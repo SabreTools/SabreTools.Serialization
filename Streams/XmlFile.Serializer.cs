@@ -17,9 +17,9 @@ namespace SabreTools.Serialization.Streams
         /// <param name="obj">Data to serialize</param>
         /// <returns>Stream containing serialized data on success, null otherwise</returns>
 #if NET48
-        public static Stream Serialize(T obj)
+        public Stream Serialize(T obj)
 #else
-        public static Stream? Serialize(T? obj)
+        public Stream? Serialize(T? obj)
 #endif
             => Serialize(obj, null, null, null, null);
 
@@ -33,9 +33,9 @@ namespace SabreTools.Serialization.Streams
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>Stream containing serialized data on success, null otherwise</returns>
 #if NET48
-        protected static Stream Serialize(T obj, string name = null, string pubid = null, string sysid = null, string subset = null)
+        public Stream Serialize(T obj, string name = null, string pubid = null, string sysid = null, string subset = null)
 #else
-        protected static Stream? Serialize(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public Stream? Serialize(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
 #endif
         {
             // If the object is null

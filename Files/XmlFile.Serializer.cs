@@ -1,7 +1,4 @@
 using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace SabreTools.Serialization.Files
 {
@@ -31,9 +28,9 @@ namespace SabreTools.Serialization.Files
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>True on successful serialization, false otherwise</returns>
 #if NET48
-        protected static bool Serialize(T obj, string path, string name = null, string pubid = null, string sysid = null, string subset = null)
+        public static bool Serialize(T obj, string path, string name = null, string pubid = null, string sysid = null, string subset = null)
 #else
-        protected static bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public static bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
 #endif
         {
             using (var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset))

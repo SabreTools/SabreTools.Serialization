@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class AACS : IStreamSerializer<MediaKeyBlock>
     {
-        /// <summary>
-        /// Parse a Stream into an AACS media key block
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled cmedia key block on success, null on error</returns>
+        /// <inheritdoc/>
 #if NET48
         public MediaKeyBlock Deserialize(Stream data)
 #else

@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.CrossModel
 #if NET48
         public Models.Metadata.MetadataFile Serialize(Models.ArchiveDotOrg.Files item)
 #else
-        public static Models.Metadata.MetadataFile? Serialize(Models.ArchiveDotOrg.Files? item)
+        public Models.Metadata.MetadataFile? Serialize(Models.ArchiveDotOrg.Files? item)
 #endif
         {
             if (item == null)
