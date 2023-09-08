@@ -16,5 +16,18 @@ namespace SabreTools.Serialization
 #else
         T? Deserialize(string? path);
 #endif
+
+        /// <summary>
+        /// Sserialize a <typeparamref name="T"/> into a file
+        /// </summary>
+        /// <typeparam name="T">Type of object to serialize from</typeparam>
+        /// <param name="obj">Data to serialize</param>
+        /// <param name="path">Path to the file to serialize to</param>
+        /// <returns>True on successful serialization, false otherwise</returns>
+#if NET48
+        bool Serialize(T obj, string path);
+#else
+        bool Serialize(T? obj, string? path);
+#endif
     }
 }
