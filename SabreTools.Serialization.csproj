@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Assembly Properties -->
+    <TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
+    <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <Version>1.1.1</Version>
+
+    <!-- Package Properties -->
+    <Authors>Matt Nadareski</Authors>
+    <Description>Serialization and deserialization helpers for various types</Description>
+    <Copyright>Copyright (c) Matt Nadareski 2019-2023</Copyright>
+    <PackageProjectUrl>https://github.com/SabreTools/</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>PLACEHOLDER</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>serialize serialization deserialize deserialization file stream</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'!='net48'">
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SabreTools.IO" Version="1.1.1" />
+    <PackageReference Include="SabreTools.Models" Version="1.1.0" />
+  </ItemGroup>
+
+</Project>
