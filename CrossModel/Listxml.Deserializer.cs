@@ -785,9 +785,9 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.SoftwareList"/> to <cref="Models.Listxml.SoftwareList"/>
         /// </summary>
-        private static SoftwareList ConvertFromInternalModel(Models.Metadata.SoftwareList item)
+        private static Models.Listxml.SoftwareList ConvertFromInternalModel(Models.Metadata.SoftwareList item)
         {
-            var softwareList = new SoftwareList
+            var softwareList = new Models.Listxml.SoftwareList
             {
                 Tag = item.ReadString(Models.Metadata.SoftwareList.TagKey),
                 Name = item.ReadString(Models.Metadata.SoftwareList.NameKey),

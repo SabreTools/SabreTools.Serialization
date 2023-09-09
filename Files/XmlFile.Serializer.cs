@@ -28,9 +28,9 @@ namespace SabreTools.Serialization.Files
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>True on successful serialization, false otherwise</returns>
 #if NET48
-        public static bool Serialize(T obj, string path, string name = null, string pubid = null, string sysid = null, string subset = null)
+        public bool Serialize(T obj, string path, string name = null, string pubid = null, string sysid = null, string subset = null)
 #else
-        public static bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
 #endif
         {
             using (var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset))

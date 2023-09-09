@@ -332,7 +332,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Logiqx.SoftwareList"/> to <cref="Models.Metadata.SoftwareList"/>
         /// </summary>
-        private static Models.Metadata.SoftwareList ConvertToInternalModel(SoftwareList item)
+        private static Models.Metadata.SoftwareList ConvertToInternalModel(Models.Logiqx.SoftwareList item)
         {
             var softwareList = new Models.Metadata.SoftwareList
             {
