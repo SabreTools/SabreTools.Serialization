@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using SabreTools.Models.ClrMamePro;
 
