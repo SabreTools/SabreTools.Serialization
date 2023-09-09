@@ -1,0 +1,44 @@
+using System.Linq;
+
+namespace SabreTools.Serialization.CrossModel
+{
+    public partial class M1 : IModelSerializer<Models.Listxml.M1, Models.Metadata.MetadataFile>
+    {
+        /// <inheritdoc/>
+#if NET48
+        public Models.Listxml.M1 Deserialize(Models.Metadata.MetadataFile obj)
+#else
+        public Models.Listxml.M1? Deserialize(Models.Metadata.MetadataFile? obj)
+#endif
+        {
+            if (obj == null)
+                return null;
+
+            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
+            var m1 = header != null ? ConvertM1FromInternalModel(header) : new Models.Listxml.M1();
+
+            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
+            if (machines != null && machines.Any())
+            {
+                m1.Game = machines
+                    .Where(m => m != null)
+                    .Select(Listxml.ConvertMachineFromInternalModel)
+                    .ToArray();
+            }
+
+            return m1;
+        }
+
+        /// <summary>
+        /// Convert from <cref="Models.Metadata.Models.Metadata.Header"/> to <cref="Models.Listxml.M1"/>
+        /// </summary>
+        private static Models.Listxml.M1 ConvertM1FromInternalModel(Models.Metadata.Header item)
+        {
+            var m1 = new Models.Listxml.M1
+            {
+                Version = item.ReadString(Models.Metadata.Header.VersionKey),
+            };
+            return m1;
+        }
+    }
+}
