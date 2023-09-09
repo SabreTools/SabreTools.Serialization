@@ -17,5 +17,7 @@ namespace SabreTools.Serialization
 #else
         T? Deserialize(byte[]? data, int offset);
 #endif
+
+        // TODO: Add serialization method
     }
 }
