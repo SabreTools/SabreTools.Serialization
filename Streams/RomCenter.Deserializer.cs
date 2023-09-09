@@ -1,0 +1,252 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using SabreTools.IO.Readers;
+using SabreTools.Models.RomCenter;
+
+namespace SabreTools.Serialization.Streams
+{
+    public partial class RomCenter : IStreamSerializer<MetadataFile>
+    {
+        /// <inheritdoc/>
+#if NET48
+        public MetadataFile Deserialize(Stream data)
+#else
+        public MetadataFile? Deserialize(Stream? data)
+#endif
+        {
+            // If the stream is null
+            if (data == null)
+                return default;
+
+            // Setup the reader and output
+            var reader = new IniReader(data, Encoding.UTF8)
+            {
+                ValidateRows = false,
+            };
+            var dat = new MetadataFile();
+
+            // Loop through and parse out the values
+            var roms = new List<Rom>();
+            var additional = new List<string>();
+            var creditsAdditional = new List<string>();
+            var datAdditional = new List<string>();
+            var emulatorAdditional = new List<string>();
+            var gamesAdditional = new List<string>();
+            while (!reader.EndOfStream)
+            {
+                // If we have no next line
+                if (!reader.ReadNextLine())
+                    break;
+
+                // Ignore certain row types
+                switch (reader.RowType)
+                {
+                    case IniRowType.None:
+                    case IniRowType.Comment:
+                        continue;
+                    case IniRowType.SectionHeader:
+                        switch (reader.Section?.ToLowerInvariant())
+                        {
+#if NET48
+                            case "credits":
+                                if (dat.Credits == null)
+                                    dat.Credits = new Credits();
+                                break;
+                            case "dat":
+                                if (dat.Dat == null)
+                                    dat.Dat = new Dat();
+                                break;
+                            case "emulator":
+                                if (dat.Emulator == null)
+                                    dat.Emulator = new Emulator();
+                                break;
+                            case "games":
+                                if (dat.Games == null)
+                                    dat.Games = new Games();
+                                break;
+#else
+                            case "credits":
+                                dat.Credits ??= new Credits();
+                                break;
+                            case "dat":
+                                dat.Dat ??= new Dat();
+                                break;
+                            case "emulator":
+                                dat.Emulator ??= new Emulator();
+                                break;
+                            case "games":
+                                dat.Games ??= new Games();
+                                break;
+#endif
+                            default:
+                                if (reader.CurrentLine != null)
+                                    additional.Add(reader.CurrentLine);
+                                break;
+                        }
+                        continue;
+                }
+
+                // If we're in credits
+                if (reader.Section?.ToLowerInvariant() == "credits")
+                {
+                    // Create the section if we haven't already
+#if NET48
+                    dat.Credits = dat.Credits != null ? dat.Credits : new Credits();
+#else
+                    dat.Credits ??= new Credits();
+#endif
+
+                    switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
+                    {
+                        case "author":
+                            dat.Credits.Author = reader.KeyValuePair?.Value;
+                            break;
+                        case "version":
+                            dat.Credits.Version = reader.KeyValuePair?.Value;
+                            break;
+                        case "email":
+                            dat.Credits.Email = reader.KeyValuePair?.Value;
+                            break;
+                        case "homepage":
+                            dat.Credits.Homepage = reader.KeyValuePair?.Value;
+                            break;
+                        case "url":
+                            dat.Credits.Url = reader.KeyValuePair?.Value;
+                            break;
+                        case "date":
+                            dat.Credits.Date = reader.KeyValuePair?.Value;
+                            break;
+                        case "comment":
+                            dat.Credits.Comment = reader.KeyValuePair?.Value;
+                            break;
+                        default:
+                            if (reader.CurrentLine != null)
+                                creditsAdditional.Add(reader.CurrentLine);
+                            break;
+                    }
+                }
+
+                // If we're in dat
+                else if (reader.Section?.ToLowerInvariant() == "dat")
+                {
+                    // Create the section if we haven't already
+#if NET48
+                    dat.Dat = dat.Dat != null ? dat.Dat : new Dat();
+#else
+                    dat.Dat ??= new Dat();
+#endif
+
+                    switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
+                    {
+                        case "version":
+                            dat.Dat.Version = reader.KeyValuePair?.Value;
+                            break;
+                        case "plugin":
+                            dat.Dat.Plugin = reader.KeyValuePair?.Value;
+                            break;
+                        case "split":
+                            dat.Dat.Split = reader.KeyValuePair?.Value;
+                            break;
+                        case "merge":
+                            dat.Dat.Merge = reader.KeyValuePair?.Value;
+                            break;
+                        default:
+                            if (reader.CurrentLine != null)
+                                datAdditional.Add(reader.CurrentLine);
+                            break;
+                    }
+                }
+
+                // If we're in emulator
+                else if (reader.Section?.ToLowerInvariant() == "emulator")
+                {
+                    // Create the section if we haven't already
+#if NET48
+                    dat.Emulator = dat.Emulator != null ? dat.Emulator : new Emulator();
+#else
+                    dat.Emulator ??= new Emulator();
+#endif
+
+                    switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
+                    {
+                        case "refname":
+                            dat.Emulator.RefName = reader.KeyValuePair?.Value;
+                            break;
+                        case "version":
+                            dat.Emulator.Version = reader.KeyValuePair?.Value;
+                            break;
+                        default:
+                            if (reader.CurrentLine != null)
+                                emulatorAdditional.Add(reader.CurrentLine);
+                            break;
+                    }
+                }
+
+                // If we're in games
+                else if (reader.Section?.ToLowerInvariant() == "games")
+                {
+                    // Create the section if we haven't already
+#if NET48
+                    dat.Games = dat.Games != null ? dat.Games : new Games();
+#else
+                    dat.Games ??= new Games();
+#endif
+
+                    // If the line doesn't contain the delimiter
+                    if (!(reader.CurrentLine?.Contains('¬') ?? false))
+                    {
+                        if (reader.CurrentLine != null)
+                            gamesAdditional.Add(reader.CurrentLine);
+
+                        continue;
+                    }
+
+                    // Otherwise, separate out the line
+                    string[] splitLine = reader.CurrentLine.Split('¬');
+                    var rom = new Rom
+                    {
+                        // EMPTY = splitLine[0]
+                        ParentName = splitLine[1],
+                        ParentDescription = splitLine[2],
+                        GameName = splitLine[3],
+                        GameDescription = splitLine[4],
+                        RomName = splitLine[5],
+                        RomCRC = splitLine[6],
+                        RomSize = splitLine[7],
+                        RomOf = splitLine[8],
+                        MergeName = splitLine[9],
+                        // EMPTY = splitLine[10]
+                    };
+
+                    if (splitLine.Length > 11)
+                        rom.ADDITIONAL_ELEMENTS = splitLine.Skip(11).ToArray();
+
+                    roms.Add(rom);
+                }
+
+                else
+                {
+                    if (reader.CurrentLine != null)
+                        additional.Add(reader.CurrentLine);
+                }
+            }
+
+            // Add extra pieces and return
+            dat.ADDITIONAL_ELEMENTS = additional.Where(s => s != null).ToArray();
+            if (dat.Credits != null)
+                dat.Credits.ADDITIONAL_ELEMENTS = creditsAdditional.Where(s => s != null).ToArray();
+            if (dat.Dat != null)
+                dat.Dat.ADDITIONAL_ELEMENTS = datAdditional.Where(s => s != null).ToArray();
+            if (dat.Emulator != null)
+                dat.Emulator.ADDITIONAL_ELEMENTS = emulatorAdditional.Where(s => s != null).ToArray();
+            if (dat.Games != null)
+            {
+                dat.Games.Rom = roms.ToArray();
+                dat.Games.ADDITIONAL_ELEMENTS = gamesAdditional.Where(s => s != null).Select(s => s).ToArray();
+            }
+            return dat;
+        }
+    }
+}

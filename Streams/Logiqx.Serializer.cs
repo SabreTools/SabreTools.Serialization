@@ -3,7 +3,7 @@ using SabreTools.Models.Logiqx;
 
 namespace SabreTools.Serialization.Streams
 {
-    public partial class Logiqx : XmlFile<Models.Logiqx.Datafile>
+    public partial class Logiqx : XmlFile<Datafile>
     {
         /// <inheritdoc cref="Serialize(Datafile, string?, string?, string?, string?)" />
 #if NET48
