@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Files
         public bool Serialize(MetadataFile obj, string path)
 #else
         public bool Serialize(MetadataFile? obj, string? path)
-
 #endif
         {
             using (var stream = new Streams.AttractMode().Serialize(obj))
