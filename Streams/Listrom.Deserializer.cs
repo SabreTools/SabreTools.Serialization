@@ -1,0 +1,253 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using SabreTools.Models.Listrom;
+
+namespace SabreTools.Serialization.Streams
+{
+    public partial class Listrom : IStreamSerializer<MetadataFile>
+    {
+        /// <inheritdoc/>
+#if NET48
+        public MetadataFile Deserialize(Stream data)
+#else
+        public MetadataFile? Deserialize(Stream? data)
+#endif
+        {
+            // If the stream is null
+            if (data == null)
+                return default;
+
+            // Setup the reader and output
+            var reader = new StreamReader(data, Encoding.UTF8);
+            var dat = new MetadataFile();
+
+#if NET48
+            Set set = null;
+#else
+            Set? set = null;
+#endif
+            var sets = new List<Set>();
+            var rows = new List<Row>();
+
+            var additional = new List<string>();
+            while (!reader.EndOfStream)
+            {
+                // Read the line and don't split yet
+#if NET48
+                string line = reader.ReadLine();
+#else
+                string? line = reader.ReadLine();
+#endif
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    // If we have a set to process
+                    if (set != null)
+                    {
+                        set.Row = rows.ToArray();
+                        sets.Add(set);
+                        set = null;
+                        rows.Clear();
+                    }
+
+                    continue;
+                }
+
+                // Set lines are unique
+                if (line.StartsWith("ROMs required for driver"))
+                {
+#if NET48
+                    string driver = line.Substring("ROMs required for driver".Length).Trim('"', ' ', '.');
+#else
+                    string driver = line["ROMs required for driver".Length..].Trim('"', ' ', '.');
+#endif
+                    set = new Set { Driver = driver };
+                    continue;
+                }
+                else if (line.StartsWith("No ROMs required for driver"))
+                {
+#if NET48
+                    string driver = line.Substring("No ROMs required for driver".Length).Trim('"', ' ', '.');
+#else
+                    string driver = line["No ROMs required for driver".Length..].Trim('"', ' ', '.');
+#endif
+                    set = new Set { Driver = driver };
+                    continue;
+                }
+                else if (line.StartsWith("ROMs required for device"))
+                {
+#if NET48
+                    string device = line.Substring("ROMs required for device".Length).Trim('"', ' ', '.');
+#else
+                    string device = line["ROMs required for device".Length..].Trim('"', ' ', '.');
+#endif
+                    set = new Set { Device = device };
+                    continue;
+                }
+                else if (line.StartsWith("No ROMs required for device"))
+                {
+#if NET48
+                    string device = line.Substring("No ROMs required for device".Length).Trim('"', ' ', '.');
+#else
+                    string device = line["No ROMs required for device".Length..].Trim('"', ' ', '.');
+#endif
+                    set = new Set { Device = device };
+                    continue;
+                }
+                else if (line.Equals("Name                                   Size Checksum", StringComparison.OrdinalIgnoreCase))
+                {
+                    // No-op
+                    continue;
+                }
+
+                // Split the line for the name iteratively
+#if NET48
+                string[] lineParts = line.Split(new string[] { "     " }, StringSplitOptions.RemoveEmptyEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split(new string[] { "    " }, StringSplitOptions.RemoveEmptyEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split(new string[] { "   " }, StringSplitOptions.RemoveEmptyEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split(new string[] { "  " }, StringSplitOptions.RemoveEmptyEntries);
+#else
+                string[] lineParts = line.Split("     ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split("    ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split("   ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (lineParts.Length == 1)
+                    lineParts = line.Split("  ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+#endif
+
+                // Read the name and set the rest of the line for processing
+                string name = lineParts[0];
+#if NET48
+                string trimmedLine = line.Substring(name.Length);
+#else
+                string trimmedLine = line[name.Length..];
+#endif
+                if (trimmedLine == null)
+                    continue;
+
+#if NET48
+                lineParts = trimmedLine.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+#else
+                lineParts = trimmedLine.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+#endif
+
+                // The number of items in the row explains what type of row it is
+                var row = new Row();
+                switch (lineParts.Length)
+                {
+                    // Normal CHD (Name, MD5/SHA1)
+                    case 1:
+                        row.Name = name;
+#if NET48
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[0].Substring("MD5".Length).Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[0].Substring("SHA1".Length).Trim('(', ')');
+#else
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[0]["MD5".Length..].Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[0]["SHA1".Length..].Trim('(', ')');
+#endif
+                        break;
+
+                    // Normal ROM (Name, Size, CRC, MD5/SHA1)
+                    case 3 when line.Contains("CRC"):
+                        row.Name = name;
+                        row.Size = lineParts[0];
+#if NET48
+                        row.CRC = lineParts[1].Substring("CRC".Length).Trim('(', ')');
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[2].Substring("MD5".Length).Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[2].Substring("SHA1".Length).Trim('(', ')');
+#else
+                        row.CRC = lineParts[1]["CRC".Length..].Trim('(', ')');
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[2]["MD5".Length..].Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[2]["SHA1".Length..].Trim('(', ')');
+#endif
+                        break;
+
+                    // Bad CHD (Name, BAD, SHA1, BAD_DUMP)
+                    case 3 when line.Contains("BAD_DUMP"):
+                        row.Name = name;
+                        row.Bad = true;
+#if NET48
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[1].Substring("MD5".Length).Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[1].Substring("SHA1".Length).Trim('(', ')');
+#else
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[1]["MD5".Length..].Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[1]["SHA1".Length..].Trim('(', ')');
+#endif
+                        break;
+
+                    // Nodump CHD (Name, NO GOOD DUMP KNOWN)
+                    case 4 when line.Contains("NO GOOD DUMP KNOWN"):
+                        row.Name = name;
+                        row.NoGoodDumpKnown = true;
+                        break;
+
+                    // Bad ROM (Name, Size, BAD, CRC, MD5/SHA1, BAD_DUMP)
+                    case 5 when line.Contains("BAD_DUMP"):
+                        row.Name = name;
+                        row.Size = lineParts[0];
+                        row.Bad = true;
+#if NET48
+                        row.CRC = lineParts[2].Substring("CRC".Length).Trim('(', ')');
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[3].Substring("MD5".Length).Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[3].Substring("SHA1".Length).Trim('(', ')');
+#else
+                        row.CRC = lineParts[2]["CRC".Length..].Trim('(', ')');
+                        if (line.Contains("MD5("))
+                            row.MD5 = lineParts[3]["MD5".Length..].Trim('(', ')');
+                        else
+                            row.SHA1 = lineParts[3]["SHA1".Length..].Trim('(', ')');
+#endif
+                        break;
+
+                    // Nodump ROM (Name, Size, NO GOOD DUMP KNOWN)
+                    case 5 when line.Contains("NO GOOD DUMP KNOWN"):
+                        row.Name = name;
+                        row.Size = lineParts[0];
+                        row.NoGoodDumpKnown = true;
+                        break;
+
+                    default:
+                        row = null;
+                        additional.Add(line);
+                        break;
+                }
+
+                if (row != null)
+                    rows.Add(row);
+            }
+
+            // If we have a set to process
+            if (set != null)
+            {
+                set.Row = rows.ToArray();
+                sets.Add(set);
+                set = null;
+                rows.Clear();
+            }
+
+            // Add extra pieces and return
+            dat.Set = sets.ToArray();
+            dat.ADDITIONAL_ELEMENTS = additional.ToArray();
+            return dat;
+        }
+    }
+}
