@@ -14,7 +14,7 @@ namespace SabreTools.Serialization
 #if NET48
         public static Stream OpenStream(string path)
 #else
-        public static Stream? OpenStream(string path)
+        public static Stream? OpenStream(string? path)
 #endif
         {
             try

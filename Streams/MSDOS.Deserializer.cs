@@ -68,14 +68,25 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
+#if NET48
         private static ExecutableHeader ParseExecutableHeader(Stream data)
+#else
+        private static ExecutableHeader? ParseExecutableHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var header = new ExecutableHeader();
 
             #region Standard Fields
 
+#if NET48
             byte[] magic = data.ReadBytes(2);
+#else
+            byte[]? magic = data.ReadBytes(2);
+#endif
+            if (magic == null)
+                return null;
+
             header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;

@@ -94,11 +94,22 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled cabinet header on success, null on error</returns>
+#if NET48
         private static CFHEADER ParseCabinetHeader(Stream data)
+#else
+        private static CFHEADER? ParseCabinetHeader(Stream data)
+#endif
         {
             CFHEADER header = new CFHEADER();
 
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;

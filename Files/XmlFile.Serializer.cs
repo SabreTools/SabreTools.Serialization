@@ -33,6 +33,9 @@ namespace SabreTools.Serialization.Files
         public bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
 #endif
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
             using (var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset))
             {
                 if (stream == null)

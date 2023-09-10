@@ -49,12 +49,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life 2 Level header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;

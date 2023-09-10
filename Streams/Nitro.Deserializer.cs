@@ -131,11 +131,21 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             CommonHeader commonHeader = new CommonHeader();
 
+#if NET48
             byte[] gameTitle = data.ReadBytes(12);
-            commonHeader.GameTitle = Encoding.ASCII.GetString(gameTitle).TrimEnd('\0');
+#else
+            byte[]? gameTitle = data.ReadBytes(12);
+#endif
+            if (gameTitle != null)
+                commonHeader.GameTitle = Encoding.ASCII.GetString(gameTitle).TrimEnd('\0');
             commonHeader.GameCode = data.ReadUInt32();
+#if NET48
             byte[] makerCode = data.ReadBytes(2);
-            commonHeader.MakerCode = Encoding.ASCII.GetString(bytes: makerCode).TrimEnd('\0');
+#else
+            byte[]? makerCode = data.ReadBytes(2);
+#endif
+            if (makerCode != null)
+                commonHeader.MakerCode = Encoding.ASCII.GetString(bytes: makerCode).TrimEnd('\0');
             commonHeader.UnitCode = (Unitcode)data.ReadByteValue();
             commonHeader.EncryptionSeedSelect = data.ReadByteValue();
             commonHeader.DeviceCapacity = data.ReadByteValue();
@@ -321,7 +331,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled name list entry on success, null on error</returns>
+#if NET48
         private static NameListEntry ParseNameListEntry(Stream data)
+#else
+        private static NameListEntry? ParseNameListEntry(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             NameListEntry entry = new NameListEntry();
@@ -335,8 +349,13 @@ namespace SabreTools.Serialization.Streams
             byte size = (byte)(flagAndSize & ~0x80);
             if (size > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(size);
-                entry.Name = Encoding.UTF8.GetString(name);
+#else
+                byte[]? name = data.ReadBytes(size);
+#endif
+                if (name != null)
+                    entry.Name = Encoding.UTF8.GetString(name);
             }
 
             if (entry.Folder)

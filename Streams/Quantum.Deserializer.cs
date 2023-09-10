@@ -75,12 +75,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
+#if NET48
             byte[] signature = data.ReadBytes(2);
+#else
+            byte[]? signature = data.ReadBytes(2);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;
@@ -108,15 +119,25 @@ namespace SabreTools.Serialization.Streams
             fileDescriptor.FileNameSize = ReadVariableLength(data);
             if (fileDescriptor.FileNameSize > 0)
             {
+#if NET48
                 byte[] fileName = data.ReadBytes(fileDescriptor.FileNameSize);
-                fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
+#else
+                byte[]? fileName = data.ReadBytes(fileDescriptor.FileNameSize);
+#endif
+                if (fileName != null)
+                    fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
             }
 
             fileDescriptor.CommentFieldSize = ReadVariableLength(data);
             if (fileDescriptor.CommentFieldSize > 0)
             {
+#if NET48
                 byte[] commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
-                fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
+#else
+                byte[]? commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
+#endif
+                if (commentField != null)
+                    fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
             }
 
             fileDescriptor.ExpandedFileSize = data.ReadUInt32();
@@ -146,7 +167,7 @@ namespace SabreTools.Serialization.Streams
             byte b0 = data.ReadByteValue();
             if (b0 < 0x7F)
                 return b0;
-            
+
             b0 &= 0x7F;
             byte b1 = data.ReadByteValue();
             return (b0 << 8) | b1;

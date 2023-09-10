@@ -71,12 +71,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Package header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;
@@ -97,8 +108,13 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             DirectoryItem directoryItem = new DirectoryItem();
 
+#if NET48
             byte[] itemName = data.ReadBytes(56);
-            directoryItem.ItemName = Encoding.ASCII.GetString(itemName).TrimEnd('\0');
+#else
+            byte[]? itemName = data.ReadBytes(56);
+#endif
+            if (itemName != null)
+                directoryItem.ItemName = Encoding.ASCII.GetString(itemName).TrimEnd('\0');
             directoryItem.ItemOffset = data.ReadUInt32();
             directoryItem.ItemLength = data.ReadUInt32();
 

@@ -61,10 +61,21 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SGA header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
+#if NET48
             byte[] signatureBytes = data.ReadBytes(8);
+#else
+            byte[]? signatureBytes = data.ReadBytes(8);
+#endif
+            if (signatureBytes == null)
+                return null;
+
             string signature = Encoding.ASCII.GetString(signatureBytes);
             if (signature != SignatureString)
                 return null;
@@ -85,8 +96,13 @@ namespace SabreTools.Serialization.Streams
                     header4.MajorVersion = majorVersion;
                     header4.MinorVersion = minorVersion;
                     header4.FileMD5 = data.ReadBytes(0x10);
+#if NET48
                     byte[] header4Name = data.ReadBytes(count: 128);
-                    header4.Name = Encoding.Unicode.GetString(header4Name).TrimEnd('\0');
+#else
+                    byte[]? header4Name = data.ReadBytes(count: 128);
+#endif
+                    if (header4Name != null)
+                        header4.Name = Encoding.Unicode.GetString(header4Name).TrimEnd('\0');
                     header4.HeaderMD5 = data.ReadBytes(0x10);
                     header4.HeaderLength = data.ReadUInt32();
                     header4.FileDataOffset = data.ReadUInt32();
@@ -102,8 +118,13 @@ namespace SabreTools.Serialization.Streams
                     header6.Signature = signature;
                     header6.MajorVersion = majorVersion;
                     header6.MinorVersion = minorVersion;
+#if NET48
                     byte[] header6Name = data.ReadBytes(count: 128);
-                    header6.Name = Encoding.Unicode.GetString(header6Name).TrimEnd('\0');
+#else
+                    byte[]? header6Name = data.ReadBytes(count: 128);
+#endif
+                    if (header6Name != null)
+                        header6.Name = Encoding.Unicode.GetString(header6Name).TrimEnd('\0');
                     header6.HeaderLength = data.ReadUInt32();
                     header6.FileDataOffset = data.ReadUInt32();
                     header6.Dummy0 = data.ReadUInt32();
@@ -122,7 +143,11 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">SGA major version</param>
         /// <returns>Filled SGA directory on success, null on error</returns>
+#if NET48
         private static Models.SGA.Directory ParseDirectory(Stream data, ushort majorVersion)
+#else
+        private static Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
+#endif
         {
             #region Directory
 
@@ -152,10 +177,17 @@ namespace SabreTools.Serialization.Streams
             // Set the directory header
             switch (majorVersion)
             {
+#if NET48
                 case 4: (directory as Directory4).DirectoryHeader = directoryHeader as DirectoryHeader4; break;
                 case 5: (directory as Directory5).DirectoryHeader = directoryHeader as DirectoryHeader5; break;
                 case 6: (directory as Directory6).DirectoryHeader = directoryHeader as DirectoryHeader5; break;
                 case 7: (directory as Directory7).DirectoryHeader = directoryHeader as DirectoryHeader7; break;
+#else
+                case 4: (directory as Directory4)!.DirectoryHeader = directoryHeader as DirectoryHeader4; break;
+                case 5: (directory as Directory5)!.DirectoryHeader = directoryHeader as DirectoryHeader5; break;
+                case 6: (directory as Directory6)!.DirectoryHeader = directoryHeader as DirectoryHeader5; break;
+                case 7: (directory as Directory7)!.DirectoryHeader = directoryHeader as DirectoryHeader7; break;
+#endif
                 default: return null;
             }
 
@@ -167,10 +199,17 @@ namespace SabreTools.Serialization.Streams
             long sectionOffset;
             switch (majorVersion)
             {
+#if NET48
                 case 4: sectionOffset = (directoryHeader as DirectoryHeader4).SectionOffset; break;
                 case 5:
                 case 6: sectionOffset = (directoryHeader as DirectoryHeader5).SectionOffset; break;
                 case 7: sectionOffset = (directoryHeader as DirectoryHeader7).SectionOffset; break;
+#else
+                case 4: sectionOffset = (directoryHeader as DirectoryHeader4)!.SectionOffset; break;
+                case 5:
+                case 6: sectionOffset = (directoryHeader as DirectoryHeader5)!.SectionOffset; break;
+                case 7: sectionOffset = (directoryHeader as DirectoryHeader7)!.SectionOffset; break;
+#endif
                 default: return null;
             }
 
@@ -188,10 +227,17 @@ namespace SabreTools.Serialization.Streams
             uint sectionCount;
             switch (majorVersion)
             {
+#if NET48
                 case 4: sectionCount = (directoryHeader as DirectoryHeader4).SectionCount; break;
                 case 5:
                 case 6: sectionCount = (directoryHeader as DirectoryHeader5).SectionCount; break;
                 case 7: sectionCount = (directoryHeader as DirectoryHeader7).SectionCount; break;
+#else
+                case 4: sectionCount = (directoryHeader as DirectoryHeader4)!.SectionCount; break;
+                case 5:
+                case 6: sectionCount = (directoryHeader as DirectoryHeader5)!.SectionCount; break;
+                case 7: sectionCount = (directoryHeader as DirectoryHeader7)!.SectionCount; break;
+#endif
                 default: return null;
             }
 
@@ -222,10 +268,17 @@ namespace SabreTools.Serialization.Streams
             // Assign the sections
             switch (majorVersion)
             {
+#if NET48
                 case 4: (directory as Directory4).Sections = sections as Section4[]; break;
                 case 5: (directory as Directory5).Sections = sections as Section5[]; break;
                 case 6: (directory as Directory6).Sections = sections as Section5[]; break;
                 case 7: (directory as Directory7).Sections = sections as Section5[]; break;
+#else
+                case 4: (directory as Directory4)!.Sections = sections as Section4[]; break;
+                case 5: (directory as Directory5)!.Sections = sections as Section5[]; break;
+                case 6: (directory as Directory6)!.Sections = sections as Section5[]; break;
+                case 7: (directory as Directory7)!.Sections = sections as Section5[]; break;
+#endif
                 default: return null;
             }
 
@@ -237,10 +290,17 @@ namespace SabreTools.Serialization.Streams
             long folderOffset;
             switch (majorVersion)
             {
+#if NET48
                 case 4: folderOffset = (directoryHeader as DirectoryHeader4).FolderOffset; break;
                 case 5: folderOffset = (directoryHeader as DirectoryHeader5).FolderOffset; break;
                 case 6: folderOffset = (directoryHeader as DirectoryHeader5).FolderOffset; break;
                 case 7: folderOffset = (directoryHeader as DirectoryHeader7).FolderOffset; break;
+#else
+                case 4: folderOffset = (directoryHeader as DirectoryHeader4)!.FolderOffset; break;
+                case 5: folderOffset = (directoryHeader as DirectoryHeader5)!.FolderOffset; break;
+                case 6: folderOffset = (directoryHeader as DirectoryHeader5)!.FolderOffset; break;
+                case 7: folderOffset = (directoryHeader as DirectoryHeader7)!.FolderOffset; break;
+#endif
                 default: return null;
             }
 
@@ -258,10 +318,17 @@ namespace SabreTools.Serialization.Streams
             uint folderCount;
             switch (majorVersion)
             {
+#if NET48
                 case 4: folderCount = (directoryHeader as DirectoryHeader4).FolderCount; break;
                 case 5: folderCount = (directoryHeader as DirectoryHeader5).FolderCount; break;
                 case 6: folderCount = (directoryHeader as DirectoryHeader5).FolderCount; break;
                 case 7: folderCount = (directoryHeader as DirectoryHeader7).FolderCount; break;
+#else
+                case 4: folderCount = (directoryHeader as DirectoryHeader4)!.FolderCount; break;
+                case 5: folderCount = (directoryHeader as DirectoryHeader5)!.FolderCount; break;
+                case 6: folderCount = (directoryHeader as DirectoryHeader5)!.FolderCount; break;
+                case 7: folderCount = (directoryHeader as DirectoryHeader7)!.FolderCount; break;
+#endif
                 default: return null;
             }
 
@@ -292,10 +359,17 @@ namespace SabreTools.Serialization.Streams
             // Assign the folders
             switch (majorVersion)
             {
+#if NET48
                 case 4: (directory as Directory4).Folders = folders as Folder4[]; break;
                 case 5: (directory as Directory5).Folders = folders as Folder5[]; break;
                 case 6: (directory as Directory6).Folders = folders as Folder5[]; break;
                 case 7: (directory as Directory7).Folders = folders as Folder5[]; break;
+#else
+                case 4: (directory as Directory4)!.Folders = folders as Folder4[]; break;
+                case 5: (directory as Directory5)!.Folders = folders as Folder5[]; break;
+                case 6: (directory as Directory6)!.Folders = folders as Folder5[]; break;
+                case 7: (directory as Directory7)!.Folders = folders as Folder5[]; break;
+#endif
                 default: return null;
             }
 
@@ -307,10 +381,17 @@ namespace SabreTools.Serialization.Streams
             long fileOffset;
             switch (majorVersion)
             {
+#if NET48
                 case 4: fileOffset = (directoryHeader as DirectoryHeader4).FileOffset; break;
                 case 5: fileOffset = (directoryHeader as DirectoryHeader5).FileOffset; break;
                 case 6: fileOffset = (directoryHeader as DirectoryHeader5).FileOffset; break;
                 case 7: fileOffset = (directoryHeader as DirectoryHeader7).FileOffset; break;
+#else
+                case 4: fileOffset = (directoryHeader as DirectoryHeader4)!.FileOffset; break;
+                case 5: fileOffset = (directoryHeader as DirectoryHeader5)!.FileOffset; break;
+                case 6: fileOffset = (directoryHeader as DirectoryHeader5)!.FileOffset; break;
+                case 7: fileOffset = (directoryHeader as DirectoryHeader7)!.FileOffset; break;
+#endif
                 default: return null;
             }
 
@@ -328,10 +409,17 @@ namespace SabreTools.Serialization.Streams
             uint fileCount;
             switch (majorVersion)
             {
+#if NET48
                 case 4: fileCount = (directoryHeader as DirectoryHeader4).FileCount; break;
                 case 5: fileCount = (directoryHeader as DirectoryHeader5).FileCount; break;
                 case 6: fileCount = (directoryHeader as DirectoryHeader5).FileCount; break;
                 case 7: fileCount = (directoryHeader as DirectoryHeader7).FileCount; break;
+#else
+                case 4: fileCount = (directoryHeader as DirectoryHeader4)!.FileCount; break;
+                case 5: fileCount = (directoryHeader as DirectoryHeader5)!.FileCount; break;
+                case 6: fileCount = (directoryHeader as DirectoryHeader5)!.FileCount; break;
+                case 7: fileCount = (directoryHeader as DirectoryHeader7)!.FileCount; break;
+#endif
                 default: return null;
             }
 
@@ -362,10 +450,17 @@ namespace SabreTools.Serialization.Streams
             // Assign the files
             switch (majorVersion)
             {
+#if NET48
                 case 4: (directory as Directory4).Files = files as File4[]; break;
                 case 5: (directory as Directory5).Files = files as File4[]; break;
                 case 6: (directory as Directory6).Files = files as File6[]; break;
                 case 7: (directory as Directory7).Files = files as File7[]; break;
+#else
+                case 4: (directory as Directory4)!.Files = files as File4[]; break;
+                case 5: (directory as Directory5)!.Files = files as File4[]; break;
+                case 6: (directory as Directory6)!.Files = files as File6[]; break;
+                case 7: (directory as Directory7)!.Files = files as File7[]; break;
+#endif
                 default: return null;
             }
 
@@ -377,10 +472,17 @@ namespace SabreTools.Serialization.Streams
             long stringTableOffset;
             switch (majorVersion)
             {
+#if NET48
                 case 4: stringTableOffset = (directoryHeader as DirectoryHeader4).StringTableOffset; break;
                 case 5: stringTableOffset = (directoryHeader as DirectoryHeader5).StringTableOffset; break;
                 case 6: stringTableOffset = (directoryHeader as DirectoryHeader5).StringTableOffset; break;
                 case 7: stringTableOffset = (directoryHeader as DirectoryHeader7).StringTableOffset; break;
+#else
+                case 4: stringTableOffset = (directoryHeader as DirectoryHeader4)!.StringTableOffset; break;
+                case 5: stringTableOffset = (directoryHeader as DirectoryHeader5)!.StringTableOffset; break;
+                case 6: stringTableOffset = (directoryHeader as DirectoryHeader5)!.StringTableOffset; break;
+                case 7: stringTableOffset = (directoryHeader as DirectoryHeader7)!.StringTableOffset; break;
+#endif
                 default: return null;
             }
 
@@ -398,10 +500,17 @@ namespace SabreTools.Serialization.Streams
             uint stringCount;
             switch (majorVersion)
             {
+#if NET48
                 case 4: stringCount = (directoryHeader as DirectoryHeader4).StringTableCount; break;
                 case 5: stringCount = (directoryHeader as DirectoryHeader5).StringTableCount; break;
                 case 6: stringCount = (directoryHeader as DirectoryHeader5).StringTableCount; break;
                 case 7: stringCount = (directoryHeader as DirectoryHeader7).StringTableCount; break;
+#else
+                case 4: stringCount = (directoryHeader as DirectoryHeader4)!.StringTableCount; break;
+                case 5: stringCount = (directoryHeader as DirectoryHeader5)!.StringTableCount; break;
+                case 6: stringCount = (directoryHeader as DirectoryHeader5)!.StringTableCount; break;
+                case 7: stringCount = (directoryHeader as DirectoryHeader7)!.StringTableCount; break;
+#endif
                 default: return null;
             }
 
@@ -409,7 +518,11 @@ namespace SabreTools.Serialization.Streams
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
+#if NET48
             Dictionary<long, string> strings = new Dictionary<long, string>((int)stringCount);
+#else
+            Dictionary<long, string?> strings = new Dictionary<long, string?>((int)stringCount);
+#endif
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
@@ -424,10 +537,17 @@ namespace SabreTools.Serialization.Streams
             // Assign the files
             switch (majorVersion)
             {
+#if NET48
                 case 4: (directory as Directory4).StringTable = strings; break;
                 case 5: (directory as Directory5).StringTable = strings; break;
                 case 6: (directory as Directory6).StringTable = strings; break;
                 case 7: (directory as Directory7).StringTable = strings; break;
+#else
+                case 4: (directory as Directory4)!.StringTable = strings; break;
+                case 5: (directory as Directory5)!.StringTable = strings; break;
+                case 6: (directory as Directory6)!.StringTable = strings; break;
+                case 7: (directory as Directory7)!.StringTable = strings; break;
+#endif
                 default: return null;
             }
 
@@ -436,10 +556,17 @@ namespace SabreTools.Serialization.Streams
             {
                 switch (majorVersion)
                 {
+#if NET48
                     case 4: (directory as Directory4).Folders[i].Name = strings[(directory as Directory4).Folders[i].NameOffset]; break;
                     case 5: (directory as Directory5).Folders[i].Name = strings[(directory as Directory5).Folders[i].NameOffset]; break;
                     case 6: (directory as Directory6).Folders[i].Name = strings[(directory as Directory6).Folders[i].NameOffset]; break;
                     case 7: (directory as Directory7).Folders[i].Name = strings[(directory as Directory7).Folders[i].NameOffset]; break;
+#else
+                    case 4: (directory as Directory4)!.Folders[i]!.Name = strings[(directory as Directory4)!.Folders[i]!.NameOffset] ?? string.Empty; break;
+                    case 5: (directory as Directory5)!.Folders[i]!.Name = strings[(directory as Directory5)!.Folders[i]!.NameOffset] ?? string.Empty; break;
+                    case 6: (directory as Directory6)!.Folders[i]!.Name = strings[(directory as Directory6)!.Folders[i]!.NameOffset] ?? string.Empty; break;
+                    case 7: (directory as Directory7)!.Folders[i]!.Name = strings[(directory as Directory7)!.Folders[i]!.NameOffset] ?? string.Empty; break;
+#endif
                     default: return null;
                 }
             }
@@ -449,10 +576,17 @@ namespace SabreTools.Serialization.Streams
             {
                 switch (majorVersion)
                 {
+#if NET48
                     case 4: (directory as Directory4).Files[i].Name = strings[(directory as Directory4).Files[i].NameOffset]; break;
                     case 5: (directory as Directory5).Files[i].Name = strings[(directory as Directory5).Files[i].NameOffset]; break;
                     case 6: (directory as Directory6).Files[i].Name = strings[(directory as Directory6).Files[i].NameOffset]; break;
                     case 7: (directory as Directory7).Files[i].Name = strings[(directory as Directory7).Files[i].NameOffset]; break;
+#else
+                    case 4: (directory as Directory4)!.Files[i]!.Name = strings[(directory as Directory4)!.Files[i]!.NameOffset] ?? string.Empty; break;
+                    case 5: (directory as Directory5)!.Files[i]!.Name = strings[(directory as Directory5)!.Files[i]!.NameOffset] ?? string.Empty; break;
+                    case 6: (directory as Directory6)!.Files[i]!.Name = strings[(directory as Directory6)!.Files[i]!.NameOffset] ?? string.Empty; break;
+                    case 7: (directory as Directory7)!.Files[i]!.Name = strings[(directory as Directory7)!.Files[i]!.NameOffset] ?? string.Empty; break;
+#endif
                     default: return null;
                 }
             }
@@ -468,7 +602,11 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">SGA major version</param>
         /// <returns>Filled SGA directory header on success, null on error</returns>
+#if NET48
         private static object ParseDirectoryHeader(Stream data, ushort majorVersion)
+#else
+        private static object? ParseDirectoryHeader(Stream data, ushort majorVersion)
+#endif
         {
             switch (majorVersion)
             {
@@ -555,10 +693,20 @@ namespace SabreTools.Serialization.Streams
         {
             Section4 section4 = new Section4();
 
-            byte[] section4Alias = data.ReadBytes(count: 64);
-            section4.Alias = Encoding.ASCII.GetString(section4Alias).TrimEnd('\0');
+#if NET48
+            byte[] section4Alias = data.ReadBytes(64);
+#else
+            byte[]? section4Alias = data.ReadBytes(64);
+#endif
+            if (section4Alias != null)
+                section4.Alias = Encoding.ASCII.GetString(section4Alias).TrimEnd('\0');
+#if NET48
             byte[] section4Name = data.ReadBytes(64);
-            section4.Name = Encoding.ASCII.GetString(section4Name).TrimEnd('\0');
+#else
+            byte[]? section4Name = data.ReadBytes(64);
+#endif
+            if (section4Name != null)
+                section4.Name = Encoding.ASCII.GetString(section4Name).TrimEnd('\0');
             section4.FolderStartIndex = data.ReadUInt16();
             section4.FolderEndIndex = data.ReadUInt16();
             section4.FileStartIndex = data.ReadUInt16();
@@ -578,10 +726,20 @@ namespace SabreTools.Serialization.Streams
         {
             Section5 section5 = new Section5();
 
-            byte[] section5Alias = data.ReadBytes(count: 64);
-            section5.Alias = Encoding.ASCII.GetString(section5Alias).TrimEnd('\0');
+#if NET48
+            byte[] section5Alias = data.ReadBytes(64);
+#else
+            byte[]? section5Alias = data.ReadBytes(64);
+#endif
+            if (section5Alias != null)
+                section5.Alias = Encoding.ASCII.GetString(section5Alias).TrimEnd('\0');
+#if NET48
             byte[] section5Name = data.ReadBytes(64);
-            section5.Name = Encoding.ASCII.GetString(section5Name).TrimEnd('\0');
+#else
+            byte[]? section5Name = data.ReadBytes(64);
+#endif
+            if (section5Name != null)
+                section5.Name = Encoding.ASCII.GetString(section5Name).TrimEnd('\0');
             section5.FolderStartIndex = data.ReadUInt32();
             section5.FolderEndIndex = data.ReadUInt32();
             section5.FileStartIndex = data.ReadUInt32();

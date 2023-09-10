@@ -72,12 +72,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
+#if NET48
             byte[] magic = data.ReadBytes(4);
+#else
+            byte[]? magic = data.ReadBytes(4);
+#endif
+            if (magic == null)
+                return null;
+
             header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;
@@ -101,8 +112,13 @@ namespace SabreTools.Serialization.Streams
             fileEntry.NameSize = data.ReadInt32();
             if (fileEntry.NameSize > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(fileEntry.NameSize);
-                fileEntry.Name = Encoding.ASCII.GetString(name);
+#else
+                byte[]? name = data.ReadBytes(fileEntry.NameSize);
+#endif
+                if (name != null)
+                    fileEntry.Name = Encoding.ASCII.GetString(name);
             }
 
             fileEntry.UncompressedSize = data.ReadInt32();

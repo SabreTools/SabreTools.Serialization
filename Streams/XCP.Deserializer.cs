@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Streams
                 uint directoryItemOffset = header.DirectoryItemOffset;
                 if (directoryItemOffset < 0 || directoryItemOffset >= data.Length)
                     return null;
-                
+
                 // Seek to the directory items
                 data.Seek(directoryItemOffset, SeekOrigin.Begin);
 
@@ -137,12 +137,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled XBox Package File header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != HeaderSignatureString)
                 return null;
@@ -228,13 +239,24 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled XBox Package File footer on success, null on error</returns>
+#if NET48
         private static Footer ParseFooter(Stream data)
+#else
+        private static Footer? ParseFooter(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Footer footer = new Footer();
 
             footer.FileLength = data.ReadUInt32();
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             footer.Signature = Encoding.ASCII.GetString(signature);
             if (footer.Signature != FooterSignatureString)
                 return null;

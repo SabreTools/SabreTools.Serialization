@@ -49,7 +49,8 @@ namespace SabreTools.Serialization.Streams
             var difatSectors = new List<SectorNumber>();
 
             // Add the sectors from the header
-            difatSectors.AddRange(fileHeader.DIFAT);
+            if (fileHeader.DIFAT != null)
+                difatSectors.AddRange(fileHeader.DIFAT);
 
             // Loop through and add the DIFAT sectors
             SectorNumber currentSector = (SectorNumber)fileHeader.FirstDIFATSectorLocation;
@@ -230,7 +231,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled file header on success, null on error</returns>
+#if NET48
         private static FileHeader ParseFileHeader(Stream data)
+#else
+        private static FileHeader? ParseFileHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             FileHeader header = new FileHeader();
@@ -309,7 +314,11 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sectorShift">Sector shift from the header</param>
         /// <param name="majorVersion">Major version from the header</param>
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
+#if NET48
         private static DirectoryEntry[] ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
+#else
+        private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
+#endif
         {
             // TODO: Use marshalling here instead of building
             const int directoryEntrySize = 64 + 2 + 1 + 1 + 4 + 4 + 4 + 16 + 4 + 8 + 8 + 4 + 8;
@@ -339,8 +348,13 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             DirectoryEntry directoryEntry = new DirectoryEntry();
 
+#if NET48
             byte[] name = data.ReadBytes(64);
-            directoryEntry.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
+#else
+            byte[]? name = data.ReadBytes(64);
+#endif
+            if (name != null)
+                directoryEntry.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
             directoryEntry.NameLength = data.ReadUInt16();
             directoryEntry.ObjectType = (ObjectType)data.ReadByteValue();
             directoryEntry.ColorFlag = (ColorFlag)data.ReadByteValue();

@@ -19,6 +19,9 @@ namespace SabreTools.Serialization.Files
         public bool Serialize(MetadataFile? obj, string? path, bool quotes)
 #endif
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
             using (var stream = new Streams.ClrMamePro().Serialize(obj, quotes))
             {
                 if (stream == null)

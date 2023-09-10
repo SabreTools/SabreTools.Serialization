@@ -190,10 +190,11 @@ namespace SabreTools.Serialization.Streams
                 while (true)
                 {
                     var bundle = ParseEntryTableBundle(data);
-                    entryTable.Add(bundle);
+                    if (bundle != null)
+                        entryTable.Add(bundle);
 
                     // If we have a 0-length entry
-                    if (bundle.Entries == 0)
+                    if (bundle == null || bundle.Entries == 0)
                         break;
                 }
 
@@ -246,7 +247,7 @@ namespace SabreTools.Serialization.Streams
                 data.Seek(offset, SeekOrigin.Begin);
 
                 // Create the fix-up page table
-                executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap.Length + 1];
+                executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
 
                 // Try to parse the fix-up page table
                 for (int i = 0; i < executable.FixupPageTable.Length; i++)
@@ -271,7 +272,7 @@ namespace SabreTools.Serialization.Streams
                 data.Seek(offset, SeekOrigin.Begin);
 
                 // Create the fix-up record table
-                executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap.Length + 1];
+                executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
 
                 // Try to parse the fix-up record table
                 for (int i = 0; i < executable.FixupRecordTable.Length; i++)
@@ -426,12 +427,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled information block on success, null on error</returns>
+#if NET48
         private static InformationBlock ParseInformationBlock(Stream data)
+#else
+        private static InformationBlock? ParseInformationBlock(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var informationBlock = new InformationBlock();
 
+#if NET48
             byte[] magic = data.ReadBytes(2);
+#else
+            byte[]? magic = data.ReadBytes(2);
+#endif
+            if (magic == null)
+                return null;
+
             informationBlock.Signature = Encoding.ASCII.GetString(magic);
             if (informationBlock.Signature != LESignatureString && informationBlock.Signature != LXSignatureString)
                 return null;
@@ -554,8 +566,13 @@ namespace SabreTools.Serialization.Streams
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+#else
+                byte[]? name = data.ReadBytes(entry.Length);
+#endif
+                if (name != null)
+                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
             entry.OrdinalNumber = data.ReadUInt16();
 
@@ -567,7 +584,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled entry table bundle on success, null on error</returns>
+#if NET48
         private static EntryTableBundle ParseEntryTableBundle(Stream data)
+#else
+        private static EntryTableBundle? ParseEntryTableBundle(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var bundle = new EntryTableBundle();
@@ -683,7 +704,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled fix-up record table entry on success, null on error</returns>
+#if NET48
         private static FixupRecordTableEntry ParseFixupRecordTableEntry(Stream data)
+#else
+        private static FixupRecordTableEntry? ParseFixupRecordTableEntry(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var entry = new FixupRecordTableEntry();
@@ -826,8 +851,13 @@ namespace SabreTools.Serialization.Streams
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+#else
+                byte[]? name = data.ReadBytes(entry.Length);
+#endif
+                if (name != null)
+                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
             return entry;
@@ -846,8 +876,13 @@ namespace SabreTools.Serialization.Streams
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+#else
+                byte[]? name = data.ReadBytes(entry.Length);
+#endif
+                if (name != null)
+                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
             return entry;
@@ -881,8 +916,13 @@ namespace SabreTools.Serialization.Streams
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0)
             {
+#if NET48
                 byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+#else
+                byte[]? name = data.ReadBytes(entry.Length);
+#endif
+                if (name != null)
+                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
             entry.OrdinalNumber = data.ReadUInt16();
 
@@ -895,12 +935,23 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="size">Total size of the debug information</param>
         /// <returns>Filled debug information on success, null on error</returns>
+#if NET48
         private static DebugInformation ParseDebugInformation(Stream data, long size)
+#else
+        private static DebugInformation? ParseDebugInformation(Stream data, long size)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var debugInformation = new DebugInformation();
 
+#if NET48
             byte[] signature = data.ReadBytes(3);
+#else
+            byte[]? signature = data.ReadBytes(3);
+#endif
+            if (signature == null)
+                return null;
+
             debugInformation.Signature = Encoding.ASCII.GetString(signature);
             if (debugInformation.Signature != DebugInformationSignatureString)
                 return null;

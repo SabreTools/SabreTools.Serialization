@@ -216,12 +216,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
+#if NET48
         private static ExecutableHeader ParseExecutableHeader(Stream data)
+#else
+        private static ExecutableHeader? ParseExecutableHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var header = new ExecutableHeader();
 
+#if NET48
             byte[] magic = data.ReadBytes(2);
+#else
+            byte[]? magic = data.ReadBytes(2);
+#endif
+            if (magic == null)
+                return null;
+
             header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;
@@ -333,7 +344,11 @@ namespace SabreTools.Serialization.Streams
                 .ToList();
 
             // Populate the type and name string dictionary
+#if NET48
             resourceTable.TypeAndNameStrings = new Dictionary<ushort, ResourceTypeAndNameString>();
+#else
+            resourceTable.TypeAndNameStrings = new Dictionary<ushort, ResourceTypeAndNameString?>();
+#endif
             for (int i = 0; i < stringOffsets.Count; i++)
             {
                 int stringOffset = (int)(stringOffsets[i] + initialOffset);
@@ -397,10 +412,18 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the imported-name table</param>
         /// <returns>Filled imported-name table on success, null on error</returns>
+#if NET48
         private static Dictionary<ushort, ImportedNameTableEntry> ParseImportedNameTable(Stream data, int endOffset)
+#else
+        private static Dictionary<ushort, ImportedNameTableEntry?> ParseImportedNameTable(Stream data, int endOffset)
+#endif
         {
             // TODO: Use marshalling here instead of building
+#if NET48
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
+#else
+            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry?>();
+#endif
 
             while (data.Position < endOffset)
             {

@@ -11,6 +11,9 @@ namespace SabreTools.Serialization.Files
         public bool Serialize(MetadataFile? obj, string? path)
 #endif
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
             using (var stream = new Streams.SeparatedValue().Serialize(obj))
             {
                 if (stream == null)

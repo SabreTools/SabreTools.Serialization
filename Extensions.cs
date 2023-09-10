@@ -156,7 +156,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into overlay data</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled SecuROM AddD overlay data on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.SecuROMAddD AsSecuROMAddD(this byte[] data, ref int offset)
+#else
+        public static Models.PortableExecutable.SecuROMAddD? AsSecuROMAddD(this byte[]? data, ref int offset)
+#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -176,7 +180,7 @@ namespace SabreTools.Serialization
             if (string.IsNullOrWhiteSpace(addD.Version))
                 offset = originalOffset + 0x10;
 
-            addD.Build = data.ReadBytes(ref offset, 4).Select(b => (char)b).ToArray();
+            addD.Build = data.ReadBytes(ref offset, 4)?.Select(b => (char)b)?.ToArray();
 
             // Distinguish between v1 and v2
             int bytesToRead = 112; // v2
@@ -219,7 +223,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a database</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled NB10 Program Database on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.NB10ProgramDatabase AsNB10ProgramDatabase(this byte[] data, ref int offset)
+#else
+        public static Models.PortableExecutable.NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
+#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -245,7 +253,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a database</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled RSDS Program Database on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.RSDSProgramDatabase AsRSDSProgramDatabase(this byte[] data, ref int offset)
+#else
+        public static Models.PortableExecutable.RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[]? data, ref int offset)
+#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -257,7 +269,9 @@ namespace SabreTools.Serialization
             if (rsdsProgramDatabase.Signature != 0x53445352)
                 return null;
 
-            rsdsProgramDatabase.GUID = new Guid(data.ReadBytes(ref offset, 0x10));
+            var guid = data.ReadBytes(ref offset, 0x10);
+            if (guid != null)
+                rsdsProgramDatabase.GUID = new Guid(guid);
             rsdsProgramDatabase.Age = data.ReadUInt32(ref offset);
             rsdsProgramDatabase.PathAndFileName = data.ReadString(ref offset, Encoding.ASCII); // TODO: Actually null-terminated UTF-8
 
@@ -275,7 +289,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a resource header</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled resource header on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.ResourceHeader AsResourceHeader(this byte[] data, ref int offset)
+#else
+        public static Models.PortableExecutable.ResourceHeader? AsResourceHeader(this byte[]? data, ref int offset)
+#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -301,7 +319,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
         /// <returns>A filled accelerator table resource on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.AcceleratorTableEntry[] AsAcceleratorTableResource(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.AcceleratorTableEntry[]? AsAcceleratorTableResource(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have data that's invalid for this resource type, we can't do anything
             if (entry?.Data == null || entry.Data.Length % 8 != 0)
@@ -337,7 +359,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
         /// <returns>A filled side-by-side assembly manifest on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.AssemblyManifest AsAssemblyManifest(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.AssemblyManifest? AsAssemblyManifest(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -359,7 +385,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a dialog box</param>
         /// <returns>A filled dialog box on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.DialogBoxResource AsDialogBox(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.DialogBoxResource? AsDialogBox(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -868,7 +898,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a font group</param>
         /// <returns>A filled font group on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.FontGroupHeader AsFontGroup(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.FontGroupHeader? AsFontGroup(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -919,7 +953,7 @@ namespace SabreTools.Serialization
                     dirEntry.Entry.Device = entry.Data.ReadUInt32(ref offset);
                     dirEntry.Entry.Face = entry.Data.ReadUInt32(ref offset);
                     dirEntry.Entry.Reserved = entry.Data.ReadUInt32(ref offset);
-                
+
                     // TODO: Determine how to read these two? Immediately after?
                     dirEntry.Entry.DeviceName = entry.Data.ReadString(ref offset);
                     dirEntry.Entry.FaceName = entry.Data.ReadString(ref offset);
@@ -937,7 +971,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a menu</param>
         /// <returns>A filled menu on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.MenuResource AsMenu(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.MenuResource? AsMenu(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1060,7 +1098,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a message table resource</param>
         /// <returns>A filled message table resource on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.MessageResourceData AsMessageResourceData(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.MessageResourceData? AsMessageResourceData(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1095,7 +1137,11 @@ namespace SabreTools.Serialization
             // Message resource entries
             if (messageResourceData.Blocks != null && messageResourceData.Blocks.Length != 0)
             {
+#if NET48
                 var messageResourceEntries = new Dictionary<uint, Models.PortableExecutable.MessageResourceEntry>();
+#else
+                var messageResourceEntries = new Dictionary<uint, Models.PortableExecutable.MessageResourceEntry?>();
+#endif
 
                 for (int i = 0; i < messageResourceData.Blocks.Length; i++)
                 {
@@ -1110,8 +1156,13 @@ namespace SabreTools.Serialization
                         messageResourceEntry.Flags = entry.Data.ReadUInt16(ref offset);
 
                         Encoding textEncoding = messageResourceEntry.Flags == 0x0001 ? Encoding.Unicode : Encoding.ASCII;
+#if NET48
                         byte[] textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
-                        messageResourceEntry.Text = textEncoding.GetString(textArray);
+#else
+                        byte[]? textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
+#endif
+                        if (textArray != null)
+                            messageResourceEntry.Text = textEncoding.GetString(textArray);
 
                         messageResourceEntries[j] = messageResourceEntry;
                     }
@@ -1128,7 +1179,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
         /// <returns>A filled string table resource on success, null on error</returns>
+#if NET48
         public static Dictionary<int, string> AsStringTable(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1138,7 +1193,11 @@ namespace SabreTools.Serialization
             int offset = 0, stringIndex = 0;
 
             // Create the output table
+#if NET48
             var stringTable = new Dictionary<int, string>();
+#else
+            var stringTable = new Dictionary<int, string?>();
+#endif
 
             // Loop through and add 
             while (offset < entry.Data.Length)
@@ -1171,7 +1230,11 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
         /// <returns>A filled version info resource on success, null on error</returns>
+#if NET48
         public static Models.PortableExecutable.VersionInfo AsVersionInfo(this Models.PortableExecutable.ResourceDataEntry entry)
+#else
+        public static Models.PortableExecutable.VersionInfo? AsVersionInfo(this Models.PortableExecutable.ResourceDataEntry? entry)
+#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1228,8 +1291,11 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
-
+#if NET48
                 string nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+#else
+                string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+#endif
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1251,7 +1317,11 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
+#if NET48
                 string nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+#else
+                string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+#endif
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1275,7 +1345,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a string file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled string file info resource on success, null on error</returns>
+#if NET48
         private static Models.PortableExecutable.StringFileInfo AsStringFileInfo(byte[] data, ref int offset)
+#else
+        private static Models.PortableExecutable.StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
+#endif
         {
             var stringFileInfo = new Models.PortableExecutable.StringFileInfo();
 
@@ -1288,7 +1362,7 @@ namespace SabreTools.Serialization
             stringFileInfo.Key = data.ReadString(ref offset, Encoding.Unicode);
             if (stringFileInfo.Key != "StringFileInfo")
             {
-                offset -= 6 + ((stringFileInfo.Key.Length + 1) * 2);
+                offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
                 return null;
             }
 
@@ -1335,8 +1409,13 @@ namespace SabreTools.Serialization
 
                     if (stringData.ValueLength > 0)
                     {
+#if NET48
                         byte[] valueBytes = data.ReadBytes(ref offset, stringData.ValueLength * sizeof(ushort));
-                        stringData.Value = Encoding.Unicode.GetString(valueBytes);
+#else
+                        byte[]? valueBytes = data.ReadBytes(ref offset, stringData.ValueLength * sizeof(ushort));
+#endif
+                        if (valueBytes != null)
+                            stringData.Value = Encoding.Unicode.GetString(valueBytes);
                     }
 
                     // Align to the DWORD boundary if we're not at the end
@@ -1365,7 +1444,11 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a var file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled var file info resource on success, null on error</returns>
+#if NET48
         private static Models.PortableExecutable.VarFileInfo AsVarFileInfo(byte[] data, ref int offset)
+#else
+        private static Models.PortableExecutable.VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
+#endif
         {
             var varFileInfo = new Models.PortableExecutable.VarFileInfo();
 
@@ -1397,7 +1480,7 @@ namespace SabreTools.Serialization
                 varData.Key = data.ReadString(ref offset, Encoding.Unicode);
                 if (varData.Key != "Translation")
                 {
-                    offset -= 6 + ((varData.Key.Length + 1) * 2);
+                    offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);
                     return null;
                 }
 

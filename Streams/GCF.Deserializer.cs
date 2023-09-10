@@ -113,7 +113,11 @@ namespace SabreTools.Serialization.Streams
             if (header.MinorVersion < 6)
             {
                 // Create the block entry map array
+#if NET48
                 file.BlockEntryMaps = new BlockEntryMap[file.BlockEntryMapHeader.BlockCount];
+#else
+                file.BlockEntryMaps = new BlockEntryMap[file.BlockEntryMapHeader!.BlockCount];
+#endif
 
                 // Try to parse the block entry maps
                 for (int i = 0; i < file.BlockEntryMapHeader.BlockCount; i++)
@@ -165,17 +169,29 @@ namespace SabreTools.Serialization.Streams
                 long directoryNamesEnd = data.Position + directoryHeader.NameSize;
 
                 // Create the string dictionary
+#if NET48
                 file.DirectoryNames = new Dictionary<long, string>();
+#else
+                file.DirectoryNames = new Dictionary<long, string?>();
+#endif
 
                 // Loop and read the null-terminated strings
                 while (data.Position < directoryNamesEnd)
                 {
                     long nameOffset = data.Position - directoryNamesStart;
+#if NET48
                     string directoryName = data.ReadString(Encoding.ASCII);
+#else
+                    string? directoryName = data.ReadString(Encoding.ASCII);
+#endif
                     if (data.Position > directoryNamesEnd)
                     {
-                        data.Seek(-directoryName.Length, SeekOrigin.Current);
+                        data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);
+#if NET48
                         byte[] endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
+#else
+                        byte[]? endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
+#endif
                         if (endingData != null)
                             directoryName = Encoding.ASCII.GetString(endingData);
                         else
@@ -360,7 +376,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Game Cache on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
@@ -614,7 +634,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Game Cache directory map header on success, null on error</returns>
+#if NET48
         private static DirectoryMapHeader ParseDirectoryMapHeader(Stream data)
+#else
+        private static DirectoryMapHeader? ParseDirectoryMapHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             DirectoryMapHeader directoryMapHeader = new DirectoryMapHeader();
@@ -650,7 +674,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Game Cache checksum header on success, null on error</returns>
+#if NET48
         private static ChecksumHeader ParseChecksumHeader(Stream data)
+#else
+        private static ChecksumHeader? ParseChecksumHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             ChecksumHeader checksumHeader = new ChecksumHeader();
@@ -669,7 +697,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Game Cache checksum map header on success, null on error</returns>
+#if NET48
         private static ChecksumMapHeader ParseChecksumMapHeader(Stream data)
+#else
+        private static ChecksumMapHeader? ParseChecksumMapHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             ChecksumMapHeader checksumMapHeader = new ChecksumMapHeader();

@@ -96,7 +96,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
@@ -163,7 +167,11 @@ namespace SabreTools.Serialization.Streams
             while (true)
             {
                 // Get the extension
+#if NET48
                 string extensionString = data.ReadString(Encoding.ASCII);
+#else
+                string? extensionString = data.ReadString(Encoding.ASCII);
+#endif
                 if (string.IsNullOrEmpty(extensionString))
                     break;
 
@@ -176,7 +184,11 @@ namespace SabreTools.Serialization.Streams
                 while (true)
                 {
                     // Get the path
+#if NET48
                     string pathString = data.ReadString(Encoding.ASCII);
+#else
+                    string? pathString = data.ReadString(Encoding.ASCII);
+#endif
                     if (string.IsNullOrEmpty(pathString))
                         break;
 
@@ -189,7 +201,11 @@ namespace SabreTools.Serialization.Streams
                     while (true)
                     {
                         // Get the name
+#if NET48
                         string nameString = data.ReadString(Encoding.ASCII);
+#else
+                        string? nameString = data.ReadString(Encoding.ASCII);
+#endif
                         if (string.IsNullOrEmpty(nameString))
                             break;
 
@@ -244,7 +260,11 @@ namespace SabreTools.Serialization.Streams
             }
 
             // If we had a valid preload data pointer
+#if NET48
             byte[] preloadData = null;
+#else
+            byte[]? preloadData = null;
+#endif
             if (preloadDataPointer >= 0 && preloadDataLength > 0)
             {
                 // Cache the current offset

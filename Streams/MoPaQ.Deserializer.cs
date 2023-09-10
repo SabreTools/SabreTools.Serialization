@@ -276,7 +276,7 @@ namespace SabreTools.Serialization.Streams
                     // Read in the hi-block table
                     var hiBlockTable = new List<short>();
 
-                    for (int i = 0; i < archive.BlockTable.Length; i++)
+                    for (int i = 0; i < (archive.BlockTable?.Length ?? 0); i++)
                     {
                         short hiBlockEntry = data.ReadInt16();
                         hiBlockTable.Add(hiBlockEntry);
@@ -342,12 +342,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled archive header on success, null on error</returns>
+#if NET48
         private static ArchiveHeader ParseArchiveHeader(Stream data)
+#else
+        private static ArchiveHeader? ParseArchiveHeader(Stream data)
+#endif
         {
             ArchiveHeader archiveHeader = new ArchiveHeader();
 
             // V1 - Common
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             archiveHeader.Signature = Encoding.ASCII.GetString(signature);
             if (archiveHeader.Signature != ArchiveHeaderSignatureString)
                 return null;
@@ -403,11 +414,22 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled user data on success, null on error</returns>
+#if NET48
         private static UserData ParseUserData(Stream data)
+#else
+        private static UserData? ParseUserData(Stream data)
+#endif
         {
             UserData userData = new UserData();
 
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             userData.Signature = Encoding.ASCII.GetString(signature);
             if (userData.Signature != UserDataSignatureString)
                 return null;
@@ -424,12 +446,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HET table on success, null on error</returns>
+#if NET48
         private static HetTable ParseHetTable(Stream data)
+#else
+        private static HetTable? ParseHetTable(Stream data)
+#endif
         {
             HetTable hetTable = new HetTable();
 
             // Common Headers
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             hetTable.Signature = Encoding.ASCII.GetString(signature);
             if (hetTable.Signature != HetTableSignatureString)
                 return null;
@@ -458,12 +491,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled BET table on success, null on error</returns>
+#if NET48
         private static BetTable ParseBetTable(Stream data)
+#else
+        private static BetTable? ParseBetTable(Stream data)
+#endif
         {
             BetTable betTable = new BetTable();
 
             // Common Headers
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             betTable.Signature = Encoding.ASCII.GetString(signature);
             if (betTable.Signature != BetTableSignatureString)
                 return null;
@@ -496,8 +540,13 @@ namespace SabreTools.Serialization.Streams
             betTable.FlagCount = data.ReadUInt32();
 
             betTable.FlagsArray = new uint[betTable.FlagCount];
+#if NET48
             byte[] flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
-            Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
+#else
+            byte[]? flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
+#endif
+            if (flagsArray != null)
+                Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
 
             // TODO: Populate the file table
             // TODO: Populate the hash table

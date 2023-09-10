@@ -35,12 +35,23 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SVM on success, null on error</returns>
+#if NET48
         private static SVM ParseSVMData(Stream data)
+#else
+        private static SVM? ParseSVMData(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             var svm = new SVM();
 
+#if NET48
             byte[] signature = data.ReadBytes(8);
+#else
+            byte[]? signature = data.ReadBytes(8);
+#endif
+            if (signature == null)
+                return null;
+
             svm.Signature = Encoding.ASCII.GetString(signature);
             if (svm.Signature != SignatureString)
                 return null;

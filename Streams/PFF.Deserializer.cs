@@ -94,13 +94,24 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled header on success, null on error</returns>
+#if NET48
         private static Header ParseHeader(Stream data)
+#else
+        private static Header? ParseHeader(Stream data)
+#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
             header.HeaderSize = data.ReadUInt32();
+#if NET48
             byte[] signature = data.ReadBytes(4);
+#else
+            byte[]? signature = data.ReadBytes(4);
+#endif
+            if (signature == null)
+                return null;
+
             header.Signature = Encoding.ASCII.GetString(signature);
             header.NumberOfFiles = data.ReadUInt32();
             header.FileSegmentSize = data.ReadUInt32();
@@ -148,8 +159,13 @@ namespace SabreTools.Serialization.Streams
 
             footer.SystemIP = data.ReadUInt32();
             footer.Reserved = data.ReadUInt32();
+#if NET48
             byte[] kingTag = data.ReadBytes(4);
-            footer.KingTag = Encoding.ASCII.GetString(kingTag);
+#else
+            byte[]? kingTag = data.ReadBytes(4);
+#endif
+            if (kingTag != null)
+                footer.KingTag = Encoding.ASCII.GetString(kingTag);
 
             return footer;
         }
@@ -169,8 +185,13 @@ namespace SabreTools.Serialization.Streams
             segment.FileLocation = data.ReadUInt32();
             segment.FileSize = data.ReadUInt32();
             segment.PackedDate = data.ReadUInt32();
+#if NET48
             byte[] fileName = data.ReadBytes(0x10);
-            segment.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
+#else
+            byte[]? fileName = data.ReadBytes(0x10);
+#endif
+            if (fileName != null)
+                segment.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
             if (segmentSize > Version2SegmentSize)
                 segment.ModifiedDate = data.ReadUInt32();
             if (segmentSize > Version3SegmentSize)
