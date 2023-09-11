@@ -25,6 +25,7 @@ namespace SabreTools.Serialization.CrossModel
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Game
                     .Where(g => g != null)
                     .Select(ConvertMachineToInternalModel)
+                    .Where(m => m != null)
                     .ToArray();
             }
 
@@ -60,8 +61,15 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ClrMamePro.GameBase"/> to <cref="Models.Metadata.Machine"/>
         /// </summary>
+#if NET48
         private static Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
+#else
+        private static Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
+#endif
         {
+            if (item == null)
+                return null;
+
             var machine = new Models.Metadata.Machine
             {
                 [Models.Metadata.Machine.NameKey] = item.Name,

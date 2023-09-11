@@ -204,7 +204,8 @@ namespace SabreTools.Serialization.Streams
                 // Loop and assign to entries
                 foreach (var directoryEntry in file.DirectoryEntries)
                 {
-                    directoryEntry.Name = file.DirectoryNames[directoryEntry.NameOffset];
+                    if (directoryEntry != null)
+                        directoryEntry.Name = file.DirectoryNames[directoryEntry.NameOffset];
                 }
             }
 

@@ -75,7 +75,11 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Physical address, 0 on error</returns>
+#if NET48
         public static uint ConvertVirtualAddress(this uint rva, Models.PortableExecutable.SectionHeader[] sections)
+#else
+        public static uint ConvertVirtualAddress(this uint rva, Models.PortableExecutable.SectionHeader?[] sections)
+#endif
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -86,7 +90,7 @@ namespace SabreTools.Serialization
                 return 0;
 
             // If the RVA matches a section start exactly, use that
-            var matchingSection = sections.FirstOrDefault(s => s.VirtualAddress == rva);
+            var matchingSection = sections.FirstOrDefault(s => s != null && s.VirtualAddress == rva);
             if (matchingSection != null)
                 return rva - matchingSection.VirtualAddress + matchingSection.PointerToRawData;
 
@@ -98,11 +102,19 @@ namespace SabreTools.Serialization
                     continue;
 
                 // If the section "starts" at 0, just skip it
+#if NET48
                 if (sections[i].PointerToRawData == 0)
+#else
+                if (sections[i]!.PointerToRawData == 0)
+#endif
                     continue;
 
                 // Attempt to derive the physical address from the current section
+#if NET48
                 var section = sections[i];
+#else
+                var section = sections[i]!;
+#endif
                 if (rva >= section.VirtualAddress && section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return rva - section.VirtualAddress + section.PointerToRawData;
                 else if (rva >= section.VirtualAddress && section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
@@ -1146,6 +1158,9 @@ namespace SabreTools.Serialization
                 for (int i = 0; i < messageResourceData.Blocks.Length; i++)
                 {
                     var messageResourceBlock = messageResourceData.Blocks[i];
+                    if (messageResourceBlock == null)
+                        continue;
+
                     offset = (int)messageResourceBlock.OffsetToEntries;
 
                     for (uint j = messageResourceBlock.LowId; j <= messageResourceBlock.HighId; j++)

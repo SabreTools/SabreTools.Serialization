@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Streams
 #if NET48
         private static void WriteGames(GameBase[] games, ClrMameProWriter writer)
 #else
-        private static void WriteGames(GameBase[]? games, ClrMameProWriter writer)
+        private static void WriteGames(GameBase?[]? games, ClrMameProWriter writer)
 #endif
         {
             // If the games information is missing, we can't do anything
@@ -97,6 +97,9 @@ namespace SabreTools.Serialization.Streams
             // Loop through and write out the games
             foreach (var game in games)
             {
+                if (game == null)
+                    continue;
+
                 WriteGame(game, writer);
                 writer.Flush();
             }

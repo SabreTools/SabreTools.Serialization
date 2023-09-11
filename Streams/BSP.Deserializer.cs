@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Streams
 
             // Try to get the texture header lump
             var textureDataLump = file.Lumps[HL_BSP_LUMP_TEXTUREDATA];
-            if (textureDataLump.Offset == 0 || textureDataLump.Length == 0)
+            if (textureDataLump == null || textureDataLump.Offset == 0 || textureDataLump.Length == 0)
                 return null;
 
             // Seek to the texture header
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Streams
 #if NET48
                 int offset = (int)(textureHeader.Offsets[i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA].Offset);
 #else
-                int offset = (int)(textureHeader.Offsets![i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA].Offset);
+                int offset = (int)(textureHeader.Offsets![i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA]!.Offset);
 #endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Streams
             TextureHeader textureHeader = new TextureHeader();
 
             textureHeader.TextureCount = data.ReadUInt32();
-            
+
             var offsets = new uint[textureHeader.TextureCount];
 
             for (int i = 0; i < textureHeader.TextureCount; i++)

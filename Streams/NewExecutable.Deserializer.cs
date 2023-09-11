@@ -333,12 +333,25 @@ namespace SabreTools.Serialization.Streams
 
             // Get the full list of unique string offsets
             var stringOffsets = resourceTable.ResourceTypes
+                .Where(rt => rt != null)
+#if NET48
                 .Where(rt => rt.IsIntegerType() == false)
                 .Select(rt => rt.TypeID)
+#else
+                .Where(rt => rt!.IsIntegerType() == false)
+                .Select(rt => rt!.TypeID)
+#endif
                 .Union(resourceTable.ResourceTypes
+                    .Where(rt => rt != null)
+#if NET48
                     .SelectMany(rt => rt.Resources)
                     .Where(r => r.IsIntegerType() == false)
                     .Select(r => r.ResourceID))
+#else
+                    .SelectMany(rt => rt!.Resources ?? System.Array.Empty<ResourceTypeResourceEntry>())
+                    .Where(r => r!.IsIntegerType() == false)
+                    .Select(r => r!.ResourceID))
+#endif
                 .Distinct()
                 .OrderBy(o => o)
                 .ToList();

@@ -25,6 +25,7 @@ namespace SabreTools.Serialization.CrossModel
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Row
                     .Where(r => r != null)
                     .Select(ConvertMachineToInternalModel)
+                    .Where(m => m != null)
                     .ToArray();
             }
 
@@ -46,8 +47,15 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.AttractMode.Row"/> to <cref="Models.Metadata.Machine"/>
         /// </summary>
+#if NET48
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Row item)
+#else
+        private static Models.Metadata.Machine? ConvertMachineToInternalModel(Row? item)
+#endif
         {
+            if (item == null)
+                return null;
+
             var machine = new Models.Metadata.Machine
             {
                 [Models.Metadata.Machine.NameKey] = item.Name,

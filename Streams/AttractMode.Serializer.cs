@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Streams
 #if NET48
         private static void WriteRows(Row[] rows, SeparatedValueWriter writer)
 #else
-        private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
+        private static void WriteRows(Row?[]? rows, SeparatedValueWriter writer)
 #endif
         {
             // If the games information is missing, we can't do anything
@@ -58,6 +58,9 @@ namespace SabreTools.Serialization.Streams
             // Loop through and write out the rows
             foreach (var row in rows)
             {
+                if (row == null)
+                    continue;
+
 #if NET48
                 var rowArray = new string[]
 #else

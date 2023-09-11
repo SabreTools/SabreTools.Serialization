@@ -64,14 +64,20 @@ namespace SabreTools.Serialization.Streams
             #region Lump Infos
 
             // Create the lump info array
-            #if NET48
+#if NET48
             file.LumpInfos = new LumpInfo[header.LumpCount];
-            #else
+#else
             file.LumpInfos = new LumpInfo?[header.LumpCount];
-            #endif
+#endif
             for (int i = 0; i < header.LumpCount; i++)
             {
                 var lump = file.Lumps[i];
+                if (lump == null)
+                {
+                    file.LumpInfos[i] = null;
+                    continue;
+                }
+
                 if (lump.Compression != 0)
                 {
                     file.LumpInfos[i] = null;

@@ -554,18 +554,35 @@ namespace SabreTools.Serialization.Streams
             // Loop through all folders to assign names
             for (int i = 0; i < folderCount; i++)
             {
+                uint nameOffset;
                 switch (majorVersion)
                 {
 #if NET48
-                    case 4: (directory as Directory4).Folders[i].Name = strings[(directory as Directory4).Folders[i].NameOffset]; break;
-                    case 5: (directory as Directory5).Folders[i].Name = strings[(directory as Directory5).Folders[i].NameOffset]; break;
-                    case 6: (directory as Directory6).Folders[i].Name = strings[(directory as Directory6).Folders[i].NameOffset]; break;
-                    case 7: (directory as Directory7).Folders[i].Name = strings[(directory as Directory7).Folders[i].NameOffset]; break;
+                    case 4: nameOffset = (directory as Directory4).Folders[i].NameOffset; break;
+                    case 5: nameOffset = (directory as Directory5).Folders[i].NameOffset; break;
+                    case 6: nameOffset = (directory as Directory6).Folders[i].NameOffset; break;
+                    case 7: nameOffset = (directory as Directory7).Folders[i].NameOffset; break;
 #else
-                    case 4: (directory as Directory4)!.Folders[i]!.Name = strings[(directory as Directory4)!.Folders[i]!.NameOffset] ?? string.Empty; break;
-                    case 5: (directory as Directory5)!.Folders[i]!.Name = strings[(directory as Directory5)!.Folders[i]!.NameOffset] ?? string.Empty; break;
-                    case 6: (directory as Directory6)!.Folders[i]!.Name = strings[(directory as Directory6)!.Folders[i]!.NameOffset] ?? string.Empty; break;
-                    case 7: (directory as Directory7)!.Folders[i]!.Name = strings[(directory as Directory7)!.Folders[i]!.NameOffset] ?? string.Empty; break;
+                    case 4: nameOffset = (directory as Directory4)!.Folders![i]!.NameOffset; break;
+                    case 5: nameOffset = (directory as Directory5)!.Folders![i]!.NameOffset; break;
+                    case 6: nameOffset = (directory as Directory6)!.Folders![i]!.NameOffset; break;
+                    case 7: nameOffset = (directory as Directory7)!.Folders![i]!.NameOffset; break;
+#endif
+                    default: return null;
+                }
+
+                switch (majorVersion)
+                {
+#if NET48
+                    case 4: (directory as Directory4).Folders[i].Name = strings[nameOffset]; break;
+                    case 5: (directory as Directory5).Folders[i].Name = strings[nameOffset]; break;
+                    case 6: (directory as Directory6).Folders[i].Name = strings[nameOffset]; break;
+                    case 7: (directory as Directory7).Folders[i].Name = strings[nameOffset]; break;
+#else
+                    case 4: (directory as Directory4)!.Folders![i]!.Name = strings[nameOffset]; break;
+                    case 5: (directory as Directory5)!.Folders![i]!.Name = strings[nameOffset]; break;
+                    case 6: (directory as Directory6)!.Folders![i]!.Name = strings[nameOffset]; break;
+                    case 7: (directory as Directory7)!.Folders![i]!.Name = strings[nameOffset]; break;
 #endif
                     default: return null;
                 }
@@ -574,18 +591,35 @@ namespace SabreTools.Serialization.Streams
             // Loop through all files to assign names
             for (int i = 0; i < fileCount; i++)
             {
+                uint nameOffset;
                 switch (majorVersion)
                 {
 #if NET48
-                    case 4: (directory as Directory4).Files[i].Name = strings[(directory as Directory4).Files[i].NameOffset]; break;
-                    case 5: (directory as Directory5).Files[i].Name = strings[(directory as Directory5).Files[i].NameOffset]; break;
-                    case 6: (directory as Directory6).Files[i].Name = strings[(directory as Directory6).Files[i].NameOffset]; break;
-                    case 7: (directory as Directory7).Files[i].Name = strings[(directory as Directory7).Files[i].NameOffset]; break;
+                    case 4: nameOffset = (directory as Directory4).Files[i].NameOffset; break;
+                    case 5: nameOffset = (directory as Directory5).Files[i].NameOffset; break;
+                    case 6: nameOffset = (directory as Directory6).Files[i].NameOffset; break;
+                    case 7: nameOffset = (directory as Directory7).Files[i].NameOffset; break;
 #else
-                    case 4: (directory as Directory4)!.Files[i]!.Name = strings[(directory as Directory4)!.Files[i]!.NameOffset] ?? string.Empty; break;
-                    case 5: (directory as Directory5)!.Files[i]!.Name = strings[(directory as Directory5)!.Files[i]!.NameOffset] ?? string.Empty; break;
-                    case 6: (directory as Directory6)!.Files[i]!.Name = strings[(directory as Directory6)!.Files[i]!.NameOffset] ?? string.Empty; break;
-                    case 7: (directory as Directory7)!.Files[i]!.Name = strings[(directory as Directory7)!.Files[i]!.NameOffset] ?? string.Empty; break;
+                    case 4: nameOffset = (directory as Directory4)!.Files![i]!.NameOffset; break;
+                    case 5: nameOffset = (directory as Directory5)!.Files![i]!.NameOffset; break;
+                    case 6: nameOffset = (directory as Directory6)!.Files![i]!.NameOffset; break;
+                    case 7: nameOffset = (directory as Directory7)!.Files![i]!.NameOffset; break;
+#endif
+                    default: return null;
+                }
+
+                switch (majorVersion)
+                {
+#if NET48
+                    case 4: (directory as Directory4).Files[i].Name = strings[nameOffset]; break;
+                    case 5: (directory as Directory5).Files[i].Name = strings[nameOffset]; break;
+                    case 6: (directory as Directory6).Files[i].Name = strings[nameOffset]; break;
+                    case 7: (directory as Directory7).Files[i].Name = strings[nameOffset]; break;
+#else
+                    case 4: (directory as Directory4)!.Files![i]!.Name = strings[nameOffset]; break;
+                    case 5: (directory as Directory5)!.Files![i]!.Name = strings[nameOffset]; break;
+                    case 6: (directory as Directory6)!.Files![i]!.Name = strings[nameOffset]; break;
+                    case 7: (directory as Directory7)!.Files![i]!.Name = strings[nameOffset]; break;
 #endif
                     default: return null;
                 }

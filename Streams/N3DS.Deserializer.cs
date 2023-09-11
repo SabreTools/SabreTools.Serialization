@@ -93,15 +93,27 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
+#if NET48
                 if (cart.Partitions[i].MagicID != NCCHMagicNumber)
+#else
+                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
+#endif
                     continue;
 
                 // If we have no partitions table
+#if NET48
                 if (cart.Header.PartitionsTable == null)
+#else
+                if (cart.Header!.PartitionsTable == null)
+#endif
                     continue;
 
                 // Get the extended header offset
+#if NET48
                 long offset = (cart.Header.PartitionsTable[i].Offset * mediaUnitSize) + 0x200;
+#else
+                long offset = (cart.Header.PartitionsTable[i]!.Offset * mediaUnitSize) + 0x200;
+#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -125,15 +137,27 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
+#if NET48
                 if (cart.Partitions[i].MagicID != NCCHMagicNumber)
+#else
+                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
+#endif
                     continue;
 
                 // If we have no partitions table
+#if NET48
                 if (cart.Header.PartitionsTable == null)
+#else
+                if (cart.Header!.PartitionsTable == null)
+#endif
                     continue;
 
                 // Get the ExeFS header offset
+#if NET48
                 long offset = (cart.Header.PartitionsTable[i].Offset + cart.Partitions[i].ExeFSOffsetInMediaUnits) * mediaUnitSize;
+#else
+                long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.ExeFSOffsetInMediaUnits) * mediaUnitSize;
+#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -155,15 +179,27 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
+#if NET48
                 if (cart.Partitions[i].MagicID != NCCHMagicNumber)
+#else
+                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
+#endif
                     continue;
 
                 // If we have no partitions table
+#if NET48
                 if (cart.Header.PartitionsTable == null)
+#else
+                if (cart.Header!.PartitionsTable == null)
+#endif
                     continue;
 
                 // Get the RomFS header offset
+#if NET48
                 long offset = (cart.Header.PartitionsTable[i].Offset + cart.Partitions[i].RomFSOffsetInMediaUnits) * mediaUnitSize;
+#else
+                long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.RomFSOffsetInMediaUnits) * mediaUnitSize;
+#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 

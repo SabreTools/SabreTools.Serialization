@@ -24,6 +24,7 @@ namespace SabreTools.Serialization.CrossModel
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.File
                     .Where(f => f != null)
                     .Select(ConvertMachineToInternalModel)
+                    .Where(m => m != null)
                     .ToArray();
             }
 
@@ -45,7 +46,11 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ArchiveDotOrg.File"/> to <cref="Models.Metadata.Machine"/>
         /// </summary>
+#if NET48
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Models.ArchiveDotOrg.File item)
+#else
+        private static Models.Metadata.Machine ConvertMachineToInternalModel(Models.ArchiveDotOrg.File? item)
+#endif
         {
             var machine = new Models.Metadata.Machine
             {
@@ -57,8 +62,15 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ArchiveDotOrg.File"/> to <cref="Models.Metadata.Rom"/>
         /// </summary>
+#if NET48
         private static Models.Metadata.Rom ConvertToInternalModel(Models.ArchiveDotOrg.File item)
+#else
+        private static Models.Metadata.Rom? ConvertToInternalModel(Models.ArchiveDotOrg.File? item)
+#endif
         {
+            if (item == null)
+                return null;
+
             var rom = new Models.Metadata.Rom
             {
                 [Models.Metadata.Rom.NameKey] = item.Name,
