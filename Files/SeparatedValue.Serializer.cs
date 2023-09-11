@@ -6,15 +6,22 @@ namespace SabreTools.Serialization.Files
     {
         /// <inheritdoc/>
 #if NET48
-        public bool Serialize(MetadataFile obj, string path)
+        public bool Serialize(MetadataFile obj, string path) => Serialize(obj, path, ',');
 #else
-        public bool Serialize(MetadataFile? obj, string? path)
+        public bool Serialize(MetadataFile? obj, string? path) => Serialize(obj, path, ',');
+#endif
+
+        /// <inheritdoc/>
+#if NET48
+        public bool Serialize(MetadataFile obj, string path, char delim)
+#else
+        public bool Serialize(MetadataFile? obj, string? path, char delim)
 #endif
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;
 
-            using (var stream = new Streams.SeparatedValue().Serialize(obj))
+            using (var stream = new Streams.SeparatedValue().Serialize(obj, delim))
             {
                 if (stream == null)
                     return false;

@@ -4,15 +4,22 @@ namespace SabreTools.Serialization.Files
     {
         /// <inheritdoc/>
 #if NET48
-        public bool Serialize(Models.Hashfile.Hashfile obj, string path)
+        public bool Serialize(Models.Hashfile.Hashfile obj, string path) => Serialize(obj, path, Hash.CRC);
 #else
-        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
+        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path) => Serialize(obj, path, Hash.CRC);
+#endif
+
+        /// <inheritdoc/>
+#if NET48
+        public bool Serialize(Models.Hashfile.Hashfile obj, string path, Hash hash)
+#else
+        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
 #endif
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;
 
-            using (var stream = new Streams.Hashfile().Serialize(obj))
+            using (var stream = new Streams.Hashfile().Serialize(obj, hash))
             {
                 if (stream == null)
                     return false;

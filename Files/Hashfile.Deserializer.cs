@@ -4,14 +4,21 @@ namespace SabreTools.Serialization.Files
     {
         /// <inheritdoc/>
 #if NET48
-        public Models.Hashfile.Hashfile Deserialize(string path)
+        public Models.Hashfile.Hashfile Deserialize(string path) => Deserialize(path, Hash.CRC);
 #else
-        public Models.Hashfile.Hashfile? Deserialize(string? path)
+        public Models.Hashfile.Hashfile? Deserialize(string? path) => Deserialize(path, Hash.CRC);
+#endif
+
+        /// <inheritdoc/>
+#if NET48
+        public Models.Hashfile.Hashfile Deserialize(string path, Hash hash)
+#else
+        public Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash)
 #endif
         {
             using (var stream = PathProcessor.OpenStream(path))
             {
-                return new Streams.Hashfile().Deserialize(stream);
+                return new Streams.Hashfile().Deserialize(stream, hash);
             }
         }
     }

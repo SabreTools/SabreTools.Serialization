@@ -6,14 +6,21 @@ namespace SabreTools.Serialization.Files
     {
         /// <inheritdoc/>
 #if NET48
-        public MetadataFile Deserialize(string path)
+        public MetadataFile Deserialize(string path) => Deserialize(path, true);
 #else
-        public MetadataFile? Deserialize(string? path)
+        public MetadataFile? Deserialize(string? path) => Deserialize(path, true);
+#endif
+
+        /// <inheritdoc/>
+#if NET48
+        public MetadataFile Deserialize(string path, bool quotes)
+#else
+        public MetadataFile? Deserialize(string? path, bool quotes)
 #endif
         {
             using (var stream = PathProcessor.OpenStream(path))
             {
-                return new Streams.ClrMamePro().Deserialize(stream);
+                return new Streams.ClrMamePro().Deserialize(stream, quotes);
             }
         }
     }
