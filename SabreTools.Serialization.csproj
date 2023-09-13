@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="SabreTools.IO" Version="1.1.1" />
-    <PackageReference Include="SabreTools.Models" Version="1.1.1" />
+    <PackageReference Include="SabreTools.Models" Version="1.1.2" />
   </ItemGroup>
 
 </Project>
