@@ -4,7 +4,7 @@
     <!-- Assembly Properties -->
     <TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
     <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- Package Properties -->
