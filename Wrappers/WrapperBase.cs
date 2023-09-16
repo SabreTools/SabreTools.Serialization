@@ -401,12 +401,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Printing
-
-        /// <summary>
-        /// Export the item information as pretty-printed text
-        /// </summary>
-        public abstract StringBuilder PrettyPrint();
+        #region JSON Export
 
 #if NET6_0_OR_GREATER
         /// <summary>
