@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.SGA;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Streams

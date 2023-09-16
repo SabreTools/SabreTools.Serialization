@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.AACS;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

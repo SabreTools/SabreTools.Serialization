@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
     /// Defines how to serialize to and from Streams

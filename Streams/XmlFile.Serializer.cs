@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

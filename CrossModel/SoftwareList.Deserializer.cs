@@ -1,5 +1,6 @@
 using System.Linq;
 using SabreTools.Models.SoftwareList;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

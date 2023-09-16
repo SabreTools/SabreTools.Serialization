@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.DosCenter;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

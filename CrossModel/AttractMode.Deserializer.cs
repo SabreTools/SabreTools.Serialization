@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using SabreTools.Models.AttractMode;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

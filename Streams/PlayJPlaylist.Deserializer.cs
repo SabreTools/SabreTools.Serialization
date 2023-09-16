@@ -1,6 +1,7 @@
 using System.IO;
 using SabreTools.IO;
 using SabreTools.Models.PlayJ;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

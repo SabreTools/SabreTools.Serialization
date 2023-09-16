@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SabreTools.Models.Listrom;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

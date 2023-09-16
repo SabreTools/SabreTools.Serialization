@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PIC;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PIC.Constants;
 
 namespace SabreTools.Serialization.Streams

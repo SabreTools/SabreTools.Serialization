@@ -1,4 +1,5 @@
 using SabreTools.Models.Listrom;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {

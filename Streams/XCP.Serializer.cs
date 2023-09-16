@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

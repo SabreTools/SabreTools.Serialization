@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Models.CueSheets;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

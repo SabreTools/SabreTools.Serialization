@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.N3DS;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

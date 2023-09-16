@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SabreTools.Models.CueSheets;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {

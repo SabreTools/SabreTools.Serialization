@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.NewExecutable;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Streams

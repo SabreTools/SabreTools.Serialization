@@ -1,6 +1,6 @@
-using System;
 using System.Linq;
 using SabreTools.Models.Logiqx;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

@@ -1,3 +1,5 @@
+using SabreTools.Serialization.Interfaces;
+
 namespace SabreTools.Serialization.Files
 {
     public partial class XeMID : IFileSerializer<Models.Xbox.XeMID>

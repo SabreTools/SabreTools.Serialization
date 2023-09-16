@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.SeparatedValue;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

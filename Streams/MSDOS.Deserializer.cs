@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.MSDOS;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.MSDOS.Constants;
 
 namespace SabreTools.Serialization.Streams

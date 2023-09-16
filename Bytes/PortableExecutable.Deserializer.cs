@@ -1,5 +1,6 @@
 using System.IO;
 using SabreTools.Models.PortableExecutable;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {

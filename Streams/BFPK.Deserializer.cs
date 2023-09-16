@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.BFPK;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.BFPK.Constants;
 
 namespace SabreTools.Serialization.Streams

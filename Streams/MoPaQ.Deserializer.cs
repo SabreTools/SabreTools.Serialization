@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.MoPaQ;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.MoPaQ.Constants;
 
 namespace SabreTools.Serialization.Streams

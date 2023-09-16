@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.BSP;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.BSP.Constants;
 
 namespace SabreTools.Serialization.Streams

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SabreTools.Models.SeparatedValue;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

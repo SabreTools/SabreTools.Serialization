@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.ClrMamePro;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

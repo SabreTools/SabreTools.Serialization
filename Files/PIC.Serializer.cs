@@ -1,4 +1,5 @@
 using SabreTools.Models.PIC;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {

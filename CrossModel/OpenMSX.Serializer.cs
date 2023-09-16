@@ -1,5 +1,6 @@
 using System.Linq;
 using SabreTools.Models.OpenMSX;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

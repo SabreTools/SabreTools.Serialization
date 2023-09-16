@@ -1,3 +1,5 @@
+using SabreTools.Serialization.Interfaces;
+
 namespace SabreTools.Serialization.Files
 {
     /// <summary>

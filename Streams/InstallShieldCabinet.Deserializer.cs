@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.InstallShieldCabinet;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Streams

@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.XZP;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.XZP.Constants;
 
 namespace SabreTools.Serialization.Streams

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.Models.CFB;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {

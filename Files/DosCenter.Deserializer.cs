@@ -1,4 +1,5 @@
 using SabreTools.Models.DosCenter;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
