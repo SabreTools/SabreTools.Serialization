@@ -209,7 +209,7 @@ namespace SabreTools.Serialization.Wrappers
 #if NET48
         public byte[] ReadFromDataSource(int position, int length)
 #else
-        protected byte[]? ReadFromDataSource(int position, int length)
+        public byte[]? ReadFromDataSource(int position, int length)
 #endif
         {
             // Validate the data source
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Wrappers
 #if NET48
         public List<string> ReadStringsFromDataSource(int position, int length, int charLimit = 5)
 #else
-        protected List<string>? ReadStringsFromDataSource(int position, int length, int charLimit = 5)
+        public List<string>? ReadStringsFromDataSource(int position, int length, int charLimit = 5)
 #endif
         {
             // Read the data as a byte array first
