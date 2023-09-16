@@ -90,15 +90,15 @@ namespace SabreTools.Serialization
             for (int i = 0; i < sections.Length; i++)
             {
                 // If the section is invalid, just skip it
-                if (sections[i] == null)
+                var section = sections[i];
+                if (section == null)
                     continue;
 
                 // If the section "starts" at 0, just skip it
-                if (sections[i].PointerToRawData == 0)
+                if (section.PointerToRawData == 0)
                     continue;
 
                 // Attempt to derive the physical address from the current section
-                var section = sections[i];
                 if (rva >= section.VirtualAddress && section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return i;
                 else if (rva >= section.VirtualAddress && section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
