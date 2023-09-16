@@ -5,70 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using SabreTools.IO;
+using SabreTools.Models.PortableExecutable;
 
 namespace SabreTools.Serialization
 {
-    public static class Extensions
+    public static partial class Extensions
     {
-        #region New Executable
-
-        /// <summary>
-        /// Determine if a resource type information entry is an integer or offset
-        /// </summary>
-        /// <param name="entry">Resource type information entry to check</param>
-        /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
-        public static bool? IsIntegerType(this Models.NewExecutable.ResourceTypeInformationEntry entry)
-        {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return null;
-
-            // If the highest order bit is set, it's an integer type
-            return (entry.TypeID & 0x8000) != 0;
-        }
-
-        /// <summary>
-        /// Determine if a resource type resource entry is an integer or offset
-        /// </summary>
-        /// <param name="entry">Resource type resource entry to check</param>
-        /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
-        public static bool? IsIntegerType(this Models.NewExecutable.ResourceTypeResourceEntry entry)
-        {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return null;
-
-            // If the highest order bit is set, it's an integer type
-            return (entry.ResourceID & 0x8000) != 0;
-        }
-
-        /// <summary>
-        /// Get the segment entry type for an entry table bundle
-        /// </summary>
-        /// <param name="entry">Entry table bundle to check</param>
-        /// <returns>SegmentEntryType corresponding to the type</returns>
-        public static Models.NewExecutable.SegmentEntryType GetEntryType(this Models.NewExecutable.EntryTableBundle entry)
-        {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return Models.NewExecutable.SegmentEntryType.Unused;
-
-            // Determine the entry type based on segment indicator
-            if (entry.SegmentIndicator == 0x00)
-                return Models.NewExecutable.SegmentEntryType.Unused;
-            else if (entry.SegmentIndicator >= 0x01 && entry.SegmentIndicator <= 0xFE)
-                return Models.NewExecutable.SegmentEntryType.FixedSegment;
-            else if (entry.SegmentIndicator == 0xFF)
-                return Models.NewExecutable.SegmentEntryType.MoveableSegment;
-
-            // We should never get here
-            return Models.NewExecutable.SegmentEntryType.Unused;
-        }
-
-        #endregion
-
-        #region Portable Executable
-
         /// <summary>
         /// Convert a relative virtual address to a physical one
         /// </summary>
@@ -76,9 +18,9 @@ namespace SabreTools.Serialization
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Physical address, 0 on error</returns>
 #if NET48
-        public static uint ConvertVirtualAddress(this uint rva, Models.PortableExecutable.SectionHeader[] sections)
+        public static uint ConvertVirtualAddress(this uint rva, SectionHeader[] sections)
 #else
-        public static uint ConvertVirtualAddress(this uint rva, Models.PortableExecutable.SectionHeader?[] sections)
+        public static uint ConvertVirtualAddress(this uint rva, SectionHeader?[]? sections)
 #endif
         {
             // If we have an invalid section table, we can't do anything
@@ -130,7 +72,11 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Section index, null on error</returns>
-        public static int ContainingSectionIndex(this uint rva, Models.PortableExecutable.SectionHeader[] sections)
+#if NET48
+        public static int ContainingSectionIndex(this uint rva, SectionHeader[] sections)
+#else
+        public static int ContainingSectionIndex(this uint rva, SectionHeader?[]? sections)
+#endif
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -169,9 +115,9 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled SecuROM AddD overlay data on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.SecuROMAddD AsSecuROMAddD(this byte[] data, ref int offset)
+        public static SecuROMAddD AsSecuROMAddD(this byte[] data, ref int offset)
 #else
-        public static Models.PortableExecutable.SecuROMAddD? AsSecuROMAddD(this byte[]? data, ref int offset)
+        public static SecuROMAddD? AsSecuROMAddD(this byte[]? data, ref int offset)
 #endif
         {
             // If we have data that's invalid, we can't do anything
@@ -179,7 +125,7 @@ namespace SabreTools.Serialization
                 return null;
 
             // Read in the table
-            var addD = new Models.PortableExecutable.SecuROMAddD();
+            var addD = new SecuROMAddD();
 
             addD.Signature = data.ReadUInt32(ref offset);
             if (addD.Signature != 0x44646441)
@@ -205,10 +151,10 @@ namespace SabreTools.Serialization
 
             addD.Unknown14h = data.ReadBytes(ref offset, bytesToRead);
 
-            addD.Entries = new Models.PortableExecutable.SecuROMAddDEntry[addD.EntryCount];
+            addD.Entries = new SecuROMAddDEntry[addD.EntryCount];
             for (int i = 0; i < addD.EntryCount; i++)
             {
-                var addDEntry = new Models.PortableExecutable.SecuROMAddDEntry();
+                var addDEntry = new SecuROMAddDEntry();
 
                 addDEntry.PhysicalOffset = data.ReadUInt32(ref offset);
                 addDEntry.Length = data.ReadUInt32(ref offset);
@@ -236,16 +182,16 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled NB10 Program Database on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.NB10ProgramDatabase AsNB10ProgramDatabase(this byte[] data, ref int offset)
+        public static NB10ProgramDatabase AsNB10ProgramDatabase(this byte[] data, ref int offset)
 #else
-        public static Models.PortableExecutable.NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
+        public static NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
 #endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
                 return null;
 
-            var nb10ProgramDatabase = new Models.PortableExecutable.NB10ProgramDatabase();
+            var nb10ProgramDatabase = new NB10ProgramDatabase();
 
             nb10ProgramDatabase.Signature = data.ReadUInt32(ref offset);
             if (nb10ProgramDatabase.Signature != 0x3031424E)
@@ -266,16 +212,16 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled RSDS Program Database on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.RSDSProgramDatabase AsRSDSProgramDatabase(this byte[] data, ref int offset)
+        public static RSDSProgramDatabase AsRSDSProgramDatabase(this byte[] data, ref int offset)
 #else
-        public static Models.PortableExecutable.RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[]? data, ref int offset)
+        public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[]? data, ref int offset)
 #endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
                 return null;
 
-            var rsdsProgramDatabase = new Models.PortableExecutable.RSDSProgramDatabase();
+            var rsdsProgramDatabase = new RSDSProgramDatabase();
 
             rsdsProgramDatabase.Signature = data.ReadUInt32(ref offset);
             if (rsdsProgramDatabase.Signature != 0x53445352)
@@ -302,9 +248,9 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled resource header on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.ResourceHeader AsResourceHeader(this byte[] data, ref int offset)
+        public static ResourceHeader AsResourceHeader(this byte[] data, ref int offset)
 #else
-        public static Models.PortableExecutable.ResourceHeader? AsResourceHeader(this byte[]? data, ref int offset)
+        public static ResourceHeader? AsResourceHeader(this byte[]? data, ref int offset)
 #endif
         {
             // If we have data that's invalid, we can't do anything
@@ -312,13 +258,13 @@ namespace SabreTools.Serialization
                 return null;
 
             // Read in the table
-            var header = new Models.PortableExecutable.ResourceHeader();
+            var header = new ResourceHeader();
             header.DataSize = data.ReadUInt32(ref offset);
             header.HeaderSize = data.ReadUInt32(ref offset);
-            header.ResourceType = (Models.PortableExecutable.ResourceType)data.ReadUInt32(ref offset); // TODO: Could be a string too
+            header.ResourceType = (ResourceType)data.ReadUInt32(ref offset); // TODO: Could be a string too
             header.Name = data.ReadUInt32(ref offset); // TODO: Could be a string too
             header.DataVersion = data.ReadUInt32(ref offset);
-            header.MemoryFlags = (Models.PortableExecutable.MemoryFlags)data.ReadUInt16(ref offset);
+            header.MemoryFlags = (MemoryFlags)data.ReadUInt16(ref offset);
             header.LanguageId = data.ReadUInt16(ref offset);
             header.Version = data.ReadUInt32(ref offset);
             header.Characteristics = data.ReadUInt32(ref offset);
@@ -332,9 +278,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
         /// <returns>A filled accelerator table resource on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.AcceleratorTableEntry[] AsAcceleratorTableResource(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static AcceleratorTableEntry[] AsAcceleratorTableResource(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.AcceleratorTableEntry[]? AsAcceleratorTableResource(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this ResourceDataEntry? entry)
 #endif
         {
             // If we have data that's invalid for this resource type, we can't do anything
@@ -348,14 +294,14 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var table = new Models.PortableExecutable.AcceleratorTableEntry[count];
+            var table = new AcceleratorTableEntry[count];
 
             // Read in the table
             for (int i = 0; i < count; i++)
             {
-                var acceleratorTableEntry = new Models.PortableExecutable.AcceleratorTableEntry();
+                var acceleratorTableEntry = new AcceleratorTableEntry();
 
-                acceleratorTableEntry.Flags = (Models.PortableExecutable.AcceleratorTableFlags)entry.Data.ReadUInt16(ref offset);
+                acceleratorTableEntry.Flags = (AcceleratorTableFlags)entry.Data.ReadUInt16(ref offset);
                 acceleratorTableEntry.Ansi = entry.Data.ReadUInt16(ref offset);
                 acceleratorTableEntry.Id = entry.Data.ReadUInt16(ref offset);
                 acceleratorTableEntry.Padding = entry.Data.ReadUInt16(ref offset);
@@ -372,9 +318,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
         /// <returns>A filled side-by-side assembly manifest on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.AssemblyManifest AsAssemblyManifest(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static AssemblyManifest AsAssemblyManifest(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.AssemblyManifest? AsAssemblyManifest(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static AssemblyManifest? AsAssemblyManifest(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -383,8 +329,8 @@ namespace SabreTools.Serialization
 
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Models.PortableExecutable.AssemblyManifest));
-                return serializer.Deserialize(new MemoryStream(entry.Data)) as Models.PortableExecutable.AssemblyManifest;
+                XmlSerializer serializer = new XmlSerializer(typeof(AssemblyManifest));
+                return serializer.Deserialize(new MemoryStream(entry.Data)) as AssemblyManifest;
             }
             catch
             {
@@ -398,9 +344,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a dialog box</param>
         /// <returns>A filled dialog box on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.DialogBoxResource AsDialogBox(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static DialogBoxResource AsDialogBox(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.DialogBoxResource? AsDialogBox(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static DialogBoxResource? AsDialogBox(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -411,7 +357,7 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var dialogBoxResource = new Models.PortableExecutable.DialogBoxResource();
+            var dialogBoxResource = new DialogBoxResource();
 
             // Try to read the signature for an extended dialog box template
             int signatureOffset = sizeof(ushort);
@@ -420,13 +366,13 @@ namespace SabreTools.Serialization
             {
                 #region Extended dialog template
 
-                var dialogTemplateExtended = new Models.PortableExecutable.DialogTemplateExtended();
+                var dialogTemplateExtended = new DialogTemplateExtended();
 
                 dialogTemplateExtended.Version = entry.Data.ReadUInt16(ref offset);
                 dialogTemplateExtended.Signature = entry.Data.ReadUInt16(ref offset);
                 dialogTemplateExtended.HelpID = entry.Data.ReadUInt32(ref offset);
-                dialogTemplateExtended.ExtendedStyle = (Models.PortableExecutable.ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplateExtended.Style = (Models.PortableExecutable.WindowStyles)entry.Data.ReadUInt32(ref offset);
+                dialogTemplateExtended.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
+                dialogTemplateExtended.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
                 dialogTemplateExtended.DialogItems = entry.Data.ReadUInt16(ref offset);
                 dialogTemplateExtended.PositionX = entry.Data.ReadInt16(ref offset);
                 dialogTemplateExtended.PositionY = entry.Data.ReadInt16(ref offset);
@@ -535,7 +481,7 @@ namespace SabreTools.Serialization
                 #region Point size and typeface
 
                 // Only if DS_SETFONT is set are the values here used
-                if (dialogTemplateExtended.Style.HasFlag(Models.PortableExecutable.WindowStyles.DS_SETFONT))
+                if (dialogTemplateExtended.Style.HasFlag(WindowStyles.DS_SETFONT))
                 {
                     dialogTemplateExtended.PointSize = entry.Data.ReadUInt16(ref offset);
                     dialogTemplateExtended.Weight = entry.Data.ReadUInt16(ref offset);
@@ -559,15 +505,15 @@ namespace SabreTools.Serialization
 
                 #region Extended dialog item templates
 
-                var dialogItemExtendedTemplates = new List<Models.PortableExecutable.DialogItemTemplateExtended>();
+                var dialogItemExtendedTemplates = new List<DialogItemTemplateExtended>();
 
                 for (int i = 0; i < dialogTemplateExtended.DialogItems; i++)
                 {
-                    var dialogItemTemplate = new Models.PortableExecutable.DialogItemTemplateExtended();
+                    var dialogItemTemplate = new DialogItemTemplateExtended();
 
                     dialogItemTemplate.HelpID = entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.ExtendedStyle = (Models.PortableExecutable.ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.Style = (Models.PortableExecutable.WindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
                     dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
@@ -587,7 +533,7 @@ namespace SabreTools.Serialization
                         _ = entry.Data.ReadUInt16(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.ClassResourceOrdinal = (Models.PortableExecutable.DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
                     }
                     else
                     {
@@ -665,10 +611,10 @@ namespace SabreTools.Serialization
             {
                 #region Dialog template
 
-                var dialogTemplate = new Models.PortableExecutable.DialogTemplate();
+                var dialogTemplate = new DialogTemplate();
 
-                dialogTemplate.Style = (Models.PortableExecutable.WindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplate.ExtendedStyle = (Models.PortableExecutable.ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
+                dialogTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
+                dialogTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
                 dialogTemplate.ItemCount = entry.Data.ReadUInt16(ref offset);
                 dialogTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                 dialogTemplate.PositionY = entry.Data.ReadInt16(ref offset);
@@ -777,7 +723,7 @@ namespace SabreTools.Serialization
                 #region Point size and typeface
 
                 // Only if DS_SETFONT is set are the values here used
-                if (dialogTemplate.Style.HasFlag(Models.PortableExecutable.WindowStyles.DS_SETFONT))
+                if (dialogTemplate.Style.HasFlag(WindowStyles.DS_SETFONT))
                 {
                     dialogTemplate.PointSizeValue = entry.Data.ReadUInt16(ref offset);
 
@@ -800,14 +746,14 @@ namespace SabreTools.Serialization
 
                 #region Dialog item templates
 
-                var dialogItemTemplates = new List<Models.PortableExecutable.DialogItemTemplate>();
+                var dialogItemTemplates = new List<DialogItemTemplate>();
 
                 for (int i = 0; i < dialogTemplate.ItemCount; i++)
                 {
-                    var dialogItemTemplate = new Models.PortableExecutable.DialogItemTemplate();
+                    var dialogItemTemplate = new DialogItemTemplate();
 
-                    dialogItemTemplate.Style = (Models.PortableExecutable.WindowStyles)entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.ExtendedStyle = (Models.PortableExecutable.ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
                     dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
@@ -827,7 +773,7 @@ namespace SabreTools.Serialization
                         _ = entry.Data.ReadUInt16(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.ClassResourceOrdinal = (Models.PortableExecutable.DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
                     }
                     else
                     {
@@ -911,9 +857,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a font group</param>
         /// <returns>A filled font group on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.FontGroupHeader AsFontGroup(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static FontGroupHeader AsFontGroup(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.FontGroupHeader? AsFontGroup(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static FontGroupHeader? AsFontGroup(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -924,19 +870,19 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var fontGroupHeader = new Models.PortableExecutable.FontGroupHeader();
+            var fontGroupHeader = new FontGroupHeader();
 
             fontGroupHeader.NumberOfFonts = entry.Data.ReadUInt16(ref offset);
             if (fontGroupHeader.NumberOfFonts > 0)
             {
-                fontGroupHeader.DE = new Models.PortableExecutable.DirEntry[fontGroupHeader.NumberOfFonts];
+                fontGroupHeader.DE = new DirEntry[fontGroupHeader.NumberOfFonts];
                 for (int i = 0; i < fontGroupHeader.NumberOfFonts; i++)
                 {
-                    var dirEntry = new Models.PortableExecutable.DirEntry();
+                    var dirEntry = new DirEntry();
 
                     dirEntry.FontOrdinal = entry.Data.ReadUInt16(ref offset);
 
-                    dirEntry.Entry = new Models.PortableExecutable.FontDirEntry();
+                    dirEntry.Entry = new FontDirEntry();
                     dirEntry.Entry.Version = entry.Data.ReadUInt16(ref offset);
                     dirEntry.Entry.Size = entry.Data.ReadUInt32(ref offset);
                     dirEntry.Entry.Copyright = entry.Data.ReadBytes(ref offset, 60);
@@ -984,9 +930,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a menu</param>
         /// <returns>A filled menu on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.MenuResource AsMenu(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static MenuResource AsMenu(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.MenuResource? AsMenu(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static MenuResource? AsMenu(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -997,7 +943,7 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var menuResource = new Models.PortableExecutable.MenuResource();
+            var menuResource = new MenuResource();
 
             // Try to read the version for an extended header
             int versionOffset = 0;
@@ -1006,7 +952,7 @@ namespace SabreTools.Serialization
             {
                 #region Extended menu header
 
-                var menuHeaderExtended = new Models.PortableExecutable.MenuHeaderExtended();
+                var menuHeaderExtended = new MenuHeaderExtended();
 
                 menuHeaderExtended.Version = entry.Data.ReadUInt16(ref offset);
                 menuHeaderExtended.Offset = entry.Data.ReadUInt16(ref offset);
@@ -1018,7 +964,7 @@ namespace SabreTools.Serialization
 
                 #region Extended dialog item templates
 
-                var extendedMenuItems = new List<Models.PortableExecutable.MenuItemExtended>();
+                var extendedMenuItems = new List<MenuItemExtended>();
 
                 if (offset != 0)
                 {
@@ -1026,12 +972,12 @@ namespace SabreTools.Serialization
 
                     while (offset < entry.Data.Length)
                     {
-                        var extendedMenuItem = new Models.PortableExecutable.MenuItemExtended();
+                        var extendedMenuItem = new MenuItemExtended();
 
-                        extendedMenuItem.ItemType = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.State = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        extendedMenuItem.ItemType = (MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        extendedMenuItem.State = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         extendedMenuItem.ID = entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.Flags = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        extendedMenuItem.Flags = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         extendedMenuItem.MenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the DWORD boundary if we're not at the end
@@ -1053,7 +999,7 @@ namespace SabreTools.Serialization
             {
                 #region Menu header
 
-                var menuHeader = new Models.PortableExecutable.MenuHeader();
+                var menuHeader = new MenuHeader();
 
                 menuHeader.Version = entry.Data.ReadUInt16(ref offset);
                 menuHeader.HeaderSize = entry.Data.ReadUInt16(ref offset);
@@ -1064,26 +1010,26 @@ namespace SabreTools.Serialization
 
                 #region Menu items
 
-                var menuItems = new List<Models.PortableExecutable.MenuItem>();
+                var menuItems = new List<MenuItem>();
 
                 while (offset < entry.Data.Length)
                 {
-                    var menuItem = new Models.PortableExecutable.MenuItem();
+                    var menuItem = new MenuItem();
 
                     // Determine if this is a popup
                     int flagsOffset = offset;
-                    var initialFlags = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt16(ref flagsOffset);
-                    if (initialFlags.HasFlag(Models.PortableExecutable.MenuFlags.MF_POPUP))
+                    var initialFlags = (MenuFlags)entry.Data.ReadUInt16(ref flagsOffset);
+                    if (initialFlags.HasFlag(MenuFlags.MF_POPUP))
                     {
-                        menuItem.PopupItemType = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupState = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        menuItem.PopupItemType = (MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        menuItem.PopupState = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         menuItem.PopupID = entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupResInfo = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt32(ref offset);
+                        menuItem.PopupResInfo = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         menuItem.PopupMenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
                     }
                     else
                     {
-                        menuItem.NormalResInfo = (Models.PortableExecutable.MenuFlags)entry.Data.ReadUInt16(ref offset);
+                        menuItem.NormalResInfo = (MenuFlags)entry.Data.ReadUInt16(ref offset);
                         menuItem.NormalMenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
                     }
 
@@ -1111,9 +1057,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a message table resource</param>
         /// <returns>A filled message table resource on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.MessageResourceData AsMessageResourceData(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static MessageResourceData AsMessageResourceData(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.MessageResourceData? AsMessageResourceData(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static MessageResourceData? AsMessageResourceData(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -1124,17 +1070,17 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var messageResourceData = new Models.PortableExecutable.MessageResourceData();
+            var messageResourceData = new MessageResourceData();
 
             // Message resource blocks
             messageResourceData.NumberOfBlocks = entry.Data.ReadUInt32(ref offset);
             if (messageResourceData.NumberOfBlocks > 0)
             {
-                var messageResourceBlocks = new List<Models.PortableExecutable.MessageResourceBlock>();
+                var messageResourceBlocks = new List<MessageResourceBlock>();
 
                 for (int i = 0; i < messageResourceData.NumberOfBlocks; i++)
                 {
-                    var messageResourceBlock = new Models.PortableExecutable.MessageResourceBlock();
+                    var messageResourceBlock = new MessageResourceBlock();
 
                     messageResourceBlock.LowId = entry.Data.ReadUInt32(ref offset);
                     messageResourceBlock.HighId = entry.Data.ReadUInt32(ref offset);
@@ -1150,9 +1096,9 @@ namespace SabreTools.Serialization
             if (messageResourceData.Blocks != null && messageResourceData.Blocks.Length != 0)
             {
 #if NET48
-                var messageResourceEntries = new Dictionary<uint, Models.PortableExecutable.MessageResourceEntry>();
+                var messageResourceEntries = new Dictionary<uint, MessageResourceEntry>();
 #else
-                var messageResourceEntries = new Dictionary<uint, Models.PortableExecutable.MessageResourceEntry?>();
+                var messageResourceEntries = new Dictionary<uint, MessageResourceEntry?>();
 #endif
 
                 for (int i = 0; i < messageResourceData.Blocks.Length; i++)
@@ -1165,7 +1111,7 @@ namespace SabreTools.Serialization
 
                     for (uint j = messageResourceBlock.LowId; j <= messageResourceBlock.HighId; j++)
                     {
-                        var messageResourceEntry = new Models.PortableExecutable.MessageResourceEntry();
+                        var messageResourceEntry = new MessageResourceEntry();
 
                         messageResourceEntry.Length = entry.Data.ReadUInt16(ref offset);
                         messageResourceEntry.Flags = entry.Data.ReadUInt16(ref offset);
@@ -1195,9 +1141,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
         /// <returns>A filled string table resource on success, null on error</returns>
 #if NET48
-        public static Dictionary<int, string> AsStringTable(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static Dictionary<int, string> AsStringTable(this ResourceDataEntry entry)
 #else
-        public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static Dictionary<int, string?>? AsStringTable(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -1246,9 +1192,9 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
         /// <returns>A filled version info resource on success, null on error</returns>
 #if NET48
-        public static Models.PortableExecutable.VersionInfo AsVersionInfo(this Models.PortableExecutable.ResourceDataEntry entry)
+        public static VersionInfo AsVersionInfo(this ResourceDataEntry entry)
 #else
-        public static Models.PortableExecutable.VersionInfo? AsVersionInfo(this Models.PortableExecutable.ResourceDataEntry? entry)
+        public static VersionInfo? AsVersionInfo(this ResourceDataEntry? entry)
 #endif
         {
             // If we have an invalid entry, just skip
@@ -1259,11 +1205,11 @@ namespace SabreTools.Serialization
             int offset = 0;
 
             // Create the output object
-            var versionInfo = new Models.PortableExecutable.VersionInfo();
+            var versionInfo = new VersionInfo();
 
             versionInfo.Length = entry.Data.ReadUInt16(ref offset);
             versionInfo.ValueLength = entry.Data.ReadUInt16(ref offset);
-            versionInfo.ResourceType = (Models.PortableExecutable.VersionResourceType)entry.Data.ReadUInt16(ref offset);
+            versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16(ref offset);
             versionInfo.Key = entry.Data.ReadString(ref offset, Encoding.Unicode);
             if (versionInfo.Key != "VS_VERSION_INFO")
                 return null;
@@ -1274,7 +1220,7 @@ namespace SabreTools.Serialization
             // Read fixed file info
             if (versionInfo.ValueLength > 0)
             {
-                var fixedFileInfo = new Models.PortableExecutable.FixedFileInfo();
+                var fixedFileInfo = new FixedFileInfo();
                 fixedFileInfo.Signature = entry.Data.ReadUInt32(ref offset);
                 if (fixedFileInfo.Signature != 0xFEEF04BD)
                     return null;
@@ -1285,10 +1231,10 @@ namespace SabreTools.Serialization
                 fixedFileInfo.ProductVersionMS = entry.Data.ReadUInt32(ref offset);
                 fixedFileInfo.ProductVersionLS = entry.Data.ReadUInt32(ref offset);
                 fixedFileInfo.FileFlagsMask = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileFlags = (Models.PortableExecutable.FixedFileInfoFlags)(entry.Data.ReadUInt32(ref offset) & fixedFileInfo.FileFlagsMask);
-                fixedFileInfo.FileOS = (Models.PortableExecutable.FixedFileInfoOS)entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileType = (Models.PortableExecutable.FixedFileInfoFileType)entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileSubtype = (Models.PortableExecutable.FixedFileInfoFileSubtype)entry.Data.ReadUInt32(ref offset);
+                fixedFileInfo.FileFlags = (FixedFileInfoFlags)(entry.Data.ReadUInt32(ref offset) & fixedFileInfo.FileFlagsMask);
+                fixedFileInfo.FileOS = (FixedFileInfoOS)entry.Data.ReadUInt32(ref offset);
+                fixedFileInfo.FileType = (FixedFileInfoFileType)entry.Data.ReadUInt32(ref offset);
+                fixedFileInfo.FileSubtype = (FixedFileInfoFileSubtype)entry.Data.ReadUInt32(ref offset);
                 fixedFileInfo.FileDateMS = entry.Data.ReadUInt32(ref offset);
                 fixedFileInfo.FileDateLS = entry.Data.ReadUInt32(ref offset);
                 versionInfo.Value = fixedFileInfo;
@@ -1361,19 +1307,19 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled string file info resource on success, null on error</returns>
 #if NET48
-        private static Models.PortableExecutable.StringFileInfo AsStringFileInfo(byte[] data, ref int offset)
+        private static StringFileInfo AsStringFileInfo(byte[] data, ref int offset)
 #else
-        private static Models.PortableExecutable.StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
+        private static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
 #endif
         {
-            var stringFileInfo = new Models.PortableExecutable.StringFileInfo();
+            var stringFileInfo = new StringFileInfo();
 
             // Cache the initial offset
             int currentOffset = offset;
 
             stringFileInfo.Length = data.ReadUInt16(ref offset);
             stringFileInfo.ValueLength = data.ReadUInt16(ref offset);
-            stringFileInfo.ResourceType = (Models.PortableExecutable.VersionResourceType)data.ReadUInt16(ref offset);
+            stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
             stringFileInfo.Key = data.ReadString(ref offset, Encoding.Unicode);
             if (stringFileInfo.Key != "StringFileInfo")
             {
@@ -1388,14 +1334,14 @@ namespace SabreTools.Serialization
                     stringFileInfo.Padding = data.ReadByte(ref offset);
             }
 
-            var stringFileInfoChildren = new List<Models.PortableExecutable.StringTable>();
+            var stringFileInfoChildren = new List<StringTable>();
             while ((offset - currentOffset) < stringFileInfo.Length)
             {
-                var stringTable = new Models.PortableExecutable.StringTable();
+                var stringTable = new StringTable();
 
                 stringTable.Length = data.ReadUInt16(ref offset);
                 stringTable.ValueLength = data.ReadUInt16(ref offset);
-                stringTable.ResourceType = (Models.PortableExecutable.VersionResourceType)data.ReadUInt16(ref offset);
+                stringTable.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
                 stringTable.Key = data.ReadString(ref offset, Encoding.Unicode);
 
                 // Align to the DWORD boundary if we're not at the end
@@ -1405,14 +1351,14 @@ namespace SabreTools.Serialization
                         stringTable.Padding = data.ReadByte(ref offset);
                 }
 
-                var stringTableChildren = new List<Models.PortableExecutable.StringData>();
+                var stringTableChildren = new List<StringData>();
                 while ((offset - currentOffset) < stringTable.Length)
                 {
-                    var stringData = new Models.PortableExecutable.StringData();
+                    var stringData = new StringData();
 
                     stringData.Length = data.ReadUInt16(ref offset);
                     stringData.ValueLength = data.ReadUInt16(ref offset);
-                    stringData.ResourceType = (Models.PortableExecutable.VersionResourceType)data.ReadUInt16(ref offset);
+                    stringData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
                     stringData.Key = data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the DWORD boundary if we're not at the end
@@ -1460,19 +1406,19 @@ namespace SabreTools.Serialization
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled var file info resource on success, null on error</returns>
 #if NET48
-        private static Models.PortableExecutable.VarFileInfo AsVarFileInfo(byte[] data, ref int offset)
+        private static VarFileInfo AsVarFileInfo(byte[] data, ref int offset)
 #else
-        private static Models.PortableExecutable.VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
+        private static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
 #endif
         {
-            var varFileInfo = new Models.PortableExecutable.VarFileInfo();
+            var varFileInfo = new VarFileInfo();
 
             // Cache the initial offset
             int initialOffset = offset;
 
             varFileInfo.Length = data.ReadUInt16(ref offset);
             varFileInfo.ValueLength = data.ReadUInt16(ref offset);
-            varFileInfo.ResourceType = (Models.PortableExecutable.VersionResourceType)data.ReadUInt16(ref offset);
+            varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
             varFileInfo.Key = data.ReadString(ref offset, Encoding.Unicode);
             if (varFileInfo.Key != "VarFileInfo")
                 return null;
@@ -1484,14 +1430,14 @@ namespace SabreTools.Serialization
                     varFileInfo.Padding = data.ReadByte(ref offset);
             }
 
-            var varFileInfoChildren = new List<Models.PortableExecutable.VarData>();
+            var varFileInfoChildren = new List<VarData>();
             while ((offset - initialOffset) < varFileInfo.Length)
             {
-                var varData = new Models.PortableExecutable.VarData();
+                var varData = new VarData();
 
                 varData.Length = data.ReadUInt16(ref offset);
                 varData.ValueLength = data.ReadUInt16(ref offset);
-                varData.ResourceType = (Models.PortableExecutable.VersionResourceType)data.ReadUInt16(ref offset);
+                varData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
                 varData.Key = data.ReadString(ref offset, Encoding.Unicode);
                 if (varData.Key != "Translation")
                 {
@@ -1525,8 +1471,6 @@ namespace SabreTools.Serialization
 
             return varFileInfo;
         }
-
-        #endregion
 
         #endregion
     }
