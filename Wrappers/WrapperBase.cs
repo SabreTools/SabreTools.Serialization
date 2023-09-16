@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Validate the backing data source
         /// </summary>
         /// <returns>True if the data source is valid, false otherwise</returns>
-        protected bool DataSourceIsValid()
+        public bool DataSourceIsValid()
         {
             switch (_dataSource)
             {
@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="position">Position in the source</param>
         /// <param name="length">Length of the data to check</param>
         /// <returns>True if the positional data is valid, false otherwise</returns>
-        protected bool SegmentValid(int position, int length)
+        public bool SegmentValid(int position, int length)
         {
             // Validate the data souece
             if (!DataSourceIsValid())
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">Length of the requested data</param>
         /// <returns>Byte array containing the requested data, null on error</returns>
 #if NET48
-        protected byte[] ReadFromDataSource(int position, int length)
+        public byte[] ReadFromDataSource(int position, int length)
 #else
         protected byte[]? ReadFromDataSource(int position, int length)
 #endif
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="charLimit">Number of characters needed to be a valid string</param>
         /// <returns>String list containing the requested data, null on error</returns>
 #if NET48
-        protected List<string> ReadStringsFromDataSource(int position, int length, int charLimit = 5)
+        public List<string> ReadStringsFromDataSource(int position, int length, int charLimit = 5)
 #else
         protected List<string>? ReadStringsFromDataSource(int position, int length, int charLimit = 5)
 #endif
@@ -370,7 +370,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the ending offset of the source
         /// </summary>
         /// <returns>Value greater than 0 for a valid end of file, -1 on error</returns>
-        protected int GetEndOfFile()
+        public int GetEndOfFile()
         {
             // Validate the data souece
             if (!DataSourceIsValid())
