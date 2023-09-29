@@ -171,6 +171,7 @@ namespace SabreTools.Serialization.Streams
             {
                 case DiscTypeIdentifierROM:
                 case DiscTypeIdentifierROMUltra:
+                case DiscTypeIdentifierXGD4:
                     body.FormatDependentContents = data.ReadBytes(52);
                     break;
                 case DiscTypeIdentifierReWritable:
