@@ -33,9 +33,9 @@ namespace SabreTools.Serialization.Files
         private static Models.Xbox.XeMID? ParseXeMID(string? xemidString)
 #endif
         {
-            if (xemidString == null
-                || (xemidString.Length != 13 && xemidString.Length != 14
-                    && xemidString.Length != 21 && xemidString.Length != 22))
+            if (xemidString == null)
+                return null;
+            if (!(xemidString.Length == 13 || xemidString.Length == 14 || xemidString.Length == 21 || xemidString.Length == 22))
                 return null;
 
             var xemid = new Models.Xbox.XeMID();
