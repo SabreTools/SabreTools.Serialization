@@ -39,9 +39,6 @@ namespace SabreTools.Serialization.Files
             var xmid = new Models.Xbox.XMID();
 
             xmid.PublisherIdentifier = xmidString.Substring(0, 2);
-            if (string.IsNullOrEmpty(PublisherName(xmid)))
-                return null;
-
             xmid.GameID = xmidString.Substring(2, 3);
             xmid.VersionNumber = xmidString.Substring(5, 2);
             xmid.RegionIdentifier = xmidString[7];
@@ -183,7 +180,7 @@ namespace SabreTools.Serialization.Files
                 case "XR": return "Panorama";
                 case "YB": return "YBM Sisa (South-Korea)";
                 case "ZD": return "Zushi Games (formerly Zoo Digital Publishing)";
-                default: return null;
+                default: return $"Unknown ({publisherIdentifier})";
             }
         }
 
