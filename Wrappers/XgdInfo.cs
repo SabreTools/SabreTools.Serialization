@@ -1,4 +1,6 @@
-﻿namespace SabreTools.Serialization.Wrappers
+﻿using static SabreTools.Models.Xbox.Constants;
+
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
     /// Contains information specific to an XGD disc
@@ -43,6 +45,96 @@
         #endregion
 
         #region Extension Properties
+
+        /// <summary>
+        /// Get the human-readable media subtype string
+        /// </summary>
+#if NET48
+        public string MediaSubtype
+#else
+        public string? MediaSubtype
+#endif
+        {
+            get
+            {
+                if (!this.Initialized)
+                    return null;
+
+                // Media subtype is only valid for XGD2/3
+                if (XeMID == null)
+                    return null;
+
+                char mediaSubtype = XeMID.MediaSubtypeIdentifier;
+                if (MediaSubtypes.ContainsKey(mediaSubtype))
+                    return MediaSubtypes[mediaSubtype];
+
+                return $"Unknown ({mediaSubtype})";
+            }
+        }
+
+        /// <summary>
+        /// Get the human-readable publisher string
+        /// </summary>
+#if NET48
+        public string Publisher
+#else
+        public string? Publisher
+#endif
+        {
+            get
+            {
+                if (!this.Initialized)
+                    return null;
+
+#if NET48
+                string publisherIdentifier = null;
+#else
+                string? publisherIdentifier = null;
+#endif
+                if (XMID != null)
+                    publisherIdentifier = XMID.PublisherIdentifier;
+                else if (XeMID != null)
+                    publisherIdentifier = XeMID.PublisherIdentifier;
+
+                if (string.IsNullOrWhiteSpace(publisherIdentifier))
+                    return null;
+
+                if (Publishers.ContainsKey(publisherIdentifier))
+                    return Publishers[publisherIdentifier];
+
+                return $"Unknown ({publisherIdentifier})";
+            }
+        }
+
+        /// <summary>
+        /// Get the human-readable region string
+        /// </summary>
+#if NET48
+        public string Region
+#else
+        public string? Region
+#endif
+        {
+            get
+            {
+                if (!this.Initialized)
+                    return null;
+
+                char? regionIdentifier = null;
+                if (XMID != null)
+                    regionIdentifier = XMID.RegionIdentifier;
+                else if (XeMID != null)
+                    regionIdentifier = XeMID.RegionIdentifier;
+
+                if (regionIdentifier == null)
+                    return null;
+
+                if (Regions.ContainsKey((char)regionIdentifier))
+                    return Regions[(char)regionIdentifier];
+
+                return $"Unknown ({regionIdentifier})";
+            }
+        }
 
         /// <summary>
         /// Get the human-readable serial string
@@ -93,11 +185,8 @@
 
                 try
                 {
-                    // XGD1 doesn't use PlatformIdentifier
                     if (XMID != null)
                         return $"1.{XMID.VersionNumber}";
-
-                    // XGD2/3 uses a specific identifier
                     else if (XeMID?.PlatformIdentifier == '2')
                         return $"1.{XeMID.SKU}";
 
