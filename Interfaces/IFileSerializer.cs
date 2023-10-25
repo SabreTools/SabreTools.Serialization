@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Interfaces
 #endif
 
         /// <summary>
-        /// Sserialize a <typeparamref name="T"/> into a file
+        /// Serialize a <typeparamref name="T"/> into a file
         /// </summary>
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>

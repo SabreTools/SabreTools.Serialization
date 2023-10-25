@@ -1,11 +1,10 @@
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Files
+namespace SabreTools.Serialization.Strings
 {
-    public partial class XeMID : IFileSerializer<Models.Xbox.XeMID>
+    public partial class XeMID : IStringSerializer<Models.Xbox.XeMID>
     {
         /// <inheritdoc/>
-        /// <remarks>This treats the input path like a parseable string</remarks>
 #if NET48
         public Models.Xbox.XeMID Deserialize(string path)
 #else
