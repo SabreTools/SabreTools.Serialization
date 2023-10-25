@@ -41,9 +41,6 @@ namespace SabreTools.Serialization.Files
             var xemid = new Models.Xbox.XeMID();
 
             xemid.PublisherIdentifier = xemidString.Substring(0, 2);
-            if (string.IsNullOrEmpty(PublisherName(xemid)))
-                return null;
-
             xemid.PlatformIdentifier = xemidString[2];
             if (xemid.PlatformIdentifier != '2')
                 return null;
@@ -171,6 +168,7 @@ namespace SabreTools.Serialization.Files
                 case "EL": return "Enlight Software";
                 case "EM": return "Empire Interactive";
                 case "ES": return "Eidos Interactive";
+                case "FE": return "Focus Entertainment (formerly Focus Home Interactive)"; // TODO: Confirm
                 case "FI": return "Fox Interactive";
                 case "FS": return "From Software";
                 case "GE": return "Genki Co.";
@@ -216,6 +214,7 @@ namespace SabreTools.Serialization.Files
                 case "SC": return "SCi Games";
                 case "SE": return "SEGA";
                 case "SN": return "SNK";
+                case "SQ": return "Square Enix"; // TODO: Confirm
                 case "SS": return "Simon & Schuster";
                 case "SU": return "Success Corporation";
                 case "SW": return "Swing! Deutschland";
@@ -242,7 +241,7 @@ namespace SabreTools.Serialization.Files
                 case "XR": return "Panorama";
                 case "YB": return "YBM Sisa (South-Korea)";
                 case "ZD": return "Zushi Games (formerly Zoo Digital Publishing)";
-                default: return null;
+                default: return $"Unknown ({publisherIdentifier})";
             }
         }
 
