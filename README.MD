@@ -20,6 +20,10 @@ This namespace comprises of serializers and deserializers that can convert to an
 
 This namespace comprises of serializers and deserializers that can convert to and from any type of stream. Most of the serializers are symmetric, but this is not guaranteed. Unimplemented methods will throw `NotImplementedException`.
 
+## `SabreTools.Serialization.Strings`
+
+This namespace comprises of serializers and deserializers that can convert to and from strings. Most of the serializers are symmetric, but this is not guaranteed. Unimplemented methods will throw `NotImplementedException`.
+
 ## `SabreTools.Serialization.Wrappers`
 
 This namespace comrpises of wrapping classes that include keeping a reference to the source of each serializable model. Some of the wrappers may also include what are referred to as "extension properties", which are generated properties derived from either parts of the model or the underlying source.
