@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Streams
     public partial class Listrom : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj)
-#else
         public Stream? Serialize(MetadataFile? obj)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -36,11 +32,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sets">Array of Set objects representing the sets information</param>
         /// <param name="writer">StreamWriter representing the output</param>
-#if NET48
-        private static void WriteSets(Set[] sets, StreamWriter writer)
-#else
         private static void WriteSets(Set[]? sets, StreamWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (sets == null || !sets.Any())
@@ -112,11 +104,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="rows">Array of Row objects to write</param>
         /// <param name="writer">StreamWriter representing the output</param>
-#if NET48
-        private static void WriteRows(Row[] rows, StreamWriter writer)
-#else
         private static void WriteRows(Row[]? rows, StreamWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (rows == null)

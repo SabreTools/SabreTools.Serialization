@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Files
     public partial class CueSheet : IFileSerializer<Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-#if NET48
-        public bool Serialize(Models.CueSheets.CueSheet obj, string path)
-#else
         public bool Serialize(Models.CueSheets.CueSheet? obj, string? path)
-#endif
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;

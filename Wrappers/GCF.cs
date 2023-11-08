@@ -17,11 +17,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Set of all files and their information
         /// </summary>
-#if NET48
-        public FileInfo[] Files
-#else
         public FileInfo[]? Files
-#endif
         {
             get
             {
@@ -54,11 +50,7 @@ namespace SabreTools.Serialization.Wrappers
                         Encrypted = directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
                     };
                     var pathParts = new List<string> { directoryEntry.Name ?? string.Empty };
-#if NET48
-                    var blockEntries = new List<Models.GCF.BlockEntry>();
-#else
                     var blockEntries = new List<Models.GCF.BlockEntry?>();
-#endif
 
                     // Traverse the parent tree
                     uint index = directoryEntry.ParentIndex;
@@ -104,11 +96,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Set of all data block offsets
         /// </summary>
-#if NET48
-        public long[] DataBlockOffsets
-#else
         public long[]? DataBlockOffsets
-#endif
         {
             get
             {
@@ -116,11 +104,9 @@ namespace SabreTools.Serialization.Wrappers
                 if (_dataBlockOffsets != null)
                     return _dataBlockOffsets;
 
-#if NET6_0_OR_GREATER
                 // If we don't have a block count, offset, or size
                 if (this.Model.DataBlockHeader?.BlockCount == null || this.Model.DataBlockHeader?.FirstBlockOffset == null || this.Model.DataBlockHeader?.BlockSize == null)
                     return null;
-#endif
 
                 // Otherwise, build the data block set
                 _dataBlockOffsets = new long[this.Model.DataBlockHeader.BlockCount];
@@ -142,42 +128,26 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Set of all files and their information
         /// </summary>
-#if NET48
-        private FileInfo[] _files = null;
-#else
         private FileInfo[]? _files = null;
-#endif
 
         /// <summary>
         /// Set of all data block offsets
         /// </summary>
-#if NET48
-        private long[] _dataBlockOffsets = null;
-#else
         private long[]? _dataBlockOffsets = null;
-#endif
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public GCF(Models.GCF.File model, byte[] data, int offset)
-#else
         public GCF(Models.GCF.File? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public GCF(Models.GCF.File model, Stream data)
-#else
         public GCF(Models.GCF.File? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -189,11 +159,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the GCF</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>An GCF wrapper on success, null on failure</returns>
-#if NET48
-        public static GCF Create(byte[] data, int offset)
-#else
         public static GCF? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -213,11 +179,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the GCF</param>
         /// <returns>An GCF wrapper on success, null on failure</returns>
-#if NET48
-        public static GCF Create(Stream data)
-#else
         public static GCF? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -249,11 +211,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Full item path
             /// </summary>
-#if NET48
-            public string Path;
-#else
             public string? Path;
-#endif
 
             /// <summary>
             /// File size
@@ -268,11 +226,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Array of block entries
             /// </summary>
-#if NET48
-            public SabreTools.Models.GCF.BlockEntry[] BlockEntries;
-#else
             public SabreTools.Models.GCF.BlockEntry?[]? BlockEntries;
-#endif
         }
 
         #endregion

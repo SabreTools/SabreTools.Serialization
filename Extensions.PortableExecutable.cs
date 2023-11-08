@@ -17,11 +17,7 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Physical address, 0 on error</returns>
-#if NET48
-        public static uint ConvertVirtualAddress(this uint rva, SectionHeader[] sections)
-#else
         public static uint ConvertVirtualAddress(this uint rva, SectionHeader?[]? sections)
-#endif
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -44,19 +40,11 @@ namespace SabreTools.Serialization
                     continue;
 
                 // If the section "starts" at 0, just skip it
-#if NET48
-                if (sections[i].PointerToRawData == 0)
-#else
                 if (sections[i]!.PointerToRawData == 0)
-#endif
                     continue;
 
                 // Attempt to derive the physical address from the current section
-#if NET48
-                var section = sections[i];
-#else
                 var section = sections[i]!;
-#endif
                 if (rva >= section.VirtualAddress && section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return rva - section.VirtualAddress + section.PointerToRawData;
                 else if (rva >= section.VirtualAddress && section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
@@ -72,11 +60,7 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Section index, null on error</returns>
-#if NET48
-        public static int ContainingSectionIndex(this uint rva, SectionHeader[] sections)
-#else
         public static int ContainingSectionIndex(this uint rva, SectionHeader?[]? sections)
-#endif
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -114,11 +98,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into overlay data</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled SecuROM AddD overlay data on success, null on error</returns>
-#if NET48
-        public static SecuROMAddD AsSecuROMAddD(this byte[] data, ref int offset)
-#else
         public static SecuROMAddD? AsSecuROMAddD(this byte[]? data, ref int offset)
-#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -181,11 +161,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a database</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled NB10 Program Database on success, null on error</returns>
-#if NET48
-        public static NB10ProgramDatabase AsNB10ProgramDatabase(this byte[] data, ref int offset)
-#else
         public static NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
-#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -211,11 +187,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a database</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled RSDS Program Database on success, null on error</returns>
-#if NET48
-        public static RSDSProgramDatabase AsRSDSProgramDatabase(this byte[] data, ref int offset)
-#else
         public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[]? data, ref int offset)
-#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -247,11 +219,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a resource header</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled resource header on success, null on error</returns>
-#if NET48
-        public static ResourceHeader AsResourceHeader(this byte[] data, ref int offset)
-#else
         public static ResourceHeader? AsResourceHeader(this byte[]? data, ref int offset)
-#endif
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -277,11 +245,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
         /// <returns>A filled accelerator table resource on success, null on error</returns>
-#if NET48
-        public static AcceleratorTableEntry[] AsAcceleratorTableResource(this ResourceDataEntry entry)
-#else
         public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this ResourceDataEntry? entry)
-#endif
         {
             // If we have data that's invalid for this resource type, we can't do anything
             if (entry?.Data == null || entry.Data.Length % 8 != 0)
@@ -317,11 +281,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
         /// <returns>A filled side-by-side assembly manifest on success, null on error</returns>
-#if NET48
-        public static AssemblyManifest AsAssemblyManifest(this ResourceDataEntry entry)
-#else
         public static AssemblyManifest? AsAssemblyManifest(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -343,11 +303,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a dialog box</param>
         /// <returns>A filled dialog box on success, null on error</returns>
-#if NET48
-        public static DialogBoxResource AsDialogBox(this ResourceDataEntry entry)
-#else
         public static DialogBoxResource? AsDialogBox(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -856,11 +812,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a font group</param>
         /// <returns>A filled font group on success, null on error</returns>
-#if NET48
-        public static FontGroupHeader AsFontGroup(this ResourceDataEntry entry)
-#else
         public static FontGroupHeader? AsFontGroup(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -929,11 +881,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a menu</param>
         /// <returns>A filled menu on success, null on error</returns>
-#if NET48
-        public static MenuResource AsMenu(this ResourceDataEntry entry)
-#else
         public static MenuResource? AsMenu(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1056,11 +1004,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a message table resource</param>
         /// <returns>A filled message table resource on success, null on error</returns>
-#if NET48
-        public static MessageResourceData AsMessageResourceData(this ResourceDataEntry entry)
-#else
         public static MessageResourceData? AsMessageResourceData(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1095,11 +1039,7 @@ namespace SabreTools.Serialization
             // Message resource entries
             if (messageResourceData.Blocks != null && messageResourceData.Blocks.Length != 0)
             {
-#if NET48
-                var messageResourceEntries = new Dictionary<uint, MessageResourceEntry>();
-#else
                 var messageResourceEntries = new Dictionary<uint, MessageResourceEntry?>();
-#endif
 
                 for (int i = 0; i < messageResourceData.Blocks.Length; i++)
                 {
@@ -1117,11 +1057,7 @@ namespace SabreTools.Serialization
                         messageResourceEntry.Flags = entry.Data.ReadUInt16(ref offset);
 
                         Encoding textEncoding = messageResourceEntry.Flags == 0x0001 ? Encoding.Unicode : Encoding.ASCII;
-#if NET48
-                        byte[] textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
-#else
                         byte[]? textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
-#endif
                         if (textArray != null)
                             messageResourceEntry.Text = textEncoding.GetString(textArray);
 
@@ -1140,11 +1076,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
         /// <returns>A filled string table resource on success, null on error</returns>
-#if NET48
-        public static Dictionary<int, string> AsStringTable(this ResourceDataEntry entry)
-#else
         public static Dictionary<int, string?>? AsStringTable(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1154,11 +1086,7 @@ namespace SabreTools.Serialization
             int offset = 0, stringIndex = 0;
 
             // Create the output table
-#if NET48
-            var stringTable = new Dictionary<int, string>();
-#else
             var stringTable = new Dictionary<int, string?>();
-#endif
 
             // Loop through and add 
             while (offset < entry.Data.Length)
@@ -1191,11 +1119,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
         /// <returns>A filled version info resource on success, null on error</returns>
-#if NET48
-        public static VersionInfo AsVersionInfo(this ResourceDataEntry entry)
-#else
         public static VersionInfo? AsVersionInfo(this ResourceDataEntry? entry)
-#endif
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1252,11 +1176,7 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
-#if NET48
-                string nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
-#else
                 string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
-#endif
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1278,11 +1198,7 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
-#if NET48
-                string nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
-#else
                 string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
-#endif
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1306,11 +1222,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a string file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled string file info resource on success, null on error</returns>
-#if NET48
-        private static StringFileInfo AsStringFileInfo(byte[] data, ref int offset)
-#else
         private static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
-#endif
         {
             var stringFileInfo = new StringFileInfo();
 
@@ -1370,11 +1282,7 @@ namespace SabreTools.Serialization
 
                     if (stringData.ValueLength > 0)
                     {
-#if NET48
-                        byte[] valueBytes = data.ReadBytes(ref offset, stringData.ValueLength * sizeof(ushort));
-#else
                         byte[]? valueBytes = data.ReadBytes(ref offset, stringData.ValueLength * sizeof(ushort));
-#endif
                         if (valueBytes != null)
                             stringData.Value = Encoding.Unicode.GetString(valueBytes);
                     }
@@ -1405,11 +1313,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a var file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled var file info resource on success, null on error</returns>
-#if NET48
-        private static VarFileInfo AsVarFileInfo(byte[] data, ref int offset)
-#else
         private static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
-#endif
         {
             var varFileInfo = new VarFileInfo();
 

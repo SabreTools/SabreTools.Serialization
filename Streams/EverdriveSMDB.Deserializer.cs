@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class EverdriveSMDB : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data)
-#else
         public MetadataFile? Deserialize(Stream? data)
-#endif
         {
             // If the stream is null
             if (data == null)

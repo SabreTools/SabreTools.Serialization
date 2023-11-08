@@ -13,11 +13,7 @@ namespace SabreTools.Serialization.Streams
     public partial class XmlFile<T> : IStreamSerializer<T>
     {
         /// <inheritdoc/>
-#if NET48
-        public T Deserialize(Stream data)
-#else
         public T? Deserialize(Stream? data)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -36,11 +32,7 @@ namespace SabreTools.Serialization.Streams
             var xmlReader = XmlReader.Create(streamReader, settings);
 
             // Perform the deserialization and return
-#if NET48
-            return (T)serializer.Deserialize(xmlReader);
-#else
             return (T?)serializer.Deserialize(xmlReader);
-#endif
         }
     }
 }

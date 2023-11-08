@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class ArchiveDotOrg : IModelSerializer<Models.ArchiveDotOrg.Files, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(Models.ArchiveDotOrg.Files item)
-#else
         public Models.Metadata.MetadataFile? Serialize(Models.ArchiveDotOrg.Files? item)
-#endif
         {
             if (item == null)
                 return null;
@@ -47,11 +43,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ArchiveDotOrg.File"/> to <cref="Models.Metadata.Machine"/>
         /// </summary>
-#if NET48
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(Models.ArchiveDotOrg.File item)
-#else
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Models.ArchiveDotOrg.File? item)
-#endif
         {
             var machine = new Models.Metadata.Machine
             {
@@ -63,11 +55,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ArchiveDotOrg.File"/> to <cref="Models.Metadata.Rom"/>
         /// </summary>
-#if NET48
-        private static Models.Metadata.Rom ConvertToInternalModel(Models.ArchiveDotOrg.File item)
-#else
         private static Models.Metadata.Rom? ConvertToInternalModel(Models.ArchiveDotOrg.File? item)
-#endif
         {
             if (item == null)
                 return null;

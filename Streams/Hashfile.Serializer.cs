@@ -11,18 +11,10 @@ namespace SabreTools.Serialization.Streams
     public partial class Hashfile : IStreamSerializer<Models.Hashfile.Hashfile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(Models.Hashfile.Hashfile obj) => Serialize(obj, Hash.CRC);
-#else
         public Stream? Serialize(Models.Hashfile.Hashfile? obj) => Serialize(obj, Hash.CRC);
-#endif
 
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(Models.Hashfile.Hashfile obj, Hash hash)
-#else
         public Stream? Serialize(Models.Hashfile.Hashfile? obj, Hash hash)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -75,11 +67,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sfvs">Array of SFV objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSFV(SFV[] sfvs, SeparatedValueWriter writer)
-#else
         private static void WriteSFV(SFV[]? sfvs, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (sfvs == null || !sfvs.Any())
@@ -103,11 +91,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="md5s">Array of MD5 objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteMD5(MD5[] md5s, SeparatedValueWriter writer)
-#else
         private static void WriteMD5(MD5[]? md5s, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (md5s == null || !md5s.Any())
@@ -131,11 +115,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sha1s">Array of SHA1 objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSHA1(SHA1[] sha1s, SeparatedValueWriter writer)
-#else
         private static void WriteSHA1(SHA1[]? sha1s, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (sha1s == null || !sha1s.Any())
@@ -159,11 +139,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sha256s">Array of SHA256 objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSHA256(SHA256[] sha256s, SeparatedValueWriter writer)
-#else
         private static void WriteSHA256(SHA256[]? sha256s, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (sha256s == null || !sha256s.Any())
@@ -187,11 +163,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sha384s">Array of SHA384 objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSHA384(SHA384[] sha384s, SeparatedValueWriter writer)
-#else
         private static void WriteSHA384(SHA384[]? sha384s, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (sha384s == null || !sha384s.Any())
@@ -215,11 +187,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sha512s">Array of SHA512 objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSHA512(SHA512[] sha512s, SeparatedValueWriter writer)
-#else
         private static void WriteSHA512(SHA512[]? sha512s, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (sha512s == null || !sha512s.Any())
@@ -243,11 +211,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="spamsums">Array of SpamSum objects representing the files</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteSpamSum(SpamSum[] spamsums, SeparatedValueWriter writer)
-#else
         private static void WriteSpamSum(SpamSum[]? spamsums, SeparatedValueWriter writer)
-#endif
         {
             // If the item information is missing, we can't do anything
             if (spamsums == null || !spamsums.Any())

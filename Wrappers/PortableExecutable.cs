@@ -21,11 +21,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Header padding data, if it exists
         /// </summary>
-#if NET48
-        public byte[] HeaderPaddingData
-#else
         public byte[]? HeaderPaddingData
-#endif
         {
             get
             {
@@ -60,11 +56,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Header padding strings, if they exist
         /// </summary>
-#if NET48
-        public List<string> HeaderPaddingStrings
-#else
         public List<string>? HeaderPaddingStrings
-#endif
         {
             get
             {
@@ -99,11 +91,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Entry point data, if it exists
         /// </summary>
-#if NET48
-        public byte[] EntryPointData
-#else
         public byte[]? EntryPointData
-#endif
         {
             get
             {
@@ -215,11 +203,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Overlay data, if it exists
         /// </summary>
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
-#if NET48
-        public byte[] OverlayData
-#else
         public byte[]? OverlayData
-#endif
         {
             get
             {
@@ -297,11 +281,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
-#if NET48
-        public List<string> OverlayStrings
-#else
         public List<string>? OverlayStrings
-#endif
         {
             get
             {
@@ -379,11 +359,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Sanitized section names
         /// </summary>
-#if NET48
-        public string[] SectionNames
-#else
         public string[]? SectionNames
-#endif
         {
             get
             {
@@ -406,11 +382,7 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         // TODO: Handle long section names with leading `/`
-#if NET48
-                        byte[] sectionNameBytes = section.Name;
-#else
                         byte[]? sectionNameBytes = section.Name;
-#endif
                         if (sectionNameBytes != null)
                         {
                             string sectionNameString = Encoding.UTF8.GetString(sectionNameBytes).TrimEnd('\0');
@@ -426,11 +398,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
-#if NET48
-        public byte[] StubExecutableData
-#else
         public byte[]? StubExecutableData
-#endif
         {
             get
             {
@@ -457,11 +425,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Dictionary of debug data
         /// </summary>
-#if NET48
-        public Dictionary<int, object> DebugData
-#else
         public Dictionary<int, object>? DebugData
-#endif
         {
             get
             {
@@ -486,11 +450,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Dictionary of resource data
         /// </summary>
-#if NET48
-        public Dictionary<string, object> ResourceData
-#else
         public Dictionary<string, object?>? ResourceData
-#endif
         {
             get
             {
@@ -518,101 +478,61 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// "Build GUID"
         /// </summary/>
-#if NET48
-        public string BuildGuid => GetVersionInfoString("BuildGuid");
-#else
         public string? BuildGuid => GetVersionInfoString("BuildGuid");
-#endif
 
         /// <summary>
         /// "Build signature"
         /// </summary/>
-#if NET48
-        public string BuildSignature => GetVersionInfoString("BuildSignature");
-#else
         public string? BuildSignature => GetVersionInfoString("BuildSignature");
-#endif
 
         /// <summary>
         /// Additional information that should be displayed for diagnostic purposes.
         /// </summary/>
-#if NET48
-        public string Comments => GetVersionInfoString("Comments");
-#else
         public string? Comments => GetVersionInfoString("Comments");
-#endif
 
         /// <summary>
         /// Company that produced the file—for example, "Microsoft Corporation" or
         /// "Standard Microsystems Corporation, Inc." This string is required.
         /// </summary/>
-#if NET48
-        public string CompanyName => GetVersionInfoString("CompanyName");
-#else
         public string? CompanyName => GetVersionInfoString("CompanyName");
-#endif
 
         /// <summary>
         /// "Debug version"
         /// </summary/>
-#if NET48
-        public string DebugVersion => GetVersionInfoString("DebugVersion");
-#else
         public string? DebugVersion => GetVersionInfoString("DebugVersion");
-#endif
 
         /// <summary>
         /// File description to be presented to users. This string may be displayed in a
         /// list box when the user is choosing files to install—for example, "Keyboard
         /// Driver for AT-Style Keyboards". This string is required.
         /// </summary/>
-#if NET48
-        public string FileDescription => GetVersionInfoString("FileDescription");
-#else
         public string? FileDescription => GetVersionInfoString("FileDescription");
-#endif
 
         /// <summary>
         /// Version number of the file—for example, "3.10" or "5.00.RC2". This string
         /// is required.
         /// </summary/>
-#if NET48
-        public string FileVersion => GetVersionInfoString("FileVersion");
-#else
         public string? FileVersion => GetVersionInfoString("FileVersion");
-#endif
 
         /// <summary>
         /// Internal name of the file, if one exists—for example, a module name if the
         /// file is a dynamic-link library. If the file has no internal name, this
         /// string should be the original filename, without extension. This string is required.
         /// </summary/>
-#if NET48
-        public string InternalName => GetVersionInfoString(key: "InternalName");
-#else
         public string? InternalName => GetVersionInfoString(key: "InternalName");
-#endif
 
         /// <summary>
         /// Copyright notices that apply to the file. This should include the full text of
         /// all notices, legal symbols, copyright dates, and so on. This string is optional.
         /// </summary/>
-#if NET48
-        public string LegalCopyright => GetVersionInfoString(key: "LegalCopyright");
-#else
         public string? LegalCopyright => GetVersionInfoString(key: "LegalCopyright");
-#endif
 
         /// <summary>
         /// Trademarks and registered trademarks that apply to the file. This should include
         /// the full text of all notices, legal symbols, trademark numbers, and so on. This
         /// string is optional.
         /// </summary/>
-#if NET48
-        public string LegalTrademarks => GetVersionInfoString(key: "LegalTrademarks");
-#else
         public string? LegalTrademarks => GetVersionInfoString(key: "LegalTrademarks");
-#endif
 
         /// <summary>
         /// Original name of the file, not including a path. This information enables an
@@ -620,50 +540,30 @@ namespace SabreTools.Serialization.Wrappers
         /// the name depends on the file system for which the file was created. This string
         /// is required.
         /// </summary/>
-#if NET48
-        public string OriginalFilename => GetVersionInfoString(key: "OriginalFilename");
-#else
         public string? OriginalFilename => GetVersionInfoString(key: "OriginalFilename");
-#endif
 
         /// <summary>
         /// Information about a private version of the file—for example, "Built by TESTER1 on
         /// \TESTBED". This string should be present only if VS_FF_PRIVATEBUILD is specified in
         /// the fileflags parameter of the root block.
         /// </summary/>
-#if NET48
-        public string PrivateBuild => GetVersionInfoString(key: "PrivateBuild");
-#else
         public string? PrivateBuild => GetVersionInfoString(key: "PrivateBuild");
-#endif
 
         /// <summary>
         /// "Product GUID"
         /// </summary/>
-#if NET48
-        public string ProductGuid => GetVersionInfoString("ProductGuid");
-#else
         public string? ProductGuid => GetVersionInfoString("ProductGuid");
-#endif
 
         /// <summary>
         /// Name of the product with which the file is distributed. This string is required.
         /// </summary/>
-#if NET48
-        public string ProductName => GetVersionInfoString(key: "ProductName");
-#else
         public string? ProductName => GetVersionInfoString(key: "ProductName");
-#endif
 
         /// <summary>
         /// Version of the product with which the file is distributed—for example, "3.10" or
         /// "5.00.RC2". This string is required.
         /// </summary/>
-#if NET48
-        public string ProductVersion => GetVersionInfoString(key: "ProductVersion");
-#else
         public string? ProductVersion => GetVersionInfoString(key: "ProductVersion");
-#endif
 
         /// <summary>
         /// Text that specifies how this version of the file differs from the standard
@@ -671,43 +571,27 @@ namespace SabreTools.Serialization.Wrappers
         /// M250E computers". This string should be present only if VS_FF_SPECIALBUILD is
         /// specified in the fileflags parameter of the root block.
         /// </summary/>
-#if NET48
-        public string SpecialBuild => GetVersionInfoString(key: "SpecialBuild") ?? GetVersionInfoString(key: "Special Build");
-#else
         public string? SpecialBuild => GetVersionInfoString(key: "SpecialBuild") ?? GetVersionInfoString(key: "Special Build");
-#endif
 
         /// <summary>
         /// "Trade name"
         /// </summary/>
-#if NET48
-        public string TradeName => GetVersionInfoString(key: "TradeName");
-#else
         public string? TradeName => GetVersionInfoString(key: "TradeName");
-#endif
 
         /// <summary>
         /// Get the internal version as reported by the resources
         /// </summary>
         /// <returns>Version string, null on error</returns>
         /// <remarks>The internal version is either the file version, product version, or assembly version, in that order</remarks>
-#if NET48
-        public string GetInternalVersion()
-#else
         public string? GetInternalVersion()
-#endif
         {
-#if NET48
-            string version = this.FileVersion;
-#else
             string? version = this.FileVersion;
-#endif
             if (!string.IsNullOrWhiteSpace(version))
-                return version.Replace(", ", ".");
+                return version!.Replace(", ", ".");
 
             version = this.ProductVersion;
             if (!string.IsNullOrWhiteSpace(version))
-                return version.Replace(", ", ".");
+                return version!.Replace(", ", ".");
 
             version = this.AssemblyVersion;
             if (!string.IsNullOrWhiteSpace(version))
@@ -723,11 +607,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Description as derived from the assembly manifest
         /// </summary>
-#if NET48
-        public string AssemblyDescription
-#else
         public string? AssemblyDescription
-#endif
         {
             get
             {
@@ -746,11 +626,7 @@ namespace SabreTools.Serialization.Wrappers
         /// this will only retrieve the value from the first that doesn't
         /// have a null or empty version.
         /// </remarks>
-#if NET48
-        public string AssemblyVersion
-#else
         public string? AssemblyVersion
-#endif
         {
             get
             {
@@ -771,29 +647,17 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Header padding data, if it exists
         /// </summary>
-#if NET48
-        private byte[] _headerPaddingData = null;
-#else
         private byte[]? _headerPaddingData = null;
-#endif
 
         /// <summary>
         /// Header padding strings, if they exist
         /// </summary>
-#if NET48
-        private List<string> _headerPaddingStrings = null;
-#else
         private List<string>? _headerPaddingStrings = null;
-#endif
 
         /// <summary>
         /// Entry point data, if it exists and isn't aligned to a section
         /// </summary>
-#if NET48
-        private byte[] _entryPointData = null;
-#else
         private byte[]? _entryPointData = null;
-#endif
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -803,74 +667,42 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
-#if NET48
-        private byte[] _overlayData = null;
-#else
         private byte[]? _overlayData = null;
-#endif
 
         /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
-#if NET48
-        private List<string> _overlayStrings = null;
-#else
         private List<string>? _overlayStrings = null;
-#endif
 
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
-#if NET48
-        private byte[] _stubExecutableData = null;
-#else
         private byte[]? _stubExecutableData = null;
-#endif
 
         /// <summary>
         /// Sanitized section names
         /// </summary>
-#if NET48
-        private string[] _sectionNames = null;
-#else
         private string[]? _sectionNames = null;
-#endif
 
         /// <summary>
         /// Cached raw section data
         /// </summary>
-#if NET48
-        private byte[][] _sectionData = null;
-#else
         private byte[]?[]? _sectionData = null;
-#endif
 
         /// <summary>
         /// Cached found string data in sections
         /// </summary>
-#if NET48
-        private List<string>[] _sectionStringData = null;
-#else
         private List<string>?[]? _sectionStringData = null;
-#endif
 
         /// <summary>
         /// Cached raw table data
         /// </summary>
-#if NET48
-        private byte[][] _tableData = null;
-#else
         private byte[]?[]? _tableData = null;
-#endif
 
         /// <summary>
         /// Cached found string data in tables
         /// </summary>
-#if NET48
-        private List<string>[] _tableStringData = null;
-#else
         private List<string>?[]? _tableStringData = null;
-#endif
 
         /// <summary>
         /// Cached debug data
@@ -880,29 +712,17 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached resource data
         /// </summary>
-#if NET48
-        private readonly Dictionary<string, object> _resourceData = new Dictionary<string, object>();
-#else
         private readonly Dictionary<string, object?> _resourceData = new Dictionary<string, object?>();
-#endif
 
         /// <summary>
         /// Cached version info data
         /// </summary>
-#if NET48
-        private Models.PortableExecutable.VersionInfo _versionInfo = null;
-#else
         private Models.PortableExecutable.VersionInfo? _versionInfo = null;
-#endif
 
         /// <summary>
         /// Cached assembly manifest data
         /// </summary>
-#if NET48
-        private Models.PortableExecutable.AssemblyManifest _assemblyManifest = null;
-#else
         private Models.PortableExecutable.AssemblyManifest? _assemblyManifest = null;
-#endif
 
         /// <summary>
         /// Lock object for reading from the source
@@ -914,22 +734,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public PortableExecutable(Models.PortableExecutable.Executable model, byte[] data, int offset)
-#else
         public PortableExecutable(Models.PortableExecutable.Executable? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public PortableExecutable(Models.PortableExecutable.Executable model, Stream data)
-#else
         public PortableExecutable(Models.PortableExecutable.Executable? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -941,11 +753,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the executable</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A PE executable wrapper on success, null on failure</returns>
-#if NET48
-        public static PortableExecutable Create(byte[] data, int offset)
-#else
         public static PortableExecutable? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -965,11 +773,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the executable</param>
         /// <returns>A PE executable wrapper on success, null on failure</returns>
-#if NET48
-        public static PortableExecutable Create(Stream data)
-#else
         public static PortableExecutable? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -1005,11 +809,7 @@ namespace SabreTools.Serialization.Wrappers
         /// the first available value. This may not actually matter for version info,
         /// but it is worth mentioning.
         /// </remarks>
-#if NET48
-        public string GetVersionInfoString(string key)
-#else
         public string? GetVersionInfoString(string key)
-#endif
         {
             // If we have an invalid key, we can't do anything
             if (string.IsNullOrEmpty(key))
@@ -1037,11 +837,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the assembly manifest, if possible
         /// </summary>
         /// <returns>Assembly manifest object, null on error</returns>
-#if NET48
-        private Models.PortableExecutable.AssemblyManifest GetAssemblyManifest()
-#else
         private Models.PortableExecutable.AssemblyManifest? GetAssemblyManifest()
-#endif
         {
             // Use the cached data if possible
             if (_assemblyManifest != null)
@@ -1064,19 +860,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="path">Partial path to check for</param>
         /// <returns>Enumerable of matching debug data</returns>
-#if NET48
-        public IEnumerable<object> FindCodeViewDebugTableByPath(string path)
-#else
         public IEnumerable<object?> FindCodeViewDebugTableByPath(string path)
-#endif
         {
             // Ensure that we have the debug data cached
             if (DebugData == null)
-#if NET48
-                return Enumerable.Empty<object>();
-#else
                 return Enumerable.Empty<object?>();
-#endif
 
             var nb10Found = DebugData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.NB10ProgramDatabase)
@@ -1098,19 +886,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="value">String value to check for</param>
         /// <returns>Enumerable of matching debug data</returns>
-#if NET48
-        public IEnumerable<byte[]> FindGenericDebugTableByValue(string value)
-#else
         public IEnumerable<byte[]?> FindGenericDebugTableByValue(string value)
-#endif
         {
             // Ensure that we have the resource data cached
             if (DebugData == null)
-#if NET48
                 return Enumerable.Empty<byte[]>();
-#else
-                return Enumerable.Empty<byte[]>();
-#endif
 
             return DebugData.Select(r => r.Value)
                 .Select(b => b as byte[])
@@ -1119,11 +899,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     try
                     {
-#if NET48
-                        string arrayAsASCII = Encoding.ASCII.GetString(b);
-#else
                         string? arrayAsASCII = Encoding.ASCII.GetString(b!);
-#endif
                         if (arrayAsASCII.Contains(value))
                             return true;
                     }
@@ -1131,11 +907,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     try
                     {
-#if NET48
-                        string arrayAsUTF8 = Encoding.UTF8.GetString(b);
-#else
                         string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
-#endif
                         if (arrayAsUTF8.Contains(value))
                             return true;
                     }
@@ -1143,11 +915,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     try
                     {
-#if NET48
-                        string arrayAsUnicode = Encoding.Unicode.GetString(b);
-#else
                         string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
-#endif
                         if (arrayAsUnicode.Contains(value))
                             return true;
                     }
@@ -1180,11 +948,7 @@ namespace SabreTools.Serialization.Wrappers
                 uint address = entry.PointerToRawData;
                 uint size = entry.SizeOfData;
 
-#if NET48
-                byte[] entryData = ReadFromDataSource((int)address, (int)size);
-#else
                 byte[]? entryData = ReadFromDataSource((int)address, (int)size);
-#endif
                 if (entryData == null)
                     continue;
 
@@ -1236,19 +1000,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box title to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-#if NET48
-        public IEnumerable<Models.PortableExecutable.DialogBoxResource> FindDialogByTitle(string title)
-#else
         public IEnumerable<Models.PortableExecutable.DialogBoxResource?> FindDialogByTitle(string title)
-#endif
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-#if NET48
-                return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource>();
-#else
                 return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource?>();
-#endif
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
@@ -1265,19 +1021,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box item title to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-#if NET48
-        public IEnumerable<Models.PortableExecutable.DialogBoxResource> FindDialogBoxByItemTitle(string title)
-#else
         public IEnumerable<Models.PortableExecutable.DialogBoxResource?> FindDialogBoxByItemTitle(string title)
-#endif
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-#if NET48
-                return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource>();
-#else
                 return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource?>();
-#endif
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
@@ -1306,26 +1054,14 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="entry">String entry to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-#if NET48
-        public IEnumerable<Dictionary<int, string>> FindStringTableByEntry(string entry)
-#else
         public IEnumerable<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
-#endif
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-#if NET48
-                return Enumerable.Empty<Dictionary<int, string>>();
-#else
                 return Enumerable.Empty<Dictionary<int, string?>?>();
-#endif
 
             return ResourceData.Select(r => r.Value)
-#if NET48
-                .Select(r => r as Dictionary<int, string>)
-#else
                 .Select(r => r as Dictionary<int, string?>)
-#endif
                 .Where(st => st != null)
                 .Where(st => st?.Select(kvp => kvp.Value)?
                     .Any(s => s != null && s.Contains(entry)) == true);
@@ -1336,19 +1072,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="typeName">Type name to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-#if NET48
-        public IEnumerable<byte[]> FindResourceByNamedType(string typeName)
-#else
         public IEnumerable<byte[]?> FindResourceByNamedType(string typeName)
-#endif
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-#if NET48
-                return Enumerable.Empty<byte[]>();
-#else
                 return Enumerable.Empty<byte[]?>();
-#endif
 
             return ResourceData.Where(kvp => kvp.Key.Contains(typeName))
                 .Select(kvp => kvp.Value as byte[])
@@ -1360,19 +1088,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="value">String value to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-#if NET48
-        public IEnumerable<byte[]> FindGenericResource(string value)
-#else
         public IEnumerable<byte[]?> FindGenericResource(string value)
-#endif
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-#if NET48
-                return Enumerable.Empty<byte[]>();
-#else
                 return Enumerable.Empty<byte[]?>();
-#endif
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as byte[])
@@ -1381,11 +1101,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     try
                     {
-#if NET48
-                        string arrayAsASCII = Encoding.ASCII.GetString(b);
-#else
                         string? arrayAsASCII = Encoding.ASCII.GetString(b!);
-#endif
                         if (arrayAsASCII.Contains(value))
                             return true;
                     }
@@ -1393,11 +1109,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     try
                     {
-#if NET48
-                        string arrayAsUTF8 = Encoding.UTF8.GetString(b);
-#else
                         string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
-#endif
                         if (arrayAsUTF8.Contains(value))
                             return true;
                     }
@@ -1405,11 +1117,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     try
                     {
-#if NET48
-                        string arrayAsUnicode = Encoding.Unicode.GetString(b);
-#else
                         string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
-#endif
                         if (arrayAsUnicode.Contains(value))
                             return true;
                     }
@@ -1471,11 +1179,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Create the key and value objects
             string key = types == null ? $"UNKNOWN_{Guid.NewGuid()}" : string.Join(", ", types);
-#if NET48
-            object value = entry.Data;
-#else
             object? value = entry.Data;
-#endif
 
             // If we have a known resource type
             if (types != null && types.Count > 0 && types[0] is uint resourceType)
@@ -1581,11 +1285,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="sectionName">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>True if the section is in the executable, false otherwise</returns>
-#if NET48
-        public bool ContainsSection(string sectionName, bool exact = false)
-#else
         public bool ContainsSection(string? sectionName, bool exact = false)
-#endif
         {
             // If no section name is provided
             if (sectionName == null)
@@ -1623,15 +1323,10 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Otherwise, find the section it exists within
-#if NET48
-            return this.Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(this.Model.SectionTable);
-#else
-            // Otherwise, find the section it exists within
             return this.Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(this.Model.SectionTable
                 .Where(sh => sh != null)
                 .Cast<Models.PortableExecutable.SectionHeader>()
                 .ToArray());
-#endif
         }
 
         /// <summary>
@@ -1640,11 +1335,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public SabreTools.Models.PortableExecutable.SectionHeader GetFirstSection(string name, bool exact = false)
-#else
         public SabreTools.Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1669,11 +1360,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public SabreTools.Models.PortableExecutable.SectionHeader GetLastSection(string name, bool exact = false)
-#else
         public SabreTools.Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1697,11 +1384,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the section to check for</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public SabreTools.Models.PortableExecutable.SectionHeader GetSection(int index)
-#else
         public SabreTools.Models.PortableExecutable.SectionHeader? GetSection(int index)
-#endif
         {
             // If we have no sections
             if (this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1721,11 +1404,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public byte[] GetFirstSectionData(string name, bool exact = false)
-#else
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1746,11 +1425,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public byte[] GetLastSectionData(string name, bool exact = false)
-#else
         public byte[]? GetLastSectionData(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1770,11 +1445,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the section to check for</param>
         /// <returns>Section data on success, null on error</returns>
-#if NET48
-        public byte[] GetSectionData(int index)
-#else
         public byte[]? GetSectionData(int index)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1806,11 +1477,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _sectionData[index];
 
                 // Populate the raw section data based on the source
-#if NET48
-                byte[] sectionData = ReadFromDataSource((int)address, (int)size);
-#else
                 byte[]? sectionData = ReadFromDataSource((int)address, (int)size);
-#endif
 
                 // Cache and return the section data, even if null
                 _sectionData[index] = sectionData;
@@ -1824,11 +1491,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section strings on success, null on error</returns>
-#if NET48
-        public List<string> GetFirstSectionStrings(string name, bool exact = false)
-#else
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1849,11 +1512,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section strings on success, null on error</returns>
-#if NET48
-        public List<string> GetLastSectionStrings(string name, bool exact = false)
-#else
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1873,11 +1532,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the section to check for</param>
         /// <returns>Section strings on success, null on error</returns>
-#if NET48
-        public List<string> GetSectionStrings(int index)
-#else
         public List<string>? GetSectionStrings(int index)
-#endif
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1909,11 +1564,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _sectionStringData[index];
 
                 // Populate the section string data based on the source
-#if NET48
-                List<string> sectionStringData = ReadStringsFromDataSource((int)address, (int)size);
-#else
                 List<string>? sectionStringData = ReadStringsFromDataSource((int)address, (int)size);
-#endif
 
                 // Cache and return the section string data, even if null
                 _sectionStringData[index] = sectionStringData;
@@ -1930,11 +1581,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the table to check for</param>
         /// <returns>Table data on success, null on error</returns>
-#if NET48
-        public byte[] GetTableData(int index)
-#else
         public byte[]? GetTableData(int index)
-#endif
         {
             // If the table doesn't exist
             if (this.Model.OptionalHeader == null || index < 0 || index > 16)
@@ -2030,11 +1677,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _tableData[index];
 
                 // Populate the raw table data based on the source
-#if NET48
-                byte[] tableData = ReadFromDataSource((int)address, (int)size);
-#else
                 byte[]? tableData = ReadFromDataSource((int)address, (int)size);
-#endif
 
                 // Cache and return the table data, even if null
                 _tableData[index] = tableData;
@@ -2047,11 +1690,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the table to check for</param>
         /// <returns>Table strings on success, null on error</returns>
-#if NET48
-        public List<string> GetTableStrings(int index)
-#else
         public List<string>? GetTableStrings(int index)
-#endif
         {
             // If the table doesn't exist
             if (this.Model.OptionalHeader == null || index < 0 || index > 16)
@@ -2147,11 +1786,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _tableStringData[index];
 
                 // Populate the table string data based on the source
-#if NET48
-                List<string> tableStringData = ReadStringsFromDataSource((int)address, (int)size);
-#else
                 List<string>? tableStringData = ReadStringsFromDataSource((int)address, (int)size);
-#endif
 
                 // Cache and return the table string data, even if null
                 _tableStringData[index] = tableStringData;

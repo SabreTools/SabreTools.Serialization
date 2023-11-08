@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Streams
     public partial class CueSheet : IStreamSerializer<Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(Models.CueSheets.CueSheet obj)
-#else
         public Stream? Serialize(Models.CueSheets.CueSheet? obj)
-#endif
         {
             // If the cuesheet is null
             if (obj == null)
@@ -78,11 +74,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="cueFile">CueFile to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-#if NET48
-        private static void WriteCueFile(CueFile cueFile, StreamWriter sw)
-#else
         private static void WriteCueFile(CueFile? cueFile, StreamWriter sw)
-#endif
         {
             // If we don't have any tracks, it's invalid
             if (cueFile?.Tracks == null)
@@ -103,11 +95,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="cueFile">CueFile to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-#if NET48
-        private static void WriteCueTrack(CueTrack cueTrack, StreamWriter sw)
-#else
         private static void WriteCueTrack(CueTrack? cueTrack, StreamWriter sw)
-#endif
         {
             // If we don't have any indices, it's invalid
             if (cueTrack?.Indices == null)
@@ -159,11 +147,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="cueIndex">CueIndex to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-#if NET48
-        private static void WriteCueIndex(CueIndex cueIndex, StreamWriter sw)
-#else
         private static void WriteCueIndex(CueIndex? cueIndex, StreamWriter sw)
-#endif
         {
             if (cueIndex == null)
                 throw new ArgumentNullException(nameof(cueIndex));

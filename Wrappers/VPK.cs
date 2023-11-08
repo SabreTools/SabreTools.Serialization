@@ -18,11 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Array of archive filenames attached to the given VPK
         /// </summary>
-#if NET48
-        public string[] ArchiveFilenames
-#else
         public string[]? ArchiveFilenames
-#endif
         {
             get
             {
@@ -36,11 +32,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // If the filename is not the right format
                 string extension = Path.GetExtension(fs.Name).TrimStart('.');
-#if NET48
-                string directoryName = Path.GetDirectoryName(fs.Name);
-#else
                 string? directoryName = Path.GetDirectoryName(fs.Name);
-#endif
                 string fileName = directoryName == null
                     ? Path.GetFileNameWithoutExtension(fs.Name)
                     : Path.Combine(directoryName, Path.GetFileNameWithoutExtension(fs.Name));
@@ -82,33 +74,21 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Array of archive filenames attached to the given VPK
         /// </summary>
-#if NET48
-        private string[] _archiveFilenames = null;
-#else
         private string[]? _archiveFilenames = null;
-#endif
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public VPK(Models.VPK.File model, byte[] data, int offset)
-#else
         public VPK(Models.VPK.File? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public VPK(Models.VPK.File model, Stream data)
-#else
         public VPK(Models.VPK.File? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -120,11 +100,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the VPK</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A VPK wrapper on success, null on failure</returns>
-#if NET48
-        public static VPK Create(byte[] data, int offset)
-#else
         public static VPK? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -144,11 +120,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the VPK</param>
         /// <returns>A VPK wrapper on success, null on failure</returns>
-#if NET48
-        public static VPK Create(Stream data)
-#else
         public static VPK? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class BFPK : IStreamSerializer<Archive>
     {
         /// <inheritdoc/>
-#if NET48
-        public Archive Deserialize(Stream data)
-#else
         public Archive? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -73,20 +69,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
-#if NET48
-            byte[] magic = data.ReadBytes(4);
-#else
             byte[]? magic = data.ReadBytes(4);
-#endif
             if (magic == null)
                 return null;
 
@@ -113,11 +101,7 @@ namespace SabreTools.Serialization.Streams
             fileEntry.NameSize = data.ReadInt32();
             if (fileEntry.NameSize > 0)
             {
-#if NET48
-                byte[] name = data.ReadBytes(fileEntry.NameSize);
-#else
                 byte[]? name = data.ReadBytes(fileEntry.NameSize);
-#endif
                 if (name != null)
                     fileEntry.Name = Encoding.ASCII.GetString(name);
             }

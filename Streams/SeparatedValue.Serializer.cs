@@ -10,18 +10,10 @@ namespace SabreTools.Serialization.Streams
     public partial class SeparatedValue : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj) => Serialize(obj, ',');
-#else
         public Stream? Serialize(MetadataFile? obj) => Serialize(obj, ',');
-#endif
 
         /// <inheritdoc cref="Serialize(MetadataFile)"/>
-#if NET48
-        public Stream Serialize(MetadataFile obj, char delim)
-#else
         public Stream? Serialize(MetadataFile? obj, char delim)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -49,11 +41,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="writer">SeparatedValueWriter representing the output</param>
         private static void WriteHeader(SeparatedValueWriter writer)
         {
-#if NET48
-            var headerArray = new string[]
-#else
             var headerArray = new string?[]
-#endif
             {
                 "File Name",
                 "Internal Name",
@@ -83,11 +71,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="rows">Array of Row objects representing the rows information</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteRows(Row[] rows, SeparatedValueWriter writer)
-#else
         private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (rows == null || !rows.Any())
@@ -96,11 +80,7 @@ namespace SabreTools.Serialization.Streams
             // Loop through and write out the rows
             foreach (var row in rows)
             {
-#if NET48
-                var rowArray = new string[]
-#else
                 var rowArray = new string?[]
-#endif
                 {
                     row.FileName,
                     row.InternalName,

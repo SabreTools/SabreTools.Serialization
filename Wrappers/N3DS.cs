@@ -14,22 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public N3DS(Models.N3DS.Cart model, byte[] data, int offset)
-#else
         public N3DS(Models.N3DS.Cart? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public N3DS(Models.N3DS.Cart model, Stream data)
-#else
         public N3DS(Models.N3DS.Cart? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -41,11 +33,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the archive</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A 3DS cart image wrapper on success, null on failure</returns>
-#if NET48
-        public static N3DS Create(byte[] data, int offset)
-#else
         public static N3DS? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -65,11 +53,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the archive</param>
         /// <returns>A 3DS cart image wrapper on success, null on failure</returns>
-#if NET48
-        public static N3DS Create(Stream data)
-#else
         public static N3DS? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

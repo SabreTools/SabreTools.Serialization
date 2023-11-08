@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class ClrMamePro : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(MetadataFile obj)
-#else
         public Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;
@@ -62,11 +58,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.ClrMamePro.GameBase"/> to <cref="Models.Metadata.Machine"/>
         /// </summary>
-#if NET48
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
-#else
         private static Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
-#endif
         {
             if (item == null)
                 return null;

@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class OfflineList : IModelSerializer<Dat, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(Dat item)
-#else
         public Models.Metadata.MetadataFile? Serialize(Dat? item)
-#endif
         {
             if (item == null)
                 return null;

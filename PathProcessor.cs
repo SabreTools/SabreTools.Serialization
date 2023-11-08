@@ -11,11 +11,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="path">Path to open as a stream</param>
         /// <returns>Stream representing the file, null on error</returns>
-#if NET48
-        public static Stream OpenStream(string path)
-#else
         public static Stream? OpenStream(string? path)
-#endif
         {
             try
             {

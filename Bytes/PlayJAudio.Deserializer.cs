@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class PlayJAudio : IByteSerializer<AudioFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public AudioFile Deserialize(byte[] data, int offset)
-#else
         public AudioFile? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

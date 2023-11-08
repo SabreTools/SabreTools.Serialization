@@ -14,22 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public BSP(Models.BSP.File model, byte[] data, int offset)
-#else
         public BSP(Models.BSP.File? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public BSP(Models.BSP.File model, Stream data)
-#else
         public BSP(Models.BSP.File? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -41,11 +33,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the BSP</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A BSP wrapper on success, null on failure</returns>
-#if NET48
-        public static BSP Create(byte[] data, int offset)
-#else
         public static BSP? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -65,11 +53,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the BSP</param>
         /// <returns>An BSP wrapper on success, null on failure</returns>
-#if NET48
-        public static BSP Create(Stream data)
-#else
         public static BSP? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

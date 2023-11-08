@@ -10,11 +10,7 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Extract nested items from a Dump
         /// </summary>
-#if NET48
-        public static DatItem[] ExtractItems(Dump item)
-#else
         public static DatItem[]? ExtractItems(Dump? item)
-#endif
         {
             if (item == null)
                 return null;
@@ -39,11 +35,7 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Extract nested items from a Part
         /// </summary>
-#if NET48
-        public static DatItem[] ExtractItems(Part item)
-#else
         public static DatItem[]? ExtractItems(Part? item)
-#endif
         {
             if (item == null)
                 return null;

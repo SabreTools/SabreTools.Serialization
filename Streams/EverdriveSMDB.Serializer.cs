@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class EverdriveSMDB : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj)
-#else
         public Stream? Serialize(MetadataFile? obj)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -38,11 +34,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="rows">Array of Row objects representing the rows information</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-#if NET48
-        private static void WriteRows(Row[] rows, SeparatedValueWriter writer)
-#else
         private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (rows == null || !rows.Any())
@@ -54,11 +46,7 @@ namespace SabreTools.Serialization.Streams
                 if (row == null)
                     continue;
 
-#if NET48
-                var rowArray = new List<string>
-#else
                 var rowArray = new List<string?>
-#endif
                 {
                     row.SHA256,
                     row.Name,

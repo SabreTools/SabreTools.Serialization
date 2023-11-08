@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class NCF : IByteSerializer<Models.NCF.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.NCF.File Deserialize(byte[] data, int offset)
-#else
         public Models.NCF.File? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

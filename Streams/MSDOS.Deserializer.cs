@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class MSDOS : IStreamSerializer<Executable>
     {
         /// <inheritdoc/>
-#if NET48
-        public Executable Deserialize(Stream data)
-#else
         public Executable? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -69,22 +65,14 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
-#if NET48
-        private static ExecutableHeader ParseExecutableHeader(Stream data)
-#else
         private static ExecutableHeader? ParseExecutableHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var header = new ExecutableHeader();
 
             #region Standard Fields
 
-#if NET48
-            byte[] magic = data.ReadBytes(2);
-#else
             byte[]? magic = data.ReadBytes(2);
-#endif
             if (magic == null)
                 return null;
 

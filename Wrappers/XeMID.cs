@@ -78,22 +78,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public XeMID(Models.Xbox.XeMID model, byte[] data, int offset)
-#else
         public XeMID(Models.Xbox.XeMID? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public XeMID(Models.Xbox.XeMID model, Stream data)
-#else
         public XeMID(Models.Xbox.XeMID? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -104,11 +96,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">String representing the data</param>
         /// <returns>A XeMID wrapper on success, null on failure</returns>
-#if NET48
-        public static XeMID Create(string data)
-#else
         public static XeMID? Create(string? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0)

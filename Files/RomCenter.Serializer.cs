@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Files
     public partial class RomCenter : IFileSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public bool Serialize(MetadataFile obj, string path)
-#else
         public bool Serialize(MetadataFile? obj, string? path)
-#endif
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;

@@ -11,18 +11,10 @@ namespace SabreTools.Serialization.Streams
     public partial class ClrMamePro : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data) => Deserialize(data, true);
-#else
         public MetadataFile? Deserialize(Stream? data) => Deserialize(data, true);
-#endif
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-#if NET48
-        public MetadataFile Deserialize(Stream data, bool quotes)
-#else
         public MetadataFile? Deserialize(Stream? data, bool quotes)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -33,17 +25,9 @@ namespace SabreTools.Serialization.Streams
             var dat = new MetadataFile();
 
             // Loop through and parse out the values
-#if NET48
-            string lastTopLevel = reader.TopLevel;
-#else
             string? lastTopLevel = reader.TopLevel;
-#endif
 
-#if NET48
-            GameBase game = null;
-#else
             GameBase? game = null;
-#endif
             var games = new List<GameBase>();
             var releases = new List<Release>();
             var biosSets = new List<BiosSet>();
@@ -154,11 +138,7 @@ namespace SabreTools.Serialization.Streams
                     && reader.RowType == CmpRowType.Standalone)
                 {
                     // Create the block if we haven't already
-#if NET48
-                    dat.ClrMamePro = dat.ClrMamePro != null ? dat.ClrMamePro : new Models.ClrMamePro.ClrMamePro();
-#else
                     dat.ClrMamePro ??= new Models.ClrMamePro.ClrMamePro();
-#endif
 
                     switch (reader.Standalone?.Key?.ToLowerInvariant())
                     {
@@ -222,28 +202,6 @@ namespace SabreTools.Serialization.Streams
                     && reader.RowType == CmpRowType.Standalone)
                 {
                     // Create the block if we haven't already
-#if NET48
-                    if (game == null)
-                    {
-                        switch (reader.TopLevel)
-                        {
-                            case "game":
-                                game = new Game();
-                                break;
-                            case "machine":
-                                game = new Machine();
-                                break;
-                            case "resource":
-                                game = new Resource();
-                                break;
-                            case "set":
-                                game = new Set();
-                                break;
-                            default:
-                                throw new FormatException($"Unknown top-level block: {reader.TopLevel}");
-                        }
-                    }
-#else
                     game ??= reader.TopLevel switch
                     {
                         "game" => new Game(),
@@ -252,7 +210,6 @@ namespace SabreTools.Serialization.Streams
                         "set" => new Set(),
                         _ => throw new FormatException($"Unknown top-level block: {reader.TopLevel}"),
                     };
-#endif
 
                     switch (reader.Standalone?.Key?.ToLowerInvariant())
                     {
@@ -396,11 +353,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Release object created from the reader context</returns>
-#if NET48
-        private static Release CreateRelease(ClrMameProReader reader)
-#else
         private static Release? CreateRelease(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -441,11 +394,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>BiosSet object created from the reader context</returns>
-#if NET48
-        private static BiosSet CreateBiosSet(ClrMameProReader reader)
-#else
         private static BiosSet? CreateBiosSet(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -480,11 +429,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Rom object created from the reader context</returns>
-#if NET48
-        private static Rom CreateRom(ClrMameProReader reader)
-#else
         private static Rom? CreateRom(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -573,11 +518,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Disk object created from the reader context</returns>
-#if NET48
-        private static Disk CreateDisk(ClrMameProReader reader)
-#else
         private static Disk? CreateDisk(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -621,11 +562,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Media object created from the reader context</returns>
-#if NET48
-        private static Media CreateMedia(ClrMameProReader reader)
-#else
         private static Media? CreateMedia(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -666,11 +603,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Sample object created from the reader context</returns>
-#if NET48
-        private static Sample CreateSample(ClrMameProReader reader)
-#else
         private static Sample? CreateSample(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -699,11 +632,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Archive object created from the reader context</returns>
-#if NET48
-        private static Archive CreateArchive(ClrMameProReader reader)
-#else
         private static Archive? CreateArchive(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -732,11 +661,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Chip object created from the reader context</returns>
-#if NET48
-        private static Chip CreateChip(ClrMameProReader reader)
-#else
         private static Chip? CreateChip(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -774,11 +699,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Video object created from the reader context</returns>
-#if NET48
-        private static Video CreateVideo(ClrMameProReader reader)
-#else
         private static Video? CreateVideo(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -825,11 +746,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Sound object created from the reader context</returns>
-#if NET48
-        private static Sound CreateSound(ClrMameProReader reader)
-#else
         private static Sound? CreateSound(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -858,11 +775,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Input object created from the reader context</returns>
-#if NET48
-        private static Input CreateInput(ClrMameProReader reader)
-#else
         private static Input? CreateInput(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -906,11 +819,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>DipSwitch object created from the reader context</returns>
-#if NET48
-        private static DipSwitch CreateDipSwitch(ClrMameProReader reader)
-#else
         private static DipSwitch? CreateDipSwitch(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;
@@ -947,11 +856,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>Driver object created from the reader context</returns>
-#if NET48
-        private static Driver CreateDriver(ClrMameProReader reader)
-#else
         private static Driver? CreateDriver(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;

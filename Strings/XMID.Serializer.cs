@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Strings
     public partial class XMID : IStringSerializer<Models.Xbox.XMID>
     {
         /// <inheritdoc/>
-#if NET48
-        public string Serialize(Models.Xbox.XMID obj)
-#else
         public string? Serialize(Models.Xbox.XMID? obj)
-#endif
         {
             if (obj == null)
                 return null;

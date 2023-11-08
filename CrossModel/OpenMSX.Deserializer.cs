@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class OpenMSX : IModelSerializer<SoftwareDb, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public SoftwareDb Deserialize(Models.Metadata.MetadataFile obj)
-#else
         public SoftwareDb? Deserialize(Models.Metadata.MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;

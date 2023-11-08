@@ -12,11 +12,7 @@ namespace SabreTools.Serialization.Streams
     public partial class MoPaQ : IStreamSerializer<Archive>
     {
         /// <inheritdoc/>
-#if NET48
-        public Archive Deserialize(Stream data)
-#else
         public Archive? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -343,20 +339,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled archive header on success, null on error</returns>
-#if NET48
-        private static ArchiveHeader ParseArchiveHeader(Stream data)
-#else
         private static ArchiveHeader? ParseArchiveHeader(Stream data)
-#endif
         {
             ArchiveHeader archiveHeader = new ArchiveHeader();
 
             // V1 - Common
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -415,19 +403,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled user data on success, null on error</returns>
-#if NET48
-        private static UserData ParseUserData(Stream data)
-#else
         private static UserData? ParseUserData(Stream data)
-#endif
         {
             UserData userData = new UserData();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -447,20 +427,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HET table on success, null on error</returns>
-#if NET48
-        private static HetTable ParseHetTable(Stream data)
-#else
         private static HetTable? ParseHetTable(Stream data)
-#endif
         {
             HetTable hetTable = new HetTable();
 
             // Common Headers
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -492,20 +464,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled BET table on success, null on error</returns>
-#if NET48
-        private static BetTable ParseBetTable(Stream data)
-#else
         private static BetTable? ParseBetTable(Stream data)
-#endif
         {
             BetTable betTable = new BetTable();
 
             // Common Headers
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -541,11 +505,7 @@ namespace SabreTools.Serialization.Streams
             betTable.FlagCount = data.ReadUInt32();
 
             betTable.FlagsArray = new uint[betTable.FlagCount];
-#if NET48
-            byte[] flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
-#else
             byte[]? flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
-#endif
             if (flagsArray != null)
                 Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
 

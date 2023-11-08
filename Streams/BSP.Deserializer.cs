@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class BSP : IStreamSerializer<Models.BSP.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.BSP.File Deserialize(Stream data)
-#else
         public Models.BSP.File? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -86,11 +82,7 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < textureHeader.TextureCount; i++)
             {
                 // Get the texture offset
-#if NET48
-                int offset = (int)(textureHeader.Offsets[i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA].Offset);
-#else
                 int offset = (int)(textureHeader.Offsets![i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA]!.Offset);
-#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -111,11 +103,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Level header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
@@ -179,11 +167,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             Texture texture = new Texture();
 
-#if NET48
-            byte[] name = data.ReadBytes(16)?.TakeWhile(c => c != '\0')?.ToArray();
-#else
             byte[]? name = data.ReadBytes(16)?.TakeWhile(c => c != '\0')?.ToArray();
-#endif
             if (name != null)
                 texture.Name = Encoding.ASCII.GetString(name);
             texture.Width = data.ReadUInt32();

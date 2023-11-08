@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class Nitro : IByteSerializer<Cart>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cart Deserialize(byte[] data, int offset)
-#else
         public Cart? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

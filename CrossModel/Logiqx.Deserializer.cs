@@ -7,18 +7,10 @@ namespace SabreTools.Serialization.CrossModel
     public partial class Logiqx : IModelSerializer<Datafile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Datafile Deserialize(Models.Metadata.MetadataFile obj) => Deserialize(obj, false);
-#else
         public Datafile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, false);
-#endif
 
         /// <inheritdoc/>
-#if NET48
-        public Datafile Deserialize(Models.Metadata.MetadataFile obj, bool game)
-#else
         public Datafile? Deserialize(Models.Metadata.MetadataFile? obj, bool game)
-#endif
         {
             if (obj == null)
                 return null;
@@ -111,15 +103,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static GameBase ConvertMachineFromInternalModel(Models.Metadata.Machine item, bool game = false)
         {
-#if NET48
-            GameBase gameBase;
-            if (game)
-                gameBase = new Game();
-            else
-                gameBase = new Machine();
-#else
             GameBase gameBase = game ? new Game() : new Machine();
-#endif
 
             gameBase.Name = item.ReadString(Models.Metadata.Machine.NameKey);
             gameBase.SourceFile = item.ReadString(Models.Metadata.Machine.SourceFileKey);

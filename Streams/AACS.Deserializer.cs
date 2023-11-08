@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class AACS : IStreamSerializer<MediaKeyBlock>
     {
         /// <inheritdoc/>
-#if NET48
-        public MediaKeyBlock Deserialize(Stream data)
-#else
         public MediaKeyBlock? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -76,20 +72,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled record on success, null on error</returns>
-#if NET48
-        private static Record ParseRecord(Stream data)
-#else
         private static Record? ParseRecord(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
 
             // The first 4 bytes make up the type and length
-#if NET48
-            byte[] typeAndLength = data.ReadBytes(4);
-#else
             byte[]? typeAndLength = data.ReadBytes(4);
-#endif
             if (typeAndLength == null)
                 return null;
 
@@ -125,11 +113,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled end of media key block record on success, null on error</returns>
-#if NET48
-        private static EndOfMediaKeyBlockRecord ParseEndOfMediaKeyBlockRecord(Stream data, RecordType type, uint length)
-#else
         private static EndOfMediaKeyBlockRecord? ParseEndOfMediaKeyBlockRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.EndOfMediaKeyBlock)
@@ -151,11 +135,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled explicit subset-difference record on success, null on error</returns>
-#if NET48
-        private static ExplicitSubsetDifferenceRecord ParseExplicitSubsetDifferenceRecord(Stream data, RecordType type, uint length)
-#else
         private static ExplicitSubsetDifferenceRecord? ParseExplicitSubsetDifferenceRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.ExplicitSubsetDifference)
@@ -199,11 +179,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled media key data record on success, null on error</returns>
-#if NET48
-        private static MediaKeyDataRecord ParseMediaKeyDataRecord(Stream data, RecordType type, uint length)
-#else
         private static MediaKeyDataRecord? ParseMediaKeyDataRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.MediaKeyData)
@@ -224,11 +200,7 @@ namespace SabreTools.Serialization.Streams
             // Try to parse the media keys
             while (data.Position < initialOffset + length)
             {
-#if NET48
-                byte[] mediaKey = data.ReadBytes(0x10);
-#else
                 byte[]? mediaKey = data.ReadBytes(0x10);
-#endif
                 if (mediaKey != null)
                     mediaKeys.Add(mediaKey);
             }
@@ -244,11 +216,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled subset-difference index record on success, null on error</returns>
-#if NET48
-        private static SubsetDifferenceIndexRecord ParseSubsetDifferenceIndexRecord(Stream data, RecordType type, uint length)
-#else
         private static SubsetDifferenceIndexRecord? ParseSubsetDifferenceIndexRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.SubsetDifferenceIndex)
@@ -286,11 +254,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled type and version record on success, null on error</returns>
-#if NET48
-        private static TypeAndVersionRecord ParseTypeAndVersionRecord(Stream data, RecordType type, uint length)
-#else
         private static TypeAndVersionRecord? ParseTypeAndVersionRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.TypeAndVersion)
@@ -312,11 +276,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled drive revocation list record on success, null on error</returns>
-#if NET48
-        private static DriveRevocationListRecord ParseDriveRevocationListRecord(Stream data, RecordType type, uint length)
-#else
         private static DriveRevocationListRecord? ParseDriveRevocationListRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.DriveRevocationList)
@@ -377,11 +337,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled host revocation list record on success, null on error</returns>
-#if NET48
-        private static HostRevocationListRecord ParseHostRevocationListRecord(Stream data, RecordType type, uint length)
-#else
         private static HostRevocationListRecord? ParseHostRevocationListRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.HostRevocationList)
@@ -442,11 +398,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled verify media key record on success, null on error</returns>
-#if NET48
-        private static VerifyMediaKeyRecord ParseVerifyMediaKeyRecord(Stream data, RecordType type, uint length)
-#else
         private static VerifyMediaKeyRecord? ParseVerifyMediaKeyRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.VerifyMediaKey)
@@ -467,11 +419,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled copyright record on success, null on error</returns>
-#if NET48
-        private static CopyrightRecord ParseCopyrightRecord(Stream data, RecordType type, uint length)
-#else
         private static CopyrightRecord? ParseCopyrightRecord(Stream data, RecordType type, uint length)
-#endif
         {
             // Verify we're calling the right parser
             if (type != RecordType.Copyright)
@@ -484,11 +432,7 @@ namespace SabreTools.Serialization.Streams
             record.RecordLength = length;
             if (length > 4)
             {
-#if NET48
-                byte[] copyright = data.ReadBytes((int)(length - 4));
-#else
                 byte[]? copyright = data.ReadBytes((int)(length - 4));
-#endif
                 if (copyright != null)
                     record.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
             }

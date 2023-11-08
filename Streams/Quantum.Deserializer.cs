@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class Quantum : IStreamSerializer<Archive>
     {
         /// <inheritdoc/>
-#if NET48
-        public Archive Deserialize(Stream data)
-#else
         public Archive? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -76,20 +72,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
-#if NET48
-            byte[] signature = data.ReadBytes(2);
-#else
             byte[]? signature = data.ReadBytes(2);
-#endif
             if (signature == null)
                 return null;
 
@@ -120,11 +108,7 @@ namespace SabreTools.Serialization.Streams
             fileDescriptor.FileNameSize = ReadVariableLength(data);
             if (fileDescriptor.FileNameSize > 0)
             {
-#if NET48
-                byte[] fileName = data.ReadBytes(fileDescriptor.FileNameSize);
-#else
                 byte[]? fileName = data.ReadBytes(fileDescriptor.FileNameSize);
-#endif
                 if (fileName != null)
                     fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
             }
@@ -132,11 +116,7 @@ namespace SabreTools.Serialization.Streams
             fileDescriptor.CommentFieldSize = ReadVariableLength(data);
             if (fileDescriptor.CommentFieldSize > 0)
             {
-#if NET48
-                byte[] commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
-#else
                 byte[]? commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
-#endif
                 if (commentField != null)
                     fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
             }

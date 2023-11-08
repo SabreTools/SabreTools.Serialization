@@ -4,8 +4,11 @@
     <!-- Assembly Properties -->
     <TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
     <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    <Version>1.1.7</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Version>1.1.7</Version>
 
     <!-- Package Properties -->
     <Authors>Matt Nadareski</Authors>
@@ -17,10 +20,6 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>serialize serialization deserialize deserialization file stream</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'!='net48'">
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

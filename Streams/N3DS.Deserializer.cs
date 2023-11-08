@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class N3DS : IStreamSerializer<Cart>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cart Deserialize(Stream data)
-#else
         public Cart? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -94,27 +90,15 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
-#if NET48
-                if (cart.Partitions[i].MagicID != NCCHMagicNumber)
-#else
                 if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
-#endif
                     continue;
 
                 // If we have no partitions table
-#if NET48
-                if (cart.Header.PartitionsTable == null)
-#else
                 if (cart.Header!.PartitionsTable == null)
-#endif
                     continue;
 
                 // Get the extended header offset
-#if NET48
-                long offset = (cart.Header.PartitionsTable[i].Offset * mediaUnitSize) + 0x200;
-#else
                 long offset = (cart.Header.PartitionsTable[i]!.Offset * mediaUnitSize) + 0x200;
-#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -138,27 +122,15 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
-#if NET48
-                if (cart.Partitions[i].MagicID != NCCHMagicNumber)
-#else
                 if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
-#endif
                     continue;
 
                 // If we have no partitions table
-#if NET48
-                if (cart.Header.PartitionsTable == null)
-#else
                 if (cart.Header!.PartitionsTable == null)
-#endif
                     continue;
 
                 // Get the ExeFS header offset
-#if NET48
-                long offset = (cart.Header.PartitionsTable[i].Offset + cart.Partitions[i].ExeFSOffsetInMediaUnits) * mediaUnitSize;
-#else
                 long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.ExeFSOffsetInMediaUnits) * mediaUnitSize;
-#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -180,27 +152,15 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < 8; i++)
             {
                 // If we have an encrypted or invalid partition
-#if NET48
-                if (cart.Partitions[i].MagicID != NCCHMagicNumber)
-#else
                 if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
-#endif
                     continue;
 
                 // If we have no partitions table
-#if NET48
-                if (cart.Header.PartitionsTable == null)
-#else
                 if (cart.Header!.PartitionsTable == null)
-#endif
                     continue;
 
                 // Get the RomFS header offset
-#if NET48
-                long offset = (cart.Header.PartitionsTable[i].Offset + cart.Partitions[i].RomFSOffsetInMediaUnits) * mediaUnitSize;
-#else
                 long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.RomFSOffsetInMediaUnits) * mediaUnitSize;
-#endif
                 if (offset < 0 || offset >= data.Length)
                     continue;
 
@@ -223,21 +183,13 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled NCSD header on success, null on error</returns>
-#if NET48
-        private static NCSDHeader ParseNCSDHeader(Stream data)
-#else
         private static NCSDHeader? ParseNCSDHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             NCSDHeader header = new NCSDHeader();
 
             header.RSA2048Signature = data.ReadBytes(0x100);
-#if NET48
-            byte[] magicNumber = data.ReadBytes(4);
-#else
             byte[]? magicNumber = data.ReadBytes(4);
-#endif
             if (magicNumber == null)
                 return null;
 
@@ -329,11 +281,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled development card info header on success, null on error</returns>
-#if NET48
-        private static DevelopmentCardInfoHeader ParseDevelopmentCardInfoHeader(Stream data)
-#else
         private static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             DevelopmentCardInfoHeader developmentCardInfoHeader = new DevelopmentCardInfoHeader();
@@ -358,11 +306,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled initial data on success, null on error</returns>
-#if NET48
-        private static InitialData ParseInitialData(Stream data)
-#else
         private static InitialData? ParseInitialData(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             InitialData initialData = new InitialData();
@@ -393,11 +337,7 @@ namespace SabreTools.Serialization.Streams
             if (!skipSignature)
                 header.RSA2048Signature = data.ReadBytes(0x100);
 
-#if NET48
-            byte[] magicId = data.ReadBytes(4);
-#else
             byte[]? magicId = data.ReadBytes(4);
-#endif
             if (magicId != null)
                 header.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
             header.ContentSizeInMediaUnits = data.ReadUInt32();
@@ -408,11 +348,7 @@ namespace SabreTools.Serialization.Streams
             header.ProgramId = data.ReadBytes(8);
             header.Reserved1 = data.ReadBytes(0x10);
             header.LogoRegionHash = data.ReadBytes(0x20);
-#if NET48
-            byte[] productCode = data.ReadBytes(0x10);
-#else
             byte[]? productCode = data.ReadBytes(0x10);
-#endif
             if (productCode != null)
                 header.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
             header.ExtendedHeaderHash = data.ReadBytes(0x20);
@@ -489,11 +425,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled NCCH extended header on success, null on error</returns>
-#if NET48
-        private static NCCHExtendedHeader ParseNCCHExtendedHeader(Stream data)
-#else
         private static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             NCCHExtendedHeader extendedHeader = new NCCHExtendedHeader();
@@ -526,11 +458,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             SystemControlInfo systemControlInfo = new SystemControlInfo();
 
-#if NET48
-            byte[] applicationTitle = data.ReadBytes(8);
-#else
             byte[]? applicationTitle = data.ReadBytes(8);
-#endif
             if (applicationTitle != null)
                 systemControlInfo.ApplicationTitle = Encoding.ASCII.GetString(applicationTitle).TrimEnd('\0');
             systemControlInfo.Reserved1 = data.ReadBytes(5);
@@ -731,11 +659,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             ExeFSFileHeader exeFSFileHeader = new ExeFSFileHeader();
 
-#if NET48
-            byte[] fileName = data.ReadBytes(8);
-#else
             byte[]? fileName = data.ReadBytes(8);
-#endif
             if (fileName != null)
                 exeFSFileHeader.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
             exeFSFileHeader.FileOffset = data.ReadUInt32();
@@ -749,20 +673,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled RomFS header on success, null on error</returns>
-#if NET48
-        private static RomFSHeader ParseRomFSHeader(Stream data)
-#else
         private static RomFSHeader? ParseRomFSHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             RomFSHeader romFSHeader = new RomFSHeader();
 
-#if NET48
-            byte[] magicString = data.ReadBytes(4);
-#else
             byte[]? magicString = data.ReadBytes(4);
-#endif
             if (magicString == null)
                 return null;
 

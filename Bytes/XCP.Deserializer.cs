@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class XZP : IByteSerializer<Models.XZP.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.XZP.File Deserialize(byte[] data, int offset)
-#else
         public Models.XZP.File? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

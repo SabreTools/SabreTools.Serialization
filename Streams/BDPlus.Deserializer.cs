@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class BDPlus : IStreamSerializer<SVM>
     {
         /// <inheritdoc/>
-#if NET48
-        public SVM Deserialize(Stream data)
-#else
         public SVM? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -36,20 +32,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SVM on success, null on error</returns>
-#if NET48
-        private static SVM ParseSVMData(Stream data)
-#else
         private static SVM? ParseSVMData(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var svm = new SVM();
 
-#if NET48
-            byte[] signature = data.ReadBytes(8);
-#else
             byte[]? signature = data.ReadBytes(8);
-#endif
             if (signature == null)
                 return null;
 

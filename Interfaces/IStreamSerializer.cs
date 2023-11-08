@@ -13,11 +13,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to deserialize to</typeparam>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object on success, null on error</returns>
-#if NET48
-        T Deserialize(Stream data);
-#else
         T? Deserialize(Stream? data);
-#endif
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a Stream
@@ -25,10 +21,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
         /// <returns>Filled object on success, null on error</returns>
-#if NET48
-        Stream Serialize(T obj);
-#else
         Stream? Serialize(T? obj);
-#endif
     }
 }

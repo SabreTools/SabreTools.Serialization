@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class MicrosoftCabinet : IStreamSerializer<Cabinet>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cabinet Deserialize(Stream data)
-#else
         public Cabinet? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -95,19 +91,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled cabinet header on success, null on error</returns>
-#if NET48
-        private static CFHEADER ParseCabinetHeader(Stream data)
-#else
         private static CFHEADER? ParseCabinetHeader(Stream data)
-#endif
         {
             CFHEADER header = new CFHEADER();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 

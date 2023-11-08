@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Streams
     public partial class IRD : IStreamSerializer<Models.IRD.IRD>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(Models.IRD.IRD obj)
-#else
         public Stream? Serialize(Models.IRD.IRD? obj)
-#endif
         {
             // If the data is invalid
             if (obj?.Magic == null)

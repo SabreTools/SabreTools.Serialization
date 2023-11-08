@@ -15,22 +15,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public LinearExecutable(Models.LinearExecutable.Executable model, byte[] data, int offset)
-#else
         public LinearExecutable(Models.LinearExecutable.Executable? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public LinearExecutable(Models.LinearExecutable.Executable model, Stream data)
-#else
         public LinearExecutable(Models.LinearExecutable.Executable? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -40,11 +32,7 @@ namespace SabreTools.Serialization.Wrappers
          /// <param name="data">Byte array representing the executable</param>
          /// <param name="offset">Offset within the array to parse</param>
          /// <returns>An LE/LX executable wrapper on success, null on failure</returns>
-#if NET48
-        public static LinearExecutable Create(byte[] data, int offset)
-#else
         public static LinearExecutable? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -64,11 +52,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the executable</param>
         /// <returns>An LE/LX executable wrapper on success, null on failure</returns>
-#if NET48
-        public static LinearExecutable Create(Stream data)
-#else
         public static LinearExecutable? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -99,11 +83,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">How many bytes to read, -1 means read until end</param>
         /// <returns>Byte array representing the range, null on error</returns>
         [Obsolete]
-#if NET48
-        public byte[] ReadArbitraryRange(int rangeStart = -1, int length = -1)
-#else
         public byte[]? ReadArbitraryRange(int rangeStart = -1, int length = -1)
-#endif
         {
             // If we have an unset range start, read from the start of the source
             if (rangeStart == -1)
@@ -115,19 +95,11 @@ namespace SabreTools.Serialization.Wrappers
                 switch (_dataSource)
                 {
                     case DataSource.ByteArray:
-#if NET48
-                        length = _byteArrayData.Length - _byteArrayOffset;
-#else
                         length = _byteArrayData!.Length - _byteArrayOffset;
-#endif
                         break;
 
                     case DataSource.Stream:
-#if NET48
-                        length = (int)_streamData.Length;
-#else
                         length = (int)_streamData!.Length;
-#endif
                         break;
                 }
             }

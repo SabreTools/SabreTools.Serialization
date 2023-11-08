@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class CFB : IByteSerializer<Binary>
     {
         /// <inheritdoc/>
-#if NET48
-        public Binary Deserialize(byte[] data, int offset)
-#else
         public Binary? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

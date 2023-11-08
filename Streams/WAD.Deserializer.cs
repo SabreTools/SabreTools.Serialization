@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class WAD : IStreamSerializer<Models.WAD.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.WAD.File Deserialize(Stream data)
-#else
         public Models.WAD.File? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -65,11 +61,7 @@ namespace SabreTools.Serialization.Streams
             #region Lump Infos
 
             // Create the lump info array
-#if NET48
-            file.LumpInfos = new LumpInfo[header.LumpCount];
-#else
             file.LumpInfos = new LumpInfo?[header.LumpCount];
-#endif
             for (int i = 0; i < header.LumpCount; i++)
             {
                 var lump = file.Lumps[i];
@@ -111,20 +103,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Texture Package header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -155,11 +139,7 @@ namespace SabreTools.Serialization.Streams
             lump.Compression = data.ReadByteValue();
             lump.Padding0 = data.ReadByteValue();
             lump.Padding1 = data.ReadByteValue();
-#if NET48
-            byte[] name = data.ReadBytes(16);
-#else
             byte[]? name = data.ReadBytes(16);
-#endif
             if (name != null)
                 lump.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
 
@@ -173,11 +153,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="type">Lump type</param>
         /// <param name="mipmap">Mipmap level</param>
         /// <returns>Filled Half-Life Texture Package lump info on success, null on error</returns>
-#if NET48
-        private static LumpInfo ParseLumpInfo(Stream data, byte type, uint mipmap = 0)
-#else
         private static LumpInfo? ParseLumpInfo(Stream data, byte type, uint mipmap = 0)
-#endif
         {
             // TODO: Use marshalling here instead of building
             LumpInfo lumpInfo = new LumpInfo();
@@ -201,11 +177,7 @@ namespace SabreTools.Serialization.Streams
                 if (mipmap > 3)
                     return null;
 
-#if NET48
-                byte[] name = data.ReadBytes(16);
-#else
                 byte[]? name = data.ReadBytes(16);
-#endif
                 if (name != null)
                     lumpInfo.Name = Encoding.ASCII.GetString(name);
                 lumpInfo.Width = data.ReadUInt32();

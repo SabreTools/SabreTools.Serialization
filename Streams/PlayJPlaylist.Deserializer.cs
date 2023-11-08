@@ -8,11 +8,7 @@ namespace SabreTools.Serialization.Streams
     public partial class PlayJPlaylist : IStreamSerializer<Playlist>
     {
         /// <inheritdoc/>
-#if NET48
-        public Playlist Deserialize(Stream data)
-#else
         public Playlist? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

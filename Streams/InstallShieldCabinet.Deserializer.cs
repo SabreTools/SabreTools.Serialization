@@ -12,11 +12,7 @@ namespace SabreTools.Serialization.Streams
     public partial class InstallShieldCabinet : IStreamSerializer<Cabinet>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cabinet Deserialize(Stream data)
-#else
         public Cabinet? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -121,11 +117,7 @@ namespace SabreTools.Serialization.Streams
                 data.Seek(offset, SeekOrigin.Begin);
 
                 // Create and add the file descriptor
-#if NET48
-                string directoryName = ParseDirectoryName(data, GetMajorVersion(commonHeader));
-#else
                 string? directoryName = ParseDirectoryName(data, GetMajorVersion(commonHeader));
-#endif
                 if (directoryName != null)
                     cabinet.DirectoryNames[i] = directoryName;
             }
@@ -171,19 +163,11 @@ namespace SabreTools.Serialization.Streams
             #region File Group Offsets
 
             // Create and fill the file group offsets
-#if NET48
-            cabinet.FileGroupOffsets = new Dictionary<long, OffsetList>();
-#else
             cabinet.FileGroupOffsets = new Dictionary<long, OffsetList?>();
-#endif
             for (int i = 0; i < (descriptor.FileGroupOffsets?.Length ?? 0); i++)
             {
                 // Get the file group offset
-#if NET48
-                uint offset = descriptor.FileGroupOffsets[i];
-#else
                 uint offset = descriptor.FileGroupOffsets![i];
-#endif
                 if (offset == 0)
                     continue;
 
@@ -230,11 +214,7 @@ namespace SabreTools.Serialization.Streams
             foreach (var kvp in cabinet.FileGroupOffsets)
             {
                 // Get the offset
-#if NET48
-                OffsetList list = kvp.Value;
-#else
                 OffsetList? list = kvp.Value;
-#endif
                 if (list == null)
                 {
                     fileGroupId++;
@@ -265,19 +245,11 @@ namespace SabreTools.Serialization.Streams
             #region Component Offsets
 
             // Create and fill the component offsets
-#if NET48
-            cabinet.ComponentOffsets = new Dictionary<long, OffsetList>();
-#else
             cabinet.ComponentOffsets = new Dictionary<long, OffsetList?>();
-#endif
             for (int i = 0; i < (descriptor.ComponentOffsets?.Length ?? 0); i++)
             {
                 // Get the component offset
-#if NET48
-                uint offset = descriptor.ComponentOffsets[i];
-#else
                 uint offset = descriptor.ComponentOffsets![i];
-#endif
                 if (offset == 0)
                     continue;
 
@@ -321,18 +293,10 @@ namespace SabreTools.Serialization.Streams
 
             // Create and fill the components
             int componentId = 0;
-#if NET48
-            foreach (KeyValuePair<long, OffsetList> kvp in cabinet.ComponentOffsets)
-#else
             foreach (KeyValuePair<long, OffsetList?> kvp in cabinet.ComponentOffsets)
-#endif
             {
                 // Get the offset
-#if NET48
-                OffsetList list = kvp.Value;
-#else
                 OffsetList? list = kvp.Value;
-#endif
                 if (list == null)
                 {
                     componentId++;
@@ -370,19 +334,11 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled common header on success, null on error</returns>
-#if NET48
-        private static CommonHeader ParseCommonHeader(Stream data)
-#else
         private static CommonHeader? ParseCommonHeader(Stream data)
-#endif
         {
             CommonHeader commonHeader = new CommonHeader();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -722,11 +678,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <returns>Filled directory name on success, null on error</returns>
-#if NET48
-        private static string ParseDirectoryName(Stream data, int majorVersion)
-#else
         private static string? ParseDirectoryName(Stream data, int majorVersion)
-#endif
         {
             // Read the string
             if (majorVersion >= 17)

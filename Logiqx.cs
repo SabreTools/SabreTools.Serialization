@@ -23,10 +23,6 @@ namespace SabreTools.Serialization
         /// <summary>
         /// subset field for DOCTYPE
         /// </summary>
-#if NET48
-        public const string DocTypeSubset = null;
-#else
         public const string? DocTypeSubset = null;
-#endif
     }
 }

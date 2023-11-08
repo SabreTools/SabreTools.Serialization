@@ -8,18 +8,10 @@ namespace SabreTools.Serialization.CrossModel
     public partial class Hashfile : IModelSerializer<Models.Hashfile.Hashfile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Hashfile.Hashfile Deserialize(Models.Metadata.MetadataFile obj) => Deserialize(obj, Hash.CRC);
-#else
         public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, Hash.CRC);
-#endif
 
         /// <inheritdoc/>
-#if NET48
-        public Models.Hashfile.Hashfile Deserialize(Models.Metadata.MetadataFile obj, Hash hash)
-#else
         public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj, Hash hash)
-#endif
         {
             if (obj == null)
                 return null;
@@ -81,11 +73,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.MetadataFile"/> to an array of <cref="Models.Hashfile.Hashfile"/>
         /// </summary>
-#if NET48
-        public static Models.Hashfile.Hashfile[] ConvertArrayFromInternalModel(Models.Metadata.MetadataFile item, Hash hash)
-#else
         public static Models.Hashfile.Hashfile[]? ConvertArrayFromInternalModel(Models.Metadata.MetadataFile? item, Hash hash)
-#endif
         {
             if (item == null)
                 return null;

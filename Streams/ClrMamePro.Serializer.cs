@@ -11,18 +11,10 @@ namespace SabreTools.Serialization.Streams
     public partial class ClrMamePro : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj) => Serialize(obj, true);
-#else
         public Stream? Serialize(MetadataFile? obj) => Serialize(obj, true);
-#endif
 
         /// <inheritdoc cref="Serialize(MetadataFile)"/>
-#if NET48
-        public Stream Serialize(MetadataFile obj, bool quotes)
-#else
         public Stream? Serialize(MetadataFile? obj, bool quotes)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -48,11 +40,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="header">ClrMamePro representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteHeader(Models.ClrMamePro.ClrMamePro header, ClrMameProWriter writer)
-#else
         private static void WriteHeader(Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
-#endif
         {
             // If the header information is missing, we can't do anything
             if (header == null)
@@ -85,11 +73,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="games">Array of GameBase objects representing the games information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteGames(GameBase[] games, ClrMameProWriter writer)
-#else
         private static void WriteGames(GameBase?[]? games, ClrMameProWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (games == null || !games.Any())
@@ -117,16 +101,6 @@ namespace SabreTools.Serialization.Streams
             if (game == null)
                 return;
 
-#if NET48
-            if (game is Game)
-                writer.WriteStartElement("game");
-            else if (game is Machine)
-                writer.WriteStartElement("machine");
-            else if (game is Resource)
-                writer.WriteStartElement("resource");
-            else if (game is Set)
-                writer.WriteStartElement(name: "set");
-#else
             switch (game)
             {
                 case Game:
@@ -142,7 +116,6 @@ namespace SabreTools.Serialization.Streams
                     writer.WriteStartElement(name: "set");
                     break;
             }
-#endif
 
             // Write the standalone values
             writer.WriteRequiredStandalone("name", game.Name, throwOnError: true);
@@ -177,11 +150,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="releases">Array of Release objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteReleases(Release[] releases, ClrMameProWriter writer)
-#else
         private static void WriteReleases(Release[]? releases, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (releases == null)
@@ -204,11 +173,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="biossets">Array of BiosSet objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteBiosSets(BiosSet[] biossets, ClrMameProWriter writer)
-#else
         private static void WriteBiosSets(BiosSet[]? biossets, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (biossets == null)
@@ -229,11 +194,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="roms">Array of Rom objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteRoms(Rom[] roms, ClrMameProWriter writer)
-#else
         private static void WriteRoms(Rom[]? roms, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (roms == null)
@@ -272,11 +233,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="disks">Array of Disk objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteDisks(Disk[] disks, ClrMameProWriter writer)
-#else
         private static void WriteDisks(Disk[]? disks, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (disks == null)
@@ -300,11 +257,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="medias">Array of Media objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteMedia(Media[] medias, ClrMameProWriter writer)
-#else
         private static void WriteMedia(Media[]? medias, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (medias == null)
@@ -327,11 +280,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="samples">Array of Sample objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteSamples(Sample[] samples, ClrMameProWriter writer)
-#else
         private static void WriteSamples(Sample[]? samples, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (samples == null)
@@ -350,11 +299,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="archives">Array of Archive objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteArchives(Archive[] archives, ClrMameProWriter writer)
-#else
         private static void WriteArchives(Archive[]? archives, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (archives == null)
@@ -373,11 +318,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="chips">Array of Chip objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteChips(Chip[] chips, ClrMameProWriter writer)
-#else
         private static void WriteChips(Chip[]? chips, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (chips == null)
@@ -399,11 +340,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="videos">Array of Video objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteVideos(Video[] videos, ClrMameProWriter writer)
-#else
         private static void WriteVideos(Video[]? videos, ClrMameProWriter writer)
-#endif
         {
             // If the item is missing, we can't do anything
             if (videos == null)
@@ -428,11 +365,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="sound">Sound object to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteSound(Sound sound, ClrMameProWriter writer)
-#else
         private static void WriteSound(Sound? sound, ClrMameProWriter writer)
-#endif
         {
             // If the item is missing, we can't do anything
             if (sound == null)
@@ -448,11 +381,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="input">Input object to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteInput(Input input, ClrMameProWriter writer)
-#else
         private static void WriteInput(Input? input, ClrMameProWriter writer)
-#endif
         {
             // If the item is missing, we can't do anything
             if (input == null)
@@ -473,11 +402,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="dipswitches">Array of DipSwitch objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteDipSwitches(DipSwitch[] dipswitches, ClrMameProWriter writer)
-#else
         private static void WriteDipSwitches(DipSwitch[]? dipswitches, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (dipswitches == null)
@@ -501,11 +426,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="driver">Driver object to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteDriver(Driver driver, ClrMameProWriter writer)
-#else
         private static void WriteDriver(Driver? driver, ClrMameProWriter writer)
-#endif
         {
             // If the item is missing, we can't do anything
             if (driver == null)

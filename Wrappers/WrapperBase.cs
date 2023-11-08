@@ -27,11 +27,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Internal model
         /// </summary>
-#if NET48
         public T Model { get; private set; }
-#else
-        public T Model { get; init; }
-#endif
 
         #endregion
 
@@ -46,11 +42,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Source byte array data
         /// </summary>
         /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.ByteArray"/></remarks>
-#if NET48
-        protected byte[] _byteArrayData = null;
-#else
         protected byte[]? _byteArrayData = null;
-#endif
 
         /// <summary>
         /// Source byte array data offset
@@ -62,13 +54,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Source Stream data
         /// </summary>
         /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.Stream"/></remarks>
-#if NET48
-        protected Stream _streamData = null;
-#else
         protected Stream? _streamData = null;
-#endif
 
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
 
         /// <summary>
         /// JSON serializer options for output printing
@@ -94,11 +82,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
-#if NET48
-        protected WrapperBase(T model, byte[] data, int offset)
-#else
         protected WrapperBase(T? model, byte[]? data, int offset)
-#endif
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -116,11 +100,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
-#if NET48
-        protected WrapperBase(T model, Stream data)
-#else
         protected WrapperBase(T? model, Stream? data)
-#endif
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -180,18 +160,10 @@ namespace SabreTools.Serialization.Wrappers
             switch (_dataSource)
             {
                 case DataSource.ByteArray:
-#if NET48
-                    return _byteArrayOffset + position + length <= _byteArrayData.Length;
-#else
                     return _byteArrayOffset + position + length <= _byteArrayData!.Length;
-#endif
 
                 case DataSource.Stream:
-#if NET48
-                    return position + length <= _streamData.Length;
-#else
                     return position + length <= _streamData!.Length;
-#endif
 
                 // Everything else is invalid
                 case DataSource.UNKNOWN:
@@ -206,11 +178,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="position">Position in the source to read from</param>
         /// <param name="length">Length of the requested data</param>
         /// <returns>Byte array containing the requested data, null on error</returns>
-#if NET48
-        public byte[] ReadFromDataSource(int position, int length)
-#else
         public byte[]? ReadFromDataSource(int position, int length)
-#endif
         {
             // Validate the data source
             if (!DataSourceIsValid())
@@ -221,28 +189,16 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Read and return the data
-#if NET48
-            byte[] sectionData = null;
-#else
             byte[]? sectionData = null;
-#endif
             switch (_dataSource)
             {
                 case DataSource.ByteArray:
                     sectionData = new byte[length];
-#if NET48
-                    Array.Copy(_byteArrayData, _byteArrayOffset + position, sectionData, 0, length);
-#else
                     Array.Copy(_byteArrayData!, _byteArrayOffset + position, sectionData, 0, length);
-#endif
                     break;
 
                 case DataSource.Stream:
-#if NET48
-                    long currentLocation = _streamData.Position;
-#else
                     long currentLocation = _streamData!.Position;
-#endif
                     _streamData.Seek(position, SeekOrigin.Begin);
                     sectionData = _streamData.ReadBytes(length);
                     _streamData.Seek(currentLocation, SeekOrigin.Begin);
@@ -259,18 +215,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">Length of the requested data</param>
         /// <param name="charLimit">Number of characters needed to be a valid string</param>
         /// <returns>String list containing the requested data, null on error</returns>
-#if NET48
-        public List<string> ReadStringsFromDataSource(int position, int length, int charLimit = 5)
-#else
         public List<string>? ReadStringsFromDataSource(int position, int length, int charLimit = 5)
-#endif
         {
             // Read the data as a byte array first
-#if NET48
-            byte[] sourceData = ReadFromDataSource(position, length);
-#else
             byte[]? sourceData = ReadFromDataSource(position, length);
-#endif
             if (sourceData == null)
                 return null;
 
@@ -380,18 +328,10 @@ namespace SabreTools.Serialization.Wrappers
             switch (_dataSource)
             {
                 case DataSource.ByteArray:
-#if NET48
-                    return _byteArrayData.Length - _byteArrayOffset;
-#else
                     return _byteArrayData!.Length - _byteArrayOffset;
-#endif
 
                 case DataSource.Stream:
-#if NET48
-                    return (int)_streamData.Length;
-#else
                     return (int)_streamData!.Length;
-#endif
 
                 case DataSource.UNKNOWN:
                 default:
@@ -403,7 +343,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region JSON Export
 
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
         /// <summary>
         /// Export the item information as JSON
         /// </summary>

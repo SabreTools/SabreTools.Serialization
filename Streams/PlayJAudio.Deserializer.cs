@@ -10,19 +10,11 @@ namespace SabreTools.Serialization.Streams
     public partial class PlayJAudio : IStreamSerializer<AudioFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public AudioFile Deserialize(Stream data) => Deserialize(data, 0);
-#else
         public AudioFile? Deserialize(Stream? data) => Deserialize(data, 0);
-#endif
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         /// <param name="adjust">Offset to adjust all seeking by</param>
-#if NET48
-        public AudioFile Deserialize(Stream data, long adjust)
-#else
         public AudioFile? Deserialize(Stream? data, long adjust)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -176,11 +168,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled audio header on success, null on error</returns>
-#if NET48
-        private static AudioHeader ParseAudioHeader(Stream data)
-#else
         private static AudioHeader? ParseAudioHeader(Stream data)
-#endif
         {
             // Cache the current offset
             long initialOffset = data.Position;
@@ -260,67 +248,39 @@ namespace SabreTools.Serialization.Streams
             }
 
             audioHeader.TrackLength = data.ReadUInt16();
-#if NET48
-            byte[] track = data.ReadBytes(audioHeader.TrackLength);
-#else
             byte[]? track = data.ReadBytes(audioHeader.TrackLength);
-#endif
             if (track != null)
                 audioHeader.Track = Encoding.ASCII.GetString(track);
 
             audioHeader.ArtistLength = data.ReadUInt16();
-#if NET48
-            byte[] artist = data.ReadBytes(audioHeader.ArtistLength);
-#else
             byte[]? artist = data.ReadBytes(audioHeader.ArtistLength);
-#endif
             if (artist != null)
                 audioHeader.Artist = Encoding.ASCII.GetString(artist);
 
             audioHeader.AlbumLength = data.ReadUInt16();
-#if NET48
-            byte[] album = data.ReadBytes(audioHeader.AlbumLength);
-#else
             byte[]? album = data.ReadBytes(audioHeader.AlbumLength);
-#endif
             if (album != null)
                 audioHeader.Album = Encoding.ASCII.GetString(album);
 
             audioHeader.WriterLength = data.ReadUInt16();
-#if NET48
-            byte[] writer = data.ReadBytes(audioHeader.WriterLength);
-#else
             byte[]? writer = data.ReadBytes(audioHeader.WriterLength);
-#endif
             if (writer != null)
                 audioHeader.Writer = Encoding.ASCII.GetString(writer);
 
             audioHeader.PublisherLength = data.ReadUInt16();
-#if NET48
-            byte[] publisher = data.ReadBytes(audioHeader.PublisherLength);
-#else
             byte[]? publisher = data.ReadBytes(audioHeader.PublisherLength);
-#endif
             if (publisher != null)
                 audioHeader.Publisher = Encoding.ASCII.GetString(publisher);
 
             audioHeader.LabelLength = data.ReadUInt16();
-#if NET48
-            byte[] label = data.ReadBytes(audioHeader.LabelLength);
-#else
             byte[]? label = data.ReadBytes(audioHeader.LabelLength);
-#endif
             if (label != null)
                 audioHeader.Label = Encoding.ASCII.GetString(label);
 
             if (data.Position - initialOffset < unknownOffset1)
             {
                 audioHeader.CommentsLength = data.ReadUInt16();
-#if NET48
-                byte[] comments = data.ReadBytes(audioHeader.CommentsLength);
-#else
                 byte[]? comments = data.ReadBytes(audioHeader.CommentsLength);
-#endif
                 if (comments != null)
                     audioHeader.Comments = Encoding.ASCII.GetString(comments);
             }
@@ -370,11 +330,7 @@ namespace SabreTools.Serialization.Streams
             DataFile dataFile = new DataFile();
 
             dataFile.FileNameLength = data.ReadUInt16();
-#if NET48
-            byte[] fileName = data.ReadBytes(dataFile.FileNameLength);
-#else
             byte[]? fileName = data.ReadBytes(dataFile.FileNameLength);
-#endif
             if (fileName != null)
                 dataFile.FileName = Encoding.ASCII.GetString(fileName);
 

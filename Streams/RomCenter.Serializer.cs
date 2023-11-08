@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class RomCenter : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj)
-#else
         public Stream? Serialize(MetadataFile? obj)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -46,11 +42,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="credits">Credits object representing the credits information</param>
         /// <param name="writer">IniWriter representing the output</param>
-#if NET48
-        private static void WriteCredits(Credits credits, IniWriter writer)
-#else
         private static void WriteCredits(Credits? credits, IniWriter writer)
-#endif
         {
             // If the credits information is missing, we can't do anything
             if (credits == null)
@@ -75,11 +67,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="dat">Dat object representing the dat information</param>
         /// <param name="writer">IniWriter representing the output</param>
-#if NET48
-        private static void WriteDat(Dat dat, IniWriter writer)
-#else
         private static void WriteDat(Dat? dat, IniWriter writer)
-#endif
         {
             // If the dat information is missing, we can't do anything
             if (dat == null)
@@ -101,11 +89,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="emulator">Emulator object representing the emulator information</param>
         /// <param name="writer">IniWriter representing the output</param>
-#if NET48
-        private static void WriteEmulator(Emulator emulator, IniWriter writer)
-#else
         private static void WriteEmulator(Emulator? emulator, IniWriter writer)
-#endif
         {
             // If the emulator information is missing, we can't do anything
             if (emulator == null)
@@ -125,11 +109,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="games">Games object representing the games information</param>
         /// <param name="writer">IniWriter representing the output</param>
-#if NET48
-        private static void WriteGames(Games games, IniWriter writer)
-#else
         private static void WriteGames(Games? games, IniWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (games?.Rom == null || !games.Rom.Any())

@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class Listxml : IModelSerializer<Mame, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Mame Deserialize(Models.Metadata.MetadataFile obj)
-#else
         public Mame? Deserialize(Models.Metadata.MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;
@@ -34,11 +30,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Models.Metadata.MetadataFile"/> to <cref="Models.Listxml.Mame"/>
         /// </summary>
-#if NET48
-        private static Mame ConvertMameFromInternalModel(Models.Metadata.MetadataFile item)
-#else
         public static Mame? ConvertMameFromInternalModel(Models.Metadata.MetadataFile? item)
-#endif
         {
             if (item == null)
                 return null;

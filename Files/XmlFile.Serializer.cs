@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Files
     public partial class XmlFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-#if NET48
-        public bool Serialize(T obj, string path)
-#else
         public bool Serialize(T? obj, string? path)
-#endif
             => Serialize(obj, path, null, null, null, null);
 
         /// <summary>
@@ -28,11 +24,7 @@ namespace SabreTools.Serialization.Files
         /// <param name="sysid">Optional DOCTYPE sysid</param>
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-#if NET48
-        public bool Serialize(T obj, string path, string name = null, string pubid = null, string sysid = null, string subset = null)
-#else
         public bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
-#endif
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;

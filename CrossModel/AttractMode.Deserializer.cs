@@ -8,11 +8,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class AttractMode : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Models.Metadata.MetadataFile obj)
-#else
         public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;

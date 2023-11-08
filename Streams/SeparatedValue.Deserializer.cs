@@ -11,18 +11,10 @@ namespace SabreTools.Serialization.Streams
     public partial class SeparatedValue : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data) => Deserialize(data, ',');
-#else
         public MetadataFile? Deserialize(Stream? data) => Deserialize(data, ',');
-#endif
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-#if NET48
-        public MetadataFile Deserialize(Stream data, char delim)
-#else
         public MetadataFile? Deserialize(Stream? data, char delim)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -52,11 +44,7 @@ namespace SabreTools.Serialization.Streams
                     break;
 
                 // Parse the line into a row
-#if NET48
-                Row row = null;
-#else
                 Row? row = null;
-#endif
                 if (reader.Line.Count < Serialization.SeparatedValue.HeaderWithExtendedHashesCount)
                 {
                     row = new Row

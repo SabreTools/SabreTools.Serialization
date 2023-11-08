@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class VBSP : IStreamSerializer<Models.VBSP.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.VBSP.File Deserialize(Stream data)
-#else
         public Models.VBSP.File? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -50,20 +46,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life 2 Level header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 

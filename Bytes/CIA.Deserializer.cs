@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class CIA : IByteSerializer<Models.N3DS.CIA>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.N3DS.CIA Deserialize(byte[] data, int offset)
-#else
         public Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

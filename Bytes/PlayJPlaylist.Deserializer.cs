@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class PlayJPlaylist : IByteSerializer<Playlist>
     {
         /// <inheritdoc/>
-#if NET48
-        public Playlist Deserialize(byte[] data, int offset)
-#else
         public Playlist? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

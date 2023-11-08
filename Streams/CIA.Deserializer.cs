@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class CIA : IStreamSerializer<Models.N3DS.CIA>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.N3DS.CIA Deserialize(Stream data)
-#else
         public Models.N3DS.CIA? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -173,11 +169,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled certificate on success, null on error</returns>
-#if NET48
-        private static Certificate ParseCertificate(Stream data)
-#else
         private static Certificate? ParseCertificate(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Certificate certificate = new Certificate();
@@ -215,19 +207,11 @@ namespace SabreTools.Serialization.Streams
 
             certificate.Signature = data.ReadBytes(certificate.SignatureSize);
             certificate.Padding = data.ReadBytes(certificate.PaddingSize);
-#if NET48
-            byte[] issuer = data.ReadBytes(0x40);
-#else
             byte[]? issuer = data.ReadBytes(0x40);
-#endif
             if (issuer != null)
                 certificate.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             certificate.KeyType = (PublicKeyType)data.ReadUInt32();
-#if NET48
-            byte[] name = data.ReadBytes(0x40);
-#else
             byte[]? name = data.ReadBytes(0x40);
-#endif
             if (name != null)
                 certificate.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             certificate.ExpirationTime = data.ReadUInt32();
@@ -261,11 +245,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="fromCdn">Indicates if the ticket is from CDN</param>
         /// <returns>Filled ticket on success, null on error</returns>
-#if NET48
-        private static Ticket ParseTicket(Stream data, bool fromCdn = false)
-#else
         private static Ticket? ParseTicket(Stream data, bool fromCdn = false)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Ticket ticket = new Ticket();
@@ -303,11 +283,7 @@ namespace SabreTools.Serialization.Streams
 
             ticket.Signature = data.ReadBytes(ticket.SignatureSize);
             ticket.Padding = data.ReadBytes(ticket.PaddingSize);
-#if NET48
-            byte[] issuer = data.ReadBytes(0x40);
-#else
             byte[]? issuer = data.ReadBytes(0x40);
-#endif
             if (issuer != null)
                 ticket.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             ticket.ECCPublicKey = data.ReadBytes(0x3C);
@@ -339,11 +315,7 @@ namespace SabreTools.Serialization.Streams
             data.Seek(4, SeekOrigin.Current);
 
             // Read the size (big-endian)
-#if NET48
-            byte[] contentIndexSize = data.ReadBytes(4);
-#else
             byte[]? contentIndexSize = data.ReadBytes(4);
-#endif
             if (contentIndexSize != null)
             {
                 Array.Reverse(contentIndexSize);
@@ -378,11 +350,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="fromCdn">Indicates if the ticket is from CDN</param>
         /// <returns>Filled title metadata on success, null on error</returns>
-#if NET48
-        private static TitleMetadata ParseTitleMetadata(Stream data, bool fromCdn = false)
-#else
         private static TitleMetadata? ParseTitleMetadata(Stream data, bool fromCdn = false)
-#endif
         {
             // TODO: Use marshalling here instead of building
             TitleMetadata titleMetadata = new TitleMetadata();
@@ -420,11 +388,7 @@ namespace SabreTools.Serialization.Streams
 
             titleMetadata.Signature = data.ReadBytes(titleMetadata.SignatureSize);
             titleMetadata.Padding1 = data.ReadBytes(titleMetadata.PaddingSize);
-#if NET48
-            byte[] issuer = data.ReadBytes(0x40);
-#else
             byte[]? issuer = data.ReadBytes(0x40);
-#endif
             if (issuer != null)
                 titleMetadata.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             titleMetadata.Version = data.ReadByteValue();
@@ -444,11 +408,7 @@ namespace SabreTools.Serialization.Streams
             titleMetadata.TitleVersion = data.ReadUInt16();
 
             // Read the content count (big-endian)
-#if NET48
-            byte[] contentCount = data.ReadBytes(2);
-#else
             byte[]? contentCount = data.ReadBytes(2);
-#endif
             if (contentCount != null)
             {
                 Array.Reverse(contentCount);

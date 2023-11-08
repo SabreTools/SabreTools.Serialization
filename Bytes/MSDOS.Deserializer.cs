@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class MSDOS : IByteSerializer<Executable>
     {
         /// <inheritdoc/>
-#if NET48
-        public Executable Deserialize(byte[] data, int offset)
-#else
         public Executable? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

@@ -14,22 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public MSDOS(Models.MSDOS.Executable model, byte[] data, int offset)
-#else
         public MSDOS(Models.MSDOS.Executable? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public MSDOS(Models.MSDOS.Executable model, Stream data)
-#else
         public MSDOS(Models.MSDOS.Executable? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -39,11 +31,7 @@ namespace SabreTools.Serialization.Wrappers
          /// <param name="data">Byte array representing the executable</param>
          /// <param name="offset">Offset within the array to parse</param>
          /// <returns>An MS-DOS executable wrapper on success, null on failure</returns>
-#if NET48
-        public static MSDOS Create(byte[] data, int offset)
-#else
         public static MSDOS? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -63,11 +51,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the executable</param>
         /// <returns>An MS-DOS executable wrapper on success, null on failure</returns>
-#if NET48
-        public static MSDOS Create(Stream data)
-#else
         public static MSDOS? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

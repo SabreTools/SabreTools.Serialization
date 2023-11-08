@@ -13,11 +13,7 @@ namespace SabreTools.Serialization
         /// <summary>
         /// pubid field for DOCTYPE
         /// </summary>
-#if NET48
-        public const string DocTypePubId = null;
-#else
         public const string? DocTypePubId = null;
-#endif
 
         /// <summary>
         /// sysid field for DOCTYPE
@@ -27,10 +23,6 @@ namespace SabreTools.Serialization
         /// <summary>
         /// subset field for DOCTYPE
         /// </summary>
-#if NET48
-        public const string DocTypeSubset = null;
-#else
         public const string? DocTypeSubset = null;
-#endif
     }
 }

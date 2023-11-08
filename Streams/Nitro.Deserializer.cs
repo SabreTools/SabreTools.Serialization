@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class Nitro : IStreamSerializer<Cart>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cart Deserialize(Stream data)
-#else
         public Cart? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -132,19 +128,11 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             CommonHeader commonHeader = new CommonHeader();
 
-#if NET48
-            byte[] gameTitle = data.ReadBytes(12);
-#else
             byte[]? gameTitle = data.ReadBytes(12);
-#endif
             if (gameTitle != null)
                 commonHeader.GameTitle = Encoding.ASCII.GetString(gameTitle).TrimEnd('\0');
             commonHeader.GameCode = data.ReadUInt32();
-#if NET48
-            byte[] makerCode = data.ReadBytes(2);
-#else
             byte[]? makerCode = data.ReadBytes(2);
-#endif
             if (makerCode != null)
                 commonHeader.MakerCode = Encoding.ASCII.GetString(bytes: makerCode).TrimEnd('\0');
             commonHeader.UnitCode = (Unitcode)data.ReadByteValue();
@@ -332,11 +320,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled name list entry on success, null on error</returns>
-#if NET48
-        private static NameListEntry ParseNameListEntry(Stream data)
-#else
         private static NameListEntry? ParseNameListEntry(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             NameListEntry entry = new NameListEntry();
@@ -350,11 +334,7 @@ namespace SabreTools.Serialization.Streams
             byte size = (byte)(flagAndSize & ~0x80);
             if (size > 0)
             {
-#if NET48
-                byte[] name = data.ReadBytes(size);
-#else
                 byte[]? name = data.ReadBytes(size);
-#endif
                 if (name != null)
                     entry.Name = Encoding.UTF8.GetString(name);
             }

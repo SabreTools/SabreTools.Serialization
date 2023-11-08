@@ -8,11 +8,7 @@ namespace SabreTools.Serialization.CrossModel
 {
     public partial class Logiqx : IModelSerializer<Datafile, Models.Metadata.MetadataFile>
     {
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(Datafile item)
-#else
         public Models.Metadata.MetadataFile? Serialize(Datafile? item)
-#endif
         {
             if (item == null)
                 return null;

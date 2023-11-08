@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class EverdriveSMDB : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(MetadataFile obj)
-#else
         public Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;

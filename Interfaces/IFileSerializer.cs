@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to deserialize to</typeparam>
         /// <param name="path">Path to deserialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-#if NET48
-        T Deserialize(string path);
-#else
         T? Deserialize(string? path);
-#endif
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a file
@@ -24,10 +20,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-#if NET48
-        bool Serialize(T obj, string path);
-#else
         bool Serialize(T? obj, string? path);
-#endif
     }
 }

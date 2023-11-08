@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Files
     public partial class CueSheet : IFileSerializer<Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.CueSheets.CueSheet Deserialize(string path)
-#else
         public Models.CueSheets.CueSheet? Deserialize(string? path)
-#endif
         {
             // Check that the file exists
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
@@ -122,11 +118,7 @@ namespace SabreTools.Serialization.Files
         /// <param name="fileType">File type to set</param>
         /// <param name="cueLines">Lines array to pull from</param>
         /// <param name="i">Reference to index in array</param>
-#if NET48
-        private static CueFile CreateCueFile(string fileName, string fileType, string[] cueLines, ref int i)
-#else
         private static CueFile? CreateCueFile(string fileName, string fileType, string[]? cueLines, ref int i)
-#endif
         {
             // Check the required parameters
             if (cueLines == null)
@@ -191,11 +183,7 @@ namespace SabreTools.Serialization.Files
         /// <param name="dataType">Data type to set</param>
         /// <param name="cueLines">Lines array to pull from</param>
         /// <param name="i">Reference to index in array</param>
-#if NET48
-        private static CueTrack CreateCueTrack(string number, string dataType, string[] cueLines, ref int i)
-#else
         private static CueTrack? CreateCueTrack(string number, string dataType, string[]? cueLines, ref int i)
-#endif
         {
             // Check the required parameters
             if (cueLines == null)
@@ -326,18 +314,14 @@ namespace SabreTools.Serialization.Files
         /// Create a PREGAP from a mm:ss:ff length
         /// </summary>
         /// <param name="length">String to get length information from</param>
-#if NET48
-        private static PreGap CreatePreGap(string length)
-#else
         private static PreGap CreatePreGap(string? length)
-#endif
         {
             // Ignore empty lines
             if (string.IsNullOrWhiteSpace(length))
                 throw new ArgumentException("Length was null or whitespace");
 
             // Ignore lines that don't contain the correct information
-            if (length.Length != 8 || length.Count(c => c == ':') != 2)
+            if (length!.Length != 8 || length.Count(c => c == ':') != 2)
                 throw new FormatException($"Length was not in a recognized format: {length}");
 
             // Split the line
@@ -381,11 +365,7 @@ namespace SabreTools.Serialization.Files
         /// </summary>
         /// <param name="index">Index to set</param>
         /// <param name="startTime">Start time to set</param>
-#if NET48
-        private static CueIndex CreateCueIndex(string index, string startTime)
-#else
         private static CueIndex CreateCueIndex(string? index, string? startTime)
-#endif
         {
             // Set the current fields
             if (!int.TryParse(index, out int parsedIndex))
@@ -398,7 +378,7 @@ namespace SabreTools.Serialization.Files
                 throw new ArgumentException("Start time was null or whitespace");
 
             // Ignore lines that don't contain the correct information
-            if (startTime.Length != 8 || startTime.Count(c => c == ':') != 2)
+            if (startTime!.Length != 8 || startTime.Count(c => c == ':') != 2)
                 throw new FormatException($"Start time was not in a recognized format: {startTime}");
 
             // Split the line
@@ -442,18 +422,14 @@ namespace SabreTools.Serialization.Files
         /// Create a POSTGAP from a mm:ss:ff length
         /// </summary>
         /// <param name="length">String to get length information from</param>
-#if NET48
-        private static PostGap CreatePostGap(string length)
-#else
         private static PostGap CreatePostGap(string? length)
-#endif
         {
             // Ignore empty lines
             if (string.IsNullOrWhiteSpace(length))
                 throw new ArgumentException("Length was null or whitespace");
 
             // Ignore lines that don't contain the correct information
-            if (length.Length != 8 || length.Count(c => c == ':') != 2)
+            if (length!.Length != 8 || length.Count(c => c == ':') != 2)
                 throw new FormatException($"Length was not in a recognized format: {length}");
 
             // Split the line
@@ -499,11 +475,7 @@ namespace SabreTools.Serialization.Files
         /// </summary>
         /// <param name="fileType">String to get value from</param>
         /// <returns>CueFileType, if possible</returns>
-#if NET48
-        private static CueFileType GetFileType(string fileType)
-#else
         private static CueFileType GetFileType(string? fileType)
-#endif
         {
             switch (fileType?.ToLowerInvariant())
             {
@@ -532,11 +504,7 @@ namespace SabreTools.Serialization.Files
         /// </summary>
         /// <param name="dataType">String to get value from</param>
         /// <returns>CueTrackDataType, if possible (default AUDIO)</returns>
-#if NET48
-        private static CueTrackDataType GetDataType(string dataType)
-#else
         private static CueTrackDataType GetDataType(string? dataType)
-#endif
         {
             switch (dataType?.ToLowerInvariant())
             {
@@ -574,21 +542,13 @@ namespace SabreTools.Serialization.Files
         /// </summary>
         /// <param name="flagStrings">Possible flags as strings</param>
         /// <returns>CueTrackFlag value representing the strings, if possible</returns>
-#if NET48
-        private static CueTrackFlag GetFlags(string[] flagStrings)
-#else
         private static CueTrackFlag GetFlags(string?[]? flagStrings)
-#endif
         {
             CueTrackFlag flag = 0;
             if (flagStrings == null)
                 return flag;
 
-#if NET48
-            foreach (string flagString in flagStrings)
-#else
             foreach (string? flagString in flagStrings)
-#endif
             {
                 switch (flagString?.ToLowerInvariant())
                 {

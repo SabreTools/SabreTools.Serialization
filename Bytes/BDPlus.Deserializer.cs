@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class BDPlus : IByteSerializer<SVM>
     {
         /// <inheritdoc/>
-#if NET48
-        public SVM Deserialize(byte[] data, int offset)
-#else
         public SVM? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class PIC : IStreamSerializer<DiscInformation>
     {
         /// <inheritdoc/>
-#if NET48
-        public DiscInformation Deserialize(Stream data)
-#else
         public DiscInformation? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -55,11 +51,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled disc information unit on success, null on error</returns>
-#if NET48
-        private static DiscInformationUnit ParseDiscInformationUnit(Stream data)
-#else
         private static DiscInformationUnit? ParseDiscInformationUnit(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var unit = new DiscInformationUnit();
@@ -111,21 +103,13 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled disc information unit header on success, null on error</returns>
-#if NET48
-        private static DiscInformationUnitHeader ParseDiscInformationUnitHeader(Stream data)
-#else
         private static DiscInformationUnitHeader? ParseDiscInformationUnitHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var header = new DiscInformationUnitHeader();
 
             // We only accept Disc Information units, not Emergency Brake or other
-#if NET48
-            byte[] dic = data.ReadBytes(2);
-#else
             byte[]? dic = data.ReadBytes(2);
-#endif
             if (dic == null)
                 return null;
 
@@ -148,20 +132,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled disc information unit body on success, null on error</returns>
-#if NET48
-        private static DiscInformationUnitBody ParseDiscInformationUnitBody(Stream data)
-#else
         private static DiscInformationUnitBody? ParseDiscInformationUnitBody(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var body = new DiscInformationUnitBody();
 
-#if NET48
-            byte[] dti = data.ReadBytes(3);
-#else
             byte[]? dti = data.ReadBytes(3);
-#endif
             if (dti == null)
                 return null;
 

@@ -8,10 +8,6 @@ namespace SabreTools.Serialization.Streams
     public partial class PlayJAudio : IStreamSerializer<AudioFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(AudioFile obj) => throw new NotImplementedException();
-#else
         public Stream? Serialize(AudioFile? obj) => throw new NotImplementedException();
-#endif
     }
 }

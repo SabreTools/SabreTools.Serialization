@@ -8,11 +8,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class ArchiveDotOrg : IModelSerializer<Models.ArchiveDotOrg.Files, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.ArchiveDotOrg.Files Deserialize(Models.Metadata.MetadataFile obj)
-#else
         public Models.ArchiveDotOrg.Files? Deserialize(Models.Metadata.MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;

@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class GCF : IByteSerializer<Models.GCF.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.GCF.File Deserialize(byte[] data, int offset)
-#else
         public Models.GCF.File? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

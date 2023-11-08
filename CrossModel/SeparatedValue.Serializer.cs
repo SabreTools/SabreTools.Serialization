@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class SeparatedValue : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(MetadataFile obj)
-#else
         public Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;
@@ -78,53 +74,6 @@ namespace SabreTools.Serialization.CrossModel
             return machine;
         }
 
-#if NET48
-        /// <summary>
-        /// Convert from <cref="Models.SeparatedValue.Row"/> to <cref="Models.Metadata.DatItem"/>
-        /// </summary>
-        private static Models.Metadata.DatItem ConvertToInternalModel(Row item)
-        {
-            switch (item.Type)
-            {
-                case "disk":
-                    return new Models.Metadata.Disk
-                    {
-                        [Models.Metadata.Disk.NameKey] = item.DiskName,
-                        [Models.Metadata.Disk.MD5Key] = item.MD5,
-                        [Models.Metadata.Disk.SHA1Key] = item.SHA1,
-                        [Models.Metadata.Disk.StatusKey] = item.Status,
-                    };
-
-                case "media":
-                    return new Models.Metadata.Media
-                    {
-                        [Models.Metadata.Media.NameKey] = item.DiskName,
-                        [Models.Metadata.Media.MD5Key] = item.MD5,
-                        [Models.Metadata.Media.SHA1Key] = item.SHA1,
-                        [Models.Metadata.Media.SHA256Key] = item.SHA256,
-                        [Models.Metadata.Media.SpamSumKey] = item.SpamSum,
-                    };
-
-                case "rom":
-                    return new Models.Metadata.Rom
-                    {
-                        [Models.Metadata.Rom.NameKey] = item.RomName,
-                        [Models.Metadata.Rom.SizeKey] = item.Size,
-                        [Models.Metadata.Rom.CRCKey] = item.CRC,
-                        [Models.Metadata.Rom.MD5Key] = item.MD5,
-                        [Models.Metadata.Rom.SHA1Key] = item.SHA1,
-                        [Models.Metadata.Rom.SHA256Key] = item.SHA256,
-                        [Models.Metadata.Rom.SHA384Key] = item.SHA384,
-                        [Models.Metadata.Rom.SHA512Key] = item.SHA512,
-                        [Models.Metadata.Rom.SpamSumKey] = item.SpamSum,
-                        [Models.Metadata.Rom.StatusKey] = item.Status,
-                    };
-
-                default:
-                    return null;
-            }
-        }
-#else
         /// <summary>
         /// Convert from <cref="Models.SeparatedValue.Row"/> to <cref="Models.Metadata.DatItem"/>
         /// </summary>
@@ -163,6 +112,5 @@ namespace SabreTools.Serialization.CrossModel
                 _ => null,
             };
         }
-#endif
     }
 }

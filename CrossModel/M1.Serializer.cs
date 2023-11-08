@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class M1 : IModelSerializer<Models.Listxml.M1, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(Models.Listxml.M1 item)
-#else
         public Models.Metadata.MetadataFile? Serialize(Models.Listxml.M1? item)
-#endif
         {
             if (item == null)
                 return null;

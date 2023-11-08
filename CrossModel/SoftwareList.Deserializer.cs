@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class SoftwareList : IModelSerializer<Models.SoftwareList.SoftwareList, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.SoftwareList.SoftwareList Deserialize(Models.Metadata.MetadataFile obj)
-#else
         public Models.SoftwareList.SoftwareList? Deserialize(Models.Metadata.MetadataFile? obj)
-#endif
         {
             if (obj == null)
                 return null;

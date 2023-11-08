@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class Hashfile : IModelSerializer<Models.Hashfile.Hashfile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Metadata.MetadataFile Serialize(Models.Hashfile.Hashfile obj)
-#else
         public Models.Metadata.MetadataFile? Serialize(Models.Hashfile.Hashfile? obj)
-#endif
         {
             if (obj == null)
                 return null;

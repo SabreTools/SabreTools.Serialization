@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Streams
     public partial class IRD : IStreamSerializer<Models.IRD.IRD>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.IRD.IRD Deserialize(Stream data)
-#else
         public Models.IRD.IRD? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

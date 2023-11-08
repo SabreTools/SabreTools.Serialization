@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class Listrom : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data)
-#else
         public MetadataFile? Deserialize(Stream? data)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -24,11 +20,7 @@ namespace SabreTools.Serialization.Streams
             var reader = new StreamReader(data, Encoding.UTF8);
             var dat = new MetadataFile();
 
-#if NET48
-            Set set = null;
-#else
             Set? set = null;
-#endif
             var sets = new List<Set>();
             var rows = new List<Row>();
 
@@ -36,11 +28,7 @@ namespace SabreTools.Serialization.Streams
             while (!reader.EndOfStream)
             {
                 // Read the line and don't split yet
-#if NET48
-                string line = reader.ReadLine();
-#else
                 string? line = reader.ReadLine();
-#endif
                 if (string.IsNullOrWhiteSpace(line))
                 {
                     // If we have a set to process
@@ -58,7 +46,7 @@ namespace SabreTools.Serialization.Streams
                 // Set lines are unique
                 if (line.StartsWith("ROMs required for driver"))
                 {
-#if NET48
+#if NETFRAMEWORK
                     string driver = line.Substring("ROMs required for driver".Length).Trim('"', ' ', '.');
 #else
                     string driver = line["ROMs required for driver".Length..].Trim('"', ' ', '.');
@@ -68,7 +56,7 @@ namespace SabreTools.Serialization.Streams
                 }
                 else if (line.StartsWith("No ROMs required for driver"))
                 {
-#if NET48
+#if NETFRAMEWORK
                     string driver = line.Substring("No ROMs required for driver".Length).Trim('"', ' ', '.');
 #else
                     string driver = line["No ROMs required for driver".Length..].Trim('"', ' ', '.');
@@ -78,7 +66,7 @@ namespace SabreTools.Serialization.Streams
                 }
                 else if (line.StartsWith("ROMs required for device"))
                 {
-#if NET48
+#if NETFRAMEWORK
                     string device = line.Substring("ROMs required for device".Length).Trim('"', ' ', '.');
 #else
                     string device = line["ROMs required for device".Length..].Trim('"', ' ', '.');
@@ -88,7 +76,7 @@ namespace SabreTools.Serialization.Streams
                 }
                 else if (line.StartsWith("No ROMs required for device"))
                 {
-#if NET48
+#if NETFRAMEWORK
                     string device = line.Substring("No ROMs required for device".Length).Trim('"', ' ', '.');
 #else
                     string device = line["No ROMs required for device".Length..].Trim('"', ' ', '.');
@@ -103,7 +91,7 @@ namespace SabreTools.Serialization.Streams
                 }
 
                 // Split the line for the name iteratively
-#if NET48
+#if NETFRAMEWORK
                 string[] lineParts = line.Split(new string[] { "     " }, StringSplitOptions.RemoveEmptyEntries);
                 if (lineParts.Length == 1)
                     lineParts = line.Split(new string[] { "    " }, StringSplitOptions.RemoveEmptyEntries);
@@ -123,7 +111,7 @@ namespace SabreTools.Serialization.Streams
 
                 // Read the name and set the rest of the line for processing
                 string name = lineParts[0];
-#if NET48
+#if NETFRAMEWORK
                 string trimmedLine = line.Substring(name.Length);
 #else
                 string trimmedLine = line[name.Length..];
@@ -131,7 +119,7 @@ namespace SabreTools.Serialization.Streams
                 if (trimmedLine == null)
                     continue;
 
-#if NET48
+#if NETFRAMEWORK
                 lineParts = trimmedLine.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 #else
                 lineParts = trimmedLine.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -144,7 +132,7 @@ namespace SabreTools.Serialization.Streams
                     // Normal CHD (Name, MD5/SHA1)
                     case 1:
                         row.Name = name;
-#if NET48
+#if NETFRAMEWORK
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[0].Substring("MD5".Length).Trim('(', ')');
                         else
@@ -161,7 +149,7 @@ namespace SabreTools.Serialization.Streams
                     case 3 when line.Contains("CRC"):
                         row.Name = name;
                         row.Size = lineParts[0];
-#if NET48
+#if NETFRAMEWORK
                         row.CRC = lineParts[1].Substring("CRC".Length).Trim('(', ')');
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[2].Substring("MD5".Length).Trim('(', ')');
@@ -180,7 +168,7 @@ namespace SabreTools.Serialization.Streams
                     case 3 when line.Contains("BAD_DUMP"):
                         row.Name = name;
                         row.Bad = true;
-#if NET48
+#if NETFRAMEWORK
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[1].Substring("MD5".Length).Trim('(', ')');
                         else
@@ -204,7 +192,7 @@ namespace SabreTools.Serialization.Streams
                         row.Name = name;
                         row.Size = lineParts[0];
                         row.Bad = true;
-#if NET48
+#if NETFRAMEWORK
                         row.CRC = lineParts[2].Substring("CRC".Length).Trim('(', ')');
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[3].Substring("MD5".Length).Trim('(', ')');

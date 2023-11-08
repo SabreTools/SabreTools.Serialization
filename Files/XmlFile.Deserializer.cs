@@ -9,11 +9,7 @@ namespace SabreTools.Serialization.Files
     public partial class XmlFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-#if NET48
-        public T Deserialize(string path)
-#else
         public T? Deserialize(string? path)
-#endif
         {
             using (var data = PathProcessor.OpenStream(path))
             {

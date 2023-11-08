@@ -5,16 +5,12 @@ namespace SabreTools.Serialization.Strings
     public partial class XMID : IStringSerializer<Models.Xbox.XMID>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Xbox.XMID Deserialize(string path)
-#else
-        public Models.Xbox.XMID? Deserialize(string? path)
-#endif
+        public Models.Xbox.XMID? Deserialize(string? str)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(str))
                 return null;
 
-            string xmid = path.TrimEnd('\0');
+            string xmid = str!.TrimEnd('\0');
             if (string.IsNullOrWhiteSpace(xmid))
                 return null;
 
@@ -26,11 +22,7 @@ namespace SabreTools.Serialization.Strings
         /// </summary>
         /// <param name="xmidString">XMID string to attempt to parse</param>
         /// <returns>Filled XMID on success, null on error</returns>
-#if NET48
-        private static Models.Xbox.XMID ParseXMID(string xmidString)
-#else
         private static Models.Xbox.XMID? ParseXMID(string? xmidString)
-#endif
         {
             if (xmidString == null || xmidString.Length != 8)
                 return null;

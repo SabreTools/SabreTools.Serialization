@@ -11,11 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class RomCenter : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data)
-#else
         public MetadataFile? Deserialize(Stream? data)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -50,24 +46,6 @@ namespace SabreTools.Serialization.Streams
                     case IniRowType.SectionHeader:
                         switch (reader.Section?.ToLowerInvariant())
                         {
-#if NET48
-                            case "credits":
-                                if (dat.Credits == null)
-                                    dat.Credits = new Credits();
-                                break;
-                            case "dat":
-                                if (dat.Dat == null)
-                                    dat.Dat = new Dat();
-                                break;
-                            case "emulator":
-                                if (dat.Emulator == null)
-                                    dat.Emulator = new Emulator();
-                                break;
-                            case "games":
-                                if (dat.Games == null)
-                                    dat.Games = new Games();
-                                break;
-#else
                             case "credits":
                                 dat.Credits ??= new Credits();
                                 break;
@@ -80,7 +58,6 @@ namespace SabreTools.Serialization.Streams
                             case "games":
                                 dat.Games ??= new Games();
                                 break;
-#endif
                             default:
                                 if (reader.CurrentLine != null)
                                     additional.Add(reader.CurrentLine);
@@ -93,11 +70,7 @@ namespace SabreTools.Serialization.Streams
                 if (reader.Section?.ToLowerInvariant() == "credits")
                 {
                     // Create the section if we haven't already
-#if NET48
-                    dat.Credits = dat.Credits != null ? dat.Credits : new Credits();
-#else
                     dat.Credits ??= new Credits();
-#endif
 
                     switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
                     {
@@ -133,11 +106,7 @@ namespace SabreTools.Serialization.Streams
                 else if (reader.Section?.ToLowerInvariant() == "dat")
                 {
                     // Create the section if we haven't already
-#if NET48
-                    dat.Dat = dat.Dat != null ? dat.Dat : new Dat();
-#else
                     dat.Dat ??= new Dat();
-#endif
 
                     switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
                     {
@@ -164,11 +133,7 @@ namespace SabreTools.Serialization.Streams
                 else if (reader.Section?.ToLowerInvariant() == "emulator")
                 {
                     // Create the section if we haven't already
-#if NET48
-                    dat.Emulator = dat.Emulator != null ? dat.Emulator : new Emulator();
-#else
                     dat.Emulator ??= new Emulator();
-#endif
 
                     switch (reader.KeyValuePair?.Key?.ToLowerInvariant())
                     {
@@ -189,11 +154,7 @@ namespace SabreTools.Serialization.Streams
                 else if (reader.Section?.ToLowerInvariant() == "games")
                 {
                     // Create the section if we haven't already
-#if NET48
-                    dat.Games = dat.Games != null ? dat.Games : new Games();
-#else
                     dat.Games ??= new Games();
-#endif
 
                     // If the line doesn't contain the delimiter
                     if (!(reader.CurrentLine?.Contains('¬') ?? false))

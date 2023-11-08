@@ -10,18 +10,10 @@ namespace SabreTools.Serialization.Streams
     public partial class Hashfile : IStreamSerializer<Models.Hashfile.Hashfile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.Hashfile.Hashfile Deserialize(Stream data) => Deserialize(data, Hash.CRC);
-#else
         public Models.Hashfile.Hashfile? Deserialize(Stream? data) => Deserialize(data, Hash.CRC);
-#endif
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-#if NET48
-        public Models.Hashfile.Hashfile Deserialize(Stream data, Hash hash)
-#else
         public Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -37,11 +29,10 @@ namespace SabreTools.Serialization.Streams
             while (!reader.EndOfStream)
             {
                 // Read and split the line
-#if NET48
-                string line = reader.ReadLine();
-                string[] lineParts = line?.Split(new char[] { ' ' } , StringSplitOptions.RemoveEmptyEntries);
-#else
                 string? line = reader.ReadLine();
+#if NETFRAMEWORK
+                string[]? lineParts = line?.Split(new char[] { ' ' } , StringSplitOptions.RemoveEmptyEntries);
+#else
                 string[]? lineParts = line?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 #endif
                 if (lineParts == null)
@@ -53,7 +44,7 @@ namespace SabreTools.Serialization.Streams
                     case Hash.CRC:
                         var sfv = new SFV
                         {
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Take(lineParts.Length - 1)),
                             Hash = lineParts[lineParts.Length - 1],
 #else
@@ -67,7 +58,7 @@ namespace SabreTools.Serialization.Streams
                         var md5 = new MD5
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),
@@ -79,7 +70,7 @@ namespace SabreTools.Serialization.Streams
                         var sha1 = new SHA1
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),
@@ -91,7 +82,7 @@ namespace SabreTools.Serialization.Streams
                         var sha256 = new SHA256
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),
@@ -103,7 +94,7 @@ namespace SabreTools.Serialization.Streams
                         var sha384 = new SHA384
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),
@@ -115,7 +106,7 @@ namespace SabreTools.Serialization.Streams
                         var sha512 = new SHA512
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),
@@ -127,7 +118,7 @@ namespace SabreTools.Serialization.Streams
                         var spamSum = new SpamSum
                         {
                             Hash = lineParts[0],
-#if NET48
+#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1)),
 #else
                             File = string.Join(" ", lineParts[1..]),

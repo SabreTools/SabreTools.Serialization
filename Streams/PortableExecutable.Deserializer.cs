@@ -13,11 +13,7 @@ namespace SabreTools.Serialization.Streams
     public partial class PortableExecutable : IStreamSerializer<Executable>
     {
         /// <inheritdoc/>
-#if NET48
-        public Executable Deserialize(Stream data)
-#else
         public Executable? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -48,11 +44,7 @@ namespace SabreTools.Serialization.Streams
             #region Signature
 
             data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -704,11 +696,7 @@ namespace SabreTools.Serialization.Streams
             while (totalSize > 0 && data.Position < data.Length)
             {
                 long initialPosition = data.Position;
-#if NET48
-                string str = data.ReadString();
-#else
                 string? str = data.ReadString();
-#endif
                 strings.Add(str ?? string.Empty);
                 totalSize -= (uint)(data.Position - initialPosition);
             }
@@ -779,11 +767,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="endOffset">First address not part of the base relocation table</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-#if NET48
-        private static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader[] sections)
-#else
         private static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader?[] sections)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var baseRelocationTable = new List<BaseRelocationBlock>();
@@ -824,11 +808,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="endOffset">First address not part of the debug table</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled debug table on success, null on error</returns>
-#if NET48
-        private static DebugTable ParseDebugTable(Stream data, int endOffset, SectionHeader[] sections)
-#else
         private static DebugTable ParseDebugTable(Stream data, int endOffset, SectionHeader?[] sections)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var debugTable = new DebugTable();
@@ -865,11 +845,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled export table on success, null on error</returns>
-#if NET48
-        private static ExportTable ParseExportTable(Stream data, SectionHeader[] sections)
-#else
         private static ExportTable ParseExportTable(Stream data, SectionHeader?[] sections)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var exportTable = new ExportTable();
@@ -896,11 +872,7 @@ namespace SabreTools.Serialization.Streams
                 uint nameAddress = exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
-#if NET48
-                string name = data.ReadString(Encoding.ASCII);
-#else
                 string? name = data.ReadString(Encoding.ASCII);
-#endif
                 exportDirectoryTable.Name = name;
             }
 
@@ -973,11 +945,7 @@ namespace SabreTools.Serialization.Streams
                 exportNameTable.Strings = new string[exportDirectoryTable.NumberOfNamePointers];
                 for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
                 {
-#if NET48
-                    string str = data.ReadString(Encoding.ASCII);
-#else
                     string? str = data.ReadString(Encoding.ASCII);
-#endif
                     exportNameTable.Strings[i] = str ?? string.Empty;
                 }
 
@@ -994,11 +962,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-#if NET48
-        private static ImportTable ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
-#else
         private static ImportTable ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var importTable = new ImportTable();
@@ -1043,20 +1007,12 @@ namespace SabreTools.Serialization.Streams
                 uint nameAddress = importDirectoryTableEntry.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
-#if NET48
-                string name = data.ReadString(Encoding.ASCII);
-#else
                 string? name = data.ReadString(Encoding.ASCII);
-#endif
                 importDirectoryTableEntry.Name = name;
             }
 
             // Lookup tables
-#if NET48
-            var importLookupTables = new Dictionary<int, ImportLookupTableEntry[]>();
-#else
             var importLookupTables = new Dictionary<int, ImportLookupTableEntry?[]?>();
-#endif
 
             for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
             {
@@ -1110,11 +1066,7 @@ namespace SabreTools.Serialization.Streams
             importTable.ImportLookupTables = importLookupTables;
 
             // Address tables
-#if NET48
-            var importAddressTables = new Dictionary<int, ImportAddressTableEntry[]>();
-#else
             var importAddressTables = new Dictionary<int, ImportAddressTableEntry?[]?>();
-#endif
 
             for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
             {
@@ -1181,17 +1133,9 @@ namespace SabreTools.Serialization.Streams
                 {
                     var addresses = importTable.ImportLookupTables
                         .Where(kvp => kvp.Value != null)
-#if NET48
-                        .SelectMany(kvp => kvp.Value)
-#else
                         .SelectMany(kvp => kvp.Value!)
-#endif
                         .Where(ilte => ilte != null)
-#if NET48
-                        .Select(ilte => (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
-#else
                         .Select(ilte => (int)ilte!.HintNameTableRVA.ConvertVirtualAddress(sections));
-#endif
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
@@ -1200,17 +1144,9 @@ namespace SabreTools.Serialization.Streams
                 {
                     var addresses = importTable.ImportAddressTables
                         .Where(kvp => kvp.Value != null)
-#if NET48
-                        .SelectMany(kvp => kvp.Value)
-#else
                         .SelectMany(kvp => kvp.Value!)
-#endif
                         .Where(iate => iate != null)
-#if NET48
-                        .Select(iate => (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
-#else
                         .Select(iate => (int)iate!.HintNameTableRVA.ConvertVirtualAddress(sections));
-#endif
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
@@ -1251,11 +1187,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled resource directory table on success, null on error</returns>
-#if NET48
-        private static ResourceDirectoryTable ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections, bool topLevel = false)
-#else
         private static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader?[] sections, bool topLevel = false)
-#endif
         {
             // TODO: Use marshalling here instead of building
             var resourceDirectoryTable = new ResourceDirectoryTable();
@@ -1358,11 +1290,7 @@ namespace SabreTools.Serialization.Streams
                 return resourceDirectoryTable;
 
             // Get the section size
-#if NET48
-            int size = (int)sections.First(s => s != null && s.PointerToRawData == initialOffset).SizeOfRawData;
-#else
             int size = (int)sections.First(s => s != null && s.PointerToRawData == initialOffset)!.SizeOfRawData;
-#endif
 
             // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
             while (data.Position - initialOffset < size && data.Position % 0x200 != 0 && data.Position < data.Length - 1)

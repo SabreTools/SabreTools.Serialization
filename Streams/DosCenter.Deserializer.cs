@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class DosCenter : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public MetadataFile Deserialize(Stream data)
-#else
         public MetadataFile? Deserialize(Stream? data)
-#endif
         {
             // If the stream is null
             if (data == null)
@@ -25,17 +21,9 @@ namespace SabreTools.Serialization.Streams
             var dat = new MetadataFile();
 
             // Loop through and parse out the values
-#if NET48
-            string lastTopLevel = reader.TopLevel;
-#else
             string? lastTopLevel = reader.TopLevel;
-#endif
 
-#if NET48
-            Game game = null;
-#else
             Game? game = null;
-#endif
             var games = new List<Game>();
             var files = new List<Models.DosCenter.File>();
 
@@ -105,11 +93,7 @@ namespace SabreTools.Serialization.Streams
                 else if (reader.TopLevel == "doscenter" && reader.RowType == CmpRowType.Standalone)
                 {
                     // Create the block if we haven't already
-#if NET48
-                    dat.DosCenter = dat.DosCenter != null ? dat.DosCenter : new Models.DosCenter.DosCenter();
-#else
                     dat.DosCenter ??= new Models.DosCenter.DosCenter();
-#endif
 
                     switch (reader.Standalone?.Key?.ToLowerInvariant())
                     {
@@ -145,11 +129,7 @@ namespace SabreTools.Serialization.Streams
                 else if (reader.TopLevel == "game" && reader.RowType == CmpRowType.Standalone)
                 {
                     // Create the block if we haven't already
-#if NET48
-                    game = game != null ? game : new Game();
-#else
                     game ??= new Game();
-#endif
 
                     switch (reader.Standalone?.Key?.ToLowerInvariant())
                     {
@@ -198,11 +178,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>File object created from the reader context</returns>
-#if NET48
-        private static Models.DosCenter.File CreateFile(ClrMameProReader reader)
-#else
         private static Models.DosCenter.File? CreateFile(ClrMameProReader reader)
-#endif
         {
             if (reader.Internal == null)
                 return null;

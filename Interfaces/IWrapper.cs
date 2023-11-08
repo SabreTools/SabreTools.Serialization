@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Interfaces
         /// </summary>
         string Description();
         
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
         /// <summary>
         /// Export the item information as JSON
         /// </summary>

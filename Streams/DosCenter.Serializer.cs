@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class DosCenter : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-#if NET48
-        public Stream Serialize(MetadataFile obj)
-#else
         public Stream? Serialize(MetadataFile? obj)
-#endif
         {
             // If the metadata file is null
             if (obj == null)
@@ -43,11 +39,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="header">DosCenter representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteHeader(Models.DosCenter.DosCenter header, ClrMameProWriter writer)
-#else
         private static void WriteHeader(Models.DosCenter.DosCenter? header, ClrMameProWriter writer)
-#endif
         {
             // If the header information is missing, we can't do anything
             if (header == null)
@@ -72,11 +64,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="games">Array of Game objects representing the games information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteGames(Game[] games, ClrMameProWriter writer)
-#else
         private static void WriteGames(Game[]? games, ClrMameProWriter writer)
-#endif
         {
             // If the games information is missing, we can't do anything
             if (games == null || !games.Any())
@@ -117,11 +105,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="files">Array of File objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-#if NET48
-        private static void WriteFiles(Models.DosCenter.File[] files, ClrMameProWriter writer)
-#else
         private static void WriteFiles(Models.DosCenter.File[]? files, ClrMameProWriter writer)
-#endif
         {
             // If the array is missing, we can't do anything
             if (files == null)

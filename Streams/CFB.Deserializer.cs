@@ -12,11 +12,7 @@ namespace SabreTools.Serialization.Streams
     public partial class CFB : IStreamSerializer<Binary>
     {
         /// <inheritdoc/>
-#if NET48
-        public Binary Deserialize(Stream data)
-#else
         public Binary? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -47,11 +43,7 @@ namespace SabreTools.Serialization.Streams
             #region DIFAT Sector Numbers
 
             // Create a DIFAT sector table
-#if NET48
-            var difatSectors = new List<SectorNumber>();
-#else
             var difatSectors = new List<SectorNumber?>();
-#endif
 
             // Add the sectors from the header
             if (fileHeader.DIFAT != null)
@@ -93,11 +85,7 @@ namespace SabreTools.Serialization.Streams
             #region FAT Sector Numbers
 
             // Create a FAT sector table
-#if NET48
-            var fatSectors = new List<SectorNumber>();
-#else
             var fatSectors = new List<SectorNumber?>();
-#endif
 
             // Loop through and add the FAT sectors
             currentSector = binary.DIFATSectorNumbers[0];
@@ -135,11 +123,7 @@ namespace SabreTools.Serialization.Streams
             #region Mini FAT Sector Numbers
 
             // Create a mini FAT sector table
-#if NET48
-            var miniFatSectors = new List<SectorNumber>();
-#else
             var miniFatSectors = new List<SectorNumber?>();
-#endif
 
             // Loop through and add the mini FAT sectors
             currentSector = (SectorNumber)fileHeader.FirstMiniFATSectorLocation;
@@ -244,11 +228,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled file header on success, null on error</returns>
-#if NET48
-        private static FileHeader ParseFileHeader(Stream data)
-#else
         private static FileHeader? ParseFileHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             FileHeader header = new FileHeader();
@@ -287,11 +267,7 @@ namespace SabreTools.Serialization.Streams
             header.NumberOfMiniFATSectors = data.ReadUInt32();
             header.FirstDIFATSectorLocation = data.ReadUInt32();
             header.NumberOfDIFATSectors = data.ReadUInt32();
-#if NET48
-            header.DIFAT = new SectorNumber[109];
-#else
             header.DIFAT = new SectorNumber?[109];
-#endif
             for (int i = 0; i < header.DIFAT.Length; i++)
             {
                 header.DIFAT[i] = (SectorNumber)data.ReadUInt32();
@@ -310,19 +286,11 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorShift">Sector shift from the header</param>
         /// <returns>Filled sector full of sector numbers on success, null on error</returns>
-#if NET48
-        private static SectorNumber[] ParseSectorNumbers(Stream data, ushort sectorShift)
-#else
         private static SectorNumber?[] ParseSectorNumbers(Stream data, ushort sectorShift)
-#endif
         {
             // TODO: Use marshalling here instead of building
             int sectorCount = (int)(Math.Pow(2, sectorShift) / sizeof(uint));
-#if NET48
-            var sectorNumbers = new SectorNumber[sectorCount];
-#else
             var sectorNumbers = new SectorNumber?[sectorCount];
-#endif
 
             for (int i = 0; i < sectorNumbers.Length; i++)
             {
@@ -339,11 +307,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sectorShift">Sector shift from the header</param>
         /// <param name="majorVersion">Major version from the header</param>
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
-#if NET48
-        private static DirectoryEntry[] ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
-#else
         private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
-#endif
         {
             // TODO: Use marshalling here instead of building
             const int directoryEntrySize = 64 + 2 + 1 + 1 + 4 + 4 + 4 + 16 + 4 + 8 + 8 + 4 + 8;
@@ -373,11 +337,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             DirectoryEntry directoryEntry = new DirectoryEntry();
 
-#if NET48
-            byte[] name = data.ReadBytes(64);
-#else
             byte[]? name = data.ReadBytes(64);
-#endif
             if (name != null)
                 directoryEntry.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
             directoryEntry.NameLength = data.ReadUInt16();

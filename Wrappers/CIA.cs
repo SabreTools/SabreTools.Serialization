@@ -14,22 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-#if NET48
-        public CIA(Models.N3DS.CIA model, byte[] data, int offset)
-#else
         public CIA(Models.N3DS.CIA? model, byte[]? data, int offset)
-#endif
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-#if NET48
-        public CIA(Models.N3DS.CIA model, Stream data)
-#else
         public CIA(Models.N3DS.CIA? model, Stream? data)
-#endif
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -41,11 +33,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the archive</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A CIA archive wrapper on success, null on failure</returns>
-#if NET48
-        public static CIA Create(byte[] data, int offset)
-#else
         public static CIA? Create(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
@@ -65,11 +53,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the archive</param>
         /// <returns>A CIA archive wrapper on success, null on failure</returns>
-#if NET48
-        public static CIA Create(Stream data)
-#else
         public static CIA? Create(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

@@ -12,11 +12,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="U">Type of object to deserialize from</typeparam>
         /// <param name="obj">Object to deserialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-#if NET48
-        T Deserialize(U obj);
-#else
         T? Deserialize(U? obj);
-#endif
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into <typeparamref name="U"/>
@@ -25,10 +21,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="U">Type of object to serialize to</typeparam>
         /// <param name="obj">Object to serialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-#if NET48
-        U Serialize(T obj);
-#else
         U? Serialize(T? obj);
-#endif
     }
 }

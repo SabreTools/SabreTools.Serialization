@@ -10,11 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class PAK : IStreamSerializer<Models.PAK.File>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.PAK.File Deserialize(Stream data)
-#else
         public Models.PAK.File? Deserialize(Stream? data)
-#endif
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -72,20 +68,12 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Package header on success, null on error</returns>
-#if NET48
-        private static Header ParseHeader(Stream data)
-#else
         private static Header? ParseHeader(Stream data)
-#endif
         {
             // TODO: Use marshalling here instead of building
             Header header = new Header();
 
-#if NET48
-            byte[] signature = data.ReadBytes(4);
-#else
             byte[]? signature = data.ReadBytes(4);
-#endif
             if (signature == null)
                 return null;
 
@@ -109,11 +97,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Use marshalling here instead of building
             DirectoryItem directoryItem = new DirectoryItem();
 
-#if NET48
-            byte[] itemName = data.ReadBytes(56);
-#else
             byte[]? itemName = data.ReadBytes(56);
-#endif
             if (itemName != null)
                 directoryItem.ItemName = Encoding.ASCII.GetString(itemName).TrimEnd('\0');
             directoryItem.ItemOffset = data.ReadUInt32();

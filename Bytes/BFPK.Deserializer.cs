@@ -7,11 +7,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class BFPK : IByteSerializer<Archive>
     {
         /// <inheritdoc/>
-#if NET48
-        public Archive Deserialize(byte[] data, int offset)
-#else
         public Archive? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

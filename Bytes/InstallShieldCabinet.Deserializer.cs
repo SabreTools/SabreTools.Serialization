@@ -8,11 +8,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class InstallShieldCabinet : IByteSerializer<Cabinet>
     {
         /// <inheritdoc/>
-#if NET48
-        public Cabinet Deserialize(byte[] data, int offset)
-#else
         public Cabinet? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)

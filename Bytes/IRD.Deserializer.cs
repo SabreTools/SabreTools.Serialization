@@ -6,11 +6,7 @@ namespace SabreTools.Serialization.Bytes
     public partial class IRD : IByteSerializer<Models.IRD.IRD>
     {
         /// <inheritdoc/>
-#if NET48
-        public Models.IRD.IRD Deserialize(byte[] data, int offset)
-#else
         public Models.IRD.IRD? Deserialize(byte[]? data, int offset)
-#endif
         {
             // If the data is invalid
             if (data == null)
