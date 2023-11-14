@@ -1,4 +1,5 @@
 #if !NETFRAMEWORK
+
 using System;
 using System.Reflection;
 using System.Text.Json;
@@ -22,8 +23,13 @@ namespace SabreTools.Serialization.Wrappers
                     throw new NotImplementedException(string.Format("Concrete class {0} is not supported", typeof(TAbstract)));
             }
 
+#if NETCOREAPP3_1
+            public override TAbstract Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+                throw new NotImplementedException();
+#else
             public override TAbstract? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
                 throw new NotImplementedException();
+#endif
 
             public override void Write(Utf8JsonWriter writer, TAbstract value, JsonSerializerOptions options) =>
                 JsonSerializer.Serialize<object>(writer, value!, options);
@@ -54,8 +60,13 @@ namespace SabreTools.Serialization.Wrappers
                     throw new NotImplementedException(string.Format("Concrete class {0} is not supported", typeof(TInterface)));
             }
 
+#if NETCOREAPP3_1
+            public override TInterface Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+                throw new NotImplementedException();
+#else
             public override TInterface? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
                 throw new NotImplementedException();
+#endif
 
             public override void Write(System.Text.Json.Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
                 JsonSerializer.Serialize<object>(writer, value!, options);
@@ -79,4 +90,5 @@ namespace SabreTools.Serialization.Wrappers
         public static T ThrowOnNull<T>(this T? value) where T : class => value ?? throw new ArgumentNullException();
     }
 }
+
 #endif

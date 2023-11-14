@@ -6,10 +6,10 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {
-    public partial class IRD : IStreamSerializer<Models.IRD.IRD>
+    public partial class IRD : IStreamSerializer<Models.IRD.File>
     {
         /// <inheritdoc/>
-        public Models.IRD.IRD? Deserialize(Stream? data)
+        public Models.IRD.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Streams
             int initialOffset = (int)data.Position;
 
             // Create a new media key block to fill
-            var ird = new Models.IRD.IRD();
+            var ird = new Models.IRD.File();
 
             ird.Magic = data.ReadBytes(4);
             if (ird.Magic == null)
@@ -80,7 +80,11 @@ namespace SabreTools.Serialization.Streams
             ird.RegionHashes = new byte[ird.RegionCount][];
             for (int i = 0; i < ird.RegionCount; i++)
             {
+#if NET40 || NET452
+                ird.RegionHashes[i] = data.ReadBytes(16) ?? [];
+#else
                 ird.RegionHashes[i] = data.ReadBytes(16) ?? Array.Empty<byte>();
+#endif
             }
 
             ird.FileCount = data.ReadByteValue();
@@ -89,7 +93,11 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < ird.FileCount; i++)
             {
                 ird.FileKeys[i] = data.ReadUInt64();
+#if NET40 || NET452
+                ird.FileHashes[i] = data.ReadBytes(16) ?? [];
+#else
                 ird.FileHashes[i] = data.ReadBytes(16) ?? Array.Empty<byte>();
+#endif
             }
 
             ird.ExtraConfig = data.ReadUInt16();

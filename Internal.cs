@@ -79,7 +79,11 @@ namespace SabreTools.Serialization
         {
             var roms = item.Read<Rom[]>(DataArea.RomKey);
             if (roms == null || !roms.Any())
+#if NET40 || NET452
+                return [];
+#else
                 return Array.Empty<Rom>();
+#endif
 
             return roms.ToArray();
         }
@@ -91,7 +95,11 @@ namespace SabreTools.Serialization
         {
             var roms = item.Read<Disk[]>(DiskArea.DiskKey);
             if (roms == null || !roms.Any())
+#if NET40 || NET452
+                return [];
+#else
                 return Array.Empty<Disk>();
+#endif
 
             return roms.ToArray();
         }

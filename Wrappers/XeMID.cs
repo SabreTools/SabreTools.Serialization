@@ -41,8 +41,8 @@ namespace SabreTools.Serialization.Wrappers
                 if (string.IsNullOrWhiteSpace(publisherIdentifier))
                     return "Unknown";
 
-                if (Publishers.ContainsKey(publisherIdentifier))
-                    return Publishers[publisherIdentifier];
+                if (Publishers.ContainsKey(publisherIdentifier!))
+                    return Publishers[publisherIdentifier!];
 
                 return $"Unknown ({publisherIdentifier})";
             }

@@ -123,7 +123,7 @@ namespace SabreTools.Serialization
             // Distinguish between v1 and v2
             int bytesToRead = 112; // v2
             if (string.IsNullOrWhiteSpace(addD.Version)
-                || addD.Version.StartsWith("3")
+                || addD.Version!.StartsWith("3")
                 || addD.Version.StartsWith("4.47"))
             {
                 bytesToRead = 44;

@@ -25,7 +25,11 @@ namespace SabreTools.Serialization.Streams
 
             // Setup the writer and output
             var stream = new MemoryStream();
+#if NET40
+            var writer = new StreamWriter(stream, Encoding.ASCII, 1024);
+#else
             var writer = new StreamWriter(stream, Encoding.ASCII, 1024, true);
+#endif
 
             // Write the file
             WriteCueSheet(obj, writer);

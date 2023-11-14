@@ -826,7 +826,11 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to find a key that matches
             var match = stringTable
+#if NET40 || NET452
+                .SelectMany(st => st?.Children ?? [])
+#else
                 .SelectMany(st => st?.Children ?? Array.Empty<Models.PortableExecutable.StringData>())
+#endif
                 .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
 
             // Return either the match or null

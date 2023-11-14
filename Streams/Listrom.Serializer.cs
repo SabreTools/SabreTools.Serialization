@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Streams
                 var rowBuilder = new StringBuilder();
 
                 int padding = 40 - (row.Size?.Length ?? 0);
-                if (padding < row.Name.Length)
+                if (padding < row.Name!.Length)
                     padding = row.Name.Length + 2;
 
                 rowBuilder.Append($"{row.Name.PadRight(padding, ' ')}");

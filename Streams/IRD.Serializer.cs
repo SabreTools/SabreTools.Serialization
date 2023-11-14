@@ -6,10 +6,10 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {
-    public partial class IRD : IStreamSerializer<Models.IRD.IRD>
+    public partial class IRD : IStreamSerializer<Models.IRD.File>
     {
         /// <inheritdoc/>
-        public Stream? Serialize(Models.IRD.IRD? obj)
+        public Stream? Serialize(Models.IRD.File? obj)
         {
             // If the data is invalid
             if (obj?.Magic == null)

@@ -65,7 +65,11 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
+#if NETCOREAPP3_1
+                var serializer = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+#else
                 var serializer = new System.Text.Json.JsonSerializerOptions { IncludeFields = true, WriteIndented = true };
+#endif
                 serializer.Converters.Add(new ConcreteAbstractSerializer());
                 serializer.Converters.Add(new ConcreteInterfaceSerializer());
                 serializer.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());

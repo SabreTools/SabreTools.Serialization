@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class IRD : WrapperBase<Models.IRD.IRD>
+    public class IRD : WrapperBase<Models.IRD.File>
     {
         #region Descriptive Properties
 
@@ -14,14 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public IRD(Models.IRD.IRD? model, byte[]? data, int offset)
+        public IRD(Models.IRD.File? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public IRD(Models.IRD.IRD? model, Stream? data)
+        public IRD(Models.IRD.File? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class

@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(sfv.File) || string.IsNullOrWhiteSpace(sfv.Hash))
                     continue;
 
-                writer.WriteValues(new string[] { sfv.File, sfv.Hash });
+                writer.WriteValues(new string[] { sfv.File!, sfv.Hash! });
                 writer.Flush();
             }
         }
@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(md5.Hash) || string.IsNullOrWhiteSpace(md5.File))
                     continue;
 
-                writer.WriteValues(new string[] { md5.Hash, md5.File });
+                writer.WriteValues(new string[] { md5.Hash!, md5.File! });
                 writer.Flush();
             }
         }
@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(sha1.Hash) || string.IsNullOrWhiteSpace(sha1.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha1.Hash, sha1.File });
+                writer.WriteValues(new string[] { sha1.Hash!, sha1.File! });
                 writer.Flush();
             }
         }
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(sha256.Hash) || string.IsNullOrWhiteSpace(sha256.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha256.Hash, sha256.File });
+                writer.WriteValues(new string[] { sha256.Hash!, sha256.File! });
                 writer.Flush();
             }
         }
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(sha384.Hash) || string.IsNullOrWhiteSpace(sha384.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha384.Hash, sha384.File });
+                writer.WriteValues(new string[] { sha384.Hash!, sha384.File! });
                 writer.Flush();
             }
         }
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(sha512.Hash) || string.IsNullOrWhiteSpace(sha512.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha512.Hash, sha512.File });
+                writer.WriteValues(new string[] { sha512.Hash!, sha512.File! });
                 writer.Flush();
             }
         }
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Streams
                 if (string.IsNullOrWhiteSpace(spamsum.Hash) || string.IsNullOrWhiteSpace(spamsum.File))
                     continue;
 
-                writer.WriteValues(new string[] { spamsum.Hash, spamsum.File });
+                writer.WriteValues(new string[] { spamsum.Hash!, spamsum.File! });
                 writer.Flush();
             }
         }

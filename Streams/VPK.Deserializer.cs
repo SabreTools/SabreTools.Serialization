@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.Streams
                 // Sanitize the extension
                 for (int i = 0; i < 0x20; i++)
                 {
-                    extensionString = extensionString.Replace($"{(char)i}", string.Empty);
+                    extensionString = extensionString!.Replace($"{(char)i}", string.Empty);
                 }
 
                 while (true)
@@ -180,7 +180,7 @@ namespace SabreTools.Serialization.Streams
                     // Sanitize the path
                     for (int i = 0; i < 0x20; i++)
                     {
-                        pathString = pathString.Replace($"{(char)i}", string.Empty);
+                        pathString = pathString!.Replace($"{(char)i}", string.Empty);
                     }
 
                     while (true)
@@ -193,11 +193,11 @@ namespace SabreTools.Serialization.Streams
                         // Sanitize the name
                         for (int i = 0; i < 0x20; i++)
                         {
-                            nameString = nameString.Replace($"{(char)i}", string.Empty);
+                            nameString = nameString!.Replace($"{(char)i}", string.Empty);
                         }
 
                         // Get the directory item
-                        var directoryItem = ParseDirectoryItem(data, extensionString, pathString, nameString);
+                        var directoryItem = ParseDirectoryItem(data, extensionString!, pathString!, nameString!);
 
                         // Add the directory item
                         directoryItems.Add(directoryItem);

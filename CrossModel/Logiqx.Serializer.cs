@@ -104,7 +104,11 @@ namespace SabreTools.Serialization.CrossModel
         private static Models.Metadata.Machine[] ConvertDirToInternalModel(Dir item)
         {
             if (item.Game == null || !item.Game.Any())
+#if NET40 || NET452
+                return [];
+#else
                 return Array.Empty<Models.Metadata.Machine>();
+#endif
 
             return item.Game
                 .Where(g => g != null)

@@ -3,10 +3,10 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class IRD : IByteSerializer<Models.IRD.IRD>
+    public partial class IRD : IByteSerializer<Models.IRD.File>
     {
         /// <inheritdoc/>
-        public Models.IRD.IRD? Deserialize(byte[]? data, int offset)
+        public Models.IRD.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)

@@ -2,10 +2,10 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class IRD : IFileSerializer<Models.IRD.IRD>
+    public partial class IRD : IFileSerializer<Models.IRD.File>
     {
         /// <inheritdoc/>
-        public bool Serialize(Models.IRD.IRD? obj, string? path)
+        public bool Serialize(Models.IRD.File? obj, string? path)
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;

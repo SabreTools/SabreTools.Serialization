@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Streams
             {
                 // Read and split the line
                 string? line = reader.ReadLine();
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETCOREAPP3_1
                 string[]? lineParts = line?.Split(new char[] { ' ' } , StringSplitOptions.RemoveEmptyEntries);
 #else
                 string[]? lineParts = line?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

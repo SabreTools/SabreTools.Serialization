@@ -241,7 +241,11 @@ namespace SabreTools.Serialization.Streams
                             var sample = new Sample
                             {
                                 Name = reader.Standalone?.Value ?? string.Empty,
+#if NET40 || NET452
+                                ADDITIONAL_ELEMENTS = []
+#else
                                 ADDITIONAL_ELEMENTS = Array.Empty<string>()
+#endif
                             };
                             samples.Add(sample);
                             break;
