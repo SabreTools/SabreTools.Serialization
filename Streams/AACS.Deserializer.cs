@@ -48,9 +48,9 @@ namespace SabreTools.Serialization.Streams
                     break;
 
                 // Align to the 4-byte boundary if we're not at the end
-                if (data.Position != data.Length)
+                if (data.Position < data.Length)
                 {
-                    while ((data.Position % 4) != 0)
+                    while (data.Position < data.Length && (data.Position % 4) != 0)
                         _ = data.ReadByteValue();
                 }
                 else

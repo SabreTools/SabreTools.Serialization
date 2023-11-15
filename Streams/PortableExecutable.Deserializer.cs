@@ -716,7 +716,7 @@ namespace SabreTools.Serialization.Streams
         {
             var attributeCertificateTable = new List<AttributeCertificateTableEntry>();
 
-            while (data.Position < endOffset && data.Position != data.Length)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = new AttributeCertificateTableEntry();
 
@@ -731,7 +731,7 @@ namespace SabreTools.Serialization.Streams
                 attributeCertificateTable.Add(entry);
 
                 // Align to the 8-byte boundary
-                while ((data.Position % 8) != 0 && data.Position < endOffset && data.Position != data.Length)
+                while ((data.Position % 8) != 0 && data.Position < endOffset && data.Position < data.Length)
                     _ = data.ReadByteValue();
             }
 
