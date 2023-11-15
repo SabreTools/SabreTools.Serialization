@@ -289,7 +289,7 @@ namespace SabreTools.Serialization
 
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(AssemblyManifest));
+                var serializer = new XmlSerializer(typeof(AssemblyManifest));
                 return serializer.Deserialize(new MemoryStream(entry.Data)) as AssemblyManifest;
             }
             catch
@@ -358,7 +358,7 @@ namespace SabreTools.Serialization
                     dialogTemplateExtended.MenuResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -394,7 +394,7 @@ namespace SabreTools.Serialization
                     dialogTemplateExtended.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -425,7 +425,7 @@ namespace SabreTools.Serialization
                     dialogTemplateExtended.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -447,9 +447,9 @@ namespace SabreTools.Serialization
                 }
 
                 // Align to the DWORD boundary if we're not at the end
-                if (offset != entry.Data.Length)
+                if (offset < entry.Data.Length)
                 {
-                    while ((offset % 4) != 0)
+                    while (offset < entry.Data.Length && (offset % 4) != 0)
                         _ = entry.Data.ReadByte(ref offset);
                 }
 
@@ -502,7 +502,7 @@ namespace SabreTools.Serialization
                         dialogItemTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the WORD boundary if we're not at the end
-                        if (offset != entry.Data.Length)
+                        if (offset < entry.Data.Length)
                         {
                             while ((offset % 2) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
@@ -532,7 +532,7 @@ namespace SabreTools.Serialization
                         dialogItemTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the WORD boundary if we're not at the end
-                        if (offset != entry.Data.Length)
+                        if (offset < entry.Data.Length)
                         {
                             while ((offset % 2) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
@@ -550,16 +550,16 @@ namespace SabreTools.Serialization
                     #endregion
 
                     // Align to the DWORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
-                        while ((offset % 4) != 0)
+                        while (offset < entry.Data.Length && (offset % 4) != 0)
                             _ = entry.Data.ReadByte(ref offset);
                     }
 
                     dialogItemExtendedTemplates.Add(dialogItemTemplate);
                 }
 
-                dialogBoxResource.ExtendedDialogItemTemplates = dialogItemExtendedTemplates.ToArray();
+                dialogBoxResource.ExtendedDialogItemTemplates = [.. dialogItemExtendedTemplates];
 
                 #endregion
             }
@@ -600,7 +600,7 @@ namespace SabreTools.Serialization
                     dialogTemplate.MenuResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -636,7 +636,7 @@ namespace SabreTools.Serialization
                     dialogTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -667,7 +667,7 @@ namespace SabreTools.Serialization
                     dialogTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the WORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
                         while ((offset % 2) != 0)
                             _ = entry.Data.ReadByte(ref offset);
@@ -688,9 +688,9 @@ namespace SabreTools.Serialization
                 }
 
                 // Align to the DWORD boundary if we're not at the end
-                if (offset != entry.Data.Length)
+                if (offset < entry.Data.Length)
                 {
-                    while ((offset % 4) != 0)
+                    while (offset < entry.Data.Length && (offset % 4) != 0)
                         _ = entry.Data.ReadByte(ref offset);
                 }
 
@@ -742,7 +742,7 @@ namespace SabreTools.Serialization
                         dialogItemTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the WORD boundary if we're not at the end
-                        if (offset != entry.Data.Length)
+                        if (offset < entry.Data.Length)
                         {
                             while ((offset % 2) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
@@ -772,7 +772,7 @@ namespace SabreTools.Serialization
                         dialogItemTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the WORD boundary if we're not at the end
-                        if (offset != entry.Data.Length)
+                        if (offset < entry.Data.Length)
                         {
                             while ((offset % 2) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
@@ -790,16 +790,16 @@ namespace SabreTools.Serialization
                     #endregion
 
                     // Align to the DWORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
-                        while ((offset % 4) != 0)
+                        while (offset < entry.Data.Length && (offset % 4) != 0)
                             _ = entry.Data.ReadByte(ref offset);
                     }
 
                     dialogItemTemplates.Add(dialogItemTemplate);
                 }
 
-                dialogBoxResource.DialogItemTemplates = dialogItemTemplates.ToArray();
+                dialogBoxResource.DialogItemTemplates = [.. dialogItemTemplates];
 
                 #endregion
             }
@@ -929,9 +929,9 @@ namespace SabreTools.Serialization
                         extendedMenuItem.MenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
 
                         // Align to the DWORD boundary if we're not at the end
-                        if (offset != entry.Data.Length)
+                        if (offset < entry.Data.Length)
                         {
-                            while ((offset % 4) != 0)
+                            while (offset < entry.Data.Length && (offset % 4) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
                         }
 
@@ -939,7 +939,7 @@ namespace SabreTools.Serialization
                     }
                 }
 
-                menuResource.ExtendedMenuItems = extendedMenuItems.ToArray();
+                menuResource.ExtendedMenuItems = [.. extendedMenuItems];
 
                 #endregion
             }
@@ -982,16 +982,16 @@ namespace SabreTools.Serialization
                     }
 
                     // Align to the DWORD boundary if we're not at the end
-                    if (offset != entry.Data.Length)
+                    if (offset < entry.Data.Length)
                     {
-                        while ((offset % 4) != 0)
+                        while (offset < entry.Data.Length && (offset % 4) != 0)
                             _ = entry.Data.ReadByte(ref offset);
                     }
 
                     menuItems.Add(menuItem);
                 }
 
-                menuResource.MenuItems = menuItems.ToArray();
+                menuResource.MenuItems = [.. menuItems];
 
                 #endregion
             }
@@ -1033,7 +1033,7 @@ namespace SabreTools.Serialization
                     messageResourceBlocks.Add(messageResourceBlock);
                 }
 
-                messageResourceData.Blocks = messageResourceBlocks.ToArray();
+                messageResourceData.Blocks = [.. messageResourceBlocks];
             }
 
             // Message resource entries
@@ -1138,7 +1138,7 @@ namespace SabreTools.Serialization
             if (versionInfo.Key != "VS_VERSION_INFO")
                 return null;
 
-            while ((offset % 4) != 0)
+            while (offset < entry.Data.Length && (offset % 4) != 0)
                 versionInfo.Padding1 = entry.Data.ReadUInt16(ref offset);
 
             // Read fixed file info
@@ -1164,7 +1164,7 @@ namespace SabreTools.Serialization
                 versionInfo.Value = fixedFileInfo;
             }
 
-            while ((offset % 4) != 0)
+            while (offset < entry.Data.Length && (offset % 4) != 0)
                 versionInfo.Padding2 = entry.Data.ReadUInt16(ref offset);
 
             // TODO: Make the following block a private helper method
@@ -1240,9 +1240,9 @@ namespace SabreTools.Serialization
             }
 
             // Align to the DWORD boundary if we're not at the end
-            if (offset != data.Length)
+            if (offset < data.Length)
             {
-                while ((offset % 4) != 0)
+                while (offset < data.Length && (offset % 4) != 0)
                     stringFileInfo.Padding = data.ReadByte(ref offset);
             }
 
@@ -1257,9 +1257,9 @@ namespace SabreTools.Serialization
                 stringTable.Key = data.ReadString(ref offset, Encoding.Unicode);
 
                 // Align to the DWORD boundary if we're not at the end
-                if (offset != data.Length)
+                if (offset < data.Length)
                 {
-                    while ((offset % 4) != 0)
+                    while (offset < data.Length && (offset % 4) != 0)
                         stringTable.Padding = data.ReadByte(ref offset);
                 }
 
@@ -1274,9 +1274,9 @@ namespace SabreTools.Serialization
                     stringData.Key = data.ReadString(ref offset, Encoding.Unicode);
 
                     // Align to the DWORD boundary if we're not at the end
-                    if (offset != data.Length)
+                    if (offset < data.Length)
                     {
-                        while ((offset % 4) != 0)
+                        while (offset < data.Length && (offset % 4) != 0)
                             stringData.Padding = data.ReadByte(ref offset);
                     }
 
@@ -1288,21 +1288,21 @@ namespace SabreTools.Serialization
                     }
 
                     // Align to the DWORD boundary if we're not at the end
-                    if (offset != data.Length)
+                    if (offset < data.Length)
                     {
-                        while ((offset % 4) != 0)
+                        while (offset < data.Length && (offset % 4) != 0)
                             _ = data.ReadByte(ref offset);
                     }
 
                     stringTableChildren.Add(stringData);
                 }
 
-                stringTable.Children = stringTableChildren.ToArray();
+                stringTable.Children = [.. stringTableChildren];
 
                 stringFileInfoChildren.Add(stringTable);
             }
 
-            stringFileInfo.Children = stringFileInfoChildren.ToArray();
+            stringFileInfo.Children = [.. stringFileInfoChildren];
 
             return stringFileInfo;
         }
@@ -1328,9 +1328,9 @@ namespace SabreTools.Serialization
                 return null;
 
             // Align to the DWORD boundary if we're not at the end
-            if (offset != data.Length)
+            if (offset < data.Length)
             {
-                while ((offset % 4) != 0)
+                while (offset < data.Length && (offset % 4) != 0)
                     varFileInfo.Padding = data.ReadByte(ref offset);
             }
 
@@ -1350,9 +1350,9 @@ namespace SabreTools.Serialization
                 }
 
                 // Align to the DWORD boundary if we're not at the end
-                if (offset != data.Length)
+                if (offset < data.Length)
                 {
-                    while ((offset % 4) != 0)
+                    while (offset < data.Length && (offset % 4) != 0)
                         varData.Padding = data.ReadByte(ref offset);
                 }
 
@@ -1366,12 +1366,12 @@ namespace SabreTools.Serialization
                     varDataValue.Add(languageAndCodeIdentifierPair);
                 }
 
-                varData.Value = varDataValue.ToArray();
+                varData.Value = [.. varDataValue];
 
                 varFileInfoChildren.Add(varData);
             }
 
-            varFileInfo.Children = varFileInfoChildren.ToArray();
+            varFileInfo.Children = [.. varFileInfoChildren];
 
             return varFileInfo;
         }
