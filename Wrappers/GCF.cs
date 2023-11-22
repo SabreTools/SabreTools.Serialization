@@ -112,14 +112,14 @@ namespace SabreTools.Serialization.Wrappers
 #else
                     fileInfo.Path = Path.Combine(pathParts.ToArray());
 #endif
-                    fileInfo.BlockEntries = blockEntries.ToArray();
+                    fileInfo.BlockEntries = [.. blockEntries];
 
                     // Add the file info and continue
                     files.Add(fileInfo);
                 }
 
                 // Set and return the file infos
-                _files = files.ToArray();
+                _files = [.. files];
                 return _files;
             }
         }
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Create a memory stream and use that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Create(dataStream);
         }
 

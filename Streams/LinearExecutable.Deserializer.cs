@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.Streams
                 }
 
                 // Assign the resident names table
-                executable.ResidentNamesTable = residentNamesTable.ToArray();
+                executable.ResidentNamesTable = [.. residentNamesTable];
             }
 
             #endregion
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Streams
                 }
 
                 // Assign the entry table
-                executable.EntryTable = entryTable.ToArray();
+                executable.EntryTable = [.. entryTable];
             }
 
             #endregion
@@ -337,7 +337,7 @@ namespace SabreTools.Serialization.Streams
                 }
 
                 // Assign the resident names table
-                executable.ImportModuleProcedureNameTable = importModuleProcedureNameTable.ToArray();
+                executable.ImportModuleProcedureNameTable = [.. importModuleProcedureNameTable];
             }
 
             #endregion
@@ -391,7 +391,7 @@ namespace SabreTools.Serialization.Streams
                 }
 
                 // Assign the non-resident names table
-                executable.NonResidentNamesTable = nonResidentNamesTable.ToArray();
+                executable.NonResidentNamesTable = [.. nonResidentNamesTable];
             }
 
             #endregion

@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             case "doscenter":
                                 if (dat.ClrMamePro != null)
-                                    dat.ClrMamePro.ADDITIONAL_ELEMENTS = headerAdditional.ToArray();
+                                    dat.ClrMamePro.ADDITIONAL_ELEMENTS = [.. headerAdditional];
 
                                 headerAdditional.Clear();
                                 break;
@@ -70,17 +70,17 @@ namespace SabreTools.Serialization.Streams
                             case "set":
                                 if (game != null)
                                 {
-                                    game.Release = releases.ToArray();
-                                    game.BiosSet = biosSets.ToArray();
-                                    game.Rom = roms.ToArray();
-                                    game.Disk = disks.ToArray();
-                                    game.Media = medias.ToArray();
-                                    game.Sample = samples.ToArray();
-                                    game.Archive = archives.ToArray();
-                                    game.Chip = chips.ToArray();
-                                    game.Video = videos.ToArray();
-                                    game.DipSwitch = dipSwitches.ToArray();
-                                    game.ADDITIONAL_ELEMENTS = gameAdditional.ToArray();
+                                    game.Release = [.. releases];
+                                    game.BiosSet = [.. biosSets];
+                                    game.Rom = [.. roms];
+                                    game.Disk = [.. disks];
+                                    game.Media = [.. medias];
+                                    game.Sample = [.. samples];
+                                    game.Archive = [.. archives];
+                                    game.Chip = [.. chips];
+                                    game.Video = [.. videos];
+                                    game.DipSwitch = [.. dipSwitches];
+                                    game.ADDITIONAL_ELEMENTS = [.. gameAdditional];
 
                                     games.Add(game);
                                     game = null;
@@ -343,8 +343,8 @@ namespace SabreTools.Serialization.Streams
             }
 
             // Add extra pieces and return
-            dat.Game = games.ToArray();
-            dat.ADDITIONAL_ELEMENTS = additional.ToArray();
+            dat.Game = [.. games];
+            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
 
@@ -385,7 +385,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            release.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            release.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return release;
         }
 
@@ -420,7 +420,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            biosset.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            biosset.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return biosset;
         }
 
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            rom.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            rom.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return rom;
         }
 
@@ -553,7 +553,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            disk.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            disk.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return disk;
         }
 
@@ -594,7 +594,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            media.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            media.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return media;
         }
 
@@ -623,7 +623,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            sample.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            sample.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return sample;
         }
 
@@ -652,7 +652,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            archive.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            archive.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return archive;
         }
 
@@ -846,7 +846,7 @@ namespace SabreTools.Serialization.Streams
                 }
             }
 
-            dipswitch.Entry = entries.ToArray();
+            dipswitch.Entry = [.. entries];
             dipswitch.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
             return dipswitch;
         }

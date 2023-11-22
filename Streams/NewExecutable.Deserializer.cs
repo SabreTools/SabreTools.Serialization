@@ -335,7 +335,7 @@ namespace SabreTools.Serialization.Streams
                 .ToList();
 
             // Populate the type and name string dictionary
-            resourceTable.TypeAndNameStrings = new Dictionary<ushort, ResourceTypeAndNameString?>();
+            resourceTable.TypeAndNameStrings = [];
             for (int i = 0; i < stringOffsets.Count; i++)
             {
                 int stringOffset = (int)(stringOffsets[i] + initialOffset);
@@ -369,7 +369,7 @@ namespace SabreTools.Serialization.Streams
                 residentNameTable.Add(entry);
             }
 
-            return residentNameTable.ToArray();
+            return [.. residentNameTable];
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.Streams
                 entryTable.Add(entry);
             }
 
-            return entryTable.ToArray();
+            return [.. entryTable];
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace SabreTools.Serialization.Streams
                 residentNameTable.Add(entry);
             }
 
-            return residentNameTable.ToArray();
+            return [.. residentNameTable];
         }
     }
 }

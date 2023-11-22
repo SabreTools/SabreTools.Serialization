@@ -22,9 +22,9 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Game != null && item.Game.Any())
             {
-               machines.AddRange(item.Game
-                    .Where(g => g != null)
-                    .Select(ConvertMachineToInternalModel));
+                machines.AddRange(item.Game
+                     .Where(g => g != null)
+                     .Select(ConvertMachineToInternalModel));
             }
 
             if (item.Dir != null && item.Dir.Any())

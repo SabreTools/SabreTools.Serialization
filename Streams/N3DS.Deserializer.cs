@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Streams
         private static NCSDHeader? ParseNCSDHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            NCSDHeader header = new NCSDHeader();
+            var header = new NCSDHeader();
 
             header.RSA2048Signature = data.ReadBytes(0x100);
             byte[]? magicNumber = data.ReadBytes(4);
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Streams
         private static PartitionTableEntry ParsePartitionTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            PartitionTableEntry partitionTableEntry = new PartitionTableEntry();
+            var partitionTableEntry = new PartitionTableEntry();
 
             partitionTableEntry.Offset = data.ReadUInt32();
             partitionTableEntry.Length = data.ReadUInt32();
@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.Streams
         private static CardInfoHeader ParseCardInfoHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            CardInfoHeader cardInfoHeader = new CardInfoHeader();
+            var cardInfoHeader = new CardInfoHeader();
 
             cardInfoHeader.WritableAddressMediaUnits = data.ReadUInt32();
             cardInfoHeader.CardInfoBitmask = data.ReadUInt32();
@@ -284,7 +284,7 @@ namespace SabreTools.Serialization.Streams
         private static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            DevelopmentCardInfoHeader developmentCardInfoHeader = new DevelopmentCardInfoHeader();
+            var developmentCardInfoHeader = new DevelopmentCardInfoHeader();
 
             developmentCardInfoHeader.InitialData = ParseInitialData(data);
             if (developmentCardInfoHeader.InitialData == null)
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Streams
         private static InitialData? ParseInitialData(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            InitialData initialData = new InitialData();
+            var initialData = new InitialData();
 
             initialData.CardSeedKeyY = data.ReadBytes(0x10);
             initialData.EncryptedCardSeed = data.ReadBytes(0x10);
@@ -332,7 +332,7 @@ namespace SabreTools.Serialization.Streams
         internal static NCCHHeader ParseNCCHHeader(Stream data, bool skipSignature = false)
         {
             // TODO: Use marshalling here instead of building
-            NCCHHeader header = new NCCHHeader();
+            var header = new NCCHHeader();
 
             if (!skipSignature)
                 header.RSA2048Signature = data.ReadBytes(0x100);
@@ -381,7 +381,7 @@ namespace SabreTools.Serialization.Streams
         private static NCCHHeaderFlags ParseNCCHHeaderFlags(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            NCCHHeaderFlags headerFlags = new NCCHHeaderFlags();
+            var headerFlags = new NCCHHeaderFlags();
 
             headerFlags.Reserved0 = data.ReadByteValue();
             headerFlags.Reserved1 = data.ReadByteValue();
@@ -403,7 +403,7 @@ namespace SabreTools.Serialization.Streams
         private static TestData ParseTestData(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            TestData testData = new TestData();
+            var testData = new TestData();
 
             // TODO: Validate some of the values
             testData.Signature = data.ReadBytes(8);
@@ -428,7 +428,7 @@ namespace SabreTools.Serialization.Streams
         private static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            NCCHExtendedHeader extendedHeader = new NCCHExtendedHeader();
+            var extendedHeader = new NCCHExtendedHeader();
 
             extendedHeader.SCI = ParseSystemControlInfo(data);
             if (extendedHeader.SCI == null)
@@ -456,7 +456,7 @@ namespace SabreTools.Serialization.Streams
         private static SystemControlInfo ParseSystemControlInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            SystemControlInfo systemControlInfo = new SystemControlInfo();
+            var systemControlInfo = new SystemControlInfo();
 
             byte[]? applicationTitle = data.ReadBytes(8);
             if (applicationTitle != null)
@@ -488,7 +488,7 @@ namespace SabreTools.Serialization.Streams
         private static CodeSetInfo ParseCodeSetInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            CodeSetInfo codeSetInfo = new CodeSetInfo();
+            var codeSetInfo = new CodeSetInfo();
 
             codeSetInfo.Address = data.ReadUInt32();
             codeSetInfo.PhysicalRegionSizeInPages = data.ReadUInt32();
@@ -505,7 +505,7 @@ namespace SabreTools.Serialization.Streams
         private static SystemInfo ParseSystemInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            SystemInfo systemInfo = new SystemInfo();
+            var systemInfo = new SystemInfo();
 
             systemInfo.SaveDataSize = data.ReadUInt64();
             systemInfo.JumpID = data.ReadUInt64();
@@ -522,7 +522,7 @@ namespace SabreTools.Serialization.Streams
         private static AccessControlInfo ParseAccessControlInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            AccessControlInfo accessControlInfo = new AccessControlInfo();
+            var accessControlInfo = new AccessControlInfo();
 
             accessControlInfo.ARM11LocalSystemCapabilities = ParseARM11LocalSystemCapabilities(data);
             accessControlInfo.ARM11KernelCapabilities = ParseARM11KernelCapabilities(data);
@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.Streams
         private static ARM11LocalSystemCapabilities ParseARM11LocalSystemCapabilities(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ARM11LocalSystemCapabilities arm11LocalSystemCapabilities = new ARM11LocalSystemCapabilities();
+            var arm11LocalSystemCapabilities = new ARM11LocalSystemCapabilities();
 
             arm11LocalSystemCapabilities.ProgramID = data.ReadUInt64();
             arm11LocalSystemCapabilities.CoreVersion = data.ReadUInt32();
@@ -577,7 +577,7 @@ namespace SabreTools.Serialization.Streams
         private static StorageInfo ParseStorageInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            StorageInfo storageInfo = new StorageInfo();
+            var storageInfo = new StorageInfo();
 
             storageInfo.ExtdataID = data.ReadUInt64();
             storageInfo.SystemSavedataIDs = data.ReadBytes(8);
@@ -596,7 +596,7 @@ namespace SabreTools.Serialization.Streams
         private static ARM11KernelCapabilities ParseARM11KernelCapabilities(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ARM11KernelCapabilities arm11KernelCapabilities = new ARM11KernelCapabilities();
+            var arm11KernelCapabilities = new ARM11KernelCapabilities();
 
             arm11KernelCapabilities.Descriptors = new uint[28];
             for (int i = 0; i < 28; i++)
@@ -616,7 +616,7 @@ namespace SabreTools.Serialization.Streams
         private static ARM9AccessControl ParseARM9AccessControl(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ARM9AccessControl arm9AccessControl = new ARM9AccessControl();
+            var arm9AccessControl = new ARM9AccessControl();
 
             arm9AccessControl.Descriptors = data.ReadBytes(15);
             arm9AccessControl.DescriptorVersion = data.ReadByteValue();
@@ -632,7 +632,7 @@ namespace SabreTools.Serialization.Streams
         private static ExeFSHeader ParseExeFSHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ExeFSHeader exeFSHeader = new ExeFSHeader();
+            var exeFSHeader = new ExeFSHeader();
 
             exeFSHeader.FileHeaders = new ExeFSFileHeader[10];
             for (int i = 0; i < 10; i++)
@@ -657,7 +657,7 @@ namespace SabreTools.Serialization.Streams
         private static ExeFSFileHeader ParseExeFSFileHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ExeFSFileHeader exeFSFileHeader = new ExeFSFileHeader();
+            var exeFSFileHeader = new ExeFSFileHeader();
 
             byte[]? fileName = data.ReadBytes(8);
             if (fileName != null)
@@ -676,7 +676,7 @@ namespace SabreTools.Serialization.Streams
         private static RomFSHeader? ParseRomFSHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            RomFSHeader romFSHeader = new RomFSHeader();
+            var romFSHeader = new RomFSHeader();
 
             byte[]? magicString = data.ReadBytes(4);
             if (magicString == null)

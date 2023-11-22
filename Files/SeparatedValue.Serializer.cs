@@ -14,17 +14,13 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using (var stream = new Streams.SeparatedValue().Serialize(obj, delim))
-            {
-                if (stream == null)
-                    return false;
+            using var stream = new Streams.SeparatedValue().Serialize(obj, delim);
+            if (stream == null)
+                return false;
 
-                using (var fs = System.IO.File.OpenWrite(path))
-                {
-                    stream.CopyTo(fs);
-                    return true;
-                }
-            }
+            using var fs = System.IO.File.OpenWrite(path);
+            stream.CopyTo(fs);
+            return true;
         }
     }
 }

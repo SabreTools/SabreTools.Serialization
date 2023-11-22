@@ -29,7 +29,7 @@ namespace SabreTools.Serialization
             if (sccPlusCart != null)
                 datItems.Add(sccPlusCart);
 
-            return datItems.ToArray();
+            return [.. datItems];
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization
                     .Select(d => d as DatItem));
             }
 
-            return datItems.ToArray();
+            return [.. datItems];
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization
             if (roms == null || !roms.Any())
                 return [];
 
-            return roms.ToArray();
+            return [.. roms];
         }
 
         /// <summary>

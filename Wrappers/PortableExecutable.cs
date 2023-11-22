@@ -344,7 +344,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we're at the end of the file, cache an empty list
                     if (endOfSectionData >= endOfFile)
                     {
-                        _overlayStrings = new List<string>();
+                        _overlayStrings = [];
                         return _overlayStrings;
                     }
 
@@ -467,7 +467,7 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // Otherwise, build and return the cached dictionary
-                    ParseResourceDirectoryTable(this.Model.ResourceDirectoryTable, types: new List<object>());
+                    ParseResourceDirectoryTable(this.Model.ResourceDirectoryTable, types: []);
                     return _resourceData;
                 }
             }
@@ -707,12 +707,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached debug data
         /// </summary>
-        private readonly Dictionary<int, object> _debugData = new Dictionary<int, object>();
+        private readonly Dictionary<int, object> _debugData = [];
 
         /// <summary>
         /// Cached resource data
         /// </summary>
-        private readonly Dictionary<string, object?> _resourceData = new Dictionary<string, object?>();
+        private readonly Dictionary<string, object?> _resourceData = [];
 
         /// <summary>
         /// Cached version info data
@@ -727,7 +727,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Lock object for reading from the source
         /// </summary>
-        private readonly object _sourceDataLock = new object();
+        private readonly object _sourceDataLock = new();
 
         #endregion
 
@@ -764,7 +764,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Create a memory stream and use that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Create(dataStream);
         }
 
@@ -1145,7 +1145,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (entry == null)
                     continue;
 
-                var newTypes = new List<object>(types ?? new List<object>());
+                var newTypes = new List<object>(types ?? []);
 
                 if (entry.Name?.UnicodeString != null)
                     newTypes.Add(Encoding.UTF8.GetString(entry.Name.UnicodeString));
@@ -1469,8 +1469,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_sourceDataLock)
             {
                 // Create the section data array if we have to
-                if (_sectionData == null)
-                    _sectionData = new byte[SectionNames.Length][];
+                _sectionData ??= new byte[SectionNames.Length][];
 
                 // If we already have cached data, just use that immediately
                 if (_sectionData[index] != null)
@@ -1556,8 +1555,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_sourceDataLock)
             {
                 // Create the section string array if we have to
-                if (_sectionStringData == null)
-                    _sectionStringData = new List<string>[SectionNames.Length];
+                _sectionStringData ??= new List<string>[SectionNames.Length];
 
                 // If we already have cached data, just use that immediately
                 if (_sectionStringData[index] != null)
@@ -1669,8 +1667,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_sourceDataLock)
             {
                 // Create the table data array if we have to
-                if (_tableData == null)
-                    _tableData = new byte[16][];
+                _tableData ??= new byte[16][];
 
                 // If we already have cached data, just use that immediately
                 if (_tableData[index] != null)
@@ -1778,8 +1775,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_sourceDataLock)
             {
                 // Create the table string array if we have to
-                if (_tableStringData == null)
-                    _tableStringData = new List<string>[16];
+                _tableStringData ??= new List<string>[16];
 
                 // If we already have cached data, just use that immediately
                 if (_tableStringData[index] != null)

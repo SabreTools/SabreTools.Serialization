@@ -179,26 +179,15 @@ namespace SabreTools.Serialization.Streams
         /// <returns>String, if possible (default BINARY)</returns>
         private static string FromFileType(CueFileType fileType)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case CueFileType.BINARY:
-                    return "BINARY";
-
-                case CueFileType.MOTOROLA:
-                    return "MOTOROLA";
-
-                case CueFileType.AIFF:
-                    return "AIFF";
-
-                case CueFileType.WAVE:
-                    return "WAVE";
-
-                case CueFileType.MP3:
-                    return "MP3";
-
-                default:
-                    return string.Empty;
-            }
+                CueFileType.BINARY => "BINARY",
+                CueFileType.MOTOROLA => "MOTOROLA",
+                CueFileType.AIFF => "AIFF",
+                CueFileType.WAVE => "WAVE",
+                CueFileType.MP3 => "MP3",
+                _ => string.Empty,
+            };
         }
 
         /// <summary>
@@ -208,35 +197,18 @@ namespace SabreTools.Serialization.Streams
         /// <returns>string, if possible</returns>
         private static string FromDataType(CueTrackDataType dataType)
         {
-            switch (dataType)
+            return dataType switch
             {
-                case CueTrackDataType.AUDIO:
-                    return "AUDIO";
-
-                case CueTrackDataType.CDG:
-                    return "CDG";
-
-                case CueTrackDataType.MODE1_2048:
-                    return "MODE1/2048";
-
-                case CueTrackDataType.MODE1_2352:
-                    return "MODE1/2352";
-
-                case CueTrackDataType.MODE2_2336:
-                    return "MODE2/2336";
-
-                case CueTrackDataType.MODE2_2352:
-                    return "MODE2/2352";
-
-                case CueTrackDataType.CDI_2336:
-                    return "CDI/2336";
-
-                case CueTrackDataType.CDI_2352:
-                    return "CDI/2352";
-
-                default:
-                    return string.Empty;
-            }
+                CueTrackDataType.AUDIO => "AUDIO",
+                CueTrackDataType.CDG => "CDG",
+                CueTrackDataType.MODE1_2048 => "MODE1/2048",
+                CueTrackDataType.MODE1_2352 => "MODE1/2352",
+                CueTrackDataType.MODE2_2336 => "MODE2/2336",
+                CueTrackDataType.MODE2_2352 => "MODE2/2352",
+                CueTrackDataType.CDI_2336 => "CDI/2336",
+                CueTrackDataType.CDI_2352 => "CDI/2352",
+                _ => string.Empty,
+            };
         }
 
         /// <summary>

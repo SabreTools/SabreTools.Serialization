@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Streams
         /// <returns>Filled cabinet header on success, null on error</returns>
         private static CFHEADER? ParseCabinetHeader(Stream data)
         {
-            CFHEADER header = new CFHEADER();
+            var header = new CFHEADER();
 
             byte[]? signature = data.ReadBytes(4);
             if (signature == null)
@@ -164,7 +164,7 @@ namespace SabreTools.Serialization.Streams
         /// <returns>Filled folder on success, null on error</returns>
         private static CFFOLDER ParseFolder(Stream data, CFHEADER header)
         {
-            CFFOLDER folder = new CFFOLDER();
+            var folder = new CFFOLDER();
 
             folder.CabStartOffset = data.ReadUInt32();
             folder.DataCount = data.ReadUInt16();
@@ -199,7 +199,7 @@ namespace SabreTools.Serialization.Streams
         /// <returns>Filled folder on success, null on error</returns>
         private static CFDATA ParseDataBlock(Stream data, byte dataReservedSize)
         {
-            CFDATA dataBlock = new CFDATA();
+            var dataBlock = new CFDATA();
 
             dataBlock.Checksum = data.ReadUInt32();
             dataBlock.CompressedSize = data.ReadUInt16();
@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Streams
         /// <returns>Filled file on success, null on error</returns>
         private static CFFILE ParseFile(Stream data)
         {
-            CFFILE file = new CFFILE();
+            var file = new CFFILE();
 
             file.FileSize = data.ReadUInt32();
             file.FolderStartOffset = data.ReadUInt32();

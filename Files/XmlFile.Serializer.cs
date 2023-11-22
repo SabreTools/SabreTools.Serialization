@@ -29,18 +29,14 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using (var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset))
-            {
-                if (stream == null)
-                    return false;
+            using var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset);
+            if (stream == null)
+                return false;
 
-                using (var fs = File.OpenWrite(path))
-                {
-                    stream.CopyTo(fs);
-                }
+            using var fs = File.OpenWrite(path);
+            stream.CopyTo(fs);
 
-                return true;
-            }
+            return true;
         }
     }
 }

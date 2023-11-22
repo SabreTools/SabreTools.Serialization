@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Streams
                 // Read and split the line
                 string? line = reader.ReadLine();
 #if NETFRAMEWORK || NETCOREAPP3_1
-                string[]? lineParts = line?.Split(new char[] { ' ' } , StringSplitOptions.RemoveEmptyEntries);
+                string[]? lineParts = line?.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 #else
                 string[]? lineParts = line?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 #endif
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Streams
                     dat.SpamSum = hashes.Cast<SpamSum>().ToArray();
                     break;
             }
-            dat.ADDITIONAL_ELEMENTS = additional.ToArray();
+            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
     }
