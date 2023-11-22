@@ -694,25 +694,45 @@ namespace SabreTools.Serialization.Streams
             entry.TargetFlags = (FixupRecordTargetFlags)data.ReadByteValue();
 
             // Source list flag
+#if NET20 || NET35
+            if ((entry.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
+#else
             if (entry.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
+#endif
                 entry.SourceOffsetListCount = data.ReadByteValue();
             else
                 entry.SourceOffset = data.ReadUInt16();
 
             // OBJECT / TRGOFF
+#if NET20 || NET35
+            if ((entry.TargetFlags & FixupRecordTargetFlags.InternalReference) != 0)
+#else
             if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReference))
+#endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+#endif
                     entry.TargetObjectNumberWORD = data.ReadUInt16();
                 else
                     entry.TargetObjectNumberByte = data.ReadByteValue();
 
                 // 16-bit Selector fixup
+#if NET20 || NET35
+                if ((entry.SourceType & FixupRecordSourceType.SixteenBitSelectorFixup) == 0)
+#else
                 if (!entry.SourceType.HasFlag(FixupRecordSourceType.SixteenBitSelectorFixup))
+#endif
                 {
                     // 32-bit Target Offset Flag
+#if NET20 || NET35
+                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+#else
                     if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+#endif
                         entry.TargetOffsetDWORD = data.ReadUInt32();
                     else
                         entry.TargetOffsetWORD = data.ReadUInt16();
@@ -720,27 +740,51 @@ namespace SabreTools.Serialization.Streams
             }
 
             // MOD ORD# / IMPORT ORD / ADDITIVE
+#if NET20 || NET35
+            else if ((entry.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByOrdinal) != 0)
+#else
             else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByOrdinal))
+#endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+#endif
                     entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
                 else
                     entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // 8-bit Ordinal Flag & 32-bit Target Offset Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.EightBitOrdinalFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.EightBitOrdinalFlag))
+#endif
                     entry.ImportedOrdinalNumberByte = data.ReadByteValue();
+#if NET20 || NET35
+                else if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+#else
                 else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+#endif
                     entry.ImportedOrdinalNumberDWORD = data.ReadUInt32();
                 else
                     entry.ImportedOrdinalNumberWORD = data.ReadUInt16();
 
                 // Additive Fixup Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+#endif
                 {
                     // 32-bit Additive Flag
+#if NET20 || NET35
+                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+#else
                     if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+#endif
                         entry.AdditiveFixupValueDWORD = data.ReadUInt32();
                     else
                         entry.AdditiveFixupValueWORD = data.ReadUInt16();
@@ -748,25 +792,45 @@ namespace SabreTools.Serialization.Streams
             }
 
             // MOD ORD# / PROCEDURE NAME OFFSET / ADDITIVE
+#if NET20 || NET35
+            else if ((entry.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByName) != 0)
+#else
             else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByName))
+#endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+#endif
                     entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
                 else
                     entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // 32-bit Target Offset Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+#endif
                     entry.OffsetImportProcedureNameTableDWORD = data.ReadUInt32();
                 else
                     entry.OffsetImportProcedureNameTableWORD = data.ReadUInt16();
 
                 // Additive Fixup Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+#endif
                 {
                     // 32-bit Additive Flag
+#if NET20 || NET35
+                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+#else
                     if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+#endif
                         entry.AdditiveFixupValueDWORD = data.ReadUInt32();
                     else
                         entry.AdditiveFixupValueWORD = data.ReadUInt16();
@@ -774,19 +838,35 @@ namespace SabreTools.Serialization.Streams
             }
 
             // ORD # / ADDITIVE
+#if NET20 || NET35
+            else if ((entry.TargetFlags & FixupRecordTargetFlags.InternalReferenceViaEntryTable) != 0)
+#else
             else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReferenceViaEntryTable))
+#endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+#endif
                     entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
                 else
                     entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // Additive Fixup Flag
+#if NET20 || NET35
+                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+#else
                 if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+#endif
                 {
                     // 32-bit Additive Flag
+#if NET20 || NET35
+                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+#else
                     if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+#endif
                         entry.AdditiveFixupValueDWORD = data.ReadUInt32();
                     else
                         entry.AdditiveFixupValueWORD = data.ReadUInt16();
@@ -801,7 +881,11 @@ namespace SabreTools.Serialization.Streams
 
             #region SCROFFn
 
+#if NET20 || NET35
+            if ((entry.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
+#else
             if (entry.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
+#endif
             {
                 entry.SourceOffsetList = new ushort[entry.SourceOffsetListCount];
                 for (int i = 0; i < entry.SourceOffsetList.Length; i++)

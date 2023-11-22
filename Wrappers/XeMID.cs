@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 var publisherIdentifier = this.Model.PublisherIdentifier;
-                if (string.IsNullOrWhiteSpace(publisherIdentifier))
+                if (string.IsNullOrEmpty(publisherIdentifier))
                     return "Unknown";
 
                 if (Publishers.ContainsKey(publisherIdentifier!))

@@ -16,7 +16,7 @@ namespace SabreTools.Serialization
             try
             {
                 // If we don't have a file
-                if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
                     return null;
 
                 // Open the file for deserialization

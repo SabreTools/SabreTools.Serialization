@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public bool Serialize(Models.IRD.File? obj, string? path)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrEmpty(path))
                 return false;
 
             using (var stream = new Streams.IRD().Serialize(obj))

@@ -643,11 +643,7 @@ namespace SabreTools.Serialization.Streams
             exeFSHeader.FileHashes = new byte[10][];
             for (int i = 0; i < 10; i++)
             {
-#if NET40 || NET452
                 exeFSHeader.FileHashes[i] = data.ReadBytes(0x20) ?? [];
-#else
-                exeFSHeader.FileHashes[i] = data.ReadBytes(0x20) ?? Array.Empty<byte>();
-#endif
             }
 
             return exeFSHeader;

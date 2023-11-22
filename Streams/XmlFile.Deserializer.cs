@@ -24,7 +24,9 @@ namespace SabreTools.Serialization.Streams
             var settings = new XmlReaderSettings
             {
                 CheckCharacters = false,
+#if NET40_OR_GREATER || NETCOREAPP
                 DtdProcessing = DtdProcessing.Ignore,
+#endif
                 ValidationFlags = XmlSchemaValidationFlags.None,
                 ValidationType = ValidationType.None,
             };

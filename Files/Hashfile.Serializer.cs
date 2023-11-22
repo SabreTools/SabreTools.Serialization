@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrEmpty(path))
                 return false;
 
             using (var stream = new Streams.Hashfile().Serialize(obj, hash))

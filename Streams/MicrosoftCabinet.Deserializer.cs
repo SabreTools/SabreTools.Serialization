@@ -116,7 +116,11 @@ namespace SabreTools.Serialization.Streams
             header.SetID = data.ReadUInt16();
             header.CabinetIndex = data.ReadUInt16();
 
+#if NET20 || NET35
+            if ((header.Flags & HeaderFlags.RESERVE_PRESENT) != 0)
+#else
             if (header.Flags.HasFlag(HeaderFlags.RESERVE_PRESENT))
+#endif
             {
                 header.HeaderReservedSize = data.ReadUInt16();
                 if (header.HeaderReservedSize > 60_000)
@@ -129,13 +133,21 @@ namespace SabreTools.Serialization.Streams
                     header.ReservedData = data.ReadBytes(header.HeaderReservedSize);
             }
 
+#if NET20 || NET35
+            if ((header.Flags & HeaderFlags.PREV_CABINET) != 0)
+#else
             if (header.Flags.HasFlag(HeaderFlags.PREV_CABINET))
+#endif
             {
                 header.CabinetPrev = data.ReadString(Encoding.ASCII);
                 header.DiskPrev = data.ReadString(Encoding.ASCII);
             }
 
+#if NET20 || NET35
+            if ((header.Flags & HeaderFlags.NEXT_CABINET) != 0)
+#else
             if (header.Flags.HasFlag(HeaderFlags.NEXT_CABINET))
+#endif
             {
                 header.CabinetNext = data.ReadString(Encoding.ASCII);
                 header.DiskNext = data.ReadString(Encoding.ASCII);
@@ -218,7 +230,11 @@ namespace SabreTools.Serialization.Streams
             file.Time = data.ReadUInt16();
             file.Attributes = (Models.MicrosoftCabinet.FileAttributes)data.ReadUInt16();
 
+#if NET20 || NET35
+            if ((file.Attributes & Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF) != 0)
+#else
             if (file.Attributes.HasFlag(Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF))
+#endif
                 file.Name = data.ReadString(Encoding.Unicode);
             else
                 file.Name = data.ReadString(Encoding.ASCII);

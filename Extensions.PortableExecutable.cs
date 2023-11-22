@@ -115,14 +115,14 @@ namespace SabreTools.Serialization
 
             addD.EntryCount = data.ReadUInt32(ref offset);
             addD.Version = data.ReadString(ref offset, Encoding.ASCII);
-            if (string.IsNullOrWhiteSpace(addD.Version))
+            if (string.IsNullOrEmpty(addD.Version))
                 offset = originalOffset + 0x10;
 
             addD.Build = data.ReadBytes(ref offset, 4)?.Select(b => (char)b)?.ToArray();
 
             // Distinguish between v1 and v2
             int bytesToRead = 112; // v2
-            if (string.IsNullOrWhiteSpace(addD.Version)
+            if (string.IsNullOrEmpty(addD.Version)
                 || addD.Version!.StartsWith("3")
                 || addD.Version.StartsWith("4.47"))
             {
@@ -437,7 +437,11 @@ namespace SabreTools.Serialization
                 #region Point size and typeface
 
                 // Only if DS_SETFONT is set are the values here used
+#if NET20 || NET35
+                if ((dialogTemplateExtended.Style & WindowStyles.DS_SETFONT) != 0)
+#else
                 if (dialogTemplateExtended.Style.HasFlag(WindowStyles.DS_SETFONT))
+#endif
                 {
                     dialogTemplateExtended.PointSize = entry.Data.ReadUInt16(ref offset);
                     dialogTemplateExtended.Weight = entry.Data.ReadUInt16(ref offset);
@@ -679,7 +683,11 @@ namespace SabreTools.Serialization
                 #region Point size and typeface
 
                 // Only if DS_SETFONT is set are the values here used
+#if NET20 || NET35
+                if ((dialogTemplate.Style & WindowStyles.DS_SETFONT) != 0)
+#else
                 if (dialogTemplate.Style.HasFlag(WindowStyles.DS_SETFONT))
+#endif
                 {
                     dialogTemplate.PointSizeValue = entry.Data.ReadUInt16(ref offset);
 
@@ -967,7 +975,11 @@ namespace SabreTools.Serialization
                     // Determine if this is a popup
                     int flagsOffset = offset;
                     var initialFlags = (MenuFlags)entry.Data.ReadUInt16(ref flagsOffset);
+#if NET20 || NET35
+                    if ((initialFlags & MenuFlags.MF_POPUP) != 0)
+#else
                     if (initialFlags.HasFlag(MenuFlags.MF_POPUP))
+#endif
                     {
                         menuItem.PopupItemType = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         menuItem.PopupState = (MenuFlags)entry.Data.ReadUInt32(ref offset);

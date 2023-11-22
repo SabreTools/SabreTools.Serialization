@@ -586,15 +586,15 @@ namespace SabreTools.Serialization.Wrappers
         public string? GetInternalVersion()
         {
             string? version = this.FileVersion;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (!string.IsNullOrEmpty(version))
                 return version!.Replace(", ", ".");
 
             version = this.ProductVersion;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (!string.IsNullOrEmpty(version))
                 return version!.Replace(", ", ".");
 
             version = this.AssemblyVersion;
-            if (!string.IsNullOrWhiteSpace(version))
+            if (!string.IsNullOrEmpty(version))
                 return version;
 
             return null;
@@ -633,7 +633,7 @@ namespace SabreTools.Serialization.Wrappers
                 var manifest = GetAssemblyManifest();
                 return manifest?
                     .AssemblyIdentities?
-                    .FirstOrDefault(ai => !string.IsNullOrWhiteSpace(ai?.Version))?
+                    .FirstOrDefault(ai => !string.IsNullOrEmpty(ai?.Version))?
                     .Version;
             }
         }
@@ -826,11 +826,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to find a key that matches
             var match = stringTable
-#if NET40 || NET452
                 .SelectMany(st => st?.Children ?? [])
-#else
-                .SelectMany(st => st?.Children ?? Array.Empty<Models.PortableExecutable.StringData>())
-#endif
                 .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
 
             // Return either the match or null
@@ -894,7 +890,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (DebugData == null)
-                return Enumerable.Empty<byte[]>();
+                return Enumerable.Empty<byte[]?>();
 
             return DebugData.Select(r => r.Value)
                 .Select(b => b as byte[])
@@ -1182,7 +1178,7 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseResourceDataEntry(Models.PortableExecutable.ResourceDataEntry entry, List<object> types)
         {
             // Create the key and value objects
-            string key = types == null ? $"UNKNOWN_{Guid.NewGuid()}" : string.Join(", ", types);
+            string key = types == null ? $"UNKNOWN_{Guid.NewGuid()}" : string.Join(", ", types.Select(t => t.ToString()).ToArray());
             object? value = entry.Data;
 
             // If we have a known resource type

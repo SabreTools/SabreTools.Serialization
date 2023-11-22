@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public bool Serialize(MetadataFile? obj, string? path)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrEmpty(path))
                 return false;
 
             using (var stream = new Streams.RomCenter().Serialize(obj))

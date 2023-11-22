@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Files
         public Models.CueSheets.CueSheet? Deserialize(string? path)
         {
             // Check that the file exists
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
 
             // Check the extension
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Files
                     .ToArray();
 
                 // If we have an empty line, we skip
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrEmpty(line))
                     continue;
 
                 switch (splitLine[0])
@@ -143,7 +143,7 @@ namespace SabreTools.Serialization.Files
                 string[] splitLine = line.Split(' ');
 
                 // If we have an empty line, we skip
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrEmpty(line))
                     continue;
 
                 switch (splitLine[0])
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.Files
                 string[] splitLine = line.Split(' ');
 
                 // If we have an empty line, we skip
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrEmpty(line))
                     continue;
 
                 switch (splitLine[0])
@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Files
         private static PreGap CreatePreGap(string? length)
         {
             // Ignore empty lines
-            if (string.IsNullOrWhiteSpace(length))
+            if (string.IsNullOrEmpty(length))
                 throw new ArgumentException("Length was null or whitespace");
 
             // Ignore lines that don't contain the correct information
@@ -374,7 +374,7 @@ namespace SabreTools.Serialization.Files
                 throw new IndexOutOfRangeException($"Index must be between 0 and 99: {parsedIndex}");
 
             // Ignore empty lines
-            if (string.IsNullOrWhiteSpace(startTime))
+            if (string.IsNullOrEmpty(startTime))
                 throw new ArgumentException("Start time was null or whitespace");
 
             // Ignore lines that don't contain the correct information
@@ -425,7 +425,7 @@ namespace SabreTools.Serialization.Files
         private static PostGap CreatePostGap(string? length)
         {
             // Ignore empty lines
-            if (string.IsNullOrWhiteSpace(length))
+            if (string.IsNullOrEmpty(length))
                 throw new ArgumentException("Length was null or whitespace");
 
             // Ignore lines that don't contain the correct information

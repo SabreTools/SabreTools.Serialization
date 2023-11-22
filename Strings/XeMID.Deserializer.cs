@@ -7,11 +7,11 @@ namespace SabreTools.Serialization.Strings
         /// <inheritdoc/>
         public Models.Xbox.XeMID? Deserialize(string? str)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str))
                 return null;
 
             string xemid = str!.TrimEnd('\0');
-            if (string.IsNullOrWhiteSpace(xemid))
+            if (string.IsNullOrEmpty(xemid))
                 return null;
 
             return ParseXeMID(xemid);

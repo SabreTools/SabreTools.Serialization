@@ -80,11 +80,7 @@ namespace SabreTools.Serialization.Streams
             ird.RegionHashes = new byte[ird.RegionCount][];
             for (int i = 0; i < ird.RegionCount; i++)
             {
-#if NET40 || NET452
                 ird.RegionHashes[i] = data.ReadBytes(16) ?? [];
-#else
-                ird.RegionHashes[i] = data.ReadBytes(16) ?? Array.Empty<byte>();
-#endif
             }
 
             ird.FileCount = data.ReadByteValue();
@@ -93,11 +89,7 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < ird.FileCount; i++)
             {
                 ird.FileKeys[i] = data.ReadUInt64();
-#if NET40 || NET452
                 ird.FileHashes[i] = data.ReadBytes(16) ?? [];
-#else
-                ird.FileHashes[i] = data.ReadBytes(16) ?? Array.Empty<byte>();
-#endif
             }
 
             ird.ExtraConfig = data.ReadUInt16();

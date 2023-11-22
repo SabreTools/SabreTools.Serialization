@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Streams
             if (set == null)
                 return;
 
-            if (!string.IsNullOrWhiteSpace(set.Driver))
+            if (!string.IsNullOrEmpty(set.Driver))
             {
                 if (set.Row != null && set.Row.Any())
                 {
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Streams
                     writer.Flush();
                 }
             }
-            else if (!string.IsNullOrWhiteSpace(set.Device))
+            else if (!string.IsNullOrEmpty(set.Device))
             {
                 if (set.Row != null && set.Row.Any())
                 {
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Streams
 
             foreach (var row in rows)
             {
-                if (string.IsNullOrWhiteSpace(row.Name))
+                if (string.IsNullOrEmpty(row.Name))
                     continue;
 
                 var rowBuilder = new StringBuilder();
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Streams
                     }
                     else
                     {
-                        if (!string.IsNullOrWhiteSpace(row.MD5))
+                        if (!string.IsNullOrEmpty(row.MD5))
                             rowBuilder.Append($"MD5({row.MD5}) ");
                         else
                             rowBuilder.Append($"SHA1({row.SHA1}) ");

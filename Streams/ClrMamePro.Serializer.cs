@@ -412,11 +412,7 @@ namespace SabreTools.Serialization.Streams
             {
                 writer.WriteStartElement("dipswitch");
                 writer.WriteRequiredAttributeString("name", dipswitch.Name, throwOnError: true);
-#if NET40 || NET452
                 foreach (var entry in dipswitch.Entry ?? [])
-#else
-                foreach (var entry in dipswitch.Entry ?? Array.Empty<string>())
-#endif
                 {
                     writer.WriteRequiredAttributeString("entry", entry);
                 }

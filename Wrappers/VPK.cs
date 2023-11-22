@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _archiveFilenames;
 
                 // If we don't have a source filename
-                if (!(_streamData is FileStream fs) || string.IsNullOrWhiteSpace(fs.Name))
+                if (!(_streamData is FileStream fs) || string.IsNullOrEmpty(fs.Name))
                     return null;
 
                 // If the filename is not the right format

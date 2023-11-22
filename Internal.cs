@@ -51,7 +51,8 @@ namespace SabreTools.Serialization
             {
                 datItems.AddRange(dataAreas
                     .Where(d => d != null)
-                    .SelectMany(ExtractItems));
+                    .SelectMany(ExtractItems)
+                    .Select(d => d as DatItem));
             }
 
             var diskAreas = item.Read<DiskArea[]>(Part.DiskAreaKey);
@@ -59,14 +60,16 @@ namespace SabreTools.Serialization
             {
                 datItems.AddRange(diskAreas
                     .Where(d => d != null)
-                    .SelectMany(ExtractItems));
+                    .SelectMany(ExtractItems)
+                    .Select(d => d as DatItem));
             }
 
             var dipSwitches = item.Read<DipSwitch[]>(Part.DipSwitchKey);
             if (dipSwitches != null && dipSwitches.Any())
             {
                 datItems.AddRange(dipSwitches
-                    .Where(d => d != null));
+                    .Where(d => d != null)
+                    .Select(d => d as DatItem));
             }
 
             return datItems.ToArray();
@@ -79,11 +82,7 @@ namespace SabreTools.Serialization
         {
             var roms = item.Read<Rom[]>(DataArea.RomKey);
             if (roms == null || !roms.Any())
-#if NET40 || NET452
                 return [];
-#else
-                return Array.Empty<Rom>();
-#endif
 
             return roms.ToArray();
         }
@@ -95,13 +94,9 @@ namespace SabreTools.Serialization
         {
             var roms = item.Read<Disk[]>(DiskArea.DiskKey);
             if (roms == null || !roms.Any())
-#if NET40 || NET452
                 return [];
-#else
-                return Array.Empty<Disk>();
-#endif
 
-            return roms.ToArray();
+            return [.. roms];
         }
     }
 }

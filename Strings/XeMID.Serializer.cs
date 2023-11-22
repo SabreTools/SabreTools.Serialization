@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Strings
             sb.Append(obj.BaseVersion);
             sb.Append(obj.MediaSubtypeIdentifier);
             sb.Append(obj.DiscNumberIdentifier);
-            if (!string.IsNullOrWhiteSpace(obj.CertificationSubmissionIdentifier))
+            if (!string.IsNullOrEmpty(obj.CertificationSubmissionIdentifier))
                 sb.Append(obj.CertificationSubmissionIdentifier);
 
             return sb.ToString();

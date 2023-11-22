@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.CrossModel
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Set item)
         {
             var machine = new Models.Metadata.Machine();
-            if (!string.IsNullOrWhiteSpace(item.Device))
+            if (!string.IsNullOrEmpty(item.Device))
             {
                 machine[Models.Metadata.Machine.NameKey] = item.Device;
                 machine[Models.Metadata.Machine.IsDeviceKey] = "yes";

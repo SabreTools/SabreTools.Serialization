@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="Serialize(MetadataFile, string)"/>
         public bool Serialize(MetadataFile? obj, string? path, bool quotes)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrEmpty(path))
                 return false;
 
             using (var stream = new Streams.ClrMamePro().Serialize(obj, quotes))

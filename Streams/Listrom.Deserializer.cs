@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Streams
             {
                 // Read the line and don't split yet
                 string? line = reader.ReadLine();
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrEmpty(line))
                 {
                     // If we have a set to process
                     if (set != null)

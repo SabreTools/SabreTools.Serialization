@@ -34,11 +34,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms == null)
-#if NET40 || NET452
                 return [];
-#else
-                return Array.Empty<File>();
-#endif
 
             return roms
                 .Where(r => r != null)

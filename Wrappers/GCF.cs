@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Models.CHD;
+using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -40,14 +42,22 @@ namespace SabreTools.Serialization.Wrappers
                         continue;
 
                     // If we have a directory, skip for now
+#if NET20 || NET35
+                    if ((directoryEntry.DirectoryFlags & Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE) == 0)
+#else
                     if (!directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE))
+#endif
                         continue;
 
                     // Otherwise, start building the file info
                     var fileInfo = new FileInfo()
                     {
                         Size = directoryEntry.ItemSize,
+#if NET20 || NET35
+                        Encrypted = (directoryEntry.DirectoryFlags & Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED) != 0,
+#else
                         Encrypted = directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
+#endif
                     };
                     var pathParts = new List<string> { directoryEntry.Name ?? string.Empty };
                     var blockEntries = new List<Models.GCF.BlockEntry?>();
@@ -80,7 +90,28 @@ namespace SabreTools.Serialization.Wrappers
                     pathParts.Reverse();
 
                     // Build the remaining file info
+#if NET20 || NET35
+                    var pathArray = pathParts.ToArray();
+
+                    string tempPath = string.Empty;
+                    if (pathArray.Length == 0 || pathArray.Length == 1)
+                    {
+                        tempPath = pathArray[0];
+                    }
+                    else
+                    {
+                        for (int j = 0; j < pathArray.Length; j++)
+                        {
+                            if (j == 0)
+                                tempPath = pathArray[j];
+                            else
+                                tempPath = Path.Combine(tempPath, pathArray[j]);
+                        }
+                    }
+                    fileInfo.Path = tempPath;
+#else
                     fileInfo.Path = Path.Combine(pathParts.ToArray());
+#endif
                     fileInfo.BlockEntries = blockEntries.ToArray();
 
                     // Add the file info and continue

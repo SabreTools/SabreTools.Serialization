@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Streams
                         var sfv = new SFV
                         {
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Take(lineParts.Length - 1)),
+                            File = string.Join(" ", lineParts.Take(lineParts.Length - 1).ToArray()),
                             Hash = lineParts[lineParts.Length - 1],
 #else
                             File = string.Join(" ", lineParts[..^1]),
@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif
@@ -119,7 +119,7 @@ namespace SabreTools.Serialization.Streams
                         {
                             Hash = lineParts[0],
 #if NETFRAMEWORK
-                            File = string.Join(" ", lineParts.Skip(1)),
+                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
 #else
                             File = string.Join(" ", lineParts[1..]),
 #endif

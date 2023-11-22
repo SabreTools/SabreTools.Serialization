@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Streams
             var xmlWriter = XmlWriter.Create(streamWriter, settings);
 
             // Write the doctype if provided
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrEmpty(name))
                 xmlWriter.WriteDocType(name, pubid, sysid, subset);
 
             // Perform the deserialization and return

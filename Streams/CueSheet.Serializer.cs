@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Models.CueSheets;
+using SabreTools.Models.PortableExecutable;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
@@ -25,7 +26,7 @@ namespace SabreTools.Serialization.Streams
 
             // Setup the writer and output
             var stream = new MemoryStream();
-#if NET40
+#if NET20 || NET35 || NET40
             var writer = new StreamWriter(stream, Encoding.ASCII, 1024);
 #else
             var writer = new StreamWriter(stream, Encoding.ASCII, 1024, true);
@@ -247,19 +248,39 @@ namespace SabreTools.Serialization.Streams
         {
             string outputFlagString = string.Empty;
 
+#if NET20 || NET35
+            if ((flags & CueTrackFlag.DCP) != 0)
+#else
             if (flags.HasFlag(CueTrackFlag.DCP))
+#endif
                 outputFlagString += "DCP ";
 
+#if NET20 || NET35
+            if ((flags & CueTrackFlag.FourCH) != 0)
+#else
             if (flags.HasFlag(CueTrackFlag.FourCH))
+#endif
                 outputFlagString += "4CH ";
 
+#if NET20 || NET35
+            if ((flags & CueTrackFlag.PRE) != 0)
+#else
             if (flags.HasFlag(CueTrackFlag.PRE))
+#endif
                 outputFlagString += "PRE ";
 
+#if NET20 || NET35
+            if ((flags & CueTrackFlag.SCMS) != 0)
+#else
             if (flags.HasFlag(CueTrackFlag.SCMS))
+#endif
                 outputFlagString += "SCMS ";
 
+#if NET20 || NET35
+            if ((flags & CueTrackFlag.DATA) != 0)
+#else
             if (flags.HasFlag(CueTrackFlag.DATA))
+#endif
                 outputFlagString += "DATA ";
 
             return outputFlagString.Trim();

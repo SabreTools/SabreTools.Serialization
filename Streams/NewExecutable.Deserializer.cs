@@ -327,11 +327,7 @@ namespace SabreTools.Serialization.Streams
                 .Select(rt => rt!.TypeID)
                 .Union(resourceTable.ResourceTypes
                     .Where(rt => rt != null)
-#if NET40 || NET452
                     .SelectMany(rt => rt!.Resources ?? [])
-#else
-                    .SelectMany(rt => rt!.Resources ?? System.Array.Empty<ResourceTypeResourceEntry>())
-#endif
                     .Where(r => r!.IsIntegerType() == false)
                     .Select(r => r!.ResourceID))
                 .Distinct()
