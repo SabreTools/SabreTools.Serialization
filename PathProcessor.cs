@@ -20,7 +20,7 @@ namespace SabreTools.Serialization
                     return null;
 
                 // Open the file for deserialization
-                var stream = File.OpenRead(path);
+                var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
                 // Get the extension to determine if additional handling is needed
                 string ext = Path.GetExtension(path).TrimStart('.');
