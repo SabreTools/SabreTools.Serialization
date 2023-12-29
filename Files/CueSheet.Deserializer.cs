@@ -168,7 +168,8 @@ namespace SabreTools.Serialization.Files
                     // Default means return
                     default:
                         i--;
-                        return null;
+                        cueFile.Tracks = cueTracks.ToArray();
+                        return cueFile;
                 }
             }
 
@@ -302,7 +303,8 @@ namespace SabreTools.Serialization.Files
                     // Default means return
                     default:
                         i--;
-                        return null;
+                        cueTrack.Indices = cueIndices.ToArray();
+                        return cueTrack;
                 }
             }
 
