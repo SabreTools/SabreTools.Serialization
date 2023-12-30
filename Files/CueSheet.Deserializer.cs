@@ -165,11 +165,16 @@ namespace SabreTools.Serialization.Files
                         cueTracks.Add(track);
                         break;
 
-                    // Default means return
-                    default:
+                    // Next file found, return
+                    case "FILE":
                         i--;
                         cueFile.Tracks = cueTracks.ToArray();
                         return cueFile;
+
+                    // Default means return
+                    default:
+                        i--;
+                        return null;
                 }
             }
 
@@ -300,11 +305,17 @@ namespace SabreTools.Serialization.Files
                         cueTrack.PostGap = postgap;
                         break;
 
-                    // Default means return
-                    default:
+                    // Next track or file found, return
+                    case "TRACK":
+                    case "FILE":
                         i--;
                         cueTrack.Indices = cueIndices.ToArray();
                         return cueTrack;
+                    
+                    // Default means return
+                    default:
+                        i--;
+                        return null;
                 }
             }
 
