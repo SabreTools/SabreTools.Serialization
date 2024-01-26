@@ -1280,6 +1280,7 @@ namespace SabreTools.Serialization
                 {
                     var stringData = new StringData();
 
+                    int dataStartOffset = offset;
                     stringData.Length = data.ReadUInt16(ref offset);
                     stringData.ValueLength = data.ReadUInt16(ref offset);
                     stringData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
@@ -1294,7 +1295,8 @@ namespace SabreTools.Serialization
 
                     if (stringData.ValueLength > 0)
                     {
-                        byte[]? valueBytes = data.ReadBytes(ref offset, stringData.ValueLength * sizeof(ushort));
+                        int bytesReadable = Math.Min(stringData.ValueLength * sizeof(ushort), stringData.Length - (offset - dataStartOffset));
+                        byte[]? valueBytes = data.ReadBytes(ref offset, bytesReadable);
                         if (valueBytes != null)
                             stringData.Value = Encoding.Unicode.GetString(valueBytes);
                     }
