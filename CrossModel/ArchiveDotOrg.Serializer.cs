@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             if (item == null)
                 return null;
-            
+
             var metadataFile = new Models.Metadata.MetadataFile
             {
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
@@ -45,10 +45,12 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Models.ArchiveDotOrg.File? item)
         {
-            var machine = new Models.Metadata.Machine
-            {
-                [Models.Metadata.Machine.RomKey] = ConvertToInternalModel(item),
-            };
+            var machine = new Models.Metadata.Machine();
+
+            var rom = ConvertToInternalModel(item);
+            if (rom != null)
+                machine[Models.Metadata.Machine.RomKey] = new Models.Metadata.Rom[] { rom };
+
             return machine;
         }
 
