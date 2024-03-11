@@ -28,6 +28,7 @@ namespace SabreTools.Serialization.Streams
             // TODO: Include flag to write out long or short header
             // Write the short header
             writer.WriteString(Serialization.AttractMode.HeaderWithoutRomname); // TODO: Convert to array of values
+            writer.WriteLine();
 
             // Write out the rows, if they exist
             WriteRows(obj.Row, writer);
