@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 metadataFile.Row = machines
                     .Where(m => m != null)
-                    .SelectMany(ConvertMachineFromInternalModel)
+                    .SelectMany(m => ConvertMachineFromInternalModel(m, header))
                     .ToArray();
             }
 
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Machine"/> to an array of <cref="Models.SeparatedValue.Row"/>
         /// </summary>
-        private static Row[] ConvertMachineFromInternalModel(Models.Metadata.Machine item)
+        private static Row[] ConvertMachineFromInternalModel(Models.Metadata.Machine item, Models.Metadata.Header? header)
         {
             var rowItems = new List<Row>();
 
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 rowItems.AddRange(roms
                     .Where(r => r != null)
-                    .Select(rom => ConvertFromInternalModel(rom, item)));
+                    .Select(rom => ConvertFromInternalModel(rom, item, header)));
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 rowItems.AddRange(disks
                     .Where(d => d != null)
-                    .Select(disk => ConvertFromInternalModel(disk, item)));
+                    .Select(disk => ConvertFromInternalModel(disk, item, header)));
             }
 
             var media = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 rowItems.AddRange(media
                     .Where(m => m != null)
-                    .Select(medium => ConvertFromInternalModel(medium, item)));
+                    .Select(medium => ConvertFromInternalModel(medium, item, header)));
             }
 
             return rowItems.ToArray();
@@ -77,16 +77,26 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Disk"/> to <cref="Models.SeparatedValue.Row"/>
         /// </summary>
-        private static Row ConvertFromInternalModel(Models.Metadata.Disk item, Models.Metadata.Machine parent)
+        private static Row ConvertFromInternalModel(Models.Metadata.Disk item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {
             var row = new Row
             {
+                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                InternalName = header?.ReadString(Models.Metadata.Header.NameKey),
+                Description = header?.ReadString(Models.Metadata.Header.DescriptionKey),
                 GameName = parent.ReadString(Models.Metadata.Machine.NameKey),
-                Description = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
+                GameDescription = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
                 Type = "disk",
+                RomName = null,
                 DiskName = item.ReadString(Models.Metadata.Disk.NameKey),
+                Size = null,
+                CRC = null,
                 MD5 = item.ReadString(Models.Metadata.Disk.MD5Key),
                 SHA1 = item.ReadString(Models.Metadata.Disk.SHA1Key),
+                SHA256 = null,
+                SHA384 = null,
+                SHA512 = null,
+                SpamSum = null,
                 Status = item.ReadString(Models.Metadata.Disk.StatusKey),
             };
             return row;
@@ -95,17 +105,25 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Media"/> to <cref="Models.SeparatedValue.Row"/>
         /// </summary>
-        private static Row ConvertFromInternalModel(Models.Metadata.Media item, Models.Metadata.Machine parent)
+        private static Row ConvertFromInternalModel(Models.Metadata.Media item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {
             var row = new Row
             {
+                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                InternalName = header?.ReadString(Models.Metadata.Header.NameKey),
+                Description = header?.ReadString(Models.Metadata.Header.DescriptionKey),
                 GameName = parent.ReadString(Models.Metadata.Machine.NameKey),
-                Description = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
+                GameDescription = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
                 Type = "media",
+                RomName = null,
                 DiskName = item.ReadString(Models.Metadata.Media.NameKey),
+                Size = null,
+                CRC = null,
                 MD5 = item.ReadString(Models.Metadata.Media.MD5Key),
                 SHA1 = item.ReadString(Models.Metadata.Media.SHA1Key),
                 SHA256 = item.ReadString(Models.Metadata.Media.SHA256Key),
+                SHA384 = null,
+                SHA512 = null,
                 SpamSum = item.ReadString(Models.Metadata.Media.SpamSumKey),
             };
             return row;
@@ -114,14 +132,18 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.SeparatedValue.Row"/>
         /// </summary>
-        private static Row ConvertFromInternalModel(Models.Metadata.Rom item, Models.Metadata.Machine parent)
+        private static Row ConvertFromInternalModel(Models.Metadata.Rom item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {
             var row = new Row
             {
-                GameName = parent?.ReadString(Models.Metadata.Machine.NameKey),
-                Description = parent?.ReadString(Models.Metadata.Machine.DescriptionKey),
+                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                InternalName = header?.ReadString(Models.Metadata.Header.NameKey),
+                Description = header?.ReadString(Models.Metadata.Header.DescriptionKey),
+                GameName = parent.ReadString(Models.Metadata.Machine.NameKey),
+                GameDescription = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
                 Type = "rom",
                 RomName = item.ReadString(Models.Metadata.Rom.NameKey),
+                DiskName = null,
                 Size = item.ReadString(Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Models.Metadata.Rom.CRCKey),
                 MD5 = item.ReadString(Models.Metadata.Rom.MD5Key),
