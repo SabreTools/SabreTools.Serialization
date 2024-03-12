@@ -48,15 +48,22 @@ namespace SabreTools.Serialization.Streams
             if (credits == null)
                 return;
 
-            writer.WriteSection("credits");
+            writer.WriteSection("CREDITS");
 
-            writer.WriteKeyValuePair("author", credits.Author);
-            writer.WriteKeyValuePair("version", credits.Version);
-            writer.WriteKeyValuePair("email", credits.Email);
-            writer.WriteKeyValuePair("homepage", credits.Homepage);
-            writer.WriteKeyValuePair("url", credits.Url);
-            writer.WriteKeyValuePair("date", credits.Date);
-            writer.WriteKeyValuePair("comment", credits.Comment);
+            if (credits.Author != null)
+                writer.WriteKeyValuePair("Author", credits.Author);
+            if (credits.Version != null)
+                writer.WriteKeyValuePair("Version", credits.Version);
+            if (credits.Email != null)
+                writer.WriteKeyValuePair("Email", credits.Email);
+            if (credits.Homepage != null)
+                writer.WriteKeyValuePair("Homepage", credits.Homepage);
+            if (credits.Url != null)
+                writer.WriteKeyValuePair("Url", credits.Url);
+            if (credits.Date != null)
+                writer.WriteKeyValuePair("Date", credits.Date);
+            if (credits.Comment != null)
+                writer.WriteKeyValuePair("Comment", credits.Comment);
             writer.WriteLine();
 
             writer.Flush();
@@ -73,12 +80,16 @@ namespace SabreTools.Serialization.Streams
             if (dat == null)
                 return;
 
-            writer.WriteSection("dat");
+            writer.WriteSection("DAT");
 
-            writer.WriteKeyValuePair("version", dat.Version);
-            writer.WriteKeyValuePair("plugin", dat.Plugin);
-            writer.WriteKeyValuePair("split", dat.Split);
-            writer.WriteKeyValuePair("merge", dat.Merge);
+            if (dat.Version != null)
+                writer.WriteKeyValuePair("Version", dat.Version);
+            if (dat.Plugin != null)
+                writer.WriteKeyValuePair("Plugin", dat.Plugin);
+            if (dat.Split != null)
+                writer.WriteKeyValuePair("Split", dat.Split);
+            if (dat.Merge != null)
+                writer.WriteKeyValuePair("Merge", dat.Merge);
             writer.WriteLine();
 
             writer.Flush();
@@ -95,10 +106,12 @@ namespace SabreTools.Serialization.Streams
             if (emulator == null)
                 return;
 
-            writer.WriteSection("emulator");
+            writer.WriteSection("EMULATOR");
 
-            writer.WriteKeyValuePair("refname", emulator.RefName);
-            writer.WriteKeyValuePair("version", emulator.Version);
+            if (emulator.RefName != null)
+                writer.WriteKeyValuePair("refname", emulator.RefName);
+            if (emulator.Version != null)
+                writer.WriteKeyValuePair("version", emulator.Version);
             writer.WriteLine();
 
             writer.Flush();
@@ -115,7 +128,7 @@ namespace SabreTools.Serialization.Streams
             if (games?.Rom == null || !games.Rom.Any())
                 return;
 
-            writer.WriteSection("games");
+            writer.WriteSection("GAMES");
 
             foreach (var rom in games.Rom)
             {
