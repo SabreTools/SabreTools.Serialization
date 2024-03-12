@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Models.Metadata.Chip.NameKey] = item.Name,
                 [Models.Metadata.Chip.TagKey] = item.Tag,
-                [Models.Metadata.Chip.TypeKey] = item.Type,
+                [Models.Metadata.Chip.ChipTypeKey] = item.Type,
                 [Models.Metadata.Chip.SoundOnlyKey] = item.SoundOnly,
                 [Models.Metadata.Chip.ClockKey] = item.Clock,
             };
@@ -359,7 +359,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var control = new Models.Metadata.Control
             {
-                [Models.Metadata.Control.TypeKey] = item.Type,
+                [Models.Metadata.Control.ControlTypeKey] = item.Type,
                 [Models.Metadata.Control.PlayerKey] = item.Player,
                 [Models.Metadata.Control.ButtonsKey] = item.Buttons,
                 [Models.Metadata.Control.ReqButtonsKey] = item.ReqButtons,
@@ -382,7 +382,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var device = new Models.Metadata.Device
             {
-                [Models.Metadata.Device.TypeKey] = item.Type,
+                [Models.Metadata.Device.DeviceTypeKey] = item.Type,
                 [Models.Metadata.Device.TagKey] = item.Tag,
                 [Models.Metadata.Device.FixedImageKey] = item.FixedImage,
                 [Models.Metadata.Device.MandatoryKey] = item.Mandatory,
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.CrossModel
             var display = new Models.Metadata.Display
             {
                 [Models.Metadata.Display.TagKey] = item.Tag,
-                [Models.Metadata.Display.TypeKey] = item.Type,
+                [Models.Metadata.Display.DisplayTypeKey] = item.Type,
                 [Models.Metadata.Display.RotateKey] = item.Rotate,
                 [Models.Metadata.Display.FlipXKey] = item.FlipX,
                 [Models.Metadata.Display.WidthKey] = item.Width,
@@ -567,7 +567,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Models.Metadata.Feature
             {
-                [Models.Metadata.Feature.TypeKey] = item.Type,
+                [Models.Metadata.Feature.FeatureTypeKey] = item.Type,
                 [Models.Metadata.Feature.StatusKey] = item.Status,
                 [Models.Metadata.Feature.OverallKey] = item.Overall,
             };

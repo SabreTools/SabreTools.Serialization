@@ -308,7 +308,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.ReadString(Models.Metadata.Chip.NameKey),
                 Tag = item.ReadString(Models.Metadata.Chip.TagKey),
-                Type = item.ReadString(Models.Metadata.Chip.TypeKey),
+                Type = item.ReadString(Models.Metadata.Chip.ChipTypeKey),
                 SoundOnly = item.ReadString(Models.Metadata.Chip.SoundOnlyKey),
                 Clock = item.ReadString(Models.Metadata.Chip.ClockKey),
             };
@@ -407,7 +407,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var control = new Control
             {
-                Type = item.ReadString(Models.Metadata.Control.TypeKey),
+                Type = item.ReadString(Models.Metadata.Control.ControlTypeKey),
                 Player = item.ReadString(Models.Metadata.Control.PlayerKey),
                 Buttons = item.ReadString(Models.Metadata.Control.ButtonsKey),
                 ReqButtons = item.ReadString(Models.Metadata.Control.ReqButtonsKey),
@@ -430,7 +430,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var device = new Device
             {
-                Type = item.ReadString(Models.Metadata.Device.TypeKey),
+                Type = item.ReadString(Models.Metadata.Device.DeviceTypeKey),
                 Tag = item.ReadString(Models.Metadata.Device.TagKey),
                 FixedImage = item.ReadString(Models.Metadata.Device.FixedImageKey),
                 Mandatory = item.ReadString(Models.Metadata.Device.MandatoryKey),
@@ -563,7 +563,7 @@ namespace SabreTools.Serialization.CrossModel
             var display = new Display
             {
                 Tag = item.ReadString(Models.Metadata.Display.TagKey),
-                Type = item.ReadString(Models.Metadata.Display.TypeKey),
+                Type = item.ReadString(Models.Metadata.Display.DisplayTypeKey),
                 Rotate = item.ReadString(Models.Metadata.Display.RotateKey),
                 FlipX = item.ReadString(Models.Metadata.Display.FlipXKey),
                 Width = item.ReadString(Models.Metadata.Display.WidthKey),
@@ -621,7 +621,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var feature = new Feature
             {
-                Type = item.ReadString(Models.Metadata.Feature.TypeKey),
+                Type = item.ReadString(Models.Metadata.Feature.FeatureTypeKey),
                 Status = item.ReadString(Models.Metadata.Feature.StatusKey),
                 Overall = item.ReadString(Models.Metadata.Feature.OverallKey),
             };
