@@ -65,8 +65,8 @@ namespace SabreTools.Serialization.CrossModel
                     datItems.Add(ConvertToInternalModel(file));
                 }
 
-                machine[Models.Metadata.Machine.DiskKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "disk")?.ToArray();
-                machine[Models.Metadata.Machine.RomKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "rom")?.ToArray();
+                machine[Models.Metadata.Machine.DiskKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "disk").Select(d => d as Models.Metadata.Disk).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "rom").Select(d => d as Models.Metadata.Rom).ToArray();
             }
 
             return machine;
