@@ -1309,6 +1309,8 @@ namespace SabreTools.Serialization
                     }
 
                     stringTableChildren.Add(stringData);
+                    if (stringData.Length == 0 && stringData.ValueLength == 0)
+                        break;
                 }
 
                 stringTable.Children = [.. stringTableChildren];
