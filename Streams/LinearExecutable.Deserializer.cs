@@ -424,7 +424,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled information block on success, null on error</returns>
-        private static InformationBlock? ParseInformationBlock(Stream data)
+        public static InformationBlock? ParseInformationBlock(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var informationBlock = new InformationBlock();
@@ -491,7 +491,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object table entry on success, null on error</returns>
-        private static ObjectTableEntry ParseObjectTableEntry(Stream data)
+        public static ObjectTableEntry ParseObjectTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ObjectTableEntry();
@@ -511,7 +511,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object page map entry on success, null on error</returns>
-        private static ObjectPageMapEntry ParseObjectPageMapEntry(Stream data)
+        public static ObjectPageMapEntry ParseObjectPageMapEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ObjectPageMapEntry();
@@ -528,7 +528,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled resource table entry on success, null on error</returns>
-        private static ResourceTableEntry ParseResourceTableEntry(Stream data)
+        public static ResourceTableEntry ParseResourceTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ResourceTableEntry();
@@ -547,7 +547,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled resident names table entry on success, null on error</returns>
-        private static ResidentNamesTableEntry ParseResidentNamesTableEntry(Stream data)
+        public static ResidentNamesTableEntry ParseResidentNamesTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ResidentNamesTableEntry();
@@ -569,7 +569,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled entry table bundle on success, null on error</returns>
-        private static EntryTableBundle? ParseEntryTableBundle(Stream data)
+        public static EntryTableBundle? ParseEntryTableBundle(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var bundle = new EntryTableBundle();
@@ -632,7 +632,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled module format directives table entry on success, null on error</returns>
-        private static ModuleFormatDirectivesTableEntry ParseModuleFormatDirectivesTableEntry(Stream data)
+        public static ModuleFormatDirectivesTableEntry ParseModuleFormatDirectivesTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ModuleFormatDirectivesTableEntry();
@@ -649,7 +649,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled verify record directive table entry on success, null on error</returns>
-        private static VerifyRecordDirectiveTableEntry ParseVerifyRecordDirectiveTableEntry(Stream data)
+        public static VerifyRecordDirectiveTableEntry ParseVerifyRecordDirectiveTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new VerifyRecordDirectiveTableEntry();
@@ -670,7 +670,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled fix-up page table entry on success, null on error</returns>
-        private static FixupPageTableEntry ParseFixupPageTableEntry(Stream data)
+        public static FixupPageTableEntry ParseFixupPageTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new FixupPageTableEntry();
@@ -685,7 +685,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled fix-up record table entry on success, null on error</returns>
-        private static FixupRecordTableEntry? ParseFixupRecordTableEntry(Stream data)
+        public static FixupRecordTableEntry? ParseFixupRecordTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new FixupRecordTableEntry();
@@ -904,7 +904,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled import module name table entry on success, null on error</returns>
-        private static ImportModuleNameTableEntry ParseImportModuleNameTableEntry(Stream data)
+        public static ImportModuleNameTableEntry ParseImportModuleNameTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ImportModuleNameTableEntry();
@@ -925,7 +925,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled import module name table entry on success, null on error</returns>
-        private static ImportModuleProcedureNameTableEntry ParseImportModuleProcedureNameTableEntry(Stream data)
+        public static ImportModuleProcedureNameTableEntry ParseImportModuleProcedureNameTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new ImportModuleProcedureNameTableEntry();
@@ -946,7 +946,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled per-page checksum table entry on success, null on error</returns>
-        private static PerPageChecksumTableEntry ParsePerPageChecksumTableEntry(Stream data)
+        public static PerPageChecksumTableEntry ParsePerPageChecksumTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new PerPageChecksumTableEntry();
@@ -961,7 +961,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled non-resident names table entry on success, null on error</returns>
-        private static NonResidentNamesTableEntry ParseNonResidentNameTableEntry(Stream data)
+        public static NonResidentNamesTableEntry ParseNonResidentNameTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var entry = new NonResidentNamesTableEntry();
@@ -984,7 +984,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="size">Total size of the debug information</param>
         /// <returns>Filled debug information on success, null on error</returns>
-        private static DebugInformation? ParseDebugInformation(Stream data, long size)
+        public static DebugInformation? ParseDebugInformation(Stream data, long size)
         {
             // TODO: Use marshalling here instead of building
             var debugInformation = new DebugInformation();

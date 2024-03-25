@@ -292,7 +292,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
-        private static COFFFileHeader ParseCOFFFileHeader(Stream data)
+        public static COFFFileHeader ParseCOFFFileHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var fileHeader = new COFFFileHeader();
@@ -314,7 +314,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="optionalSize">Size of the optional header</param>
         /// <returns>Filled optional header on success, null on error</returns>
-        private static OptionalHeader ParseOptionalHeader(Stream data, int optionalSize)
+        public static OptionalHeader ParseOptionalHeader(Stream data, int optionalSize)
         {
             long initialOffset = data.Position;
 
@@ -484,7 +484,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of section table entries to read</param>
         /// <returns>Filled section table on success, null on error</returns>
-        private static SectionHeader[] ParseSectionTable(Stream data, int count)
+        public static SectionHeader[] ParseSectionTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var sectionTable = new SectionHeader[count];
@@ -524,7 +524,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of COFF symbol table entries to read</param>
         /// <returns>Filled COFF symbol table on success, null on error</returns>
-        private static COFFSymbolTableEntry[] ParseCOFFSymbolTable(Stream data, uint count)
+        public static COFFSymbolTableEntry[] ParseCOFFSymbolTable(Stream data, uint count)
         {
             // TODO: Use marshalling here instead of building
             var coffSymbolTable = new COFFSymbolTableEntry[count];
@@ -681,7 +681,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled COFF string table on success, null on error</returns>
-        private static COFFStringTable ParseCOFFStringTable(Stream data)
+        public static COFFStringTable ParseCOFFStringTable(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var coffStringTable = new COFFStringTable();
@@ -712,7 +712,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the attribute certificate table</param>
         /// <returns>Filled attribute certificate on success, null on error</returns>
-        private static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(Stream data, int endOffset)
+        public static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(Stream data, int endOffset)
         {
             var attributeCertificateTable = new List<AttributeCertificateTableEntry>();
 
@@ -743,7 +743,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled delay-load directory table on success, null on error</returns>
-        private static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(Stream data)
+        public static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var delayLoadDirectoryTable = new DelayLoadDirectoryTable();
@@ -767,7 +767,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="endOffset">First address not part of the base relocation table</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        private static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader?[] sections)
+        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var baseRelocationTable = new List<BaseRelocationBlock>();
@@ -808,7 +808,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="endOffset">First address not part of the debug table</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled debug table on success, null on error</returns>
-        private static DebugTable ParseDebugTable(Stream data, int endOffset, SectionHeader?[] sections)
+        public static DebugTable ParseDebugTable(Stream data, int endOffset, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var debugTable = new DebugTable();
@@ -845,7 +845,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled export table on success, null on error</returns>
-        private static ExportTable ParseExportTable(Stream data, SectionHeader?[] sections)
+        public static ExportTable ParseExportTable(Stream data, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var exportTable = new ExportTable();
@@ -962,7 +962,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-        private static ImportTable ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
+        public static ImportTable ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var importTable = new ImportTable();
@@ -1187,7 +1187,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled resource directory table on success, null on error</returns>
-        private static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader?[] sections, bool topLevel = false)
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader?[] sections, bool topLevel = false)
         {
             // TODO: Use marshalling here instead of building
             var resourceDirectoryTable = new ResourceDirectoryTable();

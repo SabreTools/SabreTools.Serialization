@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
-        private static ExecutableHeader? ParseExecutableHeader(Stream data)
+        public static ExecutableHeader? ParseExecutableHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var header = new ExecutableHeader();
@@ -266,7 +266,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of segment table entries to read</param>
         /// <returns>Filled segment table on success, null on error</returns>
-        private static SegmentTableEntry[] ParseSegmentTable(Stream data, int count)
+        public static SegmentTableEntry[] ParseSegmentTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var segmentTable = new SegmentTableEntry[count];
@@ -290,7 +290,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of resource table entries to read</param>
         /// <returns>Filled resource table on success, null on error</returns>
-        private static ResourceTable ParseResourceTable(Stream data, int count)
+        public static ResourceTable ParseResourceTable(Stream data, int count)
         {
             long initialOffset = data.Position;
 
@@ -355,7 +355,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the resident-name table</param>
         /// <returns>Filled resident-name table on success, null on error</returns>
-        private static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, int endOffset)
+        public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<ResidentNameTableEntry>();
@@ -378,7 +378,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of module-reference table entries to read</param>
         /// <returns>Filled module-reference table on success, null on error</returns>
-        private static ModuleReferenceTableEntry[] ParseModuleReferenceTable(Stream data, int count)
+        public static ModuleReferenceTableEntry[] ParseModuleReferenceTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var moduleReferenceTable = new ModuleReferenceTableEntry[count];
@@ -399,7 +399,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the imported-name table</param>
         /// <returns>Filled imported-name table on success, null on error</returns>
-        private static Dictionary<ushort, ImportedNameTableEntry?> ParseImportedNameTable(Stream data, int endOffset)
+        public static Dictionary<ushort, ImportedNameTableEntry?> ParseImportedNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry?>();
@@ -422,7 +422,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the entry table</param>
         /// <returns>Filled entry table on success, null on error</returns>
-        private static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
+        public static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var entryTable = new List<EntryTableBundle>();
@@ -461,7 +461,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the nonresident-name table</param>
         /// <returns>Filled nonresident-name table on success, null on error</returns>
-        private static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, int endOffset)
+        public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<NonResidentNameTableEntry>();
