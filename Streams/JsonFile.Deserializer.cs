@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Streams
             var jsonReader = new JsonTextReader(streamReader);
 
             // Perform the deserialization and return
-            return (T?)serializer.Deserialize(jsonReader, typeof(T?));
+            return serializer.Deserialize<T>(jsonReader);
         }
     }
 }
