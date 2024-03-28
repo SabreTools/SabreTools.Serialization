@@ -18,7 +18,6 @@ namespace SabreTools.Serialization.Files
         /// </summary>
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
-        /// <param name="obj">Data to serialize</param>
         /// <param name="name">Optional DOCTYPE name</param>
         /// <param name="pubid">Optional DOCTYPE pubid</param>
         /// <param name="sysid">Optional DOCTYPE sysid</param>
