@@ -149,6 +149,8 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < textureHeader.TextureCount; i++)
             {
                 offsets[i] = data.ReadUInt32();
+                if (data.Position >= data.Length)
+                    break;
             }
 
             textureHeader.Offsets = offsets;
