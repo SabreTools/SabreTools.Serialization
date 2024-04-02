@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabreTools.Serialization", "SabreTools.Serialization/SabreTools.Serialization.csproj", "{5B688801-5F36-483E-B2E8-F219BA5923A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabreTools.Serialization", "SabreTools.Serialization\SabreTools.Serialization.csproj", "{5B688801-5F36-483E-B2E8-F219BA5923A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{F3DEE31A-4726-464C-A90C-C19D78F51898}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +20,9 @@ Global
 		{5B688801-5F36-483E-B2E8-F219BA5923A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B688801-5F36-483E-B2E8-F219BA5923A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B688801-5F36-483E-B2E8-F219BA5923A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3DEE31A-4726-464C-A90C-C19D78F51898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3DEE31A-4726-464C-A90C-C19D78F51898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3DEE31A-4726-464C-A90C-C19D78F51898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3DEE31A-4726-464C-A90C-C19D78F51898}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
