@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {
@@ -8,9 +9,19 @@ namespace SabreTools.Serialization.Streams
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class BaseJsonFile<T>
+    public partial class JsonFile<T> : IStreamSerializer<T>
     {
         /// <inheritdoc/>
+        public Stream? Serialize(T? obj)
+            => Serialize(obj, new UTF8Encoding(false));
+
+        /// <summary>
+        /// Serialize a <typeparamref name="T"/> into a Stream
+        /// </summary>
+        /// <typeparam name="T">Type of object to serialize from</typeparam>
+        /// <param name="obj">Data to serialize</param>
+        /// <param name="encoding"></param>
+        /// <returns>Filled object on success, null on error</returns>
         public Stream? Serialize(T? obj, Encoding encoding)
         {
             // If the object is null

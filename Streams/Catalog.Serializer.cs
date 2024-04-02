@@ -1,14 +1,12 @@
 ﻿using System.IO;
 using System.Text;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {
-    public partial class Catalog : BaseJsonFile<Models.Xbox.Catalog>, IStreamSerializer<Models.Xbox.Catalog>
+    public partial class Catalog : JsonFile<Models.Xbox.Catalog>
     {
-        public Stream? Serialize(Models.Xbox.Catalog? obj)
-        {
-            return Serialize(obj, new UnicodeEncoding());
-        }
+        // Catalog JSON is encoded as UTF-16 LE
+        public new Stream? Serialize(Models.Xbox.Catalog? obj)
+            => Serialize(obj, new UnicodeEncoding());
     }
 }

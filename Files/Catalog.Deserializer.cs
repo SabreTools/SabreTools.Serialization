@@ -1,13 +1,11 @@
 ﻿using System.Text;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class Catalog : BaseJsonFile<Models.Xbox.Catalog>, IFileSerializer<Models.Xbox.Catalog>
+    public partial class Catalog : JsonFile<Models.Xbox.Catalog>
     {
-        public Models.Xbox.Catalog? Deserialize(string? path)
-        {
-            return Deserialize(path, new UnicodeEncoding());
-        }
+        // Catalog.js file is a UTF-16 LE JSON
+        public new Models.Xbox.Catalog? Deserialize(string? path)
+            => Deserialize(path, new UnicodeEncoding());
     }
 }
