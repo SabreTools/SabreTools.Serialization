@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Streams
             string? lastLine = null;
             while (true)
             {
-                string? line = lastLine ?? ReadLine(data);
+                string? line = lastLine ?? data.ReadQuotedString();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Streams
 
             while (true)
             {
-                string? line = lastLine ?? ReadLine(data);
+                string? line = lastLine ?? data.ReadQuotedString();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.Streams
 
             while (true)
             {
-                string? line = lastLine ?? ReadLine(data);
+                string? line = lastLine ?? data.ReadQuotedString();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -505,39 +505,6 @@ namespace SabreTools.Serialization.Streams
         }
 
         #region Helpers
-
-        /// <summary>
-        /// Read a line from the input file, where a line is either terminated by a newline character
-        /// or by an end quote
-        /// </summary>
-        private static string? ReadLine(Stream data)
-        {
-            // If we are at the end of data
-            if (data.Position >= data.Length)
-                return null;
-
-            var bytes = new List<byte>();
-            bool openQuote = false;
-            while (data.Position < data.Length)
-            {
-                // Read the byte value
-                byte b = data.ReadByteValue();
-
-                // If we have a quote, flip the flag
-                if (b == (byte)'"')
-                    openQuote = !openQuote;
-
-                // If we have a newline not in a quoted string, exit the loop
-                else if (b == (byte)'\n' && !openQuote)
-                    break;
-
-                // Add the byte to the set
-                bytes.Add(b);
-            }
-
-            var line = new string(bytes.Select(b => (char)b).ToArray());
-            return line.TrimEnd();
-        }
 
         /// <summary>
         /// Get the file type from a given string
