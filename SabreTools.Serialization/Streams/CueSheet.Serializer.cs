@@ -15,8 +15,6 @@ namespace SabreTools.Serialization.Streams
             if (obj == null)
                 return null;
 
-
-
             // If we don't have any files, it's invalid
             if (obj?.Files == null)
                 throw new ArgumentNullException(nameof(obj.Files));
