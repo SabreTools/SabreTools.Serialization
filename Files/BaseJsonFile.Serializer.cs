@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using SabreTools.Serialization.Interfaces;
+using System.Text;
 
 namespace SabreTools.Serialization.Files
 {
@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Files
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class JsonFile<T> : IFileSerializer<T>
+    public partial class BaseJsonFile<T>
     {
         /// <summary>
         /// Serializes the defined type to an JSON file
@@ -15,12 +15,12 @@ namespace SabreTools.Serialization.Files
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        public bool Serialize(T? obj, string? path)
+        public bool Serialize(T? obj, string? path, Encoding encoding)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.JsonFile<T>().Serialize(obj);
+            using var stream = new Streams.BaseJsonFile<T>().Serialize(obj, encoding);
             if (stream == null)
                 return false;
 

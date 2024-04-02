@@ -1,6 +1,6 @@
 ﻿using System.IO;
+using System.Text;
 using Newtonsoft.Json;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams
 {
@@ -8,10 +8,10 @@ namespace SabreTools.Serialization.Streams
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class JsonFile<T> : IStreamSerializer<T>
+    public partial class BaseJsonFile<T>
     {
         /// <inheritdoc/>
-        public T? Deserialize(Stream? data)
+        public T? Deserialize(Stream? data, Encoding encoding)
         {
             // If the stream is null
             if (data == null)
@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Streams
 
             // Setup the serializer and the reader
             var serializer = JsonSerializer.Create();
-            var streamReader = new StreamReader(data);
+            var streamReader = new StreamReader(data, encoding);
             var jsonReader = new JsonTextReader(streamReader);
 
             // Perform the deserialization and return

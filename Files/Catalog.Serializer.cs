@@ -1,7 +1,13 @@
-﻿namespace SabreTools.Serialization.Files
+﻿using System.Text;
+using SabreTools.Serialization.Interfaces;
+
+namespace SabreTools.Serialization.Files
 {
-    public partial class Catalog : JsonFile<Models.Xbox.Catalog>
+    public partial class Catalog : BaseJsonFile<Models.Xbox.Catalog>, IFileSerializer<Models.Xbox.Catalog>
     {
-        // All serialization logic is in the base class
+        public bool Serialize(Models.Xbox.Catalog? obj, string? path)
+        {
+            return Serialize(obj, path, new UnicodeEncoding());
+        }
     }
 }

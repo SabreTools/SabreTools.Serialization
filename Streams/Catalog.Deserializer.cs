@@ -1,7 +1,14 @@
-﻿namespace SabreTools.Serialization.Streams
+﻿using System.IO;
+using System.Text;
+using SabreTools.Serialization.Interfaces;
+
+namespace SabreTools.Serialization.Streams
 {
-    public partial class Catalog : JsonFile<Models.Xbox.Catalog>
+    public partial class Catalog : BaseJsonFile<Models.Xbox.Catalog>, IStreamSerializer<Models.Xbox.Catalog>
     {
-        // All serialization logic is in the base class
+        public Models.Xbox.Catalog? Deserialize(Stream? data)
+        {
+            return Deserialize(data, new UnicodeEncoding());
+        }
     }
 }
