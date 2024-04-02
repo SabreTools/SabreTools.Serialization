@@ -561,6 +561,10 @@ namespace SabreTools.Serialization
                     }
 
                     dialogItemExtendedTemplates.Add(dialogItemTemplate);
+
+                    // If we have an invalid item count
+                    if (offset >= entry.Data.Length)
+                        break;
                 }
 
                 dialogBoxResource.ExtendedDialogItemTemplates = [.. dialogItemExtendedTemplates];
@@ -805,6 +809,10 @@ namespace SabreTools.Serialization
                     }
 
                     dialogItemTemplates.Add(dialogItemTemplate);
+
+                    // If we have an invalid item count
+                    if (offset >= entry.Data.Length)
+                        break;
                 }
 
                 dialogBoxResource.DialogItemTemplates = [.. dialogItemTemplates];
