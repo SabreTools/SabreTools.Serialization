@@ -7,10 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public Models.MSDOS.Executable? Deserialize(string? path)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.MSDOS().Deserialize(stream);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.MSDOS().Deserialize(stream);
         }
     }
 }

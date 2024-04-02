@@ -2,15 +2,15 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class PIC : IFileSerializer<Models.PIC.DiscInformation>
+    public partial class PlayJPlaylist : IFileSerializer<Models.PlayJ.Playlist>
     {
         /// <inheritdoc/>
-        public bool Serialize(Models.PIC.DiscInformation? obj, string? path)
+        public bool Serialize(Models.PlayJ.Playlist? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.PIC().Serialize(obj);
+            using var stream = new Streams.PlayJPlaylist().Serialize(obj);
             if (stream == null)
                 return false;
 

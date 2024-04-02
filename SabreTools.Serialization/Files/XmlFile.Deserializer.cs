@@ -11,10 +11,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public T? Deserialize(string? path)
         {
-            using (var data = PathProcessor.OpenStream(path))
-            {
-                return new Streams.XmlFile<T>().Deserialize(data);
-            }
+            using var data = PathProcessor.OpenStream(path);
+            return new Streams.XmlFile<T>().Deserialize(data);
         }
     }
 }

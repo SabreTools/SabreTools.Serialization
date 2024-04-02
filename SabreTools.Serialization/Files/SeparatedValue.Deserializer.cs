@@ -11,10 +11,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public MetadataFile? Deserialize(string? path, char delim)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.SeparatedValue().Deserialize(stream, delim);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.SeparatedValue().Deserialize(stream, delim);
         }
     }
 }

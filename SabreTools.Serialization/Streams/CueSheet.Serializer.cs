@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Models.CueSheets;
-using SabreTools.Models.PortableExecutable;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Streams

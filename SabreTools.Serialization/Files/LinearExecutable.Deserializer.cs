@@ -7,10 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public Models.LinearExecutable.Executable? Deserialize(string? path)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.LinearExecutable().Deserialize(stream);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.LinearExecutable().Deserialize(stream);
         }
     }
 }

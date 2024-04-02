@@ -2,15 +2,15 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class PIC : IFileSerializer<Models.PIC.DiscInformation>
+    public partial class XZP : IFileSerializer<Models.XZP.File>
     {
         /// <inheritdoc/>
-        public bool Serialize(Models.PIC.DiscInformation? obj, string? path)
+        public bool Serialize(Models.XZP.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.PIC().Serialize(obj);
+            using var stream = new Streams.XZP().Serialize(obj);
             if (stream == null)
                 return false;
 

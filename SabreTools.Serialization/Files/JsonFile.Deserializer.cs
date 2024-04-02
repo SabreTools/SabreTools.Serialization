@@ -22,10 +22,8 @@ namespace SabreTools.Serialization.Files
         /// <returns>Filled object on success, null on error</returns>
         public T? Deserialize(string? path, Encoding encoding)
         {
-            using (var data = PathProcessor.OpenStream(path))
-            {
-                return new Streams.JsonFile<T>().Deserialize(data, encoding);
-            }
+            using var data = PathProcessor.OpenStream(path);
+            return new Streams.JsonFile<T>().Deserialize(data, encoding);
         }
     }
 }

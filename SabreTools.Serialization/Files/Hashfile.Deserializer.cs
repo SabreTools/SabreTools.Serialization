@@ -10,10 +10,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.Hashfile().Deserialize(stream, hash);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.Hashfile().Deserialize(stream, hash);
         }
     }
 }

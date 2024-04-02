@@ -7,10 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public Models.IRD.File? Deserialize(string? path)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.IRD().Deserialize(stream);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.IRD().Deserialize(stream);
         }
     }
 }

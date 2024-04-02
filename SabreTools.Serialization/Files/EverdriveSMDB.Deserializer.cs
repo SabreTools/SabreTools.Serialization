@@ -8,10 +8,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc/>
         public MetadataFile? Deserialize(string? path)
         {
-            using (var stream = PathProcessor.OpenStream(path))
-            {
-                return new Streams.EverdriveSMDB().Deserialize(stream);
-            }
+            using var stream = PathProcessor.OpenStream(path);
+            return new Streams.EverdriveSMDB().Deserialize(stream);
         }
     }
 }

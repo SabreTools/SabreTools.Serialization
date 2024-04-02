@@ -2,13 +2,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class CFB : IFileSerializer<Models.CFB.Binary>
+    public partial class Quantum : IFileSerializer<Models.Quantum.Archive>
     {
         /// <inheritdoc/>
-        public Models.CFB.Binary? Deserialize(string? path)
+        public Models.Quantum.Archive? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.CFB().Deserialize(stream);
+            return new Streams.Quantum().Deserialize(stream);
         }
     }
 }
