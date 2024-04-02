@@ -191,6 +191,10 @@ namespace SabreTools.Serialization.Streams
                 if (currentSector == SectorNumber.ENDOFCHAIN)
                     break;
 
+                // If we have a free sector for a version 3 filie
+                if (directorySectorCount == int.MaxValue && currentSector == SectorNumber.FREESECT)
+                    break;
+
                 // If we have a readable sector
                 if (currentSector <= SectorNumber.MAXREGSECT)
                 {
