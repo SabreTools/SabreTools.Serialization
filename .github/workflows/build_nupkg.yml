@@ -28,13 +28,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: 'Nuget Package'
-        path: 'bin/Release/*.nupkg'
+        path: 'SabreTools.Serialization/bin/Release/*.nupkg'
 
     - name: Upload to rolling
       uses: ncipollo/release-action@v1.14.0
       with:
         allowUpdates: True
-        artifacts: 'bin/Release/*.nupkg'
+        artifacts: 'SabreTools.Serialization/bin/Release/*.nupkg'
         body: 'Last built commit: ${{ github.sha }}'
         name: 'Rolling Release'
         prerelease: True
