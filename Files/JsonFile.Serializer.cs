@@ -1,34 +1,33 @@
-using System.IO;
+﻿using System.IO;
+using System.Text;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
     /// <summary>
-    /// Base class for other XML serializers
+    /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class XmlFile<T> : IFileSerializer<T>
+    public partial class JsonFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
         public bool Serialize(T? obj, string? path)
-            => Serialize(obj, path, null, null, null, null);
+            => Serialize(obj, path, new UTF8Encoding(false));
 
         /// <summary>
-        /// Serializes the defined type to an XML file
+        /// Serialize a <typeparamref name="T"/> into a file
         /// </summary>
+        /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
-        /// <param name="name">Optional DOCTYPE name</param>
-        /// <param name="pubid">Optional DOCTYPE pubid</param>
-        /// <param name="sysid">Optional DOCTYPE sysid</param>
-        /// <param name="subset">Optional DOCTYPE name</param>
+        /// <param name="encoding">Encoding to parse text as</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        public bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public bool Serialize(T? obj, string? path, Encoding encoding)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset);
+            using var stream = new Streams.JsonFile<T>().Serialize(obj, encoding);
             if (stream == null)
                 return false;
 

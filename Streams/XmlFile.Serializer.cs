@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Streams
             if (obj == null)
                 return null;
 
-            // Setup the serializer and the reader
+            // Setup the serializer and the writer
             var serializer = new XmlSerializer(typeof(T));
             var settings = new XmlWriterSettings
             {
