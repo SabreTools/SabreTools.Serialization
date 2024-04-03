@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.MoPaQ.Archive? Deserialize(string? path)
         {
-            var obj = new MoPaQ();
-            return obj.DeserializeImpl(path);
+            var deserializer = new MoPaQ();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

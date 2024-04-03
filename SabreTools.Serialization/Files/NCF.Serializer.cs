@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class NCF : IFileSerializer<Models.NCF.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.NCF.File? obj, string? path)
+        {
+            var serializer = new NCF();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.NCF.File? obj, string? path)
+        public bool SerializeImpl(Models.NCF.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

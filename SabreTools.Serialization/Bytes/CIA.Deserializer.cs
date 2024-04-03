@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
         {
-            var obj = new CIA();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new CIA();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

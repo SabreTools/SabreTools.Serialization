@@ -7,15 +7,15 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.SeparatedValue.MetadataFile? Deserialize(string? path)
         {
-            var obj = new SeparatedValue();
-            return obj.DeserializeImpl(path);
+            var deserializer = new SeparatedValue();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.SeparatedValue.MetadataFile? Deserialize(string? path, char delim)
         {
-            var obj = new SeparatedValue();
-            return obj.DeserializeImpl(path, delim);
+            var deserializer = new SeparatedValue();
+            return deserializer.DeserializeImpl(path, delim);
         }
 
         /// <inheritdoc/>

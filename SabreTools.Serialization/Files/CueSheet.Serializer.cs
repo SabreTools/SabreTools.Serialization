@@ -5,8 +5,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class CueSheet : IFileSerializer<Models.CueSheets.CueSheet>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.CueSheets.CueSheet? obj, string? path)
+        {
+            var serializer = new CueSheet();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.CueSheets.CueSheet? obj, string? path)
+        public bool SerializeImpl(Models.CueSheets.CueSheet? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

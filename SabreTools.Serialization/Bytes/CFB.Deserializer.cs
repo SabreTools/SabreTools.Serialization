@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.CFB.Binary? Deserialize(byte[]? data, int offset)
         {
-            var obj = new CFB();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new CFB();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.MoPaQ.Archive? Deserialize(byte[]? data, int offset)
         {
-            var obj = new MoPaQ();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new MoPaQ();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

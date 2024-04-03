@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.RomCenter.MetadataFile? Deserialize(string? path)
         {
-            var obj = new RomCenter();
-            return obj.DeserializeImpl(path);
+            var deserializer = new RomCenter();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

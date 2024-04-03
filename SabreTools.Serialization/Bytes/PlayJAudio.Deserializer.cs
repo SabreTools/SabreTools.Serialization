@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.PlayJ.AudioFile? Deserialize(byte[]? data, int offset)
         {
-            var obj = new PlayJAudio();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new PlayJAudio();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

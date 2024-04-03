@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class XZP : IFileSerializer<Models.XZP.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.XZP.File? obj, string? path)
+        {
+            var serializer = new XZP();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.XZP.File? obj, string? path)
+        public bool SerializeImpl(Models.XZP.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

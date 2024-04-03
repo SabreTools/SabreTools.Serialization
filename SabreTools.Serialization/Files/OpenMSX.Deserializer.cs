@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.OpenMSX.SoftwareDb? Deserialize(string? path)
         {
-            var obj = new OpenMSX();
-            return obj.DeserializeImpl(path);
+            var deserializer = new OpenMSX();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

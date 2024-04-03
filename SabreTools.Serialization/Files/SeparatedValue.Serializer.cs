@@ -1,15 +1,29 @@
-using SabreTools.Models.SeparatedValue;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class SeparatedValue : IFileSerializer<MetadataFile>
+    public partial class SeparatedValue : IFileSerializer<Models.SeparatedValue.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path)
+        {
+            var serializer = new SeparatedValue();
+            return serializer.SerializeImpl(obj, path);
+        }
+
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
+        {
+            var serializer = new SeparatedValue();
+            return serializer.SerializeImpl(obj, path, delim);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path) => Serialize(obj, path, ',');
+        public bool SerializeImpl(Models.SeparatedValue.MetadataFile? obj, string? path)
+            => SerializeImpl(obj, path, ',');
 
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path, char delim)
+        public bool SerializeImpl(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

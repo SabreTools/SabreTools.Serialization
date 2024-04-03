@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.PIC.DiscInformation? Deserialize(string? path)
         {
-            var obj = new PIC();
-            return obj.DeserializeImpl(path);
+            var deserializer = new PIC();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

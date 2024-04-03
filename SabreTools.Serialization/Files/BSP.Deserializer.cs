@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.BSP.File? Deserialize(string? path)
         {
-            var obj = new BSP();
-            return obj.DeserializeImpl(path);
+            var deserializer = new BSP();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class AACS : IFileSerializer<Models.AACS.MediaKeyBlock>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.AACS.MediaKeyBlock? obj, string? path)
+        {
+            var serializer = new AACS();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.AACS.MediaKeyBlock? obj, string? path)
+        public bool SerializeImpl(Models.AACS.MediaKeyBlock? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

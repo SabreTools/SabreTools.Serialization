@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.VPK.File? Deserialize(string? path)
         {
-            var obj = new VPK();
-            return obj.DeserializeImpl(path);
+            var deserializer = new VPK();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

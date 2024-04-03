@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PlayJAudio : IFileSerializer<Models.PlayJ.AudioFile>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.PlayJ.AudioFile? obj, string? path)
+        {
+            var serializer = new PlayJAudio();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.PlayJ.AudioFile? obj, string? path)
+        public bool SerializeImpl(Models.PlayJ.AudioFile? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

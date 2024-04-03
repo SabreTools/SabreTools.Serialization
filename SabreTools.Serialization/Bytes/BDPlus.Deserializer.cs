@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.BDPlus.SVM? Deserialize(byte[]? data, int offset)
         {
-            var obj = new BDPlus();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new BDPlus();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.SGA.File? Deserialize(byte[]? data, int offset)
         {
-            var obj = new SGA();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new SGA();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

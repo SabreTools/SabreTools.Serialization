@@ -7,15 +7,15 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Hashfile.Hashfile? Deserialize(string? path)
         {
-            var obj = new Hashfile();
-            return obj.DeserializeImpl(path);
+            var deserializer = new Hashfile();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash)
         {
-            var obj = new Hashfile();
-            return obj.DeserializeImpl(path, hash);
+            var deserializer = new Hashfile();
+            return deserializer.DeserializeImpl(path, hash);
         }
 
         /// <inheritdoc/>

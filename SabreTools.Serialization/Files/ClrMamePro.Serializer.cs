@@ -1,16 +1,30 @@
 using System.IO;
-using SabreTools.Models.ClrMamePro;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class ClrMamePro : IFileSerializer<MetadataFile>
+    public partial class ClrMamePro : IFileSerializer<Models.ClrMamePro.MetadataFile>
     {
-        /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path) => Serialize(obj, path, true);
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path)
+        {
+            var serializer = new ClrMamePro();
+            return serializer.SerializeImpl(obj, path);
+        }
 
-        /// <inheritdoc cref="Serialize(MetadataFile, string)"/>
-        public bool Serialize(MetadataFile? obj, string? path, bool quotes)
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
+        {
+            var serializer = new ClrMamePro();
+            return serializer.SerializeImpl(obj, path, quotes);
+        }
+        
+        /// <inheritdoc/>
+        public bool SerializeImpl(Models.ClrMamePro.MetadataFile? obj, string? path)
+            => SerializeImpl(obj, path, true);
+
+        /// <inheritdoc cref="SerializeImpl(Models.ClrMamePro.MetadataFile, string)"/>
+        public bool SerializeImpl(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

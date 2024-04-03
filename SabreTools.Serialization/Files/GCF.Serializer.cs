@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class GCF : IFileSerializer<Models.GCF.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.GCF.File? obj, string? path)
+        {
+            var serializer = new GCF();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.GCF.File? obj, string? path)
+        public bool SerializeImpl(Models.GCF.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.BDPlus.SVM? Deserialize(string? path)
         {
-            var obj = new BDPlus();
-            return obj.DeserializeImpl(path);
+            var deserializer = new BDPlus();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

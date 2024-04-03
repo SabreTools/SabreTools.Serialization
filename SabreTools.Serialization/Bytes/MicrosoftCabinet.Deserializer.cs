@@ -9,8 +9,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.MicrosoftCabinet.Cabinet? Deserialize(byte[]? data, int offset)
         {
-            var obj = new MicrosoftCabinet();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new MicrosoftCabinet();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

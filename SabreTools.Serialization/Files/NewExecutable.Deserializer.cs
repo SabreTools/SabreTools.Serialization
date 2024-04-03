@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.NewExecutable.Executable? Deserialize(string? path)
         {
-            var obj = new NewExecutable();
-            return obj.DeserializeImpl(path);
+            var deserializer = new NewExecutable();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

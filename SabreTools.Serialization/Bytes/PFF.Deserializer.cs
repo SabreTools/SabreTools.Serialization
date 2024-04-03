@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.PFF.Archive? Deserialize(byte[]? data, int offset)
         {
-            var obj = new PFF();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new PFF();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

@@ -1,12 +1,18 @@
-using SabreTools.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class RomCenter : IFileSerializer<MetadataFile>
+    public partial class RomCenter : IFileSerializer<Models.RomCenter.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.RomCenter.MetadataFile? obj, string? path)
+        {
+            var serializer = new RomCenter();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public bool SerializeImpl(Models.RomCenter.MetadataFile? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.EverdriveSMDB.MetadataFile? Deserialize(string? path)
         {
-            var obj = new EverdriveSMDB();
-            return obj.DeserializeImpl(path);
+            var deserializer = new EverdriveSMDB();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

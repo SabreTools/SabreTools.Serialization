@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.Nitro.Cart? Deserialize(byte[]? data, int offset)
         {
-            var obj = new Nitro();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new Nitro();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

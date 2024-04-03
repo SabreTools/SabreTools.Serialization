@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.GCF.File? Deserialize(byte[]? data, int offset)
         {
-            var obj = new GCF();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new GCF();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

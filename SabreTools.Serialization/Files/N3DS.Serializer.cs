@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class N3DS : IFileSerializer<Models.N3DS.Cart>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.N3DS.Cart? obj, string? path)
+        {
+            var serializer = new N3DS();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.N3DS.Cart? obj, string? path)
+        public bool SerializeImpl(Models.N3DS.Cart? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

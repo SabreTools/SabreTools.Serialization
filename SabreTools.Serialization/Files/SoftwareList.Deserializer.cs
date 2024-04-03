@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.SoftwareList.SoftwareList? Deserialize(string? path)
         {
-            var obj = new SoftwareList();
-            return obj.DeserializeImpl(path);
+            var deserializer = new SoftwareList();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

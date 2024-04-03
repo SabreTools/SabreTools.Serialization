@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.IRD.File? Deserialize(string? path)
         {
-            var obj = new IRD();
-            return obj.DeserializeImpl(path);
+            var deserializer = new IRD();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

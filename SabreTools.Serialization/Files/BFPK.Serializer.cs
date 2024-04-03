@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class BFPK : IFileSerializer<Models.BFPK.Archive>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.BFPK.Archive? obj, string? path)
+        {
+            var serializer = new BFPK();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.BFPK.Archive? obj, string? path)
+        public bool SerializeImpl(Models.BFPK.Archive? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

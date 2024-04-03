@@ -9,8 +9,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.InstallShieldCabinet.Cabinet? Deserialize(byte[]? data, int offset)
         {
-            var obj = new InstallShieldCabinet();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new InstallShieldCabinet();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

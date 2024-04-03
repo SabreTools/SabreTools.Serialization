@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.DosCenter.MetadataFile? Deserialize(string? path)
         {
-            var obj = new DosCenter();
-            return obj.DeserializeImpl(path);
+            var deserializer = new DosCenter();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

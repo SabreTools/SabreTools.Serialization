@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class MSDOS : IFileSerializer<Models.MSDOS.Executable>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.MSDOS.Executable? obj, string? path)
+        {
+            var serializer = new MSDOS();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.MSDOS.Executable? obj, string? path)
+        public bool SerializeImpl(Models.MSDOS.Executable? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

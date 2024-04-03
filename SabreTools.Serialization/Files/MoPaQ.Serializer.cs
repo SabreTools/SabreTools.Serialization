@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class MoPaQ : IFileSerializer<Models.MoPaQ.Archive>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.MoPaQ.Archive? obj, string? path)
+        {
+            var serializer = new MoPaQ();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.MoPaQ.Archive? obj, string? path)
+        public bool SerializeImpl(Models.MoPaQ.Archive? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

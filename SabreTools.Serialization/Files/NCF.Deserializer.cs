@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.NCF.File? Deserialize(string? path)
         {
-            var obj = new NCF();
-            return obj.DeserializeImpl(path);
+            var deserializer = new NCF();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

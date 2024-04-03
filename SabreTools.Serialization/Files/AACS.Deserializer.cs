@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.AACS.MediaKeyBlock? Deserialize(string? path)
         {
-            var obj = new AACS();
-            return obj.DeserializeImpl(path);
+            var deserializer = new AACS();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

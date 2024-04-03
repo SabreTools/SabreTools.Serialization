@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Listxml.M1? Deserialize(string? path)
         {
-            var obj = new M1();
-            return obj.DeserializeImpl(path);
+            var deserializer = new M1();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.ArchiveDotOrg.Files? Deserialize(string? path)
         {
-            var obj = new ArchiveDotOrg();
-            return obj.DeserializeImpl(path);
+            var deserializer = new ArchiveDotOrg();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

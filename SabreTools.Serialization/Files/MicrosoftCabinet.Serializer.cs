@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class MicrosoftCabinet : IFileSerializer<Models.MicrosoftCabinet.Cabinet>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.MicrosoftCabinet.Cabinet? obj, string? path)
+        {
+            var serializer = new MicrosoftCabinet();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.MicrosoftCabinet.Cabinet? obj, string? path)
+        public bool SerializeImpl(Models.MicrosoftCabinet.Cabinet? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

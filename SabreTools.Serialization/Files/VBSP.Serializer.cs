@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class VBSP : IFileSerializer<Models.VBSP.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.VBSP.File? obj, string? path)
+        {
+            var serializer = new VBSP();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.VBSP.File? obj, string? path)
+        public bool SerializeImpl(Models.VBSP.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

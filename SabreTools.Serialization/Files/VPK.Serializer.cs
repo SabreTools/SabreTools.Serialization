@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class VPK : IFileSerializer<Models.VPK.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.VPK.File? obj, string? path)
+        {
+            var serializer = new VPK();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.VPK.File? obj, string? path)
+        public bool SerializeImpl(Models.VPK.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

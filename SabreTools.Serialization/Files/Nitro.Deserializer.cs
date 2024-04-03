@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Nitro.Cart? Deserialize(string? path)
         {
-            var obj = new Nitro();
-            return obj.DeserializeImpl(path);
+            var deserializer = new Nitro();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

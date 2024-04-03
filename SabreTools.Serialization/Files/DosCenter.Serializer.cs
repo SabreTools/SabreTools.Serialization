@@ -1,12 +1,18 @@
-using SabreTools.Models.DosCenter;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class DosCenter : IFileSerializer<MetadataFile>
+    public partial class DosCenter : IFileSerializer<Models.DosCenter.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.DosCenter.MetadataFile? obj, string? path)
+        {
+            var serializer = new DosCenter();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public bool SerializeImpl(Models.DosCenter.MetadataFile? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

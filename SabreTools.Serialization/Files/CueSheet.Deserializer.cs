@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.CueSheets.CueSheet? Deserialize(string? path)
         {
-            var obj = new CueSheet();
-            return obj.DeserializeImpl(path);
+            var deserializer = new CueSheet();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

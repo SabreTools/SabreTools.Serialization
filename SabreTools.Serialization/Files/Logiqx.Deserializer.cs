@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Logiqx.Datafile? Deserialize(string? path)
         {
-            var obj = new Logiqx();
-            return obj.DeserializeImpl(path);
+            var deserializer = new Logiqx();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

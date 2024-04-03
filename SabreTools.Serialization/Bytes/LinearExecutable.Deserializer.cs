@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
         {
-            var obj = new LinearExecutable();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new LinearExecutable();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

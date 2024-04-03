@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.PlayJ.AudioFile? Deserialize(string? path)
         {
-            var obj = new PlayJAudio();
-            return obj.DeserializeImpl(path);
+            var deserializer = new PlayJAudio();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

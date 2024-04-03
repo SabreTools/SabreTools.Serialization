@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.MSDOS.Executable? Deserialize(byte[]? data, int offset)
         {
-            var obj = new MSDOS();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new MSDOS();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

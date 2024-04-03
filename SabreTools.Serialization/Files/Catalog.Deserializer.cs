@@ -7,12 +7,12 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Xbox.Catalog? Deserialize(string? path)
         {
-            var obj = new Catalog();
-            return obj.DeserializeImpl(path);
+            var deserializer = new Catalog();
+            return deserializer.DeserializeImpl(path);
         }
 
         // Catalog.js file is a UTF-16 LE JSON
-        public new Models.Xbox.Catalog? DeserializeImpl(string? path)
+        public override Models.Xbox.Catalog? DeserializeImpl(string? path)
             => DeserializeImpl(path, new UnicodeEncoding());
     }
 }

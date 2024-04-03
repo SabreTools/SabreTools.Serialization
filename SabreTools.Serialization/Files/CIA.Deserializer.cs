@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.N3DS.CIA? Deserialize(string? path)
         {
-            var obj = new CIA();
-            return obj.DeserializeImpl(path);
+            var deserializer = new CIA();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

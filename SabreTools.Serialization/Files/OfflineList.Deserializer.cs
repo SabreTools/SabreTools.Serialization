@@ -5,8 +5,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.OfflineList.Dat? Deserialize(string? path)
         {
-            var obj = new OfflineList();
-            return obj.DeserializeImpl(path);
+            var deserializer = new OfflineList();
+            return deserializer.DeserializeImpl(path);
         }
     }
 }

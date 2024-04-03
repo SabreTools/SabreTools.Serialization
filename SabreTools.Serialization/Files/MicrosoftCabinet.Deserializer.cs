@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.MicrosoftCabinet.Cabinet? Deserialize(string? path)
         {
-            var obj = new MicrosoftCabinet();
-            return obj.DeserializeImpl(path);
+            var deserializer = new MicrosoftCabinet();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

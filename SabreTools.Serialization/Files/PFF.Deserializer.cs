@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.PFF.Archive? Deserialize(string? path)
         {
-            var obj = new PFF();
-            return obj.DeserializeImpl(path);
+            var deserializer = new PFF();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

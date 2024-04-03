@@ -1,12 +1,18 @@
-using SabreTools.Models.EverdriveSMDB;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class EverdriveSMDB : IFileSerializer<MetadataFile>
+    public partial class EverdriveSMDB : IFileSerializer<Models.EverdriveSMDB.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.EverdriveSMDB.MetadataFile? obj, string? path)
+        {
+            var serializer = new EverdriveSMDB();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public bool SerializeImpl(Models.EverdriveSMDB.MetadataFile? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

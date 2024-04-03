@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PAK : IFileSerializer<Models.PAK.File>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.PAK.File? obj, string? path)
+        {
+            var serializer = new PAK();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.PAK.File? obj, string? path)
+        public bool SerializeImpl(Models.PAK.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

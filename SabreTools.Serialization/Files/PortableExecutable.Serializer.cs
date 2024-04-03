@@ -4,8 +4,15 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PortableExecutable : IFileSerializer<Models.PortableExecutable.Executable>
     {
+        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
+        public static bool Serialize(Models.PortableExecutable.Executable? obj, string? path)
+        {
+            var serializer = new PortableExecutable();
+            return serializer.SerializeImpl(obj, path);
+        }
+        
         /// <inheritdoc/>
-        public bool Serialize(Models.PortableExecutable.Executable? obj, string? path)
+        public bool SerializeImpl(Models.PortableExecutable.Executable? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;

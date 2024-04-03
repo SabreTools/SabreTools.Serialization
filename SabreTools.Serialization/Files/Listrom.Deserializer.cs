@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.Listrom.MetadataFile? Deserialize(string? path)
         {
-            var obj = new Listrom();
-            return obj.DeserializeImpl(path);
+            var deserializer = new Listrom();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

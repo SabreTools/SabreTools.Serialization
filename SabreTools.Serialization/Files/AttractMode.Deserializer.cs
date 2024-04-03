@@ -7,8 +7,8 @@ namespace SabreTools.Serialization.Files
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
         public static Models.AttractMode.MetadataFile? Deserialize(string? path)
         {
-            var obj = new AttractMode();
-            return obj.DeserializeImpl(path);
+            var deserializer = new AttractMode();
+            return deserializer.DeserializeImpl(path);
         }
 
         /// <inheritdoc/>

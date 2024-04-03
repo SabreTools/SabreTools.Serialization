@@ -8,8 +8,8 @@ namespace SabreTools.Serialization.Bytes
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.XZP.File? Deserialize(byte[]? data, int offset)
         {
-            var obj = new XZP();
-            return obj.DeserializeImpl(data, offset);
+            var deserializer = new XZP();
+            return deserializer.DeserializeImpl(data, offset);
         }
 
         /// <inheritdoc/>

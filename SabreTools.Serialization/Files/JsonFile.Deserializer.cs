@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Files
     public partial class JsonFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-        public T? DeserializeImpl(string? path)
+        public virtual T? DeserializeImpl(string? path)
             => DeserializeImpl(path, new UTF8Encoding(false));
 
         /// <summary>
