@@ -1,20 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    // TODO: Add multi-cabinet reading
-    public partial class InstallShieldCabinet : IByteDeserializer<Models.InstallShieldCabinet.Cabinet>
+    public partial class SGA : IByteDeserializer<Models.SGA.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.InstallShieldCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)
+        public static Models.SGA.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new InstallShieldCabinet();
+            var deserializer = new SGA();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.InstallShieldCabinet.Cabinet? Deserialize(byte[]? data, int offset)
+        public Models.SGA.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -26,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.InstallShieldCabinet.DeserializeStream(dataStream);
+            return Streams.SGA.DeserializeStream(dataStream);
         }
     }
 }

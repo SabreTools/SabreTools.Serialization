@@ -4,9 +4,9 @@ This library comprises of serializers that both read and write from files and st
 
 Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTools.Serialization).
 
-## `SabreTools.Serialization.Bytes`
-
-This namespace comprises of deserializers that take byte arrays to convert into models.
+| Interface Name | Source Type | Destination Type |
+| --- | --- | --- |
+| `IByteDeserializer` | `byte[]` | Model |
 
 ## `SabreTools.Serialization.CrossModel`
 

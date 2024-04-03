@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class N3DS : IByteDeserializer<Models.N3DS.Cart>
+    public partial class AACS : IByteDeserializer<Models.AACS.MediaKeyBlock>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.N3DS.Cart? DeserializeBytes(byte[]? data, int offset)
+        public static Models.AACS.MediaKeyBlock? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new N3DS();
+            var deserializer = new AACS();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.N3DS.Cart? Deserialize(byte[]? data, int offset)
+        public Models.AACS.MediaKeyBlock? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.N3DS.DeserializeStream(dataStream);
+            return Streams.AACS.DeserializeStream(dataStream);
         }
     }
 }

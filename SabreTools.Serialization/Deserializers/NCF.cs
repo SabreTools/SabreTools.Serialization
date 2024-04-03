@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class BFPK : IByteDeserializer<Models.BFPK.Archive>
+    public partial class NCF : IByteDeserializer<Models.NCF.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.BFPK.Archive? DeserializeBytes(byte[]? data, int offset)
+        public static Models.NCF.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new BFPK();
+            var deserializer = new NCF();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.BFPK.Archive? Deserialize(byte[]? data, int offset)
+        public Models.NCF.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.BFPK.DeserializeStream(dataStream);
+            return Streams.NCF.DeserializeStream(dataStream);
         }
     }
 }

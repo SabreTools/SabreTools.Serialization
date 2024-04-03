@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class PlayJAudio : IByteDeserializer<Models.PlayJ.AudioFile>
+    public partial class VBSP : IByteDeserializer<Models.VBSP.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.PlayJ.AudioFile? DeserializeBytes(byte[]? data, int offset)
+        public static Models.VBSP.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new PlayJAudio();
+            var deserializer = new VBSP();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.PlayJ.AudioFile? Deserialize(byte[]? data, int offset)
+        public Models.VBSP.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.PlayJAudio.DeserializeStream(dataStream);
+            return Streams.VBSP.DeserializeStream(dataStream);
         }
     }
 }

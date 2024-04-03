@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class WAD : IByteDeserializer<Models.WAD.File>
+    public partial class MSDOS : IByteDeserializer<Models.MSDOS.Executable>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.WAD.File? DeserializeBytes(byte[]? data, int offset)
+        public static Models.MSDOS.Executable? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new WAD();
+            var deserializer = new MSDOS();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.WAD.File? Deserialize(byte[]? data, int offset)
+        public Models.MSDOS.Executable? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.WAD.DeserializeStream(dataStream);
+            return Streams.MSDOS.DeserializeStream(dataStream);
         }
     }
 }

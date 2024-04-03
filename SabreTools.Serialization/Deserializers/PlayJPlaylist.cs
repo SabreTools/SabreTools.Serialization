@@ -1,7 +1,7 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
     public partial class PlayJPlaylist : IByteDeserializer<Models.PlayJ.Playlist>
     {

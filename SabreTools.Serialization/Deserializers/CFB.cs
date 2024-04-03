@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class CIA : IByteDeserializer<Models.N3DS.CIA>
+    public partial class CFB : IByteDeserializer<Models.CFB.Binary>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.N3DS.CIA? DeserializeBytes(byte[]? data, int offset)
+        public static Models.CFB.Binary? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new CIA();
+            var deserializer = new CFB();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
+        public Models.CFB.Binary? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.CIA.DeserializeStream(dataStream);
+            return Streams.CFB.DeserializeStream(dataStream);
         }
     }
 }

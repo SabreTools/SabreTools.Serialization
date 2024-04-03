@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class PAK : IByteDeserializer<Models.PAK.File>
+    public partial class IRD : IByteDeserializer<Models.IRD.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.PAK.File? DeserializeBytes(byte[]? data, int offset)
+        public static Models.IRD.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new PAK();
+            var deserializer = new IRD();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.PAK.File? Deserialize(byte[]? data, int offset)
+        public Models.IRD.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.PAK.DeserializeStream(dataStream);
+            return Streams.IRD.DeserializeStream(dataStream);
         }
     }
 }

@@ -1,19 +1,20 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class LinearExecutable : IByteDeserializer<Models.LinearExecutable.Executable>
+    // TODO: Add multi-cabinet reading
+    public partial class InstallShieldCabinet : IByteDeserializer<Models.InstallShieldCabinet.Cabinet>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.LinearExecutable.Executable? DeserializeBytes(byte[]? data, int offset)
+        public static Models.InstallShieldCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new LinearExecutable();
+            var deserializer = new InstallShieldCabinet();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
+        public Models.InstallShieldCabinet.Cabinet? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +26,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.LinearExecutable.DeserializeStream(dataStream);
+            return Streams.InstallShieldCabinet.DeserializeStream(dataStream);
         }
     }
 }

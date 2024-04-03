@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class BSP : IByteDeserializer<Models.BSP.File>
+    public partial class Quantum : IByteDeserializer<Models.Quantum.Archive>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.BSP.File? DeserializeBytes(byte[]? data, int offset)
+        public static Models.Quantum.Archive? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new BSP();
+            var deserializer = new Quantum();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.BSP.File? Deserialize(byte[]? data, int offset)
+        public Models.Quantum.Archive? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.BSP.DeserializeStream(dataStream);
+            return Streams.Quantum.DeserializeStream(dataStream);
         }
     }
 }

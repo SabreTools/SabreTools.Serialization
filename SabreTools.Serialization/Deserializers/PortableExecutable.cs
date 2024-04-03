@@ -1,20 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    // TODO: Add multi-cabinet reading
-    public partial class MicrosoftCabinet : IByteDeserializer<Models.MicrosoftCabinet.Cabinet>
+    public partial class PortableExecutable : IByteDeserializer<Models.PortableExecutable.Executable>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.MicrosoftCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)
+        public static Models.PortableExecutable.Executable? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new MicrosoftCabinet();
+            var deserializer = new PortableExecutable();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.MicrosoftCabinet.Cabinet? Deserialize(byte[]? data, int offset)
+        public Models.PortableExecutable.Executable? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -26,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.MicrosoftCabinet.DeserializeStream(dataStream);
+            return Streams.PortableExecutable.DeserializeStream(dataStream);
         }
     }
 }

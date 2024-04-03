@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class BDPlus : IByteDeserializer<Models.BDPlus.SVM>
+    public partial class PAK : IByteDeserializer<Models.PAK.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.BDPlus.SVM? DeserializeBytes(byte[]? data, int offset)
+        public static Models.PAK.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new BDPlus();
+            var deserializer = new PAK();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.BDPlus.SVM? Deserialize(byte[]? data, int offset)
+        public Models.PAK.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.BDPlus.DeserializeStream(dataStream);
+            return Streams.PAK.DeserializeStream(dataStream);
         }
     }
 }

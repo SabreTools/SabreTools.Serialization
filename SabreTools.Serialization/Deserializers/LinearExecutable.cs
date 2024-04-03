@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class MoPaQ : IByteDeserializer<Models.MoPaQ.Archive>
+    public partial class LinearExecutable : IByteDeserializer<Models.LinearExecutable.Executable>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.MoPaQ.Archive? DeserializeBytes(byte[]? data, int offset)
+        public static Models.LinearExecutable.Executable? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new MoPaQ();
+            var deserializer = new LinearExecutable();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.MoPaQ.Archive? Deserialize(byte[]? data, int offset)
+        public Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.MoPaQ.DeserializeStream(dataStream);
+            return Streams.LinearExecutable.DeserializeStream(dataStream);
         }
     }
 }

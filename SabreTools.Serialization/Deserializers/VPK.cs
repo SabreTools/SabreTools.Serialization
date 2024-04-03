@@ -1,19 +1,19 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Bytes
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class Nitro : IByteDeserializer<Models.Nitro.Cart>
+    public partial class VPK : IByteDeserializer<Models.VPK.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
-        public static Models.Nitro.Cart? DeserializeBytes(byte[]? data, int offset)
+        public static Models.VPK.File? DeserializeBytes(byte[]? data, int offset)
         {
-            var deserializer = new Nitro();
+            var deserializer = new VPK();
             return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.Nitro.Cart? Deserialize(byte[]? data, int offset)
+        public Models.VPK.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.Nitro.DeserializeStream(dataStream);
+            return Streams.VPK.DeserializeStream(dataStream);
         }
     }
 }
