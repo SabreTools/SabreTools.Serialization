@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class Nitro : IByteDeserializer<Models.Nitro.Cart>
+    public class Nitro :
+        IByteDeserializer<Models.Nitro.Cart>,
+        IFileDeserializer<Models.Nitro.Cart>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.Nitro.Cart? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new Nitro();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.Nitro.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.Nitro.Cart? DeserializeFile(string? path)
+        {
+            var deserializer = new Nitro();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.Nitro.Cart? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.Nitro.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

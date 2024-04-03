@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class BSP : IByteDeserializer<Models.BSP.File>
+    public class BSP :
+        IByteDeserializer<Models.BSP.File>,
+        IFileDeserializer<Models.BSP.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.BSP.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new BSP();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.BSP.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.BSP.File? DeserializeFile(string? path)
+        {
+            var deserializer = new BSP();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.BSP.File? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.BSP.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

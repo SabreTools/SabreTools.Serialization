@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to Streams
+    /// Defines how to serialize from Streams
     /// </summary>
-    public interface IStreamSerializer<T>
+    public interface IStreamDeserializer<T>
     {
         /// <summary>
         /// Deserialize a Stream into <typeparamref name="T"/>
@@ -12,13 +12,5 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object on success, null on error</returns>
         T? Deserialize(System.IO.Stream? data);
-
-        /// <summary>
-        /// Serialize a <typeparamref name="T"/> into a Stream
-        /// </summary>
-        /// <typeparam name="T">Type of object to serialize from</typeparam>
-        /// <param name="obj">Data to serialize</param>
-        /// <returns>Filled object on success, null on error</returns>
-        System.IO.Stream? Serialize(T? obj);
     }
 }

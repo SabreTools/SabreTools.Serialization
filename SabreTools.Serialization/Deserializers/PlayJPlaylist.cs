@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class PlayJPlaylist : IByteDeserializer<Models.PlayJ.Playlist>
+    public class PlayJPlaylist :
+        IByteDeserializer<Models.PlayJ.Playlist>,
+        IFileDeserializer<Models.PlayJ.Playlist>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.PlayJ.Playlist? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new PlayJPlaylist();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.PlayJPlaylist.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.PlayJ.Playlist? DeserializeFile(string? path)
+        {
+            var deserializer = new PlayJPlaylist();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.PlayJ.Playlist? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.PlayJPlaylist.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

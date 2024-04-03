@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class WAD : IByteDeserializer<Models.WAD.File>
+    public class WAD :
+        IByteDeserializer<Models.WAD.File>,
+        IFileDeserializer<Models.WAD.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.WAD.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new WAD();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.WAD.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.WAD.File? DeserializeFile(string? path)
+        {
+            var deserializer = new WAD();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.WAD.File? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.WAD.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class XZP : IByteDeserializer<Models.XZP.File>
+    public class XZP :
+        IByteDeserializer<Models.XZP.File>,
+        IFileDeserializer<Models.XZP.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.XZP.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new XZP();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.XZP.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.XZP.File? DeserializeFile(string? path)
+        {
+            var deserializer = new XZP();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.XZP.File? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.XZP.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

@@ -4,9 +4,13 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     // TODO: Add multi-cabinet reading
-    public partial class InstallShieldCabinet : IByteDeserializer<Models.InstallShieldCabinet.Cabinet>
+    public class InstallShieldCabinet :
+        IByteDeserializer<Models.InstallShieldCabinet.Cabinet>,
+        IFileDeserializer<Models.InstallShieldCabinet.Cabinet>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.InstallShieldCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new InstallShieldCabinet();
@@ -28,5 +32,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.InstallShieldCabinet.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.InstallShieldCabinet.Cabinet? DeserializeFile(string? path)
+        {
+            var deserializer = new InstallShieldCabinet();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.InstallShieldCabinet.Cabinet? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.InstallShieldCabinet.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

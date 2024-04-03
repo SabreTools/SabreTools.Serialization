@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class BDPlus : IByteDeserializer<Models.BDPlus.SVM>
+    public class BDPlus :
+        IByteDeserializer<Models.BDPlus.SVM>,
+        IFileDeserializer<Models.BDPlus.SVM>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.BDPlus.SVM? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new BDPlus();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.BDPlus.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.BDPlus.SVM? DeserializeFile(string? path)
+        {
+            var deserializer = new BDPlus();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.BDPlus.SVM? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.BDPlus.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

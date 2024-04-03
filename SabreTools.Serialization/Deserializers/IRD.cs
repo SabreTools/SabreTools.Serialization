@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class IRD : IByteDeserializer<Models.IRD.File>
+    public class IRD :
+        IByteDeserializer<Models.IRD.File>,
+        IFileDeserializer<Models.IRD.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.IRD.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new IRD();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.IRD.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.IRD.File? DeserializeFile(string? path)
+        {
+            var deserializer = new IRD();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.IRD.File? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.IRD.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

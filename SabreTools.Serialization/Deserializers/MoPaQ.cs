@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class MoPaQ : IByteDeserializer<Models.MoPaQ.Archive>
+    public class MoPaQ :
+        IByteDeserializer<Models.MoPaQ.Archive>,
+        IFileDeserializer<Models.MoPaQ.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.MoPaQ.Archive? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new MoPaQ();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.MoPaQ.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.MoPaQ.Archive? DeserializeFile(string? path)
+        {
+            var deserializer = new MoPaQ();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.MoPaQ.Archive? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.MoPaQ.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

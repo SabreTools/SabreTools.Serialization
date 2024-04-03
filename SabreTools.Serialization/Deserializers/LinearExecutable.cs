@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class LinearExecutable : IByteDeserializer<Models.LinearExecutable.Executable>
+    public class LinearExecutable :
+        IByteDeserializer<Models.LinearExecutable.Executable>,
+        IFileDeserializer<Models.LinearExecutable.Executable>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.LinearExecutable.Executable? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new LinearExecutable();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.LinearExecutable.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.LinearExecutable.Executable? DeserializeFile(string? path)
+        {
+            var deserializer = new LinearExecutable();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.LinearExecutable.Executable? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.LinearExecutable.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class CFB : IByteDeserializer<Models.CFB.Binary>
+    public class CFB :
+        IByteDeserializer<Models.CFB.Binary>,
+        IFileDeserializer<Models.CFB.Binary>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.CFB.Binary? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new CFB();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.CFB.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.CFB.Binary? DeserializeFile(string? path)
+        {
+            var deserializer = new CFB();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.CFB.Binary? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.CFB.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

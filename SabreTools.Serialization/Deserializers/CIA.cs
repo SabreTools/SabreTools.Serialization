@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class CIA : IByteDeserializer<Models.N3DS.CIA>
+    public class CIA :
+        IByteDeserializer<Models.N3DS.CIA>,
+        IFileDeserializer<Models.N3DS.CIA>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.N3DS.CIA? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new CIA();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.CIA.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.N3DS.CIA? DeserializeFile(string? path)
+        {
+            var deserializer = new CIA();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.N3DS.CIA? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.CIA.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }

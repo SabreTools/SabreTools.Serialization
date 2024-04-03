@@ -3,9 +3,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class VPK : IByteDeserializer<Models.VPK.File>
+    public class VPK :
+        IByteDeserializer<Models.VPK.File>,
+        IFileDeserializer<Models.VPK.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
         public static Models.VPK.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new VPK();
@@ -27,5 +31,25 @@ namespace SabreTools.Serialization.Deserializers
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Streams.VPK.DeserializeStream(dataStream);
         }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        public static Models.VPK.File? DeserializeFile(string? path)
+        {
+            var deserializer = new VPK();
+            return deserializer.Deserialize(path);
+        }
+
+        /// <inheritdoc/>
+        public Models.VPK.File? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return Streams.VPK.DeserializeStream(stream);
+        }
+
+        #endregion
     }
 }
