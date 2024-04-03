@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class CIA : IByteSerializer<Models.N3DS.CIA>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new CIA();

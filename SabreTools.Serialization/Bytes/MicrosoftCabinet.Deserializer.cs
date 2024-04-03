@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Bytes
     // TODO: Add multi-cabinet reading
     public partial class MicrosoftCabinet : IByteSerializer<Models.MicrosoftCabinet.Cabinet>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.MicrosoftCabinet.Cabinet? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new MicrosoftCabinet();

@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class N3DS : IByteSerializer<Models.N3DS.Cart>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.N3DS.Cart? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new N3DS();

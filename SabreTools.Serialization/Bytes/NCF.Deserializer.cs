@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class NCF : IByteSerializer<Models.NCF.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.NCF.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new NCF();

@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class BFPK : IByteSerializer<Models.BFPK.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.BFPK.Archive? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new BFPK();

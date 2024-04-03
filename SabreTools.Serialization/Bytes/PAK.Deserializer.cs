@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class PAK : IByteSerializer<Models.PAK.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.PAK.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new PAK();

@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class CFB : IByteSerializer<Models.CFB.Binary>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.CFB.Binary? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new CFB();

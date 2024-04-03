@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class XZP : IByteSerializer<Models.XZP.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.XZP.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new XZP();

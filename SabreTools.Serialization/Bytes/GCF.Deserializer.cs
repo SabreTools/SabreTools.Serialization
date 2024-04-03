@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class GCF : IByteSerializer<Models.GCF.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.GCF.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new GCF();

@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class VBSP : IByteSerializer<Models.VBSP.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.VBSP.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new VBSP();

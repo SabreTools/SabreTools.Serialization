@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class Quantum : IByteSerializer<Models.Quantum.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.Quantum.Archive? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new Quantum();

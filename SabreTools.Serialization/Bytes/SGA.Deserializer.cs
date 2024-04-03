@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class SGA : IByteSerializer<Models.SGA.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.SGA.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new SGA();

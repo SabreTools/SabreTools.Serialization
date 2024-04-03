@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class MoPaQ : IByteSerializer<Models.MoPaQ.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.MoPaQ.Archive? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new MoPaQ();

@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class BDPlus : IByteSerializer<Models.BDPlus.SVM>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.BDPlus.SVM? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new BDPlus();

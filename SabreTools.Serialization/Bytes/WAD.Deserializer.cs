@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class WAD : IByteSerializer<Models.WAD.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.WAD.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new WAD();

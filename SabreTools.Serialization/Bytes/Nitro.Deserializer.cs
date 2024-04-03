@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class Nitro : IByteSerializer<Models.Nitro.Cart>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.Nitro.Cart? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new Nitro();

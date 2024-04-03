@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class VPK : IByteSerializer<Models.VPK.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.VPK.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new VPK();

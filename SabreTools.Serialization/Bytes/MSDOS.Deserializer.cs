@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class MSDOS : IByteSerializer<Models.MSDOS.Executable>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.MSDOS.Executable? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new MSDOS();

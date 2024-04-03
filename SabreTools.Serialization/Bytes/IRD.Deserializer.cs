@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class IRD : IByteSerializer<Models.IRD.File>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.IRD.File? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new IRD();

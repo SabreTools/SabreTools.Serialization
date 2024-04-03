@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class NewExecutable : IByteSerializer<Models.NewExecutable.Executable>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.NewExecutable.Executable? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new NewExecutable();

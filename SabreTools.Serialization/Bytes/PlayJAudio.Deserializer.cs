@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class PlayJAudio : IByteSerializer<Models.PlayJ.AudioFile>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.PlayJ.AudioFile? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new PlayJAudio();

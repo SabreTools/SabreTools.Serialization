@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class PFF : IByteSerializer<Models.PFF.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.PFF.Archive? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new PFF();

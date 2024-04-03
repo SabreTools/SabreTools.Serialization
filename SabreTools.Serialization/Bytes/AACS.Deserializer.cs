@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class AACS : IByteSerializer<Models.AACS.MediaKeyBlock>
     {
-        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
         public static Models.AACS.MediaKeyBlock? Deserialize(byte[]? data, int offset)
         {
             var deserializer = new AACS();
