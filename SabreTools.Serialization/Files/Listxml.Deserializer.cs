@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Files
 {
     public partial class Listxml : XmlFile<Models.Listxml.Mame>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
+        public static Models.Listxml.Mame? Deserialize(string? path)
+        {
+            var obj = new Listxml();
+            return obj.DeserializeImpl(path);
+        }
     }
 }

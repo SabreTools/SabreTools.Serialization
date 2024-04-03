@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Files
 {
     public partial class OfflineList : XmlFile<Models.OfflineList.Dat>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
+        public static Models.OfflineList.Dat? Deserialize(string? path)
+        {
+            var obj = new OfflineList();
+            return obj.DeserializeImpl(path);
+        }
     }
 }

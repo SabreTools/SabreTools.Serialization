@@ -1,12 +1,18 @@
-using SabreTools.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class RomCenter : IFileSerializer<MetadataFile>
+    public partial class RomCenter : IFileSerializer<Models.RomCenter.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
+        public static Models.RomCenter.MetadataFile? Deserialize(string? path)
+        {
+            var obj = new RomCenter();
+            return obj.DeserializeImpl(path);
+        }
+
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
+        public Models.RomCenter.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
             return new Streams.RomCenter().Deserialize(stream);

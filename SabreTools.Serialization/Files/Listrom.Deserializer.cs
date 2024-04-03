@@ -1,12 +1,18 @@
-using SabreTools.Models.Listrom;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Files
 {
-    public partial class Listrom : IFileSerializer<MetadataFile>
+    public partial class Listrom : IFileSerializer<Models.Listrom.MetadataFile>
     {
+        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
+        public static Models.Listrom.MetadataFile? Deserialize(string? path)
+        {
+            var obj = new Listrom();
+            return obj.DeserializeImpl(path);
+        }
+
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
+        public Models.Listrom.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
             return new Streams.Listrom().Deserialize(stream);

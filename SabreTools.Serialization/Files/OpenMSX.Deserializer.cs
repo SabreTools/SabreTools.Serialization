@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Files
 {
     public partial class OpenMSX : XmlFile<Models.OpenMSX.SoftwareDb>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
+        public static Models.OpenMSX.SoftwareDb? Deserialize(string? path)
+        {
+            var obj = new OpenMSX();
+            return obj.DeserializeImpl(path);
+        }
     }
 }
