@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Listxml : XmlFile<Models.Listxml.Mame>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="Interfaces.IStreamSerializer.SerializeImpl(T?)"/>
+        public static System.IO.Stream? Serialize(Models.Listxml.Mame? obj)
+        {
+            var serializer = new Listxml();
+            return serializer.SerializeImpl(obj);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.GCF().Serialize(obj);
+            using var stream = new Streams.GCF().SerializeImpl(obj);
             if (stream == null)
                 return false;
 

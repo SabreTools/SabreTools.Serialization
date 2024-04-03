@@ -5,8 +5,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Logiqx : XmlFile<Datafile>
     {
-        /// <inheritdoc cref="Serialize(Datafile, string?, string?, string?, string?)" />
-        public Stream? SerializeToStreamWithDocType(Datafile obj, string path)
-            => Serialize(obj, Serialization.Logiqx.DocTypeName, Serialization.Logiqx.DocTypePubId, Serialization.Logiqx.DocTypeSysId, Serialization.Logiqx.DocTypeSysId);
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(Datafile? obj)
+        {
+            var serializer = new Logiqx();
+            return serializer.SerializeImpl(obj);
+        }
+        
+        /// <inheritdoc cref="XmlFile.SerializeImpl(T?, string?, string?, string?, string?)" />
+        public override Stream? SerializeImpl(Datafile? obj)
+            => SerializeImpl(obj, Serialization.Logiqx.DocTypeName, Serialization.Logiqx.DocTypePubId, Serialization.Logiqx.DocTypeSysId, Serialization.Logiqx.DocTypeSysId);
     }
 }

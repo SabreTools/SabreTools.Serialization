@@ -10,11 +10,26 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Hashfile : IStreamSerializer<Models.Hashfile.Hashfile>
     {
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(Models.Hashfile.Hashfile? obj)
+        {
+            var serializer = new Hashfile();
+            return serializer.SerializeImpl(obj);
+        }
+
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(Models.Hashfile.Hashfile? obj, Hash hash)
+        {
+            var serializer = new Hashfile();
+            return serializer.SerializeImpl(obj, hash);
+        }
+        
         /// <inheritdoc/>
-        public Stream? Serialize(Models.Hashfile.Hashfile? obj) => Serialize(obj, Hash.CRC);
+        public Stream? SerializeImpl(Models.Hashfile.Hashfile? obj)
+            => SerializeImpl(obj, Hash.CRC);
 
         /// <inheritdoc/>
-        public Stream? Serialize(Models.Hashfile.Hashfile? obj, Hash hash)
+        public Stream? SerializeImpl(Models.Hashfile.Hashfile? obj, Hash hash)
         {
             // If the metadata file is null
             if (obj == null)

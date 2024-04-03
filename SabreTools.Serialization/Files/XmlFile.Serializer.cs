@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset);
+            using var stream = new Streams.XmlFile<T>().SerializeImpl(obj, name, pubid, sysid, subset);
             if (stream == null)
                 return false;
 

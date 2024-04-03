@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,11 +9,26 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class ClrMamePro : IStreamSerializer<MetadataFile>
     {
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MetadataFile? obj)
+        {
+            var serializer = new ClrMamePro();
+            return serializer.SerializeImpl(obj);
+        }
+        
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MetadataFile? obj, bool quotes)
+        {
+            var serializer = new ClrMamePro();
+            return serializer.SerializeImpl(obj, quotes);
+        }
+        
         /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj) => Serialize(obj, true);
+        public Stream? SerializeImpl(MetadataFile? obj)
+            => SerializeImpl(obj, true);
 
-        /// <inheritdoc cref="Serialize(MetadataFile)"/>
-        public Stream? Serialize(MetadataFile? obj, bool quotes)
+        /// <inheritdoc cref="SerializeImpl(MetadataFile)"/>
+        public Stream? SerializeImpl(MetadataFile? obj, bool quotes)
         {
             // If the metadata file is null
             if (obj == null)

@@ -7,7 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class AACS : IStreamSerializer<MediaKeyBlock>
     {
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MediaKeyBlock? obj)
+        {
+            var serializer = new AACS();
+            return serializer.SerializeImpl(obj);
+        }
+        
         /// <inheritdoc/>
-        public Stream? Serialize(MediaKeyBlock? obj) => throw new NotImplementedException();
+        public Stream? SerializeImpl(MediaKeyBlock? obj) => throw new NotImplementedException();
     }
 }

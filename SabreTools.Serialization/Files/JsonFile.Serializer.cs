@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.JsonFile<T>().Serialize(obj, encoding);
+            using var stream = new Streams.JsonFile<T>().SerializeImpl(obj, encoding);
             if (stream == null)
                 return false;
 

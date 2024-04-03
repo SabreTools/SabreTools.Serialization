@@ -17,8 +17,8 @@ namespace SabreTools.Serialization.Streams
         /// </summary>
         /// <param name="obj">Data to serialize</param>
         /// <returns>Stream containing serialized data on success, null otherwise</returns>
-        public Stream? Serialize(T? obj)
-            => Serialize(obj, null, null, null, null);
+        public virtual Stream? SerializeImpl(T? obj)
+            => SerializeImpl(obj, null, null, null, null);
 
         /// <summary>
         /// Serializes the defined type to a stream
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sysid">Optional DOCTYPE sysid</param>
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>Stream containing serialized data on success, null otherwise</returns>
-        public Stream? Serialize(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        protected Stream? SerializeImpl(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             // If the object is null
             if (obj == null)

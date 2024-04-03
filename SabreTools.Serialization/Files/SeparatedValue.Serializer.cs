@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.SeparatedValue().Serialize(obj, delim);
+            using var stream = new Streams.SeparatedValue().SerializeImpl(obj, delim);
             if (stream == null)
                 return false;
 

@@ -8,8 +8,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class IRD : IStreamSerializer<Models.IRD.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(Models.IRD.File? obj)
+        {
+            var serializer = new IRD();
+            return serializer.SerializeImpl(obj);
+        }
+        
         /// <inheritdoc/>
-        public Stream? Serialize(Models.IRD.File? obj)
+        public Stream? SerializeImpl(Models.IRD.File? obj)
         {
             // If the data is invalid
             if (obj?.Magic == null)

@@ -9,11 +9,26 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class SeparatedValue : IStreamSerializer<MetadataFile>
     {
-        /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj) => Serialize(obj, ',');
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MetadataFile? obj)
+        {
+            var serializer = new SeparatedValue();
+            return serializer.SerializeImpl(obj);
+        }
 
-        /// <inheritdoc cref="Serialize(MetadataFile)"/>
-        public Stream? Serialize(MetadataFile? obj, char delim)
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MetadataFile? obj, char delim)
+        {
+            var serializer = new SeparatedValue();
+            return serializer.SerializeImpl(obj, delim);
+        }
+        
+        /// <inheritdoc/>
+        public Stream? SerializeImpl(MetadataFile? obj)
+            => SerializeImpl(obj, ',');
+
+        /// <inheritdoc cref="SerializeImpl(MetadataFile)"/>
+        public Stream? SerializeImpl(MetadataFile? obj, char delim)
         {
             // If the metadata file is null
             if (obj == null)

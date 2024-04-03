@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class AttractMode : IStreamSerializer<MetadataFile>
     {
+        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
+        public static Stream? Serialize(MetadataFile? obj)
+        {
+            var serializer = new AttractMode();
+            return serializer.SerializeImpl(obj);
+        }
+        
         /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj)
+        public Stream? SerializeImpl(MetadataFile? obj)
         {
             // If the metadata file is null
             if (obj == null)
