@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Files
         public T? DeserializeImpl(string? path)
         {
             using var data = PathProcessor.OpenStream(path);
-            return new Streams.XmlFile<T>().Deserialize(data);
+            return new Streams.XmlFile<T>().DeserializeImpl(data);
         }
     }
 }

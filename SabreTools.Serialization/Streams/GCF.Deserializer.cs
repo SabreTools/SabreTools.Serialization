@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class GCF : IStreamSerializer<Models.GCF.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.GCF.File? Deserialize(Stream? data)
+        {
+            var deserializer = new GCF();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.GCF.File? Deserialize(Stream? data)
+        public Models.GCF.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.PFF.Archive? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.PFF().Deserialize(stream);
+            return new Streams.PFF().DeserializeImpl(stream);
         }
     }
 }

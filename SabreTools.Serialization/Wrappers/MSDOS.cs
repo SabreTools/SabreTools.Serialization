@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var executable = new Streams.MSDOS().Deserialize(data);
+            var executable = new Streams.MSDOS().DeserializeImpl(data);
             if (executable == null)
                 return null;
 

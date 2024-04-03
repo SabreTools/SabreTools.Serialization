@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class DosCenter : IStreamSerializer<MetadataFile>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static MetadataFile? Deserialize(Stream? data)
+        {
+            var deserializer = new DosCenter();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public MetadataFile? DeserializeImpl(Stream? data)
         {
             // If the stream is null
             if (data == null)

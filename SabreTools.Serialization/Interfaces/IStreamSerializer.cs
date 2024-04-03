@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
@@ -13,7 +11,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to deserialize to</typeparam>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object on success, null on error</returns>
-        T? Deserialize(Stream? data);
+        T? DeserializeImpl(System.IO.Stream? data);
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a Stream
@@ -21,6 +19,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
         /// <returns>Filled object on success, null on error</returns>
-        Stream? Serialize(T? obj);
+        System.IO.Stream? Serialize(T? obj);
     }
 }

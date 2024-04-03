@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class OpenMSX : XmlFile<Models.OpenMSX.SoftwareDb>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="Interfaces.IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.OpenMSX.SoftwareDb? Deserialize(System.IO.Stream? data)
+        {
+            var deserializer = new OpenMSX();
+            return deserializer.DeserializeImpl(data);
+        }
     }
 }

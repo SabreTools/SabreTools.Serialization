@@ -10,8 +10,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class SGA : IStreamSerializer<Models.SGA.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.SGA.File? Deserialize(Stream? data)
+        {
+            var deserializer = new SGA();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(Stream? data)
+        public Models.SGA.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

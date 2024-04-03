@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class BFPK : IStreamSerializer<Archive>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Archive? Deserialize(Stream? data)
+        {
+            var deserializer = new BFPK();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Archive? Deserialize(Stream? data)
+        public Archive? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

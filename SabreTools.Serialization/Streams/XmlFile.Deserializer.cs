@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Streams
     public partial class XmlFile<T> : IStreamSerializer<T>
     {
         /// <inheritdoc/>
-        public T? Deserialize(Stream? data)
+        public T? DeserializeImpl(Stream? data)
         {
             // If the stream is null
             if (data == null)

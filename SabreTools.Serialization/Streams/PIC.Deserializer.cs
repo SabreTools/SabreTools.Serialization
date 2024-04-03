@@ -10,8 +10,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PIC : IStreamSerializer<DiscInformation>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static DiscInformation? Deserialize(Stream? data)
+        {
+            var deserializer = new PIC();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public DiscInformation? Deserialize(Stream? data)
+        public DiscInformation? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

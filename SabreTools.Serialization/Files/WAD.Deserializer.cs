@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.WAD.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.WAD().Deserialize(stream);
+            return new Streams.WAD().DeserializeImpl(stream);
         }
     }
 }

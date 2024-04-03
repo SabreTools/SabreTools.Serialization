@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.CueSheets.CueSheet? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.CueSheet().Deserialize(stream);
+            return new Streams.CueSheet().DeserializeImpl(stream);
         }
     }
 }

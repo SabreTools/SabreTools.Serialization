@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.EverdriveSMDB.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.EverdriveSMDB().Deserialize(stream);
+            return new Streams.EverdriveSMDB().DeserializeImpl(stream);
         }
     }
 }

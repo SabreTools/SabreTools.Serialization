@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class VBSP : IStreamSerializer<Models.VBSP.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.VBSP.File? Deserialize(Stream? data)
+        {
+            var deserializer = new VBSP();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.VBSP.File? Deserialize(Stream? data)
+        public Models.VBSP.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

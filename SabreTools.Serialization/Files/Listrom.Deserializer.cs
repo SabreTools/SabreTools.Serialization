@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.Listrom.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.Listrom().Deserialize(stream);
+            return new Streams.Listrom().DeserializeImpl(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.BDPlus.SVM? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.BDPlus().Deserialize(stream);
+            return new Streams.BDPlus().DeserializeImpl(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.Quantum.Archive? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.Quantum().Deserialize(stream);
+            return new Streams.Quantum().DeserializeImpl(stream);
         }
     }
 }

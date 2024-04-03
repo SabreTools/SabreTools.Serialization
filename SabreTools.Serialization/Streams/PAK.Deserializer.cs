@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PAK : IStreamSerializer<Models.PAK.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.PAK.File? Deserialize(Stream? data)
+        {
+            var deserializer = new PAK();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.PAK.File? Deserialize(Stream? data)
+        public Models.PAK.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.BSP.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.BSP().Deserialize(stream);
+            return new Streams.BSP().DeserializeImpl(stream);
         }
     }
 }

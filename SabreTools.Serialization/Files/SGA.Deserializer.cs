@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.SGA.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.SGA().Deserialize(stream);
+            return new Streams.SGA().DeserializeImpl(stream);
         }
     }
 }

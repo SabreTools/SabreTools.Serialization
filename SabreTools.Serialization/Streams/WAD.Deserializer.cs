@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class WAD : IStreamSerializer<Models.WAD.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.WAD.File? Deserialize(Stream? data)
+        {
+            var deserializer = new WAD();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.WAD.File? Deserialize(Stream? data)
+        public Models.WAD.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

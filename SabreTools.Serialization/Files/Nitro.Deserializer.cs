@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.Nitro.Cart? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.Nitro().Deserialize(stream);
+            return new Streams.Nitro().DeserializeImpl(stream);
         }
     }
 }

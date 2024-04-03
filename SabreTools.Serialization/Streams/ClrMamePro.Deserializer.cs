@@ -10,11 +10,26 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class ClrMamePro : IStreamSerializer<MetadataFile>
     {
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data) => Deserialize(data, true);
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static MetadataFile? Deserialize(Stream? data)
+        {
+            var deserializer = new ClrMamePro();
+            return deserializer.DeserializeImpl(data);
+        }
 
-        /// <inheritdoc cref="Deserialize(Stream)"/>
-        public MetadataFile? Deserialize(Stream? data, bool quotes)
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static MetadataFile? Deserialize(Stream? data, bool quotes)
+        {
+            var deserializer = new ClrMamePro();
+            return deserializer.DeserializeImpl(data, quotes);
+        }
+        
+        /// <inheritdoc/>
+        public MetadataFile? DeserializeImpl(Stream? data)
+            => DeserializeImpl(data, true);
+
+        /// <inheritdoc cref="DeserializeImpl(Stream)"/>
+        public MetadataFile? DeserializeImpl(Stream? data, bool quotes)
         {
             // If the stream is null
             if (data == null)

@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Files
         public T? DeserializeImpl(string? path, Encoding encoding)
         {
             using var data = PathProcessor.OpenStream(path);
-            return new Streams.JsonFile<T>().Deserialize(data, encoding);
+            return new Streams.JsonFile<T>().DeserializeImpl(data, encoding);
         }
     }
 }

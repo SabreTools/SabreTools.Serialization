@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = new Streams.XZP().Deserialize(data);
+            var file = new Streams.XZP().DeserializeImpl(data);
             if (file == null)
                 return null;
 

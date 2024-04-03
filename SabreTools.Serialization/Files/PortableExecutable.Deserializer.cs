@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.PortableExecutable.Executable? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.PortableExecutable().Deserialize(stream);
+            return new Streams.PortableExecutable().DeserializeImpl(stream);
         }
     }
 }

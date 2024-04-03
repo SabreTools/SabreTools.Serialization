@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.CFB.Binary? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.CFB().Deserialize(stream);
+            return new Streams.CFB().DeserializeImpl(stream);
         }
     }
 }

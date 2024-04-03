@@ -9,8 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class XZP : IStreamSerializer<Models.XZP.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.XZP.File? Deserialize(Stream? data)
+        {
+            var deserializer = new XZP();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.XZP.File? Deserialize(Stream? data)
+        public Models.XZP.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

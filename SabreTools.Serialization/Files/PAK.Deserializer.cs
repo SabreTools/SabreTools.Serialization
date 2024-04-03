@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.PAK.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.PAK().Deserialize(stream);
+            return new Streams.PAK().DeserializeImpl(stream);
         }
     }
 }

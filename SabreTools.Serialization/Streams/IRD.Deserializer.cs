@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO;
@@ -8,8 +7,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class IRD : IStreamSerializer<Models.IRD.File>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.IRD.File? Deserialize(Stream? data)
+        {
+            var deserializer = new IRD();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.IRD.File? Deserialize(Stream? data)
+        public Models.IRD.File? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

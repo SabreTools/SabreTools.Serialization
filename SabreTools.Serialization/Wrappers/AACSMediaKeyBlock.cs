@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var mediaKeyBlock = new Streams.AACS().Deserialize(data);
+            var mediaKeyBlock = new Streams.AACS().DeserializeImpl(data);
             if (mediaKeyBlock == null)
                 return null;
 

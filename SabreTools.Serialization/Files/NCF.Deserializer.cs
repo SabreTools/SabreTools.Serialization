@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.NCF.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.NCF().Deserialize(stream);
+            return new Streams.NCF().DeserializeImpl(stream);
         }
     }
 }

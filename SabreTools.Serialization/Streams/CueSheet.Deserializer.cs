@@ -11,8 +11,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class CueSheet : IStreamSerializer<Models.CueSheets.CueSheet>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.CueSheets.CueSheet? Deserialize(Stream? data)
+        {
+            var deserializer = new CueSheet();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public Models.CueSheets.CueSheet? Deserialize(Stream? data)
+        public Models.CueSheets.CueSheet? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

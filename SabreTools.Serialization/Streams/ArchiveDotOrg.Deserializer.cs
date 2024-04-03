@@ -2,6 +2,11 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class ArchiveDotOrg : XmlFile<Models.ArchiveDotOrg.Files>
     {
-        // All serialization logic is in the base class
+        /// <inheritdoc cref="Interfaces.IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static Models.ArchiveDotOrg.Files? Deserialize(System.IO.Stream? data)
+        {
+            var deserializer = new ArchiveDotOrg();
+            return deserializer.DeserializeImpl(data);
+        }
     }
 }

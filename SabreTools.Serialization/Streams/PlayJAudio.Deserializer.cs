@@ -9,12 +9,27 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PlayJAudio : IStreamSerializer<AudioFile>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static AudioFile? Deserialize(Stream? data)
+        {
+            var deserializer = new PlayJAudio();
+            return deserializer.DeserializeImpl(data);
+        }
+        
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static AudioFile? Deserialize(Stream? data, long adjust)
+        {
+            var deserializer = new PlayJAudio();
+            return deserializer.DeserializeImpl(data, adjust);
+        }
+        
         /// <inheritdoc/>
-        public AudioFile? Deserialize(Stream? data) => Deserialize(data, 0);
+        public AudioFile? DeserializeImpl(Stream? data)
+            => DeserializeImpl(data, 0);
 
-        /// <inheritdoc cref="Deserialize(Stream)"/>
+        /// <inheritdoc cref="DeserializeImpl(Stream)"/>
         /// <param name="adjust">Offset to adjust all seeking by</param>
-        public AudioFile? Deserialize(Stream? data, long adjust)
+        public AudioFile? DeserializeImpl(Stream? data, long adjust)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

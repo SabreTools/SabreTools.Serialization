@@ -10,8 +10,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class AACS : IStreamSerializer<MediaKeyBlock>
     {
+        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
+        public static MediaKeyBlock? Deserialize(Stream? data)
+        {
+            var deserializer = new AACS();
+            return deserializer.DeserializeImpl(data);
+        }
+        
         /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(Stream? data)
+        public MediaKeyBlock? DeserializeImpl(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

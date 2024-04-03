@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.PlayJ.Playlist? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.PlayJPlaylist().Deserialize(stream);
+            return new Streams.PlayJPlaylist().DeserializeImpl(stream);
         }
     }
 }
