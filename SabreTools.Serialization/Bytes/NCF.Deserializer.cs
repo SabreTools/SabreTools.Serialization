@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class NCF : IByteSerializer<Models.NCF.File>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.NCF.File? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.NCF.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new NCF();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.NCF.File? DeserializeImpl(byte[]? data, int offset)
+        public Models.NCF.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.NCF.Deserialize(dataStream);
+            return Streams.NCF.DeserializeStream(dataStream);
         }
     }
 }

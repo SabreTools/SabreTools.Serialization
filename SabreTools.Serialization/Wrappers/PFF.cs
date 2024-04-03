@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Streams.PFF.Deserialize(data);
+            var archive = Streams.PFF.DeserializeStream(data);
             if (archive == null)
                 return null;
 

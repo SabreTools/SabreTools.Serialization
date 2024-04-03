@@ -8,15 +8,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Listrom : IStreamSerializer<MetadataFile>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(MetadataFile? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(MetadataFile? obj)
         {
             var serializer = new Listrom();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(MetadataFile? obj)
+        public Stream? Serialize(MetadataFile? obj)
         {
             // If the metadata file is null
             if (obj == null)

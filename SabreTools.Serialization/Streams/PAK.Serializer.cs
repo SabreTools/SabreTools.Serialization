@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PAK : IStreamSerializer<Models.PAK.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.PAK.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.PAK.File? obj)
         {
             var serializer = new PAK();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.PAK.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.PAK.File? obj) => throw new NotImplementedException();
     }
 }

@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PortableExecutable : IStreamSerializer<Executable>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Executable? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Executable? obj)
         {
             var serializer = new PortableExecutable();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Executable? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Executable? obj) => throw new NotImplementedException();
     }
 }

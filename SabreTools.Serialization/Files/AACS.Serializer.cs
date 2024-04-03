@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class AACS : IFileSerializer<Models.AACS.MediaKeyBlock>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.AACS.MediaKeyBlock? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.AACS.MediaKeyBlock? obj, string? path)
         {
             var serializer = new AACS();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.AACS.MediaKeyBlock? obj, string? path)
+        public bool Serialize(Models.AACS.MediaKeyBlock? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.AACS.Serialize(obj);
+            using var stream = Streams.AACS.SerializeStream(obj);
             if (stream == null)
                 return false;
 

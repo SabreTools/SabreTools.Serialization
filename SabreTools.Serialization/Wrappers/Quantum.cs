@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Streams.Quantum.Deserialize(data);
+            var archive = Streams.Quantum.DeserializeStream(data);
             if (archive == null)
                 return null;
 

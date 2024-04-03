@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class PFF : IByteSerializer<Models.PFF.Archive>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.PFF.Archive? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.PFF.Archive? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new PFF();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.PFF.Archive? DeserializeImpl(byte[]? data, int offset)
+        public Models.PFF.Archive? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.PFF.Deserialize(dataStream);
+            return Streams.PFF.DeserializeStream(dataStream);
         }
     }
 }

@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class CIA : IStreamSerializer<Models.N3DS.CIA>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.N3DS.CIA? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Models.N3DS.CIA? DeserializeStream(Stream? data)
         {
             var deserializer = new CIA();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Models.N3DS.CIA? DeserializeImpl(Stream? data)
+        public Models.N3DS.CIA? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

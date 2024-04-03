@@ -8,15 +8,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class CueSheet : IStreamSerializer<Models.CueSheets.CueSheet>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.CueSheets.CueSheet? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.CueSheets.CueSheet? obj)
         {
             var serializer = new CueSheet();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.CueSheets.CueSheet? obj)
+        public Stream? Serialize(Models.CueSheets.CueSheet? obj)
         {
             // If the cuesheet is null
             if (obj == null)

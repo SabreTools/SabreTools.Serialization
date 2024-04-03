@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class PIC : IFileSerializer<Models.PIC.DiscInformation>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.PIC.DiscInformation? Deserialize(string? path)
+        public static Models.PIC.DiscInformation? DeserializeFile(string? path)
         {
             var deserializer = new PIC();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.PIC.DiscInformation? DeserializeImpl(string? path)
+        public Models.PIC.DiscInformation? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.PIC.Deserialize(stream);
+            return Streams.PIC.DeserializeStream(stream);
         }
     }
 }

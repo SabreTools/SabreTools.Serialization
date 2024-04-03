@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class VPK : IFileSerializer<Models.VPK.File>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.VPK.File? Deserialize(string? path)
+        public static Models.VPK.File? DeserializeFile(string? path)
         {
             var deserializer = new VPK();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.VPK.File? DeserializeImpl(string? path)
+        public Models.VPK.File? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.VPK.Deserialize(stream);
+            return Streams.VPK.DeserializeStream(stream);
         }
     }
 }

@@ -7,15 +7,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PlayJPlaylist : IStreamSerializer<Playlist>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Playlist? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Playlist? DeserializeStream(Stream? data)
         {
             var deserializer = new PlayJPlaylist();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Playlist? DeserializeImpl(Stream? data)
+        public Playlist? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < playlist.AudioFiles.Length; i++)
             {
                 long currentOffset = data.Position;
-                var entryHeader = PlayJAudio.Deserialize(data, currentOffset);
+                var entryHeader = PlayJAudio.DeserializeStream(data, currentOffset);
                 if (entryHeader == null)
                     return null;
 

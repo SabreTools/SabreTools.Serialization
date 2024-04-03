@@ -10,15 +10,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class VPK : IStreamSerializer<Models.VPK.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.VPK.File? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Models.VPK.File? DeserializeStream(Stream? data)
         {
             var deserializer = new VPK();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Models.VPK.File? DeserializeImpl(Stream? data)
+        public Models.VPK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

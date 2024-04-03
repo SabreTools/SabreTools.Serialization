@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled object on success, null on error</returns>
-        T? DeserializeImpl(byte[]? data, int offset);
+        T? Deserialize(byte[]? data, int offset);
 
         // TODO: Add serialization method
     }

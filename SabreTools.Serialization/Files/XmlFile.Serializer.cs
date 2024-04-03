@@ -10,8 +10,8 @@ namespace SabreTools.Serialization.Files
     public partial class XmlFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-        public virtual bool SerializeImpl(T? obj, string? path)
-            => SerializeImpl(obj, path, null, null, null, null);
+        public virtual bool Serialize(T? obj, string? path)
+            => Serialize(obj, path, null, null, null, null);
 
         /// <summary>
         /// Serializes the defined type to an XML file
@@ -23,12 +23,12 @@ namespace SabreTools.Serialization.Files
         /// <param name="sysid">Optional DOCTYPE sysid</param>
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        public bool SerializeImpl(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public bool Serialize(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.XmlFile<T>().SerializeImpl(obj, name, pubid, sysid, subset);
+            using var stream = new Streams.XmlFile<T>().Serialize(obj, name, pubid, sysid, subset);
             if (stream == null)
                 return false;
 

@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class IRD : IFileSerializer<Models.IRD.File>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.IRD.File? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.IRD.File? obj, string? path)
         {
             var serializer = new IRD();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.IRD.File? obj, string? path)
+        public bool Serialize(Models.IRD.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.IRD.Serialize(obj);
+            using var stream = Streams.IRD.SerializeStream(obj);
             if (stream == null)
                 return false;
 

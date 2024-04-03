@@ -5,31 +5,31 @@ namespace SabreTools.Serialization.Files
 {
     public partial class ClrMamePro : IFileSerializer<Models.ClrMamePro.MetadataFile>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.ClrMamePro.MetadataFile? obj, string? path)
         {
             var serializer = new ClrMamePro();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
 
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
         {
             var serializer = new ClrMamePro();
-            return serializer.SerializeImpl(obj, path, quotes);
+            return serializer.Serialize(obj, path, quotes);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.ClrMamePro.MetadataFile? obj, string? path)
-            => SerializeImpl(obj, path, true);
+        public bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path)
+            => Serialize(obj, path, true);
 
-        /// <inheritdoc cref="SerializeImpl(Models.ClrMamePro.MetadataFile, string)"/>
-        public bool SerializeImpl(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
+        /// <inheritdoc cref="Serialize(Models.ClrMamePro.MetadataFile, string)"/>
+        public bool Serialize(Models.ClrMamePro.MetadataFile? obj, string? path, bool quotes)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.ClrMamePro.Serialize(obj, quotes);
+            using var stream = Streams.ClrMamePro.SerializeStream(obj, quotes);
             if (stream == null)
                 return false;
 

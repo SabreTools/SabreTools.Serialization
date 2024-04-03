@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class CFB : IByteSerializer<Models.CFB.Binary>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.CFB.Binary? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.CFB.Binary? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new CFB();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.CFB.Binary? DeserializeImpl(byte[]? data, int offset)
+        public Models.CFB.Binary? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.CFB.Deserialize(dataStream);
+            return Streams.CFB.DeserializeStream(dataStream);
         }
     }
 }

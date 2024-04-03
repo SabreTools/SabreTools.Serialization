@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class Nitro : IFileSerializer<Models.Nitro.Cart>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.Nitro.Cart? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.Nitro.Cart? obj, string? path)
         {
             var serializer = new Nitro();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.Nitro.Cart? obj, string? path)
+        public bool Serialize(Models.Nitro.Cart? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.Nitro.Serialize(obj);
+            using var stream = Streams.Nitro.SerializeStream(obj);
             if (stream == null)
                 return false;
 

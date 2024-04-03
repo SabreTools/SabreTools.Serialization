@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class OpenMSX : XmlFile<SoftwareDb>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(SoftwareDb? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(SoftwareDb? obj)
         {
             var serializer = new OpenMSX();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
-        /// <inheritdoc cref="XmlFile.SerializeImpl(T?, string?, string?, string?, string?)" />
-        public override Stream? SerializeImpl(SoftwareDb? obj)
-            => SerializeImpl(obj, Serialization.OpenMSX.DocTypeName, Serialization.OpenMSX.DocTypePubId, Serialization.OpenMSX.DocTypeSysId, Serialization.OpenMSX.DocTypeSysId);
+        /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
+        public override Stream? Serialize(SoftwareDb? obj)
+            => Serialize(obj, Serialization.OpenMSX.DocTypeName, Serialization.OpenMSX.DocTypePubId, Serialization.OpenMSX.DocTypeSysId, Serialization.OpenMSX.DocTypeSysId);
     }
 }

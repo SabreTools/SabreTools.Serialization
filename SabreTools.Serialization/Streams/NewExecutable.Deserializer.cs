@@ -11,15 +11,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class NewExecutable : IStreamSerializer<Executable>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Executable? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Executable? DeserializeStream(Stream? data)
         {
             var deserializer = new NewExecutable();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Executable? DeserializeImpl(Stream? data)
+        public Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Streams
             #region MS-DOS Stub
 
             // Parse the MS-DOS stub
-            var stub = new MSDOS().DeserializeImpl(data);
+            var stub = new MSDOS().Deserialize(data);
             if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
                 return null;
 

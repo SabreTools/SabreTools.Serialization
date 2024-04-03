@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class MSDOS : IByteSerializer<Models.MSDOS.Executable>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.MSDOS.Executable? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.MSDOS.Executable? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new MSDOS();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.MSDOS.Executable? DeserializeImpl(byte[]? data, int offset)
+        public Models.MSDOS.Executable? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.MSDOS.Deserialize(dataStream);
+            return Streams.MSDOS.DeserializeStream(dataStream);
         }
     }
 }

@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class LinearExecutable : IByteSerializer<Models.LinearExecutable.Executable>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.LinearExecutable.Executable? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new LinearExecutable();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.LinearExecutable.Executable? DeserializeImpl(byte[]? data, int offset)
+        public Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.LinearExecutable.Deserialize(dataStream);
+            return Streams.LinearExecutable.DeserializeStream(dataStream);
         }
     }
 }

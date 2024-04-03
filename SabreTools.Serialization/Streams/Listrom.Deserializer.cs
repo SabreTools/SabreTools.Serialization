@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Listrom : IStreamSerializer<MetadataFile>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static MetadataFile? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static MetadataFile? DeserializeStream(Stream? data)
         {
             var deserializer = new Listrom();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public MetadataFile? DeserializeImpl(Stream? data)
+        public MetadataFile? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)

@@ -9,19 +9,19 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Hashfile : IStreamSerializer<Models.Hashfile.Hashfile>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash = Hash.CRC)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Models.Hashfile.Hashfile? DeserializeStream(Stream? data, Hash hash = Hash.CRC)
         {
             var deserializer = new Hashfile();
-            return deserializer.DeserializeImpl(data, hash);
+            return deserializer.Deserialize(data, hash);
         }
         
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? DeserializeImpl(Stream? data)
-            => DeserializeImpl(data, Hash.CRC);
+        public Models.Hashfile.Hashfile? Deserialize(Stream? data)
+            => Deserialize(data, Hash.CRC);
 
-        /// <inheritdoc cref="DeserializeImpl(Stream)"/>
-        public Models.Hashfile.Hashfile? DeserializeImpl(Stream? data, Hash hash)
+        /// <inheritdoc cref="Deserialize(Stream)"/>
+        public Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash)
         {
             // If the stream is null
             if (data == null)

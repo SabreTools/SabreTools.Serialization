@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PIC : IFileSerializer<Models.PIC.DiscInformation>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.PIC.DiscInformation? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.PIC.DiscInformation? obj, string? path)
         {
             var serializer = new PIC();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.PIC.DiscInformation? obj, string? path)
+        public bool Serialize(Models.PIC.DiscInformation? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.PIC.Serialize(obj);
+            using var stream = Streams.PIC.SerializeStream(obj);
             if (stream == null)
                 return false;
 

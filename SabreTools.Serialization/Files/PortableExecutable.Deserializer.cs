@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class PortableExecutable : IFileSerializer<Models.PortableExecutable.Executable>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.PortableExecutable.Executable? Deserialize(string? path)
+        public static Models.PortableExecutable.Executable? DeserializeFile(string? path)
         {
             var deserializer = new PortableExecutable();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.PortableExecutable.Executable? DeserializeImpl(string? path)
+        public Models.PortableExecutable.Executable? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.PortableExecutable.Deserialize(stream);
+            return Streams.PortableExecutable.DeserializeStream(stream);
         }
     }
 }

@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class BSP : IStreamSerializer<Models.BSP.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.BSP.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.BSP.File? obj)
         {
             var serializer = new BSP();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.BSP.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.BSP.File? obj) => throw new NotImplementedException();
     }
 }

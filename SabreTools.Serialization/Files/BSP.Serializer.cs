@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class BSP : IFileSerializer<Models.BSP.File>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.BSP.File? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.BSP.File? obj, string? path)
         {
             var serializer = new BSP();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.BSP.File? obj, string? path)
+        public bool Serialize(Models.BSP.File? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.BSP.Serialize(obj);
+            using var stream = Streams.BSP.SerializeStream(obj);
             if (stream == null)
                 return false;
 

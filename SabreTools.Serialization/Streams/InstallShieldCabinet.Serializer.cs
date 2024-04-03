@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class InstallShieldCabinet : IStreamSerializer<Cabinet>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Cabinet? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Cabinet? obj)
         {
             var serializer = new InstallShieldCabinet();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Cabinet? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Cabinet? obj) => throw new NotImplementedException();
     }
 }

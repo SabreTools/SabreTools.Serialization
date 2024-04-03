@@ -11,8 +11,8 @@ namespace SabreTools.Serialization.Files
     public partial class JsonFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-        public virtual bool SerializeImpl(T? obj, string? path)
-            => SerializeImpl(obj, path, new UTF8Encoding(false));
+        public virtual bool Serialize(T? obj, string? path)
+            => Serialize(obj, path, new UTF8Encoding(false));
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a file
@@ -22,12 +22,12 @@ namespace SabreTools.Serialization.Files
         /// <param name="path">Path to the file to serialize to</param>
         /// <param name="encoding">Encoding to parse text as</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        public bool SerializeImpl(T? obj, string? path, Encoding encoding)
+        public bool Serialize(T? obj, string? path, Encoding encoding)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.JsonFile<T>().SerializeImpl(obj, encoding);
+            using var stream = new Streams.JsonFile<T>().Serialize(obj, encoding);
             if (stream == null)
                 return false;
 

@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class XZP : IFileSerializer<Models.XZP.File>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.XZP.File? Deserialize(string? path)
+        public static Models.XZP.File? DeserializeFile(string? path)
         {
             var deserializer = new XZP();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.XZP.File? DeserializeImpl(string? path)
+        public Models.XZP.File? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.XZP.Deserialize(stream);
+            return Streams.XZP.DeserializeStream(stream);
         }
     }
 }

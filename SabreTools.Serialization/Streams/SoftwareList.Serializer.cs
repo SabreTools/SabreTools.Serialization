@@ -4,15 +4,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class SoftwareList : XmlFile<Models.SoftwareList.SoftwareList>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.SoftwareList.SoftwareList? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.SoftwareList.SoftwareList? obj)
         {
             var serializer = new SoftwareList();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
-        /// <inheritdoc cref="XmlFile.SerializeImpl(T?, string?, string?, string?, string?)" />
-        public override Stream? SerializeImpl(Models.SoftwareList.SoftwareList? obj)
-            => SerializeImpl(obj, SoftawreList.DocTypeName, SoftawreList.DocTypePubId, SoftawreList.DocTypeSysId, SoftawreList.DocTypeSysId);
+        /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
+        public override Stream? Serialize(Models.SoftwareList.SoftwareList? obj)
+            => Serialize(obj, SoftawreList.DocTypeName, SoftawreList.DocTypePubId, SoftawreList.DocTypeSysId, SoftawreList.DocTypeSysId);
     }
 }

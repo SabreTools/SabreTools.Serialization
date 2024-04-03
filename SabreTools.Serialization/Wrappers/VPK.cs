@@ -126,7 +126,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Streams.VPK.Deserialize(data);
+            var file = Streams.VPK.DeserializeStream(data);
             if (file == null)
                 return null;
 

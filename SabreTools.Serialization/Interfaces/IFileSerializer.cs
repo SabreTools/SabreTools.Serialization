@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to deserialize to</typeparam>
         /// <param name="path">Path to deserialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-        T? DeserializeImpl(string? path);
+        T? Deserialize(string? path);
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a file
@@ -20,6 +20,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        bool SerializeImpl(T? obj, string? path);
+        bool Serialize(T? obj, string? path);
     }
 }

@@ -4,31 +4,31 @@ namespace SabreTools.Serialization.Files
 {
     public partial class SeparatedValue : IFileSerializer<Models.SeparatedValue.MetadataFile>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.SeparatedValue.MetadataFile? obj, string? path)
         {
             var serializer = new SeparatedValue();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
 
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
         {
             var serializer = new SeparatedValue();
-            return serializer.SerializeImpl(obj, path, delim);
+            return serializer.Serialize(obj, path, delim);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.SeparatedValue.MetadataFile? obj, string? path)
-            => SerializeImpl(obj, path, ',');
+        public bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path)
+            => Serialize(obj, path, ',');
 
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
+        public bool Serialize(Models.SeparatedValue.MetadataFile? obj, string? path, char delim)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.SeparatedValue.Serialize(obj, delim);
+            using var stream = Streams.SeparatedValue.SerializeStream(obj, delim);
             if (stream == null)
                 return false;
 

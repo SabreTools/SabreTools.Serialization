@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PFF : IStreamSerializer<Archive>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Archive? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Archive? DeserializeStream(Stream? data)
         {
             var deserializer = new PFF();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Archive? DeserializeImpl(Stream? data)
+        public Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

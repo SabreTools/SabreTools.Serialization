@@ -7,15 +7,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class IRD : IStreamSerializer<Models.IRD.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.IRD.File? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Models.IRD.File? DeserializeStream(Stream? data)
         {
             var deserializer = new IRD();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Models.IRD.File? DeserializeImpl(Stream? data)
+        public Models.IRD.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

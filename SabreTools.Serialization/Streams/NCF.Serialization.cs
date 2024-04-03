@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class NCF : IStreamSerializer<Models.NCF.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.NCF.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.NCF.File? obj)
         {
             var serializer = new NCF();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.NCF.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.NCF.File? obj) => throw new NotImplementedException();
     }
 }

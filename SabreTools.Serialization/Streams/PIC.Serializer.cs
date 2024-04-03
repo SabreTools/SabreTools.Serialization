@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PIC : IStreamSerializer<DiscInformation>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(DiscInformation? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(DiscInformation? obj)
         {
             var serializer = new PIC();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(DiscInformation? obj) => throw new NotImplementedException();
+        public Stream? Serialize(DiscInformation? obj) => throw new NotImplementedException();
     }
 }

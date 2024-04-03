@@ -12,8 +12,8 @@ namespace SabreTools.Serialization.Streams
     public partial class JsonFile<T> : IStreamSerializer<T>
     {
         /// <inheritdoc/>
-        public virtual Stream? SerializeImpl(T? obj)
-            => SerializeImpl(obj, new UTF8Encoding(false));
+        public virtual Stream? Serialize(T? obj)
+            => Serialize(obj, new UTF8Encoding(false));
 
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a Stream
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="obj">Data to serialize</param>
         /// <param name="encoding"></param>
         /// <returns>Filled object on success, null on error</returns>
-        public Stream? SerializeImpl(T? obj, Encoding encoding)
+        public Stream? Serialize(T? obj, Encoding encoding)
         {
             // If the object is null
             if (obj == null)

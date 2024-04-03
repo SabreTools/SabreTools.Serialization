@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class LinearExecutable : IFileSerializer<Models.LinearExecutable.Executable>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.LinearExecutable.Executable? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.LinearExecutable.Executable? obj, string? path)
         {
             var serializer = new LinearExecutable();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.LinearExecutable.Executable? obj, string? path)
+        public bool Serialize(Models.LinearExecutable.Executable? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.LinearExecutable.Serialize(obj);
+            using var stream = Streams.LinearExecutable.SerializeStream(obj);
             if (stream == null)
                 return false;
 

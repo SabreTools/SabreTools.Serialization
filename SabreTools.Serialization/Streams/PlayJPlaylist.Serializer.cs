@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PlayJPlaylist : IStreamSerializer<Playlist>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Playlist? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Playlist? obj)
         {
             var serializer = new PlayJPlaylist();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Playlist? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Playlist? obj) => throw new NotImplementedException();
     }
 }

@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class VBSP : IByteSerializer<Models.VBSP.File>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.VBSP.File? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.VBSP.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new VBSP();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.VBSP.File? DeserializeImpl(byte[]? data, int offset)
+        public Models.VBSP.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.VBSP.Deserialize(dataStream);
+            return Streams.VBSP.DeserializeStream(dataStream);
         }
     }
 }

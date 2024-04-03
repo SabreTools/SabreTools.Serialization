@@ -4,31 +4,31 @@ namespace SabreTools.Serialization.Files
 {
     public partial class Hashfile : IFileSerializer<Models.Hashfile.Hashfile>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path)
         {
             var serializer = new Hashfile();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
 
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
         {
             var serializer = new Hashfile();
-            return serializer.SerializeImpl(obj, path, hash);
+            return serializer.Serialize(obj, path, hash);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.Hashfile.Hashfile? obj, string? path)
-            => SerializeImpl(obj, path, Hash.CRC);
+        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
+            => Serialize(obj, path, Hash.CRC);
 
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
+        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.Hashfile.Serialize(obj, hash);
+            using var stream = Streams.Hashfile.SerializeStream(obj, hash);
             if (stream == null)
                 return false;
 

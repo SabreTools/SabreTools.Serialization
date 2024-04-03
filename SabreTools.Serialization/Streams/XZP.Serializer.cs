@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class XZP : IStreamSerializer<Models.XZP.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.XZP.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.XZP.File? obj)
         {
             var serializer = new XZP();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.XZP.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.XZP.File? obj) => throw new NotImplementedException();
     }
 }

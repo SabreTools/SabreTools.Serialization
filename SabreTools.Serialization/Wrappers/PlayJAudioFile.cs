@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var audioFile = Streams.PlayJAudio.Deserialize(data);
+            var audioFile = Streams.PlayJAudio.DeserializeStream(data);
             if (audioFile == null)
                 return null;
 

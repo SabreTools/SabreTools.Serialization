@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class VPK : IByteSerializer<Models.VPK.File>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.VPK.File? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.VPK.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new VPK();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.VPK.File? DeserializeImpl(byte[]? data, int offset)
+        public Models.VPK.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.VPK.Deserialize(dataStream);
+            return Streams.VPK.DeserializeStream(dataStream);
         }
     }
 }

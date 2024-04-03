@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class CFB : IStreamSerializer<Binary>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Binary? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Binary? obj)
         {
             var serializer = new CFB();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Binary? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Binary? obj) => throw new NotImplementedException();
     }
 }

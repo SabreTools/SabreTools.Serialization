@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Streams.SGA.Deserialize(data);
+            var file = Streams.SGA.DeserializeStream(data);
             if (file == null)
                 return null;
 

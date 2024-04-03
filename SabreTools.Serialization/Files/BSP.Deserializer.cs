@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class BSP : IFileSerializer<Models.BSP.File>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.BSP.File? Deserialize(string? path)
+        public static Models.BSP.File? DeserializeFile(string? path)
         {
             var deserializer = new BSP();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.BSP.File? DeserializeImpl(string? path)
+        public Models.BSP.File? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.BSP.Deserialize(stream);
+            return Streams.BSP.DeserializeStream(stream);
         }
     }
 }

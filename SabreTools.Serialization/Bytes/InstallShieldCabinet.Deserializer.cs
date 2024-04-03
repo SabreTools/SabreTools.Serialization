@@ -6,15 +6,15 @@ namespace SabreTools.Serialization.Bytes
     // TODO: Add multi-cabinet reading
     public partial class InstallShieldCabinet : IByteSerializer<Models.InstallShieldCabinet.Cabinet>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.InstallShieldCabinet.Cabinet? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.InstallShieldCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new InstallShieldCabinet();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.InstallShieldCabinet.Cabinet? DeserializeImpl(byte[]? data, int offset)
+        public Models.InstallShieldCabinet.Cabinet? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.InstallShieldCabinet.Deserialize(dataStream);
+            return Streams.InstallShieldCabinet.DeserializeStream(dataStream);
         }
     }
 }

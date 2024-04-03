@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class VPK : IStreamSerializer<Models.VPK.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.VPK.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.VPK.File? obj)
         {
             var serializer = new VPK();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.VPK.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.VPK.File? obj) => throw new NotImplementedException();
     }
 }

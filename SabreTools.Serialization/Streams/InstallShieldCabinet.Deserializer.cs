@@ -11,15 +11,15 @@ namespace SabreTools.Serialization.Streams
     // TODO: Add multi-cabinet reading
     public partial class InstallShieldCabinet : IStreamSerializer<Cabinet>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Cabinet? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Cabinet? DeserializeStream(Stream? data)
         {
             var deserializer = new InstallShieldCabinet();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Cabinet? DeserializeImpl(Stream? data)
+        public Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

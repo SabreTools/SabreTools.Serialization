@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class IRD : IByteSerializer<Models.IRD.File>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.IRD.File? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.IRD.File? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new IRD();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.IRD.File? DeserializeImpl(byte[]? data, int offset)
+        public Models.IRD.File? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.IRD.Deserialize(dataStream);
+            return Streams.IRD.DeserializeStream(dataStream);
         }
     }
 }

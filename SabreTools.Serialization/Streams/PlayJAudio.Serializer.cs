@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class PlayJAudio : IStreamSerializer<AudioFile>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(AudioFile? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(AudioFile? obj)
         {
             var serializer = new PlayJAudio();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(AudioFile? obj) => throw new NotImplementedException();
+        public Stream? Serialize(AudioFile? obj) => throw new NotImplementedException();
     }
 }

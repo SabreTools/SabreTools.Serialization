@@ -10,8 +10,8 @@ namespace SabreTools.Serialization.Files
     public partial class JsonFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-        public virtual T? DeserializeImpl(string? path)
-            => DeserializeImpl(path, new UTF8Encoding(false));
+        public virtual T? Deserialize(string? path)
+            => Deserialize(path, new UTF8Encoding(false));
 
         /// <summary>
         /// Deserialize a file into <typeparamref name="T"/>
@@ -20,10 +20,10 @@ namespace SabreTools.Serialization.Files
         /// <param name="path">Path to deserialize from</param>
         /// <param name="encoding">Encoding to parse text as</param>
         /// <returns>Filled object on success, null on error</returns>
-        public T? DeserializeImpl(string? path, Encoding encoding)
+        public T? Deserialize(string? path, Encoding encoding)
         {
             using var data = PathProcessor.OpenStream(path);
-            return new Streams.JsonFile<T>().DeserializeImpl(data, encoding);
+            return new Streams.JsonFile<T>().Deserialize(data, encoding);
         }
     }
 }

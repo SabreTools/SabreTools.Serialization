@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Nitro : IStreamSerializer<Cart>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Cart? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Cart? obj)
         {
             var serializer = new Nitro();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Cart? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Cart? obj) => throw new NotImplementedException();
     }
 }

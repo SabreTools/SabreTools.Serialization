@@ -6,14 +6,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class SGA : IStreamSerializer<Models.SGA.File>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(Models.SGA.File? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(Models.SGA.File? obj)
         {
             var serializer = new SGA();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(Models.SGA.File? obj) => throw new NotImplementedException();
+        public Stream? Serialize(Models.SGA.File? obj) => throw new NotImplementedException();
     }
 }

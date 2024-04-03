@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class RomCenter : IFileSerializer<Models.RomCenter.MetadataFile>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.RomCenter.MetadataFile? Deserialize(string? path)
+        public static Models.RomCenter.MetadataFile? DeserializeFile(string? path)
         {
             var deserializer = new RomCenter();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.RomCenter.MetadataFile? DeserializeImpl(string? path)
+        public Models.RomCenter.MetadataFile? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.RomCenter.Deserialize(stream);
+            return Streams.RomCenter.DeserializeStream(stream);
         }
     }
 }

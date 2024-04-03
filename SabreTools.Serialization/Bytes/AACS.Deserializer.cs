@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class AACS : IByteSerializer<Models.AACS.MediaKeyBlock>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.AACS.MediaKeyBlock? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.AACS.MediaKeyBlock? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new AACS();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.AACS.MediaKeyBlock? DeserializeImpl(byte[]? data, int offset)
+        public Models.AACS.MediaKeyBlock? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.AACS.Deserialize(dataStream);
+            return Streams.AACS.DeserializeStream(dataStream);
         }
     }
 }

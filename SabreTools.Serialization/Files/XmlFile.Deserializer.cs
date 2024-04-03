@@ -9,10 +9,10 @@ namespace SabreTools.Serialization.Files
     public partial class XmlFile<T> : IFileSerializer<T>
     {
         /// <inheritdoc/>
-        public T? DeserializeImpl(string? path)
+        public T? Deserialize(string? path)
         {
             using var data = PathProcessor.OpenStream(path);
-            return new Streams.XmlFile<T>().DeserializeImpl(data);
+            return new Streams.XmlFile<T>().Deserialize(data);
         }
     }
 }

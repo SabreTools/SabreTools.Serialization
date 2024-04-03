@@ -11,15 +11,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class CFB : IStreamSerializer<Binary>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Binary? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Binary? DeserializeStream(Stream? data)
         {
             var deserializer = new CFB();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Binary? DeserializeImpl(Stream? data)
+        public Binary? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

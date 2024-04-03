@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class PAK : IFileSerializer<Models.PAK.File>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.PAK.File? Deserialize(string? path)
+        public static Models.PAK.File? DeserializeFile(string? path)
         {
             var deserializer = new PAK();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.PAK.File? DeserializeImpl(string? path)
+        public Models.PAK.File? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.PAK.Deserialize(stream);
+            return Streams.PAK.DeserializeStream(stream);
         }
     }
 }

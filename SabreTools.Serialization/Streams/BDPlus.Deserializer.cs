@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class BDPlus : IStreamSerializer<SVM>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static SVM? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static SVM? DeserializeStream(Stream? data)
         {
             var deserializer = new BDPlus();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public SVM? DeserializeImpl(Stream? data)
+        public SVM? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

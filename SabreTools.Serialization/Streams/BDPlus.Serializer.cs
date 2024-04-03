@@ -7,14 +7,14 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class BDPlus : IStreamSerializer<SVM>
     {
-        /// <inheritdoc cref="IStreamSerializer.SerializeImpl(T?)"/>
-        public static Stream? Serialize(SVM? obj)
+        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        public static Stream? SerializeStream(SVM? obj)
         {
             var serializer = new BDPlus();
-            return serializer.SerializeImpl(obj);
+            return serializer.Serialize(obj);
         }
         
         /// <inheritdoc/>
-        public Stream? SerializeImpl(SVM? obj) => throw new NotImplementedException();
+        public Stream? Serialize(SVM? obj) => throw new NotImplementedException();
     }
 }

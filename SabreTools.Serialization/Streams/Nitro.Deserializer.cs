@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class Nitro : IStreamSerializer<Cart>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Cart? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Cart? DeserializeStream(Stream? data)
         {
             var deserializer = new Nitro();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Cart? DeserializeImpl(Stream? data)
+        public Cart? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

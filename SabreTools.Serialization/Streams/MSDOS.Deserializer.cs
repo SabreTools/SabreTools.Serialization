@@ -9,15 +9,15 @@ namespace SabreTools.Serialization.Streams
 {
     public partial class MSDOS : IStreamSerializer<Executable>
     {
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Executable? Deserialize(Stream? data)
+        /// <inheritdoc cref="IStreamSerializer.Deserialize(Stream?)"/>
+        public static Executable? DeserializeStream(Stream? data)
         {
             var deserializer = new MSDOS();
-            return deserializer.DeserializeImpl(data);
+            return deserializer.Deserialize(data);
         }
         
         /// <inheritdoc/>
-        public Executable? DeserializeImpl(Stream? data)
+        public Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

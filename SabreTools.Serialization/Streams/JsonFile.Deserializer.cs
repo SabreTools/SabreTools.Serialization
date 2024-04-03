@@ -12,8 +12,8 @@ namespace SabreTools.Serialization.Streams
     public partial class JsonFile<T> : IStreamSerializer<T>
     {
         /// <inheritdoc/>
-        public virtual T? DeserializeImpl(Stream? data)
-            => DeserializeImpl(data, new UTF8Encoding(false));
+        public virtual T? Deserialize(Stream? data)
+            => Deserialize(data, new UTF8Encoding(false));
 
         /// <summary>
         /// Deserialize a Stream into <typeparamref name="T"/>
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="data">Stream to parse</param>
         /// <param name="encoding">Text encoding to use</param>
         /// <returns>Filled object on success, null on error</returns>
-        public T? DeserializeImpl(Stream? data, Encoding encoding)
+        public T? Deserialize(Stream? data, Encoding encoding)
         {
             // If the stream is null
             if (data == null)

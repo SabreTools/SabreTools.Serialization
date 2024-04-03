@@ -5,17 +5,17 @@ namespace SabreTools.Serialization.Files
     public partial class NCF : IFileSerializer<Models.NCF.File>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.NCF.File? Deserialize(string? path)
+        public static Models.NCF.File? DeserializeFile(string? path)
         {
             var deserializer = new NCF();
-            return deserializer.DeserializeImpl(path);
+            return deserializer.Deserialize(path);
         }
 
         /// <inheritdoc/>
-        public Models.NCF.File? DeserializeImpl(string? path)
+        public Models.NCF.File? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return Streams.NCF.Deserialize(stream);
+            return Streams.NCF.DeserializeStream(stream);
         }
     }
 }

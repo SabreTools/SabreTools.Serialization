@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PlayJPlaylist : IFileSerializer<Models.PlayJ.Playlist>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.PlayJ.Playlist? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.PlayJ.Playlist? obj, string? path)
         {
             var serializer = new PlayJPlaylist();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.PlayJ.Playlist? obj, string? path)
+        public bool Serialize(Models.PlayJ.Playlist? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.PlayJPlaylist.Serialize(obj);
+            using var stream = Streams.PlayJPlaylist.SerializeStream(obj);
             if (stream == null)
                 return false;
 

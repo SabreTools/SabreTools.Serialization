@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class PlayJPlaylist : IByteSerializer<Models.PlayJ.Playlist>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.PlayJ.Playlist? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.PlayJ.Playlist? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new PlayJPlaylist();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.PlayJ.Playlist? DeserializeImpl(byte[]? data, int offset)
+        public Models.PlayJ.Playlist? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.PlayJPlaylist.Deserialize(dataStream);
+            return Streams.PlayJPlaylist.DeserializeStream(dataStream);
         }
     }
 }

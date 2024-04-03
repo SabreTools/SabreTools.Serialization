@@ -4,20 +4,20 @@ namespace SabreTools.Serialization.Files
 {
     public partial class PFF : IFileSerializer<Models.PFF.Archive>
     {
-        /// <inheritdoc cref="IFileSerializer.SerializeImpl(T?, string?)"/>
-        public static bool Serialize(Models.PFF.Archive? obj, string? path)
+        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(Models.PFF.Archive? obj, string? path)
         {
             var serializer = new PFF();
-            return serializer.SerializeImpl(obj, path);
+            return serializer.Serialize(obj, path);
         }
         
         /// <inheritdoc/>
-        public bool SerializeImpl(Models.PFF.Archive? obj, string? path)
+        public bool Serialize(Models.PFF.Archive? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Streams.PFF.Serialize(obj);
+            using var stream = Streams.PFF.SerializeStream(obj);
             if (stream == null)
                 return false;
 

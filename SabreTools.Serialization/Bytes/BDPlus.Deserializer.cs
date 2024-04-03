@@ -5,15 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class BDPlus : IByteSerializer<Models.BDPlus.SVM>
     {
-        /// <inheritdoc cref="IByteSerializer.DeserializeImpl(byte[]?, int)"/>
-        public static Models.BDPlus.SVM? Deserialize(byte[]? data, int offset)
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.BDPlus.SVM? DeserializeBytes(byte[]? data, int offset)
         {
             var deserializer = new BDPlus();
-            return deserializer.DeserializeImpl(data, offset);
+            return deserializer.Deserialize(data, offset);
         }
 
         /// <inheritdoc/>
-        public Models.BDPlus.SVM? DeserializeImpl(byte[]? data, int offset)
+        public Models.BDPlus.SVM? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Streams.BDPlus.Deserialize(dataStream);
+            return Streams.BDPlus.DeserializeStream(dataStream);
         }
     }
 }
