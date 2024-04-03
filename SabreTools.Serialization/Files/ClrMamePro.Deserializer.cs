@@ -5,14 +5,7 @@ namespace SabreTools.Serialization.Files
     public partial class ClrMamePro : IFileSerializer<Models.ClrMamePro.MetadataFile>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.ClrMamePro.MetadataFile? Deserialize(string? path)
-        {
-            var deserializer = new ClrMamePro();
-            return deserializer.DeserializeImpl(path);
-        }
-
-        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.ClrMamePro.MetadataFile? Deserialize(string? path, bool quotes)
+        public static Models.ClrMamePro.MetadataFile? Deserialize(string? path, bool quotes = true)
         {
             var deserializer = new ClrMamePro();
             return deserializer.DeserializeImpl(path, quotes);

@@ -5,14 +5,7 @@ namespace SabreTools.Serialization.Files
     public partial class Hashfile : IFileSerializer<Models.Hashfile.Hashfile>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.Hashfile.Hashfile? Deserialize(string? path)
-        {
-            var deserializer = new Hashfile();
-            return deserializer.DeserializeImpl(path);
-        }
-
-        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash)
+        public static Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash = Hash.CRC)
         {
             var deserializer = new Hashfile();
             return deserializer.DeserializeImpl(path, hash);

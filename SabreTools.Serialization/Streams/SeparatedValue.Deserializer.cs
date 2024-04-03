@@ -11,14 +11,7 @@ namespace SabreTools.Serialization.Streams
     public partial class SeparatedValue : IStreamSerializer<MetadataFile>
     {
         /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static MetadataFile? Deserialize(Stream? data)
-        {
-            var deserializer = new SeparatedValue();
-            return deserializer.DeserializeImpl(data);
-        }
-
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static MetadataFile? Deserialize(Stream? data, char delim)
+        public static MetadataFile? Deserialize(Stream? data, char delim = ',')
         {
             var deserializer = new SeparatedValue();
             return deserializer.DeserializeImpl(data, delim);

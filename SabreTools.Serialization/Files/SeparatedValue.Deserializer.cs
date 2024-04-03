@@ -5,14 +5,7 @@ namespace SabreTools.Serialization.Files
     public partial class SeparatedValue : IFileSerializer<Models.SeparatedValue.MetadataFile>
     {
         /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.SeparatedValue.MetadataFile? Deserialize(string? path)
-        {
-            var deserializer = new SeparatedValue();
-            return deserializer.DeserializeImpl(path);
-        }
-
-        /// <inheritdoc cref="IFileSerializer.Deserialize(string?)"/>
-        public static Models.SeparatedValue.MetadataFile? Deserialize(string? path, char delim)
+        public static Models.SeparatedValue.MetadataFile? Deserialize(string? path, char delim = ',')
         {
             var deserializer = new SeparatedValue();
             return deserializer.DeserializeImpl(path, delim);

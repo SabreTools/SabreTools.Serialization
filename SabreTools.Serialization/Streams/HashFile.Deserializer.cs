@@ -10,14 +10,7 @@ namespace SabreTools.Serialization.Streams
     public partial class Hashfile : IStreamSerializer<Models.Hashfile.Hashfile>
     {
         /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.Hashfile.Hashfile? Deserialize(Stream? data)
-        {
-            var deserializer = new Hashfile();
-            return deserializer.DeserializeImpl(data);
-        }
-
-        /// <inheritdoc cref="IStreamSerializer.DeserializeImpl(Stream?)"/>
-        public static Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash)
+        public static Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash = Hash.CRC)
         {
             var deserializer = new Hashfile();
             return deserializer.DeserializeImpl(data, hash);
