@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class PFF : IByteSerializer<Models.PFF.Archive>
+    public partial class PFF : IByteDeserializer<Models.PFF.Archive>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.PFF.Archive? DeserializeBytes(byte[]? data, int offset)

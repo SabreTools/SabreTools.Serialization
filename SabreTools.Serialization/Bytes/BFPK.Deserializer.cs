@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class BFPK : IByteSerializer<Models.BFPK.Archive>
+    public partial class BFPK : IByteDeserializer<Models.BFPK.Archive>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.BFPK.Archive? DeserializeBytes(byte[]? data, int offset)

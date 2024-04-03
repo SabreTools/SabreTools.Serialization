@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class N3DS : IByteSerializer<Models.N3DS.Cart>
+    public partial class N3DS : IByteDeserializer<Models.N3DS.Cart>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.N3DS.Cart? DeserializeBytes(byte[]? data, int offset)

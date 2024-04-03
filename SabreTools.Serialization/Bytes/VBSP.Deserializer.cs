@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class VBSP : IByteSerializer<Models.VBSP.File>
+    public partial class VBSP : IByteDeserializer<Models.VBSP.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.VBSP.File? DeserializeBytes(byte[]? data, int offset)

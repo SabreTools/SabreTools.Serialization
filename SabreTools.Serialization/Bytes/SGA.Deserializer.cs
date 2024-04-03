@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class SGA : IByteSerializer<Models.SGA.File>
+    public partial class SGA : IByteDeserializer<Models.SGA.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.SGA.File? DeserializeBytes(byte[]? data, int offset)

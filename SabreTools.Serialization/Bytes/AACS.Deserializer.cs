@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class AACS : IByteSerializer<Models.AACS.MediaKeyBlock>
+    public partial class AACS : IByteDeserializer<Models.AACS.MediaKeyBlock>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.AACS.MediaKeyBlock? DeserializeBytes(byte[]? data, int offset)

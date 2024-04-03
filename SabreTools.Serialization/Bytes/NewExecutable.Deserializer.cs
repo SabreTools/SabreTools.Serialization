@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class NewExecutable : IByteSerializer<Models.NewExecutable.Executable>
+    public partial class NewExecutable : IByteDeserializer<Models.NewExecutable.Executable>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.NewExecutable.Executable? DeserializeBytes(byte[]? data, int offset)

@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class CIA : IByteSerializer<Models.N3DS.CIA>
+    public partial class CIA : IByteDeserializer<Models.N3DS.CIA>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.N3DS.CIA? DeserializeBytes(byte[]? data, int offset)

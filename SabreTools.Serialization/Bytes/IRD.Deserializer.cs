@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class IRD : IByteSerializer<Models.IRD.File>
+    public partial class IRD : IByteDeserializer<Models.IRD.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.IRD.File? DeserializeBytes(byte[]? data, int offset)

@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class NCF : IByteSerializer<Models.NCF.File>
+    public partial class NCF : IByteDeserializer<Models.NCF.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.NCF.File? DeserializeBytes(byte[]? data, int offset)

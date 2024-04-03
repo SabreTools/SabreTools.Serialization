@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class Quantum : IByteSerializer<Models.Quantum.Archive>
+    public partial class Quantum : IByteDeserializer<Models.Quantum.Archive>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.Quantum.Archive? DeserializeBytes(byte[]? data, int offset)

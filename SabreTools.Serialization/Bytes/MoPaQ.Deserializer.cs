@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class MoPaQ : IByteSerializer<Models.MoPaQ.Archive>
+    public partial class MoPaQ : IByteDeserializer<Models.MoPaQ.Archive>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.MoPaQ.Archive? DeserializeBytes(byte[]? data, int offset)

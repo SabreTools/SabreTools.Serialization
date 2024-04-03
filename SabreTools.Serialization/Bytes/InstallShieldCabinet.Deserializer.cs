@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Bytes
 {
     // TODO: Add multi-cabinet reading
-    public partial class InstallShieldCabinet : IByteSerializer<Models.InstallShieldCabinet.Cabinet>
+    public partial class InstallShieldCabinet : IByteDeserializer<Models.InstallShieldCabinet.Cabinet>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.InstallShieldCabinet.Cabinet? DeserializeBytes(byte[]? data, int offset)

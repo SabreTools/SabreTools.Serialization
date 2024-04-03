@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to and from byte arrays
+    /// Defines how to deserialize from byte arrays
     /// </summary>
-    public interface IByteSerializer<T>
+    public interface IByteDeserializer<T>
     {
         /// <summary>
         /// Deserialize a byte array into <typeparamref name="T"/>
@@ -13,7 +13,5 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled object on success, null on error</returns>
         T? Deserialize(byte[]? data, int offset);
-
-        // TODO: Add serialization method
     }
 }

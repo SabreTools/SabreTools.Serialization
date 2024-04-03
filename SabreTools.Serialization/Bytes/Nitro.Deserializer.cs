@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class Nitro : IByteSerializer<Models.Nitro.Cart>
+    public partial class Nitro : IByteDeserializer<Models.Nitro.Cart>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.Nitro.Cart? DeserializeBytes(byte[]? data, int offset)

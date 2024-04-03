@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class WAD : IByteSerializer<Models.WAD.File>
+    public partial class WAD : IByteDeserializer<Models.WAD.File>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.WAD.File? DeserializeBytes(byte[]? data, int offset)

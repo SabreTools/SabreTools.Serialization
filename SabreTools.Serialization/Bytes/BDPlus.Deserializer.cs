@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class BDPlus : IByteSerializer<Models.BDPlus.SVM>
+    public partial class BDPlus : IByteDeserializer<Models.BDPlus.SVM>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.BDPlus.SVM? DeserializeBytes(byte[]? data, int offset)

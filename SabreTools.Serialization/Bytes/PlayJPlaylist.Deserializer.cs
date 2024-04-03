@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class PlayJPlaylist : IByteSerializer<Models.PlayJ.Playlist>
+    public partial class PlayJPlaylist : IByteDeserializer<Models.PlayJ.Playlist>
     {
         /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
         public static Models.PlayJ.Playlist? DeserializeBytes(byte[]? data, int offset)
