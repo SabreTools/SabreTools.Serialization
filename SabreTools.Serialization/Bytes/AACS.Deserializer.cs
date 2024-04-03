@@ -1,13 +1,19 @@
 using System.IO;
-using SabreTools.Models.AACS;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class AACS : IByteSerializer<MediaKeyBlock>
+    public partial class AACS : IByteSerializer<Models.AACS.MediaKeyBlock>
     {
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.AACS.MediaKeyBlock? Deserialize(byte[]? data, int offset)
+        {
+            var obj = new AACS();
+            return obj.DeserializeImpl(data, offset);
+        }
+
         /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(byte[]? data, int offset)
+        public Models.AACS.MediaKeyBlock? DeserializeImpl(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -18,7 +24,7 @@ namespace SabreTools.Serialization.Bytes
                 return null;
 
             // Create a memory stream and parse that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return new Streams.AACS().Deserialize(dataStream);
         }
     }

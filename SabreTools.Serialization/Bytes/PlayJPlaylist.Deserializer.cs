@@ -1,13 +1,19 @@
 using System.IO;
-using SabreTools.Models.PlayJ;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class PlayJPlaylist : IByteSerializer<Playlist>
+    public partial class PlayJPlaylist : IByteSerializer<Models.PlayJ.Playlist>
     {
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.PlayJ.Playlist? Deserialize(byte[]? data, int offset)
+        {
+            var obj = new PlayJPlaylist();
+            return obj.DeserializeImpl(data, offset);
+        }
+
         /// <inheritdoc/>
-        public Playlist? Deserialize(byte[]? data, int offset)
+        public Models.PlayJ.Playlist? DeserializeImpl(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -18,7 +24,7 @@ namespace SabreTools.Serialization.Bytes
                 return null;
 
             // Create a memory stream and parse that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return new Streams.PlayJPlaylist().Deserialize(dataStream);
         }
     }

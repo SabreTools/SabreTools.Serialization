@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Create a memory stream and use that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return Create(dataStream);
         }
 

@@ -5,8 +5,15 @@ namespace SabreTools.Serialization.Bytes
 {
     public partial class CIA : IByteSerializer<Models.N3DS.CIA>
     {
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
+        {
+            var obj = new CIA();
+            return obj.DeserializeImpl(data, offset);
+        }
+
         /// <inheritdoc/>
-        public Models.N3DS.CIA? Deserialize(byte[]? data, int offset)
+        public Models.N3DS.CIA? DeserializeImpl(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -17,7 +24,7 @@ namespace SabreTools.Serialization.Bytes
                 return null;
 
             // Create a memory stream and parse that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return new Streams.CIA().Deserialize(dataStream);
         }
     }

@@ -1,13 +1,19 @@
 using System.IO;
-using SabreTools.Models.BFPK;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class BFPK : IByteSerializer<Archive>
+    public partial class BFPK : IByteSerializer<Models.BFPK.Archive>
     {
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.BFPK.Archive? Deserialize(byte[]? data, int offset)
+        {
+            var obj = new BFPK();
+            return obj.DeserializeImpl(data, offset);
+        }
+
         /// <inheritdoc/>
-        public Archive? Deserialize(byte[]? data, int offset)
+        public Models.BFPK.Archive? DeserializeImpl(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -18,7 +24,7 @@ namespace SabreTools.Serialization.Bytes
                 return null;
 
             // Create a memory stream and parse that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return new Streams.BFPK().Deserialize(dataStream);
         }
     }

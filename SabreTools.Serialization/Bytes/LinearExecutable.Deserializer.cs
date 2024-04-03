@@ -1,13 +1,19 @@
 using System.IO;
-using SabreTools.Models.LinearExecutable;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Bytes
 {
-    public partial class LinearExecutable : IByteSerializer<Executable>
+    public partial class LinearExecutable : IByteSerializer<Models.LinearExecutable.Executable>
     {
+        /// <inheritdoc cref="IByteSerializer.Deserialize(byte[]?, int)"/>
+        public static Models.LinearExecutable.Executable? Deserialize(byte[]? data, int offset)
+        {
+            var obj = new LinearExecutable();
+            return obj.DeserializeImpl(data, offset);
+        }
+
         /// <inheritdoc/>
-        public Executable? Deserialize(byte[]? data, int offset)
+        public Models.LinearExecutable.Executable? DeserializeImpl(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -18,7 +24,7 @@ namespace SabreTools.Serialization.Bytes
                 return null;
 
             // Create a memory stream and parse that
-            MemoryStream dataStream = new MemoryStream(data, offset, data.Length - offset);
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return new Streams.LinearExecutable().Deserialize(dataStream);
         }
     }
