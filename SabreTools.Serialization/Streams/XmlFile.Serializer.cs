@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Streams
         /// <param name="sysid">Optional DOCTYPE sysid</param>
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>Stream containing serialized data on success, null otherwise</returns>
-        protected Stream? SerializeImpl(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public Stream? SerializeImpl(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             // If the object is null
             if (obj == null)

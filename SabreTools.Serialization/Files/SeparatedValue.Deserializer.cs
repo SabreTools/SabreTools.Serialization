@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Files
         public Models.SeparatedValue.MetadataFile? DeserializeImpl(string? path, char delim)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.SeparatedValue().Deserialize(stream, delim);
+            return Streams.SeparatedValue.Deserialize(stream, delim);
         }
     }
 }

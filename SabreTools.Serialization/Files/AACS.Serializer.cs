@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.AACS().Serialize(obj);
+            using var stream = Streams.AACS.Serialize(obj);
             if (stream == null)
                 return false;
 

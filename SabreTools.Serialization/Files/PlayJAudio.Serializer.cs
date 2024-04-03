@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.PlayJAudio().SerializeImpl(obj);
+            using var stream = Streams.PlayJAudio.Serialize(obj);
             if (stream == null)
                 return false;
 

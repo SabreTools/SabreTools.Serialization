@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Streams
             for (int i = 0; i < playlist.AudioFiles.Length; i++)
             {
                 long currentOffset = data.Position;
-                var entryHeader = new PlayJAudio().Deserialize(data, currentOffset);
+                var entryHeader = PlayJAudio.Deserialize(data, currentOffset);
                 if (entryHeader == null)
                     return null;
 

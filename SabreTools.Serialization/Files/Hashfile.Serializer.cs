@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.Hashfile().Serialize(obj, hash);
+            using var stream = Streams.Hashfile.Serialize(obj, hash);
             if (stream == null)
                 return false;
 

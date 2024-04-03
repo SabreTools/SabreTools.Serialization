@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.WAD().SerializeImpl(obj);
+            using var stream = Streams.WAD.Serialize(obj);
             if (stream == null)
                 return false;
 

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.CIA().SerializeImpl(obj);
+            using var stream = Streams.CIA.Serialize(obj);
             if (stream == null)
                 return false;
 

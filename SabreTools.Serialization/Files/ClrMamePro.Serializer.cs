@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Files
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = new Streams.ClrMamePro().Serialize(obj, quotes);
+            using var stream = Streams.ClrMamePro.Serialize(obj, quotes);
             if (stream == null)
                 return false;
 

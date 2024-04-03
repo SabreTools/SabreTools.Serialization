@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Files
         /// <param name="sysid">Optional DOCTYPE sysid</param>
         /// <param name="subset">Optional DOCTYPE name</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        protected bool SerializeImpl(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        public bool SerializeImpl(T? obj, string? path, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
