@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.MicrosoftCabinet.Cabinet? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.MicrosoftCabinet().DeserializeImpl(stream);
+            return Streams.MicrosoftCabinet.Deserialize(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.PIC.DiscInformation? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.PIC().DeserializeImpl(stream);
+            return Streams.PIC.Deserialize(stream);
         }
     }
 }

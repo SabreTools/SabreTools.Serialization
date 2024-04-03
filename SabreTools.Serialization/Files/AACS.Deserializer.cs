@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.AACS.MediaKeyBlock? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.AACS().DeserializeImpl(stream);
+            return Streams.AACS.Deserialize(stream);
         }
     }
 }

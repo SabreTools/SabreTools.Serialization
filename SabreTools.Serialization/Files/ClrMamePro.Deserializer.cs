@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Files
         public Models.ClrMamePro.MetadataFile? DeserializeImpl(string? path, bool quotes)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.ClrMamePro().DeserializeImpl(stream, quotes);
+            return Streams.ClrMamePro.Deserialize(stream, quotes);
         }
     }
 }

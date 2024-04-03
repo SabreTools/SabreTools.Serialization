@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.RomCenter.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.RomCenter().DeserializeImpl(stream);
+            return Streams.RomCenter.Deserialize(stream);
         }
     }
 }

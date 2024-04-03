@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var cabinet = new Streams.MicrosoftCabinet().DeserializeImpl(data);
+            var cabinet = Streams.MicrosoftCabinet.Deserialize(data);
             if (cabinet == null)
                 return null;
 

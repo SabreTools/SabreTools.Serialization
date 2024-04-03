@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.VPK.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.VPK().DeserializeImpl(stream);
+            return Streams.VPK.Deserialize(stream);
         }
     }
 }

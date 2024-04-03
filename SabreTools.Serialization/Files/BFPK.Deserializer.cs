@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.BFPK.Archive? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.BFPK().DeserializeImpl(stream);
+            return Streams.BFPK.Deserialize(stream);
         }
     }
 }

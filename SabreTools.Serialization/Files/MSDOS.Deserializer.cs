@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.MSDOS.Executable? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.MSDOS().DeserializeImpl(stream);
+            return Streams.MSDOS.Deserialize(stream);
         }
     }
 }

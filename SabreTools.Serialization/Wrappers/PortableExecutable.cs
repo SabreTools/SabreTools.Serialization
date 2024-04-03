@@ -779,7 +779,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var executable = new Streams.PortableExecutable().DeserializeImpl(data);
+            var executable = Streams.PortableExecutable.Deserialize(data);
             if (executable == null)
                 return null;
 

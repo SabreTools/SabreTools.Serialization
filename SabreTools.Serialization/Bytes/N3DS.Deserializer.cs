@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Bytes
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return new Streams.N3DS().DeserializeImpl(dataStream);
+            return Streams.N3DS.Deserialize(dataStream);
         }
     }
 }

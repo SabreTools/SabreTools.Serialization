@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Files
         public Models.Hashfile.Hashfile? DeserializeImpl(string? path, Hash hash)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.Hashfile().DeserializeImpl(stream, hash);
+            return Streams.Hashfile.Deserialize(stream, hash);
         }
     }
 }

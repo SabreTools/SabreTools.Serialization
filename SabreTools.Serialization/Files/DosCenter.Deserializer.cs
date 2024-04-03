@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.DosCenter.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.DosCenter().DeserializeImpl(stream);
+            return Streams.DosCenter.Deserialize(stream);
         }
     }
 }

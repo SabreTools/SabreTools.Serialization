@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.N3DS.Cart? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.N3DS().DeserializeImpl(stream);
+            return Streams.N3DS.Deserialize(stream);
         }
     }
 }

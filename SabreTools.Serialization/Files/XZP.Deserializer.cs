@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.XZP.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.XZP().DeserializeImpl(stream);
+            return Streams.XZP.Deserialize(stream);
         }
     }
 }

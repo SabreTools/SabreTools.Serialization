@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var svm = new Streams.BDPlus().DeserializeImpl(data);
+            var svm = Streams.BDPlus.Deserialize(data);
             if (svm == null)
                 return null;
 

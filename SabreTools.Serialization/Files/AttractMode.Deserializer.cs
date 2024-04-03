@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.AttractMode.MetadataFile? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.AttractMode().DeserializeImpl(stream);
+            return Streams.AttractMode.Deserialize(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.MoPaQ.Archive? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.MoPaQ().DeserializeImpl(stream);
+            return Streams.MoPaQ.Deserialize(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.N3DS.CIA? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.CIA().DeserializeImpl(stream);
+            return Streams.CIA.Deserialize(stream);
         }
     }
 }

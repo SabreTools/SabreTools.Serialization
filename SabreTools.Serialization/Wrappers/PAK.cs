@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = new Streams.PAK().DeserializeImpl(data);
+            var file = Streams.PAK.Deserialize(data);
             if (file == null)
                 return null;
 

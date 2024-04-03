@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.InstallShieldCabinet.Cabinet? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.InstallShieldCabinet().DeserializeImpl(stream);
+            return Streams.InstallShieldCabinet.Deserialize(stream);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.IRD.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.IRD().DeserializeImpl(stream);
+            return Streams.IRD.Deserialize(stream);
         }
     }
 }

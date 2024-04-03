@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Files
         public Models.GCF.File? DeserializeImpl(string? path)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return new Streams.GCF().DeserializeImpl(stream);
+            return Streams.GCF.Deserialize(stream);
         }
     }
 }
