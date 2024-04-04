@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
 
@@ -15,7 +16,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.Hashfile.Hashfile? DeserializeFile(string? path, Hash hash = Hash.CRC)
+        public static Models.Hashfile.Hashfile? DeserializeFile(string? path, HashType hash = HashType.CRC32)
         {
             var deserializer = new Hashfile();
             return deserializer.Deserialize(path, hash);
@@ -23,10 +24,10 @@ namespace SabreTools.Serialization.Deserializers
 
         /// <inheritdoc/>
         public Models.Hashfile.Hashfile? Deserialize(string? path)
-            => Deserialize(path, Hash.CRC);
+            => Deserialize(path, HashType.CRC32);
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(string? path, Hash hash)
+        public Models.Hashfile.Hashfile? Deserialize(string? path, HashType hash)
         {
             using var stream = PathProcessor.OpenStream(path);
             return DeserializeStream(stream, hash);
@@ -37,7 +38,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IStreamDeserializer
 
         /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.Hashfile.Hashfile? DeserializeStream(Stream? data, Hash hash = Hash.CRC)
+        public static Models.Hashfile.Hashfile? DeserializeStream(Stream? data, HashType hash = HashType.CRC32)
         {
             var deserializer = new Hashfile();
             return deserializer.Deserialize(data, hash);
@@ -45,10 +46,10 @@ namespace SabreTools.Serialization.Deserializers
         
         /// <inheritdoc/>
         public Models.Hashfile.Hashfile? Deserialize(Stream? data)
-            => Deserialize(data, Hash.CRC);
+            => Deserialize(data, HashType.CRC32);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public Models.Hashfile.Hashfile? Deserialize(Stream? data, Hash hash)
+        public Models.Hashfile.Hashfile? Deserialize(Stream? data, HashType hash)
         {
             // If the stream is null
             if (data == null)
@@ -76,7 +77,11 @@ namespace SabreTools.Serialization.Deserializers
                 // Parse the line into a hash
                 switch (hash)
                 {
-                    case Hash.CRC:
+                    case HashType.CRC32:
+                    case HashType.CRC32_ISO:
+                    case HashType.CRC32_Naive:
+                    case HashType.CRC32_Optimized:
+                    case HashType.CRC32_Parallel:
                         var sfv = new SFV
                         {
 #if NETFRAMEWORK
@@ -89,7 +94,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(sfv);
                         break;
-                    case Hash.MD5:
+                    case HashType.MD5:
                         var md5 = new MD5
                         {
                             Hash = lineParts[0],
@@ -101,7 +106,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(md5);
                         break;
-                    case Hash.SHA1:
+                    case HashType.SHA1:
                         var sha1 = new SHA1
                         {
                             Hash = lineParts[0],
@@ -113,7 +118,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(sha1);
                         break;
-                    case Hash.SHA256:
+                    case HashType.SHA256:
                         var sha256 = new SHA256
                         {
                             Hash = lineParts[0],
@@ -125,7 +130,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(sha256);
                         break;
-                    case Hash.SHA384:
+                    case HashType.SHA384:
                         var sha384 = new SHA384
                         {
                             Hash = lineParts[0],
@@ -137,7 +142,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(sha384);
                         break;
-                    case Hash.SHA512:
+                    case HashType.SHA512:
                         var sha512 = new SHA512
                         {
                             Hash = lineParts[0],
@@ -149,7 +154,7 @@ namespace SabreTools.Serialization.Deserializers
                         };
                         hashes.Add(sha512);
                         break;
-                    case Hash.SpamSum:
+                    case HashType.SpamSum:
                         var spamSum = new SpamSum
                         {
                             Hash = lineParts[0],
@@ -167,25 +172,29 @@ namespace SabreTools.Serialization.Deserializers
             // Assign the hashes to the hashfile and return
             switch (hash)
             {
-                case Hash.CRC:
+                case HashType.CRC32:
+                case HashType.CRC32_ISO:
+                case HashType.CRC32_Naive:
+                case HashType.CRC32_Optimized:
+                case HashType.CRC32_Parallel:
                     dat.SFV = hashes.Cast<SFV>().ToArray();
                     break;
-                case Hash.MD5:
+                case HashType.MD5:
                     dat.MD5 = hashes.Cast<MD5>().ToArray();
                     break;
-                case Hash.SHA1:
+                case HashType.SHA1:
                     dat.SHA1 = hashes.Cast<SHA1>().ToArray();
                     break;
-                case Hash.SHA256:
+                case HashType.SHA256:
                     dat.SHA256 = hashes.Cast<SHA256>().ToArray();
                     break;
-                case Hash.SHA384:
+                case HashType.SHA384:
                     dat.SHA384 = hashes.Cast<SHA384>().ToArray();
                     break;
-                case Hash.SHA512:
+                case HashType.SHA512:
                     dat.SHA512 = hashes.Cast<SHA512>().ToArray();
                     break;
-                case Hash.SpamSum:
+                case HashType.SpamSum:
                     dat.SpamSum = hashes.Cast<SpamSum>().ToArray();
                     break;
             }

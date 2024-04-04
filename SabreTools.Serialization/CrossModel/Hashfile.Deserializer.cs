@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
 
@@ -8,10 +9,10 @@ namespace SabreTools.Serialization.CrossModel
     public partial class Hashfile : IModelSerializer<Models.Hashfile.Hashfile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, Hash.CRC);
+        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj, Hash hash)
+        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj, HashType hash)
         {
             if (obj == null)
                 return null;
@@ -73,7 +74,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.MetadataFile"/> to an array of <cref="Models.Hashfile.Hashfile"/>
         /// </summary>
-        public static Models.Hashfile.Hashfile[]? ConvertArrayFromInternalModel(Models.Metadata.MetadataFile? item, Hash hash)
+        public static Models.Hashfile.Hashfile[]? ConvertArrayFromInternalModel(Models.Metadata.MetadataFile? item, HashType hash)
         {
             if (item == null)
                 return null;
@@ -93,7 +94,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.Hashfile.Hashfile"/>
         /// </summary>
-        private static Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Models.Metadata.Machine item, Hash hash)
+        private static Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Models.Metadata.Machine item, HashType hash)
         {
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms == null)
@@ -101,43 +102,43 @@ namespace SabreTools.Serialization.CrossModel
 
             return new Models.Hashfile.Hashfile
             {
-                SFV = hash == Hash.CRC
+                SFV = hash == HashType.CRC32 || hash == HashType.CRC32_ISO || hash == HashType.CRC32_Naive || hash == HashType.CRC32_Optimized || hash == HashType.CRC32_Parallel
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSFV)
                         .ToArray()
                     : null,
-                MD5 = hash == Hash.MD5
+                MD5 = hash == HashType.MD5
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToMD5)
                         .ToArray()
                     : null,
-                SHA1 = hash == Hash.SHA1
+                SHA1 = hash == HashType.SHA1
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSHA1)
                         .ToArray()
                     : null,
-                SHA256 = hash == Hash.SHA256
+                SHA256 = hash == HashType.SHA256
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSHA256)
                         .ToArray()
                     : null,
-                SHA384 = hash == Hash.SHA384
+                SHA384 = hash == HashType.SHA384
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSHA384)
                         .ToArray()
                     : null,
-                SHA512 = hash == Hash.SHA512
+                SHA512 = hash == HashType.SHA512
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSHA512)
                         .ToArray()
                     : null,
-                SpamSum = hash == Hash.SpamSum
+                SpamSum = hash == HashType.SpamSum
                     ? roms
                         .Where(r => r != null)
                         .Select(ConvertToSpamSum)

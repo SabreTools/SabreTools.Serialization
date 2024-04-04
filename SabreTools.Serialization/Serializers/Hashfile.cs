@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SabreTools.Hashing;
 using SabreTools.IO.Writers;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
@@ -16,7 +17,7 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path, Hash hash = Hash.CRC)
+        public static bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path, HashType hash = HashType.CRC32)
         {
             var serializer = new Hashfile();
             return serializer.Serialize(obj, path, hash);
@@ -24,10 +25,10 @@ namespace SabreTools.Serialization.Serializers
         
         /// <inheritdoc/>
         public bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
-            => Serialize(obj, path, Hash.CRC);
+            => Serialize(obj, path, HashType.CRC32);
 
         /// <inheritdoc/>
-        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, Hash hash)
+        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, HashType hash)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -46,7 +47,7 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(Models.Hashfile.Hashfile? obj, Hash hash = Hash.CRC)
+        public static Stream? SerializeStream(Models.Hashfile.Hashfile? obj, HashType hash = HashType.CRC32)
         {
             var serializer = new Hashfile();
             return serializer.Serialize(obj, hash);
@@ -54,10 +55,10 @@ namespace SabreTools.Serialization.Serializers
         
         /// <inheritdoc/>
         public Stream? Serialize(Models.Hashfile.Hashfile? obj)
-            => Serialize(obj, Hash.CRC);
+            => Serialize(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public Stream? Serialize(Models.Hashfile.Hashfile? obj, Hash hash)
+        public Stream? Serialize(Models.Hashfile.Hashfile? obj, HashType hash)
         {
             // If the metadata file is null
             if (obj == null)
@@ -75,25 +76,29 @@ namespace SabreTools.Serialization.Serializers
             // Write out the items, if they exist
             switch (hash)
             {
-                case Hash.CRC:
+                case HashType.CRC32:
+                case HashType.CRC32_ISO:
+                case HashType.CRC32_Naive:
+                case HashType.CRC32_Optimized:
+                case HashType.CRC32_Parallel:
                     WriteSFV(obj.SFV, writer);
                     break;
-                case Hash.MD5:
+                case HashType.MD5:
                     WriteMD5(obj.MD5, writer);
                     break;
-                case Hash.SHA1:
+                case HashType.SHA1:
                     WriteSHA1(obj.SHA1, writer);
                     break;
-                case Hash.SHA256:
+                case HashType.SHA256:
                     WriteSHA256(obj.SHA256, writer);
                     break;
-                case Hash.SHA384:
+                case HashType.SHA384:
                     WriteSHA384(obj.SHA384, writer);
                     break;
-                case Hash.SHA512:
+                case HashType.SHA512:
                     WriteSHA512(obj.SHA512, writer);
                     break;
-                case Hash.SpamSum:
+                case HashType.SpamSum:
                     WriteSpamSum(obj.SpamSum, writer);
                     break;
                 default:
