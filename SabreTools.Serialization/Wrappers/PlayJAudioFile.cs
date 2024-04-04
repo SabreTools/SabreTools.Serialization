@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Create a PlayJ audio file from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="data">Byte array representing the audio file</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A PlayJ audio file wrapper on success, null on failure</returns>
         public static PlayJAudioFile? Create(byte[]? data, int offset)
@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Create a PlayJ audio file from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
+        /// <param name="data">Stream representing the audio file</param>
         /// <returns>A PlayJ audio file wrapper on success, null on failure</returns>
         public static PlayJAudioFile? Create(Stream? data)
         {

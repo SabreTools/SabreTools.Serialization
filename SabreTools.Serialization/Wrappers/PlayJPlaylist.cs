@@ -1,40 +1,39 @@
-﻿using System.IO;
+using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Figure out extension properties
-    public partial class MoPaQ : WrapperBase<Models.MoPaQ.Archive>
+    public class PlayJPlaylist : WrapperBase<Models.PlayJ.Playlist>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "MoPaQ Archive";
+        public override string DescriptionString => "PlayJ Playlist";
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public MoPaQ(Models.MoPaQ.Archive? model, byte[]? data, int offset)
+        public PlayJPlaylist(Models.PlayJ.Playlist? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public MoPaQ(Models.MoPaQ.Archive? model, Stream? data)
+        public PlayJPlaylist(Models.PlayJ.Playlist? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
         }
 
         /// <summary>
-        /// Create a MoPaQ archive from a byte array and offset
+        /// Create a PlayJ playlist from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="data">Byte array representing the playlist</param>
         /// <param name="offset">Offset within the array to parse</param>
-        /// <returns>A MoPaQ archive wrapper on success, null on failure</returns>
-        public static MoPaQ? Create(byte[]? data, int offset)
+        /// <returns>A PlayJ playlist wrapper on success, null on failure</returns>
+        public static PlayJPlaylist? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -50,23 +49,23 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a MoPaQ archive from a Stream
+        /// Create a PlayJ playlist from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
-        /// <returns>A MoPaQ archive wrapper on success, null on failure</returns>
-        public static MoPaQ? Create(Stream? data)
+        /// <param name="data">Stream representing the playlist</param>
+        /// <returns>A PlayJ playlist wrapper on success, null on failure</returns>
+        public static PlayJPlaylist? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.MoPaQ.DeserializeStream(data);
-            if (archive == null)
+            var playlist = Deserializers.PlayJPlaylist.DeserializeStream(data);
+            if (playlist == null)
                 return null;
 
             try
             {
-                return new MoPaQ(archive, data);
+                return new PlayJPlaylist(playlist, data);
             }
             catch
             {

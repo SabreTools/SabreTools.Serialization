@@ -60,13 +60,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.PIC.DeserializeStream(data);
-            if (archive == null)
+            var info = Deserializers.PIC.DeserializeStream(data);
+            if (info == null)
                 return null;
 
             try
             {
-                return new PIC(archive, data);
+                return new PIC(info, data);
             }
             catch
             {
