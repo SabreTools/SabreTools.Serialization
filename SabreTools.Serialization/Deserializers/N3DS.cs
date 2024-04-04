@@ -3,19 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.N3DS;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class N3DS :
-        BaseBinaryDeserializer<Cart>,
-        IStreamDeserializer<Cart>
+    public class N3DS : BaseBinaryDeserializer<Cart>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Cart? Deserialize(Stream? data)
+        public override Cart? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -712,7 +707,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return romFSHeader;
         }
-
-        #endregion
     }
 }

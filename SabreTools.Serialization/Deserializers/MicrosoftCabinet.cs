@@ -2,20 +2,15 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.MicrosoftCabinet;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.MicrosoftCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
     // TODO: Add multi-cabinet reading
-    public class MicrosoftCabinet :
-        BaseBinaryDeserializer<Cabinet>,
-        IStreamDeserializer<Cabinet>
+    public class MicrosoftCabinet : BaseBinaryDeserializer<Cabinet>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Cabinet? Deserialize(Stream? data)
+        public override Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -245,7 +240,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return file;
         }
-
-        #endregion
     }
 }

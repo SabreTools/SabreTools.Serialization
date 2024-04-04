@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PFF;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PFF.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PFF :
-        BaseBinaryDeserializer<Archive>,
-        IStreamDeserializer<Archive>
+    public class PFF : BaseBinaryDeserializer<Archive>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Archive? Deserialize(Stream? data)
+        public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -184,7 +179,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return segment;
         }
-
-        #endregion
     }
 }

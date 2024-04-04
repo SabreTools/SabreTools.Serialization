@@ -3,20 +3,15 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.InstallShieldCabinet;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
     // TODO: Add multi-cabinet reading
-    public class InstallShieldCabinet :
-        BaseBinaryDeserializer<Cabinet>,
-        IStreamDeserializer<Cabinet>
+    public class InstallShieldCabinet : BaseBinaryDeserializer<Cabinet>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Cabinet? Deserialize(Stream? data)
+        public override Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -778,8 +773,6 @@ namespace SabreTools.Serialization.Deserializers
 
             return (int)majorVersion;
         }
-
-        #endregion
 
         #endregion
     }

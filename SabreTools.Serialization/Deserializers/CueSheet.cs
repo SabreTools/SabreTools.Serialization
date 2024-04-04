@@ -5,18 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SabreTools.IO;
 using SabreTools.Models.CueSheets;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CueSheet :
-        BaseBinaryDeserializer<Models.CueSheets.CueSheet>,
-        IStreamDeserializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinaryDeserializer<Models.CueSheets.CueSheet>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.CueSheets.CueSheet? Deserialize(Stream? data)
+        public override Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -592,8 +587,6 @@ namespace SabreTools.Serialization.Deserializers
 
             return flag;
         }
-
-        #endregion
 
         #endregion
     }

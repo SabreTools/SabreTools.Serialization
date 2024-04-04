@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using Newtonsoft.Json;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -9,9 +8,7 @@ namespace SabreTools.Serialization.Deserializers
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class JsonFile<T> :
-        BaseBinaryDeserializer<T>,
-        IStreamDeserializer<T>
+    public class JsonFile<T> : BaseBinaryDeserializer<T>
     {
         #region IByteDeserializer
 
@@ -68,7 +65,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IStreamDeserializer
 
         /// <inheritdoc/>
-        public virtual T? Deserialize(Stream? data)
+        public override T? Deserialize(Stream? data)
             => Deserialize(data, new UTF8Encoding(false));
 
         /// <summary>

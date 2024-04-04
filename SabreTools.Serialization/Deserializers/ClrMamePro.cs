@@ -4,13 +4,10 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.ClrMamePro;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class ClrMamePro :
-        BaseBinaryDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class ClrMamePro : BaseBinaryDeserializer<MetadataFile>
     {
         #region IByteDeserializer
 
@@ -75,7 +72,7 @@ namespace SabreTools.Serialization.Deserializers
         }
         
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
             => Deserialize(data, true);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

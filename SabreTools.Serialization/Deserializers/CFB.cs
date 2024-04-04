@@ -4,19 +4,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.CFB;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.CFB.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CFB :
-        BaseBinaryDeserializer<Binary>,
-        IStreamDeserializer<Binary>
+    public class CFB : BaseBinaryDeserializer<Binary>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Binary? Deserialize(Stream? data)
+        public override Binary? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -365,7 +360,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return directoryEntry;
         }
-
-        #endregion
     }
 }

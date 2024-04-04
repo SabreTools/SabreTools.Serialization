@@ -3,18 +3,13 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.DosCenter;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class DosCenter :
-        BaseBinaryDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class DosCenter : BaseBinaryDeserializer<MetadataFile>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)
@@ -215,7 +210,5 @@ namespace SabreTools.Serialization.Deserializers
             file.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
             return file;
         }
-
-        #endregion
     }
 }

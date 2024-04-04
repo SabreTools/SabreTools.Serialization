@@ -3,19 +3,14 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.BSP;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.BSP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class BSP :
-        BaseBinaryDeserializer<Models.BSP.File>,
-        IStreamDeserializer<Models.BSP.File>
+    public class BSP : BaseBinaryDeserializer<Models.BSP.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.BSP.File? Deserialize(Stream? data)
+        public override Models.BSP.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -221,7 +216,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return texture;
         }
-
-        #endregion
     }
 }

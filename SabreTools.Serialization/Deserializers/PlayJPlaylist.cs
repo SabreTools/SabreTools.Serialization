@@ -1,18 +1,13 @@
 using System.IO;
 using SabreTools.IO;
 using SabreTools.Models.PlayJ;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PlayJPlaylist :
-        BaseBinaryDeserializer<Playlist>,
-        IStreamDeserializer<Playlist>
+    public class PlayJPlaylist : BaseBinaryDeserializer<Playlist>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Playlist? Deserialize(Stream? data)
+        public override Playlist? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -76,7 +71,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return playlistHeader;
         }
-
-        #endregion
     }
 }

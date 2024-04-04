@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Models.Listrom;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Listrom :
-        BaseBinaryDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class Listrom : BaseBinaryDeserializer<MetadataFile>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)
@@ -242,7 +237,5 @@ namespace SabreTools.Serialization.Deserializers
             dat.ADDITIONAL_ELEMENTS = additional.ToArray();
             return dat;
         }
-
-        #endregion
     }
 }

@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.AttractMode;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class AttractMode :
-        BaseBinaryDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class AttractMode : BaseBinaryDeserializer<MetadataFile>
     {
         #region Constants
 
@@ -23,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IStreamDeserializer
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)

@@ -2,7 +2,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -10,14 +9,10 @@ namespace SabreTools.Serialization.Deserializers
     /// Base class for other XML deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class XmlFile<T> :
-        BaseBinaryDeserializer<T>,
-        IStreamDeserializer<T>
+    public class XmlFile<T> : BaseBinaryDeserializer<T>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public T? Deserialize(Stream? data)
+        public override T? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)
@@ -40,7 +35,5 @@ namespace SabreTools.Serialization.Deserializers
             // Perform the deserialization and return
             return (T?)serializer.Deserialize(xmlReader);
         }
-
-        #endregion
     }
 }

@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.VBSP;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.VBSP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class VBSP :
-        BaseBinaryDeserializer<Models.VBSP.File>,
-        IStreamDeserializer<Models.VBSP.File>
+    public class VBSP : BaseBinaryDeserializer<Models.VBSP.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.VBSP.File? Deserialize(Stream? data)
+        public override Models.VBSP.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -112,7 +107,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return lump;
         }
-
-        #endregion
     }
 }

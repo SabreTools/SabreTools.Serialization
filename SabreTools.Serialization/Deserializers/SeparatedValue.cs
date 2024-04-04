@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.SeparatedValue;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SeparatedValue :
-        BaseBinaryDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    // TODO: Create variants for the 3 common types: CSV, SSV, TSV
+    public class SeparatedValue : BaseBinaryDeserializer<MetadataFile>
     {
         #region Constants
 
@@ -83,7 +81,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
             => Deserialize(data, ',');
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

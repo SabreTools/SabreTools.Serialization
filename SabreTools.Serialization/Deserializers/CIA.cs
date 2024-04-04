@@ -3,18 +3,13 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.N3DS;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CIA :
-        BaseBinaryDeserializer<Models.N3DS.CIA>,
-        IStreamDeserializer<Models.N3DS.CIA>
+    public class CIA : BaseBinaryDeserializer<Models.N3DS.CIA>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.N3DS.CIA? Deserialize(Stream? data)
+        public override Models.N3DS.CIA? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -504,7 +499,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return metaData;
         }
-
-        #endregion
     }
 }

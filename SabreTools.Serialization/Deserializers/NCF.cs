@@ -3,18 +3,13 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.NCF;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class NCF :
-        BaseBinaryDeserializer<Models.NCF.File>,
-        IStreamDeserializer<Models.NCF.File>
+    public class NCF : BaseBinaryDeserializer<Models.NCF.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.NCF.File? Deserialize(Stream? data)
+        public override Models.NCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -513,7 +508,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return checksumEntry;
         }
-
-        #endregion
     }
 }

@@ -3,19 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.SGA;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SGA :
-        BaseBinaryDeserializer<Models.SGA.File>,
-        IStreamDeserializer<Models.SGA.File>
+    public class SGA : BaseBinaryDeserializer<Models.SGA.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(Stream? data)
+        public override Models.SGA.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -729,7 +724,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return file7;
         }
-
-        #endregion
     }
 }

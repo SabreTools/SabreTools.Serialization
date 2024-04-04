@@ -3,19 +3,16 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PIC;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PIC.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PIC :
-        BaseBinaryDeserializer<DiscInformation>,
-        IStreamDeserializer<DiscInformation>
+    public class PIC : BaseBinaryDeserializer<DiscInformation>
     {
         #region IStreamDeserializer
 
         /// <inheritdoc/>
-        public DiscInformation? Deserialize(Stream? data)
+        public override DiscInformation? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

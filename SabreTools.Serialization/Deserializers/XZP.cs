@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.XZP;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.XZP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class XZP :
-        BaseBinaryDeserializer<Models.XZP.File>,
-        IStreamDeserializer<Models.XZP.File>
+    public class XZP : BaseBinaryDeserializer<Models.XZP.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.XZP.File? Deserialize(Stream? data)
+        public override Models.XZP.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -248,7 +243,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return footer;
         }
-
-        #endregion
     }
 }

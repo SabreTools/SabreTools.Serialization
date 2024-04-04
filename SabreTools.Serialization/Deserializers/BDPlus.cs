@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.BDPlus;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.BDPlus.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class BDPlus :
-        BaseBinaryDeserializer<SVM>,
-        IStreamDeserializer<SVM>
+    public class BDPlus : BaseBinaryDeserializer<SVM>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public SVM? Deserialize(Stream? data)
+        public override SVM? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -66,7 +61,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return svm;
         }
-
-        #endregion
     }
 }

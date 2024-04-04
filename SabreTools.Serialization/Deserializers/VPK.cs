@@ -3,19 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.VPK;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class VPK :
-        BaseBinaryDeserializer<Models.VPK.File>,
-        IStreamDeserializer<Models.VPK.File>
+    public class VPK : BaseBinaryDeserializer<Models.VPK.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.VPK.File? Deserialize(Stream? data)
+        public override Models.VPK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -286,7 +281,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return directoryEntry;
         }
-
-        #endregion
     }
 }

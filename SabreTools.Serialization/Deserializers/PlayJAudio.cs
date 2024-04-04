@@ -2,17 +2,12 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PlayJ;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PlayJ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PlayJAudio :
-        BaseBinaryDeserializer<AudioFile>,
-        IStreamDeserializer<AudioFile>
+    public class PlayJAudio : BaseBinaryDeserializer<AudioFile>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
         public static AudioFile? DeserializeStream(Stream? data, long adjust = 0)
         {
@@ -21,7 +16,7 @@ namespace SabreTools.Serialization.Deserializers
         }
         
         /// <inheritdoc/>
-        public AudioFile? Deserialize(Stream? data)
+        public override AudioFile? Deserialize(Stream? data)
             => Deserialize(data, 0);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
@@ -351,7 +346,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return dataFile;
         }
-
-        #endregion
     }
 }

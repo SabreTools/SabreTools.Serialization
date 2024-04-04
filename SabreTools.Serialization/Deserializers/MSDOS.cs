@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.MSDOS;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.MSDOS.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class MSDOS :
-        BaseBinaryDeserializer<Executable>,
-        IStreamDeserializer<Executable>
+    public class MSDOS : BaseBinaryDeserializer<Executable>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Executable? Deserialize(Stream? data)
+        public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -146,7 +141,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return relocationTable;
         }
-
-        #endregion
     }
 }

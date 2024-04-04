@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.WAD;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.WAD.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class WAD :
-        BaseBinaryDeserializer<Models.WAD.File>,
-        IStreamDeserializer<Models.WAD.File>
+    public class WAD : BaseBinaryDeserializer<Models.WAD.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.WAD.File? Deserialize(Stream? data)
+        public override Models.WAD.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -245,7 +240,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return lumpInfo;
         }
-
-        #endregion
     }
 }

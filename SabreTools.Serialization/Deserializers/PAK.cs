@@ -2,19 +2,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PAK;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PAK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PAK :
-        BaseBinaryDeserializer<Models.PAK.File>,
-        IStreamDeserializer<Models.PAK.File>
+    public class PAK : BaseBinaryDeserializer<Models.PAK.File>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Models.PAK.File? Deserialize(Stream? data)
+        public override Models.PAK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -109,7 +104,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return directoryItem;
         }
-
-        #endregion
     }
 }

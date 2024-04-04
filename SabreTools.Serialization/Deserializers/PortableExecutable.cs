@@ -5,19 +5,14 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PortableExecutable;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PortableExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PortableExecutable :
-        BaseBinaryDeserializer<Executable>,
-        IStreamDeserializer<Executable>
+    public class PortableExecutable : BaseBinaryDeserializer<Executable>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Executable? Deserialize(Stream? data)
+        public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -1334,7 +1329,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return resourceDirectoryTable;
         }
-
-        #endregion
     }
 }

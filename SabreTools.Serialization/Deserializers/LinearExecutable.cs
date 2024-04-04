@@ -3,19 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.LinearExecutable;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.LinearExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class LinearExecutable :
-        BaseBinaryDeserializer<Executable>,
-        IStreamDeserializer<Executable>
+    public class LinearExecutable : BaseBinaryDeserializer<Executable>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public Executable? Deserialize(Stream? data)
+        public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -1006,7 +1001,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return debugInformation;
         }
-
-        #endregion
     }
 }

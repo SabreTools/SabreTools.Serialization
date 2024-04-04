@@ -4,18 +4,13 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.AACS;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class AACS :
-        BaseBinaryDeserializer<MediaKeyBlock>,
-        IStreamDeserializer<MediaKeyBlock>
+    public class AACS : BaseBinaryDeserializer<MediaKeyBlock>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(Stream? data)
+        public override MediaKeyBlock? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -443,7 +438,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return record;
         }
-
-        #endregion
     }
 }

@@ -3,8 +3,7 @@ using System.Text;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Catalog :
-        JsonFile<Models.Xbox.Catalog>
+    public class Catalog : JsonFile<Models.Xbox.Catalog>
     {
         #region IByteDeserializer
 
