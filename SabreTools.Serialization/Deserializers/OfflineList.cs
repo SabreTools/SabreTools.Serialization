@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class OfflineList :
         XmlFile<Models.OfflineList.Dat>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.OfflineList.Dat? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new OfflineList();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class OpenMSX :
         XmlFile<Models.OpenMSX.SoftwareDb>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.OpenMSX.SoftwareDb? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new OpenMSX();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

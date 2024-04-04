@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class M1 :
         XmlFile<Models.Listxml.M1>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.Listxml.M1? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new M1();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

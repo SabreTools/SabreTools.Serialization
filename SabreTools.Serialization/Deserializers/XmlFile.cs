@@ -11,9 +11,30 @@ namespace SabreTools.Serialization.Deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class XmlFile<T> :
+        IByteDeserializer<T>,
         IFileDeserializer<T>,
         IStreamDeserializer<T>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc/>
+        public T? Deserialize(byte[]? data, int offset)
+        {
+            // If the data is invalid
+            if (data == null)
+                return default;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return default;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return Deserialize(dataStream);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc/>

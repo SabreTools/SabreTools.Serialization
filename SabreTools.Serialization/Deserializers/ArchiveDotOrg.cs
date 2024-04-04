@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class ArchiveDotOrg :
         XmlFile<Models.ArchiveDotOrg.Files>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.ArchiveDotOrg.Files? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new ArchiveDotOrg();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

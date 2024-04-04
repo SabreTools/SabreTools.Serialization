@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class Logiqx :
         XmlFile<Models.Logiqx.Datafile>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.Logiqx.Datafile? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new Logiqx();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

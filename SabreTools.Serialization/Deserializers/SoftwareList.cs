@@ -3,6 +3,17 @@ namespace SabreTools.Serialization.Deserializers
     public class SoftwareList :
         XmlFile<Models.SoftwareList.SoftwareList>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.SoftwareList.SoftwareList? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new SoftwareList();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>
