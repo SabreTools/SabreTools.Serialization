@@ -1,21 +1,38 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Catalog : JsonFile<Models.Xbox.Catalog>
+    public class Catalog :
+        JsonFile<Models.Xbox.Catalog>
     {
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
+        /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>
         public static Models.Xbox.Catalog? DeserializeFile(string? path)
         {
             var deserializer = new Catalog();
             return deserializer.Deserialize(path);
         }
 
-        // Catalog.js file is a UTF-16 LE JSON
+        /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
         public override Models.Xbox.Catalog? Deserialize(string? path)
             => Deserialize(path, new UnicodeEncoding());
+
+        #endregion
+
+        #region IStreamDeserializer
+
+        /// <inheritdoc cref="Interfaces.IStreamDeserializer.Deserialize(Stream?)"/>
+        public static Models.Xbox.Catalog? DeserializeStream(Stream? data)
+        {
+            var deserializer = new Catalog();
+            return deserializer.Deserialize(data);
+        }
+        
+        /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
+        public override Models.Xbox.Catalog? Deserialize(Stream? data)
+            => Deserialize(data, new UnicodeEncoding());
 
         #endregion
     }

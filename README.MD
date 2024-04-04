@@ -6,8 +6,9 @@ Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTo
 
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
-| `IByteDeserializer` | `byte[]` | Model |
+| `IByteDeserializer` | `byte[]?` | Model |
 | `IFileDeserializer` | `string?` Path | Model |
+| `IStreamDeserializer` | `Stream?` | Model |
 
 ## `SabreTools.Serialization.CrossModel`
 

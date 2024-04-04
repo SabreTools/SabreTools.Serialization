@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Streams.BSP.DeserializeStream(data);
+            var file = Deserializers.BSP.DeserializeStream(data);
             if (file == null)
                 return null;
 

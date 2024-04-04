@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Streams.NCF.DeserializeStream(data);
+            var file = Deserializers.NCF.DeserializeStream(data);
             if (file == null)
                 return null;
 
