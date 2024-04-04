@@ -8,19 +8,13 @@ Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTo
 | --- | --- | --- |
 | `IByteDeserializer` | `byte[]?` | Model |
 | `IFileDeserializer` | `string?` Path | Model |
+| `IFileSerializer` | Model | `string?` Path |
 | `IStreamDeserializer` | `Stream?` | Model |
+| `IStreamSerializer` | Model | `Stream?` |
 
 ## `SabreTools.Serialization.CrossModel`
 
 This namespace comprises of serializers and deserializers that convert models to other common ones. This is mainly used for metadata files converting to and from a common, `Dictionary`-based model.
-
-## `SabreTools.Serialization.Files`
-
-This namespace comprises of serializers and deserializers that can convert to and from files on disk. Most of the serializers are symmetric, but this is not guaranteed. Unimplemented methods will throw `NotImplementedException`.
-
-## `SabreTools.Serialization.Streams`
-
-This namespace comprises of serializers and deserializers that can convert to and from any type of stream. Most of the serializers are symmetric, but this is not guaranteed. Unimplemented methods will throw `NotImplementedException`.
 
 ## `SabreTools.Serialization.Strings`
 
