@@ -10,30 +10,9 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class BSP :
         BaseBinaryDeserializer<Models.BSP.File>,
-        IByteDeserializer<Models.BSP.File>,
         IFileDeserializer<Models.BSP.File>,
         IStreamDeserializer<Models.BSP.File>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc/>
-        public Models.BSP.File? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
         #region IFileDeserializer
 
         /// <inheritdoc/>

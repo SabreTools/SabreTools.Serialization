@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class SeparatedValue :
         BaseBinaryDeserializer<MetadataFile>,
-        IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
@@ -32,7 +31,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
+        public override MetadataFile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, ',');
 
         /// <inheritdoc/>

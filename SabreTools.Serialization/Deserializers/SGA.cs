@@ -10,30 +10,9 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class SGA :
         BaseBinaryDeserializer<Models.SGA.File>,
-        IByteDeserializer<Models.SGA.File>,
         IFileDeserializer<Models.SGA.File>,
         IStreamDeserializer<Models.SGA.File>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
         #region IFileDeserializer
 
         /// <inheritdoc/>

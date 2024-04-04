@@ -13,7 +13,28 @@ namespace SabreTools.Serialization.Deserializers
     /// <typeparam name="TModel">Type of the model to deserialize</typeparam>
     /// <remarks>These methods assume there is a concrete implementation of the deserialzier for the model available</remarks>
     public abstract class BaseBinaryDeserializer<TModel>
+        : IByteDeserializer<TModel>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc/>
+        public virtual TModel? Deserialize(byte[]? data, int offset)
+        {
+            // If the data is invalid
+            if (data == null)
+                return default;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return default;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return DeserializeStream(dataStream);
+        }
+
+        #endregion
+
         #region Static Implementations
 
         /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
@@ -46,6 +67,8 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         #endregion
+
+        #region Helpers
 
         /// <summary>
         /// Get a constructed instance of a type, if possible
@@ -84,5 +107,7 @@ namespace SabreTools.Serialization.Deserializers
 
             return default;
         }
+    
+        #endregion
     }
 }

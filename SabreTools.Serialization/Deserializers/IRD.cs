@@ -7,30 +7,9 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class IRD :
         BaseBinaryDeserializer<Models.IRD.File>,
-        IByteDeserializer<Models.IRD.File>,
         IFileDeserializer<Models.IRD.File>,
         IStreamDeserializer<Models.IRD.File>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc/>
-        public Models.IRD.File? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
         #region IFileDeserializer
 
         /// <inheritdoc/>

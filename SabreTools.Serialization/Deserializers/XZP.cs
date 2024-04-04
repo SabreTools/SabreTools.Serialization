@@ -9,30 +9,9 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class XZP :
         BaseBinaryDeserializer<Models.XZP.File>,
-        IByteDeserializer<Models.XZP.File>,
         IFileDeserializer<Models.XZP.File>,
         IStreamDeserializer<Models.XZP.File>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc/>
-        public Models.XZP.File? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
         #region IFileDeserializer
 
         /// <inheritdoc/>

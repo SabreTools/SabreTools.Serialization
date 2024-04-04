@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class Hashfile :
         BaseBinaryDeserializer<Models.Hashfile.Hashfile>,
-        IByteDeserializer<Models.Hashfile.Hashfile>,
         IFileDeserializer<Models.Hashfile.Hashfile>,
         IStreamDeserializer<Models.Hashfile.Hashfile>
     {
@@ -24,7 +23,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
+        public override Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, HashType.CRC32);
 
         /// <inheritdoc/>

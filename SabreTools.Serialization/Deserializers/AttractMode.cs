@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class AttractMode :
         BaseBinaryDeserializer<MetadataFile>,
-        IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
@@ -19,26 +18,6 @@ namespace SabreTools.Serialization.Deserializers
         public const int HeaderWithoutRomnameCount = 17;
 
         public const int HeaderWithRomnameCount = 22;
-
-        #endregion
-
-        #region IByteDeserializer
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
 
         #endregion
 

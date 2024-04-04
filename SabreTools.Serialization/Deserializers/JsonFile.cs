@@ -11,14 +11,13 @@ namespace SabreTools.Serialization.Deserializers
     /// <typeparam name="T"></typeparam>
     public class JsonFile<T> :
         BaseBinaryDeserializer<T>,
-        IByteDeserializer<T>,
         IFileDeserializer<T>,
         IStreamDeserializer<T>
     {
         #region IByteDeserializer
 
         /// <inheritdoc/>
-        public virtual T? Deserialize(byte[]? data, int offset)
+        public override T? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, new UTF8Encoding(false));
 
         /// <summary>

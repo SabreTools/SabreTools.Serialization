@@ -10,41 +10,9 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class ClrMamePro :
         BaseBinaryDeserializer<MetadataFile>,
-        IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MetadataFile? DeserializeBytes(byte[]? data, int offset, bool quotes = true)
-        {
-            var deserializer = new ClrMamePro();
-            return deserializer.Deserialize(data, offset, quotes);
-        }
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
-            => Deserialize(data, offset, true);
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset, bool quotes)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream, quotes);
-        }
-
-        #endregion
-
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
