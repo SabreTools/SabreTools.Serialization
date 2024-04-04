@@ -2,51 +2,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class IRD :
-        IFileSerializer<Models.IRD.File>,
-        IStreamSerializer<Models.IRD.File>
+    public class IRD : BaseBinarySerializer<Models.IRD.File>
     {
-        #region IFileSerializer
-
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(Models.IRD.File? obj, string? path)
-        {
-            var serializer = new IRD();
-            return serializer.Serialize(obj, path);
-        }
-        
         /// <inheritdoc/>
-        public bool Serialize(Models.IRD.File? obj, string? path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            using var stream = SerializeStream(obj);
-            if (stream == null)
-                return false;
-
-            using var fs = System.IO.File.OpenWrite(path);
-            stream.CopyTo(fs);
-            return true;
-        }
-
-        #endregion
-
-        #region IStreamSerializer
-
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(Models.IRD.File? obj)
-        {
-            var serializer = new IRD();
-            return serializer.Serialize(obj);
-        }
-        
-        /// <inheritdoc/>
-        public Stream? Serialize(Models.IRD.File? obj)
+        public override Stream? Serialize(Models.IRD.File? obj)
         {
             // If the data is invalid
             if (obj?.Magic == null)
@@ -165,7 +127,5 @@ namespace SabreTools.Serialization.Serializers
 
             return stream;
         }
-
-        #endregion
     }
 }

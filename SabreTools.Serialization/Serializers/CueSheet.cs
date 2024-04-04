@@ -2,51 +2,13 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Models.CueSheets;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class CueSheet :
-        IFileSerializer<Models.CueSheets.CueSheet>,
-        IStreamSerializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinarySerializer<Models.CueSheets.CueSheet>
     {
-        #region IFileSerializer
-
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(Models.CueSheets.CueSheet? obj, string? path)
-        {
-            var serializer = new CueSheet();
-            return serializer.Serialize(obj, path);
-        }
-        
         /// <inheritdoc/>
-        public bool Serialize(Models.CueSheets.CueSheet? obj, string? path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            using var stream = SerializeStream(obj);
-            if (stream == null)
-                return false;
-
-            using var fs = File.OpenWrite(path);
-            stream.CopyTo(fs);
-            return true;
-        }
-
-        #endregion
-
-        #region IStreamSerializer
-
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(Models.CueSheets.CueSheet? obj)
-        {
-            var serializer = new CueSheet();
-            return serializer.Serialize(obj);
-        }
-        
-        /// <inheritdoc/>
-        public Stream? Serialize(Models.CueSheets.CueSheet? obj)
+        public override Stream? Serialize(Models.CueSheets.CueSheet? obj)
         {
             // If the cuesheet is null
             if (obj == null)
@@ -291,8 +253,6 @@ namespace SabreTools.Serialization.Serializers
 
             return outputFlagString.Trim();
         }
-
-        #endregion
 
         #endregion
     }

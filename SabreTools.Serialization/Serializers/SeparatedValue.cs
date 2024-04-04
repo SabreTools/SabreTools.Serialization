@@ -3,14 +3,39 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Writers;
 using SabreTools.Models.SeparatedValue;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class SeparatedValue :
-        IFileSerializer<MetadataFile>,
-        IStreamSerializer<MetadataFile>
+    // TODO: Create variants for the 3 common types: CSV, SSV, TSV
+    public class SeparatedValue : BaseBinarySerializer<MetadataFile>
     {
+        #region IByteSerializer
+
+        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
+        public static byte[]? SerializeBytes(MetadataFile? obj, char delim = ',', bool longHeader = false)
+        {
+            var serializer = new SeparatedValue();
+            return serializer.SerializeArray(obj, delim, longHeader);
+        }
+
+        /// <inheritdoc/>
+        public override byte[]? SerializeArray(MetadataFile? obj)
+            => SerializeArray(obj, ',', false);
+
+        /// <inheritdoc/>
+        public byte[]? SerializeArray(MetadataFile? obj, char delim, bool longHeader)
+        {
+            using var stream = SerializeStream(obj, delim, longHeader);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
@@ -21,7 +46,7 @@ namespace SabreTools.Serialization.Serializers
         }
 
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public override bool Serialize(MetadataFile? obj, string? path)
             => Serialize(obj, path, ',', false);
 
         /// <inheritdoc/>
@@ -51,7 +76,7 @@ namespace SabreTools.Serialization.Serializers
         }
 
         /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj)
+        public override Stream? Serialize(MetadataFile? obj)
             => Serialize(obj, ',', false);
 
         /// <inheritdoc cref="Serialize(MetadataFile)"/>

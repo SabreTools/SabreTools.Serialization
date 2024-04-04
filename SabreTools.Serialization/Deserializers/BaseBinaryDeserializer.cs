@@ -73,6 +73,7 @@ namespace SabreTools.Serialization.Deserializers
             var deserializer = GetType<IFileDeserializer<TModel>>();
             if (deserializer == null)
                 return default;
+
             return deserializer.Deserialize(path);
         }
 
@@ -127,7 +128,7 @@ namespace SabreTools.Serialization.Deserializers
 
             return default;
         }
-    
+
         #endregion
     }
 }
