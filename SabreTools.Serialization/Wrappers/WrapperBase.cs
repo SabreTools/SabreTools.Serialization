@@ -8,7 +8,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public abstract class WrapperBase<T> : IWrapper
+    public abstract class WrapperBase<T> : IWrapper<T>
     {
         #region Descriptive Properties
 
@@ -23,6 +23,9 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Properties
+
+        /// <inheritdoc/>
+        public T GetModel() => Model;
 
         /// <summary>
         /// Internal model
