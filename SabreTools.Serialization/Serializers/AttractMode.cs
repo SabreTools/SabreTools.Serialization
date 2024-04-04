@@ -15,7 +15,54 @@ namespace SabreTools.Serialization.Serializers
 
         public const string HeaderWithoutRomname = "#Name;Title;Emulator;CloneOf;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons";
 
+        public static readonly string[] HeaderArrayWithoutRomname =
+        [
+            "#Name",
+            "Title",
+            "Emulator",
+            "CloneOf",
+            "Year",
+            "Manufacturer",
+            "Category",
+            "Players",
+            "Rotation",
+            "Control",
+            "Status",
+            "DisplayCount",
+            "DisplayType",
+            "AltRomname",
+            "AltTitle",
+            "Extra",
+            "Buttons"
+        ];
+
         public const string HeaderWithRomname = "#Romname;Title;Emulator;Cloneof;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons;Favourite;Tags;PlayedCount;PlayedTime;FileIsAvailable";
+
+        public static readonly string[] HeaderArrayWithRomname =
+        [
+            "#Romname",
+            "Title",
+            "Emulator",
+            "Cloneof",
+            "Year",
+            "Manufacturer",
+            "Category",
+            "Players",
+            "Rotation",
+            "Control",
+            "Status",
+            "DisplayCount",
+            "DisplayType",
+            "AltRomname",
+            "AltTitle",
+            "Extra",
+            "Buttons",
+            "Favourite",
+            "Tags",
+            "PlayedCount",
+            "PlayedTime",
+            "FileIsAvailable"
+        ];
 
         #endregion
 
@@ -79,10 +126,7 @@ namespace SabreTools.Serialization.Serializers
             };
 
             // Write the header
-            if (longHeader)
-                writer.WriteString(HeaderWithRomname); // TODO: Convert to array of values
-            else
-                writer.WriteString(HeaderWithoutRomname); // TODO: Convert to array of values
+            writer.WriteValues(longHeader ? HeaderArrayWithRomname : HeaderArrayWithoutRomname);
             writer.WriteLine();
 
             // Write out the rows, if they exist
