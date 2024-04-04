@@ -9,6 +9,7 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class AttractMode :
+        IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
@@ -17,6 +18,33 @@ namespace SabreTools.Serialization.Deserializers
         public const int HeaderWithoutRomnameCount = 17;
 
         public const int HeaderWithRomnameCount = 22;
+
+        #endregion
+
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static MetadataFile? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new AttractMode();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        /// <inheritdoc/>
+        public MetadataFile? Deserialize(byte[]? data, int offset)
+        {
+            // If the data is invalid
+            if (data == null)
+                return null;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return null;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return DeserializeStream(dataStream);
+        }
 
         #endregion
 

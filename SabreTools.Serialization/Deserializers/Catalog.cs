@@ -6,6 +6,21 @@ namespace SabreTools.Serialization.Deserializers
     public class Catalog :
         JsonFile<Models.Xbox.Catalog>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="Interfaces.IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.Xbox.Catalog? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new Catalog();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
+        public override Models.Xbox.Catalog? Deserialize(byte[]? data, int offset)
+            => Deserialize(data, offset, new UnicodeEncoding());
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="Interfaces.IFileDeserializer.Deserialize(string?)"/>

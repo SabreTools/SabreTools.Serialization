@@ -10,9 +10,41 @@ namespace SabreTools.Serialization.Deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class JsonFile<T> :
+        IByteDeserializer<T>,
         IFileDeserializer<T>,
         IStreamDeserializer<T>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc/>
+        public virtual T? Deserialize(byte[]? data, int offset)
+            => Deserialize(data, offset, new UTF8Encoding(false));
+
+        /// <summary>
+        /// Deserialize a byte array into <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">Type of object to deserialize to</typeparam>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <param name="encoding">Encoding to parse text as</param>
+        /// <returns>Filled object on success, null on error</returns>
+        public T? Deserialize(byte[]? data, int offset, Encoding encoding)
+        {
+            // If the data is invalid
+            if (data == null)
+                return default;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return default;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return Deserialize(dataStream, encoding);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc/>
@@ -33,7 +65,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         #endregion
-    
+
         #region IStreamDeserializer
 
         /// <inheritdoc/>

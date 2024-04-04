@@ -10,9 +10,37 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class CueSheet :
+        IByteDeserializer<Models.CueSheets.CueSheet>,
         IFileDeserializer<Models.CueSheets.CueSheet>,
         IStreamDeserializer<Models.CueSheets.CueSheet>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.CueSheets.CueSheet? DeserializeBytes(byte[]? data, int offset)
+        {
+            var deserializer = new CueSheet();
+            return deserializer.Deserialize(data, offset);
+        }
+
+        /// <inheritdoc/>
+        public Models.CueSheets.CueSheet? Deserialize(byte[]? data, int offset)
+        {
+            // If the data is invalid
+            if (data == null)
+                return null;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return null;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return DeserializeStream(dataStream);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>

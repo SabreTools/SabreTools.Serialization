@@ -6,13 +6,44 @@ using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
 
-// TODO: Replace use of Serialization.Hash with Hashing.HashType
 namespace SabreTools.Serialization.Deserializers
 {
     public class Hashfile :
+        IByteDeserializer<Models.Hashfile.Hashfile>,
         IFileDeserializer<Models.Hashfile.Hashfile>,
         IStreamDeserializer<Models.Hashfile.Hashfile>
     {
+        #region IByteDeserializer
+
+        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
+        public static Models.Hashfile.Hashfile? DeserializeBytes(byte[]? data, int offset, HashType hash = HashType.CRC32)
+        {
+            var deserializer = new Hashfile();
+            return deserializer.Deserialize(data, offset, hash);
+        }
+
+        /// <inheritdoc/>
+        public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
+            => Deserialize(data, offset, HashType.CRC32);
+
+        /// <inheritdoc/>
+        public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
+        {
+            // If the data is invalid
+            if (data == null)
+                return null;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return null;
+
+            // Create a memory stream and parse that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return DeserializeStream(dataStream, hash);
+        }
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
