@@ -22,19 +22,23 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path)
+        public static bool SerializeFile(MetadataFile? obj, string? path, bool longHeader = false)
         {
             var serializer = new AttractMode();
             return serializer.Serialize(obj, path);
         }
-        
+
         /// <inheritdoc/>
         public bool Serialize(MetadataFile? obj, string? path)
+            => Serialize(obj, path, false);
+
+        /// <inheritdoc/>
+        public bool Serialize(MetadataFile? obj, string? path, bool longHeader)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = SerializeStream(obj);
+            using var stream = SerializeStream(obj, longHeader);
             if (stream == null)
                 return false;
 
@@ -48,14 +52,18 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(MetadataFile? obj)
+        public static Stream? SerializeStream(MetadataFile? obj, bool longHeader = false)
         {
             var serializer = new AttractMode();
-            return serializer.Serialize(obj);
+            return serializer.Serialize(obj, longHeader);
         }
 
         /// <inheritdoc/>
         public Stream? Serialize(MetadataFile? obj)
+            => Serialize(obj, false);
+
+        /// <inheritdoc/>
+        public Stream? Serialize(MetadataFile? obj, bool longHeader)
         {
             // If the metadata file is null
             if (obj == null)
@@ -70,13 +78,15 @@ namespace SabreTools.Serialization.Serializers
                 VerifyFieldCount = false,
             };
 
-            // TODO: Include flag to write out long or short header
-            // Write the short header
-            writer.WriteString(HeaderWithoutRomname); // TODO: Convert to array of values
+            // Write the header
+            if (longHeader)
+                writer.WriteString(HeaderWithRomname); // TODO: Convert to array of values
+            else
+                writer.WriteString(HeaderWithoutRomname); // TODO: Convert to array of values
             writer.WriteLine();
 
             // Write out the rows, if they exist
-            WriteRows(obj.Row, writer);
+            WriteRows(obj.Row, writer, longHeader);
 
             // Return the stream
             stream.Seek(0, SeekOrigin.Begin);
@@ -88,7 +98,8 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="rows">Array of Row objects representing the rows information</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteRows(Row?[]? rows, SeparatedValueWriter writer)
+        /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
+        private static void WriteRows(Row?[]? rows, SeparatedValueWriter writer, bool longHeader)
         {
             // If the games information is missing, we can't do anything
             if (rows == null || !rows.Any())
@@ -100,26 +111,58 @@ namespace SabreTools.Serialization.Serializers
                 if (row == null)
                     continue;
 
-                var rowArray = new string?[]
+                string?[] rowArray;
+                if (longHeader)
                 {
-                    row.Name,
-                    row.Title,
-                    row.Emulator,
-                    row.CloneOf,
-                    row.Year,
-                    row.Manufacturer,
-                    row.Category,
-                    row.Players,
-                    row.Rotation,
-                    row.Control,
-                    row.Status,
-                    row.DisplayCount,
-                    row.DisplayType,
-                    row.AltRomname,
-                    row.AltTitle,
-                    row.Extra,
-                    row.Buttons,
-                };
+                    rowArray =
+                    [
+                        row.Name,
+                        row.Title,
+                        row.Emulator,
+                        row.CloneOf,
+                        row.Year,
+                        row.Manufacturer,
+                        row.Category,
+                        row.Players,
+                        row.Rotation,
+                        row.Control,
+                        row.Status,
+                        row.DisplayCount,
+                        row.DisplayType,
+                        row.AltRomname,
+                        row.AltTitle,
+                        row.Extra,
+                        row.Buttons,
+                        row.Favorite,
+                        row.Tags,
+                        row.PlayedCount,
+                        row.PlayedTime,
+                        row.FileIsAvailable,
+                    ];
+                }
+                else
+                {
+                    rowArray =
+                    [
+                        row.Name,
+                        row.Title,
+                        row.Emulator,
+                        row.CloneOf,
+                        row.Year,
+                        row.Manufacturer,
+                        row.Category,
+                        row.Players,
+                        row.Rotation,
+                        row.Control,
+                        row.Status,
+                        row.DisplayCount,
+                        row.DisplayType,
+                        row.AltRomname,
+                        row.AltTitle,
+                        row.Extra,
+                        row.Buttons,
+                    ];
+                }
 
                 writer.WriteValues(rowArray);
                 writer.Flush();

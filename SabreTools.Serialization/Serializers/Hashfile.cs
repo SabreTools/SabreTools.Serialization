@@ -7,7 +7,6 @@ using SabreTools.IO.Writers;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
 
-// TODO: Replace use of Serialization.Hash with Hashing.HashType
 namespace SabreTools.Serialization.Serializers
 {
     public class Hashfile :
