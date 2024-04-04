@@ -12,6 +12,14 @@ namespace SabreTools.Serialization.Deserializers
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
+        #region Constants
+
+        public const int HeaderWithoutRomnameCount = 17;
+
+        public const int HeaderWithRomnameCount = 22;
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
@@ -70,7 +78,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Parse the line into a row
                 Row row;
-                if (reader.Line.Count < Serialization.AttractMode.HeaderWithRomnameCount)
+                if (reader.Line.Count < HeaderWithRomnameCount)
                 {
                     row = new Row
                     {
@@ -94,8 +102,8 @@ namespace SabreTools.Serialization.Deserializers
                     };
 
                     // If we have additional fields
-                    if (reader.Line.Count > Serialization.AttractMode.HeaderWithoutRomnameCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(Serialization.AttractMode.HeaderWithoutRomnameCount).ToArray();
+                    if (reader.Line.Count > HeaderWithoutRomnameCount)
+                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithoutRomnameCount).ToArray();
                 }
                 else
                 {
@@ -121,8 +129,8 @@ namespace SabreTools.Serialization.Deserializers
                     };
 
                     // If we have additional fields
-                    if (reader.Line.Count > Serialization.AttractMode.HeaderWithRomnameCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(Serialization.AttractMode.HeaderWithRomnameCount).ToArray();
+                    if (reader.Line.Count > HeaderWithRomnameCount)
+                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithRomnameCount).ToArray();
                 }
 
                 rows.Add(row);

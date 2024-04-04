@@ -11,6 +11,14 @@ namespace SabreTools.Serialization.Serializers
         IFileSerializer<MetadataFile>,
         IStreamSerializer<MetadataFile>
     {
+        #region Constants
+
+        public const string HeaderWithoutRomname = "#Name;Title;Emulator;CloneOf;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons";
+
+        public const string HeaderWithRomname = "#Romname;Title;Emulator;Cloneof;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons;Favourite;Tags;PlayedCount;PlayedTime;FileIsAvailable";
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
@@ -64,7 +72,7 @@ namespace SabreTools.Serialization.Serializers
 
             // TODO: Include flag to write out long or short header
             // Write the short header
-            writer.WriteString(Serialization.AttractMode.HeaderWithoutRomname); // TODO: Convert to array of values
+            writer.WriteString(HeaderWithoutRomname); // TODO: Convert to array of values
             writer.WriteLine();
 
             // Write out the rows, if they exist
