@@ -8,18 +8,12 @@ using static SabreTools.Models.Quantum.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class Quantum :
+        BaseBinaryDeserializer<Archive>,
         IByteDeserializer<Archive>,
         IFileDeserializer<Archive>,
         IStreamDeserializer<Archive>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Archive? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new Quantum();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Archive? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Archive? DeserializeFile(string? path)
-        {
-            var deserializer = new Quantum();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Archive? Deserialize(string? path)
         {
@@ -58,13 +45,6 @@ namespace SabreTools.Serialization.Deserializers
         #endregion
 
         #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Archive? DeserializeStream(Stream? data)
-        {
-            var deserializer = new Quantum();
-            return deserializer.Deserialize(data);
-        }
 
         /// <inheritdoc/>
         public Archive? Deserialize(Stream? data)

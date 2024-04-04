@@ -8,18 +8,12 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class Listrom :
+        BaseBinaryDeserializer<MetadataFile>,
         IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MetadataFile? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public MetadataFile? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MetadataFile? DeserializeFile(string? path)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public MetadataFile? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MetadataFile? DeserializeStream(Stream? data)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public MetadataFile? Deserialize(Stream? data)
         {

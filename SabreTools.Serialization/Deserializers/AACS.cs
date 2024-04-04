@@ -9,18 +9,12 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class AACS :
+        BaseBinaryDeserializer<MediaKeyBlock>,
         IByteDeserializer<MediaKeyBlock>,
         IFileDeserializer<MediaKeyBlock>,
         IStreamDeserializer<MediaKeyBlock>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MediaKeyBlock? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public MediaKeyBlock? Deserialize(byte[]? data, int offset)
@@ -42,13 +36,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MediaKeyBlock? DeserializeFile(string? path)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public MediaKeyBlock? Deserialize(string? path)
         {
@@ -60,13 +47,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MediaKeyBlock? DeserializeStream(Stream? data)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public MediaKeyBlock? Deserialize(Stream? data)
         {

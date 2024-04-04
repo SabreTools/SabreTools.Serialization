@@ -8,18 +8,12 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class NCF :
+        BaseBinaryDeserializer<Models.NCF.File>,
         IByteDeserializer<Models.NCF.File>,
         IFileDeserializer<Models.NCF.File>,
         IStreamDeserializer<Models.NCF.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.NCF.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new NCF();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.NCF.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.NCF.File? DeserializeFile(string? path)
-        {
-            var deserializer = new NCF();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.NCF.File? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.NCF.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new NCF();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.NCF.File? Deserialize(Stream? data)
         {

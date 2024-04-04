@@ -9,18 +9,12 @@ using static SabreTools.Models.PIC.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class PIC :
+        BaseBinaryDeserializer<DiscInformation>,
         IByteDeserializer<DiscInformation>,
         IFileDeserializer<DiscInformation>,
         IStreamDeserializer<DiscInformation>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static DiscInformation? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public DiscInformation? Deserialize(byte[]? data, int offset)
@@ -42,13 +36,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static DiscInformation? DeserializeFile(string? path)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public DiscInformation? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
         #endregion
 
         #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static DiscInformation? DeserializeStream(Stream? data)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(data);
-        }
 
         /// <inheritdoc/>
         public DiscInformation? Deserialize(Stream? data)

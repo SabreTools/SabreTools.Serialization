@@ -9,6 +9,7 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class Hashfile :
+        BaseBinaryDeserializer<Models.Hashfile.Hashfile>,
         IByteDeserializer<Models.Hashfile.Hashfile>,
         IFileDeserializer<Models.Hashfile.Hashfile>,
         IStreamDeserializer<Models.Hashfile.Hashfile>

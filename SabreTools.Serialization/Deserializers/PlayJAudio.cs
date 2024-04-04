@@ -8,18 +8,12 @@ using static SabreTools.Models.PlayJ.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class PlayJAudio :
+        BaseBinaryDeserializer<AudioFile>,
         IByteDeserializer<AudioFile>,
         IFileDeserializer<AudioFile>,
         IStreamDeserializer<AudioFile>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static AudioFile? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PlayJAudio();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public AudioFile? Deserialize(byte[]? data, int offset)
@@ -40,13 +34,6 @@ namespace SabreTools.Serialization.Deserializers
         #endregion
 
         #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static AudioFile? DeserializeFile(string? path)
-        {
-            var deserializer = new PlayJAudio();
-            return deserializer.Deserialize(path);
-        }
 
         /// <inheritdoc/>
         public AudioFile? Deserialize(string? path)

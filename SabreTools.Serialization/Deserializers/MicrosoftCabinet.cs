@@ -9,18 +9,12 @@ namespace SabreTools.Serialization.Deserializers
 {
     // TODO: Add multi-cabinet reading
     public class MicrosoftCabinet :
+        BaseBinaryDeserializer<Cabinet>,
         IByteDeserializer<Cabinet>,
         IFileDeserializer<Cabinet>,
         IStreamDeserializer<Cabinet>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Cabinet? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new MicrosoftCabinet();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Cabinet? Deserialize(byte[]? data, int offset)
@@ -42,13 +36,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Cabinet? DeserializeFile(string? path)
-        {
-            var deserializer = new MicrosoftCabinet();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Cabinet? Deserialize(string? path)
         {
@@ -60,13 +47,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Cabinet? DeserializeStream(Stream? data)
-        {
-            var deserializer = new MicrosoftCabinet();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Cabinet? Deserialize(Stream? data)
         {

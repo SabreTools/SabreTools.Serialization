@@ -8,18 +8,12 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class GCF :
+        BaseBinaryDeserializer<Models.GCF.File>,
         IByteDeserializer<Models.GCF.File>,
         IFileDeserializer<Models.GCF.File>,
         IStreamDeserializer<Models.GCF.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.GCF.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new GCF();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.GCF.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.GCF.File? DeserializeFile(string? path)
-        {
-            var deserializer = new GCF();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.GCF.File? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.GCF.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new GCF();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.GCF.File? Deserialize(Stream? data)
         {

@@ -9,18 +9,12 @@ using static SabreTools.Models.SGA.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class SGA :
+        BaseBinaryDeserializer<Models.SGA.File>,
         IByteDeserializer<Models.SGA.File>,
         IFileDeserializer<Models.SGA.File>,
         IStreamDeserializer<Models.SGA.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.SGA.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.SGA.File? Deserialize(byte[]? data, int offset)
@@ -42,13 +36,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.SGA.File? DeserializeFile(string? path)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.SGA.File? Deserialize(string? path)
         {
@@ -60,13 +47,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.SGA.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.SGA.File? Deserialize(Stream? data)
         {

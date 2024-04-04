@@ -10,18 +10,12 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class CueSheet :
+        BaseBinaryDeserializer<Models.CueSheets.CueSheet>,
         IByteDeserializer<Models.CueSheets.CueSheet>,
         IFileDeserializer<Models.CueSheets.CueSheet>,
         IStreamDeserializer<Models.CueSheets.CueSheet>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.CueSheets.CueSheet? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new CueSheet();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.CueSheets.CueSheet? Deserialize(byte[]? data, int offset)
@@ -43,13 +37,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.CueSheets.CueSheet? DeserializeFile(string? path)
-        {
-            var deserializer = new CueSheet();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.CueSheets.CueSheet? Deserialize(string? path)
         {
@@ -61,13 +48,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.CueSheets.CueSheet? DeserializeStream(Stream? data)
-        {
-            var deserializer = new CueSheet();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {

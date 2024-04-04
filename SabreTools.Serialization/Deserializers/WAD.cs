@@ -8,18 +8,12 @@ using static SabreTools.Models.WAD.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class WAD :
+        BaseBinaryDeserializer<Models.WAD.File>,
         IByteDeserializer<Models.WAD.File>,
         IFileDeserializer<Models.WAD.File>,
         IStreamDeserializer<Models.WAD.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.WAD.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new WAD();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.WAD.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.WAD.File? DeserializeFile(string? path)
-        {
-            var deserializer = new WAD();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.WAD.File? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.WAD.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new WAD();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.WAD.File? Deserialize(Stream? data)
         {

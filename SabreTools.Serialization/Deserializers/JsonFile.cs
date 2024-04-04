@@ -10,6 +10,7 @@ namespace SabreTools.Serialization.Deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class JsonFile<T> :
+        BaseBinaryDeserializer<T>,
         IByteDeserializer<T>,
         IFileDeserializer<T>,
         IStreamDeserializer<T>

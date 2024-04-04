@@ -8,18 +8,12 @@ using static SabreTools.Models.BDPlus.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class BDPlus :
+        BaseBinaryDeserializer<SVM>,
         IByteDeserializer<SVM>,
         IFileDeserializer<SVM>,
         IStreamDeserializer<SVM>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static SVM? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new BDPlus();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public SVM? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static SVM? DeserializeFile(string? path)
-        {
-            var deserializer = new BDPlus();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public SVM? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static SVM? DeserializeStream(Stream? data)
-        {
-            var deserializer = new BDPlus();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public SVM? Deserialize(Stream? data)
         {

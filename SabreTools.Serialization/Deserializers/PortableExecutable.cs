@@ -11,18 +11,12 @@ using static SabreTools.Models.PortableExecutable.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class PortableExecutable :
+        BaseBinaryDeserializer<Executable>,
         IByteDeserializer<Executable>,
         IFileDeserializer<Executable>,
         IStreamDeserializer<Executable>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Executable? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PortableExecutable();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Executable? Deserialize(byte[]? data, int offset)
@@ -44,13 +38,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Executable? DeserializeFile(string? path)
-        {
-            var deserializer = new PortableExecutable();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Executable? Deserialize(string? path)
         {
@@ -62,13 +49,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Executable? DeserializeStream(Stream? data)
-        {
-            var deserializer = new PortableExecutable();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Executable? Deserialize(Stream? data)
         {

@@ -9,6 +9,7 @@ using SabreTools.Serialization.Interfaces;
 namespace SabreTools.Serialization.Deserializers
 {
     public class SeparatedValue :
+        BaseBinaryDeserializer<MetadataFile>,
         IByteDeserializer<MetadataFile>,
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>

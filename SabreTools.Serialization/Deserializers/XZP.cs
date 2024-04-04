@@ -8,18 +8,12 @@ using static SabreTools.Models.XZP.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class XZP :
+        BaseBinaryDeserializer<Models.XZP.File>,
         IByteDeserializer<Models.XZP.File>,
         IFileDeserializer<Models.XZP.File>,
         IStreamDeserializer<Models.XZP.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.XZP.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new XZP();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.XZP.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.XZP.File? DeserializeFile(string? path)
-        {
-            var deserializer = new XZP();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.XZP.File? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.XZP.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new XZP();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.XZP.File? Deserialize(Stream? data)
         {

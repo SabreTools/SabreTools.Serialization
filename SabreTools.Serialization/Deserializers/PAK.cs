@@ -8,18 +8,12 @@ using static SabreTools.Models.PAK.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class PAK :
+        BaseBinaryDeserializer<Models.PAK.File>,
         IByteDeserializer<Models.PAK.File>,
         IFileDeserializer<Models.PAK.File>,
         IStreamDeserializer<Models.PAK.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.PAK.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PAK();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.PAK.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.PAK.File? DeserializeFile(string? path)
-        {
-            var deserializer = new PAK();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.PAK.File? Deserialize(string? path)
         {
@@ -59,13 +46,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.PAK.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new PAK();
-            return deserializer.Deserialize(data);
-        }
-        
         /// <inheritdoc/>
         public Models.PAK.File? Deserialize(Stream? data)
         {

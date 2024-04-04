@@ -8,18 +8,12 @@ using static SabreTools.Models.VBSP.Constants;
 namespace SabreTools.Serialization.Deserializers
 {
     public class VBSP :
+        BaseBinaryDeserializer<Models.VBSP.File>,
         IByteDeserializer<Models.VBSP.File>,
         IFileDeserializer<Models.VBSP.File>,
         IStreamDeserializer<Models.VBSP.File>
     {
         #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.VBSP.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new VBSP();
-            return deserializer.Deserialize(data, offset);
-        }
 
         /// <inheritdoc/>
         public Models.VBSP.File? Deserialize(byte[]? data, int offset)
@@ -41,13 +35,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.VBSP.File? DeserializeFile(string? path)
-        {
-            var deserializer = new VBSP();
-            return deserializer.Deserialize(path);
-        }
-
         /// <inheritdoc/>
         public Models.VBSP.File? Deserialize(string? path)
         {
@@ -58,13 +45,6 @@ namespace SabreTools.Serialization.Deserializers
         #endregion
 
         #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.VBSP.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new VBSP();
-            return deserializer.Deserialize(data);
-        }
 
         /// <inheritdoc/>
         public Models.VBSP.File? Deserialize(Stream? data)
