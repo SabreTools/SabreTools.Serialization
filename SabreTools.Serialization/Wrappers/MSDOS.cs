@@ -25,12 +25,14 @@ namespace SabreTools.Serialization.Wrappers
             : base(model, data)
         {
             // All logic is handled by the base class
-        }/// <summary>
-         /// Create an MS-DOS executable from a byte array and offset
-         /// </summary>
-         /// <param name="data">Byte array representing the executable</param>
-         /// <param name="offset">Offset within the array to parse</param>
-         /// <returns>An MS-DOS executable wrapper on success, null on failure</returns>
+        }
+
+        /// <summary>
+        /// Create an MS-DOS executable from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the executable</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>An MS-DOS executable wrapper on success, null on failure</returns>
         public static MSDOS? Create(byte[]? data, int offset)
         {
             // If the data is invalid

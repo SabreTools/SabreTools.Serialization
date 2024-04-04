@@ -2,38 +2,39 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PFF : WrapperBase<Models.PFF.Archive>
+    // TODO: Figure out extension properties
+    public class PIC : WrapperBase<Models.PIC.DiscInformation>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "NovaLogic Game Archive Format (PFF)";
+        public override string DescriptionString => "Disc Information";
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public PFF(Models.PFF.Archive? model, byte[]? data, int offset)
+        public PIC(Models.PIC.DiscInformation? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public PFF(Models.PFF.Archive? model, Stream? data)
+        public PIC(Models.PIC.DiscInformation? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
         }
-
+        
         /// <summary>
-        /// Create a PFF archive from a byte array and offset
-        /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
-        /// <param name="offset">Offset within the array to parse</param>
-        /// <returns>A PFF archive wrapper on success, null on failure</returns>
-        public static PFF? Create(byte[]? data, int offset)
+         /// Create a PIC disc information object from a byte array and offset
+         /// </summary>
+         /// <param name="data">Byte array representing the information</param>
+         /// <param name="offset">Offset within the array to parse</param>
+         /// <returns>A PIC disc information wrapper on success, null on failure</returns>
+        public static PIC? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -49,23 +50,23 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a PFF archive from a Stream
+        /// Create a PIC disc information object from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
-        /// <returns>A PFF archive wrapper on success, null on failure</returns>
-        public static PFF? Create(Stream? data)
+        /// <param name="data">Stream representing the information</param>
+        /// <returns>A PIC disc information wrapper on success, null on failure</returns>
+        public static PIC? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.PFF.DeserializeStream(data);
+            var archive = Deserializers.PIC.DeserializeStream(data);
             if (archive == null)
                 return null;
 
             try
             {
-                return new PFF(archive, data);
+                return new PIC(archive, data);
             }
             catch
             {

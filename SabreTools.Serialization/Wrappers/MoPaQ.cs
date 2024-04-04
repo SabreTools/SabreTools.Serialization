@@ -27,13 +27,13 @@ namespace SabreTools.Serialization.Wrappers
         {
             // All logic is handled by the base class
         }
-        
+
         /// <summary>
-         /// Create a Microsoft Cabinet from a byte array and offset
-         /// </summary>
-         /// <param name="data">Byte array representing the cabinet</param>
-         /// <param name="offset">Offset within the array to parse</param>
-         /// <returns>A cabinet wrapper on success, null on failure</returns>
+        /// Create a MoPaQ archive from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>A MoPaQ archive wrapper on success, null on failure</returns>
         public static MoPaQ? Create(byte[]? data, int offset)
         {
             // If the data is invalid
@@ -50,10 +50,10 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a Microsoft Cabinet from a Stream
+        /// Create a MoPaQ archive from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the cabinet</param>
-        /// <returns>A cabinet wrapper on success, null on failure</returns>
+        /// <param name="data">Stream representing the archive</param>
+        /// <returns>A MoPaQ archive wrapper on success, null on failure</returns>
         public static MoPaQ? Create(Stream? data)
         {
             // If the data is invalid
