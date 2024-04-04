@@ -3,72 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.N3DS;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class N3DS :
-        IByteDeserializer<Cart>,
-        IFileDeserializer<Cart>,
-        IStreamDeserializer<Cart>
+    public class N3DS : BaseBinaryDeserializer<Cart>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Cart? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new N3DS();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public Cart? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Cart? DeserializeFile(string? path)
-        {
-            var deserializer = new N3DS();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public Cart? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Cart? DeserializeStream(Stream? data)
-        {
-            var deserializer = new N3DS();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public Cart? Deserialize(Stream? data)
+        public override Cart? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -765,7 +707,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return romFSHeader;
         }
-
-        #endregion
     }
 }

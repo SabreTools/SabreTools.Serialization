@@ -26,12 +26,14 @@ namespace SabreTools.Serialization.Wrappers
             : base(model, data)
         {
             // All logic is handled by the base class
-        }/// <summary>
-         /// Create a Microsoft Cabinet from a byte array and offset
-         /// </summary>
-         /// <param name="data">Byte array representing the cabinet</param>
-         /// <param name="offset">Offset within the array to parse</param>
-         /// <returns>A cabinet wrapper on success, null on failure</returns>
+        }
+
+        /// <summary>
+        /// Create a Microsoft Cabinet from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the cabinet</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>A cabinet wrapper on success, null on failure</returns>
         public static MicrosoftCabinet? Create(byte[]? data, int offset)
         {
             // If the data is invalid

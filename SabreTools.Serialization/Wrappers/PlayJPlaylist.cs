@@ -2,38 +2,38 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PlayJAudioFile : WrapperBase<Models.PlayJ.AudioFile>
+    public class PlayJPlaylist : WrapperBase<Models.PlayJ.Playlist>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "PlayJ Audio File (PLJ)";
+        public override string DescriptionString => "PlayJ Playlist";
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile? model, byte[]? data, int offset)
+        public PlayJPlaylist(Models.PlayJ.Playlist? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile? model, Stream? data)
+        public PlayJPlaylist(Models.PlayJ.Playlist? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
         }
 
         /// <summary>
-        /// Create a PlayJ audio file from a byte array and offset
+        /// Create a PlayJ playlist from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the audio file</param>
+        /// <param name="data">Byte array representing the playlist</param>
         /// <param name="offset">Offset within the array to parse</param>
-        /// <returns>A PlayJ audio file wrapper on success, null on failure</returns>
-        public static PlayJAudioFile? Create(byte[]? data, int offset)
+        /// <returns>A PlayJ playlist wrapper on success, null on failure</returns>
+        public static PlayJPlaylist? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -49,23 +49,23 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a PlayJ audio file from a Stream
+        /// Create a PlayJ playlist from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the audio file</param>
-        /// <returns>A PlayJ audio file wrapper on success, null on failure</returns>
-        public static PlayJAudioFile? Create(Stream? data)
+        /// <param name="data">Stream representing the playlist</param>
+        /// <returns>A PlayJ playlist wrapper on success, null on failure</returns>
+        public static PlayJPlaylist? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var audioFile = Deserializers.PlayJAudio.DeserializeStream(data);
-            if (audioFile == null)
+            var playlist = Deserializers.PlayJPlaylist.DeserializeStream(data);
+            if (playlist == null)
                 return null;
 
             try
             {
-                return new PlayJAudioFile(audioFile, data);
+                return new PlayJPlaylist(playlist, data);
             }
             catch
             {

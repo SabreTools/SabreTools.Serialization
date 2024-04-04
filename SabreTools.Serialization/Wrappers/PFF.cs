@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -26,12 +25,14 @@ namespace SabreTools.Serialization.Wrappers
             : base(model, data)
         {
             // All logic is handled by the base class
-        }/// <summary>
-         /// Create a PFF archive from a byte array and offset
-         /// </summary>
-         /// <param name="data">Byte array representing the archive</param>
-         /// <param name="offset">Offset within the array to parse</param>
-         /// <returns>A PFF archive wrapper on success, null on failure</returns>
+        }
+
+        /// <summary>
+        /// Create a PFF archive from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>A PFF archive wrapper on success, null on failure</returns>
         public static PFF? Create(byte[]? data, int offset)
         {
             // If the data is invalid

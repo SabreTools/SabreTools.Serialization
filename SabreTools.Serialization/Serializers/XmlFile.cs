@@ -2,7 +2,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -10,14 +9,40 @@ namespace SabreTools.Serialization.Serializers
     /// Base class for other XML serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class XmlFile<T> :
-        IFileSerializer<T>,
-        IStreamSerializer<T>
+    public class XmlFile<T> : BaseBinarySerializer<T>
     {
+        #region IByteSerializer
+
+        /// <inheritdoc/>
+        public override byte[]? SerializeArray(T? obj)
+            => SerializeArray(obj, null, null, null, null);
+
+        /// <summary>
+        /// Serializes the defined type to a byte array
+        /// </summary>
+        /// <param name="obj">Data to serialize</param>
+        /// <param name="name">Optional DOCTYPE name</param>
+        /// <param name="pubid">Optional DOCTYPE pubid</param>
+        /// <param name="sysid">Optional DOCTYPE sysid</param>
+        /// <param name="subset">Optional DOCTYPE name</param>
+        /// <returns>Byte array containing serialized data on success, null otherwise</returns>
+        public byte[]? SerializeArray(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
+        {
+            using var stream = Serialize(obj, name, pubid, sysid, subset);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc/>
-        public virtual bool Serialize(T? obj, string? path)
+        public override bool Serialize(T? obj, string? path)
             => Serialize(obj, path, null, null, null, null);
 
         /// <summary>
@@ -49,12 +74,8 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <summary>
-        /// Serializes the defined type to a stream
-        /// </summary>
-        /// <param name="obj">Data to serialize</param>
-        /// <returns>Stream containing serialized data on success, null otherwise</returns>
-        public virtual Stream? Serialize(T? obj)
+        /// <inheritdoc/>
+        public override Stream? Serialize(T? obj)
             => Serialize(obj, null, null, null, null);
 
         /// <summary>

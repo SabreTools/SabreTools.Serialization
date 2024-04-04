@@ -4,14 +4,11 @@ using System.IO;
 using System.Linq;
 using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Hashfile :
-        IByteDeserializer<Models.Hashfile.Hashfile>,
-        IFileDeserializer<Models.Hashfile.Hashfile>,
-        IStreamDeserializer<Models.Hashfile.Hashfile>
+    // TODO: Create variants for the implemented types
+    public class Hashfile : BaseBinaryDeserializer<Models.Hashfile.Hashfile>
     {
         #region IByteDeserializer
 
@@ -23,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
+        public override Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, HashType.CRC32);
 
         /// <inheritdoc/>
@@ -54,7 +51,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(string? path)
+        public override Models.Hashfile.Hashfile? Deserialize(string? path)
             => Deserialize(path, HashType.CRC32);
 
         /// <inheritdoc/>
@@ -76,7 +73,7 @@ namespace SabreTools.Serialization.Deserializers
         }
         
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(Stream? data)
+        public override Models.Hashfile.Hashfile? Deserialize(Stream? data)
             => Deserialize(data, HashType.CRC32);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

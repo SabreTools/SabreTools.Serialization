@@ -3,72 +3,14 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.SGA;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SGA :
-        IByteDeserializer<Models.SGA.File>,
-        IFileDeserializer<Models.SGA.File>,
-        IStreamDeserializer<Models.SGA.File>
+    public class SGA : BaseBinaryDeserializer<Models.SGA.File>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.SGA.File? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.SGA.File? DeserializeFile(string? path)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.SGA.File? DeserializeStream(Stream? data)
-        {
-            var deserializer = new SGA();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(Stream? data)
+        public override Models.SGA.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -782,7 +724,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return file7;
         }
-
-        #endregion
     }
 }

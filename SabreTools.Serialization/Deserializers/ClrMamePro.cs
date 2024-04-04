@@ -4,14 +4,10 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.ClrMamePro;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class ClrMamePro :
-        IByteDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class ClrMamePro : BaseBinaryDeserializer<MetadataFile>
     {
         #region IByteDeserializer
 
@@ -23,7 +19,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
+        public override MetadataFile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, true);
 
         /// <inheritdoc/>
@@ -31,11 +27,11 @@ namespace SabreTools.Serialization.Deserializers
         {
             // If the data is invalid
             if (data == null)
-                return null;
+                return default;
 
             // If the offset is out of bounds
             if (offset < 0 || offset >= data.Length)
-                return null;
+                return default;
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
@@ -54,7 +50,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
+        public override MetadataFile? Deserialize(string? path)
             => Deserialize(path, true);
 
         /// <inheritdoc/>
@@ -76,7 +72,7 @@ namespace SabreTools.Serialization.Deserializers
         }
         
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
             => Deserialize(data, true);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

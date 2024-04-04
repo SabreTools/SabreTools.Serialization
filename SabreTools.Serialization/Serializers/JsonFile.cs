@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using Newtonsoft.Json;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -9,14 +8,38 @@ namespace SabreTools.Serialization.Serializers
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class JsonFile<T> :
-        IFileSerializer<T>,
-        IStreamSerializer<T>
+    public class JsonFile<T> : BaseBinarySerializer<T>
     {
+        #region IByteSerializer
+
+        /// <inheritdoc/>
+        public override byte[]? SerializeArray(T? obj)
+            => SerializeArray(obj, new UTF8Encoding(false));
+
+        /// <summary>
+        /// Serialize a <typeparamref name="T"/> into a byte array
+        /// </summary>
+        /// <typeparam name="T">Type of object to serialize from</typeparam>
+        /// <param name="obj">Data to serialize</param>
+        /// <param name="encoding">Encoding to parse text as</param>
+        /// <returns>Filled object on success, null on error</returns>
+        public byte[]? SerializeArray(T? obj, Encoding encoding)
+        {
+            using var stream = Serialize(obj, encoding);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc/>
-        public virtual bool Serialize(T? obj, string? path)
+        public override bool Serialize(T? obj, string? path)
             => Serialize(obj, path, new UTF8Encoding(false));
 
         /// <summary>
@@ -47,7 +70,7 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc/>
-        public virtual Stream? Serialize(T? obj)
+        public override Stream? Serialize(T? obj)
             => Serialize(obj, new UTF8Encoding(false));
 
         /// <summary>

@@ -2,63 +2,12 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PlayJ;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PlayJ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PlayJAudio :
-        IByteDeserializer<AudioFile>,
-        IFileDeserializer<AudioFile>,
-        IStreamDeserializer<AudioFile>
+    public class PlayJAudio : BaseBinaryDeserializer<AudioFile>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static AudioFile? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PlayJAudio();
-            return deserializer.Deserialize(data, offset);
-        }
-
-        /// <inheritdoc/>
-        public AudioFile? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static AudioFile? DeserializeFile(string? path)
-        {
-            var deserializer = new PlayJAudio();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public AudioFile? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
         /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
         public static AudioFile? DeserializeStream(Stream? data, long adjust = 0)
         {
@@ -67,7 +16,7 @@ namespace SabreTools.Serialization.Deserializers
         }
         
         /// <inheritdoc/>
-        public AudioFile? Deserialize(Stream? data)
+        public override AudioFile? Deserialize(Stream? data)
             => Deserialize(data, 0);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
@@ -397,7 +346,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return dataFile;
         }
-
-        #endregion
     }
 }

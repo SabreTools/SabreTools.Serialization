@@ -3,73 +3,15 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.InstallShieldCabinet;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
     // TODO: Add multi-cabinet reading
-    public class InstallShieldCabinet :
-        IByteDeserializer<Cabinet>,
-        IFileDeserializer<Cabinet>,
-        IStreamDeserializer<Cabinet>
+    public class InstallShieldCabinet : BaseBinaryDeserializer<Cabinet>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Cabinet? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new InstallShieldCabinet();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public Cabinet? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Cabinet? DeserializeFile(string? path)
-        {
-            var deserializer = new InstallShieldCabinet();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public Cabinet? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Cabinet? DeserializeStream(Stream? data)
-        {
-            var deserializer = new InstallShieldCabinet();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public Cabinet? Deserialize(Stream? data)
+        public override Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -831,8 +773,6 @@ namespace SabreTools.Serialization.Deserializers
 
             return (int)majorVersion;
         }
-
-        #endregion
 
         #endregion
     }

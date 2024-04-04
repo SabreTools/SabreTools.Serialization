@@ -4,71 +4,13 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.AACS;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class AACS :
-        IByteDeserializer<MediaKeyBlock>,
-        IFileDeserializer<MediaKeyBlock>,
-        IStreamDeserializer<MediaKeyBlock>
+    public class AACS : BaseBinaryDeserializer<MediaKeyBlock>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MediaKeyBlock? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MediaKeyBlock? DeserializeFile(string? path)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MediaKeyBlock? DeserializeStream(Stream? data)
-        {
-            var deserializer = new AACS();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public MediaKeyBlock? Deserialize(Stream? data)
+        public override MediaKeyBlock? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -496,7 +438,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return record;
         }
-
-        #endregion
     }
 }

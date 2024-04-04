@@ -4,72 +4,14 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.NewExecutable;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class NewExecutable :
-        IByteDeserializer<Executable>,
-        IFileDeserializer<Executable>,
-        IStreamDeserializer<Executable>
+    public class NewExecutable : BaseBinaryDeserializer<Executable>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Executable? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new NewExecutable();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public Executable? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Executable? DeserializeFile(string? path)
-        {
-            var deserializer = new NewExecutable();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public Executable? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Executable? DeserializeStream(Stream? data)
-        {
-            var deserializer = new NewExecutable();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public Executable? Deserialize(Stream? data)
+        public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -534,7 +476,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return [.. residentNameTable];
         }
-
-        #endregion
     }
 }

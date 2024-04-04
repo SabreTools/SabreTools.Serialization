@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Models.CHD;
-using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Wrappers
 {

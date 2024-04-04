@@ -3,72 +3,16 @@ using System.IO;
 using System.Text;
 using SabreTools.IO;
 using SabreTools.Models.PIC;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.PIC.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PIC :
-        IByteDeserializer<DiscInformation>,
-        IFileDeserializer<DiscInformation>,
-        IStreamDeserializer<DiscInformation>
+    public class PIC : BaseBinaryDeserializer<DiscInformation>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static DiscInformation? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(data, offset);
-        }
-
-        /// <inheritdoc/>
-        public DiscInformation? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static DiscInformation? DeserializeFile(string? path)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public DiscInformation? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static DiscInformation? DeserializeStream(Stream? data)
-        {
-            var deserializer = new PIC();
-            return deserializer.Deserialize(data);
-        }
-
         /// <inheritdoc/>
-        public DiscInformation? Deserialize(Stream? data)
+        public override DiscInformation? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)

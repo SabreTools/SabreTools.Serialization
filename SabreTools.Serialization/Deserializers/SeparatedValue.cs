@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.SeparatedValue;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SeparatedValue :
-        IByteDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    // TODO: Create variants for the 3 common types: CSV, SSV, TSV
+    public class SeparatedValue : BaseBinaryDeserializer<MetadataFile>
     {
         #region Constants
 
@@ -31,7 +28,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
+        public override MetadataFile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, ',');
 
         /// <inheritdoc/>
@@ -62,7 +59,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
+        public override MetadataFile? Deserialize(string? path)
             => Deserialize(path, ',');
 
         /// <inheritdoc/>
@@ -84,7 +81,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
             => Deserialize(data, ',');
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

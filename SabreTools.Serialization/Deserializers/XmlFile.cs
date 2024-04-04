@@ -2,7 +2,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -10,46 +9,10 @@ namespace SabreTools.Serialization.Deserializers
     /// Base class for other XML deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class XmlFile<T> :
-        IByteDeserializer<T>,
-        IFileDeserializer<T>,
-        IStreamDeserializer<T>
+    public class XmlFile<T> : BaseBinaryDeserializer<T>
     {
-        #region IByteDeserializer
-
         /// <inheritdoc/>
-        public T? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return default;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return default;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return Deserialize(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public T? Deserialize(string? path)
-        {
-            using var data = PathProcessor.OpenStream(path);
-            return Deserialize(data);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc/>
-        public T? Deserialize(Stream? data)
+        public override T? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)
@@ -72,7 +35,5 @@ namespace SabreTools.Serialization.Deserializers
             // Perform the deserialization and return
             return (T?)serializer.Deserialize(xmlReader);
         }
-
-        #endregion
     }
 }

@@ -5,14 +5,39 @@ using System.Text;
 using SabreTools.Hashing;
 using SabreTools.IO.Writers;
 using SabreTools.Models.Hashfile;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class Hashfile :
-        IFileSerializer<Models.Hashfile.Hashfile>,
-        IStreamSerializer<Models.Hashfile.Hashfile>
+    // TODO: Create variants for the implemented types
+    public class Hashfile : BaseBinarySerializer<Models.Hashfile.Hashfile>
     {
+        #region IByteSerializer
+
+        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
+        public static byte[]? SerializeBytes(Models.Hashfile.Hashfile? obj, HashType hash = HashType.CRC32)
+        {
+            var serializer = new Hashfile();
+            return serializer.SerializeArray(obj, hash);
+        }
+
+        /// <inheritdoc/>
+        public override byte[]? SerializeArray(Models.Hashfile.Hashfile? obj)
+            => SerializeArray(obj, HashType.CRC32);
+
+        /// <inheritdoc/>
+        public byte[]? SerializeArray(Models.Hashfile.Hashfile? obj, HashType hash)
+        {
+            using var stream = SerializeStream(obj, hash);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
@@ -23,7 +48,7 @@ namespace SabreTools.Serialization.Serializers
         }
         
         /// <inheritdoc/>
-        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
+        public override bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
             => Serialize(obj, path, HashType.CRC32);
 
         /// <inheritdoc/>
@@ -53,7 +78,7 @@ namespace SabreTools.Serialization.Serializers
         }
         
         /// <inheritdoc/>
-        public Stream? Serialize(Models.Hashfile.Hashfile? obj)
+        public override Stream? Serialize(Models.Hashfile.Hashfile? obj)
             => Serialize(obj, HashType.CRC32);
 
         /// <inheritdoc/>

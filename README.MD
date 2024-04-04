@@ -11,6 +11,7 @@ Below is a table representing the various interfaces that are implemented within
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
 | `IByteDeserializer` | `byte[]?` | Model |
+| `IByteSerializer` | Model | `byte[]?` |
 | `IFileDeserializer` | `string?` path | Model |
 | `IFileSerializer` | Model | `string?` path |
 | `IModelSerializer` | Model | Model |

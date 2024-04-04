@@ -3,51 +3,13 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Writers;
 using SabreTools.Models.DosCenter;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class DosCenter :
-        IFileSerializer<MetadataFile>,
-        IStreamSerializer<MetadataFile>
+    public class DosCenter : BaseBinarySerializer<MetadataFile>
     {
-        #region IFileSerializer
-
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path)
-        {
-            var serializer = new DosCenter();
-            return serializer.Serialize(obj, path);
-        }
-        
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            using var stream = SerializeStream(obj);
-            if (stream == null)
-                return false;
-
-            using var fs = System.IO.File.OpenWrite(path);
-            stream.CopyTo(fs);
-            return true;
-        }
-
-        #endregion
-
-        #region IStreamSerializer
-
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(MetadataFile? obj)
-        {
-            var serializer = new DosCenter();
-            return serializer.Serialize(obj);
-        }
-        
-        /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj)
+        public override Stream? Serialize(MetadataFile? obj)
         {
             // If the metadata file is null
             if (obj == null)
@@ -160,7 +122,5 @@ namespace SabreTools.Serialization.Serializers
                 writer.WriteEndElement(); // file
             }
         }
-
-        #endregion
     }
 }

@@ -3,8 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public partial class XMID :
-        IStringSerializer<Models.Xbox.XMID>
+    public partial class XMID : IStringSerializer<Models.Xbox.XMID>
     {
         #region IStringSerializer
 

@@ -3,14 +3,38 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Writers;
 using SabreTools.Models.ClrMamePro;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class ClrMamePro :
-        IFileSerializer<MetadataFile>,
-        IStreamSerializer<MetadataFile>
+    public class ClrMamePro : BaseBinarySerializer<MetadataFile>
     {
+        #region IByteSerializer
+
+        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
+        public static byte[]? SerializeBytes(MetadataFile? obj, bool quotes = false)
+        {
+            var serializer = new ClrMamePro();
+            return serializer.SerializeArray(obj, quotes);
+        }
+
+        /// <inheritdoc/>
+        public override byte[]? SerializeArray(MetadataFile? obj)
+            => SerializeArray(obj, false);
+
+        /// <inheritdoc/>
+        public byte[]? SerializeArray(MetadataFile? obj, bool quotes)
+        {
+            using var stream = SerializeStream(obj, quotes);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
         #region IFileSerializer
 
         /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
@@ -21,7 +45,7 @@ namespace SabreTools.Serialization.Serializers
         }
         
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public override bool Serialize(MetadataFile? obj, string? path)
             => Serialize(obj, path, true);
 
         /// <inheritdoc cref="Serialize(MetadataFile, string)"/>
@@ -51,7 +75,7 @@ namespace SabreTools.Serialization.Serializers
         }
         
         /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj)
+        public override Stream? Serialize(MetadataFile? obj)
             => Serialize(obj, true);
 
         /// <inheritdoc cref="Serialize(MetadataFile)"/>

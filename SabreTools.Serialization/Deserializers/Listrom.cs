@@ -3,71 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Models.Listrom;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Listrom :
-        IByteDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
-        IStreamDeserializer<MetadataFile>
+    public class Listrom : BaseBinaryDeserializer<MetadataFile>
     {
-        #region IByteDeserializer
-
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MetadataFile? DeserializeBytes(byte[]? data, int offset)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(data, offset);
-        }
-
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(byte[]? data, int offset)
-        {
-            // If the data is invalid
-            if (data == null)
-                return null;
-
-            // If the offset is out of bounds
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Create a memory stream and parse that
-            var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
-        }
-
-        #endregion
-
-        #region IFileDeserializer
-
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MetadataFile? DeserializeFile(string? path)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(path);
-        }
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
-        #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MetadataFile? DeserializeStream(Stream? data)
-        {
-            var deserializer = new Listrom();
-            return deserializer.Deserialize(data);
-        }
-        
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(Stream? data)
+        public override MetadataFile? Deserialize(Stream? data)
         {
             // If the stream is null
             if (data == null)
@@ -295,7 +237,5 @@ namespace SabreTools.Serialization.Deserializers
             dat.ADDITIONAL_ELEMENTS = additional.ToArray();
             return dat;
         }
-
-        #endregion
     }
 }

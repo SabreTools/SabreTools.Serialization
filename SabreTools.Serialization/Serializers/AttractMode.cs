@@ -3,13 +3,10 @@ using System.Linq;
 using System.Text;
 using SabreTools.IO.Writers;
 using SabreTools.Models.AttractMode;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class AttractMode :
-        IFileSerializer<MetadataFile>,
-        IStreamSerializer<MetadataFile>
+    public class AttractMode : BaseBinarySerializer<MetadataFile>
     {
         #region Constants
 
@@ -66,17 +63,44 @@ namespace SabreTools.Serialization.Serializers
 
         #endregion
 
-        #region IFileSerializer
+        #region IByteSerializer
 
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path, bool longHeader = false)
+        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
+        public static byte[]? SerializeBytes(MetadataFile? obj, bool longHeader = false)
         {
             var serializer = new AttractMode();
-            return serializer.Serialize(obj, path);
+            return serializer.SerializeArray(obj, longHeader);
         }
 
         /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path)
+        public override byte[]? SerializeArray(MetadataFile? obj)
+            => SerializeArray(obj, false);
+
+        /// <inheritdoc/>
+        public byte[]? SerializeArray(MetadataFile? obj, bool longHeader)
+        {
+            using var stream = SerializeStream(obj, longHeader);
+            if (stream == null)
+                return null;
+
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        #endregion
+
+        #region IFileSerializer
+
+        /// <inheritdoc cref="Interfaces.IFileSerializer.Serialize(T?, string?)"/>
+        public static bool SerializeFile(MetadataFile? obj, string? path, bool longHeader = false)
+        {
+            var serializer = new AttractMode();
+            return serializer.Serialize(obj, path, longHeader);
+        }
+
+        /// <inheritdoc/>
+        public override bool Serialize(MetadataFile? obj, string? path)
             => Serialize(obj, path, false);
 
         /// <inheritdoc/>
@@ -98,7 +122,7 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
+        /// <inheritdoc cref="Interfaces.IStreamSerializer.Serialize(T?)"/>
         public static Stream? SerializeStream(MetadataFile? obj, bool longHeader = false)
         {
             var serializer = new AttractMode();
@@ -106,7 +130,7 @@ namespace SabreTools.Serialization.Serializers
         }
 
         /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj)
+        public override  Stream? Serialize(MetadataFile? obj)
             => Serialize(obj, false);
 
         /// <inheritdoc/>

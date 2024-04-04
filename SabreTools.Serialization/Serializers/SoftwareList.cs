@@ -2,8 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class SoftwareList :
-        XmlFile<Models.SoftwareList.SoftwareList>
+    public class SoftwareList : XmlFile<Models.SoftwareList.SoftwareList>
     {
         #region Constants
 
@@ -31,13 +30,6 @@ namespace SabreTools.Serialization.Serializers
 
         #region IFileSerializer
 
-        /// <inheritdoc cref="Interfaces.IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(Models.SoftwareList.SoftwareList? obj, string? path)
-        {
-            var serializer = new SoftwareList();
-            return serializer.Serialize(obj, path);
-        }
-        
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?, string?)" />
         public override bool Serialize(Models.SoftwareList.SoftwareList? obj, string? path)
             => Serialize(obj, path, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
@@ -45,13 +37,6 @@ namespace SabreTools.Serialization.Serializers
         #endregion
 
         #region IStreamSerializer
-
-        /// <inheritdoc cref="Interfaces.IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(Models.SoftwareList.SoftwareList? obj)
-        {
-            var serializer = new SoftwareList();
-            return serializer.Serialize(obj);
-        }
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
         public override Stream? Serialize(Models.SoftwareList.SoftwareList? obj)
