@@ -1,10 +1,20 @@
 using System.Text;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Strings
+namespace SabreTools.Serialization.Serializers
 {
-    public partial class XeMID : IStringSerializer<Models.Xbox.XeMID>
+    public partial class XeMID :
+        IStringSerializer<Models.Xbox.XeMID>
     {
+        #region IStringSerializer
+
+        /// <inheritdoc cref="IStringSerializer.Serialize(T?)"/>
+        public static string? SerializeString(Models.Xbox.XeMID? obj)
+        {
+            var deserializer = new XeMID();
+            return deserializer.Serialize(obj);
+        }
+
         /// <inheritdoc/>
         public string? Serialize(Models.Xbox.XeMID? obj)
         {
@@ -26,5 +36,7 @@ namespace SabreTools.Serialization.Strings
 
             return sb.ToString();
         }
+
+        #endregion
     }
 }

@@ -4,22 +4,29 @@ This library comprises of serializers that both read and write from files and st
 
 Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTools.Serialization).
 
+## Interfaces
+
+Below is a table representing the various interfaces that are implemented within this library.
+
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
 | `IByteDeserializer` | `byte[]?` | Model |
-| `IFileDeserializer` | `string?` Path | Model |
-| `IFileSerializer` | Model | `string?` Path |
+| `IFileDeserializer` | `string?` path | Model |
+| `IFileSerializer` | Model | `string?` path |
+| `IModelSerializer` | Model | Model |
 | `IStreamDeserializer` | `Stream?` | Model |
 | `IStreamSerializer` | Model | `Stream?` |
+| `IStringDeserializer` | `string?` representation | Model |
+| `IStringSerializer` | Model | `string?` representation |
+| `IWrapper` | N/A | N/A |
 
-## `SabreTools.Serialization.CrossModel`
+## Namespaces
 
-This namespace comprises of serializers and deserializers that convert models to other common ones. This is mainly used for metadata files converting to and from a common, `Dictionary`-based model.
+Below is a table of all namespaces within the library and what they represent
 
-## `SabreTools.Serialization.Strings`
-
-This namespace comprises of serializers and deserializers that can convert to and from strings. Most of the serializers are symmetric, but this is not guaranteed. Unimplemented methods will throw `NotImplementedException`.
-
-## `SabreTools.Serialization.Wrappers`
-
-This namespace comrpises of wrapping classes that include keeping a reference to the source of each serializable model. Some of the wrappers may also include what are referred to as "extension properties", which are generated properties derived from either parts of the model or the underlying source.
+| Namespace | Description |
+| --- | --- |
+| `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
+| `SabreTools.Serialization.Deserializers` | Convert from external sources to models |
+| `SabreTools.Serialization.Serializers` | Convert from models to external sources |
+| `SabreTools.Serialization.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |

@@ -1,9 +1,19 @@
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Strings
+namespace SabreTools.Serialization.Deserializers
 {
-    public partial class XMID : IStringSerializer<Models.Xbox.XMID>
+    public partial class XMID :
+        IStringDeserializer<Models.Xbox.XMID>
     {
+        #region IStringDeserializer
+
+        /// <inheritdoc cref="IStringDeserializer.Deserialize(string?)"/>
+        public static Models.Xbox.XMID? DeserializeString(string? str)
+        {
+            var deserializer = new XMID();
+            return deserializer.Deserialize(str);
+        }
+
         /// <inheritdoc/>
         public Models.Xbox.XMID? Deserialize(string? str)
         {
@@ -36,5 +46,7 @@ namespace SabreTools.Serialization.Strings
 
             return xmid;
         }
+
+        #endregion
     }
 }
