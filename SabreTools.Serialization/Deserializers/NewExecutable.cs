@@ -11,20 +11,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class NewExecutable :
         BaseBinaryDeserializer<Executable>,
-        IFileDeserializer<Executable>,
         IStreamDeserializer<Executable>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Executable? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

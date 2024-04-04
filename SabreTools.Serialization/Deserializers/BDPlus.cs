@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class BDPlus :
         BaseBinaryDeserializer<SVM>,
-        IFileDeserializer<SVM>,
         IStreamDeserializer<SVM>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public SVM? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

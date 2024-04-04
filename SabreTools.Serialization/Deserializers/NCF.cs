@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class NCF :
         BaseBinaryDeserializer<Models.NCF.File>,
-        IFileDeserializer<Models.NCF.File>,
         IStreamDeserializer<Models.NCF.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.NCF.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

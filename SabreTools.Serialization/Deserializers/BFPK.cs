@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class BFPK :
         BaseBinaryDeserializer<Archive>,
-        IFileDeserializer<Archive>,
         IStreamDeserializer<Archive>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Archive? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(string? path)
+        public override Models.Hashfile.Hashfile? Deserialize(string? path)
             => Deserialize(path, HashType.CRC32);
 
         /// <inheritdoc/>

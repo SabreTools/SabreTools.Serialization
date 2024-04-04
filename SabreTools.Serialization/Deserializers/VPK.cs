@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class VPK :
         BaseBinaryDeserializer<Models.VPK.File>,
-        IFileDeserializer<Models.VPK.File>,
         IStreamDeserializer<Models.VPK.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.VPK.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

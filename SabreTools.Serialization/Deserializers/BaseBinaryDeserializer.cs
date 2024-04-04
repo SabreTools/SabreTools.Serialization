@@ -12,8 +12,9 @@ namespace SabreTools.Serialization.Deserializers
     /// </summary>
     /// <typeparam name="TModel">Type of the model to deserialize</typeparam>
     /// <remarks>These methods assume there is a concrete implementation of the deserialzier for the model available</remarks>
-    public abstract class BaseBinaryDeserializer<TModel>
-        : IByteDeserializer<TModel>
+    public abstract class BaseBinaryDeserializer<TModel> :
+        IByteDeserializer<TModel>,
+        IFileDeserializer<TModel>
     {
         #region IByteDeserializer
 
@@ -31,6 +32,17 @@ namespace SabreTools.Serialization.Deserializers
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
             return DeserializeStream(dataStream);
+        }
+
+        #endregion
+
+        #region IFileDeserializer
+
+        /// <inheritdoc/>
+        public virtual TModel? Deserialize(string? path)
+        {
+            using var stream = PathProcessor.OpenStream(path);
+            return DeserializeStream(stream);
         }
 
         #endregion

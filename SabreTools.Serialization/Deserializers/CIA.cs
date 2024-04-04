@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class CIA :
         BaseBinaryDeserializer<Models.N3DS.CIA>,
-        IFileDeserializer<Models.N3DS.CIA>,
         IStreamDeserializer<Models.N3DS.CIA>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.N3DS.CIA? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

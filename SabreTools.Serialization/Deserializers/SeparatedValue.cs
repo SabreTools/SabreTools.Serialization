@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class SeparatedValue :
         BaseBinaryDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
         #region Constants
@@ -62,7 +61,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
+        public override MetadataFile? Deserialize(string? path)
             => Deserialize(path, ',');
 
         /// <inheritdoc/>

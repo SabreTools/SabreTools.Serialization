@@ -11,20 +11,8 @@ namespace SabreTools.Serialization.Deserializers
     // TODO: Add multi-cabinet reading
     public class InstallShieldCabinet :
         BaseBinaryDeserializer<Cabinet>,
-        IFileDeserializer<Cabinet>,
         IStreamDeserializer<Cabinet>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Cabinet? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

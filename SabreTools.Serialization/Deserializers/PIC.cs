@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class PIC :
         BaseBinaryDeserializer<DiscInformation>,
-        IFileDeserializer<DiscInformation>,
         IStreamDeserializer<DiscInformation>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public DiscInformation? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

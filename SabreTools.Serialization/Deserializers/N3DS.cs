@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class N3DS :
         BaseBinaryDeserializer<Cart>,
-        IFileDeserializer<Cart>,
         IStreamDeserializer<Cart>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Cart? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

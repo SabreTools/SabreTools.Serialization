@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class GCF :
         BaseBinaryDeserializer<Models.GCF.File>,
-        IFileDeserializer<Models.GCF.File>,
         IStreamDeserializer<Models.GCF.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.GCF.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

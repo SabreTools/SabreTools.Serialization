@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class SGA :
         BaseBinaryDeserializer<Models.SGA.File>,
-        IFileDeserializer<Models.SGA.File>,
         IStreamDeserializer<Models.SGA.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.SGA.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

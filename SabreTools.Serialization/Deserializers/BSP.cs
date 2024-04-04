@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class BSP :
         BaseBinaryDeserializer<Models.BSP.File>,
-        IFileDeserializer<Models.BSP.File>,
         IStreamDeserializer<Models.BSP.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.BSP.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

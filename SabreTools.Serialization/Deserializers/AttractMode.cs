@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class AttractMode :
         BaseBinaryDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
         #region Constants
@@ -21,17 +20,6 @@ namespace SabreTools.Serialization.Deserializers
 
         #endregion
 
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-    
         #region IStreamDeserializer
 
         /// <inheritdoc/>

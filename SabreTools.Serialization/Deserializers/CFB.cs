@@ -11,20 +11,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class CFB :
         BaseBinaryDeserializer<Binary>,
-        IFileDeserializer<Binary>,
         IStreamDeserializer<Binary>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Binary? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

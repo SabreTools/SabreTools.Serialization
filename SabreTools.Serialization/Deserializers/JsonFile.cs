@@ -11,7 +11,6 @@ namespace SabreTools.Serialization.Deserializers
     /// <typeparam name="T"></typeparam>
     public class JsonFile<T> :
         BaseBinaryDeserializer<T>,
-        IFileDeserializer<T>,
         IStreamDeserializer<T>
     {
         #region IByteDeserializer
@@ -48,7 +47,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IFileDeserializer
 
         /// <inheritdoc/>
-        public virtual T? Deserialize(string? path)
+        public override T? Deserialize(string? path)
             => Deserialize(path, new UTF8Encoding(false));
 
         /// <summary>

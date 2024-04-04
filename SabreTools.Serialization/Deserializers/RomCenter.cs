@@ -10,20 +10,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class RomCenter :
         BaseBinaryDeserializer<MetadataFile>,
-        IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public MetadataFile? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

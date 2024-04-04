@@ -11,20 +11,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class CueSheet :
         BaseBinaryDeserializer<Models.CueSheets.CueSheet>,
-        IFileDeserializer<Models.CueSheets.CueSheet>,
         IStreamDeserializer<Models.CueSheets.CueSheet>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.CueSheets.CueSheet? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

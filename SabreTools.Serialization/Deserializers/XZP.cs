@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class XZP :
         BaseBinaryDeserializer<Models.XZP.File>,
-        IFileDeserializer<Models.XZP.File>,
         IStreamDeserializer<Models.XZP.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.XZP.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

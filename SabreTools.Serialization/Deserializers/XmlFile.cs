@@ -12,20 +12,8 @@ namespace SabreTools.Serialization.Deserializers
     /// <typeparam name="T"></typeparam>
     public class XmlFile<T> :
         BaseBinaryDeserializer<T>,
-        IFileDeserializer<T>,
         IStreamDeserializer<T>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public T? Deserialize(string? path)
-        {
-            using var data = PathProcessor.OpenStream(path);
-            return Deserialize(data);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

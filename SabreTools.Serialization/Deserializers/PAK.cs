@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class PAK :
         BaseBinaryDeserializer<Models.PAK.File>,
-        IFileDeserializer<Models.PAK.File>,
         IStreamDeserializer<Models.PAK.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.PAK.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

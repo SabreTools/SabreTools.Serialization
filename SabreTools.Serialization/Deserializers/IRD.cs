@@ -7,20 +7,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class IRD :
         BaseBinaryDeserializer<Models.IRD.File>,
-        IFileDeserializer<Models.IRD.File>,
         IStreamDeserializer<Models.IRD.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.IRD.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>

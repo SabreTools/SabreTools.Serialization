@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class PlayJAudio :
         BaseBinaryDeserializer<AudioFile>,
-        IFileDeserializer<AudioFile>,
         IStreamDeserializer<AudioFile>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public AudioFile? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>

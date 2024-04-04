@@ -9,20 +9,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class WAD :
         BaseBinaryDeserializer<Models.WAD.File>,
-        IFileDeserializer<Models.WAD.File>,
         IStreamDeserializer<Models.WAD.File>
     {
-        #region IFileDeserializer
-
-        /// <inheritdoc/>
-        public Models.WAD.File? Deserialize(string? path)
-        {
-            using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream);
-        }
-
-        #endregion
-
         #region IStreamDeserializer
 
         /// <inheritdoc/>
