@@ -12,6 +12,14 @@ namespace SabreTools.Serialization.Deserializers
         IFileDeserializer<MetadataFile>,
         IStreamDeserializer<MetadataFile>
     {
+        #region Constants
+
+        public const int HeaderWithoutExtendedHashesCount = 14;
+
+        public const int HeaderWithExtendedHashesCount = 17;
+
+        #endregion
+
         #region IFileDeserializer
 
         /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
@@ -79,7 +87,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Parse the line into a row
                 Row? row = null;
-                if (reader.Line.Count < Serialization.SeparatedValue.HeaderWithExtendedHashesCount)
+                if (reader.Line.Count < HeaderWithExtendedHashesCount)
                 {
                     row = new Row
                     {
@@ -100,8 +108,8 @@ namespace SabreTools.Serialization.Deserializers
                     };
 
                     // If we have additional fields
-                    if (reader.Line.Count > Serialization.SeparatedValue.HeaderWithoutExtendedHashesCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(Serialization.SeparatedValue.HeaderWithoutExtendedHashesCount).ToArray();
+                    if (reader.Line.Count > HeaderWithoutExtendedHashesCount)
+                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithoutExtendedHashesCount).ToArray();
                 }
                 else
                 {
@@ -127,8 +135,8 @@ namespace SabreTools.Serialization.Deserializers
                     };
 
                     // If we have additional fields
-                    if (reader.Line.Count > Serialization.SeparatedValue.HeaderWithExtendedHashesCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(Serialization.SeparatedValue.HeaderWithExtendedHashesCount).ToArray();
+                    if (reader.Line.Count > HeaderWithExtendedHashesCount)
+                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithExtendedHashesCount).ToArray();
                 }
                 rows.Add(row);
             }
