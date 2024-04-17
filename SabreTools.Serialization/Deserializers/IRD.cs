@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Deserializers
 {

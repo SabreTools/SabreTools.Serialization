@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.NewExecutable;
 using static SabreTools.Models.NewExecutable.Constants;
 

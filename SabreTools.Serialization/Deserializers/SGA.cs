@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.SGA;
 using static SabreTools.Models.SGA.Constants;
 

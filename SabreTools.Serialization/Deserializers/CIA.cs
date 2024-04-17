@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.N3DS;
 
 namespace SabreTools.Serialization.Deserializers

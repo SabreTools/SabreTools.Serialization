@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
 
 namespace SabreTools.Serialization

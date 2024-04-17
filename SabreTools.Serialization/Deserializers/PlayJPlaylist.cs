@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.PlayJ;
 
 namespace SabreTools.Serialization.Deserializers

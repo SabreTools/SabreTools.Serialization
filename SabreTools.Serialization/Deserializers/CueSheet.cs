@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Deserializers

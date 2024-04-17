@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.MSDOS;
 using static SabreTools.Models.MSDOS.Constants;
 

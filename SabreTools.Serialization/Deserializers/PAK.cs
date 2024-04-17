@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text;
-using SabreTools.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.PAK;
 using static SabreTools.Models.PAK.Constants;
 
