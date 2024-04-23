@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled common header on success, null on error</returns>
-        private static CommonHeader? ParseCommonHeader(Stream data)
+        public static CommonHeader? ParseCommonHeader(Stream data)
         {
             CommonHeader commonHeader = new CommonHeader();
 
@@ -359,7 +359,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <returns>Filled volume header on success, null on error</returns>
-        private static VolumeHeader ParseVolumeHeader(Stream data, int majorVersion)
+        public static VolumeHeader ParseVolumeHeader(Stream data, int majorVersion)
         {
             VolumeHeader volumeHeader = new VolumeHeader();
 
@@ -406,7 +406,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled descriptor on success, null on error</returns>
-        private static Descriptor ParseDescriptor(Stream data)
+        public static Descriptor ParseDescriptor(Stream data)
         {
             Descriptor descriptor = new Descriptor();
 
@@ -455,7 +455,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled offset list on success, null on error</returns>
-        private static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
+        public static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
         {
             OffsetList offsetList = new OffsetList();
 
@@ -488,7 +488,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled file group on success, null on error</returns>
-        private static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
+        public static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
         {
             FileGroup fileGroup = new FileGroup();
 
@@ -551,7 +551,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled component on success, null on error</returns>
-        private static Component ParseComponent(Stream data, int majorVersion, uint descriptorOffset)
+        public static Component ParseComponent(Stream data, int majorVersion, uint descriptorOffset)
         {
             Component component = new Component();
 
@@ -677,7 +677,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <returns>Filled directory name on success, null on error</returns>
-        private static string? ParseDirectoryName(Stream data, int majorVersion)
+        public static string? ParseDirectoryName(Stream data, int majorVersion)
         {
             // Read the string
             if (majorVersion >= 17)
@@ -693,7 +693,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled file descriptor on success, null on error</returns>
-        private static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, uint descriptorOffset)
+        public static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, uint descriptorOffset)
         {
             FileDescriptor fileDescriptor = new FileDescriptor();
 
@@ -757,7 +757,7 @@ namespace SabreTools.Serialization.Deserializers
         /// Get the major version of the cabinet
         /// </summary>
         /// <remarks>This should live in the wrapper but is needed during parsing</remarks>
-        private static int GetMajorVersion(CommonHeader commonHeader)
+        public static int GetMajorVersion(CommonHeader commonHeader)
         {
             uint majorVersion = commonHeader.Version;
             if (majorVersion >> 24 == 1)
