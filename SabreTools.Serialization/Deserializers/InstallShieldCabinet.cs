@@ -533,9 +533,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    fileGroup.Name = data.ReadString(Encoding.Unicode);
+                    fileGroup.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    fileGroup.Name = data.ReadString(Encoding.ASCII);
+                    fileGroup.Name = data.ReadNullTerminatedUnicodeString();
             }
 
             // Seek back to the correct offset
@@ -558,7 +558,7 @@ namespace SabreTools.Serialization.Deserializers
             component.IdentifierOffset = data.ReadUInt32();
             component.DescriptorOffset = data.ReadUInt32();
             component.DisplayNameOffset = data.ReadUInt32();
-            component.Reserved0 = data.ReadBytes(2);
+            component.Reserved0 = data.ReadUInt16();
             component.ReservedOffset0 = data.ReadUInt32();
             component.ReservedOffset1 = data.ReadUInt32();
             component.ComponentIndex = data.ReadUInt16();
@@ -595,9 +595,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.Identifier = data.ReadString(Encoding.Unicode);
+                    component.Identifier = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.Identifier = data.ReadString(Encoding.ASCII);
+                    component.Identifier = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the display name, if possible
@@ -608,9 +608,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.DisplayName = data.ReadString(Encoding.Unicode);
+                    component.DisplayName = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.DisplayName = data.ReadString(Encoding.ASCII);
+                    component.DisplayName = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the name, if possible
@@ -621,9 +621,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.Name = data.ReadString(Encoding.Unicode);
+                    component.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.Name = data.ReadString(Encoding.ASCII);
+                    component.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the CLSID, if possible
@@ -656,9 +656,9 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(nameOffset + descriptorOffset, SeekOrigin.Begin);
 
                     if (majorVersion >= 17)
-                        component.FileGroupNames[j] = data.ReadString(Encoding.Unicode) ?? string.Empty;
+                        component.FileGroupNames[j] = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                     else
-                        component.FileGroupNames[j] = data.ReadString(Encoding.ASCII) ?? string.Empty;
+                        component.FileGroupNames[j] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
                     // Seek back to the original position
                     data.Seek(preNameOffset, SeekOrigin.Begin);
@@ -681,9 +681,9 @@ namespace SabreTools.Serialization.Deserializers
         {
             // Read the string
             if (majorVersion >= 17)
-                return data.ReadString(Encoding.Unicode);
+                return data.ReadNullTerminatedUnicodeString();
             else
-                return data.ReadString(Encoding.ASCII);
+                return data.ReadNullTerminatedAnsiString();
         }
 
         /// <summary>
@@ -740,9 +740,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    fileDescriptor.Name = data.ReadString(Encoding.Unicode);
+                    fileDescriptor.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    fileDescriptor.Name = data.ReadString(Encoding.ASCII);
+                    fileDescriptor.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Seek back to the correct offset
