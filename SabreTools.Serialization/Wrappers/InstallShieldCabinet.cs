@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Accessors
+        #region Component
 
         /// <summary>
         /// Get the component name at a given index, if possible
@@ -124,6 +124,10 @@ namespace SabreTools.Serialization.Wrappers
             return component.Identifier.Replace('\\', '/');
         }
 
+        #endregion
+
+        #region Directory
+
         /// <summary>
         /// Get the directory name at a given index, if possible
         /// </summary>
@@ -139,6 +143,66 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the directory index for the given file index
+        /// </summary>
+        /// <returns>Directory index if found, UInt32.MaxValue on error</returns>
+        public uint GetFileDirectoryIndex(int index)
+        {
+            FileDescriptor? descriptor = GetFileDescriptor(index);
+            if (descriptor != null)
+                return descriptor.DirectoryIndex;
+            else
+                return uint.MaxValue;
+        }
+
+        #endregion
+
+        #region File
+
+        /// <summary>
+        /// Returns if the file at a given index is marked as valid
+        /// </summary>
+        public bool FileIsValid(int index)
+        {
+            if (Model.Descriptor == null)
+                return false;
+
+            if (index < 0 || index > Model.Descriptor.FileCount)
+                return false;
+
+            FileDescriptor? descriptor = GetFileDescriptor(index);
+            if (descriptor == null)
+                return false;
+
+#if NET20 || NET35
+            if ((descriptor.Flags & FileFlags.FILE_INVALID) != 0)
+#else
+            if (descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
+#endif
+                return false;
+
+            if (descriptor.NameOffset == default)
+                return false;
+
+            if (descriptor.DataOffset == default)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get the reported expanded file size for a given index
+        /// </summary>
+        public ulong GetExpandedFileSize(int index)
+        {
+            FileDescriptor? descriptor = GetFileDescriptor(index);
+            if (descriptor != null)
+                return descriptor.ExpandedSize;
+            else
+                return 0;
+        }
+
+        /// <summary>
         /// Get the file descriptor at a given index, if possible
         /// </summary>
         public FileDescriptor? GetFileDescriptor(int index)
@@ -151,6 +215,26 @@ namespace SabreTools.Serialization.Wrappers
 
             return Model.FileDescriptors[index];
         }
+
+        /// <summary>
+        /// Get the file name at a given index, if possible
+        /// </summary>
+        public string? GetFileName(int index)
+        {
+            var descriptor = GetFileDescriptor(index);
+#if NET20 || NET35
+            if (descriptor == null || (descriptor.Flags & FileFlags.FILE_INVALID) != 0)
+#else
+            if (descriptor == null || descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
+#endif
+                return null;
+
+            return descriptor.Name;
+        }
+
+        #endregion
+
+        #region File Group
 
         /// <summary>
         /// Get the file group at a given index, if possible
@@ -175,22 +259,6 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             return Model.FileGroups.FirstOrDefault(fg => fg != null && string.Equals(fg.Name, name));
-        }
-
-        /// <summary>
-        /// Get the file name at a given index, if possible
-        /// </summary>
-        public string? GetFileName(int index)
-        {
-            var descriptor = GetFileDescriptor(index);
-#if NET20 || NET35
-            if (descriptor == null || (descriptor.Flags & FileFlags.FILE_INVALID) != 0)
-#else
-            if (descriptor == null || descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
-#endif
-                return null;
-
-            return descriptor.Name;
         }
 
         /// <summary>
