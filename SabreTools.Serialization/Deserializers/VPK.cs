@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Deserializers
             while (true)
             {
                 // Get the extension
-                string? extensionString = data.ReadString(Encoding.ASCII);
+                string? extensionString = data.ReadNullTerminatedAnsiString();
                 if (string.IsNullOrEmpty(extensionString))
                     break;
 
@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Deserializers
                 while (true)
                 {
                     // Get the path
-                    string? pathString = data.ReadString(Encoding.ASCII);
+                    string? pathString = data.ReadNullTerminatedAnsiString();
                     if (string.IsNullOrEmpty(pathString))
                         break;
 
@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.Deserializers
                     while (true)
                     {
                         // Get the name
-                        string? nameString = data.ReadString(Encoding.ASCII);
+                        string? nameString = data.ReadNullTerminatedAnsiString();
                         if (string.IsNullOrEmpty(nameString))
                             break;
 

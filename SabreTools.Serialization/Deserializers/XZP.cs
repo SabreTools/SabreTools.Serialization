@@ -214,7 +214,7 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(directoryItem.NameOffset, SeekOrigin.Begin);
 
             // Read the name
-            directoryItem.Name = data.ReadString(Encoding.ASCII);
+            directoryItem.Name = data.ReadNullTerminatedAnsiString();
 
             // Seek back to the right position
             data.Seek(currentPosition, SeekOrigin.Begin);

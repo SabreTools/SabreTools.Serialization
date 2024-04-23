@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Deserializers
                 while (data.Position < directoryNamesEnd)
                 {
                     long nameOffset = data.Position - directoryNamesStart;
-                    string? directoryName = data.ReadString(Encoding.ASCII);
+                    string? directoryName = data.ReadNullTerminatedAnsiString();
                     if (data.Position > directoryNamesEnd)
                     {
                         data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);

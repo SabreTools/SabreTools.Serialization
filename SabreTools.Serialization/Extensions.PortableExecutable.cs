@@ -115,7 +115,7 @@ namespace SabreTools.Serialization
             nb10ProgramDatabase.Offset = data.ReadUInt32(ref offset);
             nb10ProgramDatabase.Timestamp = data.ReadUInt32(ref offset);
             nb10ProgramDatabase.Age = data.ReadUInt32(ref offset);
-            nb10ProgramDatabase.PdbFileName = data.ReadString(ref offset, Encoding.ASCII); // TODO: Actually null-terminated UTF-8?
+            nb10ProgramDatabase.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset); // TODO: Actually null-terminated UTF-8?
 
             return nb10ProgramDatabase;
         }
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization
             if (guid != null)
                 rsdsProgramDatabase.GUID = new Guid(guid);
             rsdsProgramDatabase.Age = data.ReadUInt32(ref offset);
-            rsdsProgramDatabase.PathAndFileName = data.ReadString(ref offset, Encoding.ASCII); // TODO: Actually null-terminated UTF-8
+            rsdsProgramDatabase.PathAndFileName = data.ReadNullTerminatedAnsiString(ref offset); // TODO: Actually null-terminated UTF-8
 
             return rsdsProgramDatabase;
         }
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization
             int originalOffset = offset;
 
             addD.EntryCount = data.ReadUInt32(ref offset);
-            addD.Version = data.ReadString(ref offset, Encoding.ASCII);
+            addD.Version = data.ReadNullTerminatedAnsiString(ref offset);
             if (string.IsNullOrEmpty(addD.Version))
                 offset = originalOffset + 0x10;
 
@@ -203,7 +203,7 @@ namespace SabreTools.Serialization
                 addDEntry.Unknown14h = data.ReadUInt32(ref offset);
                 addDEntry.Unknown18h = data.ReadUInt32(ref offset);
                 addDEntry.Unknown1Ch = data.ReadUInt32(ref offset);
-                addDEntry.FileName = data.ReadString(ref offset, Encoding.ASCII);
+                addDEntry.FileName = data.ReadNullTerminatedAnsiString(ref offset);
                 addDEntry.Unknown2Ch = data.ReadUInt32(ref offset);
 
                 addD.Entries[i] = addDEntry;
@@ -359,7 +359,7 @@ namespace SabreTools.Serialization
                         offset += sizeof(ushort);
 
                     // Read the menu resource as a string
-                    dialogTemplateExtended.MenuResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplateExtended.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -395,7 +395,7 @@ namespace SabreTools.Serialization
                         offset += sizeof(ushort);
 
                     // Read the class resource as a string
-                    dialogTemplateExtended.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplateExtended.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -426,7 +426,7 @@ namespace SabreTools.Serialization
                 else
                 {
                     // Read the title resource as a string
-                    dialogTemplateExtended.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplateExtended.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -451,7 +451,7 @@ namespace SabreTools.Serialization
                     dialogTemplateExtended.Weight = entry.Data.ReadUInt16(ref offset);
                     dialogTemplateExtended.Italic = entry.Data.ReadByte(ref offset);
                     dialogTemplateExtended.CharSet = entry.Data.ReadByte(ref offset);
-                    dialogTemplateExtended.Typeface = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplateExtended.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                 }
 
                 // Align to the DWORD boundary if we're not at the end
@@ -507,7 +507,7 @@ namespace SabreTools.Serialization
                             offset += sizeof(ushort);
 
                         // Read the class resource as a string
-                        dialogItemTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                         // Align to the WORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -537,7 +537,7 @@ namespace SabreTools.Serialization
                     else
                     {
                         // Read the title resource as a string
-                        dialogItemTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                         // Align to the WORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -609,7 +609,7 @@ namespace SabreTools.Serialization
                         offset += sizeof(ushort);
 
                     // Read the menu resource as a string
-                    dialogTemplate.MenuResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplate.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -645,7 +645,7 @@ namespace SabreTools.Serialization
                         offset += sizeof(ushort);
 
                     // Read the class resource as a string
-                    dialogTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -676,7 +676,7 @@ namespace SabreTools.Serialization
                 else
                 {
                     // Read the title resource as a string
-                    dialogTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the WORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -700,7 +700,7 @@ namespace SabreTools.Serialization
                     dialogTemplate.PointSizeValue = entry.Data.ReadUInt16(ref offset);
 
                     // Read the font name as a string
-                    dialogTemplate.Typeface = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                    dialogTemplate.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                 }
 
                 // Align to the DWORD boundary if we're not at the end
@@ -755,7 +755,7 @@ namespace SabreTools.Serialization
                             offset += sizeof(ushort);
 
                         // Read the class resource as a string
-                        dialogItemTemplate.ClassResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                         // Align to the WORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -785,7 +785,7 @@ namespace SabreTools.Serialization
                     else
                     {
                         // Read the title resource as a string
-                        dialogItemTemplate.TitleResource = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                         // Align to the WORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -885,8 +885,8 @@ namespace SabreTools.Serialization
                     dirEntry.Entry.Reserved = entry.Data.ReadUInt32(ref offset);
 
                     // TODO: Determine how to read these two? Immediately after?
-                    dirEntry.Entry.DeviceName = entry.Data.ReadString(ref offset);
-                    dirEntry.Entry.FaceName = entry.Data.ReadString(ref offset);
+                    dirEntry.Entry.DeviceName = entry.Data.ReadNullTerminatedAnsiString(ref offset);
+                    dirEntry.Entry.FaceName = entry.Data.ReadNullTerminatedAnsiString(ref offset);
 
                     fontGroupHeader.DE[i] = dirEntry;
                 }
@@ -946,7 +946,7 @@ namespace SabreTools.Serialization
                         extendedMenuItem.State = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         extendedMenuItem.ID = entry.Data.ReadUInt32(ref offset);
                         extendedMenuItem.Flags = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.MenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        extendedMenuItem.MenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
 
                         // Align to the DWORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -997,12 +997,12 @@ namespace SabreTools.Serialization
                         menuItem.PopupState = (MenuFlags)entry.Data.ReadUInt32(ref offset);
                         menuItem.PopupID = entry.Data.ReadUInt32(ref offset);
                         menuItem.PopupResInfo = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupMenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        menuItem.PopupMenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                     }
                     else
                     {
                         menuItem.NormalResInfo = (MenuFlags)entry.Data.ReadUInt16(ref offset);
-                        menuItem.NormalMenuText = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                        menuItem.NormalMenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                     }
 
                     // Align to the DWORD boundary if we're not at the end
@@ -1158,7 +1158,7 @@ namespace SabreTools.Serialization
             versionInfo.Length = entry.Data.ReadUInt16(ref offset);
             versionInfo.ValueLength = entry.Data.ReadUInt16(ref offset);
             versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16(ref offset);
-            versionInfo.Key = entry.Data.ReadString(ref offset, Encoding.Unicode);
+            versionInfo.Key = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
             if (versionInfo.Key != "VS_VERSION_INFO")
                 return null;
 
@@ -1200,7 +1200,7 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
-                string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                string? nextKey = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1222,7 +1222,7 @@ namespace SabreTools.Serialization
                 int currentOffset = offset;
 
                 offset += 6;
-                string? nextKey = entry.Data.ReadString(ref offset, Encoding.Unicode);
+                string? nextKey = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
                 offset = currentOffset;
 
                 if (nextKey == "StringFileInfo")
@@ -1256,7 +1256,7 @@ namespace SabreTools.Serialization
             stringFileInfo.Length = data.ReadUInt16(ref offset);
             stringFileInfo.ValueLength = data.ReadUInt16(ref offset);
             stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-            stringFileInfo.Key = data.ReadString(ref offset, Encoding.Unicode);
+            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
             if (stringFileInfo.Key != "StringFileInfo")
             {
                 offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
@@ -1278,7 +1278,7 @@ namespace SabreTools.Serialization
                 stringTable.Length = data.ReadUInt16(ref offset);
                 stringTable.ValueLength = data.ReadUInt16(ref offset);
                 stringTable.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                stringTable.Key = data.ReadString(ref offset, Encoding.Unicode);
+                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset);
 
                 // Align to the DWORD boundary if we're not at the end
                 if (offset < data.Length)
@@ -1296,7 +1296,7 @@ namespace SabreTools.Serialization
                     stringData.Length = data.ReadUInt16(ref offset);
                     stringData.ValueLength = data.ReadUInt16(ref offset);
                     stringData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                    stringData.Key = data.ReadString(ref offset, Encoding.Unicode);
+                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
 
                     // Align to the DWORD boundary if we're not at the end
                     if (offset < data.Length)
@@ -1351,7 +1351,7 @@ namespace SabreTools.Serialization
             varFileInfo.Length = data.ReadUInt16(ref offset);
             varFileInfo.ValueLength = data.ReadUInt16(ref offset);
             varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-            varFileInfo.Key = data.ReadString(ref offset, Encoding.Unicode);
+            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
             if (varFileInfo.Key != "VarFileInfo")
                 return null;
 
@@ -1370,7 +1370,7 @@ namespace SabreTools.Serialization
                 varData.Length = data.ReadUInt16(ref offset);
                 varData.ValueLength = data.ReadUInt16(ref offset);
                 varData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                varData.Key = data.ReadString(ref offset, Encoding.Unicode);
+                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
                 if (varData.Key != "Translation")
                 {
                     offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);

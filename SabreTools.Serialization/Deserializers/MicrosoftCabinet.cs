@@ -138,8 +138,8 @@ namespace SabreTools.Serialization.Deserializers
             if (header.Flags.HasFlag(HeaderFlags.PREV_CABINET))
 #endif
             {
-                header.CabinetPrev = data.ReadString(Encoding.ASCII);
-                header.DiskPrev = data.ReadString(Encoding.ASCII);
+                header.CabinetPrev = data.ReadNullTerminatedAnsiString();
+                header.DiskPrev = data.ReadNullTerminatedAnsiString();
             }
 
 #if NET20 || NET35
@@ -148,8 +148,8 @@ namespace SabreTools.Serialization.Deserializers
             if (header.Flags.HasFlag(HeaderFlags.NEXT_CABINET))
 #endif
             {
-                header.CabinetNext = data.ReadString(Encoding.ASCII);
-                header.DiskNext = data.ReadString(Encoding.ASCII);
+                header.CabinetNext = data.ReadNullTerminatedAnsiString();
+                header.DiskNext = data.ReadNullTerminatedAnsiString();
             }
 
             return header;
@@ -234,9 +234,9 @@ namespace SabreTools.Serialization.Deserializers
 #else
             if (file.Attributes.HasFlag(Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF))
 #endif
-                file.Name = data.ReadString(Encoding.Unicode);
+                file.Name = data.ReadNullTerminatedUnicodeString();
             else
-                file.Name = data.ReadString(Encoding.ASCII);
+                file.Name = data.ReadNullTerminatedAnsiString();
 
             return file;
         }

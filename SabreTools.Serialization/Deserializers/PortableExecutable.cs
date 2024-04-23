@@ -695,12 +695,12 @@ namespace SabreTools.Serialization.Deserializers
             while (totalSize > 0 && data.Position < data.Length)
             {
                 long initialPosition = data.Position;
-                string? str = data.ReadString();
+                string? str = data.ReadNullTerminatedAnsiString();
                 strings.Add(str ?? string.Empty);
                 totalSize -= (uint)(data.Position - initialPosition);
             }
 
-            coffStringTable.Strings = strings.ToArray();
+            coffStringTable.Strings = [.. strings];
 
             return coffStringTable;
         }
@@ -871,7 +871,7 @@ namespace SabreTools.Serialization.Deserializers
                 uint nameAddress = exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
-                string? name = data.ReadString(Encoding.ASCII);
+                string? name = data.ReadNullTerminatedAnsiString();
                 exportDirectoryTable.Name = name;
             }
 
@@ -944,7 +944,7 @@ namespace SabreTools.Serialization.Deserializers
                 exportNameTable.Strings = new string[exportDirectoryTable.NumberOfNamePointers];
                 for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
                 {
-                    string? str = data.ReadString(Encoding.ASCII);
+                    string? str = data.ReadNullTerminatedAnsiString();
                     exportNameTable.Strings[i] = str ?? string.Empty;
                 }
 
@@ -1006,7 +1006,7 @@ namespace SabreTools.Serialization.Deserializers
                 uint nameAddress = importDirectoryTableEntry.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
-                string? name = data.ReadString(Encoding.ASCII);
+                string? name = data.ReadNullTerminatedAnsiString();
                 importDirectoryTableEntry.Name = name;
             }
 
@@ -1166,7 +1166,7 @@ namespace SabreTools.Serialization.Deserializers
                         var hintNameTableEntry = new HintNameTableEntry();
 
                         hintNameTableEntry.Hint = data.ReadUInt16();
-                        hintNameTableEntry.Name = data.ReadString(Encoding.ASCII);
+                        hintNameTableEntry.Name = data.ReadNullTerminatedAnsiString();
 
                         importHintNameTable.Add(hintNameTableEntry);
                     }

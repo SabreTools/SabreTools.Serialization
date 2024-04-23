@@ -419,7 +419,7 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < stringCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                strings[currentPosition] = data.ReadString(Encoding.ASCII);
+                strings[currentPosition] = data.ReadNullTerminatedAnsiString();
             }
 
             // Assign the files
