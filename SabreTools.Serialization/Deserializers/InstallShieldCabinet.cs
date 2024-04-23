@@ -411,22 +411,22 @@ namespace SabreTools.Serialization.Deserializers
             Descriptor descriptor = new Descriptor();
 
             descriptor.StringsOffset = data.ReadUInt32();
-            descriptor.Reserved0 = data.ReadBytes(4);
+            descriptor.Reserved0 = data.ReadUInt32();
             descriptor.ComponentListOffset = data.ReadUInt32();
             descriptor.FileTableOffset = data.ReadUInt32();
-            descriptor.Reserved1 = data.ReadBytes(4);
+            descriptor.Reserved1 = data.ReadUInt32();
             descriptor.FileTableSize = data.ReadUInt32();
             descriptor.FileTableSize2 = data.ReadUInt32();
             descriptor.DirectoryCount = data.ReadUInt16();
-            descriptor.Reserved2 = data.ReadBytes(4);
-            descriptor.Reserved3 = data.ReadBytes(2);
-            descriptor.Reserved4 = data.ReadBytes(4);
+            descriptor.Reserved2 = data.ReadUInt32();
+            descriptor.Reserved3 = data.ReadUInt16();
+            descriptor.Reserved4 = data.ReadUInt32();
             descriptor.FileCount = data.ReadUInt32();
             descriptor.FileTableOffset2 = data.ReadUInt32();
             descriptor.ComponentTableInfoCount = data.ReadUInt16();
             descriptor.ComponentTableOffset = data.ReadUInt32();
-            descriptor.Reserved5 = data.ReadBytes(4);
-            descriptor.Reserved6 = data.ReadBytes(4);
+            descriptor.Reserved5 = data.ReadUInt32();
+            descriptor.Reserved6 = data.ReadUInt32();
 
             descriptor.FileGroupOffsets = new uint[MAX_FILE_GROUP_COUNT];
             for (int i = 0; i < descriptor.FileGroupOffsets.Length; i++)
@@ -442,8 +442,8 @@ namespace SabreTools.Serialization.Deserializers
 
             descriptor.SetupTypesOffset = data.ReadUInt32();
             descriptor.SetupTableOffset = data.ReadUInt32();
-            descriptor.Reserved7 = data.ReadBytes(4);
-            descriptor.Reserved8 = data.ReadBytes(4);
+            descriptor.Reserved7 = data.ReadUInt32();
+            descriptor.Reserved8 = data.ReadUInt32();
 
             return descriptor;
         }
@@ -471,9 +471,9 @@ namespace SabreTools.Serialization.Deserializers
 
             // Read the string
             if (majorVersion >= 17)
-                offsetList.Name = data.ReadString(Encoding.Unicode);
+                offsetList.Name = data.ReadNullTerminatedUnicodeString();
             else
-                offsetList.Name = data.ReadString(Encoding.ASCII);
+                offsetList.Name = data.ReadNullTerminatedAnsiString();
 
             // Seek back to the correct offset
             data.Seek(currentOffset, SeekOrigin.Begin);
