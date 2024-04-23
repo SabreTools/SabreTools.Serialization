@@ -1,8 +1,10 @@
 using System.IO;
+using System.Linq;
+using SabreTools.Models.InstallShieldCabinet;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class InstallShieldCabinet : WrapperBase<Models.InstallShieldCabinet.Cabinet>
+    public partial class InstallShieldCabinet : WrapperBase<Cabinet>
     {
         #region Descriptive Properties
 
@@ -41,14 +43,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public InstallShieldCabinet(Models.InstallShieldCabinet.Cabinet? model, byte[]? data, int offset)
+        public InstallShieldCabinet(Cabinet? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public InstallShieldCabinet(Models.InstallShieldCabinet.Cabinet? model, Stream? data)
+        public InstallShieldCabinet(Cabinet? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -98,6 +100,115 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Accessors
+
+        /// <summary>
+        /// Get the component name at a given index, if possible
+        /// </summary>
+        public string? GetComponentName(int index)
+        {
+            if (Model.Components == null)
+                return null;
+
+            if (index < 0 || index >= Model.Components.Length)
+                return null;
+
+            var component = Model.Components[index];
+            if (component?.Identifier == null)
+                return null;
+
+            return component.Identifier.Replace('\\', '/');
+        }
+
+        /// <summary>
+        /// Get the directory name at a given index, if possible
+        /// </summary>
+        public string? GetDirectoryName(int index)
+        {
+            if (Model.DirectoryNames == null)
+                return null;
+
+            if (index < 0 || index >= Model.DirectoryNames.Length)
+                return null;
+
+            return Model.DirectoryNames[index];
+        }
+
+        /// <summary>
+        /// Get the file descriptor at a given index, if possible
+        /// </summary>
+        public FileDescriptor? GetFileDescriptor(int index)
+        {
+            if (Model.FileDescriptors == null)
+                return null;
+
+            if (index < 0 || index >= Model.FileDescriptors.Length)
+                return null;
+
+            return Model.FileDescriptors[index];
+        }
+
+        /// <summary>
+        /// Get the file group at a given index, if possible
+        /// </summary>
+        public FileGroup? GetFileGroup(int index)
+        {
+            if (Model.FileGroups == null)
+                return null;
+
+            if (index < 0 || index >= Model.FileGroups.Length)
+                return null;
+
+            return Model.FileGroups[index];
+        }
+
+        /// <summary>
+        /// Get the file group at a given name, if possible
+        /// </summary>
+        public FileGroup? GetFileGroup(string name)
+        {
+            if (Model.FileGroups == null)
+                return null;
+
+            return Model.FileGroups.FirstOrDefault(fg => fg != null && string.Equals(fg.Name, name));
+        }
+
+        /// <summary>
+        /// Get the file name at a given index, if possible
+        /// </summary>
+        public string? GetFileName(int index)
+        {
+            var descriptor = GetFileDescriptor(index);
+#if NET20 || NET35
+            if (descriptor == null || (descriptor.Flags & FileFlags.FILE_INVALID) != 0)
+#else
+            if (descriptor == null || descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
+#endif
+                return null;
+
+            return descriptor.Name;
+        }
+
+        /// <summary>
+        /// Get the file group name at a given index, if possible
+        /// </summary>
+        public string? GetFileGroupName(int index)
+        {
+            if (Model.FileGroups == null)
+                return null;
+
+            if (index < 0 || index >= Model.FileGroups.Length)
+                return null;
+
+            var fileGroup = Model.FileGroups[index];
+            if (fileGroup == null)
+                return null;
+
+            return fileGroup.Name;
         }
 
         #endregion
