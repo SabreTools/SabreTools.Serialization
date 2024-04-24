@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
             if (sfb == null)
                 return null;
 
-            string magic = Encoding.ASCII.GetString(sfb.Magic);
+            string magic = Encoding.ASCII.GetString(sfb!.Magic!);
             if (magic != ".SFB")
                 return null;
 

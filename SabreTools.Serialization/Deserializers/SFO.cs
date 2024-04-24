@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Deserializers
             if (sfoHeader == null)
                 return null;
 
-            string magic = Encoding.ASCII.GetString(sfoHeader.Magic);
+            string magic = Encoding.ASCII.GetString(sfoHeader!.Magic!);
             if (magic != "\0PSF")
                 return null;
 
