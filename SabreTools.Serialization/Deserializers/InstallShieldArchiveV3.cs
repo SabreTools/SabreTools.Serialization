@@ -49,12 +49,12 @@ namespace SabreTools.Serialization.Deserializers
             var directories = new List<Models.InstallShieldArchiveV3.Directory>();
             for (int i = 0; i < header.DirCount; i++)
             {
-                var directory = ParseDirectory(data, out uint chunkSize);
+                var directory = ParseDirectory(data);
                 if (directory?.Name == null)
                     return null;
 
                 directories.Add(directory);
-                data.Seek(chunkSize - directory.Name.Length - 6, SeekOrigin.Current);
+                data.Seek(directory.ChunkSize - directory.Name.Length - 6, SeekOrigin.Current);
             }
 
             // Set the directories
@@ -112,16 +112,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled directory on success, null on error</returns>
-        public static Models.InstallShieldArchiveV3.Directory? ParseDirectory(Stream data, out uint chunkSize)
+        public static Models.InstallShieldArchiveV3.Directory? ParseDirectory(Stream data)
         {
-            // TODO: Use ReadType when model is fixed
-            var directory = new Models.InstallShieldArchiveV3.Directory();
-
-            directory.FileCount = data.ReadUInt16();
-            chunkSize = data.ReadUInt16(); // TODO: Add to model and remove from output params
-            directory.Name = data.ReadPrefixedAnsiString();
-
-            return directory;
+            return data.ReadType<Models.InstallShieldArchiveV3.Directory>();
         }
 
         /// <summary>
