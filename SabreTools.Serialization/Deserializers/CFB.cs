@@ -234,7 +234,7 @@ namespace SabreTools.Serialization.Deserializers
         private static FileHeader? ParseFileHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            FileHeader header = new FileHeader();
+            var header = new FileHeader();
 
             header.Signature = data.ReadUInt64();
             if (header.Signature != SignatureUInt64)
@@ -315,7 +315,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             const int directoryEntrySize = 64 + 2 + 1 + 1 + 4 + 4 + 4 + 16 + 4 + 8 + 8 + 4 + 8;
             int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
-            DirectoryEntry[] directoryEntries = new DirectoryEntry[sectorCount];
+            var directoryEntries = new DirectoryEntry[sectorCount];
 
             for (int i = 0; i < directoryEntries.Length; i++)
             {
@@ -335,10 +335,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version from the header</param>
         /// <returns>Filled directory entry on success, null on error</returns>
-        private static DirectoryEntry ParseDirectoryEntry(Stream data, ushort majorVersion)
+        private static DirectoryEntry? ParseDirectoryEntry(Stream data, ushort majorVersion)
         {
             // TODO: Use marshalling here instead of building
-            DirectoryEntry directoryEntry = new DirectoryEntry();
+            var directoryEntry = new DirectoryEntry();
 
             byte[]? name = data.ReadBytes(64);
             if (name != null)

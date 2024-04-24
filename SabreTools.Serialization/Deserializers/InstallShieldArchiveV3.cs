@@ -96,14 +96,11 @@ namespace SabreTools.Serialization.Deserializers
         public static Header? ParseHeader(Stream data)
         {
             var header = data.ReadType<Header>();
+            
             if (header == null)
                 return null;
-
-            // Invalid signature
             if (header.Signature1 != 0x8C655D13) // TODO: Move constant to Models
                 return null;
-
-            // Invalid TOC address
             if (header.TocAddress >= data.Length)
                 return null;
 

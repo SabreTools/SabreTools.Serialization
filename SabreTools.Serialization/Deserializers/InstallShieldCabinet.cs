@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.InstallShieldCabinet;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
@@ -335,20 +334,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled common header on success, null on error</returns>
         public static CommonHeader? ParseCommonHeader(Stream data)
         {
-            CommonHeader commonHeader = new CommonHeader();
+            var commonHeader = data.ReadType<CommonHeader>();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (commonHeader == null)
                 return null;
-
-            commonHeader.Signature = Encoding.ASCII.GetString(signature);
             if (commonHeader.Signature != SignatureString)
                 return null;
-
-            commonHeader.Version = data.ReadUInt32();
-            commonHeader.VolumeInfo = data.ReadUInt32();
-            commonHeader.DescriptorOffset = data.ReadUInt32();
-            commonHeader.DescriptorSize = data.ReadUInt32();
 
             return commonHeader;
         }
@@ -406,46 +397,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled descriptor on success, null on error</returns>
-        public static Descriptor ParseDescriptor(Stream data)
+        public static Descriptor? ParseDescriptor(Stream data)
         {
-            Descriptor descriptor = new Descriptor();
-
-            descriptor.StringsOffset = data.ReadUInt32();
-            descriptor.Reserved0 = data.ReadUInt32();
-            descriptor.ComponentListOffset = data.ReadUInt32();
-            descriptor.FileTableOffset = data.ReadUInt32();
-            descriptor.Reserved1 = data.ReadUInt32();
-            descriptor.FileTableSize = data.ReadUInt32();
-            descriptor.FileTableSize2 = data.ReadUInt32();
-            descriptor.DirectoryCount = data.ReadUInt16();
-            descriptor.Reserved2 = data.ReadUInt32();
-            descriptor.Reserved3 = data.ReadUInt16();
-            descriptor.Reserved4 = data.ReadUInt32();
-            descriptor.FileCount = data.ReadUInt32();
-            descriptor.FileTableOffset2 = data.ReadUInt32();
-            descriptor.ComponentTableInfoCount = data.ReadUInt16();
-            descriptor.ComponentTableOffset = data.ReadUInt32();
-            descriptor.Reserved5 = data.ReadUInt32();
-            descriptor.Reserved6 = data.ReadUInt32();
-
-            descriptor.FileGroupOffsets = new uint[MAX_FILE_GROUP_COUNT];
-            for (int i = 0; i < descriptor.FileGroupOffsets.Length; i++)
-            {
-                descriptor.FileGroupOffsets[i] = data.ReadUInt32();
-            }
-
-            descriptor.ComponentOffsets = new uint[MAX_COMPONENT_COUNT];
-            for (int i = 0; i < descriptor.ComponentOffsets.Length; i++)
-            {
-                descriptor.ComponentOffsets[i] = data.ReadUInt32();
-            }
-
-            descriptor.SetupTypesOffset = data.ReadUInt32();
-            descriptor.SetupTableOffset = data.ReadUInt32();
-            descriptor.Reserved7 = data.ReadUInt32();
-            descriptor.Reserved8 = data.ReadUInt32();
-
-            return descriptor;
+            return data.ReadType<Descriptor>();
         }
 
         /// <summary>
@@ -457,7 +411,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled offset list on success, null on error</returns>
         public static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
         {
-            OffsetList offsetList = new OffsetList();
+            var offsetList = new OffsetList();
 
             offsetList.NameOffset = data.ReadUInt32();
             offsetList.DescriptorOffset = data.ReadUInt32();
@@ -490,7 +444,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file group on success, null on error</returns>
         public static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
         {
-            FileGroup fileGroup = new FileGroup();
+            var fileGroup = new FileGroup();
 
             fileGroup.NameOffset = data.ReadUInt32();
 
@@ -553,7 +507,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled component on success, null on error</returns>
         public static Component ParseComponent(Stream data, int majorVersion, uint descriptorOffset)
         {
-            Component component = new Component();
+            var component = new Component();
 
             component.IdentifierOffset = data.ReadUInt32();
             component.DescriptorOffset = data.ReadUInt32();

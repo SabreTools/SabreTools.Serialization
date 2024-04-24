@@ -102,20 +102,12 @@ namespace SabreTools.Serialization
         /// <returns>A filled NB10 Program Database on success, null on error</returns>
         public static NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
         {
-            // If we have data that's invalid, we can't do anything
-            if (data == null)
+            var nb10ProgramDatabase = data.ReadType<NB10ProgramDatabase>(ref offset);
+
+            if (nb10ProgramDatabase == null)
                 return null;
-
-            var nb10ProgramDatabase = new NB10ProgramDatabase();
-
-            nb10ProgramDatabase.Signature = data.ReadUInt32(ref offset);
             if (nb10ProgramDatabase.Signature != 0x3031424E)
                 return null;
-
-            nb10ProgramDatabase.Offset = data.ReadUInt32(ref offset);
-            nb10ProgramDatabase.Timestamp = data.ReadUInt32(ref offset);
-            nb10ProgramDatabase.Age = data.ReadUInt32(ref offset);
-            nb10ProgramDatabase.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset); // TODO: Actually null-terminated UTF-8?
 
             return nb10ProgramDatabase;
         }
@@ -157,12 +149,8 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into overlay data</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled SecuROM AddD overlay data on success, null on error</returns>
-        public static SecuROMAddD? AsSecuROMAddD(this byte[]? data, ref int offset)
+        public static SecuROMAddD? AsSecuROMAddD(this byte[] data, ref int offset)
         {
-            // If we have data that's invalid, we can't do anything
-            if (data == null)
-                return null;
-
             // Read in the table
             var addD = new SecuROMAddD();
 
@@ -193,18 +181,9 @@ namespace SabreTools.Serialization
             addD.Entries = new SecuROMAddDEntry[addD.EntryCount];
             for (int i = 0; i < addD.EntryCount; i++)
             {
-                var addDEntry = new SecuROMAddDEntry();
-
-                addDEntry.PhysicalOffset = data.ReadUInt32(ref offset);
-                addDEntry.Length = data.ReadUInt32(ref offset);
-                addDEntry.Unknown08h = data.ReadUInt32(ref offset);
-                addDEntry.Unknown0Ch = data.ReadUInt32(ref offset);
-                addDEntry.Unknown10h = data.ReadUInt32(ref offset);
-                addDEntry.Unknown14h = data.ReadUInt32(ref offset);
-                addDEntry.Unknown18h = data.ReadUInt32(ref offset);
-                addDEntry.Unknown1Ch = data.ReadUInt32(ref offset);
-                addDEntry.FileName = data.ReadNullTerminatedAnsiString(ref offset);
-                addDEntry.Unknown2Ch = data.ReadUInt32(ref offset);
+                var addDEntry = data.ReadType<SecuROMAddDEntry>(ref offset);
+                if (addDEntry == null)
+                    return null;
 
                 addD.Entries[i] = addDEntry;
             }
@@ -223,7 +202,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a resource header</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled resource header on success, null on error</returns>
-        public static ResourceHeader? AsResourceHeader(this byte[]? data, ref int offset)
+        public static ResourceHeader? AsResourceHeader(this byte[] data, ref int offset)
         {
             // If we have data that's invalid, we can't do anything
             if (data == null)
@@ -267,12 +246,9 @@ namespace SabreTools.Serialization
             // Read in the table
             for (int i = 0; i < count; i++)
             {
-                var acceleratorTableEntry = new AcceleratorTableEntry();
-
-                acceleratorTableEntry.Flags = (AcceleratorTableFlags)entry.Data.ReadUInt16(ref offset);
-                acceleratorTableEntry.Ansi = entry.Data.ReadUInt16(ref offset);
-                acceleratorTableEntry.Id = entry.Data.ReadUInt16(ref offset);
-                acceleratorTableEntry.Padding = entry.Data.ReadUInt16(ref offset);
+                var acceleratorTableEntry = entry.Data.ReadType<AcceleratorTableEntry>(ref offset);
+                if (acceleratorTableEntry == null)
+                    return null;
 
                 table[i] = acceleratorTableEntry;
             }
@@ -920,11 +896,9 @@ namespace SabreTools.Serialization
             {
                 #region Extended menu header
 
-                var menuHeaderExtended = new MenuHeaderExtended();
-
-                menuHeaderExtended.Version = entry.Data.ReadUInt16(ref offset);
-                menuHeaderExtended.Offset = entry.Data.ReadUInt16(ref offset);
-                menuHeaderExtended.HelpID = entry.Data.ReadUInt32(ref offset);
+                var menuHeaderExtended = entry.Data.ReadType<MenuHeaderExtended>(ref offset);
+                if (menuHeaderExtended == null)
+                    return null;
 
                 menuResource.ExtendedMenuHeader = menuHeaderExtended;
 
@@ -940,13 +914,9 @@ namespace SabreTools.Serialization
 
                     while (offset < entry.Data.Length)
                     {
-                        var extendedMenuItem = new MenuItemExtended();
-
-                        extendedMenuItem.ItemType = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.State = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.ID = entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.Flags = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        extendedMenuItem.MenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                        var extendedMenuItem = entry.Data.ReadType<MenuItemExtended>(ref offset);
+                        if (extendedMenuItem == null)
+                            return null;
 
                         // Align to the DWORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -967,10 +937,9 @@ namespace SabreTools.Serialization
             {
                 #region Menu header
 
-                var menuHeader = new MenuHeader();
-
-                menuHeader.Version = entry.Data.ReadUInt16(ref offset);
-                menuHeader.HeaderSize = entry.Data.ReadUInt16(ref offset);
+                var menuHeader = entry.Data.ReadType<MenuHeader>(ref offset);
+                if (menuHeader == null)
+                    return null;
 
                 menuResource.MenuHeader = menuHeader;
 
@@ -1048,11 +1017,9 @@ namespace SabreTools.Serialization
 
                 for (int i = 0; i < messageResourceData.NumberOfBlocks; i++)
                 {
-                    var messageResourceBlock = new MessageResourceBlock();
-
-                    messageResourceBlock.LowId = entry.Data.ReadUInt32(ref offset);
-                    messageResourceBlock.HighId = entry.Data.ReadUInt32(ref offset);
-                    messageResourceBlock.OffsetToEntries = entry.Data.ReadUInt32(ref offset);
+                    var messageResourceBlock = entry.Data.ReadType<MessageResourceBlock>(ref offset);
+                    if (messageResourceBlock == null)
+                        return null;
 
                     messageResourceBlocks.Add(messageResourceBlock);
                 }
@@ -1168,23 +1135,13 @@ namespace SabreTools.Serialization
             // Read fixed file info
             if (versionInfo.ValueLength > 0)
             {
-                var fixedFileInfo = new FixedFileInfo();
-                fixedFileInfo.Signature = entry.Data.ReadUInt32(ref offset);
+                var fixedFileInfo = entry.Data.ReadType<FixedFileInfo>(ref offset);
+
+                if (fixedFileInfo == null)
+                    return null;
                 if (fixedFileInfo.Signature != 0xFEEF04BD)
                     return null;
 
-                fixedFileInfo.StrucVersion = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileVersionMS = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileVersionLS = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.ProductVersionMS = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.ProductVersionLS = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileFlagsMask = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileFlags = (FixedFileInfoFlags)(entry.Data.ReadUInt32(ref offset) & fixedFileInfo.FileFlagsMask);
-                fixedFileInfo.FileOS = (FixedFileInfoOS)entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileType = (FixedFileInfoFileType)entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileSubtype = (FixedFileInfoFileSubtype)entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileDateMS = entry.Data.ReadUInt32(ref offset);
-                fixedFileInfo.FileDateLS = entry.Data.ReadUInt32(ref offset);
                 versionInfo.Value = fixedFileInfo;
             }
 
@@ -1246,7 +1203,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a string file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled string file info resource on success, null on error</returns>
-        private static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
+        public static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
         {
             var stringFileInfo = new StringFileInfo();
 
@@ -1341,7 +1298,7 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a var file info</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled var file info resource on success, null on error</returns>
-        private static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
+        public static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
         {
             var varFileInfo = new VarFileInfo();
 

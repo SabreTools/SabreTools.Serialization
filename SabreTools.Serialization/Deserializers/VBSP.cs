@@ -65,7 +65,11 @@ namespace SabreTools.Serialization.Deserializers
             header.Lumps = new Lump[HL_VBSP_LUMP_COUNT];
             for (int i = 0; i < HL_VBSP_LUMP_COUNT; i++)
             {
-                header.Lumps[i] = ParseLump(data, header.Version);
+                var lump = ParseLump(data, header.Version);
+                if (lump == null)
+                    return null;
+
+                header.Lumps[i] = lump;
             }
 
             header.MapRevision = data.ReadInt32();
@@ -79,19 +83,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="version">VBSP version</param>
         /// <returns>Filled Half-Life 2 Level lump on success, null on error</returns>
-        private static Lump ParseLump(Stream data, int version)
+        private static Lump? ParseLump(Stream data, int version)
         {
-            // TODO: Use marshalling here instead of building
-            Lump lump = new Lump();
-
-            lump.Offset = data.ReadUInt32();
-            lump.Length = data.ReadUInt32();
-            lump.Version = data.ReadUInt32();
-            lump.FourCC = new char[4];
-            for (int i = 0; i < 4; i++)
-            {
-                lump.FourCC[i] = (char)data.ReadByte();
-            }
+            return data.ReadType<Lump>();
 
             // This block was commented out because test VBSPs with header
             // version 21 had the values in the "right" order already and
@@ -104,8 +98,8 @@ namespace SabreTools.Serialization.Deserializers
             //    lump.Offset = lump.Length;
             //    lump.Length = temp;
             //}
-
-            return lump;
+            //
+            //return lump
         }
     }
 }

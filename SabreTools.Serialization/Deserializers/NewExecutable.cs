@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.NewExecutable;
 using static SabreTools.Models.NewExecutable.Constants;
@@ -214,47 +213,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled executable header on success, null on error</returns>
         public static ExecutableHeader? ParseExecutableHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var header = new ExecutableHeader();
+            var header = data.ReadType<ExecutableHeader>();
 
-            byte[]? magic = data.ReadBytes(2);
-            if (magic == null)
+            if (header == null)
                 return null;
-
-            header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;
-
-            header.LinkerVersion = data.ReadByteValue();
-            header.LinkerRevision = data.ReadByteValue();
-            header.EntryTableOffset = data.ReadUInt16();
-            header.EntryTableSize = data.ReadUInt16();
-            header.CrcChecksum = data.ReadUInt32();
-            header.FlagWord = (HeaderFlag)data.ReadUInt16();
-            header.AutomaticDataSegmentNumber = data.ReadUInt16();
-            header.InitialHeapAlloc = data.ReadUInt16();
-            header.InitialStackAlloc = data.ReadUInt16();
-            header.InitialCSIPSetting = data.ReadUInt32();
-            header.InitialSSSPSetting = data.ReadUInt32();
-            header.FileSegmentCount = data.ReadUInt16();
-            header.ModuleReferenceTableSize = data.ReadUInt16();
-            header.NonResidentNameTableSize = data.ReadUInt16();
-            header.SegmentTableOffset = data.ReadUInt16();
-            header.ResourceTableOffset = data.ReadUInt16();
-            header.ResidentNameTableOffset = data.ReadUInt16();
-            header.ModuleReferenceTableOffset = data.ReadUInt16();
-            header.ImportedNamesTableOffset = data.ReadUInt16();
-            header.NonResidentNamesTableOffset = data.ReadUInt32();
-            header.MovableEntriesCount = data.ReadUInt16();
-            header.SegmentAlignmentShiftCount = data.ReadUInt16();
-            header.ResourceEntriesCount = data.ReadUInt16();
-            header.TargetOperatingSystem = (OperatingSystem)data.ReadByteValue();
-            header.AdditionalFlags = (OS2Flag)data.ReadByteValue();
-            header.ReturnThunkOffset = data.ReadUInt16();
-            header.SegmentReferenceThunkOffset = data.ReadUInt16();
-            header.MinCodeSwapAreaSize = data.ReadUInt16();
-            header.WindowsSDKRevision = data.ReadByteValue();
-            header.WindowsSDKVersion = data.ReadByteValue();
 
             return header;
         }
@@ -265,22 +229,31 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of segment table entries to read</param>
         /// <returns>Filled segment table on success, null on error</returns>
-        public static SegmentTableEntry[] ParseSegmentTable(Stream data, int count)
+        public static SegmentTableEntry[]? ParseSegmentTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var segmentTable = new SegmentTableEntry[count];
 
             for (int i = 0; i < count; i++)
             {
-                var entry = new SegmentTableEntry();
-                entry.Offset = data.ReadUInt16();
-                entry.Length = data.ReadUInt16();
-                entry.FlagWord = (SegmentTableEntryFlag)data.ReadUInt16();
-                entry.MinimumAllocationSize = data.ReadUInt16();
+                var entry = ParseSegmentTableEntry(data);
+                if (entry == null)
+                    return null;
+
                 segmentTable[i] = entry;
             }
 
             return segmentTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a segment table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled segment table entry on success, null on error</returns>
+        public static SegmentTableEntry? ParseSegmentTableEntry(Stream data)
+        {
+            return data.ReadType<SegmentTableEntry>();
         }
 
         /// <summary>
@@ -289,7 +262,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of resource table entries to read</param>
         /// <returns>Filled resource table on success, null on error</returns>
-        public static ResourceTable ParseResourceTable(Stream data, int count)
+        public static ResourceTable? ParseResourceTable(Stream data, int count)
         {
             long initialOffset = data.Position;
 
@@ -308,12 +281,10 @@ namespace SabreTools.Serialization.Deserializers
                 for (int j = 0; j < entry.ResourceCount; j++)
                 {
                     // TODO: Should we read and store the resource data?
-                    var resource = new ResourceTypeResourceEntry();
-                    resource.Offset = data.ReadUInt16();
-                    resource.Length = data.ReadUInt16();
-                    resource.FlagWord = (ResourceTypeResourceFlag)data.ReadUInt16();
-                    resource.ResourceID = data.ReadUInt16();
-                    resource.Reserved = data.ReadUInt32();
+                    var resource = ParseResourceTypeResourceEntry(data);
+                    if (resource == null)
+                        return null;
+
                     entry.Resources[j] = resource;
                 }
                 resourceTable.ResourceTypes[i] = entry;
@@ -339,13 +310,42 @@ namespace SabreTools.Serialization.Deserializers
             {
                 int stringOffset = (int)(stringOffsets[i] + initialOffset);
                 data.Seek(stringOffset, SeekOrigin.Begin);
-                var str = new ResourceTypeAndNameString();
-                str.Length = data.ReadByteValue();
-                str.Text = data.ReadBytes(str.Length);
+
+                var str = ParseResourceTypeAndNameString(data);
+                if (str == null)
+                    return null;
+
                 resourceTable.TypeAndNameStrings[stringOffsets[i]] = str;
             }
 
             return resourceTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a resource entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled resource entry on success, null on error</returns>
+        public static ResourceTypeResourceEntry? ParseResourceTypeResourceEntry(Stream data)
+        {
+            // TODO: Should we read and store the resource data?
+            return data.ReadType<ResourceTypeResourceEntry>();
+        }
+
+        /// <summary>
+        /// Parse a Stream into a resource type and name string
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled resource type and name string on success, null on error</returns>
+        public static ResourceTypeAndNameString? ParseResourceTypeAndNameString(Stream data)
+        {
+            // TODO: Use marshalling here instead of building
+            var str = new ResourceTypeAndNameString();
+
+            str.Length = data.ReadByteValue();
+            str.Text = data.ReadBytes(str.Length);
+
+            return str;
         }
 
         /// <summary>
@@ -354,21 +354,38 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the resident-name table</param>
         /// <returns>Filled resident-name table on success, null on error</returns>
-        public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, int endOffset)
+        public static ResidentNameTableEntry[]? ParseResidentNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<ResidentNameTableEntry>();
 
             while (data.Position < endOffset)
             {
-                var entry = new ResidentNameTableEntry();
-                entry.Length = data.ReadByteValue();
-                entry.NameString = data.ReadBytes(entry.Length);
-                entry.OrdinalNumber = data.ReadUInt16();
+                var entry = ParseResidentNameTableEntry(data);
+                if (entry == null)
+                    return null;
+
                 residentNameTable.Add(entry);
             }
 
             return [.. residentNameTable];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a resident-name table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled resident-name table entry on success, null on error</returns>
+        public static ResidentNameTableEntry? ParseResidentNameTableEntry(Stream data)
+        {
+            // TODO: Use marshalling here instead of building
+            var entry = new ResidentNameTableEntry();
+
+            entry.Length = data.ReadByteValue();
+            entry.NameString = data.ReadBytes(entry.Length);
+            entry.OrdinalNumber = data.ReadUInt16();
+
+            return entry;
         }
 
         /// <summary>
@@ -377,19 +394,31 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of module-reference table entries to read</param>
         /// <returns>Filled module-reference table on success, null on error</returns>
-        public static ModuleReferenceTableEntry[] ParseModuleReferenceTable(Stream data, int count)
+        public static ModuleReferenceTableEntry[]? ParseModuleReferenceTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var moduleReferenceTable = new ModuleReferenceTableEntry[count];
 
             for (int i = 0; i < count; i++)
             {
-                var entry = new ModuleReferenceTableEntry();
-                entry.Offset = data.ReadUInt16();
+                var entry = ParseModuleReferenceTableEntry(data);
+                if (entry == null)
+                    return null;
+
                 moduleReferenceTable[i] = entry;
             }
 
             return moduleReferenceTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a module-reference table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled module-reference table entry on success, null on error</returns>
+        public static ModuleReferenceTableEntry? ParseModuleReferenceTableEntry(Stream data)
+        {
+            return data.ReadType<ModuleReferenceTableEntry>();
         }
 
         /// <summary>
@@ -398,7 +427,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the imported-name table</param>
         /// <returns>Filled imported-name table on success, null on error</returns>
-        public static Dictionary<ushort, ImportedNameTableEntry?> ParseImportedNameTable(Stream data, int endOffset)
+        public static Dictionary<ushort, ImportedNameTableEntry?>? ParseImportedNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry?>();
@@ -406,13 +435,30 @@ namespace SabreTools.Serialization.Deserializers
             while (data.Position < endOffset)
             {
                 ushort currentOffset = (ushort)data.Position;
-                var entry = new ImportedNameTableEntry();
-                entry.Length = data.ReadByteValue();
-                entry.NameString = data.ReadBytes(entry.Length);
+                var entry = ParseImportedNameTableEntry(data);
+                if (entry == null)
+                    return null;
+
                 importedNameTable[currentOffset] = entry;
             }
 
             return importedNameTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an imported-name table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled imported-name table entry on success, null on error</returns>
+        public static ImportedNameTableEntry? ParseImportedNameTableEntry(Stream data)
+        {
+            // TODO: Use marshalling here instead of building
+            var entry = new ImportedNameTableEntry();
+
+            entry.Length = data.ReadByteValue();
+            entry.NameString = data.ReadBytes(entry.Length);
+
+            return entry;
         }
 
         /// <summary>
@@ -460,21 +506,38 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the nonresident-name table</param>
         /// <returns>Filled nonresident-name table on success, null on error</returns>
-        public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, int endOffset)
+        public static NonResidentNameTableEntry[]? ParseNonResidentNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<NonResidentNameTableEntry>();
 
             while (data.Position < endOffset)
             {
-                var entry = new NonResidentNameTableEntry();
-                entry.Length = data.ReadByteValue();
-                entry.NameString = data.ReadBytes(entry.Length);
-                entry.OrdinalNumber = data.ReadUInt16();
+                var entry = ParseNonResidentNameTableEntry(data);
+                if (entry == null)
+                    return null;
+
                 residentNameTable.Add(entry);
             }
 
             return [.. residentNameTable];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a nonresident-name table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled nonresident-name table entry on success, null on error</returns>
+        public static NonResidentNameTableEntry? ParseNonResidentNameTableEntry(Stream data)
+        {
+            // TODO: Use marshalling here instead of building
+            var entry = new NonResidentNameTableEntry();
+
+            entry.Length = data.ReadByteValue();
+            entry.NameString = data.ReadBytes(entry.Length);
+            entry.OrdinalNumber = data.ReadUInt16();
+
+            return entry;
         }
     }
 }

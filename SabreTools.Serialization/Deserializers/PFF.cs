@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PFF;
@@ -92,47 +93,27 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
-
-            header.HeaderSize = data.ReadUInt32();
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            var header = data.ReadType<Header>();
+            if (header == null)
                 return null;
 
-            header.Signature = Encoding.ASCII.GetString(signature);
-            header.NumberOfFiles = data.ReadUInt32();
-            header.FileSegmentSize = data.ReadUInt32();
-            switch (header.Signature)
+            return header.Signature switch
             {
-                case Version0SignatureString:
-                    if (header.FileSegmentSize != Version0HSegmentSize)
-                        return null;
-                    break;
+                Version0SignatureString when header.FileSegmentSize != Version0HSegmentSize => null,
+                Version0SignatureString => header,
 
-                case Version2SignatureString:
-                    if (header.FileSegmentSize != Version2SegmentSize)
-                        return null;
-                    break;
+                Version2SignatureString when header.FileSegmentSize != Version2SegmentSize => null,
+                Version2SignatureString => header,
 
-                // Version 3 can sometimes have Version 2 segment sizes
-                case Version3SignatureString:
-                    if (header.FileSegmentSize != Version2SegmentSize && header.FileSegmentSize != Version3SegmentSize)
-                        return null;
-                    break;
+                Version3SignatureString when header.FileSegmentSize != Version2SegmentSize
+                                    && header.FileSegmentSize != Version3SegmentSize => null,
+                Version3SignatureString => header,
 
-                case Version4SignatureString:
-                    if (header.FileSegmentSize != Version4SegmentSize)
-                        return null;
-                    break;
+                Version4SignatureString when header.FileSegmentSize != Version4SegmentSize => null,
+                Version4SignatureString => header,
 
-                default:
-                    return null;
-            }
-
-            header.FileListOffset = data.ReadUInt32();
-
-            return header;
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -140,18 +121,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled footer on success, null on error</returns>
-        private static Footer ParseFooter(Stream data)
+        private static Footer? ParseFooter(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Footer footer = new Footer();
-
-            footer.SystemIP = data.ReadUInt32();
-            footer.Reserved = data.ReadUInt32();
-            byte[]? kingTag = data.ReadBytes(4);
-            if (kingTag != null)
-                footer.KingTag = Encoding.ASCII.GetString(kingTag);
-
-            return footer;
+            return data.ReadType<Footer>();
         }
 
         /// <summary>
@@ -163,7 +135,7 @@ namespace SabreTools.Serialization.Deserializers
         private static Segment ParseSegment(Stream data, uint segmentSize)
         {
             // TODO: Use marshalling here instead of building
-            Segment segment = new Segment();
+            var segment = new Segment();
 
             segment.Deleted = data.ReadUInt32();
             segment.FileLocation = data.ReadUInt32();

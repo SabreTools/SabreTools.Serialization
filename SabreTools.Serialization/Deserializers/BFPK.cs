@@ -70,19 +70,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            byte[]? magic = data.ReadBytes(4);
-            if (magic == null)
+            if (header == null)
                 return null;
-
-            header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;
-
-            header.Version = data.ReadInt32();
-            header.Files = data.ReadInt32();
 
             return header;
         }
@@ -95,7 +88,7 @@ namespace SabreTools.Serialization.Deserializers
         private static FileEntry ParseFileEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            FileEntry fileEntry = new FileEntry();
+            var fileEntry = new FileEntry();
 
             fileEntry.NameSize = data.ReadInt32();
             if (fileEntry.NameSize > 0)

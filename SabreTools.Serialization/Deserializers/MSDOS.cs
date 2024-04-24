@@ -126,20 +126,31 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of relocation table entries to read</param>
         /// <returns>Filled relocation table on success, null on error</returns>
-        private static RelocationEntry[] ParseRelocationTable(Stream data, int count)
+        private static RelocationEntry[]? ParseRelocationTable(Stream data, int count)
         {
             // TODO: Use marshalling here instead of building
             var relocationTable = new RelocationEntry[count];
 
             for (int i = 0; i < count; i++)
             {
-                var entry = new RelocationEntry();
-                entry.Offset = data.ReadUInt16();
-                entry.Segment = data.ReadUInt16();
+                var entry = ParseRelocationEntry(data);
+                if (entry == null)
+                    return null;
+
                 relocationTable[i] = entry;
             }
 
             return relocationTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a relocation table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled relocation table entry on success, null on error</returns>
+        public static RelocationEntry? ParseRelocationEntry(Stream data)
+        {
+            return data.ReadType<RelocationEntry>();
         }
     }
 }

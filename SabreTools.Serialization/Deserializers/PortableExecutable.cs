@@ -203,7 +203,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the debug table
                 data.Seek(debugTableAddress, SeekOrigin.Begin);
                 int endOffset = (int)(debugTableAddress + optionalHeader.Debug.Size);
-                var debugTable = ParseDebugTable(data, endOffset, executable.SectionTable);
+                var debugTable = ParseDebugTable(data, endOffset);
                 if (debugTable == null)
                     return null;
 
@@ -291,20 +291,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled executable header on success, null on error</returns>
-        public static COFFFileHeader ParseCOFFFileHeader(Stream data)
+        public static COFFFileHeader? ParseCOFFFileHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var fileHeader = new COFFFileHeader();
-
-            fileHeader.Machine = (MachineType)data.ReadUInt16();
-            fileHeader.NumberOfSections = data.ReadUInt16();
-            fileHeader.TimeDateStamp = data.ReadUInt32();
-            fileHeader.PointerToSymbolTable = data.ReadUInt32();
-            fileHeader.NumberOfSymbols = data.ReadUInt32();
-            fileHeader.SizeOfOptionalHeader = data.ReadUInt16();
-            fileHeader.Characteristics = (Characteristics)data.ReadUInt16();
-
-            return fileHeader;
+            return data.ReadType<COFFFileHeader>();
         }
 
         /// <summary>
@@ -380,97 +369,52 @@ namespace SabreTools.Serialization.Deserializers
             #region Data Directories
 
             if (optionalHeader.NumberOfRvaAndSizes >= 1 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ExportTable = new DataDirectory();
-                optionalHeader.ExportTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ExportTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ExportTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 2 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ImportTable = new DataDirectory();
-                optionalHeader.ImportTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ImportTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ImportTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 3 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ResourceTable = new DataDirectory();
-                optionalHeader.ResourceTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ResourceTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ResourceTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 4 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ExceptionTable = new DataDirectory();
-                optionalHeader.ExceptionTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ExceptionTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ExceptionTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 5 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.CertificateTable = new DataDirectory();
-                optionalHeader.CertificateTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.CertificateTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.CertificateTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 6 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.BaseRelocationTable = new DataDirectory();
-                optionalHeader.BaseRelocationTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.BaseRelocationTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.BaseRelocationTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 7 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.Debug = new DataDirectory();
-                optionalHeader.Debug.VirtualAddress = data.ReadUInt32();
-                optionalHeader.Debug.Size = data.ReadUInt32();
-            }
+                optionalHeader.Debug = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 8 && data.Position - initialOffset < optionalSize)
-            {
                 optionalHeader.Architecture = data.ReadUInt64();
-            }
+
             if (optionalHeader.NumberOfRvaAndSizes >= 9 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.GlobalPtr = new DataDirectory();
-                optionalHeader.GlobalPtr.VirtualAddress = data.ReadUInt32();
-                optionalHeader.GlobalPtr.Size = data.ReadUInt32();
-            }
+                optionalHeader.GlobalPtr = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 10 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ThreadLocalStorageTable = new DataDirectory();
-                optionalHeader.ThreadLocalStorageTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ThreadLocalStorageTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ThreadLocalStorageTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 11 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.LoadConfigTable = new DataDirectory();
-                optionalHeader.LoadConfigTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.LoadConfigTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.LoadConfigTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 12 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.BoundImport = new DataDirectory();
-                optionalHeader.BoundImport.VirtualAddress = data.ReadUInt32();
-                optionalHeader.BoundImport.Size = data.ReadUInt32();
-            }
+                optionalHeader.BoundImport = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 13 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.ImportAddressTable = new DataDirectory();
-                optionalHeader.ImportAddressTable.VirtualAddress = data.ReadUInt32();
-                optionalHeader.ImportAddressTable.Size = data.ReadUInt32();
-            }
+                optionalHeader.ImportAddressTable = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 14 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.DelayImportDescriptor = new DataDirectory();
-                optionalHeader.DelayImportDescriptor.VirtualAddress = data.ReadUInt32();
-                optionalHeader.DelayImportDescriptor.Size = data.ReadUInt32();
-            }
+                optionalHeader.DelayImportDescriptor = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 15 && data.Position - initialOffset < optionalSize)
-            {
-                optionalHeader.CLRRuntimeHeader = new DataDirectory();
-                optionalHeader.CLRRuntimeHeader.VirtualAddress = data.ReadUInt32();
-                optionalHeader.CLRRuntimeHeader.Size = data.ReadUInt32();
-            }
+                optionalHeader.CLRRuntimeHeader = data.ReadType<DataDirectory>();
+
             if (optionalHeader.NumberOfRvaAndSizes >= 16 && data.Position - initialOffset < optionalSize)
-            {
                 optionalHeader.Reserved = data.ReadUInt64();
-            }
 
             #endregion
 
@@ -742,21 +686,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled delay-load directory table on success, null on error</returns>
-        public static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(Stream data)
+        public static DelayLoadDirectoryTable? ParseDelayLoadDirectoryTable(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var delayLoadDirectoryTable = new DelayLoadDirectoryTable();
-
-            delayLoadDirectoryTable.Attributes = data.ReadUInt32();
-            delayLoadDirectoryTable.Name = data.ReadUInt32();
-            delayLoadDirectoryTable.ModuleHandle = data.ReadUInt32();
-            delayLoadDirectoryTable.DelayImportAddressTable = data.ReadUInt32();
-            delayLoadDirectoryTable.DelayImportNameTable = data.ReadUInt32();
-            delayLoadDirectoryTable.BoundDelayImportTable = data.ReadUInt32();
-            delayLoadDirectoryTable.UnloadDelayImportTable = data.ReadUInt32();
-            delayLoadDirectoryTable.TimeStamp = data.ReadUInt32();
-
-            return delayLoadDirectoryTable;
+            return data.ReadType<DelayLoadDirectoryTable>();
         }
 
         /// <summary>
@@ -805,9 +737,8 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the debug table</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled debug table on success, null on error</returns>
-        public static DebugTable ParseDebugTable(Stream data, int endOffset, SectionHeader?[] sections)
+        public static DebugTable? ParseDebugTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
             var debugTable = new DebugTable();
@@ -816,21 +747,14 @@ namespace SabreTools.Serialization.Deserializers
 
             while (data.Position < endOffset)
             {
-                var debugDirectoryEntry = new DebugDirectoryEntry();
-
-                debugDirectoryEntry.Characteristics = data.ReadUInt32();
-                debugDirectoryEntry.TimeDateStamp = data.ReadUInt32();
-                debugDirectoryEntry.MajorVersion = data.ReadUInt16();
-                debugDirectoryEntry.MinorVersion = data.ReadUInt16();
-                debugDirectoryEntry.DebugType = (DebugType)data.ReadUInt32();
-                debugDirectoryEntry.SizeOfData = data.ReadUInt32();
-                debugDirectoryEntry.AddressOfRawData = data.ReadUInt32();
-                debugDirectoryEntry.PointerToRawData = data.ReadUInt32();
+                var debugDirectoryEntry = data.ReadType<DebugDirectoryEntry>();
+                if (debugDirectoryEntry == null)
+                    return null;
 
                 debugDirectoryTable.Add(debugDirectoryEntry);
             }
 
-            debugTable.DebugDirectoryTable = debugDirectoryTable.ToArray();
+            debugTable.DebugDirectoryTable = [.. debugDirectoryTable];
 
             // TODO: Should we read the debug data in? Most of it is unformatted or undocumented
             // TODO: Implement .debug$F (Object Only) / IMAGE_DEBUG_TYPE_FPO
@@ -844,7 +768,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled export table on success, null on error</returns>
-        public static ExportTable ParseExportTable(Stream data, SectionHeader?[] sections)
+        public static ExportTable? ParseExportTable(Stream data, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var exportTable = new ExportTable();
@@ -885,11 +809,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 for (int i = 0; i < exportDirectoryTable.AddressTableEntries; i++)
                 {
-                    var addressTableEntry = new ExportAddressTableEntry();
-
-                    // TODO: Use the optional header address and length to determine if export or forwarder
-                    addressTableEntry.ExportRVA = data.ReadUInt32();
-                    addressTableEntry.ForwarderRVA = addressTableEntry.ExportRVA;
+                    var addressTableEntry = data.ReadType<ExportAddressTableEntry>();
+                    if (addressTableEntry == null)
+                        return null;
 
                     exportAddressTable[i] = addressTableEntry;
                 }

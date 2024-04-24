@@ -61,6 +61,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
                 var directoryEntry = ParseDirectoryEntry(data);
+                if (directoryEntry == null)
+                    return null;
+
                 file.DirectoryEntries[i] = directoryEntry;
             }
 
@@ -116,6 +119,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.Info1Count; i++)
             {
                 var directoryInfo1Entry = ParseDirectoryInfo1Entry(data);
+                if (directoryInfo1Entry == null)
+                    return null;
+
                 file.DirectoryInfo1Entries[i] = directoryInfo1Entry;
             }
 
@@ -130,6 +136,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
                 var directoryInfo2Entry = ParseDirectoryInfo2Entry(data);
+                if (directoryInfo2Entry == null)
+                    return null;
+
                 file.DirectoryInfo2Entries[i] = directoryInfo2Entry;
             }
 
@@ -144,6 +153,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.CopyCount; i++)
             {
                 var directoryCopyEntry = ParseDirectoryCopyEntry(data);
+                if (directoryCopyEntry == null)
+                    return null;
+
                 file.DirectoryCopyEntries[i] = directoryCopyEntry;
             }
 
@@ -158,6 +170,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.LocalCount; i++)
             {
                 var directoryLocalEntry = ParseDirectoryLocalEntry(data);
+                if (directoryLocalEntry == null)
+                    return null;
+
                 file.DirectoryLocalEntries[i] = directoryLocalEntry;
             }
 
@@ -187,6 +202,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
                 var unknownEntry = ParseUnknownEntry(data);
+                if (unknownEntry == null)
+                    return null;
+
                 file.UnknownEntries[i] = unknownEntry;
             }
 
@@ -228,6 +246,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < checksumMapHeader.ItemCount; i++)
             {
                 var checksumMapEntry = ParseChecksumMapEntry(data);
+                if (checksumMapEntry == null)
+                    return null;
+
                 file.ChecksumMapEntries[i] = checksumMapEntry;
             }
 
@@ -242,6 +263,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < checksumMapHeader.ChecksumCount; i++)
             {
                 var checksumEntry = ParseChecksumEntry(data);
+                if (checksumEntry == null)
+                    return null;
+
                 file.ChecksumEntries[i] = checksumEntry;
             }
 
@@ -260,29 +284,16 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            header.Dummy0 = data.ReadUInt32();
+            if (header == null)
+                return null;
             if (header.Dummy0 != 0x00000001)
                 return null;
-
-            header.MajorVersion = data.ReadUInt32();
             if (header.MajorVersion != 0x00000002)
                 return null;
-
-            header.MinorVersion = data.ReadUInt32();
             if (header.MinorVersion != 1)
                 return null;
-
-            header.CacheID = data.ReadUInt32();
-            header.LastVersionPlayed = data.ReadUInt32();
-            header.Dummy1 = data.ReadUInt32();
-            header.Dummy2 = data.ReadUInt32();
-            header.FileSize = data.ReadUInt32();
-            header.BlockSize = data.ReadUInt32();
-            header.BlockCount = data.ReadUInt32();
-            header.Dummy3 = data.ReadUInt32();
 
             return header;
         }
@@ -294,26 +305,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache directory header on success, null on error</returns>
         private static DirectoryHeader? ParseDirectoryHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryHeader directoryHeader = new DirectoryHeader();
+            var directoryHeader = data.ReadType<DirectoryHeader>();
 
-            directoryHeader.Dummy0 = data.ReadUInt32();
+            if (directoryHeader == null)
+                return null;
             if (directoryHeader.Dummy0 != 0x00000004)
                 return null;
-
-            directoryHeader.CacheID = data.ReadUInt32();
-            directoryHeader.LastVersionPlayed = data.ReadUInt32();
-            directoryHeader.ItemCount = data.ReadUInt32();
-            directoryHeader.FileCount = data.ReadUInt32();
-            directoryHeader.ChecksumDataLength = data.ReadUInt32();
-            directoryHeader.DirectorySize = data.ReadUInt32();
-            directoryHeader.NameSize = data.ReadUInt32();
-            directoryHeader.Info1Count = data.ReadUInt32();
-            directoryHeader.CopyCount = data.ReadUInt32();
-            directoryHeader.LocalCount = data.ReadUInt32();
-            directoryHeader.Dummy1 = data.ReadUInt32();
-            directoryHeader.Dummy2 = data.ReadUInt32();
-            directoryHeader.Checksum = data.ReadUInt32();
 
             return directoryHeader;
         }
@@ -323,10 +320,10 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache directory entry on success, null on error</returns>
-        private static DirectoryEntry ParseDirectoryEntry(Stream data)
+        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            DirectoryEntry directoryEntry = new DirectoryEntry();
+            var directoryEntry = new DirectoryEntry();
 
             directoryEntry.NameOffset = data.ReadUInt32();
             directoryEntry.ItemSize = data.ReadUInt32();
@@ -344,14 +341,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache directory info 1 entry on success, null on error</returns>
-        private static DirectoryInfo1Entry ParseDirectoryInfo1Entry(Stream data)
+        private static DirectoryInfo1Entry? ParseDirectoryInfo1Entry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryInfo1Entry directoryInfo1Entry = new DirectoryInfo1Entry();
-
-            directoryInfo1Entry.Dummy0 = data.ReadUInt32();
-
-            return directoryInfo1Entry;
+            return data.ReadType<DirectoryInfo1Entry>();
         }
 
         /// <summary>
@@ -359,14 +351,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache directory info 2 entry on success, null on error</returns>
-        private static DirectoryInfo2Entry ParseDirectoryInfo2Entry(Stream data)
+        private static DirectoryInfo2Entry? ParseDirectoryInfo2Entry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryInfo2Entry directoryInfo2Entry = new DirectoryInfo2Entry();
-
-            directoryInfo2Entry.Dummy0 = data.ReadUInt32();
-
-            return directoryInfo2Entry;
+            return data.ReadType<DirectoryInfo2Entry>();
         }
 
         /// <summary>
@@ -374,14 +361,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache directory copy entry on success, null on error</returns>
-        private static DirectoryCopyEntry ParseDirectoryCopyEntry(Stream data)
+        private static DirectoryCopyEntry? ParseDirectoryCopyEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryCopyEntry directoryCopyEntry = new DirectoryCopyEntry();
-
-            directoryCopyEntry.DirectoryIndex = data.ReadUInt32();
-
-            return directoryCopyEntry;
+            return data.ReadType<DirectoryCopyEntry>();
         }
 
         /// <summary>
@@ -389,14 +371,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache directory local entry on success, null on error</returns>
-        private static DirectoryLocalEntry ParseDirectoryLocalEntry(Stream data)
+        private static DirectoryLocalEntry? ParseDirectoryLocalEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryLocalEntry directoryLocalEntry = new DirectoryLocalEntry();
-
-            directoryLocalEntry.DirectoryIndex = data.ReadUInt32();
-
-            return directoryLocalEntry;
+            return data.ReadType<DirectoryLocalEntry>();
         }
 
         /// <summary>
@@ -406,14 +383,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache unknown header on success, null on error</returns>
         private static UnknownHeader? ParseUnknownHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            UnknownHeader unknownHeader = new UnknownHeader();
+            var unknownHeader = data.ReadType<UnknownHeader>();
 
-            unknownHeader.Dummy0 = data.ReadUInt32();
+            if (unknownHeader == null)
+                return null;
             if (unknownHeader.Dummy0 != 0x00000001)
                 return null;
-
-            unknownHeader.Dummy1 = data.ReadUInt32();
             if (unknownHeader.Dummy1 != 0x00000000)
                 return null;
 
@@ -425,14 +400,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cacheunknown entry on success, null on error</returns>
-        private static UnknownEntry ParseUnknownEntry(Stream data)
+        private static UnknownEntry? ParseUnknownEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            UnknownEntry unknownEntry = new UnknownEntry();
-
-            unknownEntry.Dummy0 = data.ReadUInt32();
-
-            return unknownEntry;
+            return data.ReadType<UnknownEntry>();
         }
 
         /// <summary>
@@ -442,14 +412,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache checksum header on success, null on error</returns>
         private static ChecksumHeader? ParseChecksumHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ChecksumHeader checksumHeader = new ChecksumHeader();
+            var checksumHeader = data.ReadType<ChecksumHeader>();
 
-            checksumHeader.Dummy0 = data.ReadUInt32();
+            if (checksumHeader == null)
+                return null;
             if (checksumHeader.Dummy0 != 0x00000001)
                 return null;
-
-            checksumHeader.ChecksumSize = data.ReadUInt32();
 
             return checksumHeader;
         }
@@ -461,19 +429,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache checksum map header on success, null on error</returns>
         private static ChecksumMapHeader? ParseChecksumMapHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ChecksumMapHeader checksumMapHeader = new ChecksumMapHeader();
+            var checksumMapHeader = data.ReadType<ChecksumMapHeader>();
 
-            checksumMapHeader.Dummy0 = data.ReadUInt32();
+            if (checksumMapHeader == null)
+                return null;
             if (checksumMapHeader.Dummy0 != 0x14893721)
                 return null;
-
-            checksumMapHeader.Dummy1 = data.ReadUInt32();
             if (checksumMapHeader.Dummy1 != 0x00000001)
                 return null;
-
-            checksumMapHeader.ItemCount = data.ReadUInt32();
-            checksumMapHeader.ChecksumCount = data.ReadUInt32();
 
             return checksumMapHeader;
         }
@@ -483,15 +446,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache checksum map entry on success, null on error</returns>
-        private static ChecksumMapEntry ParseChecksumMapEntry(Stream data)
+        private static ChecksumMapEntry? ParseChecksumMapEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ChecksumMapEntry checksumMapEntry = new ChecksumMapEntry();
-
-            checksumMapEntry.ChecksumCount = data.ReadUInt32();
-            checksumMapEntry.FirstChecksumIndex = data.ReadUInt32();
-
-            return checksumMapEntry;
+            return data.ReadType<ChecksumMapEntry>();
         }
 
         /// <summary>
@@ -499,14 +456,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life No Cache checksum entry on success, null on error</returns>
-        private static ChecksumEntry ParseChecksumEntry(Stream data)
+        private static ChecksumEntry? ParseChecksumEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ChecksumEntry checksumEntry = new ChecksumEntry();
-
-            checksumEntry.Checksum = data.ReadUInt32();
-
-            return checksumEntry;
+            return data.ReadType<ChecksumEntry>();
         }
     }
 }

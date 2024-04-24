@@ -46,6 +46,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < header.DirectoryEntryCount; i++)
             {
                 var directoryEntry = ParseDirectoryEntry(data);
+                if (directoryEntry == null)
+                    return null;
+
                 file.DirectoryEntries[i] = directoryEntry;
             }
 
@@ -62,6 +65,9 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < header.PreloadDirectoryEntryCount; i++)
                 {
                     var directoryEntry = ParseDirectoryEntry(data);
+                    if (directoryEntry == null)
+                        return null;
+
                     file.PreloadDirectoryEntries[i] = directoryEntry;
                 }
             }
@@ -79,6 +85,9 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < header.PreloadDirectoryEntryCount; i++)
                 {
                     var directoryMapping = ParseDirectoryMapping(data);
+                    if (directoryMapping == null)
+                        return null;
+
                     file.PreloadDirectoryMappings[i] = directoryMapping;
                 }
             }
@@ -166,16 +175,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled XBox Package File directory entry on success, null on error</returns>
-        private static DirectoryEntry ParseDirectoryEntry(Stream data)
+        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryEntry directoryEntry = new DirectoryEntry();
-
-            directoryEntry.FileNameCRC = data.ReadUInt32();
-            directoryEntry.EntryLength = data.ReadUInt32();
-            directoryEntry.EntryOffset = data.ReadUInt32();
-
-            return directoryEntry;
+            return data.ReadType<DirectoryEntry>();
         }
 
         /// <summary>
@@ -183,14 +185,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled XBox Package File directory mapping on success, null on error</returns>
-        private static DirectoryMapping ParseDirectoryMapping(Stream data)
+        private static DirectoryMapping? ParseDirectoryMapping(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryMapping directoryMapping = new DirectoryMapping();
-
-            directoryMapping.PreloadDirectoryEntryIndex = data.ReadUInt16();
-
-            return directoryMapping;
+            return data.ReadType<DirectoryMapping>();
         }
 
         /// <summary>

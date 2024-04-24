@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Deserializers
         private static ExtendedDSiHeader ParseExtendedDSiHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ExtendedDSiHeader extendedDSiHeader = new ExtendedDSiHeader();
+            var extendedDSiHeader = new ExtendedDSiHeader();
 
             extendedDSiHeader.GlobalMBK15Settings = new uint[5];
             for (int i = 0; i < 5; i++)
@@ -226,6 +226,8 @@ namespace SabreTools.Serialization.Deserializers
             extendedDSiHeader.DigestBlockSectorCount = data.ReadUInt32();
             extendedDSiHeader.IconBannerSize = data.ReadUInt32();
             extendedDSiHeader.Unknown1 = data.ReadUInt32();
+            extendedDSiHeader.NTRTWLRegionRomSize = data.ReadUInt32();
+            extendedDSiHeader.Unknown2 = data.ReadBytes(12);
             extendedDSiHeader.ModcryptArea1Offset = data.ReadUInt32();
             extendedDSiHeader.ModcryptArea1Size = data.ReadUInt32();
             extendedDSiHeader.ModcryptArea2Offset = data.ReadUInt32();
@@ -304,7 +306,7 @@ namespace SabreTools.Serialization.Deserializers
         private static FolderAllocationTableEntry ParseFolderAllocationTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            FolderAllocationTableEntry entry = new FolderAllocationTableEntry();
+            var entry = new FolderAllocationTableEntry();
 
             entry.StartOffset = data.ReadUInt32();
             entry.FirstFileIndex = data.ReadUInt16();
@@ -322,7 +324,7 @@ namespace SabreTools.Serialization.Deserializers
         private static NameListEntry? ParseNameListEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            NameListEntry entry = new NameListEntry();
+            var entry = new NameListEntry();
 
             byte flagAndSize = data.ReadByteValue();
             if (flagAndSize == 0xFF)
@@ -352,7 +354,7 @@ namespace SabreTools.Serialization.Deserializers
         private static FileAllocationTableEntry ParseFileAllocationTableEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            FileAllocationTableEntry entry = new FileAllocationTableEntry();
+            var entry = new FileAllocationTableEntry();
 
             entry.StartOffset = data.ReadUInt32();
             entry.EndOffset = data.ReadUInt32();

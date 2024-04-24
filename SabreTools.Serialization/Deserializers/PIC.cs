@@ -106,24 +106,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled disc information unit header on success, null on error</returns>
         private static DiscInformationUnitHeader? ParseDiscInformationUnitHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var header = new DiscInformationUnitHeader();
+            var header = data.ReadType<DiscInformationUnitHeader>();
 
             // We only accept Disc Information units, not Emergency Brake or other
-            byte[]? dic = data.ReadBytes(2);
-            if (dic == null)
+            if (header?.DiscInformationIdentifier != "DI")
                 return null;
-
-            header.DiscInformationIdentifier = Encoding.ASCII.GetString(dic);
-            if (header.DiscInformationIdentifier != "DI")
-                return null;
-
-            header.DiscInformationFormat = data.ReadByteValue();
-            header.NumberOfUnitsInBlock = data.ReadByteValue();
-            header.Reserved0 = data.ReadByteValue();
-            header.SequenceNumber = data.ReadByteValue();
-            header.BytesInUse = data.ReadByteValue();
-            header.Reserved1 = data.ReadByteValue();
 
             return header;
         }
@@ -165,17 +152,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled disc information unit trailer on success, null on error</returns>
-        private static DiscInformationUnitTrailer ParseDiscInformationUnitTrailer(Stream data)
+        private static DiscInformationUnitTrailer? ParseDiscInformationUnitTrailer(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var trailer = new DiscInformationUnitTrailer();
-
-            trailer.DiscManufacturerID = data.ReadBytes(6);
-            trailer.MediaTypeID = data.ReadBytes(3);
-            trailer.TimeStamp = data.ReadUInt16();
-            trailer.ProductRevisionNumber = data.ReadByteValue();
-
-            return trailer;
+            return data.ReadType<DiscInformationUnitTrailer>();
         }
 
         #endregion

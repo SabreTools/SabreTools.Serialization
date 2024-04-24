@@ -425,62 +425,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled information block on success, null on error</returns>
         public static InformationBlock? ParseInformationBlock(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var informationBlock = new InformationBlock();
+            var informationBlock = data.ReadType<InformationBlock>();
 
-            byte[]? magic = data.ReadBytes(2);
-            if (magic == null)
+            if (informationBlock == null)
                 return null;
-
-            informationBlock.Signature = Encoding.ASCII.GetString(magic);
             if (informationBlock.Signature != LESignatureString && informationBlock.Signature != LXSignatureString)
                 return null;
-
-            informationBlock.ByteOrder = (ByteOrder)data.ReadByteValue();
-            informationBlock.WordOrder = (WordOrder)data.ReadByteValue();
-            informationBlock.ExecutableFormatLevel = data.ReadUInt32();
-            informationBlock.CPUType = (CPUType)data.ReadUInt16();
-            informationBlock.ModuleOS = (OperatingSystem)data.ReadUInt16();
-            informationBlock.ModuleVersion = data.ReadUInt32();
-            informationBlock.ModuleTypeFlags = (ModuleFlags)data.ReadUInt32();
-            informationBlock.ModuleNumberPages = data.ReadUInt32();
-            informationBlock.InitialObjectCS = data.ReadUInt32();
-            informationBlock.InitialEIP = data.ReadUInt32();
-            informationBlock.InitialObjectSS = data.ReadUInt32();
-            informationBlock.InitialESP = data.ReadUInt32();
-            informationBlock.MemoryPageSize = data.ReadUInt32();
-            informationBlock.BytesOnLastPage = data.ReadUInt32();
-            informationBlock.FixupSectionSize = data.ReadUInt32();
-            informationBlock.FixupSectionChecksum = data.ReadUInt32();
-            informationBlock.LoaderSectionSize = data.ReadUInt32();
-            informationBlock.LoaderSectionChecksum = data.ReadUInt32();
-            informationBlock.ObjectTableOffset = data.ReadUInt32();
-            informationBlock.ObjectTableCount = data.ReadUInt32();
-            informationBlock.ObjectPageMapOffset = data.ReadUInt32();
-            informationBlock.ObjectIterateDataMapOffset = data.ReadUInt32();
-            informationBlock.ResourceTableOffset = data.ReadUInt32();
-            informationBlock.ResourceTableCount = data.ReadUInt32();
-            informationBlock.ResidentNamesTableOffset = data.ReadUInt32();
-            informationBlock.EntryTableOffset = data.ReadUInt32();
-            informationBlock.ModuleDirectivesTableOffset = data.ReadUInt32();
-            informationBlock.ModuleDirectivesCount = data.ReadUInt32();
-            informationBlock.FixupPageTableOffset = data.ReadUInt32();
-            informationBlock.FixupRecordTableOffset = data.ReadUInt32();
-            informationBlock.ImportedModulesNameTableOffset = data.ReadUInt32();
-            informationBlock.ImportedModulesCount = data.ReadUInt32();
-            informationBlock.ImportProcedureNameTableOffset = data.ReadUInt32();
-            informationBlock.PerPageChecksumTableOffset = data.ReadUInt32();
-            informationBlock.DataPagesOffset = data.ReadUInt32();
-            informationBlock.PreloadPageCount = data.ReadUInt32();
-            informationBlock.NonResidentNamesTableOffset = data.ReadUInt32();
-            informationBlock.NonResidentNamesTableLength = data.ReadUInt32();
-            informationBlock.NonResidentNamesTableChecksum = data.ReadUInt32();
-            informationBlock.AutomaticDataObject = data.ReadUInt32();
-            informationBlock.DebugInformationOffset = data.ReadUInt32();
-            informationBlock.DebugInformationLength = data.ReadUInt32();
-            informationBlock.PreloadInstancePagesNumber = data.ReadUInt32();
-            informationBlock.DemandInstancePagesNumber = data.ReadUInt32();
-            informationBlock.ExtraHeapAllocation = data.ReadUInt32();
 
             return informationBlock;
         }
@@ -490,19 +440,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object table entry on success, null on error</returns>
-        public static ObjectTableEntry ParseObjectTableEntry(Stream data)
+        public static ObjectTableEntry? ParseObjectTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new ObjectTableEntry();
-
-            entry.VirtualSegmentSize = data.ReadUInt32();
-            entry.RelocationBaseAddress = data.ReadUInt32();
-            entry.ObjectFlags = (ObjectFlags)data.ReadUInt16();
-            entry.PageTableIndex = data.ReadUInt32();
-            entry.PageTableEntries = data.ReadUInt32();
-            entry.Reserved = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<ObjectTableEntry>();
         }
 
         /// <summary>
@@ -510,16 +450,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled object page map entry on success, null on error</returns>
-        public static ObjectPageMapEntry ParseObjectPageMapEntry(Stream data)
+        public static ObjectPageMapEntry? ParseObjectPageMapEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new ObjectPageMapEntry();
-
-            entry.PageDataOffset = data.ReadUInt32();
-            entry.DataSize = data.ReadUInt16();
-            entry.Flags = (ObjectPageFlags)data.ReadUInt16();
-
-            return entry;
+            return data.ReadType<ObjectPageMapEntry>();
         }
 
         /// <summary>
@@ -527,18 +460,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled resource table entry on success, null on error</returns>
-        public static ResourceTableEntry ParseResourceTableEntry(Stream data)
+        public static ResourceTableEntry? ParseResourceTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new ResourceTableEntry();
-
-            entry.TypeID = (ResourceTableEntryType)data.ReadUInt32();
-            entry.NameID = data.ReadUInt16();
-            entry.ResourceSize = data.ReadUInt32();
-            entry.ObjectNumber = data.ReadUInt16();
-            entry.Offset = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<ResourceTableEntry>();
         }
 
         /// <summary>
@@ -631,16 +555,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled module format directives table entry on success, null on error</returns>
-        public static ModuleFormatDirectivesTableEntry ParseModuleFormatDirectivesTableEntry(Stream data)
+        public static ModuleFormatDirectivesTableEntry? ParseModuleFormatDirectivesTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new ModuleFormatDirectivesTableEntry();
-
-            entry.DirectiveNumber = (DirectiveNumber)data.ReadUInt16();
-            entry.DirectiveDataLength = data.ReadUInt16();
-            entry.DirectiveDataOffset = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<ModuleFormatDirectivesTableEntry>();
         }
 
         /// <summary>
@@ -648,20 +565,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled verify record directive table entry on success, null on error</returns>
-        public static VerifyRecordDirectiveTableEntry ParseVerifyRecordDirectiveTableEntry(Stream data)
+        public static VerifyRecordDirectiveTableEntry? ParseVerifyRecordDirectiveTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new VerifyRecordDirectiveTableEntry();
-
-            entry.EntryCount = data.ReadUInt16();
-            entry.OrdinalIndex = data.ReadUInt16();
-            entry.Version = data.ReadUInt16();
-            entry.ObjectEntriesCount = data.ReadUInt16();
-            entry.ObjectNumberInModule = data.ReadUInt16();
-            entry.ObjectLoadBaseAddress = data.ReadUInt16();
-            entry.ObjectVirtualAddressSize = data.ReadUInt16();
-
-            return entry;
+            return data.ReadType<VerifyRecordDirectiveTableEntry>();
         }
 
         /// <summary>
@@ -669,14 +575,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled fix-up page table entry on success, null on error</returns>
-        public static FixupPageTableEntry ParseFixupPageTableEntry(Stream data)
+        public static FixupPageTableEntry? ParseFixupPageTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new FixupPageTableEntry();
-
-            entry.Offset = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<FixupPageTableEntry>();
         }
 
         /// <summary>
@@ -945,14 +846,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled per-page checksum table entry on success, null on error</returns>
-        public static PerPageChecksumTableEntry ParsePerPageChecksumTableEntry(Stream data)
+        public static PerPageChecksumTableEntry? ParsePerPageChecksumTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new PerPageChecksumTableEntry();
-
-            entry.Checksum = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<PerPageChecksumTableEntry>();
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.VPK;
 using static SabreTools.Models.VPK.Constants;
@@ -31,6 +30,8 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the header
             // The original version had no signature.
             var header = ParseHeader(data);
+            if (header == null)
+                return null;
 
             // Set the package header
             file.Header = header;
@@ -56,6 +57,8 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create the directory items tree
             var directoryItems = ParseDirectoryItemTree(data);
+            if (directoryItems == null)
+                return null;
 
             // Set the directory items
             file.DirectoryItems = directoryItems;
@@ -79,7 +82,7 @@ namespace SabreTools.Serialization.Deserializers
                     archiveHashes.Add(archiveHash);
                 }
 
-                file.ArchiveHashes = archiveHashes.ToArray();
+                file.ArchiveHashes = [.. archiveHashes];
             }
 
             #endregion
@@ -94,18 +97,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Valve Package header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            header.Signature = data.ReadUInt32();
+            if (header == null)
+                return null;
             if (header.Signature != SignatureUInt32)
                 return null;
-
-            header.Version = data.ReadUInt32();
             if (header.Version > 2)
                 return null;
-
-            header.DirectoryLength = data.ReadUInt32();
 
             return header;
         }
@@ -115,17 +114,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package extended header on success, null on error</returns>
-        private static ExtendedHeader ParseExtendedHeader(Stream data)
+        private static ExtendedHeader? ParseExtendedHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ExtendedHeader extendedHeader = new ExtendedHeader();
-
-            extendedHeader.Dummy0 = data.ReadUInt32();
-            extendedHeader.ArchiveHashLength = data.ReadUInt32();
-            extendedHeader.ExtraLength = data.ReadUInt32();
-            extendedHeader.Dummy1 = data.ReadUInt32();
-
-            return extendedHeader;
+            return data.ReadType<ExtendedHeader>();
         }
 
         /// <summary>
@@ -136,7 +127,7 @@ namespace SabreTools.Serialization.Deserializers
         private static ArchiveHash ParseArchiveHash(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            ArchiveHash archiveHash = new ArchiveHash();
+            var archiveHash = new ArchiveHash();
 
             archiveHash.ArchiveIndex = data.ReadUInt32();
             archiveHash.ArchiveOffset = data.ReadUInt32();
@@ -151,7 +142,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package directory item tree on success, null on error</returns>
-        private static DirectoryItem[] ParseDirectoryItemTree(Stream data)
+        private static DirectoryItem[]? ParseDirectoryItemTree(Stream data)
         {
             // Create the directory items list
             var directoryItems = new List<DirectoryItem>();
@@ -197,6 +188,8 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Get the directory item
                         var directoryItem = ParseDirectoryItem(data, extensionString!, pathString!, nameString!);
+                        if (directoryItem == null)
+                            return null;
 
                         // Add the directory item
                         directoryItems.Add(directoryItem);
@@ -212,9 +205,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package directory item on success, null on error</returns>
-        private static DirectoryItem ParseDirectoryItem(Stream data, string extension, string path, string name)
+        private static DirectoryItem? ParseDirectoryItem(Stream data, string extension, string path, string name)
         {
-            DirectoryItem directoryItem = new DirectoryItem();
+            var directoryItem = new DirectoryItem();
 
             directoryItem.Extension = extension;
             directoryItem.Path = path;
@@ -222,6 +215,8 @@ namespace SabreTools.Serialization.Deserializers
 
             // Get the directory entry
             var directoryEntry = ParseDirectoryEntry(data);
+            if (directoryEntry == null)
+                return null;
 
             // Set the directory entry
             directoryItem.DirectoryEntry = directoryEntry;
@@ -267,19 +262,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package directory entry on success, null on error</returns>
-        private static DirectoryEntry ParseDirectoryEntry(Stream data)
+        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryEntry directoryEntry = new DirectoryEntry();
-
-            directoryEntry.CRC = data.ReadUInt32();
-            directoryEntry.PreloadBytes = data.ReadUInt16();
-            directoryEntry.ArchiveIndex = data.ReadUInt16();
-            directoryEntry.EntryOffset = data.ReadUInt32();
-            directoryEntry.EntryLength = data.ReadUInt32();
-            directoryEntry.Dummy0 = data.ReadUInt16();
-
-            return directoryEntry;
+            return data.ReadType<DirectoryEntry>();
         }
     }
 }

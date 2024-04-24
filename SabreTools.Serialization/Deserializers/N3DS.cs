@@ -137,7 +137,11 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(offset, SeekOrigin.Begin);
 
                 // Parse the ExeFS header
-                cart.ExeFSHeaders[i] = ParseExeFSHeader(data);
+                var exeFsHeader = ParseExeFSHeader(data);
+                if (exeFsHeader == null)
+                    return null;
+
+                cart.ExeFSHeaders[i] = exeFsHeader;
             }
 
             #endregion
@@ -628,7 +632,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ExeFS header on success, null on error</returns>
-        private static ExeFSHeader ParseExeFSHeader(Stream data)
+        private static ExeFSHeader? ParseExeFSHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var exeFSHeader = new ExeFSHeader();
@@ -636,7 +640,11 @@ namespace SabreTools.Serialization.Deserializers
             exeFSHeader.FileHeaders = new ExeFSFileHeader[10];
             for (int i = 0; i < 10; i++)
             {
-                exeFSHeader.FileHeaders[i] = ParseExeFSFileHeader(data);
+                var exeFsFileHeader = ParseExeFSFileHeader(data);
+                if (exeFsFileHeader == null)
+                    return null;
+
+                exeFSHeader.FileHeaders[i] = exeFsFileHeader;
             }
             exeFSHeader.Reserved = data.ReadBytes(0x20);
             exeFSHeader.FileHashes = new byte[10][];
@@ -653,7 +661,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ExeFS file header on success, null on error</returns>
-        private static ExeFSFileHeader ParseExeFSFileHeader(Stream data)
+        private static ExeFSFileHeader? ParseExeFSFileHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var exeFSFileHeader = new ExeFSFileHeader();

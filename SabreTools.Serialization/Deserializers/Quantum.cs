@@ -73,22 +73,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            byte[]? signature = data.ReadBytes(2);
-            if (signature == null)
+            if (header == null)
                 return null;
-
-            header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;
-
-            header.MajorVersion = data.ReadByteValue();
-            header.MinorVersion = data.ReadByteValue();
-            header.FileCount = data.ReadUInt16();
-            header.TableSize = data.ReadByteValue();
-            header.CompressionFlags = data.ReadByteValue();
 
             return header;
         }
@@ -102,7 +92,7 @@ namespace SabreTools.Serialization.Deserializers
         private static FileDescriptor ParseFileDescriptor(Stream data, byte minorVersion)
         {
             // TODO: Use marshalling here instead of building
-            FileDescriptor fileDescriptor = new FileDescriptor();
+            var fileDescriptor = new FileDescriptor();
 
             fileDescriptor.FileNameSize = ReadVariableLength(data);
             if (fileDescriptor.FileNameSize > 0)

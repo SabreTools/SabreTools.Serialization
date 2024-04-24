@@ -47,6 +47,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < HL_BSP_LUMP_COUNT; i++)
             {
                 var lump = ParseLump(data);
+                if (lump == null)
+                    return null;
+
                 file.Lumps[i] = lump;
             }
 
@@ -102,13 +105,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Level header on success, null on error</returns>
+        /// <remarks>Only recognized versions are 29 and 30</remarks>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            // Only recognized versions are 29 and 30
-            header.Version = data.ReadUInt32();
+            if (header == null)
+                return null;
             if (header.Version != 29 && header.Version != 30)
                 return null;
 
@@ -120,15 +123,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled lump on success, null on error</returns>
-        private static Lump ParseLump(Stream data)
+        private static Lump? ParseLump(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Lump lump = new Lump();
-
-            lump.Offset = data.ReadUInt32();
-            lump.Length = data.ReadUInt32();
-
-            return lump;
+            return data.ReadType<Lump>();
         }
 
         /// <summary>
@@ -139,7 +136,7 @@ namespace SabreTools.Serialization.Deserializers
         private static TextureHeader ParseTextureHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            TextureHeader textureHeader = new TextureHeader();
+            var textureHeader = new TextureHeader();
 
             textureHeader.TextureCount = data.ReadUInt32();
 
@@ -166,7 +163,7 @@ namespace SabreTools.Serialization.Deserializers
         private static Texture ParseTexture(Stream data, uint mipmap = 0)
         {
             // TODO: Use marshalling here instead of building
-            Texture texture = new Texture();
+            var texture = new Texture();
 
             byte[]? name = data.ReadBytes(16)?.TakeWhile(c => c != '\0')?.ToArray();
             if (name != null)

@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
             // Cache the current offset
             int initialOffset = (int)data.Position;
 
-            // Create a new media key block to fill
+            // Create a new IRD to fill
             var ird = new Models.IRD.File();
 
             ird.Magic = data.ReadBytes(4);

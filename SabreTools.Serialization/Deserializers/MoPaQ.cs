@@ -404,7 +404,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled user data on success, null on error</returns>
         private static UserData? ParseUserData(Stream data)
         {
-            UserData userData = new UserData();
+            var userData = new UserData();
 
             byte[]? signature = data.ReadBytes(4);
             if (signature == null)
@@ -428,7 +428,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled HET table on success, null on error</returns>
         private static HetTable? ParseHetTable(Stream data)
         {
-            HetTable hetTable = new HetTable();
+            var hetTable = new HetTable();
 
             // Common Headers
             byte[]? signature = data.ReadBytes(4);
@@ -465,7 +465,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled BET table on success, null on error</returns>
         private static BetTable? ParseBetTable(Stream data)
         {
-            BetTable betTable = new BetTable();
+            var betTable = new BetTable();
 
             // Common Headers
             byte[]? signature = data.ReadBytes(4);
@@ -519,18 +519,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled hash entry on success, null on error</returns>
-        private static HashEntry ParseHashEntry(Stream data)
+        private static HashEntry? ParseHashEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            HashEntry hashEntry = new HashEntry();
-
-            hashEntry.NameHashPartA = data.ReadUInt32();
-            hashEntry.NameHashPartB = data.ReadUInt32();
-            hashEntry.Locale = (Locale)data.ReadUInt16();
-            hashEntry.Platform = data.ReadUInt16();
-            hashEntry.BlockIndex = data.ReadUInt32();
-
-            return hashEntry;
+            return data.ReadType<HashEntry>();
         }
 
         /// <summary>
@@ -538,16 +529,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled block entry on success, null on error</returns>
-        private static BlockEntry ParseBlockEntry(Stream data)
+        private static BlockEntry? ParseBlockEntry(Stream data)
         {
-            BlockEntry blockEntry = new BlockEntry();
-
-            blockEntry.FilePosition = data.ReadUInt32();
-            blockEntry.CompressedSize = data.ReadUInt32();
-            blockEntry.UncompressedSize = data.ReadUInt32();
-            blockEntry.Flags = (FileFlags)data.ReadUInt32();
-
-            return blockEntry;
+            return data.ReadType<BlockEntry>();
         }
 
         /// <summary>
@@ -558,7 +542,7 @@ namespace SabreTools.Serialization.Deserializers
         private static PatchInfo ParsePatchInfo(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            PatchInfo patchInfo = new PatchInfo();
+            var patchInfo = new PatchInfo();
 
             patchInfo.Length = data.ReadUInt32();
             patchInfo.Flags = data.ReadUInt32();

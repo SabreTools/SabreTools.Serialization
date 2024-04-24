@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PAK;
 using static SabreTools.Models.PAK.Constants;
@@ -54,6 +53,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < file.DirectoryItems.Length; i++)
             {
                 var directoryItem = ParseDirectoryItem(data);
+                if (directoryItem == null)
+                    return null;
+
                 file.DirectoryItems[i] = directoryItem;
             }
 
@@ -69,19 +71,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life Package header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (header == null)
                 return null;
-
-            header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;
-
-            header.DirectoryOffset = data.ReadUInt32();
-            header.DirectoryLength = data.ReadUInt32();
 
             return header;
         }
@@ -91,18 +86,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Package directory item on success, null on error</returns>
-        private static DirectoryItem ParseDirectoryItem(Stream data)
+        private static DirectoryItem? ParseDirectoryItem(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            DirectoryItem directoryItem = new DirectoryItem();
-
-            byte[]? itemName = data.ReadBytes(56);
-            if (itemName != null)
-                directoryItem.ItemName = Encoding.ASCII.GetString(itemName).TrimEnd('\0');
-            directoryItem.ItemOffset = data.ReadUInt32();
-            directoryItem.ItemLength = data.ReadUInt32();
-
-            return directoryItem;
+            return data.ReadType<DirectoryItem>();
         }
     }
 }
