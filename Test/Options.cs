@@ -104,7 +104,7 @@ namespace Test
         /// </summary>
         public static void DisplayHelp()
         {
-            Console.WriteLine("SabreTools.Printing Test Program");
+            Console.WriteLine("SabreTools.Serialization Test Program");
             Console.WriteLine();
             Console.WriteLine("test.exe <options> file|directory ...");
             Console.WriteLine();

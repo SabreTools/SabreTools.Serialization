@@ -1,9 +1,9 @@
-namespace Test
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
-    /// Subset of file types that are supported by the library
+    /// Represents each of the IWrapper implementations
     /// </summary>
-    internal enum SupportedFileType
+    public enum WrapperType
     {
         /// <summary>
         /// Unknown or unsupported
@@ -33,6 +33,7 @@ namespace Test
         /// <summary>
         /// bzip2 archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         BZip2,
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace Test
         /// <summary>
         /// Executable or library
         /// </summary>
+        /// <remarks>Includes MZ, NE, LE/LX, and PE</remarks>
         Executable,
 
         /// <summary>
@@ -58,16 +60,19 @@ namespace Test
         /// <summary>
         /// gzip archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         GZIP,
 
         /// <summary>
         /// Key-value pair INI file
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         IniFile,
 
         /// <summary>
         /// InstallShield archive v3
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         InstallShieldArchiveV3,
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace Test
         /// <summary>
         /// Link Data Security encrypted file
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         LDSCRYPT,
 
         /// <summary>
@@ -88,12 +94,13 @@ namespace Test
         /// <summary>
         /// Microsoft LZ-compressed file
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         MicrosoftLZ,
 
         /// <summary>
         /// MPQ game data archive
         /// </summary>
-        MPQ,
+        MoPaQ,
 
         /// <summary>
         /// Nintendo 3DS cart image
@@ -121,14 +128,27 @@ namespace Test
         PFF,
 
         /// <summary>
+        /// PIC data object
+        /// </summary>
+        /// <remarks>Currently has no detection method</remarks>
+        PIC,
+
+        /// <summary>
         /// PKWARE ZIP archive and derivatives
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         PKZIP,
 
         /// <summary>
         /// PlayJ audio file
         /// </summary>
-        PLJ,
+        PlayJAudioFile,
+
+        /// <summary>
+        /// PlayJ playlist file
+        /// </summary>
+        /// <remarks>Currently has no detection method/remarks>
+        PlayJPlaylist,
 
         /// <summary>
         /// Quantum archive
@@ -138,26 +158,31 @@ namespace Test
         /// <summary>
         /// RAR archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         RAR,
 
         /// <summary>
         /// RealArcade Installer
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         RealArcadeInstaller,
 
         /// <summary>
         /// RealArcade Mezzanine
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         RealArcadeMezzanine,
 
         /// <summary>
         /// 7-zip archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         SevenZip,
 
         /// <summary>
         /// StarForce FileSystem file
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         SFFS,
 
         /// <summary>
@@ -168,11 +193,13 @@ namespace Test
         /// <summary>
         /// Tape archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         TapeArchive,
 
         /// <summary>
         /// Various generic textfile formats
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         Textfile,
 
         /// <summary>
@@ -193,6 +220,7 @@ namespace Test
         /// <summary>
         /// xz archive
         /// </summary>
+        /// <remarks>Currently has no IWrapper implementation</remarks>
         XZ,
 
         /// <summary>

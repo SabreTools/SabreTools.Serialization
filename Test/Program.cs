@@ -2,6 +2,7 @@
 using System.IO;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
+using SabreTools.Serialization.Wrappers;
 
 namespace Test
 {
@@ -80,11 +81,11 @@ namespace Test
                 stream.Seek(0, SeekOrigin.Begin);
 
                 // Get the file type
-                SupportedFileType ft = FileTypes.GetFileType(magic ?? []);
-                if (ft == SupportedFileType.UNKNOWN)
+                WrapperType ft = WrapperFactory.GetFileType(magic ?? []);
+                if (ft == WrapperType.UNKNOWN)
                 {
                     string extension = Path.GetExtension(file).TrimStart('.');
-                    ft = FileTypes.GetFileType(extension);
+                    ft = WrapperFactory.GetFileType(extension);
                 }
 
                 // Print out the file format
