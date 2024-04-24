@@ -18,22 +18,22 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Number of components in the cabinet set
         /// </summary>
-        public int ComponentCount => Model.Components!.Length;
+        public int ComponentCount => Model.Components?.Length ?? 0;
 
         /// <summary>
         /// Number of directories in the cabinet set
         /// </summary>
-        public ushort DirectoryCount => Model.Descriptor!.DirectoryCount;
+        public ushort DirectoryCount => Model.Descriptor?.DirectoryCount ?? 0;
 
         /// <summary>
         /// Number of files in the cabinet set
         /// </summary>
-        public uint FileCount => Model.Descriptor!.FileCount;
+        public uint FileCount => Model.Descriptor?.FileCount ?? 0;
 
         /// <summary>
         /// Number of file groups in the cabinet set
         /// </summary>
-        public int FileGroupCount => Model.FileGroups!.Length;
+        public int FileGroupCount => Model.FileGroups?.Length ?? 0;
 
         /// <summary>
         /// The major version of the cabinet
