@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Test
         public void ArchiveDotOrgDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = ArchiveDotOrg.DeserializeFile(filename);
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Test
         public void AttractModeDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = AttractMode.DeserializeFile(filename);
@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.Test
         public void ClrMameProDeserializeTest(string path, long count, bool expectHeader)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = ClrMamePro.DeserializeFile(filename, quotes: true);
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Test
         public void DosCenterDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = DosCenter.DeserializeFile(filename);
@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.Test
         public void EverdriveSMDBDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = EverdriveSMDB.DeserializeFile(filename);
@@ -248,7 +248,7 @@ namespace SabreTools.Serialization.Test
         public void HashfileDeserializeTest(string path, HashType hash, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = Hashfile.DeserializeFile(filename, hash);
@@ -300,7 +300,7 @@ namespace SabreTools.Serialization.Test
         public void ListromDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = Listrom.DeserializeFile(filename);
@@ -320,7 +320,7 @@ namespace SabreTools.Serialization.Test
         public void ListxmlDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = Listxml.DeserializeFile(filename);
@@ -549,7 +549,7 @@ namespace SabreTools.Serialization.Test
         public void LogiqxDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = Logiqx.DeserializeFile(filename);
@@ -738,7 +738,7 @@ namespace SabreTools.Serialization.Test
         public void OfflineListDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = OfflineList.DeserializeFile(filename);
@@ -943,7 +943,7 @@ namespace SabreTools.Serialization.Test
         public void OpenMSXDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = OpenMSX.DeserializeFile(filename);
@@ -986,7 +986,7 @@ namespace SabreTools.Serialization.Test
         public void RomCenterDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = RomCenter.DeserializeFile(filename);
@@ -1037,7 +1037,7 @@ namespace SabreTools.Serialization.Test
         public void SeparatedValueDeserializeTest(string path, char delim, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = SeparatedValue.DeserializeFile(filename, delim);
@@ -1060,7 +1060,7 @@ namespace SabreTools.Serialization.Test
         public void SoftwareListDeserializeTest(string path, long count)
         {
             // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+            string filename = GetTestFilePath(path);
 
             // Deserialize the file
             var dat = SoftwareList.DeserializeFile(filename);
@@ -1138,6 +1138,14 @@ namespace SabreTools.Serialization.Test
                     }
                 }
             }
+        }
+    
+        /// <summary>
+        /// Get the path to the test file
+        /// </summary>
+        private static string GetTestFilePath(string path)
+        {
+            return Path.Combine(Environment.CurrentDirectory, "TestData", path);
         }
     }
 }
