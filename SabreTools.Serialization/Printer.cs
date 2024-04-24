@@ -9,7 +9,7 @@ namespace SabreTools.Serialization
     /// <summary>
     /// Generic wrapper around printing methods
     /// </summary>
-    public static class PrintExtensions
+    public static class Printer
     {
         /// <summary>
         /// Print the item information from a wrapper to console as
