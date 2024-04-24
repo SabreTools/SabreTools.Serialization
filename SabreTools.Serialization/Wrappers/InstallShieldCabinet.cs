@@ -42,6 +42,11 @@ namespace SabreTools.Serialization.Wrappers
         public int FileGroupCount => Model.FileGroups?.Length ?? 0;
 
         /// <summary>
+        /// Indicates if Unicode strings are used
+        /// </summary>
+        public bool IsUnicode => MajorVersion >= 17;
+
+        /// <summary>
         /// The major version of the cabinet
         /// </summary>
         public int MajorVersion
