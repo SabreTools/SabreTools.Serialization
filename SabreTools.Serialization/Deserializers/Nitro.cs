@@ -103,6 +103,9 @@ namespace SabreTools.Serialization.Deserializers
             while (data.Position - fileAllocationTableOffset < header.FileAllocationTableLength)
             {
                 var entry = ParseFileAllocationTableEntry(data);
+                if (entry == null)
+                    return null;
+                
                 fileAllocationTable.Add(entry);
             }
 
@@ -122,58 +125,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled common header on success, null on error</returns>
-        private static CommonHeader ParseCommonHeader(Stream data)
+        private static CommonHeader? ParseCommonHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            CommonHeader commonHeader = new CommonHeader();
-
-            byte[]? gameTitle = data.ReadBytes(12);
-            if (gameTitle != null)
-                commonHeader.GameTitle = Encoding.ASCII.GetString(gameTitle).TrimEnd('\0');
-            commonHeader.GameCode = data.ReadUInt32();
-            byte[]? makerCode = data.ReadBytes(2);
-            if (makerCode != null)
-                commonHeader.MakerCode = Encoding.ASCII.GetString(bytes: makerCode).TrimEnd('\0');
-            commonHeader.UnitCode = (Unitcode)data.ReadByteValue();
-            commonHeader.EncryptionSeedSelect = data.ReadByteValue();
-            commonHeader.DeviceCapacity = data.ReadByteValue();
-            commonHeader.Reserved1 = data.ReadBytes(7);
-            commonHeader.GameRevision = data.ReadUInt16();
-            commonHeader.RomVersion = data.ReadByteValue();
-            commonHeader.InternalFlags = data.ReadByteValue();
-            commonHeader.ARM9RomOffset = data.ReadUInt32();
-            commonHeader.ARM9EntryAddress = data.ReadUInt32();
-            commonHeader.ARM9LoadAddress = data.ReadUInt32();
-            commonHeader.ARM9Size = data.ReadUInt32();
-            commonHeader.ARM7RomOffset = data.ReadUInt32();
-            commonHeader.ARM7EntryAddress = data.ReadUInt32();
-            commonHeader.ARM7LoadAddress = data.ReadUInt32();
-            commonHeader.ARM7Size = data.ReadUInt32();
-            commonHeader.FileNameTableOffset = data.ReadUInt32();
-            commonHeader.FileNameTableLength = data.ReadUInt32();
-            commonHeader.FileAllocationTableOffset = data.ReadUInt32();
-            commonHeader.FileAllocationTableLength = data.ReadUInt32();
-            commonHeader.ARM9OverlayOffset = data.ReadUInt32();
-            commonHeader.ARM9OverlayLength = data.ReadUInt32();
-            commonHeader.ARM7OverlayOffset = data.ReadUInt32();
-            commonHeader.ARM7OverlayLength = data.ReadUInt32();
-            commonHeader.NormalCardControlRegisterSettings = data.ReadUInt32();
-            commonHeader.SecureCardControlRegisterSettings = data.ReadUInt32();
-            commonHeader.IconBannerOffset = data.ReadUInt32();
-            commonHeader.SecureAreaCRC = data.ReadUInt16();
-            commonHeader.SecureTransferTimeout = data.ReadUInt16();
-            commonHeader.ARM9Autoload = data.ReadUInt32();
-            commonHeader.ARM7Autoload = data.ReadUInt32();
-            commonHeader.SecureDisable = data.ReadBytes(8);
-            commonHeader.NTRRegionRomSize = data.ReadUInt32();
-            commonHeader.HeaderSize = data.ReadUInt32();
-            commonHeader.Reserved2 = data.ReadBytes(56);
-            commonHeader.NintendoLogo = data.ReadBytes(156);
-            commonHeader.NintendoLogoCRC = data.ReadUInt16();
-            commonHeader.HeaderCRC = data.ReadUInt16();
-            commonHeader.DebuggerReserved = data.ReadBytes(0x20);
-
-            return commonHeader;
+            return data.ReadType<CommonHeader>();
         }
 
         /// <summary>
@@ -181,75 +135,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled extended DSi header on success, null on error</returns>
-        private static ExtendedDSiHeader ParseExtendedDSiHeader(Stream data)
+        private static ExtendedDSiHeader? ParseExtendedDSiHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var extendedDSiHeader = new ExtendedDSiHeader();
-
-            extendedDSiHeader.GlobalMBK15Settings = new uint[5];
-            for (int i = 0; i < 5; i++)
-            {
-                extendedDSiHeader.GlobalMBK15Settings[i] = data.ReadUInt32();
-            }
-            extendedDSiHeader.LocalMBK68SettingsARM9 = new uint[3];
-            for (int i = 0; i < 3; i++)
-            {
-                extendedDSiHeader.LocalMBK68SettingsARM9[i] = data.ReadUInt32();
-            }
-            extendedDSiHeader.LocalMBK68SettingsARM7 = new uint[3];
-            for (int i = 0; i < 3; i++)
-            {
-                extendedDSiHeader.LocalMBK68SettingsARM7[i] = data.ReadUInt32();
-            }
-            extendedDSiHeader.GlobalMBK9Setting = data.ReadUInt32();
-            extendedDSiHeader.RegionFlags = data.ReadUInt32();
-            extendedDSiHeader.AccessControl = data.ReadUInt32();
-            extendedDSiHeader.ARM7SCFGEXTMask = data.ReadUInt32();
-            extendedDSiHeader.ReservedFlags = data.ReadUInt32();
-            extendedDSiHeader.ARM9iRomOffset = data.ReadUInt32();
-            extendedDSiHeader.Reserved3 = data.ReadUInt32();
-            extendedDSiHeader.ARM9iLoadAddress = data.ReadUInt32();
-            extendedDSiHeader.ARM9iSize = data.ReadUInt32();
-            extendedDSiHeader.ARM7iRomOffset = data.ReadUInt32();
-            extendedDSiHeader.Reserved4 = data.ReadUInt32();
-            extendedDSiHeader.ARM7iLoadAddress = data.ReadUInt32();
-            extendedDSiHeader.ARM7iSize = data.ReadUInt32();
-            extendedDSiHeader.DigestNTRRegionOffset = data.ReadUInt32();
-            extendedDSiHeader.DigestNTRRegionLength = data.ReadUInt32();
-            extendedDSiHeader.DigestTWLRegionOffset = data.ReadUInt32();
-            extendedDSiHeader.DigestTWLRegionLength = data.ReadUInt32();
-            extendedDSiHeader.DigestSectorHashtableRegionOffset = data.ReadUInt32();
-            extendedDSiHeader.DigestSectorHashtableRegionLength = data.ReadUInt32();
-            extendedDSiHeader.DigestBlockHashtableRegionOffset = data.ReadUInt32();
-            extendedDSiHeader.DigestBlockHashtableRegionLength = data.ReadUInt32();
-            extendedDSiHeader.DigestSectorSize = data.ReadUInt32();
-            extendedDSiHeader.DigestBlockSectorCount = data.ReadUInt32();
-            extendedDSiHeader.IconBannerSize = data.ReadUInt32();
-            extendedDSiHeader.Unknown1 = data.ReadUInt32();
-            extendedDSiHeader.NTRTWLRegionRomSize = data.ReadUInt32();
-            extendedDSiHeader.Unknown2 = data.ReadBytes(12);
-            extendedDSiHeader.ModcryptArea1Offset = data.ReadUInt32();
-            extendedDSiHeader.ModcryptArea1Size = data.ReadUInt32();
-            extendedDSiHeader.ModcryptArea2Offset = data.ReadUInt32();
-            extendedDSiHeader.ModcryptArea2Size = data.ReadUInt32();
-            extendedDSiHeader.TitleID = data.ReadBytes(8);
-            extendedDSiHeader.DSiWarePublicSavSize = data.ReadUInt32();
-            extendedDSiHeader.DSiWarePrivateSavSize = data.ReadUInt32();
-            extendedDSiHeader.ReservedZero = data.ReadBytes(176);
-            extendedDSiHeader.Unknown2 = data.ReadBytes(0x10);
-            extendedDSiHeader.ARM9WithSecureAreaSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.ARM7SHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.DigestMasterSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.BannerSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.ARM9iDecryptedSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.ARM7iDecryptedSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.Reserved5 = data.ReadBytes(40);
-            extendedDSiHeader.ARM9NoSecureAreaSHA1HMACHash = data.ReadBytes(20);
-            extendedDSiHeader.Reserved6 = data.ReadBytes(2636);
-            extendedDSiHeader.ReservedAndUnchecked = data.ReadBytes(0x180);
-            extendedDSiHeader.RSASignature = data.ReadBytes(0x80);
-
-            return extendedDSiHeader;
+            return data.ReadType<ExtendedDSiHeader>();
         }
 
         /// <summary>
@@ -257,10 +145,10 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled name table on success, null on error</returns>
-        private static NameTable ParseNameTable(Stream data)
+        private static NameTable? ParseNameTable(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            NameTable nameTable = new NameTable();
+            var nameTable = new NameTable();
 
             // Create a variable-length table
             var folderAllocationTable = new List<FolderAllocationTableEntry>();
@@ -268,6 +156,9 @@ namespace SabreTools.Serialization.Deserializers
             while (entryCount > 0)
             {
                 var entry = ParseFolderAllocationTableEntry(data);
+                if (entry == null)
+                    return null;
+                
                 folderAllocationTable.Add(entry);
 
                 // If we have the root entry
@@ -303,17 +194,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled folder allocation table entry on success, null on error</returns>
-        private static FolderAllocationTableEntry ParseFolderAllocationTableEntry(Stream data)
+        private static FolderAllocationTableEntry? ParseFolderAllocationTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new FolderAllocationTableEntry();
-
-            entry.StartOffset = data.ReadUInt32();
-            entry.FirstFileIndex = data.ReadUInt16();
-            entry.ParentFolderIndex = data.ReadByteValue();
-            entry.Unknown = data.ReadByteValue();
-
-            return entry;
+            return data.ReadType<FolderAllocationTableEntry>();
         }
 
         /// <summary>
@@ -351,15 +234,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled name list entry on success, null on error</returns>
-        private static FileAllocationTableEntry ParseFileAllocationTableEntry(Stream data)
+        private static FileAllocationTableEntry? ParseFileAllocationTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var entry = new FileAllocationTableEntry();
-
-            entry.StartOffset = data.ReadUInt32();
-            entry.EndOffset = data.ReadUInt32();
-
-            return entry;
+            return data.ReadType<FileAllocationTableEntry>();
         }
     }
 }

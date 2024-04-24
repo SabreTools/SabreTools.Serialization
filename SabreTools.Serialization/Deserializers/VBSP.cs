@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Deserializers
         private static Header? ParseHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = new Header();
 
             byte[]? signature = data.ReadBytes(4);
             if (signature == null)

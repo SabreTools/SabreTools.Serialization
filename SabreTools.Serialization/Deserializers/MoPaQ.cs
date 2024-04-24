@@ -404,19 +404,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled user data on success, null on error</returns>
         private static UserData? ParseUserData(Stream data)
         {
-            var userData = new UserData();
+            var userData = data.ReadType<UserData>();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (userData == null)
                 return null;
-
-            userData.Signature = Encoding.ASCII.GetString(signature);
             if (userData.Signature != UserDataSignatureString)
                 return null;
-
-            userData.UserDataSize = data.ReadUInt32();
-            userData.HeaderOffset = data.ReadUInt32();
-            userData.UserDataHeaderSize = data.ReadUInt32();
 
             return userData;
         }
@@ -539,19 +532,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled patch info on success, null on error</returns>
-        private static PatchInfo ParsePatchInfo(Stream data)
+        private static PatchInfo? ParsePatchInfo(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var patchInfo = new PatchInfo();
-
-            patchInfo.Length = data.ReadUInt32();
-            patchInfo.Flags = data.ReadUInt32();
-            patchInfo.DataSize = data.ReadUInt32();
-            patchInfo.MD5 = data.ReadBytes(0x10);
-
-            // TODO: Fill the sector offset table
-
-            return patchInfo;
+            return data.ReadType<PatchInfo>();
         }
 
         #region Helpers

@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled NCSD header on success, null on error</returns>
-        private static NCSDHeader? ParseNCSDHeader(Stream data)
+        public static NCSDHeader? ParseNCSDHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var header = new NCSDHeader();
@@ -208,7 +208,11 @@ namespace SabreTools.Serialization.Deserializers
             header.PartitionsTable = new PartitionTableEntry[8];
             for (int i = 0; i < 8; i++)
             {
-                header.PartitionsTable[i] = ParsePartitionTableEntry(data);
+                var partitionTableEntry = ParsePartitionTableEntry(data);
+                if (partitionTableEntry == null)
+                    return null;
+
+                header.PartitionsTable[i] = partitionTableEntry;
             }
 
             if (header.PartitionsFSType == FilesystemType.Normal || header.PartitionsFSType == FilesystemType.None)
@@ -243,15 +247,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled partition table entry on success, null on error</returns>
-        private static PartitionTableEntry ParsePartitionTableEntry(Stream data)
+        public static PartitionTableEntry? ParsePartitionTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var partitionTableEntry = new PartitionTableEntry();
-
-            partitionTableEntry.Offset = data.ReadUInt32();
-            partitionTableEntry.Length = data.ReadUInt32();
-
-            return partitionTableEntry;
+            return data.ReadType<PartitionTableEntry>();
         }
 
         /// <summary>
@@ -259,24 +257,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled card info header on success, null on error</returns>
-        private static CardInfoHeader ParseCardInfoHeader(Stream data)
+        public static CardInfoHeader? ParseCardInfoHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var cardInfoHeader = new CardInfoHeader();
-
-            cardInfoHeader.WritableAddressMediaUnits = data.ReadUInt32();
-            cardInfoHeader.CardInfoBitmask = data.ReadUInt32();
-            cardInfoHeader.Reserved1 = data.ReadBytes(0xF8);
-            cardInfoHeader.FilledSize = data.ReadUInt32();
-            cardInfoHeader.Reserved2 = data.ReadBytes(0x0C);
-            cardInfoHeader.TitleVersion = data.ReadUInt16();
-            cardInfoHeader.CardRevision = data.ReadUInt16();
-            cardInfoHeader.Reserved3 = data.ReadBytes(0x0C);
-            cardInfoHeader.CVerTitleID = data.ReadBytes(8);
-            cardInfoHeader.CVerVersionNumber = data.ReadUInt16();
-            cardInfoHeader.Reserved4 = data.ReadBytes(0xCD6);
-
-            return cardInfoHeader;
+            return data.ReadType<CardInfoHeader>();
         }
 
         /// <summary>
@@ -284,46 +267,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled development card info header on success, null on error</returns>
-        private static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
+        public static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var developmentCardInfoHeader = new DevelopmentCardInfoHeader();
-
-            developmentCardInfoHeader.InitialData = ParseInitialData(data);
-            if (developmentCardInfoHeader.InitialData == null)
-                return null;
-
-            developmentCardInfoHeader.CardDeviceReserved1 = data.ReadBytes(0x200);
-            developmentCardInfoHeader.TitleKey = data.ReadBytes(0x10);
-            developmentCardInfoHeader.CardDeviceReserved2 = data.ReadBytes(0x1BF0);
-
-            developmentCardInfoHeader.TestData = ParseTestData(data);
-            if (developmentCardInfoHeader.TestData == null)
-                return null;
-
-            return developmentCardInfoHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an initial data
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled initial data on success, null on error</returns>
-        private static InitialData? ParseInitialData(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var initialData = new InitialData();
-
-            initialData.CardSeedKeyY = data.ReadBytes(0x10);
-            initialData.EncryptedCardSeed = data.ReadBytes(0x10);
-            initialData.CardSeedAESMAC = data.ReadBytes(0x10);
-            initialData.CardSeedNonce = data.ReadBytes(0xC);
-            initialData.Reserved = data.ReadBytes(0xC4);
-            initialData.BackupHeader = ParseNCCHHeader(data, true);
-            if (initialData.BackupHeader == null)
-                return null;
-
-            return initialData;
+            return data.ReadType<DevelopmentCardInfoHeader>();
         }
 
         /// <summary>
@@ -332,7 +278,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="skipSignature">Indicates if the signature should be skipped</param>
         /// <returns>Filled NCCH header on success, null on error</returns>
-        internal static NCCHHeader ParseNCCHHeader(Stream data, bool skipSignature = false)
+        public static NCCHHeader ParseNCCHHeader(Stream data, bool skipSignature = false)
         {
             // TODO: Use marshalling here instead of building
             var header = new NCCHHeader();
@@ -356,7 +302,7 @@ namespace SabreTools.Serialization.Deserializers
                 header.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
             header.ExtendedHeaderHash = data.ReadBytes(0x20);
             header.ExtendedHeaderSizeInBytes = data.ReadUInt32();
-            header.Reserved2 = data.ReadBytes(4);
+            header.Reserved2 = data.ReadUInt32();
             header.Flags = ParseNCCHHeaderFlags(data);
             header.PlainRegionOffsetInMediaUnits = data.ReadUInt32();
             header.PlainRegionSizeInMediaUnits = data.ReadUInt32();
@@ -365,11 +311,11 @@ namespace SabreTools.Serialization.Deserializers
             header.ExeFSOffsetInMediaUnits = data.ReadUInt32();
             header.ExeFSSizeInMediaUnits = data.ReadUInt32();
             header.ExeFSHashRegionSizeInMediaUnits = data.ReadUInt32();
-            header.Reserved3 = data.ReadBytes(4);
+            header.Reserved3 = data.ReadUInt32();
             header.RomFSOffsetInMediaUnits = data.ReadUInt32();
             header.RomFSSizeInMediaUnits = data.ReadUInt32();
             header.RomFSHashRegionSizeInMediaUnits = data.ReadUInt32();
-            header.Reserved4 = data.ReadBytes(4);
+            header.Reserved4 = data.ReadUInt32();
             header.ExeFSSuperblockHash = data.ReadBytes(0x20);
             header.RomFSSuperblockHash = data.ReadBytes(0x20);
 
@@ -381,46 +327,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled NCCH header flags on success, null on error</returns>
-        private static NCCHHeaderFlags ParseNCCHHeaderFlags(Stream data)
+        public static NCCHHeaderFlags? ParseNCCHHeaderFlags(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var headerFlags = new NCCHHeaderFlags();
-
-            headerFlags.Reserved0 = data.ReadByteValue();
-            headerFlags.Reserved1 = data.ReadByteValue();
-            headerFlags.Reserved2 = data.ReadByteValue();
-            headerFlags.CryptoMethod = (CryptoMethod)data.ReadByteValue();
-            headerFlags.ContentPlatform = (ContentPlatform)data.ReadByteValue();
-            headerFlags.MediaPlatformIndex = (ContentType)data.ReadByteValue();
-            headerFlags.ContentUnitSize = data.ReadByteValue();
-            headerFlags.BitMasks = (BitMasks)data.ReadByteValue();
-
-            return headerFlags;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an initial data
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled initial data on success, null on error</returns>
-        private static TestData ParseTestData(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var testData = new TestData();
-
-            // TODO: Validate some of the values
-            testData.Signature = data.ReadBytes(8);
-            testData.AscendingByteSequence = data.ReadBytes(0x1F8);
-            testData.DescendingByteSequence = data.ReadBytes(0x200);
-            testData.Filled00 = data.ReadBytes(0x200);
-            testData.FilledFF = data.ReadBytes(0x200);
-            testData.Filled0F = data.ReadBytes(0x200);
-            testData.FilledF0 = data.ReadBytes(0x200);
-            testData.Filled55 = data.ReadBytes(0x200);
-            testData.FilledAA = data.ReadBytes(0x1FF);
-            testData.FinalByte = data.ReadByteValue();
-
-            return testData;
+            return data.ReadType<NCCHHeaderFlags>();
         }
 
         /// <summary>
@@ -428,203 +337,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled NCCH extended header on success, null on error</returns>
-        private static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
+        public static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var extendedHeader = new NCCHExtendedHeader();
-
-            extendedHeader.SCI = ParseSystemControlInfo(data);
-            if (extendedHeader.SCI == null)
-                return null;
-
-            extendedHeader.ACI = ParseAccessControlInfo(data);
-            if (extendedHeader.ACI == null)
-                return null;
-
-            extendedHeader.AccessDescSignature = data.ReadBytes(0x100);
-            extendedHeader.NCCHHDRPublicKey = data.ReadBytes(0x100);
-
-            extendedHeader.ACIForLimitations = ParseAccessControlInfo(data);
-            if (extendedHeader.ACI == null)
-                return null;
-
-            return extendedHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a system control info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled system control info on success, null on error</returns>
-        private static SystemControlInfo ParseSystemControlInfo(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var systemControlInfo = new SystemControlInfo();
-
-            byte[]? applicationTitle = data.ReadBytes(8);
-            if (applicationTitle != null)
-                systemControlInfo.ApplicationTitle = Encoding.ASCII.GetString(applicationTitle).TrimEnd('\0');
-            systemControlInfo.Reserved1 = data.ReadBytes(5);
-            systemControlInfo.Flag = data.ReadByteValue();
-            systemControlInfo.RemasterVersion = data.ReadUInt16();
-            systemControlInfo.TextCodeSetInfo = ParseCodeSetInfo(data);
-            systemControlInfo.StackSize = data.ReadUInt32();
-            systemControlInfo.ReadOnlyCodeSetInfo = ParseCodeSetInfo(data);
-            systemControlInfo.Reserved2 = data.ReadBytes(4);
-            systemControlInfo.DataCodeSetInfo = ParseCodeSetInfo(data);
-            systemControlInfo.BSSSize = data.ReadUInt32();
-            systemControlInfo.DependencyModuleList = new ulong[48];
-            for (int i = 0; i < 48; i++)
-            {
-                systemControlInfo.DependencyModuleList[i] = data.ReadUInt64();
-            }
-            systemControlInfo.SystemInfo = ParseSystemInfo(data);
-
-            return systemControlInfo;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a code set info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled code set info on success, null on error</returns>
-        private static CodeSetInfo ParseCodeSetInfo(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var codeSetInfo = new CodeSetInfo();
-
-            codeSetInfo.Address = data.ReadUInt32();
-            codeSetInfo.PhysicalRegionSizeInPages = data.ReadUInt32();
-            codeSetInfo.SizeInBytes = data.ReadUInt32();
-
-            return codeSetInfo;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a system info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled system info on success, null on error</returns>
-        private static SystemInfo ParseSystemInfo(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var systemInfo = new SystemInfo();
-
-            systemInfo.SaveDataSize = data.ReadUInt64();
-            systemInfo.JumpID = data.ReadUInt64();
-            systemInfo.Reserved = data.ReadBytes(0x30);
-
-            return systemInfo;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an access control info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled access control info on success, null on error</returns>
-        private static AccessControlInfo ParseAccessControlInfo(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var accessControlInfo = new AccessControlInfo();
-
-            accessControlInfo.ARM11LocalSystemCapabilities = ParseARM11LocalSystemCapabilities(data);
-            accessControlInfo.ARM11KernelCapabilities = ParseARM11KernelCapabilities(data);
-            accessControlInfo.ARM9AccessControl = ParseARM9AccessControl(data);
-
-            return accessControlInfo;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an ARM11 local system capabilities
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ARM11 local system capabilities on success, null on error</returns>
-        private static ARM11LocalSystemCapabilities ParseARM11LocalSystemCapabilities(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var arm11LocalSystemCapabilities = new ARM11LocalSystemCapabilities();
-
-            arm11LocalSystemCapabilities.ProgramID = data.ReadUInt64();
-            arm11LocalSystemCapabilities.CoreVersion = data.ReadUInt32();
-            arm11LocalSystemCapabilities.Flag1 = (ARM11LSCFlag1)data.ReadByteValue();
-            arm11LocalSystemCapabilities.Flag2 = (ARM11LSCFlag2)data.ReadByteValue();
-            arm11LocalSystemCapabilities.Flag0 = (ARM11LSCFlag0)data.ReadByteValue();
-            arm11LocalSystemCapabilities.Priority = data.ReadByteValue();
-            arm11LocalSystemCapabilities.ResourceLimitDescriptors = new ushort[16];
-            for (int i = 0; i < 16; i++)
-            {
-                arm11LocalSystemCapabilities.ResourceLimitDescriptors[i] = data.ReadUInt16();
-            }
-            arm11LocalSystemCapabilities.StorageInfo = ParseStorageInfo(data);
-            arm11LocalSystemCapabilities.ServiceAccessControl = new ulong[32];
-            for (int i = 0; i < 32; i++)
-            {
-                arm11LocalSystemCapabilities.ServiceAccessControl[i] = data.ReadUInt64();
-            }
-            arm11LocalSystemCapabilities.ExtendedServiceAccessControl = new ulong[2];
-            for (int i = 0; i < 2; i++)
-            {
-                arm11LocalSystemCapabilities.ExtendedServiceAccessControl[i] = data.ReadUInt64();
-            }
-            arm11LocalSystemCapabilities.Reserved = data.ReadBytes(0x0F);
-            arm11LocalSystemCapabilities.ResourceLimitCategory = (ResourceLimitCategory)data.ReadByteValue();
-
-            return arm11LocalSystemCapabilities;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a storage info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled storage info on success, null on error</returns>
-        private static StorageInfo ParseStorageInfo(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var storageInfo = new StorageInfo();
-
-            storageInfo.ExtdataID = data.ReadUInt64();
-            storageInfo.SystemSavedataIDs = data.ReadBytes(8);
-            storageInfo.StorageAccessibleUniqueIDs = data.ReadBytes(8);
-            storageInfo.FileSystemAccessInfo = data.ReadBytes(7);
-            storageInfo.OtherAttributes = (StorageInfoOtherAttributes)data.ReadByteValue();
-
-            return storageInfo;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an ARM11 kernel capabilities
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ARM11 kernel capabilities on success, null on error</returns>
-        private static ARM11KernelCapabilities ParseARM11KernelCapabilities(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var arm11KernelCapabilities = new ARM11KernelCapabilities();
-
-            arm11KernelCapabilities.Descriptors = new uint[28];
-            for (int i = 0; i < 28; i++)
-            {
-                arm11KernelCapabilities.Descriptors[i] = data.ReadUInt32();
-            }
-            arm11KernelCapabilities.Reserved = data.ReadBytes(0x10);
-
-            return arm11KernelCapabilities;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an ARM11 access control
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ARM11 access control on success, null on error</returns>
-        private static ARM9AccessControl ParseARM9AccessControl(Stream data)
-        {
-            // TODO: Use marshalling here instead of building
-            var arm9AccessControl = new ARM9AccessControl();
-
-            arm9AccessControl.Descriptors = data.ReadBytes(15);
-            arm9AccessControl.DescriptorVersion = data.ReadByteValue();
-
-            return arm9AccessControl;
+            return data.ReadType<NCCHExtendedHeader>();
         }
 
         /// <summary>
@@ -632,7 +347,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ExeFS header on success, null on error</returns>
-        private static ExeFSHeader? ParseExeFSHeader(Stream data)
+        public static ExeFSHeader? ParseExeFSHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var exeFSHeader = new ExeFSHeader();
@@ -661,7 +376,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ExeFS file header on success, null on error</returns>
-        private static ExeFSFileHeader? ParseExeFSFileHeader(Stream data)
+        public static ExeFSFileHeader? ParseExeFSFileHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var exeFSFileHeader = new ExeFSFileHeader();
@@ -680,38 +395,16 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled RomFS header on success, null on error</returns>
-        private static RomFSHeader? ParseRomFSHeader(Stream data)
+        public static RomFSHeader? ParseRomFSHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var romFSHeader = new RomFSHeader();
+            var romFSHeader = data.ReadType<RomFSHeader>();
 
-            byte[]? magicString = data.ReadBytes(4);
-            if (magicString == null)
+            if (romFSHeader == null)
                 return null;
-
-            romFSHeader.MagicString = Encoding.ASCII.GetString(magicString).TrimEnd('\0');
             if (romFSHeader.MagicString != RomFSMagicNumber)
                 return null;
-
-            romFSHeader.MagicNumber = data.ReadUInt32();
             if (romFSHeader.MagicNumber != RomFSSecondMagicNumber)
                 return null;
-
-            romFSHeader.MasterHashSize = data.ReadUInt32();
-            romFSHeader.Level1LogicalOffset = data.ReadUInt64();
-            romFSHeader.Level1HashdataSize = data.ReadUInt64();
-            romFSHeader.Level1BlockSizeLog2 = data.ReadUInt32();
-            romFSHeader.Reserved1 = data.ReadBytes(4);
-            romFSHeader.Level2LogicalOffset = data.ReadUInt64();
-            romFSHeader.Level2HashdataSize = data.ReadUInt64();
-            romFSHeader.Level2BlockSizeLog2 = data.ReadUInt32();
-            romFSHeader.Reserved2 = data.ReadBytes(4);
-            romFSHeader.Level3LogicalOffset = data.ReadUInt64();
-            romFSHeader.Level3HashdataSize = data.ReadUInt64();
-            romFSHeader.Level3BlockSizeLog2 = data.ReadUInt32();
-            romFSHeader.Reserved3 = data.ReadBytes(4);
-            romFSHeader.Reserved4 = data.ReadBytes(4);
-            romFSHeader.OptionalInfoSize = data.ReadUInt32();
 
             return romFSHeader;
         }

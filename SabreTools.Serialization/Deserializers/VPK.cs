@@ -79,6 +79,9 @@ namespace SabreTools.Serialization.Deserializers
                 while (data.Position < initialOffset + file.ExtendedHeader.ArchiveHashLength)
                 {
                     var archiveHash = ParseArchiveHash(data);
+                    if (archiveHash == null)
+                        return null;
+                    
                     archiveHashes.Add(archiveHash);
                 }
 
@@ -124,17 +127,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package archive hash on success, null on error</returns>
-        private static ArchiveHash ParseArchiveHash(Stream data)
+        private static ArchiveHash? ParseArchiveHash(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var archiveHash = new ArchiveHash();
-
-            archiveHash.ArchiveIndex = data.ReadUInt32();
-            archiveHash.ArchiveOffset = data.ReadUInt32();
-            archiveHash.Length = data.ReadUInt32();
-            archiveHash.Hash = data.ReadBytes(0x10);
-
-            return archiveHash;
+            return data.ReadType<ArchiveHash>();
         }
 
         /// <summary>

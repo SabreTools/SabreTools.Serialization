@@ -118,23 +118,14 @@ namespace SabreTools.Serialization
         /// <param name="data">Data to parse into a database</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled RSDS Program Database on success, null on error</returns>
-        public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[]? data, ref int offset)
+        public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[] data, ref int offset)
         {
-            // If we have data that's invalid, we can't do anything
-            if (data == null)
+            var rsdsProgramDatabase = data.ReadType<RSDSProgramDatabase>(ref offset);
+
+            if (rsdsProgramDatabase == null)
                 return null;
-
-            var rsdsProgramDatabase = new RSDSProgramDatabase();
-
-            rsdsProgramDatabase.Signature = data.ReadUInt32(ref offset);
             if (rsdsProgramDatabase.Signature != 0x53445352)
                 return null;
-
-            var guid = data.ReadBytes(ref offset, 0x10);
-            if (guid != null)
-                rsdsProgramDatabase.GUID = new Guid(guid);
-            rsdsProgramDatabase.Age = data.ReadUInt32(ref offset);
-            rsdsProgramDatabase.PathAndFileName = data.ReadNullTerminatedAnsiString(ref offset); // TODO: Actually null-terminated UTF-8
 
             return rsdsProgramDatabase;
         }
@@ -951,28 +942,19 @@ namespace SabreTools.Serialization
 
                 while (offset < entry.Data.Length)
                 {
-                    var menuItem = new MenuItem();
-
                     // Determine if this is a popup
                     int flagsOffset = offset;
                     var initialFlags = (MenuFlags)entry.Data.ReadUInt16(ref flagsOffset);
+
+                    MenuItem? menuItem;
 #if NET20 || NET35
                     if ((initialFlags & MenuFlags.MF_POPUP) != 0)
 #else
                     if (initialFlags.HasFlag(MenuFlags.MF_POPUP))
 #endif
-                    {
-                        menuItem.PopupItemType = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupState = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupID = entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupResInfo = (MenuFlags)entry.Data.ReadUInt32(ref offset);
-                        menuItem.PopupMenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
-                    }
+                        menuItem = entry.Data.ReadType<PopupMenuItem>(ref offset);
                     else
-                    {
-                        menuItem.NormalResInfo = (MenuFlags)entry.Data.ReadUInt16(ref offset);
-                        menuItem.NormalMenuText = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
-                    }
+                        menuItem = entry.Data.ReadType<NormalMenuItem>(ref offset);
 
                     // Align to the DWORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -980,6 +962,9 @@ namespace SabreTools.Serialization
                         while (offset < entry.Data.Length && (offset % 4) != 0)
                             _ = entry.Data.ReadByte(ref offset);
                     }
+
+                    if (menuItem == null)
+                        return null;
 
                     menuItems.Add(menuItem);
                 }

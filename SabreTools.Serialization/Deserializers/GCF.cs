@@ -154,6 +154,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
                 var directoryEntry = ParseDirectoryEntry(data);
+                if (directoryEntry == null)
+                    return null;
+                
                 file.DirectoryEntries[i] = directoryEntry;
             }
 
@@ -188,13 +191,6 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     file.DirectoryNames[nameOffset] = directoryName;
-                }
-
-                // Loop and assign to entries
-                foreach (var directoryEntry in file.DirectoryEntries)
-                {
-                    if (directoryEntry != null)
-                        directoryEntry.Name = file.DirectoryNames[directoryEntry.NameOffset];
                 }
             }
 
@@ -478,20 +474,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Game Cache directory entry on success, null on error</returns>
-        private static DirectoryEntry ParseDirectoryEntry(Stream data)
+        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var directoryEntry = new DirectoryEntry();
-
-            directoryEntry.NameOffset = data.ReadUInt32();
-            directoryEntry.ItemSize = data.ReadUInt32();
-            directoryEntry.ChecksumIndex = data.ReadUInt32();
-            directoryEntry.DirectoryFlags = (HL_GCF_FLAG)data.ReadUInt32();
-            directoryEntry.ParentIndex = data.ReadUInt32();
-            directoryEntry.NextIndex = data.ReadUInt32();
-            directoryEntry.FirstIndex = data.ReadUInt32();
-
-            return directoryEntry;
+            return data.ReadType<DirectoryEntry>();
         }
 
         /// <summary>

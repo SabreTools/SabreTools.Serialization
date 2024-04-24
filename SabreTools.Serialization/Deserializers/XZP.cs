@@ -144,28 +144,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled XBox Package File header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (header == null)
                 return null;
-
-            header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != HeaderSignatureString)
                 return null;
-
-            header.Version = data.ReadUInt32();
             if (header.Version != 6)
                 return null;
-
-            header.PreloadDirectoryEntryCount = data.ReadUInt32();
-            header.DirectoryEntryCount = data.ReadUInt32();
-            header.PreloadBytes = data.ReadUInt32();
-            header.HeaderLength = data.ReadUInt32();
-            header.DirectoryItemCount = data.ReadUInt32();
-            header.DirectoryItemOffset = data.ReadUInt32();
-            header.DirectoryItemLength = data.ReadUInt32();
 
             return header;
         }
@@ -226,15 +212,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled XBox Package File footer on success, null on error</returns>
         private static Footer? ParseFooter(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Footer footer = new Footer();
+            var footer = data.ReadType<Footer>();
 
-            footer.FileLength = data.ReadUInt32();
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (footer == null)
                 return null;
-
-            footer.Signature = Encoding.ASCII.GetString(signature);
             if (footer.Signature != FooterSignatureString)
                 return null;
 

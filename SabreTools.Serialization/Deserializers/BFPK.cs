@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled file entry on success, null on error</returns>
-        private static FileEntry ParseFileEntry(Stream data)
+        private static FileEntry? ParseFileEntry(Stream data)
         {
             // TODO: Use marshalling here instead of building
             var fileEntry = new FileEntry();

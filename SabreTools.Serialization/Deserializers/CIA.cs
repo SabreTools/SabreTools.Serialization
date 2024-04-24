@@ -145,22 +145,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled CIA header on success, null on error</returns>
-        private static CIAHeader ParseCIAHeader(Stream data)
+        public static CIAHeader? ParseCIAHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            CIAHeader ciaHeader = new CIAHeader();
-
-            ciaHeader.HeaderSize = data.ReadUInt32();
-            ciaHeader.Type = data.ReadUInt16();
-            ciaHeader.Version = data.ReadUInt16();
-            ciaHeader.CertificateChainSize = data.ReadUInt32();
-            ciaHeader.TicketSize = data.ReadUInt32();
-            ciaHeader.TMDFileSize = data.ReadUInt32();
-            ciaHeader.MetaSize = data.ReadUInt32();
-            ciaHeader.ContentSize = data.ReadUInt64();
-            ciaHeader.ContentIndex = data.ReadBytes(0x2000);
-
-            return ciaHeader;
+            return data.ReadType<CIAHeader>();
         }
 
         /// <summary>
@@ -168,7 +155,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled certificate on success, null on error</returns>
-        private static Certificate? ParseCertificate(Stream data)
+        public static Certificate? ParseCertificate(Stream data)
         {
             // TODO: Use marshalling here instead of building
             Certificate certificate = new Certificate();
@@ -244,7 +231,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="fromCdn">Indicates if the ticket is from CDN</param>
         /// <returns>Filled ticket on success, null on error</returns>
-        private static Ticket? ParseTicket(Stream data, bool fromCdn = false)
+        public static Ticket? ParseTicket(Stream data, bool fromCdn = false)
         {
             // TODO: Use marshalling here instead of building
             Ticket ticket = new Ticket();
@@ -349,10 +336,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="fromCdn">Indicates if the ticket is from CDN</param>
         /// <returns>Filled title metadata on success, null on error</returns>
-        private static TitleMetadata? ParseTitleMetadata(Stream data, bool fromCdn = false)
+        public static TitleMetadata? ParseTitleMetadata(Stream data, bool fromCdn = false)
         {
             // TODO: Use marshalling here instead of building
-            TitleMetadata titleMetadata = new TitleMetadata();
+            var titleMetadata = new TitleMetadata();
 
             titleMetadata.SignatureType = (SignatureType)data.ReadUInt32();
             switch (titleMetadata.SignatureType)
@@ -420,11 +407,19 @@ namespace SabreTools.Serialization.Deserializers
             titleMetadata.ContentInfoRecords = new ContentInfoRecord[64];
             for (int i = 0; i < 64; i++)
             {
+                var contentInfoRecord = ParseContentInfoRecord(data);
+                if (contentInfoRecord == null)
+                    return null;
+
                 titleMetadata.ContentInfoRecords[i] = ParseContentInfoRecord(data);
             }
             titleMetadata.ContentChunkRecords = new ContentChunkRecord[titleMetadata.ContentCount];
             for (int i = 0; i < titleMetadata.ContentCount; i++)
             {
+                var contentChunkRecord = ParseContentChunkRecord(data);
+                if (contentChunkRecord == null)
+                    return null;
+
                 titleMetadata.ContentChunkRecords[i] = ParseContentChunkRecord(data);
             }
 
@@ -450,16 +445,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled content info record on success, null on error</returns>
-        private static ContentInfoRecord ParseContentInfoRecord(Stream data)
+        public static ContentInfoRecord? ParseContentInfoRecord(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ContentInfoRecord contentInfoRecord = new ContentInfoRecord();
-
-            contentInfoRecord.ContentIndexOffset = data.ReadUInt16();
-            contentInfoRecord.ContentCommandCount = data.ReadUInt16();
-            contentInfoRecord.UnhashedContentRecordsSHA256Hash = data.ReadBytes(0x20);
-
-            return contentInfoRecord;
+            return data.ReadType<ContentInfoRecord>();
         }
 
         /// <summary>
@@ -467,18 +455,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled content chunk record on success, null on error</returns>
-        private static ContentChunkRecord ParseContentChunkRecord(Stream data)
+        public static ContentChunkRecord? ParseContentChunkRecord(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            ContentChunkRecord contentChunkRecord = new ContentChunkRecord();
-
-            contentChunkRecord.ContentId = data.ReadUInt32();
-            contentChunkRecord.ContentIndex = (ContentIndex)data.ReadUInt16();
-            contentChunkRecord.ContentType = (TMDContentType)data.ReadUInt16();
-            contentChunkRecord.ContentSize = data.ReadUInt64();
-            contentChunkRecord.SHA256Hash = data.ReadBytes(0x20);
-
-            return contentChunkRecord;
+            return data.ReadType<ContentChunkRecord>();
         }
 
         /// <summary>
@@ -486,18 +465,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled meta data on success, null on error</returns>
-        private static MetaData ParseMetaData(Stream data)
+        public static MetaData? ParseMetaData(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            MetaData metaData = new MetaData();
-
-            metaData.TitleIDDependencyList = data.ReadBytes(0x180);
-            metaData.Reserved1 = data.ReadBytes(0x180);
-            metaData.CoreVersion = data.ReadUInt32();
-            metaData.Reserved2 = data.ReadBytes(0xFC);
-            metaData.IconData = data.ReadBytes(0x36C0);
-
-            return metaData;
+            return data.ReadType<MetaData>();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Deserializers
             #region DIFAT Sector Numbers
 
             // Create a DIFAT sector table
-            var difatSectors = new List<SectorNumber?>();
+            var difatSectors = new List<SectorNumber>();
 
             // Add the sectors from the header
             if (fileHeader.DIFAT != null)
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Deserializers
             #region FAT Sector Numbers
 
             // Create a FAT sector table
-            var fatSectors = new List<SectorNumber?>();
+            var fatSectors = new List<SectorNumber>();
 
             // Loop through and add the FAT sectors
             currentSector = binary.DIFATSectorNumbers[0];
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Mini FAT Sector Numbers
 
             // Create a mini FAT sector table
-            var miniFatSectors = new List<SectorNumber?>();
+            var miniFatSectors = new List<SectorNumber>();
 
             // Loop through and add the mini FAT sectors
             currentSector = (SectorNumber)fileHeader.FirstMiniFATSectorLocation;
@@ -233,48 +233,22 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file header on success, null on error</returns>
         private static FileHeader? ParseFileHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var header = new FileHeader();
+            var header = data.ReadType<FileHeader>();
 
-            header.Signature = data.ReadUInt64();
+            if (header == null)
+                return null;
             if (header.Signature != SignatureUInt64)
                 return null;
-
-            header.CLSID = data.ReadGuid();
-            header.MinorVersion = data.ReadUInt16();
-            header.MajorVersion = data.ReadUInt16();
-            header.ByteOrder = data.ReadUInt16();
             if (header.ByteOrder != 0xFFFE)
                 return null;
-
-            header.SectorShift = data.ReadUInt16();
             if (header.MajorVersion == 3 && header.SectorShift != 0x0009)
                 return null;
             else if (header.MajorVersion == 4 && header.SectorShift != 0x000C)
                 return null;
-
-            header.MiniSectorShift = data.ReadUInt16();
-            header.Reserved = data.ReadBytes(6);
-            header.NumberOfDirectorySectors = data.ReadUInt32();
             if (header.MajorVersion == 3 && header.NumberOfDirectorySectors != 0)
                 return null;
-
-            header.NumberOfFATSectors = data.ReadUInt32();
-            header.FirstDirectorySectorLocation = data.ReadUInt32();
-            header.TransactionSignatureNumber = data.ReadUInt32();
-            header.MiniStreamCutoffSize = data.ReadUInt32();
             if (header.MiniStreamCutoffSize != 0x00001000)
                 return null;
-
-            header.FirstMiniFATSectorLocation = data.ReadUInt32();
-            header.NumberOfMiniFATSectors = data.ReadUInt32();
-            header.FirstDIFATSectorLocation = data.ReadUInt32();
-            header.NumberOfDIFATSectors = data.ReadUInt32();
-            header.DIFAT = new SectorNumber?[109];
-            for (int i = 0; i < header.DIFAT.Length; i++)
-            {
-                header.DIFAT[i] = (SectorNumber)data.ReadUInt32();
-            }
 
             // Skip rest of sector for version 4
             if (header.MajorVersion == 4)
@@ -289,11 +263,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorShift">Sector shift from the header</param>
         /// <returns>Filled sector full of sector numbers on success, null on error</returns>
-        private static SectorNumber?[] ParseSectorNumbers(Stream data, ushort sectorShift)
+        private static SectorNumber[] ParseSectorNumbers(Stream data, ushort sectorShift)
         {
             // TODO: Use marshalling here instead of building
             int sectorCount = (int)(Math.Pow(2, sectorShift) / sizeof(uint));
-            var sectorNumbers = new SectorNumber?[sectorCount];
+            var sectorNumbers = new SectorNumber[sectorCount];
 
             for (int i = 0; i < sectorNumbers.Length; i++)
             {
@@ -337,24 +311,15 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled directory entry on success, null on error</returns>
         private static DirectoryEntry? ParseDirectoryEntry(Stream data, ushort majorVersion)
         {
-            // TODO: Use marshalling here instead of building
-            var directoryEntry = new DirectoryEntry();
+            var directoryEntry = data.ReadType<DirectoryEntry>();
 
-            byte[]? name = data.ReadBytes(64);
-            if (name != null)
-                directoryEntry.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
-            directoryEntry.NameLength = data.ReadUInt16();
-            directoryEntry.ObjectType = (ObjectType)data.ReadByteValue();
-            directoryEntry.ColorFlag = (ColorFlag)data.ReadByteValue();
-            directoryEntry.LeftSiblingID = (StreamID)data.ReadUInt32();
-            directoryEntry.RightSiblingID = (StreamID)data.ReadUInt32();
-            directoryEntry.ChildID = (StreamID)data.ReadUInt32();
-            directoryEntry.CLSID = data.ReadGuid();
-            directoryEntry.StateBits = data.ReadUInt32();
-            directoryEntry.CreationTime = data.ReadUInt64();
-            directoryEntry.ModifiedTime = data.ReadUInt64();
-            directoryEntry.StartingSectorLocation = data.ReadUInt32();
-            directoryEntry.StreamSize = data.ReadUInt64();
+            if (directoryEntry == null)
+                return null;
+
+            // TEMPORARY FIX FOR ASCII -> UNICODE
+            directoryEntry.Name = Encoding.Unicode.GetString(Encoding.ASCII.GetBytes(directoryEntry.Name));
+
+            // Handle version 3 entries
             if (majorVersion == 3)
                 directoryEntry.StreamSize &= 0x0000FFFF;
 

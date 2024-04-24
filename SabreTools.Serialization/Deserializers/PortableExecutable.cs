@@ -883,7 +883,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-        public static ImportTable ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
+        public static ImportTable? ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
         {
             // TODO: Use marshalling here instead of building
             var importTable = new ImportTable();
@@ -1085,19 +1085,28 @@ namespace SabreTools.Serialization.Deserializers
                         int hintNameTableEntryAddress = hintNameTableEntryAddresses[i];
                         data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
 
-                        var hintNameTableEntry = new HintNameTableEntry();
-
-                        hintNameTableEntry.Hint = data.ReadUInt16();
-                        hintNameTableEntry.Name = data.ReadNullTerminatedAnsiString();
+                        var hintNameTableEntry = ParseHintNameTableEntry(data);
+                        if (hintNameTableEntry == null)
+                            return null;
 
                         importHintNameTable.Add(hintNameTableEntry);
                     }
                 }
             }
 
-            importTable.HintNameTable = importHintNameTable.ToArray();
+            importTable.HintNameTable = [.. importHintNameTable];
 
             return importTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a hint name table entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled hint name table entry on success, null on error</returns>
+        public static HintNameTableEntry? ParseHintNameTableEntry(Stream data)
+        {
+            return data.ReadType<HintNameTableEntry>();
         }
 
         /// <summary>

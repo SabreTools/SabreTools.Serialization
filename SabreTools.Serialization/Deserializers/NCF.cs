@@ -99,13 +99,6 @@ namespace SabreTools.Serialization.Deserializers
 
                     file.DirectoryNames[nameOffset] = directoryName;
                 }
-
-                // Loop and assign to entries
-                foreach (var directoryEntry in file.DirectoryEntries)
-                {
-                    if (directoryEntry != null)
-                        directoryEntry.Name = file.DirectoryNames[directoryEntry.NameOffset];
-                }
             }
 
             #endregion
@@ -322,18 +315,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life No Cache directory entry on success, null on error</returns>
         private static DirectoryEntry? ParseDirectoryEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            var directoryEntry = new DirectoryEntry();
-
-            directoryEntry.NameOffset = data.ReadUInt32();
-            directoryEntry.ItemSize = data.ReadUInt32();
-            directoryEntry.ChecksumIndex = data.ReadUInt32();
-            directoryEntry.DirectoryFlags = (HL_NCF_FLAG)data.ReadUInt32();
-            directoryEntry.ParentIndex = data.ReadUInt32();
-            directoryEntry.NextIndex = data.ReadUInt32();
-            directoryEntry.FirstIndex = data.ReadUInt32();
-
-            return directoryEntry;
+            return data.ReadType<DirectoryEntry>();
         }
 
         /// <summary>

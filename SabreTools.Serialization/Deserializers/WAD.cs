@@ -52,6 +52,9 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < header.LumpCount; i++)
             {
                 var lump = ParseLump(data);
+                if (lump == null)
+                    return null;
+
                 file.Lumps[i] = lump;
             }
 
@@ -104,19 +107,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life Texture Package header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Header header = new Header();
+            var header = data.ReadType<Header>();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
+            if (header == null)
                 return null;
-
-            header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;
-
-            header.LumpCount = data.ReadUInt32();
-            header.LumpOffset = data.ReadUInt32();
 
             return header;
         }
@@ -126,23 +122,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Texture Package lump on success, null on error</returns>
-        private static Lump ParseLump(Stream data)
+        private static Lump? ParseLump(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Lump lump = new Lump();
-
-            lump.Offset = data.ReadUInt32();
-            lump.DiskLength = data.ReadUInt32();
-            lump.Length = data.ReadUInt32();
-            lump.Type = data.ReadByteValue();
-            lump.Compression = data.ReadByteValue();
-            lump.Padding0 = data.ReadByteValue();
-            lump.Padding1 = data.ReadByteValue();
-            byte[]? name = data.ReadBytes(16);
-            if (name != null)
-                lump.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
-
-            return lump;
+            return data.ReadType<Lump>();
         }
 
         /// <summary>
@@ -182,7 +164,7 @@ namespace SabreTools.Serialization.Deserializers
                 lumpInfo.Width = data.ReadUInt32();
                 lumpInfo.Height = data.ReadUInt32();
                 lumpInfo.PixelOffset = data.ReadUInt32();
-                _ = data.ReadBytes(12); // Unknown data
+                lumpInfo.UnknownData = data.ReadBytes(12);
 
                 // Cache the current offset
                 long currentOffset = data.Position;
