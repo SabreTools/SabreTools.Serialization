@@ -16,6 +16,12 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <summary>
+        /// Reference to the next cabinet header
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public InstallShieldCabinet? Next { get; set; }
+
+        /// <summary>
         /// Number of components in the cabinet set
         /// </summary>
         public int ComponentCount => Model.Components?.Length ?? 0;
