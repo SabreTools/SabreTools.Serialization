@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE softwarelist SYSTEM "softwarelist.dtd">
+<!-- Omitting license information and comments normally here -->
+
+<softwarelist name="softwarelist" description="Test Software List">
+	<software name="game1" cloneof="game2" supported="partial">
+		<description>Game! (Version 1)</description>
+		<year>1980</year>
+		<publisher>Publisher</publisher>
+		<info name="name" value="value" />
+		<sharedfeat name="name" value="value" />
+		<part name="part" interface="interface">
+			<feature name="name" value="value" />
+			<dataarea name="name" size="1024" width="16" endianness="big">
+				<rom name="rom.bin" size="1024" crc="deadbeef" sha1="ca39a3ee5e6b4b0d3255bfef95601890afd80709" offset="0x0000" value="value" status="good" loadflag="load16_byte" />
+			</dataarea>
+			<diskarea name="diskarea">
+				<disk name="disk" sha1="aa39a3ee5e6b4b0d3255bfef95601890afd80709" status="good" writable="no" />
+			</diskarea>
+			<dipswitch name="dipswitch" tag="tag" mask="mask">
+				<dipvalue name="dipvalue" value="value" default="yes" />
+			</dipswitch>
+		</part>
+	</software>
+</softwarelist>

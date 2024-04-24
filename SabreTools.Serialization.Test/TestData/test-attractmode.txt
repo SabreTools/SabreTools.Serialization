@@ -1,0 +1,2 @@
+#Name;Title;Emulator;CloneOf;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons
+game-1;desc-1;MAME;game-2;1990;Big Manufacturer;Game;4;0;6-button;Verified;1;Horizontal;Game!;Game! (v2);Glitchy;6

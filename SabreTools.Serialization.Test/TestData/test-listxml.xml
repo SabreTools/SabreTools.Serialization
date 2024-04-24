@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Omitting DTD normally present here -->
+
+<mame build="0.100" debug="yes" mameconfig="debug">
+	<machine name="game1" cloneof="game2" romof="game2" sampleof="genpin" sourcefile="blah.cpp" runnable="partial" isbios="no" isdevice="no" ismechanical="no">
+		<description>Game! (Version 1)</description>
+		<year>1980</year>
+		<manufacturer>Manufacturer</manufacturer>
+		<history>A long and storied history</history>
+		<adjuster name="adjuster" default="yes">
+			<condition tag="tag" mask="mask" relation="eq" value="value" />
+		</adjuster>
+		<biosset name="biosset" description="description" default="yes" />
+		<chip name="cpu" tag="cpu" type="cpu" clock="100000" />
+		<configuration name="configuration" tag="tag" mask="mask">
+			<condition tag="tag" mask="mask" relation="eq" value="value" />
+			<conflocation name="conflocation" number="1" inverted="no" />
+			<confsetting name="confsetting" value="value" default="yes" />
+		</configuration>
+		<device type="serial" tag="tag" fixed_image="abcd" mandatory="1" interface="serial">
+			<instance name="port_a" briefname="pa" />
+			<extension name=".123" />
+		</device>
+		<device_ref name="cport" />
+		<dipswitch name="dipswitch" tag="tag" mask="mask">
+			<condition tag="tag" mask="mask" relation="eq" value="value" />
+			<diplocation name="diplocation" number="1" inverted="no" />
+			<dipvalue name="dipvalue" value="value" default="yes" />
+		</dipswitch>
+		<disk name="disk" sha1="aa39a3ee5e6b4b0d3255bfef95601890afd80709" merge="disk2" region="USA" index="0" writable="no" status="good" optional="no" />
+		<display tag="tag" type="raster" rotate="0" flipx="no" width="1024" height="768" refresh="60.00" pixclock="10000" htotal="1092" hbend="1024" hbstart="0" vtotal="800" vbend="768" vbstart="0" />
+		<driver status="good" emulation="good" cocktail="good" savestate="supported" />
+		<feature type="camera" status="imperfect" overall="imperfect" />
+		<input service="yes" tilt="no" players="4" coins="2">
+			<control type="joy" player="1" buttons="6" reqbuttons="6" minimum="0" maximum="255" sensitivity="1" keydelta="2" reverse="no" ways="8" ways2="2" ways3="2" />
+		</input>
+		<port tag="tag">
+			<analog mask="mask" />
+		</port>
+		<ramoption name="ramoption" default="yes">1024KB</ramoption>
+		<rom name="rom.bin" bios="bios" size="1024" crc="deadbeef" sha1="ca39a3ee5e6b4b0d3255bfef95601890afd80709" merge="rom2.bin" region="USA" offset="0x0000" status="good" optional="no" />
+		<sample name="generic" />
+		<slot name="slot">
+			<slotoption name="slotoption" devname="devname" default="yes" />
+		</slot>
+		<softwarelist name="softwarelist" status="original" filter="filter" />
+		<sound channels="16" />
+	</machine>
+</mame>

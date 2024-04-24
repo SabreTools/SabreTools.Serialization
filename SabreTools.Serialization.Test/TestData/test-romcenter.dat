@@ -1,0 +1,21 @@
+[CREDITS]
+author=Unknown
+version=1.0
+email=email@email.email
+homepage=localhost
+url=127.0.0.1
+date=1900-01-01
+comment=Not real data, sorry
+
+[DAT]
+version=2.50
+plugin=Arcade
+split=0
+merge=0
+
+[EMULATOR]
+refname=Internal DAT Name
+version=Internal DAT Name
+
+[GAMES]
+¬game2¬Game! (Version 2)¬game1¬Game! (Version 1)¬rom.bin¬deadbeef¬1024¬game2¬rom2.bin¬

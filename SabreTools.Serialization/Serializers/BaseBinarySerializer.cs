@@ -102,32 +102,56 @@ namespace SabreTools.Serialization.Serializers
         /// <returns>Serializer of the requested type, null on error</returns>
         private static TSerializer? GetType<TSerializer>()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            if (assembly == null)
+            // If the serializer type is invalid
+            string? serializerName = typeof(TSerializer)?.Name;
+            if (serializerName == null)
                 return default;
 
-            // If not all types can be loaded, use the ones that could be
-            List<Type> assemblyTypes = [];
-            try
-            {
-                assemblyTypes = assembly.GetTypes().ToList<Type>();
-            }
-            catch (ReflectionTypeLoadException rtle)
-            {
-                assemblyTypes = rtle.Types.Where(t => t != null)!.ToList<Type>();
-            }
+            // If the serializer has no model type
+            Type? modelType = typeof(TSerializer).GetGenericArguments()?.FirstOrDefault();
+            if (modelType == null)
+                return default;
 
-            // Loop through all types 
-            foreach (Type type in assemblyTypes)
+            // Loop through all loaded assemblies
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                // If the type isn't a class or doesn't implement the interface
-                if (!type.IsClass || type.GetInterface(typeof(TSerializer).Name) == null)
-                    continue;
+                // If the assembly is invalid
+                if (assembly == null)
+                    return default;
 
-                // Try to create a concrete instance of the type
-                var instance = (TSerializer?)Activator.CreateInstance(type);
-                if (instance != null)
-                    return instance;
+                // If not all types can be loaded, use the ones that could be
+                List<Type> assemblyTypes = [];
+                try
+                {
+                    assemblyTypes = assembly.GetTypes().ToList<Type>();
+                }
+                catch (ReflectionTypeLoadException rtle)
+                {
+                    assemblyTypes = rtle.Types.Where(t => t != null)!.ToList<Type>();
+                }
+
+                // Loop through all types 
+                foreach (Type type in assemblyTypes)
+                {
+                    // If the type isn't a class
+                    if (!type.IsClass)
+                        continue;
+
+                    // If the type doesn't implement the interface
+                    var interfaceType = type.GetInterface(serializerName);
+                    if (interfaceType == null)
+                        continue;
+
+                    // If the interface doesn't use the correct type parameter
+                    var genericTypes = interfaceType.GetGenericArguments();
+                    if (genericTypes.Length != 1 || genericTypes[0] != modelType)
+                        continue;
+
+                    // Try to create a concrete instance of the type
+                    var instance = (TSerializer?)Activator.CreateInstance(type);
+                    if (instance != null)
+                        return instance;
+                }
             }
 
             return default;

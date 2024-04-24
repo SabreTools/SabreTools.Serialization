@@ -1,0 +1,887 @@
+clrmamepro (
+ 	name "Other Emulated Arcade Games"
+ 	description "Other Emulated Arcade Games (20030817)"
+ 	category "Arcade"
+ 	version "20030817"
+ 	author "#RomManager"
+)
+
+# Some sets in this dat are partial because only the sound is emulated.
+# They're included here because I don't have the infos for the other roms of the set
+# Please contact me if you have found such informations, or complete romsets for them.
+
+game (
+	name bm1stmix
+	description "Beatmania [DJMAME 08-07-2003]"
+	year 1997
+	manufacturer "Konami"
+	rom ( name 753jaa03.19a size 524288 crc 0xf2b2bce8 sha1 61d31b111f35e7dde89965fa43ba627c12aff11c )
+	rom ( name 753jaa04.20a size 524288 crc 0x85a18f9d sha1 ecd0ab4f53e882b00176dacad5fac35345fbea66 )
+	rom ( name 753jaa05.22a size 524288 crc 0x749b1e87 sha1 1c771c19f152ae95171e4fd51da561ba4ec5ea87 )
+	rom ( name 753jaa06.24a size 524288 crc 0x6d86b0fd sha1 74a255dbb1c83131717ea1fe335f12aef81d9fcc )
+	rom ( name 753jaa07.22d size 524288 crc 0xf03ab5d8 sha1 2ad902547908208714855aa0f2b7ed493452ee5f )
+	rom ( name 753jaa08.23d size 524288 crc 0x6559f0c8 sha1 0d6ec4bdc22c02cb9fb8de36b0a8f7a6c983440e )
+	rom ( name 753jaa09.25d size 524288 crc 0xb50c3dbb sha1 6022ea249aad0793b2279699e68087b4bc9b4ef1 )
+	rom ( name 753jaa10.27d size 524288 crc 0x391f4bfd sha1 791c9889ea3ce639bbfb87934a1cad9aa3c9ccde )
+	rom ( name 753jab01.6a size 524288 crc 0x25bf8629 sha1 2be73f9dd25cae415c6443f221cc7d38d5555ae5 )
+	rom ( name 753jab02.8a size 524288 crc 0x6ab951de sha1 a724ede03b74e9422c120fcc263e2ebcc3a3e110 )
+	disk ( name 753jaa11.chd md5 260c9b72f4a03055e3abad61c6225324 )
+)
+
+game (
+	name bm2ndmix
+	description "Beatmania 2nd MIX (Rev.B) [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	rom ( name 853jaa03.19a size 524288 crc 0x1462ed23 sha1 fdfda3060c8d367ac2e8e43dedaba8ab9012cc77 )
+	rom ( name 853jaa04.20a size 524288 crc 0x98c9b331 sha1 51f24b3c3773c53ff492ed9bad17c9867fd94e28 )
+	rom ( name 853jaa05.22a size 524288 crc 0x0da3fef9 sha1 f9ef24144c00c054ecc4650bb79e74c57c6d6b3c )
+	rom ( name 853jaa06.24a size 524288 crc 0x6a66978c sha1 460178a6f35e554a157742d77ed5ea6989fbcee1 )
+	rom ( name 853jaa07.22d size 524288 crc 0x728c0010 sha1 18888b402e0b7ccf63c7b3cb644673df1746dba7 )
+	rom ( name 853jaa08.23d size 524288 crc 0x926fc37c sha1 f251cba56ca201f0e748112462116cff218b66da )
+	rom ( name 853jaa09.25d size 524288 crc 0x8584e21e sha1 3d1ca6de00f9ac07bbe7cd1e67093cca7bf484bb )
+	rom ( name 853jaa10.27d size 524288 crc 0x9cb92d98 sha1 6ace4492ba0b5a8f94a9e7b4f7126b31c6254637 )
+	rom ( name 853jab01.6a size 524288 crc 0xc8df72c0 sha1 6793b587ba0611bc3da8c4955d6a87e47a19a223 )
+	rom ( name 853jab02.8a size 524288 crc 0xbf6ace08 sha1 29d3fdf1c73a73a0a66fa5a4c4ac3f293cb82e37 )
+	disk ( name 853jaa11.chd md5 37281741b748bea7dfa711a956649d1e )
+)
+
+game (
+	name bm2ndmxa
+	description "Beatmania 2nd MIX (Rev.A) [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	cloneof bm2ndmix
+	romof bm2ndmix
+	rom ( name 853jaa01.6a size 524288 crc 0x4f0bf5d0 sha1 4793bb411e85f2191eb703a170c16cf163ea79e7 )
+	rom ( name 853jaa02.8a size 524288 crc 0xe323925b sha1 1f9f52a7ab6359b617e87f8b3d7ac4269885c621 )
+	rom ( name 853jaa03.19a size 524288 crc 0x1462ed23 sha1 fdfda3060c8d367ac2e8e43dedaba8ab9012cc77 )
+	rom ( name 853jaa04.20a size 524288 crc 0x98c9b331 sha1 51f24b3c3773c53ff492ed9bad17c9867fd94e28 )
+	rom ( name 853jaa05.22a size 524288 crc 0x0da3fef9 sha1 f9ef24144c00c054ecc4650bb79e74c57c6d6b3c )
+	rom ( name 853jaa06.24a size 524288 crc 0x6a66978c sha1 460178a6f35e554a157742d77ed5ea6989fbcee1 )
+	rom ( name 853jaa07.22d size 524288 crc 0x728c0010 sha1 18888b402e0b7ccf63c7b3cb644673df1746dba7 )
+	rom ( name 853jaa08.23d size 524288 crc 0x926fc37c sha1 f251cba56ca201f0e748112462116cff218b66da )
+	rom ( name 853jaa09.25d size 524288 crc 0x8584e21e sha1 3d1ca6de00f9ac07bbe7cd1e67093cca7bf484bb )
+	rom ( name 853jaa10.27d size 524288 crc 0x9cb92d98 sha1 6ace4492ba0b5a8f94a9e7b4f7126b31c6254637 )
+	disk ( name 853jaa11.chd md5 37281741b748bea7dfa711a956649d1e )
+)
+
+game (
+	name bm3rdmix
+	description "Beatmania 3rd MIX (Rev.B) [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	rom ( name 825jaa03.19a size 524288 crc 0xecd62652 sha1 bceab4052dce2c843358f0a98aacc6e1124e3068 )
+	rom ( name 825jaa04.20a size 524288 crc 0x437a576f sha1 f30fd15d4f0d776e9b29ccfcd6e26861fb42e51a )
+	rom ( name 825jaa05.22a size 524288 crc 0x9f9a3369 sha1 d8b20127336af89b9e886289fb4f5a2e0db65f9b )
+	rom ( name 825jaa06.24a size 524288 crc 0xe7a3991a sha1 6c8cb481e721428e1365f784e97bb6f6d421ed5a )
+	rom ( name 825jab01.6a size 524288 crc 0x934fdcb2 sha1 b88bada065b5464c579039c2e403c061e6eeb356 )
+	rom ( name 825jab02.8a size 524288 crc 0x6012c488 sha1 df32db41942c2fe2b2aa7439900372e22ea54c3c )
+	rom ( name 825jab07.22d size 524288 crc 0x1a515c82 sha1 a0c908d449aa45cb3a90a42c97429f10873e884b )
+	rom ( name 825jab08.23d size 524288 crc 0x82731b07 sha1 c0d391fcd94c6b2225fca338c0c5db5d35e2d8bc )
+	rom ( name 825jab09.25d size 524288 crc 0x1407ba5d sha1 e7a0d190326589f4d94e83cb7c85dd4e91f4efad )
+	rom ( name 825jab10.27d size 524288 crc 0x2afd0a10 sha1 1b8b868ac5720bb1b376f4eb8952efb190257bda )
+)
+
+game (
+	name bm3rdmxa
+	description "Beatmania 3rd MIX (Rev.A) [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	cloneof bm3rdmix
+	romof bm3rdmix
+	rom ( name 825jaa01.6a size 524288 crc 0xcf7494a5 sha1 994df0644817f44d135a16f04d8dae9ec73e3728 )
+	rom ( name 825jaa02.8a size 524288 crc 0x5f787fe2 sha1 5944da21141802d96594cf77880682e97d014ca1 )
+	rom ( name 825jaa03.19a size 524288 crc 0xecd62652 sha1 bceab4052dce2c843358f0a98aacc6e1124e3068 )
+	rom ( name 825jaa04.20a size 524288 crc 0x437a576f sha1 f30fd15d4f0d776e9b29ccfcd6e26861fb42e51a )
+	rom ( name 825jaa05.22a size 524288 crc 0x9f9a3369 sha1 d8b20127336af89b9e886289fb4f5a2e0db65f9b )
+	rom ( name 825jaa06.24a size 524288 crc 0xe7a3991a sha1 6c8cb481e721428e1365f784e97bb6f6d421ed5a )
+	rom ( name 825jaa07.22d size 524288 crc 0xa96cf46c sha1 c8540b452dcb15f5873ca629fa62657a5a3bb02c )
+	rom ( name 825jaa08.23d size 524288 crc 0x06d56c3b sha1 19cd15ab0869773e6a16b1cad48c53bec2f60b0b )
+	rom ( name 825jaa09.25d size 524288 crc 0xd3e65669 sha1 51abf452da60794fa47c05d11c08b203dde563ff )
+	rom ( name 825jaa10.27d size 524288 crc 0x44d184f3 sha1 28f3ec33a29164a6531f53db071272ccf015f66d )
+	disk ( name 825jaa11.chd md5 3276e3ed57f1a6d9a18365054b0439ba )
+)
+
+game (
+	name bm4thmix
+	description "Beatmania 4th MIX [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	rom ( name 847jaa01.6a size 524288 crc 0x81138a1b sha1 ebe211126f871e541881e1670f56d50b058dead3 )
+	rom ( name 847jaa02.8a size 524288 crc 0x4eeb0010 sha1 942303dfb19a4a78dd74ad24576031760553a661 )
+	rom ( name 847jaa03.19a size 524288 crc 0xf447d140 sha1 cc15b80419940d127a77765508f877421ed86ee2 )
+	rom ( name 847jaa04.20a size 524288 crc 0xedc3e286 sha1 341b1dc6ee1562b1ddf235a66ac96b94c482b67c )
+	rom ( name 847jaa05.22a size 524288 crc 0xda165b5e sha1 e46110590e6ab89b55f6abfbf6c53c99d28a75a9 )
+	rom ( name 847jaa06.24a size 524288 crc 0x8bfc2f28 sha1 f8869867945d63d9f34b6228d95c5a61b193eed2 )
+	rom ( name 847jab07.22d size 524288 crc 0xc159e7c4 sha1 96af0c29b2f1fef494b2223179862d16f26bb33f )
+	rom ( name 847jab08.23d size 524288 crc 0x8ff084d6 sha1 50cff8c701e33f2630925c1a9ae4351076912acd )
+	rom ( name 847jab09.25d size 524288 crc 0x2e4ac9fe sha1 bbd4c6e0c82fc0be88f851e901e5853b6bcf775f )
+	rom ( name 847jab10.27d size 524288 crc 0xc78516f5 sha1 1adf5805c808dc55de14a9a9b20c3d2cf7bf414d )
+	disk ( name 847jaa11.chd md5 47cb5c1b856aa11cf38f0c7ea4a7d1c3 )
+)
+
+game (
+	name bm5thmix
+	description "Beatmania 5th MIX [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	rom ( name 981jaa01.6a size 524288 crc 0x03bbe7e3 sha1 7d4ec3bc7719a3f1b81df309b5c74afaffde42ba )
+	rom ( name 981jaa02.8a size 524288 crc 0xf4e59923 sha1 a4983435e3f2243ea9ccc2fd5439d86c30b6f604 )
+	rom ( name 981jaa03.19a size 524288 crc 0x8b7e6d72 sha1 d470377e20e4d4935af5e57d081ce24dd9ea5793 )
+	rom ( name 981jaa04.20a size 524288 crc 0x5139988a sha1 2b1eb97dcbfbe6bba1352a02cf0036e9a721ab39 )
+	rom ( name 981jaa05.22a size 524288 crc 0xf370fdb9 sha1 3a2bbdda984f2630e8ae505a8db259d9162e07a3 )
+	rom ( name 981jaa06.24a size 524288 crc 0xda6e3813 sha1 9163bd2cfb0a32798e797c7b4eea21e28772a206 )
+	rom ( name 981jaa07.22d size 524288 crc 0xf6c72998 sha1 e78af5b515b224c534f47abd6477dd97dc521b0d )
+	rom ( name 981jaa08.23d size 524288 crc 0xaa4ff682 sha1 3750e1e81b7c1a4fb419076171f20e4c36b1c544 )
+	rom ( name 981jaa09.25d size 524288 crc 0xd96d4e1c sha1 379aa4e82cd06490645f54dab1724c827108735d )
+	rom ( name 981jaa10.27d size 524288 crc 0x06bee0e4 sha1 6eea8614cb01e7079393b9976b6fd6a52c14e3c0 )
+	disk ( name 981jaa11.chd md5 0058bbdcb5db054adff1c4148ef4211e )
+)
+
+game (
+	name bm6thmix
+	description "Beatmania 6th MIX [DJMAME 08-07-2003]"
+	year 2001
+	manufacturer "Konami"
+	rom ( name a21jaa01.6a size 524288 crc 0x6d7ccbe3 sha1 633c69c14dfd70866664b94095fa5f21087428d8 )
+	rom ( name a21jaa02.8a size 524288 crc 0xf10076fa sha1 ab9f3e75a36fdaccec411afd77f588f040db139d )
+	rom ( name a21jaa03.19a size 524288 crc 0xca806266 sha1 6b5f9d5089a992347745ab6af4dadaac4e3b0742 )
+	rom ( name a21jaa04.20a size 524288 crc 0x71124e79 sha1 d9fd8f662ac9c29daf25acd310fd0f27051dea0b )
+	rom ( name a21jaa05.22a size 524288 crc 0x818e34e6 sha1 8a9093b92392a065d0cf94d56195a6f3ca611044 )
+	rom ( name a21jaa06.24a size 524288 crc 0x36f2043b sha1 d2846cc10173662029da7c5d686cf89299be2be5 )
+	rom ( name a21jaa07.22d size 524288 crc 0x841d83e1 sha1 c85962abcc955e8f11138e03002b16afd3791f0a )
+	rom ( name a21jaa08.23d size 524288 crc 0x4e561919 sha1 4b91560d9ba367c848d784db760f042d5d76e003 )
+	rom ( name a21jaa09.25d size 524288 crc 0x181e6f70 sha1 82c7ca3068ace9a66b614ead4b90ea6fe4017d51 )
+	rom ( name a21jaa10.27d size 524288 crc 0x1ac33595 sha1 3173bb8dc420487c4d427e779444a98aad37d51e )
+	disk ( name a21jaa11.chd md5 e50ff33d5b9eb179265ff6cd7824824e )
+)
+
+game (
+	name bm7thmix
+	description "Beatmania 7th MIX [DJMAME 08-07-2003]"
+	year 2001
+	manufacturer "Konami"
+	rom ( name b07jaa03.19a size 524288 crc 0x3e30af3f sha1 f092c4156bc7d0a0309171fd1e00a6d4c33cb08f )
+	rom ( name b07jaa04.20a size 524288 crc 0x190a4a83 sha1 f7ae2d3ccd98f99fdae61c1a2145f993c4064ebd )
+	rom ( name b07jaa05.22a size 524288 crc 0x415a6363 sha1 b3edbcd293006c3738a10680ecfa66e105028786 )
+	rom ( name b07jaa06.24a size 524288 crc 0x46c59a43 sha1 ba58432bf7df394b5c633e63bcf2321bc320f023 )
+	rom ( name b07jaa07.22d size 524288 crc 0xb2908dc7 sha1 22e36afef9a03681928d37a8ffe50078d04525ce )
+	rom ( name b07jaa08.23d size 524288 crc 0xcbbefecf sha1 ed1347d1a8fd59677e4290b8cd568ddf505a7265 )
+	rom ( name b07jaa09.25d size 524288 crc 0x2530cedb sha1 94b38b4fe198b26a2ff4d99d2cb28a0f935fe940 )
+	rom ( name b07jaa10.27d size 524288 crc 0x6b75ba9c sha1 aee922adc3bc0296ae6e08e461b20a9e5e72a2df )
+	rom ( name b07jab01.6a size 524288 crc 0x433d0074 sha1 5a9709ce200cbff340063469956d1c55a46810d9 )
+	rom ( name b07jab02.8a size 524288 crc 0x794773af sha1 c823deb077f6515d7701de84d324c3d367719819 )
+	disk ( name b07jab11.chd md5 0e9440787ca69567792095085e2a3619 )
+)
+
+game (
+	name bmclubmx
+	description "Beatmania Club MIX [DJMAME 08-07-2003]"
+	year 2000
+	manufacturer "Konami"
+	rom ( name 993jaa01.6a size 524288 crc 0xb314af94 sha1 6448554e1d565ee1558d13f484b5fa0018ac3667 )
+	rom ( name 993jaa02.8a size 524288 crc 0x0aa9f16a sha1 508d41e141997ba07443c4ab98454cec515d731c )
+	rom ( name 993jaa03.19a size 524288 crc 0x00394778 sha1 3631a42ed0c8ee572e7faafdaacce9fc2b372d25 )
+	rom ( name 993jaa04.20a size 524288 crc 0x2522f3b0 sha1 1ab8618b732f1402fc7bfb141630873d4c706d34 )
+	rom ( name 993jaa05.22a size 524288 crc 0x4e340947 sha1 a0a7f3b222a292b07bc5c7acd61547ea2bdbad43 )
+	rom ( name 993jaa06.24a size 524288 crc 0xc0a711d6 sha1 ab581c5215c4db6dbf58b47f54834fe81e8a569b )
+	rom ( name 993jaa07.22d size 524288 crc 0x4fc588cf sha1 00fb73002b6b5ae414eef320169e379b94ee33a1 )
+	rom ( name 993jaa08.23d size 524288 crc 0xb6c88e9e sha1 e3b76e782b9507dad2bdb9de1a34d125f6100cc8 )
+	rom ( name 993jaa09.25d size 524288 crc 0xe1a172dd sha1 42e850c055dc5bfccf6b6989f9f3a945fce13006 )
+	rom ( name 993jaa10.27d size 524288 crc 0x9d113a2d sha1 eee94a5f7015c49aa630b8df0c8e9d137d238811 )
+	disk ( name 993jaa11.chd md5 e26eb62d7cf3357585f5066da6063143 )
+)
+
+game (
+	name bmcompm2
+	description "Beatmania complete MIX 2 [DJMAME 08-07-2003]"
+	year 2000
+	manufacturer "Konami"
+	rom ( name 988jaa01.6a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa02.8a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa03.19a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa04.20a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa05.22a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa06.24a size 524288 flags nodump sha1 - )
+	rom ( name 988jaa07.22d size 524288 flags nodump sha1 - )
+	rom ( name 988jaa08.23d size 524288 flags nodump sha1 - )
+	rom ( name 988jaa09.25d size 524288 flags nodump sha1 - )
+	rom ( name 988jaa10.27d size 524288 flags nodump sha1 - )
+	disk ( name 988jaa11.chd md5 cc21d58d6bee58f1c4baf08f345fe2c5 )
+)
+
+game (
+	name bmcompmx
+	description "Beatmania complete MIX [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	rom ( name 858jaa03.19a size 524288 crc 0x8559f457 sha1 133092994087864a6c29e9d51dcdbef2e2c2a123 )
+	rom ( name 858jaa04.20a size 524288 crc 0x770824d3 sha1 5c21bc39f8128957d76be85bc178c96976987f5f )
+	rom ( name 858jaa05.22a size 524288 crc 0x9ce769da sha1 1fe2999f786effdd5e3e74475e8431393eb9403d )
+	rom ( name 858jaa06.24a size 524288 crc 0x0cde6584 sha1 fb58d2b4f58144b71703431740c0381bb583f581 )
+	rom ( name 858jaa07.22d size 524288 crc 0x7d183f46 sha1 7a1b0ccb0407b787af709bdf038d886727199e4e )
+	rom ( name 858jaa08.23d size 524288 crc 0xc731dc8f sha1 1a937d76c02711b7f73743c9999456d4408ad284 )
+	rom ( name 858jaa09.25d size 524288 crc 0x0b4ad843 sha1 c01e15053dd1975dc68db9f4e6da47062d8f9b54 )
+	rom ( name 858jaa10.27d size 524288 crc 0x00b124ee sha1 435d28a327c2707833a8ddfe841104df65ffa3f8 )
+	rom ( name 858jab01.6a size 524288 crc 0x92841eb5 sha1 3a9d90a9c4b16cb7118aed2cadd3ab32919efa96 )
+	rom ( name 858jab02.8a size 524288 crc 0x7b19969c sha1 3545acabbf53bacc5afa72a3c5af3cd648bc2ae1 )
+	disk ( name 858jaa11.chd md5 e7b26f6f03f807a32b2e5e291324d582 )
+)
+
+game (
+	name bmcorerm
+	description "Beatmania CORE REMIX [DJMAME 08-07-2003]"
+	year 2000
+	manufacturer "Konami"
+	rom ( name a05jaa01.6a size 524288 crc 0xcd6f1fc5 sha1 237cbc17a693efb6bffffd6afb24f0944c29330c )
+	rom ( name a05jaa02.8a size 524288 crc 0xfe07785e sha1 14c652008cb509b5206fb515aad7dfe36a6fe6f4 )
+	rom ( name a05jaa03.19a size 524288 crc 0x8b88932a sha1 df20f8323adb02d07b835da98f4a29b3142175c9 )
+	rom ( name a05jaa04.20a size 524288 crc 0xcc72629f sha1 f95d06f409c7d6422d66a55c0452eb3feafc6ef0 )
+	rom ( name a05jaa05.22a size 524288 crc 0xe241b22b sha1 941a76f6ac821e0984057ec7df7862b12fa657b8 )
+	rom ( name a05jaa06.24a size 524288 crc 0x77eb08a3 sha1 fd339aaec06916abfc928e850e33480707b5450d )
+	rom ( name a05jaa07.22d size 524288 crc 0x4d79646d sha1 5f1237bbd3cb09b27babf1c5359ef6c0d80ae3a9 )
+	rom ( name a05jaa08.23d size 524288 crc 0xf067494f sha1 ef031b5501556c1aa047a51604a44551b35a8b99 )
+	rom ( name a05jaa09.25d size 524288 crc 0x1504d62c sha1 3c31c6625bc089235a96fe21021239f2d0c0f6e1 )
+	rom ( name a05jaa10.27d size 524288 crc 0x99d75c36 sha1 9599420863aa0a9492d3caeb03f8ac5fd4c3cdb2 )
+	disk ( name a05jaa11.chd md5 180f7b1b2145fab2d2ba717780f2ca26 )
+)
+
+game (
+	name bmfinal
+	description "Beatmania THE FINAL [DJMAME 08-07-2003]"
+	year 2002
+	manufacturer "Konami"
+	rom ( name c01jaa01.6a size 524288 crc 0xa64eeff7 sha1 377eee1f41e3072f9154a7c17ec4c4f3fb63ea4a )
+	rom ( name c01jaa02.8a size 524288 crc 0x599bdac5 sha1 f85aff020c92fcd3c2a42036615226b54e5bee98 )
+	rom ( name c01jaa03.19a size 524288 crc 0x1c9c6eb7 sha1 bd1a9d8ed78095328817f599f52d9d34e09e9275 )
+	rom ( name c01jaa04.20a size 524288 crc 0x4e5aa665 sha1 22f3888a29497ff0a801cce620ca0373268e5cd9 )
+	rom ( name c01jaa05.22a size 524288 crc 0x37dab217 sha1 66b07c36e7749a4c9d9dfaca633958a4922c4562 )
+	rom ( name c01jaa06.24a size 524288 crc 0xd35c6818 sha1 ce608603ea3662f8cda5cf958a676d64a0f74645 )
+	rom ( name c01jaa07.22d size 524288 crc 0x3e70f506 sha1 d3cd0b48383bf2514b7f47fade8549ea8e3c5555 )
+	rom ( name c01jaa08.23d size 524288 crc 0x535e6065 sha1 131f7eec4179145781bbd23474202f4eaf9cefd0 )
+	rom ( name c01jaa09.25d size 524288 crc 0x45cf93b1 sha1 7c5082bcd1fe15761a0a965e25dda121904ff1bd )
+	rom ( name c01jaa10.27d size 524288 crc 0xc9927749 sha1 c2644877bda483e241381265e723ea8ab8357761 )
+	disk ( name c01jaa11.chd md5 8bb7e6b6bc63cac8a4f2997307c25748 )
+)
+
+game (
+	name "boogwing"
+	description "Boogie Wings / The Great Ragtime Show [sound only] [M1 v0.7.2]"
+	year "1992"
+	manufacturer "Data East Corporation"
+	rom ( name kn06.18p size 65536 crc 0x3e8bc4e1 md5 96598bfa19b4c6a3d0820d37610f106c sha1 7e4c357afefa47b8f101727e06485eb9ebae635d )
+	rom ( name mbd-09.16p size 524288 crc 0xf44f2f87 md5 aec9026003daf08468f59570b2449140 sha1 d941520bdfc9e6d88c45462bc1f697c18f33498e )
+	rom ( name mbd-10.17p size 524288 crc 0xf159f76a md5 aaee9f2c53cf7551ed9155ef6a58b6d9 sha1 0b1ea69fecdd151e2b1fa96a21eade492499691d )
+)
+
+game (
+	name "bubbletr"
+	description "Bubble Trouble [sound only] [M1 v0.7.2]"
+	year "1992"
+	manufacturer "Namco"
+	rom ( name "btl-snd0.bin" size 131072 crc 46a5c625 )
+	rom ( name "btl-voi1.bin" size 524288 crc 08b3a089 )
+)
+
+game (
+	name "densdeg2"
+	description "Densya De Go! 2 [sound only] [M1 v0.7.2]"
+	year "1998"
+	manufacturer "Taito"
+	rom ( name e52-23.034 size 2097152 crc 0xebe2dcef md5 e6104313948f853a8ecd1bd18ec72d92 sha1 16ae41e0f3bb242cbc2922f53cacbd99961a3f97 )
+	rom ( name e52-24.035 size 2097152 crc 0xa9a678da md5 921b4c8a36ecd14eb7f01e4d0b88fcfa sha1 b980ae644ef0312acd63b017028af9bf2b084c29 )
+	rom ( name e52-29.030 size 262144 crc 0x6010162a md5 b04a28cbac20ae12113fb7c35f4ed6f8 sha1 f14920b26887f5387b3e261b63573d850195982a )
+	rom ( name e52-30.031 size 262144 crc 0x2881af4a md5 a18886c09fbdbf48e4d3de482f6bdf32 sha1 5918f6508b3cd3bef3751e3bda2a48152569c1cd )
+)
+
+game (
+	name "densdego"
+	description "Densya De Go! [sound only] [M1 v0.7.2]"
+	year "1997"
+	manufacturer "Taito"
+	rom ( name e35-19.034 size 2097152 crc 0xebe2dcef md5 e6104313948f853a8ecd1bd18ec72d92 sha1 16ae41e0f3bb242cbc2922f53cacbd99961a3f97 )
+	rom ( name e35-20.035 size 2097152 crc 0xa1d4b30d md5 9caf73184e7f0009c29dabcb3bbe864c sha1 e02f613b93d3b3ee1eb23f5b7f62c5448ed3966d )
+	rom ( name e35-25.030 size 262144 crc 0x8104de13 md5 a64d6ce68282462ce06a10707980cf52 sha1 e518fbaf91704cf5cb8ffbb4833e3adba8c18658 )
+	rom ( name e35-26.031 size 262144 crc 0x61821cc9 md5 ace8158a5f29774f78d2ac32f3fcc187 sha1 87cd5bd3bb22c9f4ca4b6d96f75434d48418321b )
+)
+
+game (
+	name "gprider"
+	description "GP Rider [sound only] [M1 v0.7.2]"
+	year "1990"
+	manufacturer "Sega"
+	rom ( name epr13388.bin size 65536 crc 0x706581e4 md5 47c13b07b33f483aca9c78eae5af3d26 sha1 51c9dbf2bf0d6b8826de24cd33596f5c95136870 )
+	rom ( name opr13389.bin size 131072 crc 0x4e4c758e md5 62000b02dad71e40dd424e8ab6fc997c sha1 181750dfcdd6d5b28b063c980c251991163d9474 )
+	rom ( name opr13390.bin size 131072 crc 0x8c93cd05 md5 26da18d369f44f581bda80fb30a0a299 sha1 bb08094abac6c104eddf14f634e9791f03122946 )
+	rom ( name opr13391.bin size 131072 crc 0x8c30c867 md5 809395811c011076730078b05769f14e sha1 0d735291b1311890938f8a1143fae6af9feb2a69 )
+)
+
+game (
+	name "gt97"
+	description "Golden Tee Golf '97 [sound only] [M1 v0.7.2]"
+	year "1997"
+	manufacturer "Incredible Technologies"
+	rom ( name gt97_s1.bin size 524288 crc 0x9fc8d818 md5 678cb578d23cbf72deec43b26665029b sha1 61c0bf2807b1ca8db123cc236f83543b6b33ac0b )
+	rom ( name gt97nr.u88 size 131072 crc 0x2cee9e98 md5 ffb07e422db94a602fb965e01593ba68 sha1 02edac7abab2335c1cd824d1d9b26aa32238a2de )
+	rom ( name gt97s0.bin size 1048576 crc 0xf4c9eebb md5 2ea87cf31d960a786d3a6bfae00a1e05 sha1 7e765fb894706b30c1bbd4353e921e7a456cf521 )
+)
+
+game (
+	name hmcompm2
+	description "Hiphopmania complete MIX 2 [DJMAME 08-07-2003]"
+	year 2000
+	manufacturer "Konami"
+	cloneof bmcompm2
+	romof bmcompm2
+	rom ( name 988uaa01.6a size 524288 crc 0x5e5cc6c0 sha1 0e7cd601d4543715cbc9f65e6fd48837179c962a )
+	rom ( name 988uaa02.8a size 524288 crc 0xe262984a sha1 f47662e40f91f2addb1a4b649923c1d0ee017341 )
+	rom ( name 988uaa03.19a size 524288 crc 0xd0f204c8 sha1 866baac5a6d301d5b9cf0c14e9937ee5f435db77 )
+	rom ( name 988uaa04.20a size 524288 crc 0x74c6b3ed sha1 7d9b064bab3f29fc6435f6430c71208abbf9d861 )
+	rom ( name 988uaa05.22a size 524288 crc 0x6b9321cb sha1 449e5f85288a8c6724658050fa9521c7454a1e46 )
+	rom ( name 988uaa06.24a size 524288 crc 0xda6e0c1e sha1 4ef37db6c872bccff8c27fc53cccc0b269c7aee4 )
+	rom ( name 988uaa07.22d size 524288 crc 0x9217870d sha1 d0536a8a929c41b49cdd053205165bfb8150e0c5 )
+	rom ( name 988uaa08.23d size 524288 crc 0x77777e59 sha1 33b5508b961a04b82c9967a3326af6bbd838b85e )
+	rom ( name 988uaa09.25d size 524288 crc 0xc2ad6810 sha1 706388c5acf6718297fd90e10f8a673463a0893b )
+	rom ( name 988uaa10.27d size 524288 crc 0xdab0f3c9 sha1 6fd899e753e32f60262c54ab8553c686c7ef28de )
+	disk ( name 988jaa11.chd md5 cc21d58d6bee58f1c4baf08f345fe2c5 )
+)
+
+game (
+	name hmcompmx
+	description "Hiphopmania complete MIX [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	cloneof bmcompmx
+	romof bmcompmx
+	rom ( name 858uaa03.19a size 524288 crc 0x52b51a5e sha1 9f01e2fcbe5a9d7f80b377c5e10f18da2c9dcc8e )
+	rom ( name 858uaa04.20a size 524288 crc 0xa336cee9 sha1 0e62c0c38d86868c909b4c1790fbb7ecb2de137d )
+	rom ( name 858uaa05.22a size 524288 crc 0x2e14cf83 sha1 799b2162f7b11678d1d260f7e1eb841abda55a60 )
+	rom ( name 858uaa06.24a size 524288 crc 0x2be07788 sha1 5cc2408f907ca6156efdcbb2c10a30e9b81797f8 )
+	rom ( name 858uaa07.22d size 524288 crc 0x9d7c8ea0 sha1 5ef773ade7ab12a5dc10484e8b7711c9d76fe2a1 )
+	rom ( name 858uaa08.23d size 524288 crc 0xf21c3f45 sha1 1d7ff2c4161605b382d07900142093192aa93a48 )
+	rom ( name 858uaa09.25d size 524288 crc 0x99519886 sha1 664f6bd953201a6e2fc123cb8b3facf72766107d )
+	rom ( name 858uaa10.27d size 524288 crc 0x20aa7145 sha1 eeff87eb9a9864985d751f45e843ee6e73db8cfd )
+	rom ( name 858uab01.6a size 524288 crc 0xf9c16675 sha1 f2b50a3544f43af6fd987256a8bd4125b95749ef )
+	rom ( name 858uab02.8a size 524288 crc 0x4e8f1e78 sha1 88d654de4377b584ff8a5e1f8bc81ffb293ec8a5 )
+	disk ( name 858jaa11.chd md5 e7b26f6f03f807a32b2e5e291324d582 )
+)
+
+game (
+	name "pdrift"
+	description "Power Drift [sound only] [M1 v0.7.2]"
+	year "1988"
+	manufacturer "Sega"
+	rom ( name 11754.bin size 524288 crc 0xebeb8484 md5 3a60a2abd9de0fa5fdc827c6fe0aa5a5 sha1 269f33cb1a9be126bada858e25291385d48686a2 )
+	rom ( name 11755.bin size 131072 crc 0x6ab0646e md5 6c87b5256270bab377fed3b33484223f sha1 1a02466e617644e0d7b0311297b2bd128829ba4e )
+)
+
+game (
+	name popn1
+	description "Pop'n Music 1 [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	rom ( name 803jaa01.6a size 524288 flags baddump crc 0xb5b5a6c1 sha1 45f57e7b3ca201355f0e0e9f607c3ad031eaf7f8 )
+	rom ( name 803jaa02.8a size 524288 flags baddump crc 0x27460aec sha1 e803553f643f982c59ed7485580b1b49cd9a9b9c )
+	rom ( name 803jaa03.19a size 524288 crc 0xd80315f6 sha1 070ea8d00aeecce1e357be5a9c434ef46f57a7e9 )
+	rom ( name 803jaa04.20a size 524288 crc 0xf7b9ac82 sha1 898fbe229a3fdea5988d46359d030c3ec35eaafd )
+	rom ( name 803jaa05.22a size 524288 flags baddump crc 0x2902f6df sha1 658ccae9a67196a310bd69870c350058d2911feb )
+	rom ( name 803jaa06.24a size 524288 flags baddump crc 0x508f326a sha1 a55c17f88b5856a754f00a6e32b6f60685a88bec )
+	rom ( name 803jaa07.22d size 524288 crc 0xb9c12071 sha1 8f67965d5c8e7c9bfac528a77a9e7c8e0d8b17c8 )
+	rom ( name 803jaa08.23d size 524288 crc 0xa263f819 sha1 b479a215282212e9253e4085640c0638a4036e31 )
+	rom ( name 803jaa09.25d size 524288 crc 0x0b8f22fa sha1 21df493dbe50520a784dc2a141de638926ea4be4 )
+	rom ( name 803jaa10.27d size 524288 crc 0x094c5cbc sha1 603417f2ca197731ccccbce9117bec8fcd2e8fa3 )
+	disk ( name 803jaa11.chd md5 54a8ac87857d81740621c622e27736d7 )
+)
+
+game (
+	name popn2
+	description "Pop'n Music 2 [DJMAME 08-07-2003]"
+	year 1998
+	manufacturer "Konami"
+	rom ( name 831jaa01.6a size 524288 crc 0xaabe8689 sha1 18e74c81710228c91ab9eb554b63d9bd69b93ec8 )
+	rom ( name 831jaa02.8a size 524288 crc 0xd6214cac sha1 d51d277e9b5d0233d1c6bdfec40c32587f84b31a )
+	rom ( name 831jaa03.19a size 524288 crc 0xa07aeb72 sha1 4d957c15d1b989e955249c34b0aa5679fb3e4fbf )
+	rom ( name 831jaa04.20a size 524288 crc 0x9277d1d2 sha1 6946845973f0ce15db383032343f6852873698eb )
+	rom ( name 831jaa05.22a size 524288 crc 0xf3b63033 sha1 c3c6de0d8c749ddf4926040637f03b11c2a21b99 )
+	rom ( name 831jaa06.24a size 524288 crc 0x43564e9c sha1 54b792b8aaf22876f9eb806e31b86af4b354bcf6 )
+	rom ( name 831jaa07.22d size 524288 crc 0x25af75f5 sha1 c150514a3bc6f3f88a5b98ef0db5440e2c5fec2d )
+	rom ( name 831jaa08.23d size 524288 crc 0x3b1b5629 sha1 95b6bed5c5218a3bfb10996cd9af31bd7e08c1c4 )
+	rom ( name 831jaa09.25d size 524288 crc 0xae7838d2 sha1 4f8a6793065c6c1eb08161f65b1d6246987bf47e )
+	rom ( name 831jaa10.27d size 524288 crc 0x85173cb6 sha1 bc4d86bf4654a9a0a58e624f77090854950f3993 )
+)
+
+game (
+	name popn3
+	description "Pop'n Music 3 [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	rom ( name 980jaa01.6a size 524288 crc 0xffd37d2c sha1 2a62ccfdb77a10356dbf08d6daa84faa3ff5d93a )
+	rom ( name 980jaa02.8a size 524288 crc 0x00b15e1b sha1 7725b244b2964952e52a266aff697a8632830c97 )
+	rom ( name 980jaa03.19a size 524288 crc 0x3674ba5b sha1 8741a43b099936c5f8add33d487b511c1ee8d21b )
+	rom ( name 980jaa04.20a size 524288 crc 0x32e8ca33 sha1 5aab1cb334e57667e146516125574f4f14676104 )
+	rom ( name 980jaa05.22a size 524288 crc 0xd31072e4 sha1 c23c0e21fb22fe82b9a76d28bf2896dfec6bdc9b )
+	rom ( name 980jaa06.24a size 524288 crc 0xd2bbcf36 sha1 4f44c5d8df5dabf2956bdf33739a97b0645b5a5d )
+	rom ( name 980jaa07.22d size 524288 crc 0x770732d0 sha1 f4330952d1e54658077e315ebd3cfd35e267219c )
+	rom ( name 980jaa08.23d size 524288 crc 0x64ba3895 sha1 3e4654c970d6fffe46b4e1097c1a6cda196ec92a )
+	rom ( name 980jaa09.25d size 524288 crc 0x1cb4d84e sha1 9669585c6a2825aeae6e47dd03458624b4c44721 )
+	rom ( name 980jaa10.27d size 524288 crc 0x7776b87e sha1 662b7cd7cb4fb8f8bab240ef543bf9a593e23a03 )
+	disk ( name 980jaa11.chd md5 6e5cc17a6bc75cac0256192cc700215c )
+)
+
+game (
+	name popnstex
+	description "Pop'n Stage EX [DJMAME 08-07-2003]"
+	year 1999
+	manufacturer "Konami"
+	rom ( name 970jba01.6a size 524288 crc 0x8fa0c957 sha1 12d1d6f15e19955c663ebdfcb16d5f6d209c0f76 )
+	rom ( name 970jba02.8a size 524288 crc 0x7adb00a0 sha1 70a86897ab6cbc3f34be51f7f078644de697e331 )
+	rom ( name 970jba03.19a size 524288 crc 0xe5d15d3c sha1 bdbd3c59e3377e071b199eea6cfb2ad84d37e971 )
+	rom ( name 970jba04.20a size 524288 crc 0x687f9beb sha1 6baac0aa2db3af9e34469b1719ccff3643fd85f7 )
+	rom ( name 970jba05.22a size 524288 crc 0x3bedc09c sha1 d0806bb54a3e620a987d61c6a5f04a2e1fc613a8 )
+	rom ( name 970jba06.24a size 524288 crc 0x1673a771 sha1 2768434f1c94543f69d40165e68d325ae5d553cd )
+	rom ( name 970jba07.22d size 524288 crc 0x6fd06bdb sha1 1dc621923e0871d2d5171753f5ddb97786ab12bd )
+	rom ( name 970jba08.23d size 524288 crc 0x28256891 sha1 2069f52d596acbf355f205bb8d69cefc4cce3542 )
+	rom ( name 970jba09.25d size 524288 crc 0x5d2bda52 sha1 d03c135ac04437b54e4d267ae168fe7ebb9e5b65 )
+	rom ( name 970jba10.27d size 524288 crc 0xedc4a245 sha1 30bbd7bf0299a064119c535abb9be69d725aa130 )
+	disk ( name 970jba11.chd md5 1616905838fdb2b521d53499c6c2a7a4 )
+)
+
+game (
+	name "puzloop2"
+	description "Puzz Loop 2 [sound only] [M1 v0.7.2]"
+	year "2001"
+	manufacturer "Mitchell"
+	rom ( name "pl2.s5" size 4194304 crc 43c5ff97 )
+)
+
+game (
+	name "raidendx"
+	description "Raiden DX [sound only] [M1 v0.7.2]"
+	year "1994"
+	manufacturer "Seibu Kaihatsu"
+	rom ( name dx-5.bin size 65536 crc 0x8c46857a md5 b9eb64c2121be006a4f58128a6c268a4 sha1 8b269cb20adf960ba4eb594d8add7739dbc9a837 )
+)
+
+game (
+	name "rushhero"
+	description "Rushing Heroes [sound only] [M1 v0.7.2]"
+	year "1997"
+	manufacturer "Konami"
+	rom ( name 605a06.9m size 131072 crc 0x9ca03dce md5 916ea18a9c3d6003c00d2e72c2e04757 sha1 008106e864d8390d7ae8645a2fe06d0eaaa746e0 )
+	rom ( name 605a07.7m size 131072 crc 0x3116a8b0 md5 e6de6f5e9147ce5b968764ada1fd34ba sha1 f0899d7027464d9aad45ffa6a464288a51a80dc1 )
+	rom ( name 605a23.7r size 4194304 crc 0x992c4751 md5 2888bcb6eeda141c41c86054e6db0eb1 sha1 18ecfc21138f9dc62f0658750808bbef649510f7 )
+)
+
+game (
+	name "scudrace"
+	description "Scud Race [sound only] [M1 v0.7.2]"
+	year "1996"
+	manufacturer "Sega"
+	rom ( name "epr19612.2" size 131072 crc 13978fd4 )
+	rom ( name "mp19603.57" size 2097152 crc b1b1765f )
+	rom ( name "mp19604.58" size 2097152 crc 6ac85b49 )
+	rom ( name "mp19605.59" size 2097152 crc bec891eb )
+	rom ( name "mp19606.60" size 2097152 crc adad46b2 )
+)
+
+game (
+	name "sfchamp"
+	description "Super Football Champ [sound only] [M1 v0.7.2]"
+	year "1996"
+	manufacturer "Taito"
+	rom ( name e18-01.15 size 2097152 crc 0xdbd1408c md5 58d6559780ecc033dc71a765054eb1f5 sha1 ef81064f2f95e5ae25eb1f10d1e78f27f9e294f5 )
+	rom ( name e18-09.22 size 131072 crc 0xbb5a5319 md5 bacad16dbed046e34cd62e7a4ce63512 sha1 0bb700cafc157d3af663cc9bebb8167487ff2852 )
+)
+
+game (
+	name "stcc"
+	description "Sega Touring Car Championship [sound only] [M1 v0.7.2]"
+	year "1996"
+	manufacturer "Sega"
+	rom ( name "sega-tc.u32" size 2097152 crc 643059fa )
+	rom ( name "sega-tc.u34" size 2097152 crc ae798313 )
+)
+
+game (
+	name lastrsrt
+	description "Last Resort [sound only] [Hoot]"
+	year 1992
+	manufacturer "SNK"
+	rom ( name n046001a.1f8 size 524288 crc 0x0722da38 md5 d2a6b5a0ab580b2e86d36cc1f168867b sha1 66a9b463d5277908b3a01c03de82b3de9118f2cb )
+	rom ( name n046001a.1fc size 524288 crc 0x670ce3ec md5 463fceb184c774dc37bac50dc338fe21 sha1 9004aa85d4a9b0ecf9cf9357b073ed55a98fdb02 )
+	rom ( name n046001b.1f8 size 524288 crc 0x2e39462b md5 c65ad0b3fa6bad8a3ad74639f77c4b31 sha1 b0a9b1a3377bf0369f3020192505c46ca52927d6 )
+	rom ( name n046001b.1fc size 524288 crc 0x7944754f md5 a1738cd090a4dea0c0687a5cb1d76b4c sha1 d42a46c5127c6c62041ebffb0007af8a24abd360 )
+)
+
+game (
+	name spmonaco
+	description "Super Monaco Gp [sound only] [Hoot]"
+	year 1989
+	manufacturer "Sega"
+	rom ( name epr12436.bin size 65536 crc 0x16ec5f0a md5 21f47e64f22dc8445bbc2db6c36fc8f9 sha1 307b7388b5c36fd4bc2a61f7941db44858e03c5c )
+	rom ( name epr12437.bin size 131072 crc 0xa1c7e712 md5 8518b8cf65ece64c367bbba09f47ad3b sha1 fa7fa8c39690ae5dab8b28af5aeed5ffae2cd6de )
+	rom ( name epr12438.bin size 131072 crc 0x6573d46b md5 7bd05a490afc0d0a859ba9ae97fffbfd sha1 c4a4a0ea35250eff28a5bfd5e9cd372f52fd1308 )
+	rom ( name epr12439.bin size 131072 crc 0x13bf6de5 md5 34d527b465c27a6c1f801a3e2f8fb526 sha1 92228a05ec33d606491a1da98c4989f69cddbb49 )
+)
+
+game (
+	name wrunsuzu
+	description "Winning Run Suzuka GP (Uininguran GP) [sound only] [Hoot]"
+	year 1989
+	manufacturer "Namco"
+	rom ( name wrt-snd0.bin size 131072 crc 0xde04b794 md5 3293c0b7c029b6a49c5bc32ff4f8a1b2 sha1 191f4d79ac2375d7060f3d83ec753185e92f28ea )
+	rom ( name wrt-voi1.bin size 524288 crc 0x7dcccb31 md5 f3b0d763eef197c1004be3ca32ea6833 sha1 4441b37691434b13eae5dee2d04dc12a56b04d2a )
+	rom ( name wrt-voi3.bin size 524288 crc 0xa198141c md5 cd863e4c258e219d8b5e69064ab8e362 sha1 b4ca352e6aedd9d7a7e5e39e840f1d3a7145900e )
+)
+
+game (
+	name skytargt
+	description "Sky Target [sound only] [Nebula Jukebox v2.5]"
+	year 1995
+	manufacturer "Sega"
+	rom ( name ep18408.30 size 524288 crc 0x6deb9657 md5 8c3cd35e61722d25067dfe32fabed26a sha1 30e1894432a0765c64b93dd5ca7ca17ef58ac6c0 )
+	rom ( name mp18421.37 size 2097152 crc 0x00522390 md5 4a1a5c94a8a6d0b81f02a76cb3460739 sha1 5dbbf2ba008adad36929fcecb7c2c1e5ffd12618 )
+	rom ( name mp18422.36 size 2097152 crc 0xb4f3cea6 md5 1bee68cccc18ec8a281eba782d39f7ae sha1 49669be09e10dfae7fddce0fc4e415466cb29566 )
+	rom ( name mp18423.32 size 2097152 crc 0xc356d765 md5 c19e9fef787087c44347cca46768721c sha1 ae69c9d4e333579d826178d2863156dc784aedef )
+	rom ( name mp18424.31 size 2097152 crc 0x590a4338 md5 b5346e9b6c8da6bc7e5b5f625d05991a sha1 826f167d7a4f5d30466b2f75f0123187c29c2d69 )
+)
+
+game (
+	name ki2_l11
+	description "Killer Instinct 2 (ROMs L1.1) [U64emu 3.05]"
+	year 1996
+	manufacturer "Nintendo/Rareware/Midway"
+	rom ( name ki2-l11.u98 size 524288 crc 0x0cb8de1e md5 6b4899050567a6dc193dd29ad8a963f5 sha1 fe447f4b1d29b524f57c5ba1890652ef6afff88a )
+)
+
+game (
+	name ki_l15d
+	description "Killer Instinct (ROM L1.5d) [U64emu 3.05]"
+	year 1994
+	manufacturer "Nintendo/Rareware/Midway"
+	rom ( name u98-l15d size 524288 crc 0x7b65ca3d md5 6a63e4bbdef8ea9f0d26f7244341ca08 sha1 607394d4ba1713f38c2cb5159303cace9cde991e )
+)
+
+game (
+	name anteater
+	description "Anteater [YAAME v0.3]"
+	year 1982
+	manufacturer "[Stern] (Tago license)"
+	rom ( name ra6-5f2 size 2048 crc 0x1e2824b1 md5 a9cac2cad1c5b4e67c743568e6cc807e sha1 9527937db618505181f4d5a22bc532977a767232 )
+	rom ( name ra6-5h2 size 2048 crc 0x784319b3 md5 0b0b1cb67098bbb68c6325a938ddbe68 sha1 0c3612a428d0906b07b35782cc0f84fda13aab73 )
+)
+
+game (
+	name "bace"
+	description "Balloon Ace (PacMan HW) [ESMame 0.69u3]"
+	year "2003"
+	manufacturer "D.Widel"
+	rom ( name "5e" size 4096 crc 6da99c7b )
+	rom ( name "5f" size 4096 crc b81cdc64 )
+	rom ( name "boot1" size 4096 crc 8b60ff7c )
+	rom ( name "boot2" size 4096 crc 25d8361a )
+	rom ( name "boot3" size 4096 crc fc38d994 )
+	rom ( name "boot4" size 4096 crc 5853f341 )
+	rom ( name "boot5" size 4096 crc f154670a )
+	rom ( name "boot6" size 4096 crc f154670a )
+)
+
+game (
+	name "dderby"
+	description "Death Derby (PacMan HW) [ESMame 0.69u3]"
+	year "2003"
+	manufacturer "D.Widel"
+	rom ( name "5e" size 4096 crc 7e2c0a53 )
+	rom ( name "5f" size 4096 crc cb2dd072 )
+	rom ( name "boot1" size 4096 crc 6f373bd4 )
+	rom ( name "boot2" size 4096 crc 2fbf16bf )
+	rom ( name "boot3" size 4096 crc 6e16cd16 )
+	rom ( name "boot4" size 4096 crc f7e09874 )
+	rom ( name "boot5" size 4096 crc f154670a )
+	rom ( name "boot6" size 4096 crc f154670a )
+)
+
+game (
+	name "mineswp"
+	description "Mine Sweeper (Dottori Kun hardware) [ESMame 0.69u3]"
+	year "1998"
+	manufacturer "J-Rom"
+	rom ( name "14479a.mpr" size 16384 crc 1cece483 )
+)
+
+game (
+	name "vantris"
+	description "Vantris (Vanguard hardware) [ESMame 0.69u3]"
+	year "1998"
+	manufacturer "N.Kehrer"
+	rom ( name "sk4_ic13.bin" size 4096 crc 1176fdb0 )
+	rom ( name "sk5_ic50.bin" size 2048 crc bdd86279 )
+)
+
+game (
+	name "airco22b"
+	description "Air Combat 22 [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "acs1ccrl.3d" size 2097152 crc 07088ba1 )
+	rom ( name "acs1cg0.8d" size 2097152 crc 1f31343e )
+	rom ( name "acs1cg1.10d" size 2097152 crc ccd5481d )
+	rom ( name "acs1cg2.12d" size 2097152 crc 14e5d0d2 )
+	rom ( name "acs1cg3.13d" size 2097152 crc 1a7bcc16 )
+	rom ( name "acs1cg4.14d" size 2097152 crc 1920b7fb )
+	rom ( name "acs1cg5.16d" size 2097152 crc 3dd109b7 )
+	rom ( name "acs1cg6.18d" size 2097152 crc ec71c8a3 )
+	rom ( name "acs1cg7.19d" size 2097152 crc 82271757 )
+	rom ( name "acs1data.8k" size 524288 crc 33824bc9 )
+	rom ( name "acs1scg0.12l" size 2097152 crc e5235404 )
+	rom ( name "acs1scg1.10l" size 2097152 crc 828e91e7 )
+	rom ( name "acs1verb.1" size 1048576 crc 062c4f61 )
+	rom ( name "acs1verb.2" size 1048576 crc 8ae69711 )
+	rom ( name "acs1verb.3" size 1048576 crc 71738e67 )
+	rom ( name "acs1verb.4" size 1048576 crc 3b193add )
+	rom ( name "acs1wav0.1" size 4194304 crc 52fb9762 )
+	rom ( name "acs1wav1.2" size 4194304 crc b568dca2 )
+	rom ( name "asc1ccrh.1d" size 524288 crc 62936af6 )
+	rom ( name "asc1ptl0.18k" size 524288 crc bd5896c7 )
+	rom ( name "asc1ptl1.16k" size 524288 crc e583b975 )
+	rom ( name "asc1ptl2.15k" size 524288 crc 802d737a )
+	rom ( name "asc1ptl3.14k" size 524288 crc fe556ecb )
+	rom ( name "asc1ptm0.18j" size 524288 crc 949b6c58 )
+	rom ( name "asc1ptm1.16j" size 524288 crc 8b2b99d9 )
+	rom ( name "asc1ptm2.15j" size 524288 crc f1515080 )
+	rom ( name "asc1ptm3.14j" size 524288 crc e364f4aa )
+	rom ( name "asc1ptu0.18f" size 524288 crc 746b3084 )
+	rom ( name "asc1ptu1.16f" size 524288 crc b44f1d3b )
+	rom ( name "asc1ptu2.15f" size 524288 crc fdd2d778 )
+	rom ( name "asc1ptu3.14f" size 524288 crc 38b425d4 )
+)
+
+game (
+	name "alpinerd"
+	description "Alpine Racer Ver. D [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "ar1datab.8k" size 524288 crc c26306f8 )
+	rom ( name "ar1wavea.2l" size 2097152 crc dbf64562 )
+)
+
+game (
+	name "cybrcomm"
+	description "Cyber Commando (Japan) [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "cy1data.6r" size 131072 crc 10d0005b )
+	rom ( name "cy1eeprm.9e" size 8192 crc 4e1d294b )
+	rom ( name "cy1prgll.4d" size 524288 crc b3eab156 )
+	rom ( name "cy1prglm.2d" size 524288 crc 884a5b0e )
+	rom ( name "cy1prgum.8d" size 524288 crc c9c4a921 )
+	rom ( name "cy1prguu.6d" size 524288 crc 5f22975b )
+	rom ( name "cy1wav0.10r" size 1048576 crc c6f366a2 )
+	rom ( name "cy1wav1.10p" size 1048576 crc f30b5e37 )
+	rom ( name "cy1wav2.10n" size 1048576 crc b98c1ca6 )
+	rom ( name "cy1wav3.10l" size 1048576 crc 43dbac19 )
+	rom ( name "cyc1ccrh.2c" size 524288 crc 8c4090b8 )
+	rom ( name "cyc1ccrl.1c" size 1048576 crc 1a0dc5f0 )
+	rom ( name "cyc1cg0.1a" size 2097152 crc e839b9bd )
+	rom ( name "cyc1cg1.2a" size 2097152 crc 7d13993f )
+	rom ( name "cyc1cg2.3a" size 2097152 crc 7c464566 )
+	rom ( name "cyc1cg3.5a" size 2097152 crc 2222e16f )
+	rom ( name "cyc1ptl0.5b" size 524288 crc d91de03d )
+	rom ( name "cyc1ptl1.4b" size 524288 crc e5b98021 )
+	rom ( name "cyc1ptl2.3b" size 524288 crc 7ba786c6 )
+	rom ( name "cyc1ptm0.5c" size 524288 crc d454b5c6 )
+	rom ( name "cyc1ptm1.4c" size 524288 crc 74fdf8cc )
+	rom ( name "cyc1ptm2.3c" size 524288 crc b9c99a45 )
+	rom ( name "cyc1ptu0.5d" size 524288 crc 4d40897f )
+	rom ( name "cyc1ptu1.4d" size 524288 crc 3bdaeeeb )
+	rom ( name "cyc1ptu2.3d" size 524288 crc a0e73674 )
+)
+
+game (
+	name "cybrcycc"
+	description "Cyber Cycles Ver. C (CB2Ver.C) [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "cb1ccrh.1d" size 524288 crc 86124b93 )
+	rom ( name "cb1ccrl.3d" size 2097152 crc 2f171c48 )
+	rom ( name "cb1cg0.12b" size 2097152 crc 762a47a0 )
+	rom ( name "cb1cg1.10d" size 2097152 crc df92c3e6 )
+	rom ( name "cb1cg2.12d" size 2097152 crc 07bc508e )
+	rom ( name "cb1cg3.13d" size 2097152 crc 50c86dea )
+	rom ( name "cb1cg4.14d" size 2097152 crc e93b8894 )
+	rom ( name "cb1cg5.16d" size 2097152 crc 9ee610a1 )
+	rom ( name "cb1cg6.18a" size 2097152 crc ddc3b5cc )
+	rom ( name "cb1datab.8k" size 524288 crc e2404221 )
+	rom ( name "cb1ptrl0.18k" size 524288 crc f1393a03 )
+	rom ( name "cb1ptrl1.16k" size 524288 crc 2ad51de7 )
+	rom ( name "cb1ptrl2.15k" size 524288 crc 78f77c0d )
+	rom ( name "cb1ptrl3.14k" size 524288 crc 804bfb4a )
+	rom ( name "cb1ptrm0.18j" size 524288 crc f4eece49 )
+	rom ( name "cb1ptrm1.16j" size 524288 crc 5f3cbd7d )
+	rom ( name "cb1ptrm2.15j" size 524288 crc 02c7e4af )
+	rom ( name "cb1ptrm3.14j" size 524288 crc ace3123b )
+	rom ( name "cb1ptru0.18f" size 524288 crc 58d35341 )
+	rom ( name "cb1ptru1.16f" size 524288 crc f4d005b0 )
+	rom ( name "cb1ptru2.15f" size 524288 crc 68ffcd50 )
+	rom ( name "cb1ptru3.14f" size 524288 crc d89c1c2b )
+	rom ( name "cb1scg0.12f" size 2097152 crc 7aaca90d )
+	rom ( name "cb1wavea.2l" size 4194304 crc b79a624d )
+	rom ( name "cb1waveb.1l" size 2097152 crc 33bf08f6 )
+	rom ( name "cb2ver-c.1" size 1048576 crc a8e07a14 )
+	rom ( name "cb2ver-c.2" size 1048576 crc 054c504f )
+	rom ( name "cb2ver-c.3" size 1048576 crc 47e6306c )
+	rom ( name "cb2ver-c.4" size 1048576 crc 398426e4 )
+)
+
+game (
+	name "raveracw"
+	description "Rave Racer (World) [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "rv1data.6r" size 524288 crc d358ec20 )
+	rom ( name "rv1wav0.10r" size 1048576 crc 5aef8143 )
+	rom ( name "rv1wav1.10p" size 1048576 crc 9ed9e6b3 )
+	rom ( name "rv1wav2.10n" size 1048576 crc 5af9dc83 )
+	rom ( name "rv1wav3.10l" size 1048576 crc ffb9ad75 )
+)
+
+game (
+	name "ridger2j"
+	description "Ridge Racer 2 (Japan) [MAME 0.70u4]"
+	year "1994"
+	manufacturer "Namco"
+	rom ( name "rrs1data.bin" size 524288 crc b7063aa8 )
+	rom ( name "rrs1wav0.bin" size 1048576 crc 99d11a2d )
+	rom ( name "rrs1wav1.bin" size 1048576 crc ad28444a )
+	rom ( name "rrs1wav2.bin" size 1048576 crc 6f0d4619 )
+	rom ( name "rrs1wav3.bin" size 1048576 crc 106e761f )
+)
+
+game (
+	name "ridgeraj"
+	description "Ridge Racer (Japan [MAME 0.70u4])"
+	year "1993"
+	manufacturer "Namco"
+	rom ( name "rr1-data.bin" size 524288 crc 18f5f748 )
+	rom ( name "rr1-wav.0" size 1048576 crc a8e85bde )
+	rom ( name "rr1-wav.1" size 1048576 crc 35f47c8e )
+	rom ( name "rr1-wav.2" size 1048576 crc 3244cb59 )
+	rom ( name "rr1-wav.3" size 1048576 crc c4cda1a7 )
+)
+
+game (
+	name "timecris"
+	description "Time Crisis [MAME 0.70u4]"
+	year "1995"
+	manufacturer "Namco"
+	rom ( name "ts2ver-a.1" size 2097152 crc d57eb74b )
+	rom ( name "ts2ver-a.2" size 2097152 crc 671588af )
+)
+
+game (
+	name "victlapw"
+	description "Ace Driver: Victory Lap (World) [MAME 0.70u4]"
+	year "1996"
+	manufacturer "Namco"
+	rom ( name "adv1data.6r" size 524288 crc 10eecdb4 )
+	rom ( name "adv1wav0.10r" size 1048576 crc f07b2d9d )
+	rom ( name "adv1wav1.10p" size 1048576 crc 737f3c7a )
+	rom ( name "adv1wav2.10n" size 1048576 crc c1a5ca5e )
+	rom ( name "adv1wav3.10l" size 1048576 crc fc6b8004 )
+)
+
+game (
+	name 8ballact
+	description "Eight Ball Action (DK conversion) [MAME 0.72u1]"
+	year 1984
+	manufacturer "Seatongrove Ltd (Magic Eletronics USA licence)"
+	rom ( name 8b-dk.3n size 2048 crc 0x44830867 sha1 29d34792b9193edcdac427367c360d6f01e1e094 )
+	rom ( name 8b.2e size 256 crc 0xc7379a12 sha1 e128e7d7c71ec61b934651c29648d0d2fc69e306 )
+	rom ( name 8b.2f size 256 crc 0x116612b4 sha1 9a7c5329f211b13d5a757fdac761d7096d78b65a )
+	rom ( name 8b.2n size 256 crc 0x30586988 sha1 a9c246fd01cb3ff371ad33b55d5b2fe4898c4d1b )
+)
+
+game (
+	name 8ballat2
+	description "Eight Ball Action (DKJr conversion) [MAME 0.72u1]"
+	year 1984
+	manufacturer "Seatongrove Ltd (Magic Eletronics USA licence)"
+	rom ( name 8b-jr.3h size 4096 crc 0x7f5c19fa sha1 9cde134137ee8e34bb745a72e67981c581561428 )
+	rom ( name 8b-jr.3n size 4096 crc 0x9ec0edac sha1 ffa1ae2236995527d72917c45be337f642134cf8 )
+	rom ( name 8b-jr.3p size 4096 crc 0x2978a88b sha1 15c21a3b3fb879996c13ce56791828e170c771d1 )
+	rom ( name 8b-jr.5b size 8192 crc 0x579cd634 sha1 93d81539459f7198d8cbf05b3e66a40466aee2d9 )
+	rom ( name 8b-jr.5c size 8192 crc 0x9bccbe93 sha1 dec4e1d41e1df36359f205bf090c4290311e4141 )
+)
+
+game (
+	name asurabld
+	description "Asura Blade (Japan) [MAME 0.72u1]"
+	year 1998
+	manufacturer "Fuuki"
+	rom ( name bg1012.u22 size 4194304 crc 0xd717a0a1 sha1 007df309dc0650ca07e077b983a2b05730349d0b )
+	rom ( name bg1113.u23 size 4194304 crc 0x94338267 sha1 7848bc57cb0eac216100a508763451eb57a0a082 )
+	rom ( name bg2022.u25 size 4194304 crc 0xee312cd3 sha1 2ef9d51928d80375daf8e6b204bb66a8b9cbaee7 )
+	rom ( name bg2123.u24 size 4194304 crc 0x4acfc469 sha1 a98d06b967ebb3fa3b4c8aa3d7a05063ec981fb2 )
+	rom ( name map.u5 size 2097152 crc 0xe681155e sha1 458845b9c86df72685d92d0d4052aacc2fa7d1bd )
+	rom ( name pcm.u6 size 4194304 crc 0xac72225a sha1 8d16399ed34ac5bd69dbf43b2de2b0db9ac1c610 )
+	rom ( name pgm0.u4 size 524288 crc 0x68615497 sha1 de93751f151f195a863dc6fe83b6e7ed8f99430a )
+	rom ( name pgm1.u3 size 524288 crc 0x35104452 sha1 03cfd81429f8a945d5419c9750925bfa997d0607 )
+	rom ( name pgm2.u2 size 524288 crc 0x16b656ca sha1 5ffb551ce7dec462d3896f0fed693454496894bc )
+	rom ( name pgm3.u1 size 524288 crc 0x053e9758 sha1 c2754d3f0c607c81c8fa33b667b576eb0474fd0b )
+	rom ( name sp23.u14 size 4194304 crc 0x7df492eb sha1 30b88a3cd025ffc8c28fef06e0784755be37ef8e )
+	rom ( name sp45.u15 size 4194304 crc 0x1890f42a sha1 22254fe38fd83f4602a25e1ccba32df16edaf3f9 )
+	rom ( name sp67.u16 size 4194304 crc 0xa48f1ef0 sha1 bf8787f293793291a503af662d3738c007654726 )
+	rom ( name sp89.u17 size 4194304 crc 0x6b024362 sha1 8be5cc3c7306d28b75acd970bb3be6d3c9825367 )
+	rom ( name spab.u18 size 4194304 crc 0x803d2d8c sha1 25df30689e576a0620656c721d92bcc3fbd84844 )
+	rom ( name spcd.u19 size 4194304 crc 0x42e5c26e sha1 b68875d353bdc5d49113bbac02fd83508bce66a5 )
+	rom ( name srom.u7 size 524288 crc 0xbb1deb89 sha1 b1c70abddc0b9a88beb69a592376ff69a7e091eb )
+)
+
+game (
+	name gaia
+	description "Gaia Crusaders [MAME 0.72u1]"
+	year 1999
+	manufacturer "Noise Factory"
+	rom ( name bg1.989 size 4194304 crc 0x013a693d sha1 2cc5be6f47c13febed942e1c3167946efedc5f9b )
+	rom ( name bg2.995 size 4194304 crc 0x783cc62f sha1 8b6e4212688b53be5ecc29ff2d41fd43e7d0a420 )
+	rom ( name bg3.998 size 4194304 crc 0xbcd61d1c sha1 660a3b02a8c39e1117b00d0ad06f73221fef4ce8 )
+	rom ( name obj1.736 size 4194304 crc 0xf4f84e5d sha1 8f445dd7a5c8a996939c211e5aec5742121a6e7e )
+	rom ( name obj2.738 size 4194304 crc 0x15c2a9ce sha1 631eb2968395be86ef2403733e7d4ec769a013b9 )
+	rom ( name prg1.127 size 524288 crc 0x47b904b2 sha1 58b9b55f59cf00f70b690a0371096e86f4d723c2 )
+	rom ( name prg2.128 size 524288 crc 0x469b7794 sha1 502f855c51005a866900b19c3a0a170d9ea02392 )
+	rom ( name snd1.447 size 4194304 crc 0x92770a52 sha1 81f6835e1b45eb0f367e4586fdda92466f02edb9 )
+	rom ( name snd2.454 size 4194304 crc 0x329ae1cf sha1 0c5e5074a5d8f4fb85ab4893bc953f192dcb301a )
+	rom ( name snd3.455 size 4194304 crc 0x4048d64e sha1 5e4ec6d37e70484e2fcd04188385e79ef0b53026 )
+)
+
+game (
+	name strtheat
+	description "Street Heat - Cardinal Amusements [MAME 0.72u1]"
+	year 1985
+	manufacturer "Epos Corporation"
+	rom ( name 2716.3h size 2048 crc 0x4cd17174 sha1 5ed9b5275b0779d1ca05d6e62d3ad8a682ebde37 )
+	rom ( name 2716.3n size 2048 crc 0x29e57678 sha1 cbbb980c44c7f5c45d5f0b85209658f53b7ba4a7 )
+	rom ( name 2716.3p size 2048 crc 0x31171146 sha1 e26b22e73b528810b566b2b9f6d81e2d7856523d )
+	rom ( name 2716.7c size 2048 crc 0xa8238e9c sha1 947bbe48ce1c705ef974e37b138929f1c846ed79 )
+	rom ( name 2716.7d size 2048 crc 0x71202138 sha1 b4edc77ed2844ef46aee4a492282e4785bdb7224 )
+	rom ( name 2716.7e size 2048 crc 0xdc7785ac sha1 4ccb3f9f938fd1d9bd20f1601a16a2780c84588b )
+	rom ( name 2716.7f size 2048 crc 0xede71d86 sha1 0bce1b1d4180173537685a08055ce44b9dedc76a )
+	rom ( name 2764.u2 size 8192 crc 0x8d3e82c3 sha1 ec26fb1c6015721da1f61eca76a4b3390d8dcc76 )
+	rom ( name 2764.u3 size 8192 crc 0xf0759e76 sha1 e086f02d1861269194c4cd2ada71696b48ed1a1d )
+	rom ( name 82s129.2e size 256 crc 0x1311ba28 sha1 d9b5bc07c8943d83592833e8b1c2ff57e4accb55 )
+	rom ( name 82s129.2f size 256 crc 0x18d90d4f sha1 b956fd652dcc5eb50eaec8729762d19cfd475bc7 )
+	rom ( name 82s129.2n size 256 crc 0xa515d59b sha1 930616c4bcd819c2a4432a6619a8c6da74f3e8c5 )
+)
+
+game (
+	name wc90t
+	description "Tecmo World Cup '90 (trackball) [MAME 0.72u1]"
+	year 1989
+	manufacturer "Tecmo"
+	rom ( name wc90a-1.bin size 32768 crc 0xb6f51a68 sha1 - )
+	rom ( name wc90a-2.bin size 65536 crc 0xc50f2a98 sha1 - )
+	rom ( name wc90a-3.bin size 65536 crc 0x8c7a9542 sha1 - )
+)
+
+

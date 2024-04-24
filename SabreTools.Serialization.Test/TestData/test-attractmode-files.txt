@@ -1,0 +1,12 @@
+#Romname;Title;Emulator;Cloneof;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons;Favourite;Tags;PlayedCount;PlayedTime;FileIsAvailable
+005;005;advmame;;1981;Sega;Maze / Shooter Small;2P alt;270;joystick (4-way),joystick (4-way);imperfect;1;raster;;;;1;;;0;;1
+alpine;Alpine Ski (set 1);advmame;;1982;Taito Corporation;Sports / Skiing;2P alt;270;joystick (2-way),joystick (2-way);good;1;raster;;;;1;;;0;;1
+amidar;Amidar;advmame;;1982;Konami;Maze / Outline;2P alt;90;joystick (4-way),joystick (4-way);good;1;raster;;;;1;;;0;;1
+anteater;Anteater;advmame;;1982;Tago Electronics;Maze / Collect;2P alt;90;joystick (4-way);good;1;raster;;;;1;;;0;;1
+armorcar;Armored Car (set 1);advmame;;1981;Stern Electronics;Maze / Collect;2P alt;90;joystick (4-way),joystick (4-way);good;1;raster;;;;2;;;0;;1
+assault;Assault (Rev B);advmame;;1988;Namco;Shooter / Driving;1P;90;double joystick (4-way),double joystick (4-way);good;1;raster;;;;1;;;0;;1
+astrob;Astro Blaster (version 3);advmame;;1981;Sega;Shooter / Gallery;2P alt;270;joystick (2-way),joystick (2-way);imperfect;1;raster;;;;2;;;0;;1
+astrof;Astro Fighter (set 1);advmame;;1979;Data East;Shooter / Gallery;2P alt;90;joystick (2-way),joystick (2-way);imperfect;1;raster;;;;1;;;0;;1
+attckufo;Attack UFO;advmame;;1980;Ryoto Electric Co.;Shooter / Gallery;2P alt;270;joystick (2-way),joystick (2-way);good;1;raster;;;;1;;;0;;1
+bagman;Bagman;advmame;;1982;Valadon Automation;Platform / Run Jump;2P alt;270;joystick (4-way),joystick (4-way);good;1;raster;;;;1;;;0;;1
+ballbomb;Balloon Bomber;advmame;;1980;Taito;Shooter / Gallery;2P alt;270;joystick (2-way),joystick (2-way);imperfect;1;raster;;;;1;;;0;;1

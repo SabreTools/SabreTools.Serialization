@@ -1,0 +1,8 @@
+ROMs required for driver "game".
+Name                                   Size Checksum
+diskname                                    SHA1(a257c456d31681068ed5caa1f1fb2b51da4826db)
+baddisk                                     BAD SHA1(abcdc456d31681068ed5caa1f1fb2b51da4826db) BAD_DUMP
+goodrom.bin                            2048 CRC(8f68533e) SHA1(b257c556d31691068ed5c991f1fb2b51da4826db)
+missingdisk                                 NO GOOD DUMP KNOWN
+badrom.bin                               32 BAD CRC(000000b0) SHA1(bb0bb62365402543e3154b9a77be9c75010e6abc) BAD_DUMP
+missingrom.bin                          108 NO GOOD DUMP KNOWN

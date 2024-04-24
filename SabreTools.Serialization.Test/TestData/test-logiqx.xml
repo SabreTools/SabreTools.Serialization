@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE datafile PUBLIC "-//Logiqx//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+
+<datafile build="1.0" debug="yes">
+	<header>
+		<name>Internal DAT Name</name>
+		<description>Internal DAT Name</description>
+		<rootdir>root</rootdir>
+		<category>Games</category>
+		<version>1.0</version>
+		<date>1900-01-01</date>
+		<author>Unknown</author>
+		<email>email@email.email</email>
+		<homepage>localhost</homepage>
+		<url>127.0.0.1</url>
+		<comment>Not real data, sorry</comment>
+		<type>SuperDAT</type>
+		<clrmamepro header="match.xml" forcemerging="split" forcenodump="ignore" forcepacking="unzip" />
+		<romcenter plugin="arcade" rommode="split" biosmode="split" samplemode="split" lockrommode="no" lockbiosmode="no" locksamplemode="no" />
+	</header>
+
+	<dir name="topdir">
+		<machine name="game1" sourcefile="blah.c" board="newboard" rebuildto="game1" runnable="partial" cloneof="game2" romof="game2" sampleof="game2" isbios="yes" isdevice="no" ismechanical="yes" id="0001">
+			<comment>Not a real game, sorry</comment>
+			<description>Game! (Version 1)</description>
+			<year>1980</year>
+			<manufacturer>Manufacturer</manufacturer>
+			<publisher>Publisher</publisher>
+			<category>Games</category>
+			<category>Arcade</category>
+			<trurip>
+				<titleid>0001</titleid>
+				<publisher>Publisher</publisher>
+				<developer>Developer</developer>
+				<year>1980</year>
+				<genre>Action</genre>
+				<subgenre>Adventure</subgenre>
+				<ratings>5</ratings>
+				<score>100</score>
+				<players>4</players>
+				<enabled>Yes</enabled>
+				<crc>DEADBEEF</crc>
+				<source>Official</source>
+				<cloneof>game2</cloneof>
+				<relatedto>game3</relatedto>
+			</trurip>
+			<disk name="disk" md5="a41d8cd98f00b204e9800998ecf8427e" sha1="aa39a3ee5e6b4b0d3255bfef95601890afd80709" merge="disk2" status="good" />
+			<media name="media" md5="b41d8cd98f00b204e9800998ecf8427e" sha1="ba39a3ee5e6b4b0d3255bfef95601890afd80709" sha256="aa7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" spamsum="QXXY"/>
+			<rom name="rom.bin" size="1024" crc="deadbeef" md5="c41d8cd98f00b204e9800998ecf8427e" sha1="ca39a3ee5e6b4b0d3255bfef95601890afd80709" sha256="ca7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" sha384="ab00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7" sha512="cdaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f" spamsum="QXXZ" merge="rom2.bin" status="good" date="1980-01-01" inverted="true" mia="yes" />
+		</machine>
+		<game name="game2">
+			<archive name="archive" number="0001" clone="X" regparent="(PARENT)" region="World" langauges="Xx,Yy,Zz" />
+			<biosset name="biosset" description="Described" default="yes" />
+			<release name="release" region="World" Language="English" date="1900-01-01" default="yes" />
+		</game>
+	</dir>
+</datafile>

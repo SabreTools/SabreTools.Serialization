@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<dat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datas.xsd">
+	<configuration>
+		<datName>Internal DAT Name</datName>
+		<datVersion>1</datVersion>
+		<system>Arcade</system>
+		<screenshotsWidth>224</screenshotsWidth>
+		<screenshotsHeight>224</screenshotsHeight>
+		<infos>
+			<title visible="false" inNamingOption="true" default="false"/>
+			<location visible="true" inNamingOption="true" default="true"/>
+			<publisher visible="true" inNamingOption="true" default="true"/>
+			<sourceRom visible="true" inNamingOption="true" default="true"/>
+			<romSize visible="true" inNamingOption="true" default="true"/>
+			<releaseNumber visible="true" inNamingOption="true" default="false"/>
+			<imageNumber visible="true" inNamingOption="false" default="false"/>
+			<languageNumber visible="true" inNamingOption="true" default="false"/>
+			<comment visible="true" inNamingOption="true" default="false"/>
+			<romCRC visible="true" inNamingOption="true" default="false"/>
+			<im1CRC visible="false" inNamingOption="false" default="false"/>
+			<im2CRC visible="false" inNamingOption="false" default="false"/>
+			<languages visible="true" inNamingOption="true" default="true"/>
+		</infos>
+		<canOpen>
+			<extension>.bin</extension>
+			<extension>.rom</extension>
+		</canOpen>
+		<newDat>
+			<datVersionURL>127.0.0.1</datVersionURL>
+			<datURL fileName="DatName.zip">127.0.0.1/DatName.zip</datURL>
+			<imURL>127.0.0.1/img/</imURL>
+		</newDat>
+		<search>
+			<to value="location" default="true" auto="true"/>
+			<to value="romSize" default="true" auto="false">
+				<find operation="&lt;" value="524288">&lt; 4Mbits</find>
+				<find operation="=" value="524288">4Mbits</find>
+				<find operation="=" value="1048576">8Mbits</find>
+				<find operation="=" value="2097152">16Mbits</find>
+				<find operation="=" value="4194304">32Mbits</find>
+				<find operation="=" value="8388608">64Mbits</find>
+				<find operation="=" value="16777216">128Mbits</find>
+			</to>
+			<to value="languages" default="true" auto="true"/>
+		</search>
+		<romTitle>%u - %n</romTitle>
+	</configuration>
+	<games>
+		<game>
+			<imageNumber>1</imageNumber>
+			<releaseNumber>1</releaseNumber>
+			<title>Game! (Version 1)</title>
+			<saveType>Default</saveType>
+			<romSize>1024</romSize>
+			<publisher>Publisher</publisher>
+			<location>1</location>
+			<sourceRom>Source</sourceRom>
+			<language>256</language>
+			<files>
+				<romCRC extension=".bin">DEBEADEF</romCRC>
+			</files>
+			<im1CRC>deadbeef</im1CRC>
+			<im2CRC>beefdead</im2CRC>
+			<comment>Not a real release, sorry</comment>
+			<duplicateID>0</duplicateID>
+		</game>
+	</games>
+</dat>

@@ -1,0 +1,14 @@
+doscenter (
+    name "Internal DAT Name"
+    description "Internal DAT Name"
+    version "1.0"
+    date "1900-01-01"
+    author "Unknown"
+    homepage "127.0.0.1"
+    comment "Not real data, sorry"
+)
+
+game (
+    name "game1.zip"
+    file ( name "rom.bin" size 1024 crc DEADBEEF date 1980-01-01 12:00 )
+)
