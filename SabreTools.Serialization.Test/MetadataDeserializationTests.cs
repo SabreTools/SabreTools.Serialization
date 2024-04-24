@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Test
     /// Filenames that end in `-files` are real examples.
     /// All other files are artificial and may not fully represent real examples.
     /// </remarks>
-    public class DeserializationTests
+    public class MetadataDeserializationTests
     {
         [Theory]
         [InlineData("test-archivedotorg-files1.xml", 22)]

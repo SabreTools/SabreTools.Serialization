@@ -6,7 +6,7 @@ using Xunit;
 
 namespace SabreTools.Serialization.Test
 {
-    public class SerializationTests
+    public class MetadataSerializationTests
     {
         [Fact]
         public void OpenMSXSeserializeTest()
