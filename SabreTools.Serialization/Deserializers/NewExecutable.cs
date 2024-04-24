@@ -427,10 +427,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the imported-name table</param>
         /// <returns>Filled imported-name table on success, null on error</returns>
-        public static Dictionary<ushort, ImportedNameTableEntry?>? ParseImportedNameTable(Stream data, int endOffset)
+        public static Dictionary<ushort, ImportedNameTableEntry>? ParseImportedNameTable(Stream data, int endOffset)
         {
             // TODO: Use marshalling here instead of building
-            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry?>();
+            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
 
             while (data.Position < endOffset)
             {

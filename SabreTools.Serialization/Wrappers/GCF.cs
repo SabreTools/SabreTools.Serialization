@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
                         Encrypted = directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
 #endif
                     };
-                    var pathParts = new List<string> { directoryEntry.Name ?? string.Empty };
+                    var pathParts = new List<string> { this.Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
                     var blockEntries = new List<Models.GCF.BlockEntry?>();
 
                     // Traverse the parent tree
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Wrappers
                         if (parentDirectoryEntry == null)
                             break;
 
-                        pathParts.Add(parentDirectoryEntry.Name ?? string.Empty);
+                        pathParts.Add(this.Model.DirectoryNames![parentDirectoryEntry.NameOffset] ?? string.Empty);
                         index = parentDirectoryEntry.ParentIndex;
                     }
 

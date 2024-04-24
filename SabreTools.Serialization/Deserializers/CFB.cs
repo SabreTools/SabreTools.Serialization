@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             // TEMPORARY FIX FOR ASCII -> UNICODE
-            directoryEntry.Name = Encoding.Unicode.GetString(Encoding.ASCII.GetBytes(directoryEntry.Name));
+            directoryEntry.Name = Encoding.Unicode.GetString(Encoding.ASCII.GetBytes(directoryEntry.Name!));
 
             // Handle version 3 entries
             if (majorVersion == 3)
