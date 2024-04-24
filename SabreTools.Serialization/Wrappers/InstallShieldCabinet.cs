@@ -16,6 +16,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <summary>
+        /// Number of components in the cabinet set
+        /// </summary>
+        public int ComponentCount => Model.Components!.Length;
+
+        /// <summary>
+        /// Number of directories in the cabinet set
+        /// </summary>
+        public ushort DirectoryCount => Model.Descriptor!.DirectoryCount;
+
+        /// <summary>
+        /// Number of files in the cabinet set
+        /// </summary>
+        public uint FileCount => Model.Descriptor!.FileCount;
+
+        /// <summary>
+        /// Number of file groups in the cabinet set
+        /// </summary>
+        public int FileGroupCount => Model.FileGroups!.Length;
+
+        /// <summary>
         /// The major version of the cabinet
         /// </summary>
         public int MajorVersion
