@@ -19,41 +19,41 @@ namespace SabreTools.Serialization.Wrappers
                 case WrapperType.BDPlusSVM: return BDPlusSVM.Create(data);
                 case WrapperType.BFPK: return BFPK.Create(data);
                 case WrapperType.BSP: return BSP.Create(data);
-                //case SupportedFileType.BZip2: return BZip2.Create(data);
+                case WrapperType.BZip2: return null; // TODO: Implement wrapper
                 case WrapperType.CFB: return CFB.Create(data);
                 case WrapperType.CIA: return CIA.Create(data);
                 case WrapperType.Executable: return CreateExecutableWrapper(data);
                 case WrapperType.GCF: return GCF.Create(data);
-                //case SupportedFileType.GZIP: return GZIP.Create(data);
-                //case SupportedFileType.IniFile: return IniFile.Create(data);
-                //case SupportedFileType.InstallShieldArchiveV3: return InstallShieldArchiveV3.Create(data);
+                case WrapperType.GZIP: return null; // TODO: Implement wrapper
+                case WrapperType.IniFile: return null; // TODO: Implement wrapper
+                case WrapperType.InstallShieldArchiveV3: return null; // TODO: Implement wrapper
                 case WrapperType.InstallShieldCAB: return InstallShieldCabinet.Create(data);
-                //case SupportedFileType.LDSCRYPT: return LDSCRYPT.Create(data);
+                case WrapperType.LDSCRYPT: return null; // TODO: Implement wrapper
                 case WrapperType.MicrosoftCAB: return MicrosoftCabinet.Create(data);
-                //case SupportedFileType.MicrosoftLZ: return MicrosoftLZ.Create(data);
+                case WrapperType.MicrosoftLZ: return null; // TODO: Implement wrapper
                 case WrapperType.MoPaQ: return MoPaQ.Create(data);
                 case WrapperType.N3DS: return N3DS.Create(data);
                 case WrapperType.NCF: return NCF.Create(data);
                 case WrapperType.Nitro: return Nitro.Create(data);
                 case WrapperType.PAK: return PAK.Create(data);
                 case WrapperType.PFF: return PFF.Create(data);
-                //case SupportedFileType.PIC: return PIC.Create(data);
-                //case SupportedFileType.PKZIP: return PKZIP.Create(data);
+                case WrapperType.PIC: return PIC.Create(data);
+                case WrapperType.PKZIP: return null; // TODO: Implement wrapper
                 case WrapperType.PlayJAudioFile: return PlayJAudioFile.Create(data);
-                //case SupportedFileType.PlayJPlaylist: return PlayJPlaylist.Create(data);
+                case WrapperType.PlayJPlaylist: return PlayJPlaylist.Create(data);
                 case WrapperType.Quantum: return Quantum.Create(data);
-                //case SupportedFileType.RAR: return RAR.Create(data);
-                //case SupportedFileType.RealArcadeInstaller: return RealArcadeInstaller.Create(data);
-                //case SupportedFileType.RealArcadeMezzanine: return RealArcadeMezzanine.Create(data);
-                //case SupportedFileType.SevenZip: return SevenZip.Create(data);
-                //case SupportedFileType.SFFS: return SFFS.Create(data);
+                case WrapperType.RAR: return null; // TODO: Implement wrapper
+                case WrapperType.RealArcadeInstaller: return null; // TODO: Implement wrapper
+                case WrapperType.RealArcadeMezzanine: return null; // TODO: Implement wrapper
+                case WrapperType.SevenZip: return null; // TODO: Implement wrapper
+                case WrapperType.SFFS: return null; // TODO: Implement wrapper
                 case WrapperType.SGA: return SGA.Create(data);
-                //case SupportedFileType.TapeArchive: return TapeArchive.Create(data);
-                //case SupportedFileType.Textfile: return Textfile.Create(data);
+                case WrapperType.TapeArchive: return null; // TODO: Implement wrapper
+                case WrapperType.Textfile: return null; // TODO: Implement wrapper
                 case WrapperType.VBSP: return VBSP.Create(data);
                 case WrapperType.VPK: return VPK.Create(data);
                 case WrapperType.WAD: return WAD.Create(data);
-                //case SupportedFileType.XZ: return XZ.Create(data);
+                case WrapperType.XZ: return null; // TODO: Implement wrapper
                 case WrapperType.XZP: return XZP.Create(data);
                 default: return null;
             }
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to get an MS-DOS wrapper first
             var wrapper = MSDOS.Create(stream);
-            if (wrapper == null || !(wrapper is MSDOS msdos))
+            if (wrapper == null || wrapper is not MSDOS msdos)
                 return null;
 
             // Check for a valid new executable address
@@ -507,7 +507,7 @@ namespace SabreTools.Serialization.Wrappers
             // Shares an extension with INF setup information so it can't be used accurately
             // Blu-ray
             // if (extension.Equals("inf", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.AACSMediaKeyBlock;
+            //     return WrapperType.AACSMediaKeyBlock;
 
             // HD-DVD
             if (extension.Equals("aacs", StringComparison.OrdinalIgnoreCase))
@@ -532,7 +532,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Shares an extension with VBSP so it can't be used accurately
             // if (extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.BSP;
+            //     return WrapperType.BSP;
 
             #endregion
 
@@ -643,7 +643,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // CIA package -- Not currently supported
             // else if (extension.Equals("cia", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.N3DS;
+            //     return WrapperType.N3DS;
 
             #endregion
 
@@ -679,7 +679,7 @@ namespace SabreTools.Serialization.Wrappers
             // No extensions registered for PAK
             // Both PAK and Quantum share one extension
             // if (extension.Equals("pak", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.PAK;
+            //     return WrapperType.PAK;
 
             #endregion
 
@@ -793,7 +793,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Both PAK and Quantum share one extension
             // if (extension.Equals("pak", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.Quantum;
+            //     return WrapperType.Quantum;
 
             #endregion
 
@@ -881,7 +881,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Shares an extension with BSP so it can't be used accurately
             // if (extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.VBSP;
+            //     return WrapperType.VBSP;
 
             #endregion
 
@@ -889,7 +889,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Common extension so this cannot be used accurately
             // if (extension.Equals("vpk", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.VPK;
+            //     return WrapperType.VPK;
 
             #endregion
 
@@ -897,7 +897,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Common extension so this cannot be used accurately
             // if (extension.Equals("wad", StringComparison.OrdinalIgnoreCase))
-            //     return SupportedFileType.WAD;
+            //     return WrapperType.WAD;
 
             #endregion
 
