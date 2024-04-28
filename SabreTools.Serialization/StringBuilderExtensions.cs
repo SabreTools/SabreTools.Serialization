@@ -110,7 +110,6 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, string? value, string prefixString)
         {
-            value ??= string.Empty;
             string valueString = value ?? "[NULL]";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
