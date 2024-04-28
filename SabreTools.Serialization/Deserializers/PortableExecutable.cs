@@ -495,7 +495,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.Value = data.ReadUInt32();
                     entry.SectionNumber = data.ReadUInt16();
                     entry.SymbolType = (SymbolType)data.ReadUInt16();
-                    entry.StorageClass = (StorageClass)data.ReadByte();
+                    entry.StorageClass = (StorageClass)data.ReadByteValue();
                     entry.NumberOfAuxSymbols = data.ReadByteValue();
                     coffSymbolTable[i] = entry;
 
