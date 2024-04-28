@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
                 case WrapperType.PAK: return PAK.Create(data);
                 case WrapperType.PFF: return PFF.Create(data);
                 case WrapperType.PIC: return PIC.Create(data);
-                case WrapperType.PKZIP: return null; // TODO: Implement wrapper
+                case WrapperType.PKZIP: return PKZIP.Create(data);
                 case WrapperType.PlayJAudioFile: return PlayJAudioFile.Create(data);
                 case WrapperType.PlayJPlaylist: return PlayJPlaylist.Create(data);
                 case WrapperType.Quantum: return Quantum.Create(data);

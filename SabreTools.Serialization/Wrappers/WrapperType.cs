@@ -136,7 +136,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// PKWARE ZIP archive and derivatives
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         PKZIP,
 
         /// <summary>
