@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -50,8 +51,12 @@ namespace SabreTools.Serialization.Deserializers
             // Set a flag for ZIP64 not found by default
             bool zip64 = false;
 
-            // Process ZIP64 if we have the minimal set of indicators
-            if (eocdr.CentralDirectorySize == 0xFFFFFFFF
+            // Process ZIP64 if any fields are set to max value
+            if (eocdr.DiskNumber == 0xFFFF
+                || eocdr.StartDiskNumber == 0xFFFF
+                || eocdr.TotalEntriesOnDisk == 0xFFFF
+                || eocdr.TotalEntries == 0xFFFF
+                || eocdr.CentralDirectorySize == 0xFFFFFFFF
                 || eocdr.CentralDirectoryOffset == 0xFFFFFFFF)
             {
                 // Set the ZIP64 flag
@@ -138,6 +143,8 @@ namespace SabreTools.Serialization.Deserializers
 
             #endregion
 
+            // TODO: Handle digital signature -- immediately following central directory records
+
             #region Archive Extra Data Record
 
             // Find the archive extra data record
@@ -174,6 +181,14 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Get the local file header offset
                 long headerOffset = header.RelativeOffsetOfLocalHeader;
+                if (headerOffset == 0xFFFFFFFF && header.ExtraField != null)
+                {
+                    // TODO: Parse into a proper structure instead of this
+                    byte[] extraData = header.ExtraField;
+                    if (BitConverter.ToUInt16(extraData, 0) == 0x0001)
+                        headerOffset = BitConverter.ToInt64(extraData, 4);
+                }
+
                 if (headerOffset < 0 || headerOffset >= data.Length)
                     return null;
 
