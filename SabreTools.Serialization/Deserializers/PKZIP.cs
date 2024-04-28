@@ -138,13 +138,12 @@ namespace SabreTools.Serialization.Deserializers
 
             #endregion
 
-            // TODO: Handle ZIP64 data descriptors
             #region Local File
 
             // Setup all of the collections
             var localFileHeaders = new List<LocalFileHeader?>();
             var encryptionHeaders = new List<byte[]?>();
-            var fileData = new List<byte[]>();
+            var fileData = new List<byte[]>(); // TODO: Should this data be read here?
             var dataDescriptors = new List<DataDescriptor?>();
             var zip64DataDescriptors = new List<DataDescriptor64?>();
 
