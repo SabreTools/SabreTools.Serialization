@@ -11,7 +11,7 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="path">Path to open as a stream</param>
         /// <returns>Stream representing the file, null on error</returns>
-        public static Stream? OpenStream(string? path)
+        public static Stream? OpenStream(string? path, bool skipCompression = false)
         {
             try
             {
@@ -26,11 +26,11 @@ namespace SabreTools.Serialization
                 string ext = Path.GetExtension(path).TrimStart('.');
 
                 // Determine what we do based on the extension
-                if (string.Equals(ext, "gz", StringComparison.OrdinalIgnoreCase))
+                if (!skipCompression && string.Equals(ext, "gz", StringComparison.OrdinalIgnoreCase))
                 {
                     return new GZipStream(stream, CompressionMode.Decompress);
                 }
-                else if (string.Equals(ext, "zip", StringComparison.OrdinalIgnoreCase))
+                else if (!skipCompression && string.Equals(ext, "zip", StringComparison.OrdinalIgnoreCase))
                 {
                     // TODO: Support zip-compressed files
                     return null;
