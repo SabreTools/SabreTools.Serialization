@@ -54,6 +54,7 @@ namespace SabreTools.Serialization
                 Wrapper.PAK item => item.PrettyPrint(),
                 Wrapper.PFF item => item.PrettyPrint(),
                 Wrapper.PIC item => item.PrettyPrint(),
+                Wrapper.PKZIP item => item.PrettyPrint(),
                 Wrapper.PlayJAudioFile item => item.PrettyPrint(),
                 Wrapper.PlayJPlaylist item => item.PrettyPrint(),
                 Wrapper.PortableExecutable item => item.PrettyPrint(),
@@ -97,6 +98,7 @@ namespace SabreTools.Serialization
                 Wrapper.PAK item => item.ExportJSON(),
                 Wrapper.PFF item => item.ExportJSON(),
                 Wrapper.PIC item => item.ExportJSON(),
+                Wrapper.PKZIP item => item.ExportJSON(),
                 Wrapper.PlayJAudioFile item => item.ExportJSON(),
                 Wrapper.PlayJPlaylist item => item.ExportJSON(),
                 Wrapper.PortableExecutable item => item.ExportJSON(),
@@ -312,6 +314,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             PIC.Print(builder, item.Model);
+            return builder;
+        }
+        
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.PKZIP item)
+        {
+            var builder = new StringBuilder();
+            PKZIP.Print(builder, item.Model);
             return builder;
         }
 
