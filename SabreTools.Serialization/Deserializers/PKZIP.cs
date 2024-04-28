@@ -138,6 +138,26 @@ namespace SabreTools.Serialization.Deserializers
 
             #endregion
 
+            #region Archive Extra Data Record
+
+            // Find the archive extra data record
+            long aedrOffset = SearchForArchiveExtraDataRecord(data, cdrOffset);
+            if (aedrOffset >= 0 && aedrOffset < data.Length)
+            {
+                // Seek to the archive extra data record
+                data.Seek(aedrOffset, SeekOrigin.Begin);
+
+                // Read the archive extra data record
+                var aedr = ParseArchiveExtraDataRecord(data);
+                if (aedr == null)
+                    return null;
+
+                // Assign the archive extra data record
+                archive.ArchiveExtraDataRecord = aedr;
+            }
+
+            #endregion
+
             #region Local File
 
             // Setup all of the collections
@@ -260,7 +280,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             // TODO: Handle archive decryption header
-            // TODO: Handle archive extra data record
 
             return archive;
         }
@@ -465,6 +484,68 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return header;
+        }
+
+        /// <summary>
+        /// Search for the archive extra data record
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="centralDirectoryoffset">Offset to the first central directory record</param>
+        /// <returns>Position of the archive extra data record, -1 on error</returns>
+        public static long SearchForArchiveExtraDataRecord(Stream data, long centralDirectoryoffset)
+        {
+            // Cache the current offset
+            long current = data.Position;
+
+            // Seek to the minimum size of the record from the central directory
+            data.Seek(centralDirectoryoffset - 8, SeekOrigin.Begin);
+
+            // Attempt to find the end of central directory signature
+            while (data.Position > 0)
+            {
+                // Read the potential signature
+                uint possibleSignature = data.ReadUInt32();
+                if (possibleSignature == ArchiveExtraDataRecordSignature)
+                {
+                    long signaturePosition = data.Position - 4;
+                    data.Seek(current, SeekOrigin.Begin);
+                    return signaturePosition;
+                }
+
+                // Seek backward 5 bytes, if possible
+                data.Seek(-5, SeekOrigin.Current);
+            }
+
+            // No signature was found
+            data.Seek(current, SeekOrigin.Begin);
+            return -1;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an archive extra data record
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled archive extra data record on success, null on error</returns>
+        public static ArchiveExtraDataRecord? ParseArchiveExtraDataRecord(Stream data)
+        {
+            // TODO: Use marshalling here instead of building
+            var record = new ArchiveExtraDataRecord();
+
+            record.Signature = data.ReadUInt32();
+            if (record.Signature != ArchiveExtraDataRecordSignature)
+                return null;
+
+            record.ExtraFieldLength = data.ReadUInt32();
+            if (record.ExtraFieldLength > 0)
+            {
+                byte[] extraBytes = data.ReadBytes((int)record.ExtraFieldLength);
+                if (extraBytes.Length != record.ExtraFieldLength)
+                    return null;
+
+                record.ExtraFieldData = extraBytes;
+            }
+
+            return record;
         }
 
         /// <summary>
