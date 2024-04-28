@@ -309,6 +309,20 @@ namespace SabreTools.Serialization.Deserializers
                     return signaturePosition;
                 }
 
+                // If we find any other signature
+                switch (possibleSignature)
+                {
+                    case ArchiveExtraDataRecordSignature:
+                    case CentralDirectoryFileHeaderSignature:
+                    case DataDescriptorSignature:
+                    case DigitalSignatureSignature:
+                    case EndOfCentralDirectoryLocator64Signature:
+                    case EndOfCentralDirectoryRecord64Signature:
+                    case LocalFileHeaderSignature:
+                        data.Seek(current, SeekOrigin.Begin);
+                        return -1;
+                }
+
                 // Seek backward 5 bytes, if possible
                 data.Seek(-5, SeekOrigin.Current);
             }
@@ -375,6 +389,20 @@ namespace SabreTools.Serialization.Deserializers
                     long signaturePosition = data.Position - 4;
                     data.Seek(current, SeekOrigin.Begin);
                     return signaturePosition;
+                }
+
+                // If we find any other signature
+                switch (possibleSignature)
+                {
+                    case ArchiveExtraDataRecordSignature:
+                    case CentralDirectoryFileHeaderSignature:
+                    case DataDescriptorSignature:
+                    case DigitalSignatureSignature:
+                    case EndOfCentralDirectoryRecordSignature:
+                    case EndOfCentralDirectoryRecord64Signature:
+                    case LocalFileHeaderSignature:
+                        data.Seek(current, SeekOrigin.Begin);
+                        return -1;
                 }
 
                 // Seek backward 5 bytes, if possible
@@ -510,6 +538,20 @@ namespace SabreTools.Serialization.Deserializers
                     long signaturePosition = data.Position - 4;
                     data.Seek(current, SeekOrigin.Begin);
                     return signaturePosition;
+                }
+
+                // If we find any other signature
+                switch (possibleSignature)
+                {
+                    case CentralDirectoryFileHeaderSignature:
+                    case DataDescriptorSignature:
+                    case DigitalSignatureSignature:
+                    case EndOfCentralDirectoryLocator64Signature:
+                    case EndOfCentralDirectoryRecordSignature:
+                    case EndOfCentralDirectoryRecord64Signature:
+                    case LocalFileHeaderSignature:
+                        data.Seek(current, SeekOrigin.Begin);
+                        return -1;
                 }
 
                 // Seek backward 5 bytes, if possible
