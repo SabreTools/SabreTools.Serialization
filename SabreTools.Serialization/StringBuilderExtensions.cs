@@ -31,7 +31,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, sbyte? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X2})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, byte? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X2})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -51,7 +51,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, short? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X4})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, ushort? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X4})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, int? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X8})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -81,7 +81,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, uint? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X8})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, long? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X16})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, ulong? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X})";
+            string valueString = $"{value} (0x{value:X16})";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
