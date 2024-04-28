@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Process ZIP64 if we have the minimal set of indicators
             if (eocdr.CentralDirectorySize == 0xFFFFFFFF
-                && eocdr.CentralDirectoryOffset == 0xFFFFFFFF)
+                || eocdr.CentralDirectoryOffset == 0xFFFFFFFF)
             {
                 // Set the ZIP64 flag
                 zip64 = true;
