@@ -192,10 +192,10 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < localFileHeaders.Length; i++)
             {
                 var localFileHeader = localFileHeaders[i];
-                var encryptionHeader = encryptionHeaders != null && i < encryptionHeaders.Length - 1 ? encryptionHeaders[i] : null;
-                var fileDatum = fileData != null && i < fileData.Length - 1 ? fileData[i] : null;
-                var dataDescriptor = dataDescriptors != null && i < dataDescriptors.Length - 1 ? dataDescriptors[i] : null;
-                var zip64DataDescriptor = zip64DataDescriptors != null && i < zip64DataDescriptors.Length - 1 ? zip64DataDescriptors[i] : null;
+                var encryptionHeader = encryptionHeaders != null && i < encryptionHeaders.Length ? encryptionHeaders[i] : null;
+                var fileDatum = fileData != null && i < fileData.Length ? fileData[i] : null;
+                var dataDescriptor = dataDescriptors != null && i < dataDescriptors.Length ? dataDescriptors[i] : null;
+                var zip64DataDescriptor = zip64DataDescriptors != null && i < zip64DataDescriptors.Length ? zip64DataDescriptors[i] : null;
 
                 Print(builder, localFileHeader, encryptionHeader, fileDatum, dataDescriptor, zip64DataDescriptor, i);
             }
