@@ -127,6 +127,15 @@ namespace SabreTools.Serialization
             if (rsdsProgramDatabase.Signature != 0x53445352)
                 return null;
 
+#if NET20 || NET35 || NET40 || NET452 || NET462
+            // Convert ASCII string to UTF-8
+            if (rsdsProgramDatabase.PathAndFileName != null)
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(rsdsProgramDatabase.PathAndFileName);
+                rsdsProgramDatabase.PathAndFileName = Encoding.UTF8.GetString(bytes);
+            }
+#endif
+
             return rsdsProgramDatabase;
         }
 
