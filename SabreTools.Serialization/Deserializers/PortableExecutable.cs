@@ -1194,7 +1194,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read the data from the offset
                     offset = resourceDataEntry.DataRVA.ConvertVirtualAddress(sections);
-                    if (offset > 0 && resourceDataEntry.Size > 0)
+                    if (offset > 0 && resourceDataEntry.Size > 0 && offset + (int)resourceDataEntry.Size < data.Length)
                     {
                         data.Seek(offset, SeekOrigin.Begin);
                         resourceDataEntry.Data = data.ReadBytes((int)resourceDataEntry.Size);
