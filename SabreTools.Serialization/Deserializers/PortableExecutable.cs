@@ -1246,7 +1246,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 resourceDirectoryTable.Entries[totalEntryCount] = new ResourceDirectoryEntry
                 {
-                    Name = new ResourceDirectoryString { UnicodeString = Encoding.ASCII.GetBytes("HIDDEN RESOURCE") },
+                    Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
                     IntegerID = uint.MaxValue,
                     DataEntryOffset = (uint)data.Position,
                     DataEntry = new ResourceDataEntry

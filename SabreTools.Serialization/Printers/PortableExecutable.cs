@@ -964,7 +964,7 @@ namespace SabreTools.Serialization.Printers
 
                     var newTypes = new List<object>(types ?? []);
                     if (entry.Name?.UnicodeString != null)
-                        newTypes.Add(Encoding.UTF8.GetString(entry.Name.UnicodeString));
+                        newTypes.Add(Encoding.Unicode.GetString(entry.Name.UnicodeString));
                     else
                         newTypes.Add(entry.IntegerID);
 
