@@ -23,7 +23,7 @@ namespace Test
             }
 
             // Loop through the input paths
-            foreach (string inputPath in args)
+            foreach (string inputPath in options.InputPaths)
             {
 #if NETFRAMEWORK
                 PrintPathInfo(inputPath, false, options.Debug);
