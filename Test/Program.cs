@@ -81,12 +81,8 @@ namespace Test
                 stream.Seek(0, SeekOrigin.Begin);
 
                 // Get the file type
-                WrapperType ft = WrapperFactory.GetFileType(magic ?? []);
-                if (ft == WrapperType.UNKNOWN)
-                {
-                    string extension = Path.GetExtension(file).TrimStart('.');
-                    ft = WrapperFactory.GetFileType(extension);
-                }
+                string extension = Path.GetExtension(file).TrimStart('.');
+                WrapperType ft = WrapperFactory.GetFileType(magic ?? [], extension);
 
                 // Print out the file format
                 Console.WriteLine($"File format found: {ft}");
