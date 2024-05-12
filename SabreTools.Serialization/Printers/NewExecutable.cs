@@ -188,7 +188,7 @@ namespace SabreTools.Serialization.Printers
                         {
                             // TODO: If not integer type, print out name
                             var resource = entry.Resources[j];
-                            builder.AppendLine($"      Resource Entry {i}");
+                            builder.AppendLine($"      Resource Entry {j}");
                             if (resource == null)
                             {
                                 builder.AppendLine("      [NULL]");

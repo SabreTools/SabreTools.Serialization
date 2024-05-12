@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the segment table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.SegmentTableOffset;
+                + executableHeader.ResourceTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of resource table entries to read</param>
         /// <returns>Filled resource table on success, null on error</returns>
-        public static ResourceTable? ParseResourceTable(Stream data, int count)
+        public static ResourceTable? ParseResourceTable(Stream data, ushort count)
         {
             long initialOffset = data.Position;
 
@@ -270,13 +270,23 @@ namespace SabreTools.Serialization.Deserializers
             var resourceTable = new ResourceTable();
 
             resourceTable.AlignmentShiftCount = data.ReadUInt16();
-            resourceTable.ResourceTypes = new ResourceTypeInformationEntry[count];
-            for (int i = 0; i < resourceTable.ResourceTypes.Length; i++)
+            var resourceTypes = new List<ResourceTypeInformationEntry>();
+
+            for (int i = 0; i < count; i++)
             {
                 var entry = new ResourceTypeInformationEntry();
+
                 entry.TypeID = data.ReadUInt16();
                 entry.ResourceCount = data.ReadUInt16();
                 entry.Reserved = data.ReadUInt32();
+
+                // A zero type ID marks the end of the resource type information blocks.
+                if (entry.TypeID == 0)
+                {
+                    resourceTypes.Add(entry);
+                    break;
+                }
+
                 entry.Resources = new ResourceTypeResourceEntry[entry.ResourceCount];
                 for (int j = 0; j < entry.ResourceCount; j++)
                 {
@@ -287,20 +297,23 @@ namespace SabreTools.Serialization.Deserializers
 
                     entry.Resources[j] = resource;
                 }
-                resourceTable.ResourceTypes[i] = entry;
+                resourceTypes.Add(entry);
             }
+
+            resourceTable.ResourceTypes = [.. resourceTypes];
 
             // Get the full list of unique string offsets
             var stringOffsets = resourceTable.ResourceTypes
                 .Where(rt => rt != null)
-                .Where(rt => rt!.IsIntegerType() == false)
+                .Where(rt => !rt!.IsIntegerType() && rt!.TypeID != 0)
                 .Select(rt => rt!.TypeID)
                 .Union(resourceTable.ResourceTypes
-                    .Where(rt => rt != null)
+                    .Where(rt => rt != null && rt!.TypeID != 0)
                     .SelectMany(rt => rt!.Resources ?? [])
-                    .Where(r => r!.IsIntegerType() == false)
+                    .Where(r => !r!.IsIntegerType())
                     .Select(r => r!.ResourceID))
                 .Distinct()
+                .Where(o => o != 0)
                 .OrderBy(o => o)
                 .ToList();
 

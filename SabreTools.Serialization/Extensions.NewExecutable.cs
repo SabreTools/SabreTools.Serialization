@@ -9,13 +9,8 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource type information entry to check</param>
         /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
-        public static bool? IsIntegerType(this ResourceTypeInformationEntry entry)
+        public static bool IsIntegerType(this ResourceTypeInformationEntry entry)
         {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return null;
-
-            // If the highest order bit is set, it's an integer type
             return (entry.TypeID & 0x8000) != 0;
         }
 
@@ -24,13 +19,8 @@ namespace SabreTools.Serialization
         /// </summary>
         /// <param name="entry">Resource type resource entry to check</param>
         /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
-        public static bool? IsIntegerType(this ResourceTypeResourceEntry entry)
+        public static bool IsIntegerType(this ResourceTypeResourceEntry entry)
         {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return null;
-
-            // If the highest order bit is set, it's an integer type
             return (entry.ResourceID & 0x8000) != 0;
         }
 
@@ -41,10 +31,6 @@ namespace SabreTools.Serialization
         /// <returns>SegmentEntryType corresponding to the type</returns>
         public static SegmentEntryType GetEntryType(this EntryTableBundle entry)
         {
-            // We can't do anything with an invalid entry
-            if (entry == null)
-                return SegmentEntryType.Unused;
-
             // Determine the entry type based on segment indicator
             if (entry.SegmentIndicator == 0x00)
                 return SegmentEntryType.Unused;
