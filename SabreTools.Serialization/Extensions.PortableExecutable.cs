@@ -604,7 +604,11 @@ namespace SabreTools.Serialization
                 #region Class resource
 
                 currentOffset = offset;
-                ushort classResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort classResourceIdentifier;
+                if (offset >= entry.Data.Length)
+                    classResourceIdentifier = 0x0000;
+                else
+                    classResourceIdentifier = entry.Data.ReadUInt16(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -640,7 +644,11 @@ namespace SabreTools.Serialization
                 #region Title resource
 
                 currentOffset = offset;
-                ushort titleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort titleResourceIdentifier;
+                if (offset >= entry.Data.Length)
+                    titleResourceIdentifier = 0x0000;
+                else
+                    titleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -900,7 +908,7 @@ namespace SabreTools.Serialization
                 if (menuHeaderExtended == null)
                     return null;
 
-                menuResource.ExtendedMenuHeader = menuHeaderExtended;
+                menuResource.MenuHeader = menuHeaderExtended;
 
                 #endregion
 
@@ -929,7 +937,7 @@ namespace SabreTools.Serialization
                     }
                 }
 
-                menuResource.ExtendedMenuItems = [.. extendedMenuItems];
+                menuResource.MenuItems = [.. extendedMenuItems];
 
                 #endregion
             }
@@ -937,7 +945,7 @@ namespace SabreTools.Serialization
             {
                 #region Menu header
 
-                var menuHeader = entry.Data.ReadType<MenuHeader>(ref offset);
+                var menuHeader = entry.Data.ReadType<NormalMenuHeader>(ref offset);
                 if (menuHeader == null)
                     return null;
 
@@ -1076,21 +1084,9 @@ namespace SabreTools.Serialization
             // Loop through and add 
             while (offset < entry.Data.Length)
             {
-                ushort stringLength = entry.Data.ReadUInt16(ref offset);
-                if (stringLength == 0)
+                string? stringValue = entry.Data.ReadPrefixedUnicodeString(ref offset);
+                if (stringValue != null)
                 {
-                    stringTable[stringIndex++] = "[EMPTY]";
-                }
-                else
-                {
-                    if (stringLength * 2 > entry.Data.Length - offset)
-                    {
-                        Console.WriteLine($"{stringLength * 2} requested but {entry.Data.Length - offset} remains");
-                        stringLength = (ushort)((entry.Data.Length - offset) / 2);
-                    }
-
-                    string stringValue = Encoding.Unicode.GetString(entry.Data, offset, stringLength * 2);
-                    offset += stringLength * 2;
                     stringValue = stringValue.Replace("\n", "\\n").Replace("\r", newValue: "\\r");
                     stringTable[stringIndex++] = stringValue;
                 }

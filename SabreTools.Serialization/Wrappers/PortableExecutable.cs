@@ -1188,68 +1188,68 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     switch ((Models.PortableExecutable.ResourceType)resourceType)
                     {
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_CURSOR:
+                        case Models.PortableExecutable.ResourceType.RT_CURSOR:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_BITMAP:
+                        case Models.PortableExecutable.ResourceType.RT_BITMAP:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_ICON:
+                        case Models.PortableExecutable.ResourceType.RT_ICON:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_MENU:
+                        case Models.PortableExecutable.ResourceType.RT_MENU:
                             value = entry.AsMenu();
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_DIALOG:
+                        case Models.PortableExecutable.ResourceType.RT_DIALOG:
                             value = entry.AsDialogBox();
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_STRING:
+                        case Models.PortableExecutable.ResourceType.RT_STRING:
                             value = entry.AsStringTable();
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_FONTDIR:
+                        case Models.PortableExecutable.ResourceType.RT_FONTDIR:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_FONT:
+                        case Models.PortableExecutable.ResourceType.RT_FONT:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_ACCELERATOR:
+                        case Models.PortableExecutable.ResourceType.RT_ACCELERATOR:
                             value = entry.AsAcceleratorTableResource();
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_RCDATA:
+                        case Models.PortableExecutable.ResourceType.RT_RCDATA:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_MESSAGETABLE:
+                        case Models.PortableExecutable.ResourceType.RT_MESSAGETABLE:
                             value = entry.AsMessageResourceData();
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_GROUP_CURSOR:
+                        case Models.PortableExecutable.ResourceType.RT_GROUP_CURSOR:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_GROUP_ICON:
+                        case Models.PortableExecutable.ResourceType.RT_GROUP_ICON:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_VERSION:
+                        case Models.PortableExecutable.ResourceType.RT_VERSION:
                             _versionInfo = entry.AsVersionInfo();
                             value = _versionInfo;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_DLGINCLUDE:
+                        case Models.PortableExecutable.ResourceType.RT_DLGINCLUDE:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_PLUGPLAY:
+                        case Models.PortableExecutable.ResourceType.RT_PLUGPLAY:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_VXD:
+                        case Models.PortableExecutable.ResourceType.RT_VXD:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_ANICURSOR:
+                        case Models.PortableExecutable.ResourceType.RT_ANICURSOR:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_ANIICON:
+                        case Models.PortableExecutable.ResourceType.RT_ANIICON:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_HTML:
+                        case Models.PortableExecutable.ResourceType.RT_HTML:
                             value = entry.Data;
                             break;
-                        case SabreTools.Models.PortableExecutable.ResourceType.RT_MANIFEST:
+                        case Models.PortableExecutable.ResourceType.RT_MANIFEST:
                             _assemblyManifest = entry.AsAssemblyManifest();
                             value = _versionInfo;
                             break;
@@ -1335,7 +1335,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-        public SabreTools.Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
+        public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1360,7 +1360,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-        public SabreTools.Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
+        public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
             if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
@@ -1384,7 +1384,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the section to check for</param>
         /// <returns>Section data on success, null on error</returns>
-        public SabreTools.Models.PortableExecutable.SectionHeader? GetSection(int index)
+        public Models.PortableExecutable.SectionHeader? GetSection(int index)
         {
             // If we have no sections
             if (this.Model.SectionTable == null || !this.Model.SectionTable.Any())

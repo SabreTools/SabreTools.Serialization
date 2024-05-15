@@ -1120,79 +1120,67 @@ namespace SabreTools.Serialization.Printers
 
             if (menu.MenuHeader != null)
             {
-                builder.AppendLine(menu.MenuHeader.Version, $"{padding}Version");
-                builder.AppendLine(menu.MenuHeader.HeaderSize, $"{padding}Header size");
+                if (menu.MenuHeader is NormalMenuHeader normalMenuHeader)
+                {
+                    builder.AppendLine(normalMenuHeader.Version, $"{padding}Version");
+                    builder.AppendLine(normalMenuHeader.HeaderSize, $"{padding}Header size");
+                }
+                else if (menu.MenuHeader is MenuHeaderExtended menuHeaderExtended)
+                {
+                    builder.AppendLine(menuHeaderExtended.Version, $"{padding}Version");
+                    builder.AppendLine(menuHeaderExtended.Offset, $"{padding}Offset");
+                    builder.AppendLine(menuHeaderExtended.HelpID, $"{padding}Help ID");
+                }
+                else
+                {
+                    builder.AppendLine($"{padding}Menu header found, but malformed");
+                }
                 builder.AppendLine();
-                builder.AppendLine($"{padding}Menu items");
-                builder.AppendLine($"{padding}-------------------------");
-                if (menu.MenuItems == null || menu.MenuItems.Length == 0)
-                {
-                    builder.AppendLine($"{padding}No menu items");
-                    return;
-                }
-
-                for (int i = 0; i < menu.MenuItems.Length; i++)
-                {
-                    var menuItem = menu.MenuItems[i];
-                    builder.AppendLine($"{padding}Menu item {i}");
-                    if (menuItem == null)
-                    {
-                        builder.AppendLine($"{padding}  [NULL]");
-                        continue;
-                    }
-
-                    if (menuItem is NormalMenuItem normalMenuItem)
-                    {
-                        builder.AppendLine($"{padding}  Resource info: {normalMenuItem.NormalResInfo} (0x{normalMenuItem.NormalResInfo:X})");
-                        builder.AppendLine(normalMenuItem.NormalMenuText, $"{padding}  Menu text");
-                    }
-                    else if (menuItem is PopupMenuItem popupMenuItem)
-                    {
-                        builder.AppendLine($"{padding}  Item type: {popupMenuItem.PopupItemType} (0x{popupMenuItem.PopupItemType:X})");
-                        builder.AppendLine($"{padding}  State: {popupMenuItem.PopupState} (0x{popupMenuItem.PopupState:X})");
-                        builder.AppendLine(popupMenuItem.PopupID, $"{padding}  ID");
-                        builder.AppendLine($"{padding}  Resource info: {popupMenuItem.PopupResInfo} (0x{popupMenuItem.PopupResInfo:X})");
-                        builder.AppendLine(popupMenuItem.PopupMenuText, $"{padding}  Menu text");
-                    }
-                }
             }
-            else if (menu.ExtendedMenuHeader != null)
+
+            builder.AppendLine($"{padding}Menu items");
+            builder.AppendLine($"{padding}-------------------------");
+            if (menu.MenuItems == null || menu.MenuItems.Length == 0)
             {
-                builder.AppendLine(menu.ExtendedMenuHeader.Version, $"{padding}Version");
-                builder.AppendLine(menu.ExtendedMenuHeader.Offset, $"{padding}Offset");
-                builder.AppendLine(menu.ExtendedMenuHeader.HelpID, $"{padding}Help ID");
-                builder.AppendLine();
-                builder.AppendLine($"{padding}Menu items");
-                builder.AppendLine($"{padding}-------------------------");
-                if (menu.ExtendedMenuHeader.Offset == 0
-                    || menu.ExtendedMenuItems == null
-                    || menu.ExtendedMenuItems.Length == 0)
-                {
-                    builder.AppendLine($"{padding}No menu items");
-                    return;
-                }
-
-                for (int i = 0; i < menu.ExtendedMenuItems.Length; i++)
-                {
-                    var menuItem = menu.ExtendedMenuItems[i];
-
-                    builder.AppendLine($"{padding}Menu item {i}");
-                    if (menuItem == null)
-                    {
-                        builder.AppendLine($"{padding}  [NULL]");
-                        continue;
-                    }
-
-                    builder.AppendLine($"{padding}  Item type: {menuItem.ItemType} (0x{menuItem.ItemType:X})");
-                    builder.AppendLine($"{padding}  State: {menuItem.State} (0x{menuItem.State:X})");
-                    builder.AppendLine(menuItem.ID, $"{padding}  ID");
-                    builder.AppendLine($"{padding}  Flags: {menuItem.Flags} (0x{menuItem.Flags:X})");
-                    builder.AppendLine(menuItem.MenuText, $"{padding}  Menu text");
-                }
+                builder.AppendLine($"{padding}No menu items");
+                return;
             }
-            else
+
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                builder.AppendLine($"{padding}Menu resource found, but malformed");
+                var menuItem = menu.MenuItems[i];
+                builder.AppendLine($"{padding}Menu item {i}");
+                if (menuItem == null)
+                {
+                    builder.AppendLine($"{padding}  [NULL]");
+                    continue;
+                }
+
+                if (menuItem is NormalMenuItem normalMenuItem)
+                {
+                    builder.AppendLine($"{padding}  Resource info: {normalMenuItem.NormalResInfo} (0x{normalMenuItem.NormalResInfo:X})");
+                    builder.AppendLine(normalMenuItem.NormalMenuText, $"{padding}  Menu text");
+                }
+                else if (menuItem is PopupMenuItem popupMenuItem)
+                {
+                    builder.AppendLine($"{padding}  Item type: {popupMenuItem.PopupItemType} (0x{popupMenuItem.PopupItemType:X})");
+                    builder.AppendLine($"{padding}  State: {popupMenuItem.PopupState} (0x{popupMenuItem.PopupState:X})");
+                    builder.AppendLine(popupMenuItem.PopupID, $"{padding}  ID");
+                    builder.AppendLine($"{padding}  Resource info: {popupMenuItem.PopupResInfo} (0x{popupMenuItem.PopupResInfo:X})");
+                    builder.AppendLine(popupMenuItem.PopupMenuText, $"{padding}  Menu text");
+                }
+                else if (menuItem is MenuItemExtended menuItemExtended)
+                {
+                    builder.AppendLine($"{padding}  Item type: {menuItemExtended.ItemType} (0x{menuItemExtended.ItemType:X})");
+                    builder.AppendLine($"{padding}  State: {menuItemExtended.State} (0x{menuItemExtended.State:X})");
+                    builder.AppendLine(menuItemExtended.ID, $"{padding}  ID");
+                    builder.AppendLine($"{padding}  Flags: {menuItemExtended.Flags} (0x{menuItemExtended.Flags:X})");
+                    builder.AppendLine(menuItemExtended.MenuText, $"{padding}  Menu text");
+                }
+                else
+                {
+                    builder.AppendLine($"{padding}  Menu item found, but malformed");
+                }
             }
         }
 
