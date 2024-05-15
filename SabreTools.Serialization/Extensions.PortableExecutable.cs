@@ -1127,7 +1127,7 @@ namespace SabreTools.Serialization
                 versionInfo.Padding1 = entry.Data.ReadUInt16(ref offset);
 
             // Read fixed file info
-            if (versionInfo.ValueLength > 0)
+            if (versionInfo.ValueLength > 0 && offset + versionInfo.ValueLength <= entry.Data.Length)
             {
                 var fixedFileInfo = entry.Data.ReadType<FixedFileInfo>(ref offset);
 

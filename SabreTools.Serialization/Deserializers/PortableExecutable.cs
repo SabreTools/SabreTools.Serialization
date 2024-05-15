@@ -668,7 +668,7 @@ namespace SabreTools.Serialization.Deserializers
                 entry.CertificateType = (WindowsCertificateType)data.ReadUInt16();
 
                 int certificateDataLength = (int)(entry.Length - 8);
-                if (certificateDataLength > 0)
+                if (certificateDataLength > 0 && data.Position + certificateDataLength <= data.Length)
                     entry.Certificate = data.ReadBytes(certificateDataLength);
 
                 attributeCertificateTable.Add(entry);
@@ -1164,7 +1164,7 @@ namespace SabreTools.Serialization.Deserializers
                     var resourceDirectoryString = new ResourceDirectoryString();
 
                     resourceDirectoryString.Length = data.ReadUInt16();
-                    if (resourceDirectoryString.Length > 0)
+                    if (resourceDirectoryString.Length > 0 && data.Position + resourceDirectoryString.Length <= data.Length)
                         resourceDirectoryString.UnicodeString = data.ReadBytes(resourceDirectoryString.Length * 2);
 
                     entry.Name = resourceDirectoryString;

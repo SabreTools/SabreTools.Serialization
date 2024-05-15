@@ -67,7 +67,10 @@ namespace SabreTools.Serialization.Deserializers
 
             #region Archive Hashes
 
-            if (header?.Version == 2 && file.ExtendedHeader != null && file.ExtendedHeader.ArchiveHashLength > 0)
+            if (header?.Version == 2
+                && file.ExtendedHeader != null
+                && file.ExtendedHeader.ArchiveHashLength > 0
+                && data.Position + file.ExtendedHeader.ArchiveHashLength <= data.Length)
             {
                 // Create the archive hashes list
                 var archiveHashes = new List<ArchiveHash>();
@@ -218,7 +221,9 @@ namespace SabreTools.Serialization.Deserializers
 
             // Get the preload data pointer
             long preloadDataPointer = -1; int preloadDataLength = -1;
-            if (directoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE && directoryEntry.EntryLength > 0)
+            if (directoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE
+                && directoryEntry.EntryLength > 0
+                && data.Position + directoryEntry.EntryLength <= data.Length)
             {
                 preloadDataPointer = directoryEntry.EntryOffset;
                 preloadDataLength = (int)directoryEntry.EntryLength;
@@ -231,7 +236,9 @@ namespace SabreTools.Serialization.Deserializers
 
             // If we had a valid preload data pointer
             byte[]? preloadData = null;
-            if (preloadDataPointer >= 0 && preloadDataLength > 0)
+            if (preloadDataPointer >= 0
+                && preloadDataLength > 0
+                && data.Position + preloadDataLength <= data.Length)
             {
                 // Cache the current offset
                 long initialOffset = data.Position;

@@ -476,7 +476,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
                 byte[]? name = data.ReadBytes(entry.Length);
                 if (name != null)
@@ -810,7 +810,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ImportModuleNameTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
                 byte[]? name = data.ReadBytes(entry.Length);
                 if (name != null)
@@ -831,7 +831,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ImportModuleProcedureNameTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
                 byte[]? name = data.ReadBytes(entry.Length);
                 if (name != null)
@@ -862,7 +862,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new NonResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
                 byte[]? name = data.ReadBytes(entry.Length);
                 if (name != null)

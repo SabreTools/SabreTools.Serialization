@@ -368,7 +368,7 @@ namespace SabreTools.Serialization.Deserializers
             record.CentralDirectorySize = data.ReadUInt32();
             record.CentralDirectoryOffset = data.ReadUInt32();
             record.FileCommentLength = data.ReadUInt16();
-            if (record.FileCommentLength > 0)
+            if (record.FileCommentLength > 0 && data.Position + record.FileCommentLength <= data.Length)
             {
                 byte[] commentBytes = data.ReadBytes(record.FileCommentLength);
                 if (commentBytes.Length != record.FileCommentLength)
@@ -501,7 +501,7 @@ namespace SabreTools.Serialization.Deserializers
             header.ExternalFileAttributes = data.ReadUInt32();
             header.RelativeOffsetOfLocalHeader = data.ReadUInt32();
 
-            if (header.FileNameLength > 0)
+            if (header.FileNameLength > 0 && data.Position + header.FileNameLength <= data.Length)
             {
                 byte[] filenameBytes = data.ReadBytes(header.FileNameLength);
                 if (filenameBytes.Length != header.FileNameLength)
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 header.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
-            if (header.ExtraFieldLength > 0)
+            if (header.ExtraFieldLength > 0 && data.Position + header.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes(header.ExtraFieldLength);
                 if (extraBytes.Length != header.ExtraFieldLength)
@@ -517,7 +517,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 header.ExtraField = extraBytes;
             }
-            if (header.FileCommentLength > 0)
+            if (header.FileCommentLength > 0 && data.Position + header.FileCommentLength <= data.Length)
             {
                 byte[] commentBytes = data.ReadBytes(header.FileCommentLength);
                 if (commentBytes.Length != header.FileCommentLength)
@@ -593,7 +593,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             record.ExtraFieldLength = data.ReadUInt32();
-            if (record.ExtraFieldLength > 0)
+            if (record.ExtraFieldLength > 0 && data.Position + record.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes((int)record.ExtraFieldLength);
                 if (extraBytes.Length != record.ExtraFieldLength)
@@ -630,7 +630,7 @@ namespace SabreTools.Serialization.Deserializers
             header.FileNameLength = data.ReadUInt16();
             header.ExtraFieldLength = data.ReadUInt16();
 
-            if (header.FileNameLength > 0)
+            if (header.FileNameLength > 0 && data.Position + header.FileNameLength <= data.Length)
             {
                 byte[] filenameBytes = data.ReadBytes(header.FileNameLength);
                 if (filenameBytes.Length != header.FileNameLength)
@@ -638,7 +638,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 header.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
-            if (header.ExtraFieldLength > 0)
+            if (header.ExtraFieldLength > 0 && data.Position + header.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes(header.ExtraFieldLength);
                 if (extraBytes.Length != header.ExtraFieldLength)
