@@ -372,7 +372,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<ResidentNameTableEntry>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = ParseResidentNameTableEntry(data);
                 if (entry == null)
@@ -445,7 +445,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 ushort currentOffset = (ushort)data.Position;
                 var entry = ParseImportedNameTableEntry(data);
@@ -485,7 +485,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var entryTable = new List<EntryTableBundle>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = new EntryTableBundle();
                 entry.EntryCount = data.ReadByteValue();
@@ -524,7 +524,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var residentNameTable = new List<NonResidentNameTableEntry>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = ParseNonResidentNameTableEntry(data);
                 if (entry == null)

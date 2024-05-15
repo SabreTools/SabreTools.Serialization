@@ -703,7 +703,7 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var baseRelocationTable = new List<BaseRelocationBlock>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var baseRelocationBlock = new BaseRelocationBlock();
 
@@ -724,12 +724,12 @@ namespace SabreTools.Serialization.Deserializers
                     totalSize += 2;
                 }
 
-                baseRelocationBlock.TypeOffsetFieldEntries = typeOffsetFieldEntries.ToArray();
+                baseRelocationBlock.TypeOffsetFieldEntries = [.. typeOffsetFieldEntries];
 
                 baseRelocationTable.Add(baseRelocationBlock);
             }
 
-            return baseRelocationTable.ToArray();
+            return [.. baseRelocationTable];
         }
 
         /// <summary>
@@ -745,7 +745,7 @@ namespace SabreTools.Serialization.Deserializers
 
             var debugDirectoryTable = new List<DebugDirectoryEntry>();
 
-            while (data.Position < endOffset)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
                 var debugDirectoryEntry = data.ReadType<DebugDirectoryEntry>();
                 if (debugDirectoryEntry == null)
