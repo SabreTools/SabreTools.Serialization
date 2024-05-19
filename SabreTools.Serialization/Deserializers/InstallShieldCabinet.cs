@@ -489,7 +489,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (majorVersion >= 17)
                     fileGroup.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    fileGroup.Name = data.ReadNullTerminatedUnicodeString();
+                    fileGroup.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Seek back to the correct offset
