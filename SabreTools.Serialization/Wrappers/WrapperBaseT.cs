@@ -30,6 +30,11 @@ namespace SabreTools.Serialization.Wrappers
         protected DataSource _dataSource = DataSource.UNKNOWN;
 
         /// <summary>
+        /// Lock object for reading from the source
+        /// </summary>
+        private readonly object _streamDataLock = new();
+
+        /// <summary>
         /// Source byte array data
         /// </summary>
         /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.ByteArray"/></remarks>
@@ -193,11 +198,14 @@ namespace SabreTools.Serialization.Wrappers
                     break;
 
                 case DataSource.Stream:
-                    long currentLocation = _streamData!.Position;
-                    _streamData.Seek(position, SeekOrigin.Begin);
-                    sectionData = _streamData.ReadBytes(length);
-                    _streamData.Seek(currentLocation, SeekOrigin.Begin);
-                    break;
+                    lock (_streamDataLock)
+                    {
+                        long currentLocation = _streamData!.Position;
+                        _streamData.Seek(position, SeekOrigin.Begin);
+                        sectionData = _streamData.ReadBytes(length);
+                        _streamData.Seek(currentLocation, SeekOrigin.Begin);
+                        break;
+                    }
             }
 
             return sectionData;
