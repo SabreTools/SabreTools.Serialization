@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.InstallShieldArchiveV3;
 
@@ -114,7 +115,17 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled directory on success, null on error</returns>
         public static Models.InstallShieldArchiveV3.Directory? ParseDirectory(Stream data)
         {
-            return data.ReadType<Models.InstallShieldArchiveV3.Directory>();
+            var directory = new Models.InstallShieldArchiveV3.Directory();
+
+            directory.FileCount = data.ReadUInt16();
+            directory.ChunkSize = data.ReadUInt16();
+
+            // TODO: Is there any equivilent automatic type for UInt16-prefixed ANSI?
+            ushort nameLength = data.ReadUInt16();
+            byte[] nameBytes = data.ReadBytes(nameLength);
+            directory.Name = Encoding.ASCII.GetString(nameBytes);
+
+            return directory;
         }
 
         /// <summary>
