@@ -33,20 +33,22 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Don't scan the known header data as well
 
-                    // If the section table is missing
+                    // If any required pieces are missing
+                    if (this.Model.Stub?.Header == null)
+                        return [];
                     if (this.Model.SectionTable == null)
-                        return null;
+                        return [];
 
                     // Populate the raw header padding data based on the source
-                    uint headerStartAddress = this.Model.Stub?.Header?.NewExeHeaderAddr ?? 0;
+                    uint headerStartAddress = this.Model.Stub.Header.NewExeHeaderAddr;
                     uint firstSectionAddress = this.Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
-                        .Where(s => s != 0)
+                        .Where(s => s != 0 && s >= headerStartAddress)
                         .OrderBy(s => s)
-                        .First();
-                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
+                        .FirstOrDefault();
 
                     // Check if the header length is more than 0 before reading data
+                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
                     if (headerLength <= 0)
                         _headerPaddingData = [];
                     else 
@@ -73,20 +75,22 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Don't scan the known header data as well
 
-                    // If the section table is missing
+                    // If any required pieces are missing
+                    if (this.Model.Stub?.Header == null)
+                        return [];
                     if (this.Model.SectionTable == null)
-                        return null;
+                        return [];
 
-                    // Populate the raw header padding data based on the source
-                    uint headerStartAddress = this.Model.Stub?.Header?.NewExeHeaderAddr ?? 0;
+                    // Populate the header padding strings based on the source
+                    uint headerStartAddress = this.Model.Stub.Header.NewExeHeaderAddr;
                     uint firstSectionAddress = this.Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
-                        .Where(s => s != 0)
+                        .Where(s => s != 0 && s >= headerStartAddress)
                         .OrderBy(s => s)
-                        .First();
-                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
+                        .FirstOrDefault();
 
                     // Check if the header length is more than 0 before reading strings
+                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
                     if (headerLength <= 0)
                         _headerPaddingStrings = [];
                     else
