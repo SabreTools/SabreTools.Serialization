@@ -878,7 +878,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the debug data cached
             if (DebugData == null)
-                return Enumerable.Empty<object?>();
+                return [];
 
             var nb10Found = DebugData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.NB10ProgramDatabase)
@@ -904,7 +904,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (DebugData == null)
-                return Enumerable.Empty<byte[]?>();
+                return [];
 
             return DebugData.Select(r => r.Value)
                 .Select(b => b as byte[])
@@ -967,7 +967,7 @@ namespace SabreTools.Serialization.Wrappers
                     continue;
 
                 // If we have CodeView debug data, try to parse it
-                if (entry.DebugType == SabreTools.Models.PortableExecutable.DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
+                if (entry.DebugType == Models.PortableExecutable.DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
                 {
                     // Read the signature
                     int offset = 0;
@@ -1018,7 +1018,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-                return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource?>();
+                return [];
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
@@ -1039,7 +1039,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-                return Enumerable.Empty<Models.PortableExecutable.DialogBoxResource?>();
+                return [];
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
@@ -1072,7 +1072,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-                return Enumerable.Empty<Dictionary<int, string?>?>();
+                return [];
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as Dictionary<int, string?>)
@@ -1090,7 +1090,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-                return Enumerable.Empty<byte[]?>();
+                return [];
 
             return ResourceData.Where(kvp => kvp.Key.Contains(typeName))
                 .Select(kvp => kvp.Value as byte[])
@@ -1106,7 +1106,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
-                return Enumerable.Empty<byte[]?>();
+                return [];
 
             return ResourceData.Select(r => r.Value)
                 .Select(r => r as byte[])

@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.Wrappers
                 var nextSector = this.Model.FATSectorNumbers[(uint)lastSector!.Value];
 
                 // If we have an end of chain or free sector
-                if (nextSector == SabreTools.Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == SabreTools.Models.CFB.SectorNumber.FREESECT)
+                if (nextSector == Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == Models.CFB.SectorNumber.FREESECT)
                     break;
 
                 // Add the next sector to the list and replace the last sector
@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.Wrappers
                 var nextSector = this.Model.MiniFATSectorNumbers[(uint)lastSector!.Value];
 
                 // If we have an end of chain or free sector
-                if (nextSector == SabreTools.Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == SabreTools.Models.CFB.SectorNumber.FREESECT)
+                if (nextSector == Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == Models.CFB.SectorNumber.FREESECT)
                     break;
 
                 // Add the next sector to the list and replace the last sector
