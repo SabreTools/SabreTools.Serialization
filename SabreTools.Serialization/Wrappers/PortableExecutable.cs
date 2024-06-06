@@ -34,14 +34,14 @@ namespace SabreTools.Serialization.Wrappers
                     // TODO: Don't scan the known header data as well
 
                     // If any required pieces are missing
-                    if (this.Model.Stub?.Header == null)
+                    if (Model.Stub?.Header == null)
                         return [];
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return [];
 
                     // Populate the raw header padding data based on the source
-                    uint headerStartAddress = this.Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = this.Model.SectionTable
+                    uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
+                    uint firstSectionAddress = Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
                         .Where(s => s != 0 && s >= headerStartAddress)
                         .OrderBy(s => s)
@@ -76,14 +76,14 @@ namespace SabreTools.Serialization.Wrappers
                     // TODO: Don't scan the known header data as well
 
                     // If any required pieces are missing
-                    if (this.Model.Stub?.Header == null)
+                    if (Model.Stub?.Header == null)
                         return [];
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return [];
 
                     // Populate the header padding strings based on the source
-                    uint headerStartAddress = this.Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = this.Model.SectionTable
+                    uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
+                    uint firstSectionAddress = Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
                         .Where(s => s != 0 && s >= headerStartAddress)
                         .OrderBy(s => s)
@@ -112,21 +112,21 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sourceDataLock)
                 {
                     // If the section table is missing
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return null;
 
                     // If the address is missing
-                    if (this.Model.OptionalHeader?.AddressOfEntryPoint == null)
+                    if (Model.OptionalHeader?.AddressOfEntryPoint == null)
                         return null;
 
                     // If we have no entry point
-                    int entryPointAddress = (int)this.Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(this.Model.SectionTable);
+                    int entryPointAddress = (int)Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(Model.SectionTable);
                     if (entryPointAddress == 0)
                         return null;
 
                     // If the entry point matches with the start of a section, use that
                     int entryPointSection = FindEntryPointSectionIndex();
-                    if (entryPointSection >= 0 && this.Model.OptionalHeader.AddressOfEntryPoint == this.Model.SectionTable[entryPointSection]?.VirtualAddress)
+                    if (entryPointSection >= 0 && Model.OptionalHeader.AddressOfEntryPoint == Model.SectionTable[entryPointSection]?.VirtualAddress)
                         return GetSectionData(entryPointSection);
 
                     // If we already have cached data, just use that immediately
@@ -162,27 +162,27 @@ namespace SabreTools.Serialization.Wrappers
                         return -1;
 
                     // If the section table is missing
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return -1;
 
                     // If we have certificate data, use that as the end
-                    if (this.Model.OptionalHeader?.CertificateTable != null)
+                    if (Model.OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)this.Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in this.Model.SectionTable)
+                    foreach (var section in Model.SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -233,27 +233,27 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If the section table is missing
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return null;
 
                     // If we have certificate data, use that as the end
-                    if (this.Model.OptionalHeader?.CertificateTable != null)
+                    if (Model.OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)this.Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in this.Model.SectionTable)
+                    foreach (var section in Model.SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -311,27 +311,27 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If the section table is missing
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return null;
 
                     // If we have certificate data, use that as the end
-                    if (this.Model.OptionalHeader?.CertificateTable != null)
+                    if (Model.OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)this.Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in this.Model.SectionTable)
+                    foreach (var section in Model.SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -384,14 +384,14 @@ namespace SabreTools.Serialization.Wrappers
                         return _sectionNames;
 
                     // If there are no sections
-                    if (this.Model.SectionTable == null)
+                    if (Model.SectionTable == null)
                         return null;
 
                     // Otherwise, build and return the cached array
-                    _sectionNames = new string[this.Model.SectionTable.Length];
+                    _sectionNames = new string[Model.SectionTable.Length];
                     for (int i = 0; i < _sectionNames.Length; i++)
                     {
-                        var section = this.Model.SectionTable[i];
+                        var section = Model.SectionTable[i];
                         if (section == null)
                             continue;
 
@@ -422,12 +422,12 @@ namespace SabreTools.Serialization.Wrappers
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
 
-                    if (this.Model.Stub?.Header?.NewExeHeaderAddr == null)
+                    if (Model.Stub?.Header?.NewExeHeaderAddr == null)
                         return null;
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
-                    int lengthOfStubExecutableData = (int)this.Model.Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    int lengthOfStubExecutableData = (int)Model.Stub.Header.NewExeHeaderAddr - endOfStubHeader;
                     _stubExecutableData = ReadFromDataSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
@@ -450,8 +450,8 @@ namespace SabreTools.Serialization.Wrappers
                         return _debugData;
 
                     // If we have no resource table, just return
-                    if (this.Model.DebugTable?.DebugDirectoryTable == null
-                        || this.Model.DebugTable.DebugDirectoryTable.Length == 0)
+                    if (Model.DebugTable?.DebugDirectoryTable == null
+                        || Model.DebugTable.DebugDirectoryTable.Length == 0)
                         return null;
 
                     // Otherwise, build and return the cached dictionary
@@ -475,13 +475,13 @@ namespace SabreTools.Serialization.Wrappers
                         return _resourceData;
 
                     // If we have no resource table, just return
-                    if (this.Model.OptionalHeader?.ResourceTable == null
-                        || this.Model.OptionalHeader.ResourceTable.VirtualAddress == 0
-                        || this.Model.ResourceDirectoryTable == null)
+                    if (Model.OptionalHeader?.ResourceTable == null
+                        || Model.OptionalHeader.ResourceTable.VirtualAddress == 0
+                        || Model.ResourceDirectoryTable == null)
                         return null;
 
                     // Otherwise, build and return the cached dictionary
-                    ParseResourceDirectoryTable(this.Model.ResourceDirectoryTable, types: []);
+                    ParseResourceDirectoryTable(Model.ResourceDirectoryTable, types: []);
                     return _resourceData;
                 }
             }
@@ -599,15 +599,15 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>The internal version is either the file version, product version, or assembly version, in that order</remarks>
         public string? GetInternalVersion()
         {
-            string? version = this.FileVersion;
+            string? version = FileVersion;
             if (!string.IsNullOrEmpty(version))
                 return version!.Replace(", ", ".");
 
-            version = this.ProductVersion;
+            version = ProductVersion;
             if (!string.IsNullOrEmpty(version))
                 return version!.Replace(", ", ".");
 
-            version = this.AssemblyVersion;
+            version = AssemblyVersion;
             if (!string.IsNullOrEmpty(version))
                 return version;
 
@@ -949,13 +949,13 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseDebugTable()
         {
             // If there is no debug table
-            if (this.Model.DebugTable?.DebugDirectoryTable == null)
+            if (Model.DebugTable?.DebugDirectoryTable == null)
                 return;
 
             // Loop through all debug table entries
-            for (int i = 0; i < this.Model.DebugTable.DebugDirectoryTable.Length; i++)
+            for (int i = 0; i < Model.DebugTable.DebugDirectoryTable.Length; i++)
             {
-                var entry = this.Model.DebugTable.DebugDirectoryTable[i];
+                var entry = Model.DebugTable.DebugDirectoryTable[i];
                 if (entry == null)
                     continue;
 
@@ -1325,19 +1325,19 @@ namespace SabreTools.Serialization.Wrappers
         public int FindEntryPointSectionIndex()
         {
             // If the section table is missing
-            if (this.Model.SectionTable == null)
+            if (Model.SectionTable == null)
                 return -1;
 
             // If the address is missing
-            if (this.Model.OptionalHeader?.AddressOfEntryPoint == null)
+            if (Model.OptionalHeader?.AddressOfEntryPoint == null)
                 return -1;
 
             // If we don't have an entry point
-            if (this.Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(this.Model.SectionTable) == 0)
+            if (Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(Model.SectionTable) == 0)
                 return -1;
 
             // Otherwise, find the section it exists within
-            return this.Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(this.Model.SectionTable
+            return Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(Model.SectionTable
                 .Where(sh => sh != null)
                 .Cast<Models.PortableExecutable.SectionHeader>()
                 .ToArray());
@@ -1352,7 +1352,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1365,7 +1365,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Return the section
-            return this.Model.SectionTable[index];
+            return Model.SectionTable[index];
         }
 
         /// <summary>
@@ -1377,7 +1377,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1390,7 +1390,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Return the section
-            return this.Model.SectionTable[index];
+            return Model.SectionTable[index];
         }
 
         /// <summary>
@@ -1401,15 +1401,15 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetSection(int index)
         {
             // If we have no sections
-            if (this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= this.Model.SectionTable.Length)
+            if (index < 0 || index >= Model.SectionTable.Length)
                 return null;
 
             // Return the section
-            return this.Model.SectionTable[index];
+            return Model.SectionTable[index];
         }
 
         /// <summary>
@@ -1421,7 +1421,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1442,7 +1442,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetLastSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1462,19 +1462,19 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetSectionData(int index)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= this.Model.SectionTable.Length)
+            if (index < 0 || index >= Model.SectionTable.Length)
                 return null;
 
             // Get the section data from the table
-            var section = this.Model.SectionTable[index];
+            var section = Model.SectionTable[index];
             if (section == null)
                 return null;
 
-            uint address = section.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+            uint address = section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
             if (address == 0)
                 return null;
 
@@ -1507,7 +1507,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1528,7 +1528,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
@@ -1548,19 +1548,19 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetSectionStrings(int index)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || this.Model.SectionTable == null || !this.Model.SectionTable.Any())
+            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= this.Model.SectionTable.Length)
+            if (index < 0 || index >= Model.SectionTable.Length)
                 return null;
 
             // Get the section data from the table
-            var section = this.Model.SectionTable[index];
+            var section = Model.SectionTable[index];
             if (section == null)
                 return null;
 
-            uint address = section.VirtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+            uint address = section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
             if (address == 0)
                 return null;
 
@@ -1596,7 +1596,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetTableData(int index)
         {
             // If the table doesn't exist
-            if (this.Model.OptionalHeader == null || index < 0 || index > 16)
+            if (Model.OptionalHeader == null || index < 0 || index > 16)
                 return null;
 
             // Get the virtual address and size from the entries
@@ -1604,64 +1604,64 @@ namespace SabreTools.Serialization.Wrappers
             switch (index)
             {
                 case 1:
-                    virtualAddress = this.Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ExportTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ExportTable?.Size ?? 0;
                     break;
                 case 2:
-                    virtualAddress = this.Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ImportTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ImportTable?.Size ?? 0;
                     break;
                 case 3:
-                    virtualAddress = this.Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ResourceTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ResourceTable?.Size ?? 0;
                     break;
                 case 4:
-                    virtualAddress = this.Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ExceptionTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ExceptionTable?.Size ?? 0;
                     break;
                 case 5:
-                    virtualAddress = this.Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.CertificateTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.CertificateTable?.Size ?? 0;
                     break;
                 case 6:
-                    virtualAddress = this.Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
                     break;
                 case 7:
-                    virtualAddress = this.Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.Debug?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.Debug?.Size ?? 0;
                     break;
                 case 8: // Architecture Table
                     virtualAddress = 0;
                     size = 0;
                     break;
                 case 9:
-                    virtualAddress = this.Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.GlobalPtr?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.GlobalPtr?.Size ?? 0;
                     break;
                 case 10:
-                    virtualAddress = this.Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
                     break;
                 case 11:
-                    virtualAddress = this.Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
                     break;
                 case 12:
-                    virtualAddress = this.Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.BoundImport?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.BoundImport?.Size ?? 0;
                     break;
                 case 13:
-                    virtualAddress = this.Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
                     break;
                 case 14:
-                    virtualAddress = this.Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
                     break;
                 case 15:
-                    virtualAddress = this.Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
                     break;
                 case 16: // Reserved
                     virtualAddress = 0;
@@ -1670,11 +1670,11 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If there is  no section table
-            if (this.Model.SectionTable == null)
+            if (Model.SectionTable == null)
                 return null;
 
             // Get the physical address from the virtual one
-            uint address = virtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+            uint address = virtualAddress.ConvertVirtualAddress(Model.SectionTable);
             if (address == 0 || size == 0)
                 return null;
 
@@ -1704,7 +1704,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetTableStrings(int index)
         {
             // If the table doesn't exist
-            if (this.Model.OptionalHeader == null || index < 0 || index > 16)
+            if (Model.OptionalHeader == null || index < 0 || index > 16)
                 return null;
 
             // Get the virtual address and size from the entries
@@ -1712,64 +1712,64 @@ namespace SabreTools.Serialization.Wrappers
             switch (index)
             {
                 case 1:
-                    virtualAddress = this.Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ExportTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ExportTable?.Size ?? 0;
                     break;
                 case 2:
-                    virtualAddress = this.Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ImportTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ImportTable?.Size ?? 0;
                     break;
                 case 3:
-                    virtualAddress = this.Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ResourceTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ResourceTable?.Size ?? 0;
                     break;
                 case 4:
-                    virtualAddress = this.Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ExceptionTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ExceptionTable?.Size ?? 0;
                     break;
                 case 5:
-                    virtualAddress = this.Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.CertificateTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.CertificateTable?.Size ?? 0;
                     break;
                 case 6:
-                    virtualAddress = this.Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
                     break;
                 case 7:
-                    virtualAddress = this.Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.Debug?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.Debug?.Size ?? 0;
                     break;
                 case 8: // Architecture Table
                     virtualAddress = 0;
                     size = 0;
                     break;
                 case 9:
-                    virtualAddress = this.Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.GlobalPtr?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.GlobalPtr?.Size ?? 0;
                     break;
                 case 10:
-                    virtualAddress = this.Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
                     break;
                 case 11:
-                    virtualAddress = this.Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
                     break;
                 case 12:
-                    virtualAddress = this.Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.BoundImport?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.BoundImport?.Size ?? 0;
                     break;
                 case 13:
-                    virtualAddress = this.Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
                     break;
                 case 14:
-                    virtualAddress = this.Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
                     break;
                 case 15:
-                    virtualAddress = this.Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
-                    size = this.Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
+                    virtualAddress = Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
+                    size = Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
                     break;
                 case 16: // Reserved
                     virtualAddress = 0;
@@ -1778,11 +1778,11 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If there is  no section table
-            if (this.Model.SectionTable == null)
+            if (Model.SectionTable == null)
                 return null;
 
             // Get the physical address from the virtual one
-            uint address = virtualAddress.ConvertVirtualAddress(this.Model.SectionTable);
+            uint address = virtualAddress.ConvertVirtualAddress(Model.SectionTable);
             if (address == 0 || size == 0)
                 return null;
 

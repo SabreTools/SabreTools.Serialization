@@ -43,9 +43,9 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Get the archive count
-                int archiveCount = this.Model.DirectoryItems == null
+                int archiveCount = Model.DirectoryItems == null
                     ? 0
-                    : this.Model.DirectoryItems
+                    : Model.DirectoryItems
                         .Select(di => di?.DirectoryEntry)
                         .Select(de => de?.ArchiveIndex ?? 0)
                         .Where(ai => ai != HL_VPK_NO_ARCHIVE)

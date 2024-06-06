@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Wrappers
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
 
-            this.Model = model;
+            Model = model;
             _dataSource = DataSource.ByteArray;
             _byteArrayData = data;
             _byteArrayOffset = offset;
@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data.Length == 0 || !data.CanSeek || !data.CanRead)
                 throw new ArgumentOutOfRangeException(nameof(data));
 
-            this.Model = model;
+            Model = model;
             _dataSource = DataSource.Stream;
             _streamData = data;
         }

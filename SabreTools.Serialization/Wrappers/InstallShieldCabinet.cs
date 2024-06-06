@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                uint majorVersion = this.Model.CommonHeader?.Version ?? 0;
+                uint majorVersion = Model.CommonHeader?.Version ?? 0;
                 if (majorVersion >> 24 == 1)
                 {
                     majorVersion = (majorVersion >> 12) & 0x0F;

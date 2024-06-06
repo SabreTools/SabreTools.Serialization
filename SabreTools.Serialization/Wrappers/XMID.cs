@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var publisherIdentifier = this.Model.PublisherIdentifier;
+                var publisherIdentifier = Model.PublisherIdentifier;
                 if (string.IsNullOrEmpty(publisherIdentifier))
                     return "Unknown";
 
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var regionIdentifier = this.Model.RegionIdentifier;
+                var regionIdentifier = Model.RegionIdentifier;
                 if (Regions.ContainsKey(regionIdentifier))
                     return Regions[regionIdentifier];
 
@@ -51,12 +51,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the human-readable serial string
         /// </summary>
-        public string Serial => $"{this.Model.PublisherIdentifier}-{this.Model.GameID}";
+        public string Serial => $"{Model.PublisherIdentifier}-{Model.GameID}";
 
         /// <summary>
         /// Get the human-readable version string
         /// </summary>
-        public string Version => $"1.{this.Model.VersionNumber}";
+        public string Version => $"1.{Model.VersionNumber}";
 
         #endregion
 

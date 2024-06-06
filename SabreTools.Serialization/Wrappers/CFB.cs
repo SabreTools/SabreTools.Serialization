@@ -18,12 +18,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Normal sector size in bytes
         /// </summary>
-        public long SectorSize => (long)Math.Pow(2, this.Model.Header?.SectorShift ?? 0);
+        public long SectorSize => (long)Math.Pow(2, Model.Header?.SectorShift ?? 0);
 
         /// <summary>
         /// Mini sector size in bytes
         /// </summary>
-        public long MiniSectorSize => (long)Math.Pow(2, this.Model.Header?.MiniSectorShift ?? 0);
+        public long MiniSectorSize => (long)Math.Pow(2, Model.Header?.MiniSectorShift ?? 0);
 
         #endregion
 
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<Models.CFB.SectorNumber?>? GetFATSectorChain(Models.CFB.SectorNumber? startingSector)
         {
             // If we have an invalid sector
-            if (startingSector == null || startingSector < 0 || this.Model.FATSectorNumbers == null || (long)startingSector >= this.Model.FATSectorNumbers.Length)
+            if (startingSector == null || startingSector < 0 || Model.FATSectorNumbers == null || (long)startingSector >= Model.FATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Wrappers
                     break;
 
                 // Get the next sector from the lookup table
-                var nextSector = this.Model.FATSectorNumbers[(uint)lastSector!.Value];
+                var nextSector = Model.FATSectorNumbers[(uint)lastSector!.Value];
 
                 // If we have an end of chain or free sector
                 if (nextSector == Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == Models.CFB.SectorNumber.FREESECT)
@@ -188,7 +188,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<Models.CFB.SectorNumber?>? GetMiniFATSectorChain(Models.CFB.SectorNumber? startingSector)
         {
             // If we have an invalid sector
-            if (startingSector == null || startingSector < 0 || this.Model.MiniFATSectorNumbers == null || (long)startingSector >= this.Model.MiniFATSectorNumbers.Length)
+            if (startingSector == null || startingSector < 0 || Model.MiniFATSectorNumbers == null || (long)startingSector >= Model.MiniFATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
                     break;
 
                 // Get the next sector from the lookup table
-                var nextSector = this.Model.MiniFATSectorNumbers[(uint)lastSector!.Value];
+                var nextSector = Model.MiniFATSectorNumbers[(uint)lastSector!.Value];
 
                 // If we have an end of chain or free sector
                 if (nextSector == Models.CFB.SectorNumber.ENDOFCHAIN || nextSector == Models.CFB.SectorNumber.FREESECT)

@@ -26,16 +26,16 @@ namespace SabreTools.Serialization.Wrappers
                     return _files;
 
                 // If we don't have a required property
-                if (this.Model.DirectoryEntries == null || this.Model.DirectoryMapEntries == null || this.Model.BlockEntries == null)
+                if (Model.DirectoryEntries == null || Model.DirectoryMapEntries == null || Model.BlockEntries == null)
                     return null;
 
                 // Otherwise, scan and build the files
                 var files = new List<FileInfo>();
-                for (int i = 0; i < this.Model.DirectoryEntries.Length; i++)
+                for (int i = 0; i < Model.DirectoryEntries.Length; i++)
                 {
                     // Get the directory entry
-                    var directoryEntry = this.Model.DirectoryEntries[i];
-                    var directoryMapEntry = this.Model.DirectoryMapEntries[i];
+                    var directoryEntry = Model.DirectoryEntries[i];
+                    var directoryMapEntry = Model.DirectoryMapEntries[i];
                     if (directoryEntry == null || directoryMapEntry == null)
                         continue;
 
@@ -57,26 +57,26 @@ namespace SabreTools.Serialization.Wrappers
                         Encrypted = directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
 #endif
                     };
-                    var pathParts = new List<string> { this.Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
+                    var pathParts = new List<string> { Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
                     var blockEntries = new List<Models.GCF.BlockEntry?>();
 
                     // Traverse the parent tree
                     uint index = directoryEntry.ParentIndex;
                     while (index != 0xFFFFFFFF)
                     {
-                        var parentDirectoryEntry = this.Model.DirectoryEntries[index];
+                        var parentDirectoryEntry = Model.DirectoryEntries[index];
                         if (parentDirectoryEntry == null)
                             break;
 
-                        pathParts.Add(this.Model.DirectoryNames![parentDirectoryEntry.NameOffset] ?? string.Empty);
+                        pathParts.Add(Model.DirectoryNames![parentDirectoryEntry.NameOffset] ?? string.Empty);
                         index = parentDirectoryEntry.ParentIndex;
                     }
 
                     // Traverse the block entries
                     index = directoryMapEntry.FirstBlockIndex;
-                    while (index != this.Model.DataBlockHeader?.BlockCount)
+                    while (index != Model.DataBlockHeader?.BlockCount)
                     {
-                        var nextBlock = this.Model.BlockEntries[index];
+                        var nextBlock = Model.BlockEntries[index];
                         if (nextBlock == null)
                             break;
 
@@ -134,14 +134,14 @@ namespace SabreTools.Serialization.Wrappers
                     return _dataBlockOffsets;
 
                 // If we don't have a block count, offset, or size
-                if (this.Model.DataBlockHeader?.BlockCount == null || this.Model.DataBlockHeader?.FirstBlockOffset == null || this.Model.DataBlockHeader?.BlockSize == null)
+                if (Model.DataBlockHeader?.BlockCount == null || Model.DataBlockHeader?.FirstBlockOffset == null || Model.DataBlockHeader?.BlockSize == null)
                     return null;
 
                 // Otherwise, build the data block set
-                _dataBlockOffsets = new long[this.Model.DataBlockHeader.BlockCount];
-                for (int i = 0; i < this.Model.DataBlockHeader.BlockCount; i++)
+                _dataBlockOffsets = new long[Model.DataBlockHeader.BlockCount];
+                for (int i = 0; i < Model.DataBlockHeader.BlockCount; i++)
                 {
-                    long dataBlockOffset = this.Model.DataBlockHeader.FirstBlockOffset + (i * this.Model.DataBlockHeader.BlockSize);
+                    long dataBlockOffset = Model.DataBlockHeader.FirstBlockOffset + (i * Model.DataBlockHeader.BlockSize);
                     _dataBlockOffsets[i] = dataBlockOffset;
                 }
 

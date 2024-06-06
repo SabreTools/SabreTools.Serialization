@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                char mediaSubtype = this.Model.MediaSubtypeIdentifier;
+                char mediaSubtype = Model.MediaSubtypeIdentifier;
                 if (MediaSubtypes.ContainsKey(mediaSubtype))
                     return MediaSubtypes[mediaSubtype];
 
@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var publisherIdentifier = this.Model.PublisherIdentifier;
+                var publisherIdentifier = Model.PublisherIdentifier;
                 if (string.IsNullOrEmpty(publisherIdentifier))
                     return "Unknown";
 
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var regionIdentifier = this.Model.RegionIdentifier;
+                var regionIdentifier = Model.RegionIdentifier;
                 if (Regions.ContainsKey(regionIdentifier))
                     return Regions[regionIdentifier];
 
@@ -66,12 +66,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the human-readable serial string
         /// </summary>
-        public string Serial => $"{this.Model.PublisherIdentifier}-{this.Model.PlatformIdentifier}{this.Model.GameID}";
+        public string Serial => $"{Model.PublisherIdentifier}-{Model.PlatformIdentifier}{Model.GameID}";
 
         /// <summary>
         /// Get the human-readable version string
         /// </summary>
-        public string Version => $"1.{this.Model.SKU}";
+        public string Version => $"1.{Model.SKU}";
 
         #endregion
 

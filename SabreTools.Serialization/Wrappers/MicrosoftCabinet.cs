@@ -124,11 +124,11 @@ namespace SabreTools.Serialization.Wrappers
         public DateTime? GetDateTime(int fileIndex)
         {
             // If we have an invalid file index
-            if (fileIndex < 0 || this.Model.Files == null || fileIndex >= this.Model.Files.Length)
+            if (fileIndex < 0 || Model.Files == null || fileIndex >= Model.Files.Length)
                 return null;
 
             // Get the file header
-            var file = this.Model.Files[fileIndex];
+            var file = Model.Files[fileIndex];
             if (file == null)
                 return null;
 
