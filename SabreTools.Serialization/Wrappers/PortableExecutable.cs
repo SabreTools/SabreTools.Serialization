@@ -45,7 +45,12 @@ namespace SabreTools.Serialization.Wrappers
                         .OrderBy(s => s)
                         .First();
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
-                    _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
+
+                    // Check if the header length is more than 0 before reading data
+                    if (headerLength <= 0)
+                        _headerPaddingData = [];
+                    else 
+                        _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
 
                     // Cache and return the header padding data, even if null
                     return _headerPaddingData;
@@ -80,7 +85,12 @@ namespace SabreTools.Serialization.Wrappers
                         .OrderBy(s => s)
                         .First();
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
-                    _headerPaddingStrings = ReadStringsFromDataSource((int)headerStartAddress, headerLength, charLimit: 3);
+
+                    // Check if the header length is more than 0 before reading strings
+                    if (headerLength <= 0)
+                        _headerPaddingStrings = [];
+                    else
+                        _headerPaddingStrings = ReadStringsFromDataSource((int)headerStartAddress, headerLength, charLimit: 3);
 
                     // Cache and return the header padding data, even if null
                     return _headerPaddingStrings;
