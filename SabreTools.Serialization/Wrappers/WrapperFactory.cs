@@ -639,6 +639,21 @@ namespace SabreTools.Serialization.Wrappers
             if (magic.StartsWith(new byte?[] { 0x61, 0x4C, 0x75, 0x5A }))
                 return WrapperType.Textfile;
 
+            // InstallShield Compiled Installation Script (1993)
+            // http://justsolve.archiveteam.org/wiki/InstallShield_INS
+            if (magic.StartsWith(new byte?[] { 0xff, 0xff, 0x0c, 0x00, null, 0x00, 0x34, 0x12 }))
+                return WrapperType.Textfile;
+
+            // InstallShield Compiled Installation Script (1995)
+            // http://justsolve.archiveteam.org/wiki/InstallShield_INS
+            if (magic.StartsWith(new byte?[] { 0xb8, 0xc9, 0x0c, 0x00, null, 0x00, 0x34, 0x12 }))
+                return WrapperType.Textfile;
+
+            // InstallShield Compiled Installation Script (1997)
+            // http://justsolve.archiveteam.org/wiki/InstallShield_INS
+            if (magic.StartsWith(new byte?[] { 0xb8, 0xc9, 0x0c, 0x00, null, 0x00, 0x01, 0x00 }))
+                return WrapperType.Textfile;
+
             // Microsoft Office File (old)
             if (magic.StartsWith(new byte?[] { 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 }))
                 return WrapperType.Textfile;
