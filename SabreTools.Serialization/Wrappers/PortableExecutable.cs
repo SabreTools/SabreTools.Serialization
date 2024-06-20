@@ -962,9 +962,18 @@ namespace SabreTools.Serialization.Wrappers
                 uint address = entry.PointerToRawData;
                 uint size = entry.SizeOfData;
 
-                byte[]? entryData = ReadFromDataSource((int)address, (int)size);
-                if (entryData == null)
-                    continue;
+                // Read the entry data until we have the end of the stream
+                byte[]? entryData;
+                try
+                {
+                    entryData = ReadFromDataSource((int)address, (int)size);
+                    if (entryData == null || entryData.Length < 4)
+                        continue;
+                }
+                catch (EndOfStreamException)
+                {
+                    return;
+                }
 
                 // If we have CodeView debug data, try to parse it
                 if (entry.DebugType == Models.PortableExecutable.DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
