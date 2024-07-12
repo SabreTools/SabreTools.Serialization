@@ -254,7 +254,7 @@ namespace SabreTools.Serialization.Printers
             }
             if (header.DelayImportDescriptor != null)
             {
-                builder.AppendLine("    Delay Import Descriptior (14)");
+                builder.AppendLine("    Delay Import Descriptor (14)");
                 builder.AppendLine(header.DelayImportDescriptor.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.DelayImportDescriptor.Size, "      Size");
