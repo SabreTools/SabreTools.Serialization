@@ -131,6 +131,8 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.CVerVersionNumber, "  Version number of CVer in included update partition");
             builder.AppendLine(header.Reserved4, "  Reserved 4");
             builder.AppendLine();
+
+            Print(builder, header.InitialData);
         }
 
         private static void Print(StringBuilder builder, DevelopmentCardInfoHeader? header)
@@ -223,6 +225,96 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(header.TestData.Filled55, "  Filled with 55");
                 builder.AppendLine(header.TestData.FilledAA, "  Filled with AA");
                 builder.AppendLine(header.TestData.FinalByte, "  Final byte");
+            }
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, InitialData? id)
+        {
+            builder.AppendLine("    Initial Data Information:");
+            builder.AppendLine("    -------------------------");
+            if (id == null)
+            {
+                builder.AppendLine("    No initial data");
+                builder.AppendLine();
+                return;
+            }
+
+            builder.AppendLine(id.CardSeedKeyY, "    Card seed KeyY");
+            builder.AppendLine(id.EncryptedCardSeed, "    Encrypted card seed");
+            builder.AppendLine(id.CardSeedAESMAC, "    Card seed AES-MAC");
+            builder.AppendLine(id.CardSeedNonce, "    Card seed nonce");
+            builder.AppendLine(id.Reserved, "    Reserved");
+            builder.AppendLine();
+
+            PrintBackup(builder, id.BackupHeader);
+        }
+
+        private static void PrintBackup(StringBuilder builder, NCCHHeader? header)
+        {
+            builder.AppendLine("      Backup NCCH Header Information:");
+            builder.AppendLine("      -------------------------");
+            if (header == null)
+            {
+                builder.AppendLine("      No backup NCCH header");
+                builder.AppendLine();
+                return;
+            }
+
+            if (header.MagicID == string.Empty)
+            {
+                builder.AppendLine("      Empty backup header, no data can be parsed");
+            }
+            else if (header.MagicID != Constants.NCCHMagicNumber)
+            {
+                builder.AppendLine("      Unrecognized backup header, no data can be parsed");
+            }
+            else
+            {
+                // Backup header omits RSA signature
+                builder.AppendLine(header.MagicID, "      Magic ID");
+                builder.AppendLine(header.ContentSizeInMediaUnits, "      Content size in media units");
+                builder.AppendLine(header.PartitionId, "      Partition ID");
+                builder.AppendLine(header.MakerCode, "      Maker code");
+                builder.AppendLine(header.Version, "      Version");
+                builder.AppendLine(header.VerificationHash, "      Verification hash");
+                builder.AppendLine(header.ProgramId, "      Program ID");
+                builder.AppendLine(header.Reserved1, "      Reserved 1");
+                builder.AppendLine(header.LogoRegionHash, "      Logo region SHA-256 hash");
+                builder.AppendLine(header.ProductCode, "      Product code");
+                builder.AppendLine(header.ExtendedHeaderHash, "      Extended header SHA-256 hash");
+                builder.AppendLine(header.ExtendedHeaderSizeInBytes, "      Extended header size in bytes");
+                builder.AppendLine(header.Reserved2, "      Reserved 2");
+                builder.AppendLine("      Flags:");
+                if (header.Flags == null)
+                {
+                    builder.AppendLine("        [NULL]");
+                }
+                else
+                {
+                    builder.AppendLine(header.Flags.Reserved0, "        Reserved 0");
+                    builder.AppendLine(header.Flags.Reserved1, "        Reserved 1");
+                    builder.AppendLine(header.Flags.Reserved2, "        Reserved 2");
+                    builder.AppendLine($"        Crypto method: {header.Flags.CryptoMethod} (0x{header.Flags.CryptoMethod:X})");
+                    builder.AppendLine($"        Content platform: {header.Flags.ContentPlatform} (0x{header.Flags.ContentPlatform:X})");
+                    builder.AppendLine($"        Content type: {header.Flags.MediaPlatformIndex} (0x{header.Flags.MediaPlatformIndex:X})");
+                    builder.AppendLine(header.Flags.ContentUnitSize, "        Content unit size");
+                    builder.AppendLine($"        Bitmasks: {header.Flags.BitMasks} (0x{header.Flags.BitMasks:X})");
+                }
+                builder.AppendLine(header.PlainRegionOffsetInMediaUnits, "      Plain region offset, in media units");
+                builder.AppendLine(header.PlainRegionSizeInMediaUnits, "      Plain region size, in media units");
+                builder.AppendLine(header.LogoRegionOffsetInMediaUnits, "      Logo region offset, in media units");
+                builder.AppendLine(header.LogoRegionSizeInMediaUnits, "      Logo region size, in media units");
+                builder.AppendLine(header.ExeFSOffsetInMediaUnits, "      ExeFS offset, in media units");
+                builder.AppendLine(header.ExeFSSizeInMediaUnits, "      ExeFS size, in media units");
+                builder.AppendLine(header.ExeFSHashRegionSizeInMediaUnits, "      ExeFS hash region size, in media units");
+                builder.AppendLine(header.Reserved3, "      Reserved 3");
+                builder.AppendLine(header.RomFSOffsetInMediaUnits, "      RomFS offset, in media units");
+                builder.AppendLine(header.RomFSSizeInMediaUnits, "      RomFS size, in media units");
+                builder.AppendLine(header.RomFSHashRegionSizeInMediaUnits, "      RomFS hash region size, in media units");
+                builder.AppendLine(header.Reserved4, "      Reserved 4");
+                builder.AppendLine(header.ExeFSSuperblockHash, "      ExeFS superblock SHA-256 hash");
+                builder.AppendLine(header.RomFSSuperblockHash, "      RomFS superblock SHA-256 hash");
             }
             builder.AppendLine();
         }
@@ -455,7 +547,7 @@ namespace SabreTools.Serialization.Printers
                     }
                     else
                     {
-                        builder.AppendLine(entry.ACI.ARM9AccessControl.Descriptors, "        Descriptors");
+                        builder.AppendLine($"        Descriptors: {entry.ACI.ARM9AccessControl.Descriptors} (0x{entry.ACI.ARM9AccessControl.Descriptors:X})");
                         builder.AppendLine(entry.ACI.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
                     }
 
@@ -523,7 +615,7 @@ namespace SabreTools.Serialization.Printers
                     }
                     else
                     {
-                        builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.Descriptors, "        Descriptors");
+                        builder.AppendLine($"        Descriptors: {entry.ACIForLimitations.ARM9AccessControl.Descriptors} (0x{entry.ACIForLimitations.ARM9AccessControl.Descriptors:X})");
                         builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
                     }
                 }
