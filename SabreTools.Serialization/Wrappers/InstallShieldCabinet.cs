@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the directory index for the given file index
         /// </summary>
         /// <returns>Directory index if found, UInt32.MaxValue on error</returns>
-        public uint GetFileDirectoryIndex(int index)
+        public uint GetDirectoryIndexFromFile(int index)
         {
             FileDescriptor? descriptor = GetFileDescriptor(index);
             if (descriptor != null)
@@ -293,22 +293,42 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get the file group name at a given index, if possible
+        /// Get the file group for the given file index, if possible
         /// </summary>
-        public string? GetFileGroupName(int index)
+        public FileGroup? GetFileGroupFromFile(int index)
         {
             if (Model.FileGroups == null)
                 return null;
 
-            if (index < 0 || index >= Model.FileGroups.Length)
+            if (index < 0 || index >= FileCount)
                 return null;
 
-            var fileGroup = Model.FileGroups[index];
-            if (fileGroup == null)
-                return null;
+            for (int i = 0; i < FileGroupCount; i++)
+            {
+                var fileGroup = GetFileGroup(i);
+                if (fileGroup == null)
+                    continue;
 
-            return fileGroup.Name;
+                if (fileGroup.FirstFile > index || fileGroup.LastFile < index)
+                    continue;
+
+                return fileGroup;
+            }
+
+            return null;
         }
+
+        /// <summary>
+        /// Get the file group name at a given index, if possible
+        /// </summary>
+        public string? GetFileGroupName(int index)
+            => GetFileGroup(index)?.Name;
+
+        /// <summary>
+        /// Get the file group name at a given file index, if possible
+        /// </summary>
+        public string? GetFileGroupNameFromFile(int index)
+            => GetFileGroupFromFile(index)?.Name;
 
         #endregion
     }
