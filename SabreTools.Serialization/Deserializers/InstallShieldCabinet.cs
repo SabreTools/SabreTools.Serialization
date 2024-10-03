@@ -446,10 +446,14 @@ namespace SabreTools.Serialization.Deserializers
         {
             var fileGroup = new FileGroup();
 
+            // Reserved0 has been determined to be invalid.
+            // This change needs to be made at the model level
+            // and then propigated up to here for proper support
+
             fileGroup.NameOffset = data.ReadUInt32();
 
             fileGroup.ExpandedSize = data.ReadUInt32();
-            fileGroup.Reserved0 = data.ReadBytes(4);
+            //fileGroup.Reserved0 = data.ReadBytes(4);
             fileGroup.CompressedSize = data.ReadUInt32();
             fileGroup.Reserved1 = data.ReadBytes(4);
             fileGroup.Reserved2 = data.ReadBytes(2);
