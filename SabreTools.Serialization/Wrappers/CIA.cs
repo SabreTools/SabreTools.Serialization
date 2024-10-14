@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.Models.N3DS;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -72,6 +73,37 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
             }
         }
+
+        #endregion
+
+        // TODO: Hook these up for external use
+        #region Currently Unused Extensions
+
+        #region Ticket
+
+        /// <summary>
+        /// Denotes if the ticket denotes a demo or not
+        /// </summary>
+        public static bool IsDemo(Ticket? ticket)
+        {
+            if (ticket?.Limits == null || ticket.Limits.Length == 0)
+                return false;
+
+            return ticket.Limits[0] == 0x0004;
+        }
+
+        /// <summary>
+        /// Denotes if the max playcount for a demo
+        /// </summary>
+        public static uint PlayCount(Ticket ticket)
+        {
+            if (ticket?.Limits == null || ticket.Limits.Length == 0)
+                return 0;
+
+            return ticket.Limits[1];
+        }
+
+        #endregion
 
         #endregion
     }
