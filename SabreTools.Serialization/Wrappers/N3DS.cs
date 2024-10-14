@@ -105,7 +105,11 @@ namespace SabreTools.Serialization.Wrappers
             if (flags == null)
                 return false;
 
+#if NET20 || NET35
+            return (flags.BitMasks & BitMasks.NoCrypto) != 0;
+#else
             return flags.BitMasks.HasFlag(BitMasks.NoCrypto);
+#endif
         }
 
         #endregion
