@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
@@ -446,19 +447,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var fileGroup = new FileGroup();
 
-            // Reserved0 has been determined to be invalid.
-            // This change needs to be made at the model level
-            // and then propigated up to here for proper support
-
             fileGroup.NameOffset = data.ReadUInt32();
-
             fileGroup.ExpandedSize = data.ReadUInt32();
-            //fileGroup.Reserved0 = data.ReadBytes(4);
             fileGroup.CompressedSize = data.ReadUInt32();
-            fileGroup.Reserved1 = data.ReadBytes(4);
-            fileGroup.Reserved2 = data.ReadBytes(2);
-            fileGroup.Attribute1 = data.ReadUInt16();
-            fileGroup.Attribute2 = data.ReadUInt16();
+            fileGroup.Attributes = (FileGroupAttributes)data.ReadUInt16();
 
             // TODO: Figure out what data lives in this area for V5 and below
             if (majorVersion <= 5)
@@ -466,19 +458,19 @@ namespace SabreTools.Serialization.Deserializers
 
             fileGroup.FirstFile = data.ReadUInt32();
             fileGroup.LastFile = data.ReadUInt32();
-            fileGroup.UnknownOffset = data.ReadUInt32();
-            fileGroup.Var4Offset = data.ReadUInt32();
-            fileGroup.Var1Offset = data.ReadUInt32();
+            fileGroup.UnknownStringOffset = data.ReadUInt32();
+            fileGroup.OperatingSystemOffset = data.ReadUInt32();
+            fileGroup.LanguageOffset = data.ReadUInt32();
             fileGroup.HTTPLocationOffset = data.ReadUInt32();
             fileGroup.FTPLocationOffset = data.ReadUInt32();
             fileGroup.MiscOffset = data.ReadUInt32();
-            fileGroup.Var2Offset = data.ReadUInt32();
             fileGroup.TargetDirectoryOffset = data.ReadUInt32();
-            fileGroup.Reserved3 = data.ReadBytes(2);
-            fileGroup.Reserved4 = data.ReadBytes(2);
-            fileGroup.Reserved5 = data.ReadBytes(2);
-            fileGroup.Reserved6 = data.ReadBytes(2);
-            fileGroup.Reserved7 = data.ReadBytes(2);
+            fileGroup.OverwriteFlags = (FileGroupFlags)data.ReadUInt32();
+            fileGroup.Reserved = new uint[4];
+            for (int i = 0; i < fileGroup.Reserved.Length; i++)
+            {
+                fileGroup.Reserved[i] = data.ReadUInt32();
+            }
 
             // Cache the current position
             long currentPosition = data.Position;
@@ -516,15 +508,19 @@ namespace SabreTools.Serialization.Deserializers
             component.IdentifierOffset = data.ReadUInt32();
             component.DescriptorOffset = data.ReadUInt32();
             component.DisplayNameOffset = data.ReadUInt32();
-            component.Reserved0 = data.ReadUInt16();
-            component.ReservedOffset0 = data.ReadUInt32();
-            component.ReservedOffset1 = data.ReadUInt32();
+            component.Status = (ComponentStatus)data.ReadUInt16();
+            component.PasswordOffset = data.ReadUInt32();
+            component.MiscOffset = data.ReadUInt32();
             component.ComponentIndex = data.ReadUInt16();
             component.NameOffset = data.ReadUInt32();
-            component.ReservedOffset2 = data.ReadUInt32();
-            component.ReservedOffset3 = data.ReadUInt32();
-            component.ReservedOffset4 = data.ReadUInt32();
-            component.Reserved1 = data.ReadBytes(32);
+            component.CDRomFolderOffset = data.ReadUInt32();
+            component.HTTPLocationOffset = data.ReadUInt32();
+            component.FTPLocationOffset = data.ReadUInt32();
+            component.Guid = new Guid[2];
+            for (int i = 0; i < component.Guid.Length; i++)
+            {
+                component.Guid[i] = data.ReadGuid();
+            }
             component.CLSIDOffset = data.ReadUInt32();
             component.Reserved2 = data.ReadBytes(28);
             component.Reserved3 = data.ReadBytes(majorVersion <= 5 ? 2 : 1);
@@ -537,10 +533,10 @@ namespace SabreTools.Serialization.Deserializers
             component.SubComponentsCount = data.ReadUInt16();
             component.SubComponentsOffset = data.ReadUInt32();
             component.NextComponentOffset = data.ReadUInt32();
-            component.ReservedOffset5 = data.ReadUInt32();
-            component.ReservedOffset6 = data.ReadUInt32();
-            component.ReservedOffset7 = data.ReadUInt32();
-            component.ReservedOffset8 = data.ReadUInt32();
+            component.OnInstallingOffset = data.ReadUInt32();
+            component.OnInstalledOffset = data.ReadUInt32();
+            component.OnUninstallingOffset = data.ReadUInt32();
+            component.OnUninstalledOffset = data.ReadUInt32();
 
             // Cache the current position
             long currentPosition = data.Position;

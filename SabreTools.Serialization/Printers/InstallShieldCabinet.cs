@@ -315,27 +315,19 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(fileGroup.NameOffset, "    Name offset");
                 builder.AppendLine(fileGroup.Name, "    Name");
                 builder.AppendLine(fileGroup.ExpandedSize, "    Expanded size");
-                builder.AppendLine(fileGroup.Reserved0, "    Reserved 0");
                 builder.AppendLine(fileGroup.CompressedSize, "    Compressed size");
-                builder.AppendLine(fileGroup.Reserved1, "    Reserved 1");
-                builder.AppendLine(fileGroup.Reserved2, "    Reserved 2");
-                builder.AppendLine(fileGroup.Attribute1, "    Attribute 1");
-                builder.AppendLine(fileGroup.Attribute2, "    Attribute 2");
+                builder.AppendLine($"    Attributes: {fileGroup.Attributes} (0x{fileGroup.Attributes:X})");
                 builder.AppendLine(fileGroup.FirstFile, "    First file");
                 builder.AppendLine(fileGroup.LastFile, "    Last file");
-                builder.AppendLine(fileGroup.UnknownOffset, "    Unknown offset");
-                builder.AppendLine(fileGroup.Var4Offset, "    Var 4 offset");
-                builder.AppendLine(fileGroup.Var1Offset, "    Var 1 offset");
+                builder.AppendLine(fileGroup.UnknownStringOffset, "    Unknown string offset");
+                builder.AppendLine(fileGroup.OperatingSystemOffset, "    Operating system offset");
+                builder.AppendLine(fileGroup.LanguageOffset, "    Language offset");
                 builder.AppendLine(fileGroup.HTTPLocationOffset, "    HTTP location offset");
                 builder.AppendLine(fileGroup.FTPLocationOffset, "    FTP location offset");
                 builder.AppendLine(fileGroup.MiscOffset, "    Misc. offset");
-                builder.AppendLine(fileGroup.Var2Offset, "    Var 2 offset");
                 builder.AppendLine(fileGroup.TargetDirectoryOffset, "    Target directory offset");
-                builder.AppendLine(fileGroup.Reserved3, "    Reserved 3");
-                builder.AppendLine(fileGroup.Reserved4, "    Reserved 4");
-                builder.AppendLine(fileGroup.Reserved5, "    Reserved 5");
-                builder.AppendLine(fileGroup.Reserved6, "    Reserved 6");
-                builder.AppendLine(fileGroup.Reserved7, "    Reserved 7");
+                builder.AppendLine($"    Overwrite flags: {fileGroup.OverwriteFlags} (0x{fileGroup.OverwriteFlags:X})");
+                builder.AppendLine(fileGroup.Reserved, "    Reserved");
             }
             builder.AppendLine();
         }
@@ -366,16 +358,16 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(component.DescriptorOffset, "    Descriptor offset");
                 builder.AppendLine(component.DisplayNameOffset, "    Display name offset");
                 builder.AppendLine(component.DisplayName, "    Display name");
-                builder.AppendLine(component.Reserved0, "    Reserved 0");
-                builder.AppendLine(component.ReservedOffset0, "    Reserved offset 0");
-                builder.AppendLine(component.ReservedOffset1, "    Reserved offset 1");
+                builder.AppendLine($"    Status: {component.Status} (0x{component.Status:X})");
+                builder.AppendLine(component.PasswordOffset, "    Password offset");
+                builder.AppendLine(component.MiscOffset, "    Misc. offset");
                 builder.AppendLine(component.ComponentIndex, "    Component index");
                 builder.AppendLine(component.NameOffset, "    Name offset");
                 builder.AppendLine(component.Name, "    Name");
-                builder.AppendLine(component.ReservedOffset2, "    Reserved offset 2");
-                builder.AppendLine(component.ReservedOffset3, "    Reserved offset 3");
-                builder.AppendLine(component.ReservedOffset4, "    Reserved offset 4");
-                builder.AppendLine(component.Reserved1, "    Reserved 1");
+                builder.AppendLine(component.CDRomFolderOffset, "    CD-ROM folder offset");
+                builder.AppendLine(component.HTTPLocationOffset, "    HTTP location offset");
+                builder.AppendLine(component.FTPLocationOffset, "    FTP location offset");
+                builder.AppendLine(component.Guid, "    GUIDs");
                 builder.AppendLine(component.CLSIDOffset, "    CLSID offset");
                 builder.AppendLine(component.CLSID, "    CLSID");
                 builder.AppendLine(component.Reserved2, "    Reserved 2");
@@ -406,10 +398,10 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(component.SubComponentsCount, "    Sub-components count");
                 builder.AppendLine(component.SubComponentsOffset, "    Sub-components offset");
                 builder.AppendLine(component.NextComponentOffset, "    Next component offset");
-                builder.AppendLine(component.ReservedOffset5, "    Reserved offset 5");
-                builder.AppendLine(component.ReservedOffset6, "    Reserved offset 6");
-                builder.AppendLine(component.ReservedOffset7, "    Reserved offset 7");
-                builder.AppendLine(component.ReservedOffset8, "    Reserved offset 8");
+                builder.AppendLine(component.OnInstallingOffset, "    On installing offset");
+                builder.AppendLine(component.OnInstalledOffset, "    On installed offset");
+                builder.AppendLine(component.OnUninstallingOffset, "    On uninstalling offset");
+                builder.AppendLine(component.OnUninstalledOffset, "    On uninstalled offset");
             }
             builder.AppendLine();
         }

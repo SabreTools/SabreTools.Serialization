@@ -204,5 +204,14 @@ namespace SabreTools.Serialization
             string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(u => u.ToString()).ToArray()));
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
+
+        /// <summary>
+        /// Append a line containing a UInt64[] value to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, Guid[]? value, string prefixString)
+        {
+            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(g => g.ToString()).ToArray()));
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
     }
 }
