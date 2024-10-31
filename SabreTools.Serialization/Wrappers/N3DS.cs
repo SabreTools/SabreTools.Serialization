@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get if the NoCrypto bit is set
         /// </summary>
-        public static bool PossblyDecrypted(NCCHHeaderFlags flags)
+        public static bool PossiblyDecrypted(NCCHHeaderFlags flags)
         {
             if (flags == null)
                 return false;
