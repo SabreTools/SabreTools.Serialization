@@ -21,6 +21,7 @@ namespace SabreTools.Serialization.Wrappers
                 case WrapperType.BSP: return BSP.Create(data);
                 case WrapperType.BZip2: return null; // TODO: Implement wrapper
                 case WrapperType.CFB: return CFB.Create(data);
+                case WrapperType.CHD: return CHD.Create(data);
                 case WrapperType.CIA: return CIA.Create(data);
                 case WrapperType.Executable: return CreateExecutableWrapper(data);
                 case WrapperType.GCF: return GCF.Create(data);
@@ -215,6 +216,13 @@ namespace SabreTools.Serialization.Wrappers
             // Patch Creation Properties
             else if (extension.Equals("pcp", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.CFB;
+
+            #endregion
+
+            #region CHD
+
+            if (magic.StartsWith(new byte?[] { 0x4D, 0x43, 0x6F, 0x6D, 0x70, 0x72, 0x48, 0x44 }))
+                return WrapperType.CHD;
 
             #endregion
 

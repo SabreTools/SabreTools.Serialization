@@ -42,6 +42,11 @@ namespace SabreTools.Serialization.Wrappers
         CFB,
 
         /// <summary>
+        /// MAME Compressed Hunks of Data
+        /// </summary>
+        CHD,
+
+        /// <summary>
         /// CTR Importable Archive
         /// </summary>
         CIA,
