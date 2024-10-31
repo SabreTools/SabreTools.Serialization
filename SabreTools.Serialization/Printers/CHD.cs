@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text;
 using SabreTools.Models.CHD;
 using SabreTools.Serialization.Interfaces;
@@ -121,7 +123,30 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.Tag, $"Tag");
             builder.AppendLine(header.Length, $"Length");
             builder.AppendLine(header.Version, $"Version");
-            builder.AppendLine(header.Compressors, $"Compressors");
+
+            // TODO: Remove this hack when actual compressor names are supported
+            // builder.AppendLine(header.Compressors, $"Compressors");
+            string compressorsLine = "Compressors: ";
+            if (header.Compressors == null)
+            {
+                compressorsLine += "[NULL]";
+            }
+            else
+            {
+                var compressors = new List<string>();
+                for (int i = 0; i < header.Compressors.Length; i++)
+                {
+                    uint compressor = header.Compressors[i];
+                    byte[] compressorBytes = BitConverter.GetBytes(compressor);
+                    Array.Reverse(compressorBytes);
+                    string compressorString = Encoding.ASCII.GetString(compressorBytes);
+                    compressors.Add(compressorString);
+                }
+
+                compressorsLine += string.Join(", ", [.. compressors]);
+            }
+            builder.AppendLine(compressorsLine);
+
             builder.AppendLine(header.LogicalBytes, $"Logical bytes");
             builder.AppendLine(header.MapOffset, $"Map offset");
             builder.AppendLine(header.MetaOffset, $"Meta offset");
