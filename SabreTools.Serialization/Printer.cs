@@ -39,6 +39,7 @@ namespace SabreTools.Serialization
                 Wrapper.BFPK item => item.PrettyPrint(),
                 Wrapper.BSP item => item.PrettyPrint(),
                 Wrapper.CFB item => item.PrettyPrint(),
+                Wrapper.CHD item => item.PrettyPrint(),
                 Wrapper.CIA item => item.PrettyPrint(),
                 Wrapper.GCF item => item.PrettyPrint(),
                 Wrapper.InstallShieldCabinet item => item.PrettyPrint(),
@@ -83,6 +84,7 @@ namespace SabreTools.Serialization
                 Wrapper.BFPK item => item.ExportJSON(),
                 Wrapper.BSP item => item.ExportJSON(),
                 Wrapper.CFB item => item.ExportJSON(),
+                Wrapper.CHD item => item.ExportJSON(),
                 Wrapper.CIA item => item.ExportJSON(),
                 Wrapper.GCF item => item.ExportJSON(),
                 Wrapper.InstallShieldCabinet item => item.ExportJSON(),
@@ -164,6 +166,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             CFB.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.CHD item)
+        {
+            var builder = new StringBuilder();
+            CHD.Print(builder, item.Model);
             return builder;
         }
 
