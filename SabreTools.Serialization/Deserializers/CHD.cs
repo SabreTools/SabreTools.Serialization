@@ -58,6 +58,7 @@ namespace SabreTools.Serialization.Deserializers
                 return 0;
 
             // Match the version to header length
+#if NET472_OR_GREATER || NETCOREAPP
             return (version, length) switch
             {
                 (1, Constants.HeaderV1Size) => version,
@@ -67,6 +68,17 @@ namespace SabreTools.Serialization.Deserializers
                 (5, Constants.HeaderV5Size) => version,
                 _ => 0,
             };
+#else
+            return version switch
+            {
+                1 => length == Constants.HeaderV1Size ? version : 0,
+                2 => length == Constants.HeaderV2Size ? version : 0,
+                3 => length == Constants.HeaderV3Size ? version : 0,
+                4 => length == Constants.HeaderV4Size ? version : 0,
+                5 => length == Constants.HeaderV5Size ? version : 0,
+                _ => 0,
+            };
+#endif
         }
 
         /// <summary>
