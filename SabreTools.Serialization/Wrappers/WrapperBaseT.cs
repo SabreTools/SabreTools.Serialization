@@ -53,7 +53,6 @@ namespace SabreTools.Serialization.Wrappers
         protected Stream? _streamData = null;
 
 #if !NETFRAMEWORK
-
         /// <summary>
         /// JSON serializer options for output printing
         /// </summary>
@@ -72,7 +71,6 @@ namespace SabreTools.Serialization.Wrappers
                 return serializer;
             }
         }
-
 #endif
 
         #endregion
