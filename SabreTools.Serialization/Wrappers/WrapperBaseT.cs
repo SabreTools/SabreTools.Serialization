@@ -294,6 +294,8 @@ namespace SabreTools.Serialization.Wrappers
             // Reset cached data
             sourceDataIndex = 0;
             cachedString = string.Empty;
+            lastReadChar = string.Empty;
+            lastReadCharCount = 0;
 
             // We are limiting the check for Unicode characters with a second byte of 0x00 for now
 
