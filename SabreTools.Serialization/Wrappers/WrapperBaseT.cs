@@ -235,6 +235,8 @@ namespace SabreTools.Serialization.Wrappers
             // Setup cached data
             int sourceDataIndex = 0;
             string cachedString = string.Empty;
+            string lastReadChar = string.Empty;
+            int lastReadCharCount = 0;
 
             // Check for ASCII strings
             while (sourceDataIndex < sourceData.Length)
@@ -259,7 +261,31 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // All other characters get read in
-                cachedString += Encoding.ASCII.GetString(sourceData, sourceDataIndex, 1);
+                string nextChar = Encoding.ASCII.GetString(sourceData, sourceDataIndex, 1);
+
+                // Search for long repeating strings
+                if (nextChar == lastReadChar)
+                {
+                    lastReadCharCount++;
+                }
+                else
+                {
+                    lastReadChar = nextChar;
+                    lastReadCharCount = 0;
+                }
+
+                // If a long repeating string is found, discard it
+                if (lastReadCharCount >= 64)
+                {
+                    cachedString = string.Empty;
+                    lastReadChar = string.Empty;
+                    lastReadCharCount = 0;
+                    sourceDataIndex++;
+                    continue;
+                }
+
+                // Append the character to the cached string
+                cachedString += nextChar;
                 sourceDataIndex++;
             }
 
@@ -302,7 +328,31 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // All other characters get read in
-                cachedString += Encoding.Unicode.GetString(sourceData, sourceDataIndex, 2);
+                string nextChar = Encoding.Unicode.GetString(sourceData, sourceDataIndex, 2);
+
+                // Search for long repeating strings
+                if (nextChar == lastReadChar)
+                {
+                    lastReadCharCount++;
+                }
+                else
+                {
+                    lastReadChar = nextChar;
+                    lastReadCharCount = 0;
+                }
+
+                // If a long repeating string is found, discard it
+                if (lastReadCharCount >= 64)
+                {
+                    cachedString = string.Empty;
+                    lastReadChar = string.Empty;
+                    lastReadCharCount = 0;
+                    sourceDataIndex++;
+                    continue;
+                }
+
+                // Append the character to the cached string
+                cachedString += nextChar;
                 sourceDataIndex += 2;
             }
 
@@ -311,7 +361,7 @@ namespace SabreTools.Serialization.Wrappers
                 sourceStrings.Add(cachedString);
 
             // Deduplicate the string list for storage
-            sourceStrings = sourceStrings.Distinct().OrderBy(s => s).ToList();
+            sourceStrings = [.. sourceStrings.Distinct().OrderBy(s => s)];
 
             // TODO: Complete implementation of string finding
             return sourceStrings;
