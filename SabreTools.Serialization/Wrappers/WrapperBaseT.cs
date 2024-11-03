@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -223,147 +224,21 @@ namespace SabreTools.Serialization.Wrappers
             if (sourceData == null)
                 return null;
 
-            // If we have an invalid character limit, default to 5
-            if (charLimit <= 0)
-                charLimit = 5;
-
-            // Create the string list to return
-            var sourceStrings = new List<string>();
-
-            // Setup cached data
-            int sourceDataIndex = 0;
-            string cachedString = string.Empty;
-            string lastReadChar = string.Empty;
-            int lastReadCharCount = 0;
-
             // Check for ASCII strings
-            while (sourceDataIndex < sourceData.Length)
-            {
-                // If we have a control character or an invalid byte
-                if (sourceData[sourceDataIndex] < 0x20 || sourceData[sourceDataIndex] > 0x7F)
-                {
-                    // If we have no cached string
-                    if (cachedString.Length == 0)
-                    {
-                        sourceDataIndex++;
-                        continue;
-                    }
+            var asciiStrings = ReadStringsWithEncoding(sourceData, charLimit, Encoding.ASCII);
 
-                    // If we have a cached string greater than the limit
-                    if (cachedString.Length >= charLimit)
-                        sourceStrings.Add(cachedString);
-
-                    cachedString = string.Empty;
-                    sourceDataIndex++;
-                    continue;
-                }
-
-                // All other characters get read in
-                string nextChar = Encoding.ASCII.GetString(sourceData, sourceDataIndex, 1);
-
-                // Search for long repeating strings
-                if (nextChar == lastReadChar)
-                {
-                    lastReadCharCount++;
-                }
-                else
-                {
-                    lastReadChar = nextChar;
-                    lastReadCharCount = 0;
-                }
-
-                // If a long repeating string is found, discard it
-                if (lastReadCharCount >= 64)
-                {
-                    cachedString = string.Empty;
-                    lastReadChar = string.Empty;
-                    lastReadCharCount = 0;
-                    sourceDataIndex++;
-                    continue;
-                }
-
-                // Append the character to the cached string
-                cachedString += nextChar;
-                sourceDataIndex++;
-            }
-
-            // If we have a cached string greater than the limit
-            if (cachedString.Length >= charLimit)
-                sourceStrings.Add(cachedString);
-
-            // Reset cached data
-            sourceDataIndex = 0;
-            cachedString = string.Empty;
-            lastReadChar = string.Empty;
-            lastReadCharCount = 0;
-
+            // Check for UTF-8 strings
             // We are limiting the check for Unicode characters with a second byte of 0x00 for now
+            var utf8Strings = ReadStringsWithEncoding(sourceData, charLimit, Encoding.UTF8);
 
             // Check for Unicode strings
-            while (sourceDataIndex < sourceData.Length)
-            {
-                // Unicode characters are always 2 bytes
-                if (sourceDataIndex == sourceData.Length - 1)
-                    break;
-
-                ushort ch = BitConverter.ToUInt16(sourceData, sourceDataIndex);
-
-                // If we have a null terminator or "invalid" character
-                if (ch == 0x0000 || (ch & 0xFF00) != 0)
-                {
-                    // If we have no cached string
-                    if (cachedString.Length == 0)
-                    {
-                        sourceDataIndex += 2;
-                        continue;
-                    }
-
-                    // If we have a cached string greater than the limit
-                    if (cachedString.Length >= charLimit)
-                        sourceStrings.Add(cachedString);
-
-                    cachedString = string.Empty;
-                    sourceDataIndex += 2;
-                    continue;
-                }
-
-                // All other characters get read in
-                string nextChar = Encoding.Unicode.GetString(sourceData, sourceDataIndex, 2);
-
-                // Search for long repeating strings
-                if (nextChar == lastReadChar)
-                {
-                    lastReadCharCount++;
-                }
-                else
-                {
-                    lastReadChar = nextChar;
-                    lastReadCharCount = 0;
-                }
-
-                // If a long repeating string is found, discard it
-                if (lastReadCharCount >= 64)
-                {
-                    cachedString = string.Empty;
-                    lastReadChar = string.Empty;
-                    lastReadCharCount = 0;
-                    sourceDataIndex++;
-                    continue;
-                }
-
-                // Append the character to the cached string
-                cachedString += nextChar;
-                sourceDataIndex += 2;
-            }
-
-            // If we have a cached string greater than the limit
-            if (cachedString.Length >= charLimit)
-                sourceStrings.Add(cachedString);
+            // We are limiting the check for Unicode characters with a second byte of 0x00 for now
+            var unicodeStrings = ReadStringsWithEncoding(sourceData, charLimit, Encoding.Unicode);
 
             // Deduplicate the string list for storage
+            List<string> sourceStrings = [.. asciiStrings, .. utf8Strings, .. unicodeStrings];
             sourceStrings = [.. sourceStrings.Distinct().OrderBy(s => s)];
 
-            // TODO: Complete implementation of string finding
             return sourceStrings;
         }
 
@@ -390,6 +265,68 @@ namespace SabreTools.Serialization.Wrappers
                 default:
                     return -1;
             }
+        }
+
+        /// <summary>
+        /// Read string data from the source with an encoding
+        /// </summary>
+        /// <param name="sourceData">Byte array representing the source data</param>
+        /// <param name="charLimit">Number of characters needed to be a valid string</param>
+        /// <param name="encoding">Character encoding to use for checking</param>
+        /// <returns>String list containing the requested data, empty on error</returns>
+        /// <remarks>TODO: Move to IO?</remarks>
+        private List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+        {
+            // If we have an invalid character limit, default to 5
+            if (charLimit <= 0)
+                charLimit = 5;
+
+            // Create the string list to return
+            var sourceStrings = new List<string>();
+
+            // Setup cached data
+            int sourceDataIndex = 0;
+            string cachedString = string.Empty;
+
+            // Check for strings
+            while (sourceDataIndex < sourceData.Length)
+            {
+                // Read the next character
+                char ch = encoding.GetChars(sourceData, sourceDataIndex, 1)[0];
+
+                // If we have a control character or an invalid byte
+                bool isValid = !char.IsControl(ch) && (ch & 0xFF00) == 0;
+                if (!isValid)
+                {
+                    // If we have no cached string
+                    if (cachedString.Length == 0)
+                        continue;
+
+                    // If we have a cached string greater than the limit
+                    if (cachedString.Length >= charLimit)
+                        sourceStrings.Add(cachedString);
+
+                    cachedString = string.Empty;
+                    continue;
+                }
+
+                // If a long repeating string is found, discard it
+                if (cachedString.Length >= 64 && cachedString.All(c => c == cachedString[0]))
+                {
+                    cachedString = string.Empty;
+                    continue;
+                }
+
+                // Append the character to the cached string
+                cachedString += ch;
+                sourceDataIndex++;
+            }
+
+            // If we have a cached string greater than the limit
+            if (cachedString.Length >= charLimit)
+                sourceStrings.Add(cachedString);
+
+            return sourceStrings;
         }
 
         #endregion
