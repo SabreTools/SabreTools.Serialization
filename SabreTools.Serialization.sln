@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabreTools.Serialization", "SabreTools.Serialization\SabreTools.Serialization.csproj", "{5B688801-5F36-483E-B2E8-F219BA5923A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{F3DEE31A-4726-464C-A90C-C19D78F51898}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoPrint", "InfoPrint\InfoPrint.csproj", "{F3DEE31A-4726-464C-A90C-C19D78F51898}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabreTools.Serialization.Test", "SabreTools.Serialization.Test\SabreTools.Serialization.Test.csproj", "{B8A04C5E-A14F-4842-9035-2F6871A1DA10}"
 EndProject

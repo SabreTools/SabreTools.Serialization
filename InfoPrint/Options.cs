@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Test
+namespace InfoPrint
 {
     /// <summary>
     /// Set of options for the test executable
@@ -104,15 +104,15 @@ namespace Test
         /// </summary>
         public static void DisplayHelp()
         {
-            Console.WriteLine("SabreTools.Serialization Test Program");
+            Console.WriteLine("Information Printing Program");
             Console.WriteLine();
-            Console.WriteLine("test.exe <options> file|directory ...");
+            Console.WriteLine("infoprint.exe <options> file|directory ...");
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("-?, -h, --help           Display this help text and quit");
             Console.WriteLine("-d, --debug              Enable debug mode");
 #if NET6_0_OR_GREATER
-            Console.WriteLine("-j, --json               Print executable info as JSON");
+            Console.WriteLine("-j, --json               Print info as JSON");
 #endif
         }
     }

@@ -67,11 +67,11 @@ if [ $NO_BUILD = false ]; then
     # Create Nuget Package
     dotnet pack SabreTools.Serialization/SabreTools.Serialization.csproj --output $BUILD_FOLDER
 
-    # Build Program
+    # Build InfoPrint
     for FRAMEWORK in "${FRAMEWORKS[@]}"; do
         for RUNTIME in "${RUNTIMES[@]}"; do
             # Output the current build
-            echo "===== Build Program - $FRAMEWORK, $RUNTIME ====="
+            echo "===== Build InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
@@ -93,15 +93,15 @@ if [ $NO_BUILD = false ]; then
             if [[ $(echo ${SINGLE_FILE_CAPABLE[@]} | fgrep -w $FRAMEWORK) ]]; then
                 # Only include Debug if building all
                 if [ $USE_ALL = true ]; then
-                    dotnet publish Test/Test.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
+                    dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 fi
-                dotnet publish Test/Test.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+                dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
             else
                 # Only include Debug if building all
                 if [ $USE_ALL = true ]; then
-                    dotnet publish Test/Test.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
+                    dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 fi
-                dotnet publish Test/Test.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+                dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
             fi
         done
     done
@@ -109,11 +109,11 @@ fi
 
 # Only create archives if requested
 if [ $NO_ARCHIVE = false ]; then
-    # Create Test archives
+    # Create InfoPrint archives
     for FRAMEWORK in "${FRAMEWORKS[@]}"; do
         for RUNTIME in "${RUNTIMES[@]}"; do
             # Output the current build
-            echo "===== Archive Program - $FRAMEWORK, $RUNTIME ====="
+            echo "===== Archive InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if [[ ! $(echo ${VALID_CROSS_PLATFORM_FRAMEWORKS[@]} | fgrep -w $FRAMEWORK) ]]; then
@@ -133,11 +133,11 @@ if [ $NO_ARCHIVE = false ]; then
 
             # Only include Debug if building all
             if [ $USE_ALL = true ]; then
-                cd $BUILD_FOLDER/Test/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
-                zip -r $BUILD_FOLDER/SabreTools.Serialization_${FRAMEWORK}_${RUNTIME}_debug.zip .
+                cd $BUILD_FOLDER/InfoPrint/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
+                zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip .
             fi
-            cd $BUILD_FOLDER/Test/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
-            zip -r $BUILD_FOLDER/SabreTools.Serialization_${FRAMEWORK}_${RUNTIME}_release.zip .
+            cd $BUILD_FOLDER/InfoPrint/bin/Release/${FRAMEWORK}/${RUNTIME}/publish/
+            zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip .
         done
     done
 

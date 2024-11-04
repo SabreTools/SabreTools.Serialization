@@ -58,11 +58,11 @@ if (!$NO_BUILD.IsPresent) {
     # Create Nuget Package
     dotnet pack SabreTools.Serialization\SabreTools.Serialization.csproj --output $BUILD_FOLDER
 
-    # Build Test
+    # Build InfoPrint
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
             # Output the current build
-            Write-Host "===== Build Program - $FRAMEWORK, $RUNTIME ====="
+            Write-Host "===== Build InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
@@ -80,16 +80,16 @@ if (!$NO_BUILD.IsPresent) {
             if ($SINGLE_FILE_CAPABLE -contains $FRAMEWORK) {
                 # Only include Debug if building all
                 if ($USE_ALL.IsPresent) {
-                    dotnet publish Test\Test.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
+                    dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 }
-                dotnet publish Test\Test.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+                dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
             }
             else {
                 # Only include Debug if building all
                 if ($USE_ALL.IsPresent) {
-                    dotnet publish Test\Test.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
+                    dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 }
-                dotnet publish Test\Test.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+                dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
             }
         }
     }
@@ -97,7 +97,7 @@ if (!$NO_BUILD.IsPresent) {
 
 # Only create archives if requested
 if (!$NO_ARCHIVE.IsPresent) {
-    # Create Test archives
+    # Create InfoPrint archives
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
             # Output the current build
@@ -117,12 +117,12 @@ if (!$NO_ARCHIVE.IsPresent) {
 
             # Only include Debug if building all
             if ($USE_ALL.IsPresent) {
-                Set-Location -Path $BUILD_FOLDER\Test\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
-                7z a -tzip $BUILD_FOLDER\SabreTools.Serialization_${FRAMEWORK}_${RUNTIME}_debug.zip *
+                Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
+                7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip *
             }
         
-            Set-Location -Path $BUILD_FOLDER\Test\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
-            7z a -tzip $BUILD_FOLDER\SabreTools.Serialization_${FRAMEWORK}_${RUNTIME}_release.zip *
+            Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
+            7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_release.zip *
         }
     }
 

@@ -4,7 +4,7 @@ using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
 using SabreTools.Serialization.Wrappers;
 
-namespace Test
+namespace InfoPrint
 {
     public static class Program
     {
