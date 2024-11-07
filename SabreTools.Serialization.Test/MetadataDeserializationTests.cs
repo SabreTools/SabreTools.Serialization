@@ -235,10 +235,18 @@ namespace SabreTools.Serialization.Test
 
         [Theory]
         [InlineData("test-sfv-files.sfv", HashType.CRC32, 100)]
-        [InlineData("test-sfv-files.sfv", HashType.CRC32_ISO, 100)]
-        [InlineData("test-sfv-files.sfv", HashType.CRC32_Naive, 100)]
-        [InlineData("test-sfv-files.sfv", HashType.CRC32_Optimized, 100)]
-        [InlineData("test-sfv-files.sfv", HashType.CRC32_Parallel, 100)]
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_AIXM, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_AUTOSAR, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_BASE91D, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_BZIP2, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_CDROMEDC, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_CKSUM, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_ISCSI, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_ISOHDLC, 100)]
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_JAMCRC, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_MEF, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_MPEG2, 100)] // Not technically the same as normal CRC-32
+        [InlineData("test-sfv-files.sfv", HashType.CRC32_XFER, 100)] // Not technically the same as normal CRC-32
         [InlineData("test-md5-files.md5", HashType.MD5, 100)]
         [InlineData("test-sha1-files.sha1", HashType.SHA1, 100)]
         [InlineData("test-sha256.sha256", HashType.SHA256, 1)]
@@ -259,10 +267,18 @@ namespace SabreTools.Serialization.Test
             switch (hash)
             {
                 case HashType.CRC32:
-                case HashType.CRC32_ISO:
-                case HashType.CRC32_Naive:
-                case HashType.CRC32_Optimized:
-                case HashType.CRC32_Parallel:
+                case HashType.CRC32_AIXM:
+                case HashType.CRC32_AUTOSAR:
+                case HashType.CRC32_BASE91D:
+                case HashType.CRC32_BZIP2:
+                case HashType.CRC32_CDROMEDC:
+                case HashType.CRC32_CKSUM:
+                case HashType.CRC32_ISCSI:
+                case HashType.CRC32_ISOHDLC:
+                case HashType.CRC32_JAMCRC:
+                case HashType.CRC32_MEF:
+                case HashType.CRC32_MPEG2:
+                case HashType.CRC32_XFER:
                     Assert.NotNull(dat.SFV);
                     Assert.Equal(count, dat.SFV.Length);
                     break;

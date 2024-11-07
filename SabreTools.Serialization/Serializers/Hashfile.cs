@@ -101,10 +101,18 @@ namespace SabreTools.Serialization.Serializers
             switch (hash)
             {
                 case HashType.CRC32:
-                case HashType.CRC32_ISO:
-                case HashType.CRC32_Naive:
-                case HashType.CRC32_Optimized:
-                case HashType.CRC32_Parallel:
+                case HashType.CRC32_AIXM:
+                case HashType.CRC32_AUTOSAR:
+                case HashType.CRC32_BASE91D:
+                case HashType.CRC32_BZIP2:
+                case HashType.CRC32_CDROMEDC:
+                case HashType.CRC32_CKSUM:
+                case HashType.CRC32_ISCSI:
+                case HashType.CRC32_ISOHDLC:
+                case HashType.CRC32_JAMCRC:
+                case HashType.CRC32_MEF:
+                case HashType.CRC32_MPEG2:
+                case HashType.CRC32_XFER:
                     WriteSFV(obj.SFV, writer);
                     break;
                 case HashType.MD5:
