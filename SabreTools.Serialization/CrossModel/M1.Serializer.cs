@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -18,10 +18,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item?.Game != null && item.Game.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.Game
-                    .Where(g => g != null)
-                    .Select(Listxml.ConvertMachineToInternalModel)
-                    .ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(item.Game, Listxml.ConvertMachineToInternalModel);
             }
 
             return metadataFile;

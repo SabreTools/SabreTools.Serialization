@@ -1,4 +1,5 @@
 using System.Linq;
+using System;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -34,10 +35,7 @@ namespace SabreTools.Serialization.CrossModel
             if (roms == null)
                 return [];
 
-            return roms
-                .Where(r => r != null)
-                .Select(ConvertFromInternalModel)
-                .ToArray();
+            return Array.ConvertAll(roms, ConvertFromInternalModel);
         }
 
         /// <summary>

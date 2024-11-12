@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.OpenMSX;
 using SabreTools.Serialization.Interfaces;
 
@@ -17,12 +17,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
-            {
-                softwareDb.Software = machines
-                    .Where(m => m != null)
-                    .Select(ConvertMachineFromInternalModel)
-                    .ToArray();
-            }
+                softwareDb.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
             
             return softwareDb;
         }
@@ -56,12 +51,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var dumps = item.Read<Models.Metadata.Dump[]>(Models.Metadata.Machine.DumpKey);
             if (dumps != null && dumps.Length > 0)
-            {
-                game.Dump = dumps
-                    .Where(d => d != null)
-                    .Select(ConvertFromInternalModel)
-                    .ToArray();
-            }
+                game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
 
             return game;
         }

@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.SoftwareList;
 using SabreTools.Serialization.Interfaces;
 
@@ -19,10 +19,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item?.Software != null && item.Software.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.Software
-                    .Where(s => s != null)
-                    .Select(ConvertMachineToInternalModel)
-                    .ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
             }
 
             return metadataFile;
@@ -59,13 +57,13 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Info != null && item.Info.Length > 0)
-                machine[Models.Metadata.Machine.InfoKey] = item.Info.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.InfoKey] = Array.ConvertAll(item.Info, ConvertToInternalModel);
 
             if (item.SharedFeat != null && item.SharedFeat.Length > 0)
-                machine[Models.Metadata.Machine.SharedFeatKey] = item.SharedFeat.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.SharedFeatKey] = Array.ConvertAll(item.SharedFeat, ConvertToInternalModel);
 
             if (item.Part != null && item.Part.Length > 0)
-                machine[Models.Metadata.Machine.PartKey] = item.Part.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.PartKey] = Array.ConvertAll(item.Part, ConvertToInternalModel);
 
             return machine;
         }
@@ -84,7 +82,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Rom != null && item.Rom.Length > 0)
-                dataArea[Models.Metadata.DataArea.RomKey] = item.Rom.Select(ConvertToInternalModel).ToArray();
+                dataArea[Models.Metadata.DataArea.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             return dataArea;
         }
@@ -102,7 +100,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.DipValue != null && item.DipValue.Length > 0)
-                dipSwitch[Models.Metadata.DipSwitch.DipValueKey] = item.DipValue.Select(ConvertToInternalModel).ToArray();
+                dipSwitch[Models.Metadata.DipSwitch.DipValueKey] = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
 
             return dipSwitch;
         }
@@ -148,7 +146,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Disk != null && item.Disk.Length > 0)
-                diskArea[Models.Metadata.DiskArea.DiskKey] = item.Disk.Select(ConvertToInternalModel).ToArray();
+                diskArea[Models.Metadata.DiskArea.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             return diskArea;
         }
@@ -191,16 +189,16 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Feature != null && item.Feature.Length > 0)
-                part[Models.Metadata.Part.FeatureKey] = item.Feature.Select(ConvertToInternalModel).ToArray();
+                part[Models.Metadata.Part.FeatureKey] = Array.ConvertAll(item.Feature, ConvertToInternalModel);
 
             if (item.DataArea != null && item.DataArea.Length > 0)
-                part[Models.Metadata.Part.DataAreaKey] = item.DataArea.Select(ConvertToInternalModel).ToArray();
+                part[Models.Metadata.Part.DataAreaKey] = Array.ConvertAll(item.DataArea, ConvertToInternalModel);
 
             if (item.DiskArea != null && item.DiskArea.Length > 0)
-                part[Models.Metadata.Part.DiskAreaKey] = item.DiskArea.Select(ConvertToInternalModel).ToArray();
+                part[Models.Metadata.Part.DiskAreaKey] = Array.ConvertAll(item.DiskArea, ConvertToInternalModel);
 
             if (item.DipSwitch != null && item.DipSwitch.Length > 0)
-                part[Models.Metadata.Part.DipSwitchKey] = item.DipSwitch.Select(ConvertToInternalModel).ToArray();
+                part[Models.Metadata.Part.DipSwitchKey] = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
 
             return part;
         }

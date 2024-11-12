@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using SabreTools.Models.Listrom;
 using SabreTools.Serialization.Interfaces;
 
@@ -17,12 +17,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
-            {
-                metadataFile.Set = machines
-                    .Where(m => m != null)
-                    .Select(ConvertMachineFromInternalModel)
-                    .ToArray();
-            }
+                metadataFile.Set = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
             
             return metadataFile;
         }
@@ -43,14 +38,14 @@ namespace SabreTools.Serialization.CrossModel
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null)
             {
-                rowItems.AddRange(roms.Where(r => r != null).Select(ConvertFromInternalModel));
+                rowItems.AddRange(Array.ConvertAll(roms, ConvertFromInternalModel));
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
             if (disks != null)
-                rowItems.AddRange(disks.Where(d => d != null).Select(ConvertFromInternalModel));
+                rowItems.AddRange(Array.ConvertAll(disks, ConvertFromInternalModel));
 
-            set.Row = rowItems.ToArray();
+            set.Row = [.. rowItems];
             return set;
         }
 

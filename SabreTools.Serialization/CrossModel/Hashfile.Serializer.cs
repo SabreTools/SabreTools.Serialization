@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
 
@@ -43,19 +43,19 @@ namespace SabreTools.Serialization.CrossModel
             var machine = new Models.Metadata.Machine();
 
             if (item.SFV != null && item.SFV.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SFV.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SFV, ConvertToInternalModel);
             else if (item.MD5 != null && item.MD5.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.MD5.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD5, ConvertToInternalModel);
             else if (item.SHA1 != null && item.SHA1.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SHA1.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA1, ConvertToInternalModel);
             else if (item.SHA256 != null && item.SHA256.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SHA256.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA256, ConvertToInternalModel);
             else if (item.SHA384 != null && item.SHA384.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SHA384.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA384, ConvertToInternalModel);
             else if (item.SHA512 != null && item.SHA512.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SHA512.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA512, ConvertToInternalModel);
             else if (item.SpamSum != null && item.SpamSum.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.SpamSum.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SpamSum, ConvertToInternalModel);
 
             return machine;
         }

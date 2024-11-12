@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SabreTools.Models.Listrom;
@@ -20,10 +21,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (obj?.Set != null && obj.Set.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Set
-                    .Where(s => s != null)
-                    .Select(ConvertMachineToInternalModel)
-                    .ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(obj.Set, ConvertMachineToInternalModel);
             }
 
             return metadataFile;

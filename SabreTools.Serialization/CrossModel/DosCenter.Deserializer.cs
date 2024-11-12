@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.DosCenter;
 using SabreTools.Serialization.Interfaces;
 
@@ -20,12 +20,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
-            {
-                metadataFile.Game = machines
-                    .Where(m => m != null)
-                    .Select(ConvertMachineFromInternalModel)
-                    .ToArray();
-            }
+                metadataFile.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
             return metadataFile;
         }
@@ -60,12 +55,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
-            {
-                game.File = roms
-                    .Where(r => r != null)
-                    .Select(ConvertFromInternalModel)
-                    .ToArray();
-            }
+                game.File = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             return game;
         }

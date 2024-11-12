@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -16,12 +16,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
-            {
-                m1.Game = machines
-                    .Where(m => m != null)
-                    .Select(Listxml.ConvertMachineFromInternalModel)
-                    .ToArray();
-            }
+                m1.Game = Array.ConvertAll(machines, Listxml.ConvertMachineFromInternalModel);
 
             return m1;
         }

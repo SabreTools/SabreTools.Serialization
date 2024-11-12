@@ -21,11 +21,7 @@ namespace SabreTools.Serialization.CrossModel
             var machines = new List<Models.Metadata.Machine>();
 
             if (item.Game != null && item.Game.Length > 0)
-            {
-                machines.AddRange(item.Game
-                     .Where(g => g != null)
-                     .Select(ConvertMachineToInternalModel));
-            }
+                machines.AddRange(Array.ConvertAll(item.Game, ConvertMachineToInternalModel));
 
             if (item.Dir != null && item.Dir.Length > 0)
             {
@@ -106,15 +102,12 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Game == null || item.Game.Length == 0)
                 return [];
 
-            return item.Game
-                .Where(g => g != null)
-                .Select(game =>
+            return Array.ConvertAll(item.Game, g =>
                 {
-                    var machine = ConvertMachineToInternalModel(game);
+                    var machine = ConvertMachineToInternalModel(g);
                     machine[Models.Metadata.Machine.DirNameKey] = item.Name;
                     return machine;
-                })
-                .ToArray();
+                });
         }
 
         /// <summary>
@@ -147,34 +140,34 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             if (item.Release != null && item.Release.Length > 0)
-                machine[Models.Metadata.Machine.ReleaseKey] = item.Release.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.ReleaseKey] = Array.ConvertAll(item.Release, ConvertToInternalModel);
 
             if (item.BiosSet != null && item.BiosSet.Length > 0)
-                machine[Models.Metadata.Machine.BiosSetKey] = item.BiosSet.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.BiosSetKey] = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
 
             if (item.Rom != null && item.Rom.Length > 0)
-                machine[Models.Metadata.Machine.RomKey] = item.Rom.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             if (item.Disk != null && item.Disk.Length > 0)
-                machine[Models.Metadata.Machine.DiskKey] = item.Disk.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             if (item.Media != null && item.Media.Length > 0)
-                machine[Models.Metadata.Machine.MediaKey] = item.Media.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.MediaKey] = Array.ConvertAll(item.Media, ConvertToInternalModel);
 
             if (item.DeviceRef != null && item.DeviceRef.Length > 0)
-                machine[Models.Metadata.Machine.DeviceRefKey] = item.DeviceRef.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.DeviceRefKey] = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
 
             if (item.Sample != null && item.Sample.Length > 0)
-                machine[Models.Metadata.Machine.SampleKey] = item.Sample.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.SampleKey] = Array.ConvertAll(item.Sample, ConvertToInternalModel);
 
             if (item.Archive != null && item.Archive.Length > 0)
-                machine[Models.Metadata.Machine.ArchiveKey] = item.Archive.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.ArchiveKey] = Array.ConvertAll(item.Archive, ConvertToInternalModel);
 
             if (item.Driver != null)
                 machine[Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
 
             if (item.SoftwareList != null && item.SoftwareList.Length > 0)
-                machine[Models.Metadata.Machine.SoftwareListKey] = item.SoftwareList.Select(ConvertToInternalModel).ToArray();
+                machine[Models.Metadata.Machine.SoftwareListKey] = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
 
             return machine;
         }

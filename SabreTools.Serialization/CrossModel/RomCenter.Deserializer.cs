@@ -93,10 +93,7 @@ namespace SabreTools.Serialization.CrossModel
             if (roms == null)
                 return [];
 
-            return roms
-                .Where(r => r != null)
-                .Select(rom => ConvertFromInternalModel(rom, item))
-                .ToArray();
+            return Array.ConvertAll(roms, r => ConvertFromInternalModel(r, item));
         }
 
         /// <summary>

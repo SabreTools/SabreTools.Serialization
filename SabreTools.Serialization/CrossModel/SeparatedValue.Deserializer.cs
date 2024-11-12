@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SabreTools.Models.SeparatedValue;
@@ -50,25 +51,22 @@ namespace SabreTools.Serialization.CrossModel
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
             {
-                rowItems.AddRange(roms
-                    .Where(r => r != null)
-                    .Select(rom => ConvertFromInternalModel(rom, item, header)));
+                rowItems.AddRange(
+                    Array.ConvertAll(roms, r => ConvertFromInternalModel(r, item, header)));
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
             if (disks != null && disks.Length > 0)
             {
-                rowItems.AddRange(disks
-                    .Where(d => d != null)
-                    .Select(disk => ConvertFromInternalModel(disk, item, header)));
+                rowItems.AddRange(
+                    Array.ConvertAll(disks, d => ConvertFromInternalModel(d, item, header)));
             }
 
             var media = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
             if (media != null && media.Length > 0)
             {
-                rowItems.AddRange(media
-                    .Where(m => m != null)
-                    .Select(medium => ConvertFromInternalModel(medium, item, header)));
+                rowItems.AddRange(
+                    Array.ConvertAll(media, m => ConvertFromInternalModel(m, item, header)));
             }
 
             return rowItems.ToArray();

@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -18,11 +18,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item?.File != null && item.File.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.File
-                    .Where(f => f != null)
-                    .Select(ConvertMachineToInternalModel)
-                    .Where(m => m != null)
-                    .ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(item.File, ConvertMachineToInternalModel);
             }
 
             return metadataFile;

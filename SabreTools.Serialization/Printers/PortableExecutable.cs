@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using SabreTools.ASN1;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
 using SabreTools.Serialization.Interfaces;
-using static SabreTools.Serialization.Extensions;
 
 namespace SabreTools.Serialization.Printers
 {
@@ -999,7 +997,8 @@ namespace SabreTools.Serialization.Printers
             string padding = new(' ', (level + 1) * 2);
 
             // TODO: Use ordered list of base types to determine the shape of the data
-            builder.AppendLine($"{padding}Base types: {string.Join(", ", types.Select(t => t.ToString()).ToArray())}");
+            var baseTypes = Array.ConvertAll(types.ToArray(), t => t.ToString());
+            builder.AppendLine($"{padding}Base types: {string.Join(", ", baseTypes)}");
 
             builder.AppendLine(level, $"{padding}Entry level");
             builder.AppendLine(entry.DataRVA, $"{padding}Data RVA");

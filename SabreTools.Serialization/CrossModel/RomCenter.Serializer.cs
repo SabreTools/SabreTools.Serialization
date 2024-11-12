@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
 
@@ -19,9 +19,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (obj?.Games?.Rom != null && obj.Games.Rom.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Games.Rom
-                    .Where(r => r != null)
-                    .Select(ConvertMachineToInternalModel).ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(obj.Games.Rom, ConvertMachineToInternalModel);
             }
 
             return metadataFile;

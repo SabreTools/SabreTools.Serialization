@@ -195,17 +195,17 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Add extra pieces and return
-            dat.ADDITIONAL_ELEMENTS = additional.Where(s => s != null).ToArray();
+            dat.ADDITIONAL_ELEMENTS = [.. additional];
             if (dat.Credits != null)
-                dat.Credits.ADDITIONAL_ELEMENTS = creditsAdditional.Where(s => s != null).ToArray();
+                dat.Credits.ADDITIONAL_ELEMENTS = [.. creditsAdditional];
             if (dat.Dat != null)
-                dat.Dat.ADDITIONAL_ELEMENTS = datAdditional.Where(s => s != null).ToArray();
+                dat.Dat.ADDITIONAL_ELEMENTS = [.. datAdditional];
             if (dat.Emulator != null)
-                dat.Emulator.ADDITIONAL_ELEMENTS = emulatorAdditional.Where(s => s != null).ToArray();
+                dat.Emulator.ADDITIONAL_ELEMENTS = [.. emulatorAdditional];
             if (dat.Games != null)
             {
                 dat.Games.Rom = [.. roms];
-                dat.Games.ADDITIONAL_ELEMENTS = gamesAdditional.Where(s => s != null).Select(s => s).ToArray();
+                dat.Games.ADDITIONAL_ELEMENTS = [.. gamesAdditional];
             }
             return dat;
         }

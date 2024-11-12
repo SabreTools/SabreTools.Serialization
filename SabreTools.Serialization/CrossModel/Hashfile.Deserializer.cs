@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
 using SabreTools.Serialization.Interfaces;
@@ -21,9 +21,7 @@ namespace SabreTools.Serialization.CrossModel
             if (machines == null || machines.Length == 0)
                 return null;
 
-            var hashfiles = machines
-                .Where(m => m != null)
-                .Select(machine => ConvertMachineFromInternalModel(machine, hash));
+            var hashfiles = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, hash));
 
             var sfvs = new List<SFV>();
             var md5s = new List<MD5>();
@@ -81,12 +79,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = item.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
-            {
-                return machines
-                    .Where(m => m != null)
-                    .Select(machine => ConvertMachineFromInternalModel(machine, hash))
-                    .ToArray();
-            }
+                return Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, hash));
 
             return null;
         }
@@ -103,46 +96,25 @@ namespace SabreTools.Serialization.CrossModel
             return new Models.Hashfile.Hashfile
             {
                 SFV = hash == HashType.CRC32
-                        ? roms
-                            .Where(r => r != null)
-                            .Select(ConvertToSFV)
-                            .ToArray()
-                        : null,
+                    ? Array.ConvertAll(roms, ConvertToSFV)
+                    : null,
                 MD5 = hash == HashType.MD5
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToMD5)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToMD5)
                     : null,
                 SHA1 = hash == HashType.SHA1
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToSHA1)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToSHA1)
                     : null,
                 SHA256 = hash == HashType.SHA256
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToSHA256)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToSHA256)
                     : null,
                 SHA384 = hash == HashType.SHA384
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToSHA384)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToSHA384)
                     : null,
                 SHA512 = hash == HashType.SHA512
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToSHA512)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToSHA512)
                     : null,
                 SpamSum = hash == HashType.SpamSum
-                    ? roms
-                        .Where(r => r != null)
-                        .Select(ConvertToSpamSum)
-                        .ToArray()
+                    ? Array.ConvertAll(roms, ConvertToSpamSum)
                     : null,
             };
         }

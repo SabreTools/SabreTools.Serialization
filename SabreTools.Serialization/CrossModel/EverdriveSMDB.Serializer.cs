@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using SabreTools.Models.EverdriveSMDB;
 using SabreTools.Serialization.Interfaces;
 
@@ -19,10 +19,8 @@ namespace SabreTools.Serialization.CrossModel
 
             if (obj?.Row != null && obj.Row.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Row
-                    .Where(r => r != null)
-                    .Select(ConvertMachineToInternalModel)
-                    .ToArray();
+                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                    = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
             }
 
             return metadataFile;
