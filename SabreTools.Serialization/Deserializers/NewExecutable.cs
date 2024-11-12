@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.NewExecutable;
 using static SabreTools.Models.NewExecutable.Constants;
@@ -303,18 +302,34 @@ namespace SabreTools.Serialization.Deserializers
             resourceTable.ResourceTypes = [.. resourceTypes];
 
             // Get the full list of unique string offsets
-            var stringOffsets = resourceTable.ResourceTypes
-                .Where(rt => rt != null && rt.TypeID != 0 && !rt.IsIntegerType())
-                .Select(rt => rt!.TypeID)
-                .Union(resourceTable.ResourceTypes
-                    .Where(rt => rt != null && rt!.TypeID != 0)
-                    .SelectMany(rt => rt!.Resources ?? [])
-                    .Where(r => !r!.IsIntegerType())
-                    .Select(r => r!.ResourceID))
-                .Distinct()
-                .Where(o => o != 0)
-                .OrderBy(o => o)
-                .ToList();
+            var stringOffsets = new List<ushort>();
+            foreach (var rtie in resourceTable.ResourceTypes)
+            {
+                // Skip invalid entries
+                if (rtie == null || rtie.TypeID == 0)
+                    continue;
+
+                // Handle offset types
+                if (!rtie.IsIntegerType() && !stringOffsets.Contains(rtie.TypeID))
+                    stringOffsets.Add(rtie.TypeID);
+
+                // Handle types with resources
+                foreach (var rtre in rtie.Resources ?? [])
+                {
+                    // Skip invalid entries
+                    if (rtre == null || rtre.IsIntegerType() || rtre.ResourceID == 0)
+                        continue;
+
+                    // Skip already added entries
+                    if (stringOffsets.Contains(rtre.ResourceID))
+                        continue;
+
+                    stringOffsets.Add(rtre.ResourceID);
+                }
+            }
+
+            // Order the offsets list
+            stringOffsets.Sort();
 
             // Populate the type and name string dictionary
             resourceTable.TypeAndNameStrings = [];
