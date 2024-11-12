@@ -134,7 +134,11 @@ namespace SabreTools.Serialization.Deserializers
                     dat.Games ??= new Games();
 
                     // If the line doesn't contain the delimiter
+#if NETFRAMEWORK
+                    if (!(reader.CurrentLine?.Contains("¬") ?? false))
+#else
                     if (!(reader.CurrentLine?.Contains('¬') ?? false))
+#endif
                         continue;
 
                     // Otherwise, separate out the line
