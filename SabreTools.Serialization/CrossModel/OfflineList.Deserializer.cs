@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using SabreTools.Models.OfflineList;
 using SabreTools.Serialization.Interfaces;
 
@@ -101,11 +100,10 @@ namespace SabreTools.Serialization.CrossModel
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
             {
-                var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Models.Metadata.Rom.SizeKey)?.ToString());
-                game.RomSize = romSizes.FirstOrDefault(s => s != null);
+                var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Models.Metadata.Rom.SizeKey) ?? -1);
+                game.RomSize = Array.Find(romSizes, s => s > -1).ToString();
 
                 var romCRCs = Array.ConvertAll(roms, ConvertFromInternalModel);;
-
                 game.Files = new Models.OfflineList.Files { RomCRC = romCRCs };
             }
 
