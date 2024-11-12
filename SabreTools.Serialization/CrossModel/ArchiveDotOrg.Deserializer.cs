@@ -19,9 +19,9 @@ namespace SabreTools.Serialization.CrossModel
             if (machines != null && machines.Any())
             {
                 files.File = machines
-                .Where(m => m != null)
-                .SelectMany(ConvertFromInternalModel)
-                .ToArray();
+                    .Where(m => m != null)
+                    .SelectMany(ConvertFromInternalModel)
+                    .ToArray();
             }
 
             return files;
@@ -38,7 +38,8 @@ namespace SabreTools.Serialization.CrossModel
 
             return roms
                 .Where(r => r != null)
-                .Select(ConvertFromInternalModel).ToArray();
+                .Select(ConvertFromInternalModel)
+                .ToArray();
         }
 
         /// <summary>

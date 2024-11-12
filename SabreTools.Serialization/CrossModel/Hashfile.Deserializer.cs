@@ -54,19 +54,19 @@ namespace SabreTools.Serialization.CrossModel
             var hashfileItem = new Models.Hashfile.Hashfile();
 
             if (sfvs.Any())
-                hashfileItem.SFV = sfvs.ToArray();
+                hashfileItem.SFV = [.. sfvs];
             if (md5s.Any())
-                hashfileItem.MD5 = md5s.ToArray();
+                hashfileItem.MD5 = [.. md5s];
             if (sha1s.Any())
-                hashfileItem.SHA1 = sha1s.ToArray();
+                hashfileItem.SHA1 = [.. sha1s];
             if (sha256s.Any())
-                hashfileItem.SHA256 = sha256s.ToArray();
+                hashfileItem.SHA256 = [.. sha256s];
             if (sha384s.Any())
-                hashfileItem.SHA384 = sha384s.ToArray();
+                hashfileItem.SHA384 = [.. sha384s];
             if (sha512s.Any())
-                hashfileItem.SHA512 = sha512s.ToArray();
+                hashfileItem.SHA512 = [.. sha512s];
             if (spamsums.Any())
-                hashfileItem.SpamSum = spamsums.ToArray();
+                hashfileItem.SpamSum = [.. spamsums];
 
             return hashfileItem;
         }

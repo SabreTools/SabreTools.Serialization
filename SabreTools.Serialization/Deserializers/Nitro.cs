@@ -110,7 +110,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the file allocation table
-            cart.FileAllocationTable = fileAllocationTable.ToArray();
+            cart.FileAllocationTable = [.. fileAllocationTable];
 
             #endregion
 
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the folder allocation table
-            nameTable.FolderAllocationTable = folderAllocationTable.ToArray();
+            nameTable.FolderAllocationTable = [.. folderAllocationTable];
 
             // Create a variable-length table
             var nameList = new List<NameListEntry>();
@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the name list
-            nameTable.NameList = nameList.ToArray();
+            nameTable.NameList = [.. nameList];
 
             return nameTable;
         }

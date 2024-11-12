@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the DIFAT sectors table
-            binary.DIFATSectorNumbers = difatSectors.ToArray();
+            binary.DIFATSectorNumbers = [.. difatSectors];
 
             #endregion
 
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the FAT sectors table
-            binary.FATSectorNumbers = fatSectors.ToArray();
+            binary.FATSectorNumbers = [.. fatSectors];
 
             #endregion
 
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the mini FAT sectors table
-            binary.MiniFATSectorNumbers = miniFatSectors.ToArray();
+            binary.MiniFATSectorNumbers = [.. miniFatSectors];
 
             #endregion
 
@@ -219,7 +219,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the Directory sectors table
-            binary.DirectoryEntries = directorySectors.ToArray();
+            binary.DirectoryEntries = [.. directorySectors];
 
             #endregion
 

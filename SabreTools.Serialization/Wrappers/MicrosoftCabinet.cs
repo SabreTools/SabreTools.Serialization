@@ -86,13 +86,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private static uint ChecksumData(byte[] data)
         {
-            uint[] C = new uint[4]
-            {
+            uint[] C =
+            [
                 S(data, 1, data.Length),
                 S(data, 2, data.Length),
                 S(data, 3, data.Length),
                 S(data, 4, data.Length),
-            };
+            ];
 
             return C[0] ^ C[1] ^ C[2] ^ C[3];
         }

@@ -678,7 +678,7 @@ namespace SabreTools.Serialization.Deserializers
                     _ = data.ReadByteValue();
             }
 
-            return attributeCertificateTable.ToArray();
+            return [.. attributeCertificateTable];
         }
 
         /// <summary>
@@ -913,7 +913,7 @@ namespace SabreTools.Serialization.Deserializers
                     break;
             }
 
-            importTable.ImportDirectoryTable = importDirectoryTable.ToArray();
+            importTable.ImportDirectoryTable = [.. importDirectoryTable];
 
             // Names
             for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
@@ -981,7 +981,7 @@ namespace SabreTools.Serialization.Deserializers
                         break;
                 }
 
-                importLookupTables[i] = entryLookupTable.ToArray();
+                importLookupTables[i] = [.. entryLookupTable];
             }
 
             importTable.ImportLookupTables = importLookupTables;
@@ -1035,7 +1035,7 @@ namespace SabreTools.Serialization.Deserializers
                         break;
                 }
 
-                importAddressTables[i] = addressLookupTable.ToArray();
+                importAddressTables[i] = [.. addressLookupTable];
             }
 
             importTable.ImportAddressTables = importAddressTables;

@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.Deserializers
                 dat.Emulator.ADDITIONAL_ELEMENTS = emulatorAdditional.Where(s => s != null).ToArray();
             if (dat.Games != null)
             {
-                dat.Games.Rom = roms.ToArray();
+                dat.Games.Rom = [.. roms];
                 dat.Games.ADDITIONAL_ELEMENTS = gamesAdditional.Where(s => s != null).Select(s => s).ToArray();
             }
             return dat;

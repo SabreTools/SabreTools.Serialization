@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Deserializers
         private static DirectoryItem ParseDirectoryItem(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            DirectoryItem directoryItem = new DirectoryItem();
+            var directoryItem = new DirectoryItem();
 
             directoryItem.FileNameCRC = data.ReadUInt32();
             directoryItem.NameOffset = data.ReadUInt32();

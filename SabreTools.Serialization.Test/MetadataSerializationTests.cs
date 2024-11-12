@@ -63,9 +63,9 @@ namespace SabreTools.Serialization.Test
 
             var dump = new Models.OpenMSX.Dump[]
             {
-                new Models.OpenMSX.Dump { Original = original, Rom = rom },
-                new Models.OpenMSX.Dump { Rom = megaRom },
-                new Models.OpenMSX.Dump { Rom = sccPlusCart },
+                new() { Original = original, Rom = rom },
+                new() { Rom = megaRom },
+                new() { Rom = sccPlusCart },
             };
 
             var software = new Models.OpenMSX.Software

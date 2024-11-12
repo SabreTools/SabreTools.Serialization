@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Deserializers
             if (!reader.ReadHeader() || reader.HeaderValues == null)
                 return null;
 
-            dat.Header = reader.HeaderValues.ToArray();
+            dat.Header = [.. reader.HeaderValues];
 
             // Loop through the rows and parse out values
             var rows = new List<Row>();
@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the rows to the Dat and return
-            dat.Row = rows.ToArray();
+            dat.Row = [.. rows];
             return dat;
         }
 

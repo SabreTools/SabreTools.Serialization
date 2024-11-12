@@ -165,7 +165,9 @@ namespace SabreTools.Serialization
             if (string.IsNullOrEmpty(addD.Version))
                 offset = originalOffset + 0x10;
 
-            addD.Build = data.ReadBytes(ref offset, 4)?.Select(b => (char)b)?.ToArray();
+            var buildBytes = data.ReadBytes(ref offset, 4);
+            var buildChars = Array.ConvertAll(buildBytes, b => (char)b);
+            addD.Build = buildChars;
 
             // Distinguish between v1 and v2
             int bytesToRead = 112; // v2

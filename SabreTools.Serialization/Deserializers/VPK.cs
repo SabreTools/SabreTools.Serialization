@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            return directoryItems.ToArray();
+            return [.. directoryItems];
         }
 
         /// <summary>

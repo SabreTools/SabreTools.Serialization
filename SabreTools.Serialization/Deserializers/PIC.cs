@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the units and return
-            di.Units = diUnits.ToArray();
+            di.Units = [.. diUnits];
             return di;
         }
 

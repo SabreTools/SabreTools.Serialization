@@ -752,7 +752,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            chip.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            chip.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return chip;
         }
 
@@ -799,7 +799,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            video.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            video.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return video;
         }
 
@@ -828,7 +828,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            sound.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            sound.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return sound;
         }
 
@@ -872,7 +872,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            input.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            input.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return input;
         }
 
@@ -909,7 +909,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             dipswitch.Entry = [.. entries];
-            dipswitch.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            dipswitch.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return dipswitch;
         }
 
@@ -950,7 +950,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            driver.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            driver.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return driver;
         }
 

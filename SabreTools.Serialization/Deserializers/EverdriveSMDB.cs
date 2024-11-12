@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the rows to the Dat and return
-            dat.Row = rows.ToArray();
+            dat.Row = [.. rows];
             return dat;
         }
     }

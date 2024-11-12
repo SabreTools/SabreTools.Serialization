@@ -46,15 +46,15 @@ namespace SabreTools.Serialization.Deserializers
                         {
                             case "doscenter":
                                 if (dat.DosCenter != null)
-                                    dat.DosCenter.ADDITIONAL_ELEMENTS = headerAdditional.ToArray();
+                                    dat.DosCenter.ADDITIONAL_ELEMENTS = [.. headerAdditional];
 
                                 headerAdditional.Clear();
                                 break;
                             case "game":
                                 if (game != null)
                                 {
-                                    game.File = files.ToArray();
-                                    game.ADDITIONAL_ELEMENTS = gameAdditional.ToArray();
+                                    game.File = [.. files];
+                                    game.ADDITIONAL_ELEMENTS = [.. gameAdditional];
                                     games.Add(game);
                                 }
 
@@ -167,8 +167,8 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Add extra pieces and return
-            dat.Game = games.ToArray();
-            dat.ADDITIONAL_ELEMENTS = additional.ToArray();
+            dat.Game = [.. games];
+            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
 
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            file.ADDITIONAL_ELEMENTS = itemAdditional.ToArray();
+            file.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return file;
         }
     }

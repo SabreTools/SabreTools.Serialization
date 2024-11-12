@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Build the remaining file info
 #if NET20 || NET35
-                    var pathArray = pathParts.ToArray();
+                    var pathArray = [.. pathParts];
 
                     string tempPath = string.Empty;
                     if (pathArray.Length == 0 || pathArray.Length == 1)
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
                     fileInfo.Path = tempPath;
 #else
-                    fileInfo.Path = Path.Combine(pathParts.ToArray());
+                    fileInfo.Path = Path.Combine([.. pathParts]);
 #endif
                     fileInfo.BlockEntries = [.. blockEntries];
 

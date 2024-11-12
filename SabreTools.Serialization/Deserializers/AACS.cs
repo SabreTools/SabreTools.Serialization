@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the records
-            mediaKeyBlock.Records = records.ToArray();
+            mediaKeyBlock.Records = [.. records];
 
             #endregion
 
@@ -164,7 +164,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the subset differences
-            record.SubsetDifferences = subsetDifferences.ToArray();
+            record.SubsetDifferences = [.. subsetDifferences];
 
             // If there's any data left, discard it
             if (data.Position < initialOffset + length)
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the media keys
-            record.MediaKeyData = mediaKeys.ToArray();
+            record.MediaKeyData = [.. mediaKeys];
 
             return record;
         }
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the offsets
-            record.Offsets = offsets.ToArray();
+            record.Offsets = [.. offsets];
 
             return record;
         }
@@ -322,7 +322,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the signature blocks
-            record.SignatureBlocks = blocks.ToArray();
+            record.SignatureBlocks = [.. blocks];
 
             // If there's any data left, discard it
             if (data.Position < initialOffset + length)
@@ -383,7 +383,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Set the signature blocks
-            record.SignatureBlocks = blocks.ToArray();
+            record.SignatureBlocks = [.. blocks];
 
             // If there's any data left, discard it
             if (data.Position < initialOffset + length)

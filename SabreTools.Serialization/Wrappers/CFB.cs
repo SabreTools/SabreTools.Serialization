@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.Wrappers
                 data.AddRange(sectorData);
             }
 
-            return data.ToArray();
+            return [.. data];
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Wrappers
                 data.AddRange(sectorData);
             }
 
-            return data.ToArray();
+            return [.. data];
         }
 
         /// <summary>

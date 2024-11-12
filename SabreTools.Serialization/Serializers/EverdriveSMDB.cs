@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Serializers
                 if (row.Size != null)
                     rowArray.Add(row.Size);
 
-                writer.WriteValues(rowArray.ToArray());
+                writer.WriteValues([.. rowArray]);
                 writer.Flush();
             }
         }

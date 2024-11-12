@@ -280,7 +280,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= endOfFile)
                     {
-                        _overlayData = new byte[0];
+                        _overlayData = [];
                         return _overlayData;
                     }
 

@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Deserializers
                         hashTable.Add(hashEntry);
                     }
 
-                    archive.HashTable = hashTable.ToArray();
+                    archive.HashTable = [.. hashTable];
                 }
             }
 
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.Deserializers
                         hashTable.Add(hashEntry);
                     }
 
-                    archive.HashTable = hashTable.ToArray();
+                    archive.HashTable = [.. hashTable];
                 }
             }
 
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Deserializers
                         hashTable.Add(hashEntry);
                     }
 
-                    archive.HashTable = hashTable.ToArray();
+                    archive.HashTable = [.. hashTable];
                 }
             }
 
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.Deserializers
                         blockTable.Add(blockEntry);
                     }
 
-                    archive.BlockTable = blockTable.ToArray();
+                    archive.BlockTable = [.. blockTable];
                 }
             }
 
@@ -222,7 +222,7 @@ namespace SabreTools.Serialization.Deserializers
                         blockTable.Add(blockEntry);
                     }
 
-                    archive.BlockTable = blockTable.ToArray();
+                    archive.BlockTable = [.. blockTable];
                 }
             }
 
@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.Deserializers
                         blockTable.Add(blockEntry);
                     }
 
-                    archive.BlockTable = blockTable.ToArray();
+                    archive.BlockTable = [.. blockTable];
                 }
             }
 
@@ -278,7 +278,7 @@ namespace SabreTools.Serialization.Deserializers
                         hiBlockTable.Add(hiBlockEntry);
                     }
 
-                    archive.HiBlockTable = hiBlockTable.ToArray();
+                    archive.HiBlockTable = [.. hiBlockTable];
                 }
             }
 

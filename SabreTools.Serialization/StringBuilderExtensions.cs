@@ -147,7 +147,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, char[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(c => c.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, c => c.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -156,7 +162,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, short[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(s => s.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, s => s.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -165,7 +177,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ushort[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(u => u.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, u => u.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -174,7 +192,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, int[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(i => i.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, i => i.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -183,7 +207,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, uint[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(u => u.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, u => u.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -192,7 +222,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, long[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(l => l.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, l => l.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -201,7 +237,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ulong[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(u => u.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, u => u.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -210,7 +252,13 @@ namespace SabreTools.Serialization
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, Guid[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : string.Join(", ", value.Select(g => g.ToString()).ToArray()));
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, g => g.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
     }

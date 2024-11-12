@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Deserializers
                     // If we have a set to process
                     if (set != null)
                     {
-                        set.Row = rows.ToArray();
+                        set.Row = [.. rows];
                         sets.Add(set);
                         set = null;
                         rows.Clear();
@@ -226,15 +226,15 @@ namespace SabreTools.Serialization.Deserializers
             // If we have a set to process
             if (set != null)
             {
-                set.Row = rows.ToArray();
+                set.Row = [.. rows];
                 sets.Add(set);
                 set = null;
                 rows.Clear();
             }
 
             // Add extra pieces and return
-            dat.Set = sets.ToArray();
-            dat.ADDITIONAL_ELEMENTS = additional.ToArray();
+            dat.Set = [.. sets];
+            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
     }
