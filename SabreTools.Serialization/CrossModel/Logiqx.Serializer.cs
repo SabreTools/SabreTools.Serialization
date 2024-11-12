@@ -26,7 +26,6 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Dir != null && item.Dir.Length > 0)
             {
                 machines.AddRange(item.Dir
-                    .Where(d => d != null)
                     .SelectMany(ConvertDirToInternalModel));
             }
 

@@ -18,7 +18,6 @@ namespace SabreTools.Serialization.CrossModel
             if (machines != null && machines.Length > 0)
             {
                 files.File = machines
-                    .Where(m => m != null)
                     .SelectMany(ConvertFromInternalModel)
                     .ToArray();
             }

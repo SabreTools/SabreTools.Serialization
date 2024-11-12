@@ -22,7 +22,6 @@ namespace SabreTools.Serialization.CrossModel
                 metadataFile.Games = new Games
                 {
                     Rom = machines
-                        .Where(m => m != null)
                         .SelectMany(ConvertMachineFromInternalModel)
                         .ToArray()
                 };

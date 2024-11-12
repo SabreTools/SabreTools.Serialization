@@ -19,7 +19,6 @@ namespace SabreTools.Serialization.CrossModel
             if (machines != null && machines.Length > 0)
             {
                 metadataFile.Row = machines
-                    .Where(m => m != null)
                     .SelectMany(ConvertMachineFromInternalModel)
                     .ToArray();
             }
