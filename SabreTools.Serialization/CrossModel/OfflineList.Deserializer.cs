@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.CrossModel
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
             {
-                var romSizes = Array.ConvertAll(roms, r => r.ToString());
+                var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Models.Metadata.Rom.SizeKey)?.ToString());
                 game.RomSize = romSizes.FirstOrDefault(s => s != null);
 
                 var romCRCs = Array.ConvertAll(roms, ConvertFromInternalModel);;
