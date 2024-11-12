@@ -1,5 +1,5 @@
+using System;
 using System.IO;
-using System.Linq;
 using static SabreTools.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Wrappers
@@ -43,13 +43,16 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Get the archive count
-                int archiveCount = Model.DirectoryItems == null
-                    ? 0
-                    : Model.DirectoryItems
-                        .Select(di => di?.DirectoryEntry)
-                        .Select(de => de?.ArchiveIndex ?? 0)
-                        .Where(ai => ai != HL_VPK_NO_ARCHIVE)
-                        .Max();
+                ushort archiveCount = 0;
+                foreach (var di in Model.DirectoryItems ?? [])
+                {
+                    if (di?.DirectoryEntry == null)
+                        continue;
+                    if (di.DirectoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE)
+                        continue;
+
+                    archiveCount = Math.Max(archiveCount, di.DirectoryEntry.ArchiveIndex);
+                }
 
                 // Build the list of archive filenames to populate
                 _archiveFilenames = new string[archiveCount];
