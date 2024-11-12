@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.File != null && item.File.Any())
+            if (item?.File != null && item.File.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.File
                     .Where(f => f != null)

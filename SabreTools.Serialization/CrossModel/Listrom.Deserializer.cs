@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 metadataFile.Set = machines
                     .Where(m => m != null)

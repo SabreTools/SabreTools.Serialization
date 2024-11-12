@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
             var softwareDb = header != null ? ConvertHeaderFromInternalModel(header) : new SoftwareDb();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 softwareDb.Software = machines
                     .Where(m => m != null)
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var dumps = item.Read<Models.Metadata.Dump[]>(Models.Metadata.Machine.DumpKey);
-            if (dumps != null && dumps.Any())
+            if (dumps != null && dumps.Length > 0)
             {
                 game.Dump = dumps
                     .Where(d => d != null)

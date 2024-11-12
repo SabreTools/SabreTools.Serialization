@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines == null || !machines.Any())
+            if (machines == null || machines.Length == 0)
                 return null;
 
             var hashfiles = machines
@@ -35,37 +35,37 @@ namespace SabreTools.Serialization.CrossModel
 
             foreach (var hashfile in hashfiles)
             {
-                if (hashfile.SFV != null && hashfile.SFV.Any())
+                if (hashfile.SFV != null && hashfile.SFV.Length > 0)
                     sfvs.AddRange(hashfile.SFV);
-                if (hashfile.MD5 != null && hashfile.MD5.Any())
+                if (hashfile.MD5 != null && hashfile.MD5.Length > 0)
                     md5s.AddRange(hashfile.MD5);
-                if (hashfile.SHA1 != null && hashfile.SHA1.Any())
+                if (hashfile.SHA1 != null && hashfile.SHA1.Length > 0)
                     sha1s.AddRange(hashfile.SHA1);
-                if (hashfile.SHA256 != null && hashfile.SHA256.Any())
+                if (hashfile.SHA256 != null && hashfile.SHA256.Length > 0)
                     sha256s.AddRange(hashfile.SHA256);
-                if (hashfile.SHA384 != null && hashfile.SHA384.Any())
+                if (hashfile.SHA384 != null && hashfile.SHA384.Length > 0)
                     sha384s.AddRange(hashfile.SHA384);
-                if (hashfile.SHA512 != null && hashfile.SHA512.Any())
+                if (hashfile.SHA512 != null && hashfile.SHA512.Length > 0)
                     sha512s.AddRange(hashfile.SHA512);
-                if (hashfile.SpamSum != null && hashfile.SpamSum.Any())
+                if (hashfile.SpamSum != null && hashfile.SpamSum.Length > 0)
                     spamsums.AddRange(hashfile.SpamSum);
             }
 
             var hashfileItem = new Models.Hashfile.Hashfile();
 
-            if (sfvs.Any())
+            if (sfvs.Count > 0)
                 hashfileItem.SFV = [.. sfvs];
-            if (md5s.Any())
+            if (md5s.Count > 0)
                 hashfileItem.MD5 = [.. md5s];
-            if (sha1s.Any())
+            if (sha1s.Count > 0)
                 hashfileItem.SHA1 = [.. sha1s];
-            if (sha256s.Any())
+            if (sha256s.Count > 0)
                 hashfileItem.SHA256 = [.. sha256s];
-            if (sha384s.Any())
+            if (sha384s.Count > 0)
                 hashfileItem.SHA384 = [.. sha384s];
-            if (sha512s.Any())
+            if (sha512s.Count > 0)
                 hashfileItem.SHA512 = [.. sha512s];
-            if (spamsums.Any())
+            if (spamsums.Count > 0)
                 hashfileItem.SpamSum = [.. spamsums];
 
             return hashfileItem;
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var machines = item.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 return machines
                     .Where(m => m != null)

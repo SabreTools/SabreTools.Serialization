@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Game != null && item.Game.Any())
+            if (item?.Game != null && item.Game.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.Game
                     .Where(g => g != null)
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.HistoryKey] = item.History,
             };
 
-            if (item.BiosSet != null && item.BiosSet.Any())
+            if (item.BiosSet != null && item.BiosSet.Length > 0)
             {
                 machine[Models.Metadata.Machine.BiosSetKey] = item.BiosSet
                     .Where(b => b != null)
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Rom != null && item.Rom.Any())
+            if (item.Rom != null && item.Rom.Length > 0)
             {
                 machine[Models.Metadata.Machine.RomKey] = item.Rom
                     .Where(r => r != null)
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Disk != null && item.Disk.Any())
+            if (item.Disk != null && item.Disk.Length > 0)
             {
                 machine[Models.Metadata.Machine.DiskKey] = item.Disk
                     .Where(d => d != null)
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.DeviceRef != null && item.DeviceRef.Any())
+            if (item.DeviceRef != null && item.DeviceRef.Length > 0)
             {
                 machine[Models.Metadata.Machine.DeviceRefKey] = item.DeviceRef
                     .Where(d => d != null)
@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Sample != null && item.Sample.Any())
+            if (item.Sample != null && item.Sample.Length > 0)
             {
                 machine[Models.Metadata.Machine.SampleKey] = item.Sample
                     .Where(s => s != null)
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Chip != null && item.Chip.Any())
+            if (item.Chip != null && item.Chip.Length > 0)
             {
                 machine[Models.Metadata.Machine.ChipKey] = item.Chip
                     .Where(c => c != null)
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Display != null && item.Display.Any())
+            if (item.Display != null && item.Display.Length > 0)
             {
                 machine[Models.Metadata.Machine.DisplayKey] = item.Display
                     .Where(d => d != null)
@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Video != null && item.Video.Any())
+            if (item.Video != null && item.Video.Length > 0)
             {
                 machine[Models.Metadata.Machine.VideoKey] = item.Video
                     .Where(v => v != null)
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Input != null)
                 machine[Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
 
-            if (item.DipSwitch != null && item.DipSwitch.Any())
+            if (item.DipSwitch != null && item.DipSwitch.Length > 0)
             {
                 machine[Models.Metadata.Machine.DipSwitchKey] = item.DipSwitch
                     .Where(d => d != null)
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Configuration != null && item.Configuration.Any())
+            if (item.Configuration != null && item.Configuration.Length > 0)
             {
                 machine[Models.Metadata.Machine.ConfigurationKey] = item.Configuration
                     .Where(c => c != null)
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Port != null && item.Port.Any())
+            if (item.Port != null && item.Port.Length > 0)
             {
                 machine[Models.Metadata.Machine.PortKey] = item.Port
                     .Where(p => p != null)
@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Adjuster != null && item.Adjuster.Any())
+            if (item.Adjuster != null && item.Adjuster.Length > 0)
             {
                 machine[Models.Metadata.Machine.AdjusterKey] = item.Adjuster
                     .Where(a => a != null)
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Driver != null)
                 machine[Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
 
-            if (item.Feature != null && item.Feature.Any())
+            if (item.Feature != null && item.Feature.Length > 0)
             {
                 machine[Models.Metadata.Machine.FeatureKey] = item.Feature
                     .Where(f => f != null)
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Device != null && item.Device.Any())
+            if (item.Device != null && item.Device.Length > 0)
             {
                 machine[Models.Metadata.Machine.DeviceKey] = item.Device
                     .Where(d => d != null)
@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Slot != null && item.Slot.Any())
+            if (item.Slot != null && item.Slot.Length > 0)
             {
                 machine[Models.Metadata.Machine.SlotKey] = item.Slot
                     .Where(s => s != null)
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.SoftwareList != null && item.SoftwareList.Any())
+            if (item.SoftwareList != null && item.SoftwareList.Length > 0)
             {
                 machine[Models.Metadata.Machine.SoftwareListKey] = item.SoftwareList
                     .Where(s => s != null)
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.RamOption != null && item.RamOption.Any())
+            if (item.RamOption != null && item.RamOption.Length > 0)
             {
                 machine[Models.Metadata.Machine.RamOptionKey] = item.RamOption
                     .Where(r => r != null)
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Condition != null)
                 configuration[Models.Metadata.Configuration.ConditionKey] = ConvertToInternalModel(item.Condition);
 
-            if (item.ConfLocation != null && item.ConfLocation.Any())
+            if (item.ConfLocation != null && item.ConfLocation.Length > 0)
             {
                 configuration[Models.Metadata.Configuration.ConfLocationKey] = item.ConfLocation
                     .Where(c => c != null)
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.ConfSetting != null && item.ConfSetting.Any())
+            if (item.ConfSetting != null && item.ConfSetting.Length > 0)
             {
                 configuration[Models.Metadata.Configuration.ConfSettingKey] = item.ConfSetting
                     .Where(c => c != null)
@@ -392,7 +392,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Instance != null)
                 device[Models.Metadata.Device.InstanceKey] = ConvertToInternalModel(item.Instance);
 
-            if (item.Extension != null && item.Extension.Any())
+            if (item.Extension != null && item.Extension.Length > 0)
             {
                 device[Models.Metadata.Device.ExtensionKey] = item.Extension
                     .Where(e => e != null)
@@ -444,7 +444,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Condition != null)
                 dipSwitch[Models.Metadata.DipSwitch.ConditionKey] = ConvertToInternalModel(item.Condition);
 
-            if (item.DipLocation != null && item.DipLocation.Any())
+            if (item.DipLocation != null && item.DipLocation.Length > 0)
             {
                 dipSwitch[Models.Metadata.DipSwitch.DipLocationKey] = item.DipLocation
                     .Where(d => d != null)
@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.DipValue != null && item.DipValue.Any())
+            if (item.DipValue != null && item.DipValue.Length > 0)
             {
                 dipSwitch[Models.Metadata.DipSwitch.DipValueKey] = item.DipValue
                     .Where(d => d != null)
@@ -589,7 +589,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Input.CoinsKey] = item.Coins,
             };
 
-            if (item.Control != null && item.Control.Any())
+            if (item.Control != null && item.Control.Length > 0)
             {
                 input[Models.Metadata.Input.ControlKey] = item.Control
                     .Where(c => c != null)
@@ -623,7 +623,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Port.TagKey] = item.Tag,
             };
 
-            if (item.Analog != null && item.Analog.Any())
+            if (item.Analog != null && item.Analog.Length > 0)
             {
                 port[Models.Metadata.Port.AnalogKey] = item.Analog
                     .Where(a => a != null)
@@ -693,7 +693,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Slot.NameKey] = item.Name,
             };
 
-            if (item.SlotOption != null && item.SlotOption.Any())
+            if (item.SlotOption != null && item.SlotOption.Length > 0)
             {
                 slot[Models.Metadata.Slot.SlotOptionKey] = item.SlotOption
                     .Where(s => s != null)

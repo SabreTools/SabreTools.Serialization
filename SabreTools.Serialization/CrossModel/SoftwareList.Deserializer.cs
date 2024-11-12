@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new Models.SoftwareList.SoftwareList();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 metadataFile.Software = machines
                     .Where(m => m != null)
@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var infos = item.Read<Models.Metadata.Info[]>(Models.Metadata.Machine.InfoKey);
-            if (infos != null && infos.Any())
+            if (infos != null && infos.Length > 0)
             {
                 software.Info = infos
                     .Where(i => i != null)
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var sharedFeats = item.Read<Models.Metadata.SharedFeat[]>(Models.Metadata.Machine.SharedFeatKey);
-            if (sharedFeats != null && sharedFeats.Any())
+            if (sharedFeats != null && sharedFeats.Length > 0)
             {
                 software.SharedFeat = sharedFeats
                     .Where(s => s != null)
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var parts = item.Read<Models.Metadata.Part[]>(Models.Metadata.Machine.PartKey);
-            if (parts != null && parts.Any())
+            if (parts != null && parts.Length > 0)
             {
                 software.Part = parts
                     .Where(p => p != null)
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.DataArea.RomKey);
-            if (roms != null && roms.Any())
+            if (roms != null && roms.Length > 0)
             {
                 dataArea.Rom = roms
                     .Where(r => r != null)
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var dipValues = item.Read<Models.Metadata.DipValue[]>(Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues != null && dipValues.Any())
+            if (dipValues != null && dipValues.Length > 0)
             {
                 dipSwitch.DipValue = dipValues
                     .Where(d => d != null)
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.DiskArea.DiskKey);
-            if (disks != null && disks.Any())
+            if (disks != null && disks.Length > 0)
             {
                 diskArea.Disk = disks
                     .Where(d => d != null)
@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var features = item.Read<Models.Metadata.Feature[]>(Models.Metadata.Part.FeatureKey);
-            if (features != null && features.Any())
+            if (features != null && features.Length > 0)
             {
                 part.Feature = features
                     .Where(f => f != null)
@@ -235,7 +235,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var dataAreas = item.Read<Models.Metadata.DataArea[]>(Models.Metadata.Part.DataAreaKey);
-            if (dataAreas != null && dataAreas.Any())
+            if (dataAreas != null && dataAreas.Length > 0)
             {
                 part.DataArea = dataAreas
                     .Where(d => d != null)
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var diskAreas = item.Read<Models.Metadata.DiskArea[]>(Models.Metadata.Part.DiskAreaKey);
-            if (diskAreas != null && diskAreas.Any())
+            if (diskAreas != null && diskAreas.Length > 0)
             {
                 part.DiskArea = diskAreas
                     .Where(d => d != null)
@@ -253,7 +253,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var dipSwitches = item.Read<Models.Metadata.DipSwitch[]>(Models.Metadata.Part.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Any())
+            if (dipSwitches != null && dipSwitches.Length > 0)
             {
                 part.DipSwitch = dipSwitches
                     .Where(d => d != null)

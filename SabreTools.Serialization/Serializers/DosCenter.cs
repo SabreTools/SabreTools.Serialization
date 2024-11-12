@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Serializers
         private static void WriteGames(Game[]? games, ClrMameProWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (games == null || !games.Any())
+            if (games == null || games.Length == 0)
                 return;
 
             // Loop through and write out the games

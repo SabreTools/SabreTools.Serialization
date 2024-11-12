@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Software != null && item.Software.Any())
+            if (item?.Software != null && item.Software.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.Software
                     .Where(s => s != null)
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.CountryKey] = item.Country,
             };
 
-            if (item.Dump != null && item.Dump.Any())
+            if (item.Dump != null && item.Dump.Length > 0)
             {
                 machine[Models.Metadata.Machine.DumpKey] = item.Dump
                     .Where(d => d != null)

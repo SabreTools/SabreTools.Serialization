@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Build the remaining file info
 #if NET20 || NET35
-                    var pathArray = [.. pathParts];
+                    string[] pathArray = [.. pathParts];
 
                     string tempPath = string.Empty;
                     if (pathArray.Length == 0 || pathArray.Length == 1)

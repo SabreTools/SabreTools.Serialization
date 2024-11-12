@@ -1078,7 +1078,7 @@ namespace SabreTools.Serialization.Deserializers
                     .ToList();
 
                 // If we have any addresses, add them to the table
-                if (hintNameTableEntryAddresses.Any())
+                if (hintNameTableEntryAddresses.Count > 0)
                 {
                     for (int i = 0; i < hintNameTableEntryAddresses.Count; i++)
                     {

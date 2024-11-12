@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
             };
 
-            if (obj?.Row != null && obj.Row.Any())
+            if (obj?.Row != null && obj.Row.Length > 0)
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Row.Select(ConvertMachineToInternalModel).ToArray();
 
             return metadataFile;
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Header.HeaderKey] = item.Header,
             };
 
-            if (item.Row != null && item.Row.Any())
+            if (item.Row != null && item.Row.Length > 0)
             {
                 var first = item.Row[0];
                 //header[Models.Metadata.Header.FileNameKey] = first.FileName; // Not possible to map

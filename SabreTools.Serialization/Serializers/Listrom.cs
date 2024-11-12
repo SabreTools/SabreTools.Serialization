@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Serializers
         private static void WriteSets(Set[]? sets, StreamWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (sets == null || !sets.Any())
+            if (sets == null || sets.Length == 0)
                 return;
 
             // Loop through and write out the games
@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Serializers
 
             if (!string.IsNullOrEmpty(set.Driver))
             {
-                if (set.Row != null && set.Row.Any())
+                if (set.Row != null && set.Row.Length > 0)
                 {
                     writer.WriteLine($"ROMs required for driver \"{set.Driver}\".");
                     writer.WriteLine("Name                                   Size Checksum");
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Serializers
             }
             else if (!string.IsNullOrEmpty(set.Device))
             {
-                if (set.Row != null && set.Row.Any())
+                if (set.Row != null && set.Row.Length > 0)
                 {
                     writer.WriteLine($"ROMs required for device \"{set.Device}\".");
                     writer.WriteLine("Name                                   Size Checksum");

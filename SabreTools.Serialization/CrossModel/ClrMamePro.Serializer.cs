@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
             if (obj?.ClrMamePro != null)
                 metadataFile[Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.ClrMamePro);
 
-            if (obj?.Game != null && obj.Game.Any())
+            if (obj?.Game != null && obj.Game.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Game
                     .Where(g => g != null)
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
             };
 
-            if (item.Release != null && item.Release.Any())
+            if (item.Release != null && item.Release.Length > 0)
             {
                 machine[Models.Metadata.Machine.ReleaseKey] = item.Release
                     .Where(r => r != null)
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.BiosSet != null && item.BiosSet.Any())
+            if (item.BiosSet != null && item.BiosSet.Length > 0)
             {
                 machine[Models.Metadata.Machine.BiosSetKey] = item.BiosSet
                     .Where(b => b != null)
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Rom != null && item.Rom.Any())
+            if (item.Rom != null && item.Rom.Length > 0)
             {
                 machine[Models.Metadata.Machine.RomKey] = item.Rom
                     .Where(r => r != null)
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.CrossModel
                 .ToArray();
             }
 
-            if (item.Disk != null && item.Disk.Any())
+            if (item.Disk != null && item.Disk.Length > 0)
             {
                 machine[Models.Metadata.Machine.DiskKey] = item.Disk
                     .Where(d => d != null)
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Media != null && item.Media.Any())
+            if (item.Media != null && item.Media.Length > 0)
             {
                 machine[Models.Metadata.Machine.MediaKey] = item.Media
                     .Where(m => m != null)
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Sample != null && item.Sample.Any())
+            if (item.Sample != null && item.Sample.Length > 0)
             {
                 machine[Models.Metadata.Machine.SampleKey] = item.Sample
                     .Where(s => s != null)
@@ -123,7 +123,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Archive != null && item.Archive.Any())
+            if (item.Archive != null && item.Archive.Length > 0)
             {
                 machine[Models.Metadata.Machine.ArchiveKey] = item.Archive
                     .Where(a => a != null)
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.CrossModel
                     .ToArray();
             }
 
-            if (item.Chip != null && item.Chip.Any())
+            if (item.Chip != null && item.Chip.Length > 0)
             {
                 machine[Models.Metadata.Machine.ChipKey] = item.Chip
                     .Where(c => c != null)
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Input != null)
                 machine[Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
 
-            if (item.DipSwitch != null && item.DipSwitch.Any())
+            if (item.DipSwitch != null && item.DipSwitch.Length > 0)
             {
                 machine[Models.Metadata.Machine.DipSwitchKey] = item.DipSwitch
                     .Where(d => d != null)

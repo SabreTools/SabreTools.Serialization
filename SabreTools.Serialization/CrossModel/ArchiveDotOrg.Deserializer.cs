@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using SabreTools.Models.ArchiveDotOrg;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -16,7 +14,7 @@ namespace SabreTools.Serialization.CrossModel
             var files = new Models.ArchiveDotOrg.Files();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 files.File = machines
                     .Where(m => m != null)

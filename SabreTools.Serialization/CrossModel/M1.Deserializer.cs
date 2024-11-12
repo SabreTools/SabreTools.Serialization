@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.CrossModel
             var m1 = header != null ? ConvertM1FromInternalModel(header) : new Models.Listxml.M1();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 m1.Game = machines
                     .Where(m => m != null)

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
             if (obj?.DosCenter != null)
                 metadataFile[Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.DosCenter);
 
-            if (obj?.Game != null && obj.Game.Any())
+            if (obj?.Game != null && obj.Game.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Game
                     .Where(g => g != null)
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.NameKey] = item.Name,
             };
 
-            if (item.File != null && item.File.Any())
+            if (item.File != null && item.File.Length > 0)
             {
                 machine[Models.Metadata.Machine.RomKey] = item.File
                     .Where(f => f != null)

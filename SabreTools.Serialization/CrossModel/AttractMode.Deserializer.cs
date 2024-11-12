@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 metadataFile.Row = machines
                     .Where(m => m != null)
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.CrossModel
         private static Row[] ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
-            if (roms == null || !roms.Any())
+            if (roms == null || roms.Length == 0)
                 return [];
 
             return roms

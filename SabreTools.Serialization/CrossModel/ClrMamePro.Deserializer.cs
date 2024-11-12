@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.CrossModel
                 metadataFile.ClrMamePro = ConvertHeaderFromInternalModel(header);
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 metadataFile.Game = machines
                     .Where(m => m != null)
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.SampleOf = item.ReadString(Models.Metadata.Machine.SampleOfKey);
 
             var releases = item.Read<Models.Metadata.Release[]>(Models.Metadata.Machine.ReleaseKey);
-            if (releases != null && releases.Any())
+            if (releases != null && releases.Length > 0)
             {
                 gameBase.Release = releases
                     .Where(r => r != null)
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var biosSets = item.Read<Models.Metadata.BiosSet[]>(Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Any())
+            if (biosSets != null && biosSets.Length > 0)
             {
                 gameBase.BiosSet = biosSets
                     .Where(r => r != null)
@@ -94,7 +94,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Any())
+            if (roms != null && roms.Length > 0)
             {
                 gameBase.Rom = roms
                     .Where(r => r != null)
@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Any())
+            if (disks != null && disks.Length > 0)
             {
                 gameBase.Disk = disks
                     .Where(d => d != null)
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var medias = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
-            if (medias != null && medias.Any())
+            if (medias != null && medias.Length > 0)
             {
                 gameBase.Media = medias
                     .Where(m => m != null)
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var samples = item.Read<Models.Metadata.Sample[]>(Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Any())
+            if (samples != null && samples.Length > 0)
             {
                 gameBase.Sample = samples
                     .Where(m => m != null)
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var archives = item.Read<Models.Metadata.Archive[]>(Models.Metadata.Machine.ArchiveKey);
-            if (archives != null && archives.Any())
+            if (archives != null && archives.Length > 0)
             {
                 gameBase.Archive = archives
                     .Where(m => m != null)
@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var chips = item.Read<Models.Metadata.Chip[]>(Models.Metadata.Machine.ChipKey);
-            if (chips != null && chips.Any())
+            if (chips != null && chips.Length > 0)
             {
                 gameBase.Chip = chips
                     .Where(m => m != null)
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var videos = item.Read<Models.Metadata.Video[]>(Models.Metadata.Machine.VideoKey);
-            if (videos != null && videos.Any())
+            if (videos != null && videos.Length > 0)
             {
                 gameBase.Video = videos
                     .Where(m => m != null)
@@ -165,7 +165,7 @@ namespace SabreTools.Serialization.CrossModel
                 gameBase.Input = ConvertFromInternalModel(input);
 
             var dipSwitches = item.Read<Models.Metadata.DipSwitch[]>(Models.Metadata.Machine.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Any())
+            if (dipSwitches != null && dipSwitches.Length > 0)
             {
                 gameBase.DipSwitch = dipSwitches
                     .Where(m => m != null)

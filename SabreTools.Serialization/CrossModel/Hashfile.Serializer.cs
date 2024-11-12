@@ -42,19 +42,19 @@ namespace SabreTools.Serialization.CrossModel
         {
             var machine = new Models.Metadata.Machine();
 
-            if (item.SFV != null && item.SFV.Any())
+            if (item.SFV != null && item.SFV.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SFV.Select(ConvertToInternalModel).ToArray();
-            else if (item.MD5 != null && item.MD5.Any())
+            else if (item.MD5 != null && item.MD5.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.MD5.Select(ConvertToInternalModel).ToArray();
-            else if (item.SHA1 != null && item.SHA1.Any())
+            else if (item.SHA1 != null && item.SHA1.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SHA1.Select(ConvertToInternalModel).ToArray();
-            else if (item.SHA256 != null && item.SHA256.Any())
+            else if (item.SHA256 != null && item.SHA256.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SHA256.Select(ConvertToInternalModel).ToArray();
-            else if (item.SHA384 != null && item.SHA384.Any())
+            else if (item.SHA384 != null && item.SHA384.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SHA384.Select(ConvertToInternalModel).ToArray();
-            else if (item.SHA512 != null && item.SHA512.Any())
+            else if (item.SHA512 != null && item.SHA512.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SHA512.Select(ConvertToInternalModel).ToArray();
-            else if (item.SpamSum != null && item.SpamSum.Any())
+            else if (item.SpamSum != null && item.SpamSum.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = item.SpamSum.Select(ConvertToInternalModel).ToArray();
 
             return machine;

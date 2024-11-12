@@ -835,7 +835,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we don't have string version info in this executable
             var stringTable = _versionInfo?.StringFileInfo?.Children;
-            if (stringTable == null || !stringTable.Any())
+            if (stringTable == null || stringTable.Length == 0)
                 return null;
 
             // Try to find a key that matches
@@ -1361,7 +1361,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1386,7 +1386,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1410,7 +1410,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetSection(int index)
         {
             // If we have no sections
-            if (Model.SectionTable == null || !Model.SectionTable.Any())
+            if (Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1430,7 +1430,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1451,7 +1451,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetLastSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1471,7 +1471,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetSectionData(int index)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1516,7 +1516,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1537,7 +1537,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1557,7 +1557,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetSectionStrings(int index)
         {
             // If we have no sections
-            if (SectionNames == null || !SectionNames.Any() || Model.SectionTable == null || !Model.SectionTable.Any())
+            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist

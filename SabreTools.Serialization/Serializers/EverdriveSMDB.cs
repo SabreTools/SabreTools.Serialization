@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Serializers
         private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (rows == null || !rows.Any())
+            if (rows == null || rows.Length == 0)
                 return;
 
             // Loop through and write out the rows

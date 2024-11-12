@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 metadataFile.Row = machines
                     .Where(m => m != null)
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
             var rowItems = new List<Row>();
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Any())
+            if (roms != null && roms.Length > 0)
             {
                 rowItems.AddRange(roms
                     .Where(r => r != null)
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Any())
+            if (disks != null && disks.Length > 0)
             {
                 rowItems.AddRange(disks
                     .Where(d => d != null)
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var media = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
-            if (media != null && media.Any())
+            if (media != null && media.Length > 0)
             {
                 rowItems.AddRange(media
                     .Where(m => m != null)

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Games?.Game != null && item.Games.Game.Any())
+            if (item?.Games?.Game != null && item.Games.Game.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = item.Games.Game
                     .Where(g => g != null)
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
             };
 
-            if (item.Files?.RomCRC != null && item.Files.RomCRC.Any())
+            if (item.Files?.RomCRC != null && item.Files.RomCRC.Length > 0)
             {
                 machine[Models.Metadata.Machine.RomKey] = item.Files.RomCRC
                     .Where(r => r != null)

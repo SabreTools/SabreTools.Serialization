@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Serializers
         private static void WriteGames(Games? games, IniWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (games?.Rom == null || !games.Rom.Any())
+            if (games?.Rom == null || games.Rom.Length == 0)
                 return;
 
             writer.WriteSection("GAMES");

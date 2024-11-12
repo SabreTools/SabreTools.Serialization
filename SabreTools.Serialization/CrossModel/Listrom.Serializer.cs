@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
             };
 
-            if (obj?.Set != null && obj.Set.Any())
+            if (obj?.Set != null && obj.Set.Length > 0)
             {
                 metadataFile[Models.Metadata.MetadataFile.MachineKey] = obj.Set
                     .Where(s => s != null)
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.CrossModel
                 machine[Models.Metadata.Machine.NameKey] = item.Driver;
             }
 
-            if (item.Row != null && item.Row.Any())
+            if (item.Row != null && item.Row.Length > 0)
             {
                 var datItems = new List<Models.Metadata.DatItem>();
                 foreach (var file in item.Row)

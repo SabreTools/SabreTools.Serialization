@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
             var mame = header != null ? ConvertMameFromInternalModel(header) : new Mame();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 mame.Game = machines
                     .Where(m => m != null)
@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
             var mame = header != null ? ConvertMameFromInternalModel(header) : new Mame();
 
             var machines = item.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 mame.Game = machines
                     .Where(m => m != null)
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var biosSets = item.Read<Models.Metadata.BiosSet[]>(Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Any())
+            if (biosSets != null && biosSets.Length > 0)
             {
                 machine.BiosSet = biosSets
                     .Where(b => b != null)
@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Any())
+            if (roms != null && roms.Length > 0)
             {
                 machine.Rom = roms
                     .Where(r => r != null)
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Any())
+            if (disks != null && disks.Length > 0)
             {
                 machine.Disk = disks
                     .Where(d => d != null)
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var deviceRefs = item.Read<Models.Metadata.DeviceRef[]>(Models.Metadata.Machine.DeviceRefKey);
-            if (deviceRefs != null && deviceRefs.Any())
+            if (deviceRefs != null && deviceRefs.Length > 0)
             {
                 machine.DeviceRef = deviceRefs
                     .Where(d => d != null)
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var samples = item.Read<Models.Metadata.Sample[]>(Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Any())
+            if (samples != null && samples.Length > 0)
             {
                 machine.Sample = samples
                     .Where(s => s != null)
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var chips = item.Read<Models.Metadata.Chip[]>(Models.Metadata.Machine.ChipKey);
-            if (chips != null && chips.Any())
+            if (chips != null && chips.Length > 0)
             {
                 machine.Chip = chips
                     .Where(c => c != null)
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var displays = item.Read<Models.Metadata.Display[]>(Models.Metadata.Machine.DisplayKey);
-            if (displays != null && displays.Any())
+            if (displays != null && displays.Length > 0)
             {
                 machine.Display = displays
                     .Where(d => d != null)
@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var videos = item.Read<Models.Metadata.Video[]>(Models.Metadata.Machine.VideoKey);
-            if (videos != null && videos.Any())
+            if (videos != null && videos.Length > 0)
             {
                 machine.Video = videos
                     .Where(d => d != null)
@@ -168,7 +168,7 @@ namespace SabreTools.Serialization.CrossModel
                 machine.Input = ConvertFromInternalModel(input);
 
             var dipSwitches = item.Read<Models.Metadata.DipSwitch[]>(Models.Metadata.Machine.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Any())
+            if (dipSwitches != null && dipSwitches.Length > 0)
             {
                 machine.DipSwitch = dipSwitches
                     .Where(d => d != null)
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var configurations = item.Read<Models.Metadata.Configuration[]>(Models.Metadata.Machine.ConfigurationKey);
-            if (configurations != null && configurations.Any())
+            if (configurations != null && configurations.Length > 0)
             {
                 machine.Configuration = configurations
                     .Where(d => d != null)
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var ports = item.Read<Models.Metadata.Port[]>(Models.Metadata.Machine.PortKey);
-            if (ports != null && ports.Any())
+            if (ports != null && ports.Length > 0)
             {
                 machine.Port = ports
                     .Where(d => d != null)
@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var adjusters = item.Read<Models.Metadata.Adjuster[]>(Models.Metadata.Machine.AdjusterKey);
-            if (adjusters != null && adjusters.Any())
+            if (adjusters != null && adjusters.Length > 0)
             {
                 machine.Adjuster = adjusters
                     .Where(d => d != null)
@@ -208,7 +208,7 @@ namespace SabreTools.Serialization.CrossModel
                 machine.Driver = ConvertFromInternalModel(driver);
 
             var features = item.Read<Models.Metadata.Feature[]>(Models.Metadata.Machine.FeatureKey);
-            if (features != null && features.Any())
+            if (features != null && features.Length > 0)
             {
                 machine.Feature = features
                     .Where(d => d != null)
@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var devices = item.Read<Models.Metadata.Device[]>(Models.Metadata.Machine.DeviceKey);
-            if (devices != null && devices.Any())
+            if (devices != null && devices.Length > 0)
             {
                 machine.Device = devices
                     .Where(d => d != null)
@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var slots = item.Read<Models.Metadata.Slot[]>(Models.Metadata.Machine.SlotKey);
-            if (slots != null && slots.Any())
+            if (slots != null && slots.Length > 0)
             {
                 machine.Slot = slots
                     .Where(d => d != null)
@@ -235,7 +235,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var softwareLists = item.Read<Models.Metadata.SoftwareList[]>(Models.Metadata.Machine.SoftwareListKey);
-            if (softwareLists != null && softwareLists.Any())
+            if (softwareLists != null && softwareLists.Length > 0)
             {
                 machine.SoftwareList = softwareLists
                     .Where(d => d != null)
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var ramOptions = item.Read<Models.Metadata.RamOption[]>(Models.Metadata.Machine.RamOptionKey);
-            if (ramOptions != null && ramOptions.Any())
+            if (ramOptions != null && ramOptions.Length > 0)
             {
                 machine.RamOption = ramOptions
                     .Where(d => d != null)
@@ -347,7 +347,7 @@ namespace SabreTools.Serialization.CrossModel
                 configuration.Condition = ConvertFromInternalModel(condition);
 
             var confLocations = item.Read<Models.Metadata.ConfLocation[]>(Models.Metadata.Configuration.ConfLocationKey);
-            if (confLocations != null && confLocations.Any())
+            if (confLocations != null && confLocations.Length > 0)
             {
                 configuration.ConfLocation = confLocations
                     .Where(c => c != null)
@@ -356,7 +356,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var confSettings = item.Read<Models.Metadata.ConfSetting[]>(Models.Metadata.Configuration.ConfSettingKey);
-            if (confSettings != null && confSettings.Any())
+            if (confSettings != null && confSettings.Length > 0)
             {
                 configuration.ConfSetting = confSettings
                     .Where(c => c != null)
@@ -442,7 +442,7 @@ namespace SabreTools.Serialization.CrossModel
                 device.Instance = ConvertFromInternalModel(instance);
 
             var extensions = item.Read<Models.Metadata.Extension[]>(Models.Metadata.Device.ExtensionKey);
-            if (extensions != null && extensions.Any())
+            if (extensions != null && extensions.Length > 0)
             {
                 device.Extension = extensions
                     .Where(e => e != null)
@@ -496,7 +496,7 @@ namespace SabreTools.Serialization.CrossModel
                 dipSwitch.Condition = ConvertFromInternalModel(condition);
 
             var dipLocations = item.Read<Models.Metadata.DipLocation[]>(Models.Metadata.DipSwitch.DipLocationKey);
-            if (dipLocations != null && dipLocations.Any())
+            if (dipLocations != null && dipLocations.Length > 0)
             {
                 dipSwitch.DipLocation = dipLocations
                     .Where(d => d != null)
@@ -505,7 +505,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var dipValues = item.Read<Models.Metadata.DipValue[]>(Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues != null && dipValues.Any())
+            if (dipValues != null && dipValues.Length > 0)
             {
                 dipSwitch.DipValue = dipValues
                     .Where(d => d != null)
@@ -644,7 +644,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var controls = item.Read<Models.Metadata.Control[]>(Models.Metadata.Input.ControlKey);
-            if (controls != null && controls.Any())
+            if (controls != null && controls.Length > 0)
             {
                 input.Control = controls
                     .Where(c => c != null)
@@ -679,7 +679,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var analogs = item.Read<Models.Metadata.Analog[]>(Models.Metadata.Port.AnalogKey);
-            if (analogs != null && analogs.Any())
+            if (analogs != null && analogs.Length > 0)
             {
                 port.Analog = analogs
                     .Where(a => a != null)
@@ -750,7 +750,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var slotOptions = item.Read<Models.Metadata.SlotOption[]>(Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions != null && slotOptions.Any())
+            if (slotOptions != null && slotOptions.Length > 0)
             {
                 slot.SlotOption = slotOptions
                     .Where(s => s != null)

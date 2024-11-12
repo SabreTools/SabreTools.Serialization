@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
 
             // TODO: Handle Dir items - Currently need to be generated from the machines
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Any())
+            if (machines != null && machines.Length > 0)
             {
                 datafile.Game = machines
                     .Where(m => m != null)
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.CrossModel
                 gameBase.Trurip = trurip;
 
             var releases = item.Read<Models.Metadata.Release[]>(Models.Metadata.Machine.ReleaseKey);
-            if (releases != null && releases.Any())
+            if (releases != null && releases.Length > 0)
             {
                 gameBase.Release = releases
                     .Where(r => r != null)
@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var biosSets = item.Read<Models.Metadata.BiosSet[]>(Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Any())
+            if (biosSets != null && biosSets.Length > 0)
             {
                 gameBase.BiosSet = biosSets
                     .Where(b => b != null)
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Any())
+            if (roms != null && roms.Length > 0)
             {
                 gameBase.Rom = roms
                     .Where(r => r != null)
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Any())
+            if (disks != null && disks.Length > 0)
             {
                 gameBase.Disk = disks
                     .Where(d => d != null)
@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var medias = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
-            if (medias != null && medias.Any())
+            if (medias != null && medias.Length > 0)
             {
                 gameBase.Media = medias
                     .Where(m => m != null)
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var deviceRefs = item.Read<Models.Metadata.DeviceRef[]>(Models.Metadata.Machine.DeviceRefKey);
-            if (deviceRefs != null && deviceRefs.Any())
+            if (deviceRefs != null && deviceRefs.Length > 0)
             {
                 gameBase.DeviceRef = deviceRefs
                     .Where(m => m != null)
@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var samples = item.Read<Models.Metadata.Sample[]>(Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Any())
+            if (samples != null && samples.Length > 0)
             {
                 gameBase.Sample = samples
                     .Where(m => m != null)
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var archives = item.Read<Models.Metadata.Archive[]>(Models.Metadata.Machine.ArchiveKey);
-            if (archives != null && archives.Any())
+            if (archives != null && archives.Length > 0)
             {
                 gameBase.Archive = archives
                     .Where(m => m != null)
@@ -206,7 +206,7 @@ namespace SabreTools.Serialization.CrossModel
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
             var softwareLists = item.Read<Models.Metadata.SoftwareList[]>(Models.Metadata.Machine.SoftwareListKey);
-            if (softwareLists != null && softwareLists.Any())
+            if (softwareLists != null && softwareLists.Length > 0)
             {
                 gameBase.SoftwareList = softwareLists
                     .Where(m => m != null)

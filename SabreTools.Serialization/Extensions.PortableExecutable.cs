@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using SabreTools.IO.Extensions;
@@ -28,7 +27,7 @@ namespace SabreTools.Serialization
                 return 0;
 
             // If the RVA matches a section start exactly, use that
-            var matchingSection = sections.FirstOrDefault(s => s != null && s.VirtualAddress == rva);
+            var matchingSection = Array.Find(sections, s => s != null && s.VirtualAddress == rva);
             if (matchingSection != null)
                 return rva - matchingSection.VirtualAddress + matchingSection.PointerToRawData;
 
