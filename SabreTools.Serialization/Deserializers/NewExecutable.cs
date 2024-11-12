@@ -304,8 +304,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Get the full list of unique string offsets
             var stringOffsets = resourceTable.ResourceTypes
-                .Where(rt => rt != null)
-                .Where(rt => !rt!.IsIntegerType() && rt!.TypeID != 0)
+                .Where(rt => rt != null && rt.TypeID != 0 && !rt.IsIntegerType())
                 .Select(rt => rt!.TypeID)
                 .Union(resourceTable.ResourceTypes
                     .Where(rt => rt != null && rt!.TypeID != 0)

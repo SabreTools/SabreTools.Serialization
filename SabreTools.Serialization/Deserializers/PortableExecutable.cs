@@ -1053,8 +1053,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (importTable.ImportLookupTables != null && importLookupTables.Count > 0)
                 {
                     var addresses = importTable.ImportLookupTables
-                        .Where(kvp => kvp.Value != null)
-                        .SelectMany(kvp => kvp.Value!)
+                        .SelectMany(kvp => kvp.Value ?? [])
                         .Where(ilte => ilte != null)
                         .Select(ilte => (int)ilte!.HintNameTableRVA.ConvertVirtualAddress(sections));
                     hintNameTableEntryAddresses.AddRange(addresses);
@@ -1064,8 +1063,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
                 {
                     var addresses = importTable.ImportAddressTables
-                        .Where(kvp => kvp.Value != null)
-                        .SelectMany(kvp => kvp.Value!)
+                        .SelectMany(kvp => kvp.Value ?? [])
                         .Where(iate => iate != null)
                         .Select(iate => (int)iate!.HintNameTableRVA.ConvertVirtualAddress(sections));
                     hintNameTableEntryAddresses.AddRange(addresses);
