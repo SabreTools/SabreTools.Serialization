@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using SabreTools.Serialization.Interfaces;
 
@@ -107,12 +106,13 @@ namespace SabreTools.Serialization.Serializers
             if (serializerName == null)
                 return default;
 
-            // If the serializer has no model type
-            Type? modelType = typeof(TSerializer).GetGenericArguments()?.FirstOrDefault();
-            if (modelType == null)
+            // If the serializer has no generic arguments
+            var genericArgs = typeof(TSerializer).GetGenericArguments();
+            if (genericArgs == null || genericArgs.Length == 0)
                 return default;
 
             // Loop through all loaded assemblies
+            Type modelType = genericArgs[0];
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 // If the assembly is invalid
