@@ -45,9 +45,10 @@ namespace SabreTools.Serialization.Deserializers
                 // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
                 var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
                 var splitLine = new List<string>();
-                foreach (Match match in matchCol)
+                foreach (Match? match in matchCol)
                 {
-                    splitLine.Add(match.Groups[0].Value);
+                    if (match != null)
+                        splitLine.Add(match.Groups[0].Value);
                 }
 
                 switch (splitLine[0])
@@ -154,9 +155,10 @@ namespace SabreTools.Serialization.Deserializers
                 // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
                 var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
                 var splitLine = new List<string>();
-                foreach (Match match in matchCol)
+                foreach (Match? match in matchCol)
                 {
-                    splitLine.Add(match.Groups[0].Value);
+                    if (match != null)
+                        splitLine.Add(match.Groups[0].Value);
                 }
 
                 switch (splitLine[0])
@@ -240,11 +242,11 @@ namespace SabreTools.Serialization.Deserializers
                 // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
                 var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
                 var splitLine = new List<string>();
-                foreach (Match match in matchCol)
+                foreach (Match? match in matchCol)
                 {
-                    splitLine.Add(match.Groups[0].Value);
+                    if (match != null)
+                        splitLine.Add(match.Groups[0].Value);
                 }
-
                 switch (splitLine[0])
                 {
                     // Read comments
