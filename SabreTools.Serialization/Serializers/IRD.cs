@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace SabreTools.Serialization.Serializers
@@ -38,11 +37,11 @@ namespace SabreTools.Serialization.Serializers
                 return null;
             if (obj.Footer == null || obj.Footer.Length != obj.FooterLength)
                 return null;
-            if (obj.RegionHashes == null || obj.RegionHashes.Length != obj.RegionCount || obj.RegionHashes.Any(h => h == null || h.Length != 16))
+            if (obj.RegionHashes == null || obj.RegionHashes.Length != obj.RegionCount || !Array.TrueForAll(obj.RegionHashes, h => h == null || h.Length != 16))
                 return null;
             if (obj.FileKeys == null || obj.FileKeys.Length != obj.FileCount)
                 return null;
-            if (obj.FileHashes == null || obj.FileHashes.Length != obj.FileCount || obj.FileHashes.Any(h => h == null || h.Length != 16))
+            if (obj.FileHashes == null || obj.FileHashes.Length != obj.FileCount || !Array.TrueForAll(obj.FileHashes, h => h == null || h.Length != 16))
                 return null;
             if (obj.PIC == null || obj.PIC.Length != 115)
                 return null;
