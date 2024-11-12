@@ -1047,7 +1047,7 @@ namespace SabreTools.Serialization.Deserializers
                 || importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
             {
                 // Get the addresses of the hint/name table entries
-                List<int> hintNameTableEntryAddresses = new List<int>();
+                var hintNameTableEntryAddresses = new List<int>();
 
                 // If we have import lookup tables
                 if (importTable.ImportLookupTables != null && importLookupTables.Count > 0)

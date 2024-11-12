@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SabreTools.Models.Listrom;
 using SabreTools.Serialization.Interfaces;
 
@@ -58,14 +57,19 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.Row != null && item.Row.Length > 0)
             {
-                var datItems = new List<Models.Metadata.DatItem>();
+                var disks = new List<Models.Metadata.Disk>();
+                var roms = new List<Models.Metadata.Rom>();
                 foreach (var file in item.Row)
                 {
-                    datItems.Add(ConvertToInternalModel(file));
+                    var datItem = ConvertToInternalModel(file);
+                    if (datItem is Models.Metadata.Disk disk)
+                        disks.Add(disk);
+                    else if (datItem is Models.Metadata.Rom rom)
+                        roms.Add(rom);
                 }
 
-                machine[Models.Metadata.Machine.DiskKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "disk").Select(d => d as Models.Metadata.Disk).ToArray();
-                machine[Models.Metadata.Machine.RomKey] = datItems.Where(i => i.ReadString(Models.Metadata.DatItem.TypeKey) == "rom").Select(d => d as Models.Metadata.Rom).ToArray();
+                machine[Models.Metadata.Machine.DiskKey] = disks.ToArray();
+                machine[Models.Metadata.Machine.RomKey] = roms.ToArray();
             }
 
             return machine;

@@ -1,5 +1,4 @@
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.BSP;
@@ -165,9 +164,9 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var texture = new Texture();
 
-            byte[]? name = data.ReadBytes(16)?.TakeWhile(c => c != '\0')?.ToArray();
+            byte[]? name = data.ReadBytes(16);
             if (name != null)
-                texture.Name = Encoding.ASCII.GetString(name);
+                texture.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             texture.Width = data.ReadUInt32();
             texture.Height = data.ReadUInt32();
             texture.Offsets = new uint[4];

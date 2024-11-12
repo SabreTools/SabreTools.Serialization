@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read and split the line
                 string? line = reader.ReadLine();
 #if NETFRAMEWORK || NETCOREAPP3_1
-                string[]? lineParts = line?.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
 #else
                 string[]? lineParts = line?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 #endif
