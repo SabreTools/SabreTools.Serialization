@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using SabreTools.Hashing;
 using SabreTools.Models.Hashfile;
 
@@ -111,7 +110,7 @@ namespace SabreTools.Serialization.Deserializers
                     case HashType.CRC32:
                         var sfv = new SFV
                         {
-                            File = string.Join(" ", lineParts.Take(lineParts.Length - 1).ToArray()),
+                            File = string.Join(" ", lineParts, 0, lineParts.Length - 1),
                             Hash = lineParts[lineParts.Length - 1],
                         };
                         sfvList.Add(sfv);
@@ -120,7 +119,7 @@ namespace SabreTools.Serialization.Deserializers
                         var md5 = new MD5
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         md5List.Add(md5);
                         break;
@@ -128,7 +127,7 @@ namespace SabreTools.Serialization.Deserializers
                         var sha1 = new SHA1
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         sha1List.Add(sha1);
                         break;
@@ -136,7 +135,7 @@ namespace SabreTools.Serialization.Deserializers
                         var sha256 = new SHA256
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         sha256List.Add(sha256);
                         break;
@@ -144,7 +143,7 @@ namespace SabreTools.Serialization.Deserializers
                         var sha384 = new SHA384
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         sha384List.Add(sha384);
                         break;
@@ -152,7 +151,7 @@ namespace SabreTools.Serialization.Deserializers
                         var sha512 = new SHA512
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         sha512List.Add(sha512);
                         break;
@@ -160,7 +159,7 @@ namespace SabreTools.Serialization.Deserializers
                         var spamSum = new SpamSum
                         {
                             Hash = lineParts[0],
-                            File = string.Join(" ", lineParts.Skip(1).ToArray()),
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
                         };
                         spamsumList.Add(spamSum);
                         break;
