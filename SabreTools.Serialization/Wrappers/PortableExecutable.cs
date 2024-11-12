@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
                     if (headerLength <= 0)
                         _headerPaddingData = [];
-                    else 
+                    else
                         _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
 
                     // Cache and return the header padding data, even if null
@@ -1199,7 +1199,10 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseResourceDataEntry(Models.PortableExecutable.ResourceDataEntry entry, List<object> types)
         {
             // Create the key and value objects
-            string key = types == null ? $"UNKNOWN_{Guid.NewGuid()}" : string.Join(", ", types.Select(t => t.ToString()).ToArray());
+            string key = types == null
+                ? $"UNKNOWN_{Guid.NewGuid()}"
+                : string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
+
             object? value = entry.Data;
 
             // If we have a known resource type
