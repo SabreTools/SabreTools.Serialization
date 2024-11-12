@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.RomCenter;
@@ -25,11 +24,6 @@ namespace SabreTools.Serialization.Deserializers
 
             // Loop through and parse out the values
             var roms = new List<Rom>();
-            var additional = new List<string>();
-            var creditsAdditional = new List<string>();
-            var datAdditional = new List<string>();
-            var emulatorAdditional = new List<string>();
-            var gamesAdditional = new List<string>();
             while (!reader.EndOfStream)
             {
                 // If we have no next line
@@ -56,10 +50,6 @@ namespace SabreTools.Serialization.Deserializers
                                 break;
                             case "games":
                                 dat.Games ??= new Games();
-                                break;
-                            default:
-                                if (reader.CurrentLine != null)
-                                    additional.Add(reader.CurrentLine);
                                 break;
                         }
                         continue;
@@ -94,10 +84,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "comment":
                             dat.Credits.Comment = reader.KeyValuePair?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                creditsAdditional.Add(reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -121,10 +107,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "merge":
                             dat.Dat.Merge = reader.KeyValuePair?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                datAdditional.Add(reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -142,10 +124,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "version":
                             dat.Emulator.Version = reader.KeyValuePair?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                emulatorAdditional.Add(reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -157,12 +135,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // If the line doesn't contain the delimiter
                     if (!(reader.CurrentLine?.Contains('¬') ?? false))
-                    {
-                        if (reader.CurrentLine != null)
-                            gamesAdditional.Add(reader.CurrentLine);
-
                         continue;
-                    }
 
                     // Otherwise, separate out the line
                     string[] splitLine = reader.CurrentLine.Split('¬');
@@ -181,32 +154,14 @@ namespace SabreTools.Serialization.Deserializers
                         // EMPTY = splitLine[10]
                     };
 
-                    if (splitLine.Length > 11)
-                        rom.ADDITIONAL_ELEMENTS = splitLine.Skip(11).ToArray();
-
                     roms.Add(rom);
-                }
-
-                else
-                {
-                    if (reader.CurrentLine != null)
-                        additional.Add(reader.CurrentLine);
                 }
             }
 
             // Add extra pieces and return
-            dat.ADDITIONAL_ELEMENTS = [.. additional];
-            if (dat.Credits != null)
-                dat.Credits.ADDITIONAL_ELEMENTS = [.. creditsAdditional];
-            if (dat.Dat != null)
-                dat.Dat.ADDITIONAL_ELEMENTS = [.. datAdditional];
-            if (dat.Emulator != null)
-                dat.Emulator.ADDITIONAL_ELEMENTS = [.. emulatorAdditional];
             if (dat.Games != null)
-            {
                 dat.Games.Rom = [.. roms];
-                dat.Games.ADDITIONAL_ELEMENTS = [.. gamesAdditional];
-            }
+
             return dat;
         }
     }

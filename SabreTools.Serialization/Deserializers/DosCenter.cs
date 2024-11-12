@@ -26,9 +26,6 @@ namespace SabreTools.Serialization.Deserializers
             var games = new List<Game>();
             var files = new List<Models.DosCenter.File>();
 
-            var additional = new List<string>();
-            var headerAdditional = new List<string>();
-            var gameAdditional = new List<string>();
             while (!reader.EndOfStream)
             {
                 // If we have no next line
@@ -44,26 +41,15 @@ namespace SabreTools.Serialization.Deserializers
                     case CmpRowType.EndTopLevel:
                         switch (lastTopLevel)
                         {
-                            case "doscenter":
-                                if (dat.DosCenter != null)
-                                    dat.DosCenter.ADDITIONAL_ELEMENTS = [.. headerAdditional];
-
-                                headerAdditional.Clear();
-                                break;
                             case "game":
                                 if (game != null)
                                 {
                                     game.File = [.. files];
-                                    game.ADDITIONAL_ELEMENTS = [.. gameAdditional];
                                     games.Add(game);
                                 }
 
                                 game = null;
                                 files.Clear();
-                                gameAdditional.Clear();
-                                break;
-                            default:
-                                // No-op
                                 break;
                         }
                         continue;
@@ -80,10 +66,6 @@ namespace SabreTools.Serialization.Deserializers
                             break;
                         case "game":
                             game = new Game();
-                            break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                additional.Add(reader.CurrentLine);
                             break;
                     }
                 }
@@ -117,10 +99,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "comment:":
                             dat.DosCenter.Comment = reader.Standalone?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                headerAdditional.Add(item: reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -135,10 +113,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "name":
                             game.Name = reader.Standalone?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                gameAdditional.Add(item: reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -147,28 +121,17 @@ namespace SabreTools.Serialization.Deserializers
                 {
                     // If we have an unknown type, log it
                     if (reader.InternalName != "file")
-                    {
-                        if (reader.CurrentLine != null)
-                            gameAdditional.Add(reader.CurrentLine);
                         continue;
-                    }
 
                     // Create the file and add to the list
                     var file = CreateFile(reader);
                     if (file != null)
                         files.Add(file);
                 }
-
-                else
-                {
-                    if (reader.CurrentLine != null)
-                        additional.Add(item: reader.CurrentLine);
-                }
             }
 
             // Add extra pieces and return
             dat.Game = [.. games];
-            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
 
@@ -182,7 +145,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var file = new Models.DosCenter.File();
             foreach (var kvp in reader.Internal)
             {
@@ -200,14 +162,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "date":
                         file.Date = kvp.Value;
                         break;
-                    default:
-                        if (reader.CurrentLine != null)
-                            itemAdditional.Add(item: reader.CurrentLine);
-                        break;
                 }
             }
 
-            file.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return file;
         }
     }

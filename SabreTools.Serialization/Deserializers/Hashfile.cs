@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Deserializers
             using var stream = PathProcessor.OpenStream(path);
             return DeserializeStream(stream, hash);
         }
-    
+
         #endregion
 
         #region IStreamDeserializer
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Deserializers
             var deserializer = new Hashfile();
             return deserializer.Deserialize(data, hash);
         }
-        
+
         /// <inheritdoc/>
         public override Models.Hashfile.Hashfile? Deserialize(Stream? data)
             => Deserialize(data, HashType.CRC32);
@@ -86,7 +86,6 @@ namespace SabreTools.Serialization.Deserializers
             // Setup the reader and output
             var reader = new StreamReader(data);
             var dat = new Models.Hashfile.Hashfile();
-            var additional = new List<string>();
 
             // Loop through the rows and parse out values
             var hashes = new List<object>();
@@ -218,7 +217,7 @@ namespace SabreTools.Serialization.Deserializers
                     dat.SpamSum = hashes.Cast<SpamSum>().ToArray();
                     break;
             }
-            dat.ADDITIONAL_ELEMENTS = [.. additional];
+
             return dat;
         }
 

@@ -23,7 +23,6 @@ namespace SabreTools.Serialization.Deserializers
             var sets = new List<Set>();
             var rows = new List<Row>();
 
-            var additional = new List<string>();
             while (!reader.EndOfStream)
             {
                 // Read the line and don't split yet
@@ -215,7 +214,6 @@ namespace SabreTools.Serialization.Deserializers
 
                     default:
                         row = null;
-                        additional.Add(line);
                         break;
                 }
 
@@ -234,7 +232,6 @@ namespace SabreTools.Serialization.Deserializers
 
             // Add extra pieces and return
             dat.Set = [.. sets];
-            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
     }

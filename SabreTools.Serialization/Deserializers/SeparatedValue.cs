@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.SeparatedValue;
@@ -135,10 +134,6 @@ namespace SabreTools.Serialization.Deserializers
                         SHA256 = reader.Line[12],
                         Status = reader.Line[13],
                     };
-
-                    // If we have additional fields
-                    if (reader.Line.Count > HeaderWithoutExtendedHashesCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithoutExtendedHashesCount).ToArray();
                 }
                 else
                 {
@@ -162,10 +157,6 @@ namespace SabreTools.Serialization.Deserializers
                         SpamSum = reader.Line[15],
                         Status = reader.Line[16],
                     };
-
-                    // If we have additional fields
-                    if (reader.Line.Count > HeaderWithExtendedHashesCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithExtendedHashesCount).ToArray();
                 }
                 rows.Add(row);
             }

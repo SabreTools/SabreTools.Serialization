@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.EverdriveSMDB;
@@ -46,10 +45,6 @@ namespace SabreTools.Serialization.Deserializers
                 // If we have the size field
                 if (reader.Line.Count > 5)
                     row.Size = reader.Line[5];
-
-                // If we have additional fields
-                if (reader.Line.Count > 6)
-                    row.ADDITIONAL_ELEMENTS = reader.Line.Skip(5).ToArray();
 
                 rows.Add(row);
             }

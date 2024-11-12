@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Readers;
 using SabreTools.Models.AttractMode;
@@ -72,10 +71,6 @@ namespace SabreTools.Serialization.Deserializers
                         Extra = reader.Line[15],
                         Buttons = reader.Line[16],
                     };
-
-                    // If we have additional fields
-                    if (reader.Line.Count > HeaderWithoutRomnameCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithoutRomnameCount).ToArray();
                 }
                 else
                 {
@@ -99,10 +94,6 @@ namespace SabreTools.Serialization.Deserializers
                         Extra = reader.Line[15],
                         Buttons = reader.Line[16],
                     };
-
-                    // If we have additional fields
-                    if (reader.Line.Count > HeaderWithRomnameCount)
-                        row.ADDITIONAL_ELEMENTS = reader.Line.Skip(HeaderWithRomnameCount).ToArray();
                 }
 
                 rows.Add(row);

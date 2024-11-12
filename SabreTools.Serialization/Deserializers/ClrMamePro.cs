@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Deserializers
             var deserializer = new ClrMamePro();
             return deserializer.Deserialize(data, quotes);
         }
-        
+
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)
             => Deserialize(data, true);
@@ -102,9 +102,6 @@ namespace SabreTools.Serialization.Deserializers
             var videos = new List<Video>();
             var dipSwitches = new List<DipSwitch>();
 
-            var additional = new List<string>();
-            var headerAdditional = new List<string>();
-            var gameAdditional = new List<string>();
             while (!reader.EndOfStream)
             {
                 // If we have no next line
@@ -120,12 +117,6 @@ namespace SabreTools.Serialization.Deserializers
                     case CmpRowType.EndTopLevel:
                         switch (lastTopLevel)
                         {
-                            case "doscenter":
-                                if (dat.ClrMamePro != null)
-                                    dat.ClrMamePro.ADDITIONAL_ELEMENTS = [.. headerAdditional];
-
-                                headerAdditional.Clear();
-                                break;
                             case "game":
                             case "machine":
                             case "resource":
@@ -142,7 +133,6 @@ namespace SabreTools.Serialization.Deserializers
                                     game.Chip = [.. chips];
                                     game.Video = [.. videos];
                                     game.DipSwitch = [.. dipSwitches];
-                                    game.ADDITIONAL_ELEMENTS = [.. gameAdditional];
 
                                     games.Add(game);
                                     game = null;
@@ -158,10 +148,6 @@ namespace SabreTools.Serialization.Deserializers
                                 chips.Clear();
                                 videos.Clear();
                                 dipSwitches.Clear();
-                                gameAdditional.Clear();
-                                break;
-                            default:
-                                // No-op
                                 break;
                         }
                         continue;
@@ -187,10 +173,6 @@ namespace SabreTools.Serialization.Deserializers
                             break;
                         case "set":
                             game = new Set();
-                            break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                additional.Add(reader.CurrentLine);
                             break;
                     }
                 }
@@ -249,10 +231,6 @@ namespace SabreTools.Serialization.Deserializers
                         case "forcepacking":
                             dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
                             break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                headerAdditional.Add(reader.CurrentLine);
-                            break;
                     }
                 }
 
@@ -303,13 +281,8 @@ namespace SabreTools.Serialization.Deserializers
                             var sample = new Sample
                             {
                                 Name = reader.Standalone?.Value ?? string.Empty,
-                                ADDITIONAL_ELEMENTS = [],
                             };
                             samples.Add(sample);
-                            break;
-                        default:
-                            if (reader.CurrentLine != null)
-                                gameAdditional.Add(reader.CurrentLine);
                             break;
                     }
                 }
@@ -391,22 +364,13 @@ namespace SabreTools.Serialization.Deserializers
                                 game.Driver = driver;
                             break;
                         default:
-                            if (reader.CurrentLine != null)
-                                gameAdditional.Add(reader.CurrentLine);
                             continue;
                     }
-                }
-
-                else
-                {
-                    if (reader.CurrentLine != null)
-                        additional.Add(reader.CurrentLine);
                 }
             }
 
             // Add extra pieces and return
             dat.Game = [.. games];
-            dat.ADDITIONAL_ELEMENTS = [.. additional];
             return dat;
         }
 
@@ -447,7 +411,6 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            release.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return release;
         }
 
@@ -461,7 +424,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var biosset = new BiosSet();
             foreach (var kvp in reader.Internal)
             {
@@ -476,13 +438,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "default":
                         biosset.Default = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            biosset.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return biosset;
         }
 
@@ -496,7 +454,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var rom = new Rom();
             foreach (var kvp in reader.Internal)
             {
@@ -565,13 +522,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "mia":
                         rom.MIA = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            rom.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return rom;
         }
 
@@ -585,7 +538,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var disk = new Disk();
             foreach (var kvp in reader.Internal)
             {
@@ -609,13 +561,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "flags":
                         disk.Flags = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            disk.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return disk;
         }
 
@@ -629,7 +577,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var media = new Media();
             foreach (var kvp in reader.Internal)
             {
@@ -650,13 +597,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "spamsum":
                         media.SpamSum = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            media.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return media;
         }
 
@@ -670,7 +613,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var sample = new Sample();
             foreach (var kvp in reader.Internal)
             {
@@ -679,13 +621,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "name":
                         sample.Name = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            sample.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return sample;
         }
 
@@ -699,7 +637,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var archive = new Archive();
             foreach (var kvp in reader.Internal)
             {
@@ -708,13 +645,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "name":
                         archive.Name = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            archive.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return archive;
         }
 
@@ -728,7 +661,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var chip = new Chip();
             foreach (var kvp in reader.Internal)
             {
@@ -746,13 +678,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "clock":
                         chip.Clock = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            chip.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return chip;
         }
 
@@ -766,7 +694,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var video = new Video();
             foreach (var kvp in reader.Internal)
             {
@@ -793,13 +720,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "freq":
                         video.Freq = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            video.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return video;
         }
 
@@ -813,7 +736,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var sound = new Sound();
             foreach (var kvp in reader.Internal)
             {
@@ -822,13 +744,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "channels":
                         sound.Channels = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            sound.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return sound;
         }
 
@@ -842,7 +760,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var input = new Input();
             foreach (var kvp in reader.Internal)
             {
@@ -866,13 +783,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "service":
                         input.Service = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            input.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return input;
         }
 
@@ -886,7 +799,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var dipswitch = new DipSwitch();
             var entries = new List<string>();
             foreach (var kvp in reader.Internal)
@@ -902,14 +814,10 @@ namespace SabreTools.Serialization.Deserializers
                     case "default":
                         dipswitch.Default = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
             dipswitch.Entry = [.. entries];
-            dipswitch.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return dipswitch;
         }
 
@@ -923,7 +831,6 @@ namespace SabreTools.Serialization.Deserializers
             if (reader.Internal == null)
                 return null;
 
-            var itemAdditional = new List<string>();
             var driver = new Driver();
             foreach (var kvp in reader.Internal)
             {
@@ -944,13 +851,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "blit":
                         driver.Blit = kvp.Value;
                         break;
-                    default:
-                        itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
-                        break;
                 }
             }
 
-            driver.ADDITIONAL_ELEMENTS = [.. itemAdditional];
             return driver;
         }
 
