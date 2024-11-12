@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using SabreTools.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
 
@@ -17,16 +17,13 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            var items = new List<Rom>();
+            foreach (var machine in machines ?? [])
             {
-                metadataFile.Games = new Games
-                {
-                    Rom = machines
-                        .SelectMany(ConvertMachineFromInternalModel)
-                        .ToArray()
-                };
+                items.AddRange(ConvertMachineFromInternalModel(machine));
             }
 
+            metadataFile.Games = new Games { Rom = [.. items] };
             return metadataFile;
         }
 

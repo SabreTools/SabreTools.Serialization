@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SabreTools.Models.SeparatedValue;
 using SabreTools.Serialization.Interfaces;
 
@@ -18,13 +17,13 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            var items = new List<Row>();
+            foreach (var machine in machines ?? [])
             {
-                metadataFile.Row = machines
-                    .SelectMany(m => ConvertMachineFromInternalModel(m, header))
-                    .ToArray();
+                items.AddRange(ConvertMachineFromInternalModel(machine, header));
             }
 
+            metadataFile.Row = [.. items];
             return metadataFile;
         }
 

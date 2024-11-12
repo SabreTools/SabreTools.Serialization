@@ -1,5 +1,5 @@
-using System.Linq;
 using System;
+using System.Collections.Generic;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
@@ -15,13 +15,13 @@ namespace SabreTools.Serialization.CrossModel
             var files = new Models.ArchiveDotOrg.Files();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            var items = new List<Models.ArchiveDotOrg.File>();
+            foreach (var machine in machines ?? [])
             {
-                files.File = machines
-                    .SelectMany(ConvertFromInternalModel)
-                    .ToArray();
+                items.AddRange(ConvertFromInternalModel(machine));
             }
 
+            files.File = [.. items];
             return files;
         }
 

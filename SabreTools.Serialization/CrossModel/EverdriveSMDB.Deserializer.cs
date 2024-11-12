@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using SabreTools.Models.EverdriveSMDB;
 using SabreTools.Serialization.Interfaces;
 
@@ -16,12 +16,13 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new MetadataFile();
 
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
-            {
-                metadataFile.Row = machines
-                    .SelectMany(ConvertMachineFromInternalModel)
-                    .ToArray();
-            }
+            var items = new List<Row>();
+                foreach (var machine in machines ?? [])
+                {
+                    items.AddRange(ConvertMachineFromInternalModel(machine));
+                }
+
+                metadataFile.Row = [.. items];
 
             return metadataFile;
         }

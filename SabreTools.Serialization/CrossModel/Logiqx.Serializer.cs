@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SabreTools.Models.Logiqx;
 using SabreTools.Serialization.Interfaces;
 
@@ -23,10 +22,9 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Game != null && item.Game.Length > 0)
                 machines.AddRange(Array.ConvertAll(item.Game, ConvertMachineToInternalModel));
 
-            if (item.Dir != null && item.Dir.Length > 0)
+            foreach (var dir in item.Dir ?? [])
             {
-                machines.AddRange(item.Dir
-                    .SelectMany(ConvertDirToInternalModel));
+                machines.AddRange(ConvertDirToInternalModel(dir));
             }
 
             if (machines.Count > 0)
