@@ -87,17 +87,21 @@ namespace SabreTools.Serialization.Deserializers
             var reader = new StreamReader(data);
             var dat = new Models.Hashfile.Hashfile();
 
+            // Create lists for each hash type
+            var sfvList = new List<SFV>();
+            var md5List = new List<MD5>();
+            var sha1List = new List<SHA1>();
+            var sha256List = new List<SHA256>();
+            var sha384List = new List<SHA384>();
+            var sha512List = new List<SHA512>();
+            var spamsumList = new List<SpamSum>();
+
             // Loop through the rows and parse out values
-            var hashes = new List<object>();
             while (!reader.EndOfStream)
             {
                 // Read and split the line
                 string? line = reader.ReadLine();
-#if NETFRAMEWORK || NETCOREAPP3_1
                 string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-#else
-                string[]? lineParts = line?.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-#endif
                 if (lineParts == null)
                     continue;
 
@@ -107,87 +111,58 @@ namespace SabreTools.Serialization.Deserializers
                     case HashType.CRC32:
                         var sfv = new SFV
                         {
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Take(lineParts.Length - 1).ToArray()),
                             Hash = lineParts[lineParts.Length - 1],
-#else
-                            File = string.Join(" ", lineParts[..^1]),
-                            Hash = lineParts[^1],
-#endif
                         };
-                        hashes.Add(sfv);
+                        sfvList.Add(sfv);
                         break;
                     case HashType.MD5:
                         var md5 = new MD5
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(md5);
+                        md5List.Add(md5);
                         break;
                     case HashType.SHA1:
                         var sha1 = new SHA1
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(sha1);
+                        sha1List.Add(sha1);
                         break;
                     case HashType.SHA256:
                         var sha256 = new SHA256
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(sha256);
+                        sha256List.Add(sha256);
                         break;
                     case HashType.SHA384:
                         var sha384 = new SHA384
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(sha384);
+                        sha384List.Add(sha384);
                         break;
                     case HashType.SHA512:
                         var sha512 = new SHA512
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(sha512);
+                        sha512List.Add(sha512);
                         break;
                     case HashType.SpamSum:
                         var spamSum = new SpamSum
                         {
                             Hash = lineParts[0],
-#if NETFRAMEWORK
                             File = string.Join(" ", lineParts.Skip(1).ToArray()),
-#else
-                            File = string.Join(" ", lineParts[1..]),
-#endif
                         };
-                        hashes.Add(spamSum);
+                        spamsumList.Add(spamSum);
                         break;
                 }
             }
@@ -196,25 +171,25 @@ namespace SabreTools.Serialization.Deserializers
             switch (hash)
             {
                 case HashType.CRC32:
-                    dat.SFV = hashes.Cast<SFV>().ToArray();
+                    dat.SFV = [.. sfvList];
                     break;
                 case HashType.MD5:
-                    dat.MD5 = hashes.Cast<MD5>().ToArray();
+                    dat.MD5 = [.. md5List];
                     break;
                 case HashType.SHA1:
-                    dat.SHA1 = hashes.Cast<SHA1>().ToArray();
+                    dat.SHA1 = [.. sha1List];
                     break;
                 case HashType.SHA256:
-                    dat.SHA256 = hashes.Cast<SHA256>().ToArray();
+                    dat.SHA256 = [.. sha256List];
                     break;
                 case HashType.SHA384:
-                    dat.SHA384 = hashes.Cast<SHA384>().ToArray();
+                    dat.SHA384 = [.. sha384List];
                     break;
                 case HashType.SHA512:
-                    dat.SHA512 = hashes.Cast<SHA512>().ToArray();
+                    dat.SHA512 = [.. sha512List];
                     break;
                 case HashType.SpamSum:
-                    dat.SpamSum = hashes.Cast<SpamSum>().ToArray();
+                    dat.SpamSum = [.. spamsumList];
                     break;
             }
 
