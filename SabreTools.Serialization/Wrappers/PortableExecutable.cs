@@ -1344,10 +1344,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Otherwise, find the section it exists within
-            return Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(Model.SectionTable
-                .Where(sh => sh != null)
-                .Cast<Models.PortableExecutable.SectionHeader>()
-                .ToArray());
+            return Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(Model.SectionTable);
         }
 
         /// <summary>
