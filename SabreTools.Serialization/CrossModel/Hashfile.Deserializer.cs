@@ -103,18 +103,6 @@ namespace SabreTools.Serialization.CrossModel
             return new Models.Hashfile.Hashfile
             {
                 SFV = hash == HashType.CRC32
-                    || hash == HashType.CRC32_AIXM
-                    || hash == HashType.CRC32_AUTOSAR
-                    || hash == HashType.CRC32_BASE91D
-                    || hash == HashType.CRC32_BZIP2
-                    || hash == HashType.CRC32_CDROMEDC
-                    || hash == HashType.CRC32_CKSUM
-                    || hash == HashType.CRC32_ISCSI
-                    || hash == HashType.CRC32_ISOHDLC
-                    || hash == HashType.CRC32_JAMCRC
-                    || hash == HashType.CRC32_MEF
-                    || hash == HashType.CRC32_MPEG2
-                    || hash == HashType.CRC32_XFER
                         ? roms
                             .Where(r => r != null)
                             .Select(ConvertToSFV)

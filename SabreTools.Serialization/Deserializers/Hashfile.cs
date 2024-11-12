@@ -106,18 +106,6 @@ namespace SabreTools.Serialization.Deserializers
                 switch (hash)
                 {
                     case HashType.CRC32:
-                    case HashType.CRC32_AIXM:
-                    case HashType.CRC32_AUTOSAR:
-                    case HashType.CRC32_BASE91D:
-                    case HashType.CRC32_BZIP2:
-                    case HashType.CRC32_CDROMEDC:
-                    case HashType.CRC32_CKSUM:
-                    case HashType.CRC32_ISCSI:
-                    case HashType.CRC32_ISOHDLC:
-                    case HashType.CRC32_JAMCRC:
-                    case HashType.CRC32_MEF:
-                    case HashType.CRC32_MPEG2:
-                    case HashType.CRC32_XFER:
                         var sfv = new SFV
                         {
 #if NETFRAMEWORK
@@ -209,18 +197,6 @@ namespace SabreTools.Serialization.Deserializers
             switch (hash)
             {
                 case HashType.CRC32:
-                case HashType.CRC32_AIXM:
-                case HashType.CRC32_AUTOSAR:
-                case HashType.CRC32_BASE91D:
-                case HashType.CRC32_BZIP2:
-                case HashType.CRC32_CDROMEDC:
-                case HashType.CRC32_CKSUM:
-                case HashType.CRC32_ISCSI:
-                case HashType.CRC32_ISOHDLC:
-                case HashType.CRC32_JAMCRC:
-                case HashType.CRC32_MEF:
-                case HashType.CRC32_MPEG2:
-                case HashType.CRC32_XFER:
                     dat.SFV = hashes.Cast<SFV>().ToArray();
                     break;
                 case HashType.MD5:
