@@ -44,8 +44,7 @@ namespace SabreTools.Serialization.Wrappers
                     uint firstSectionAddress = Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
                         .Where(s => s != 0 && s >= headerStartAddress)
-                        .OrderBy(s => s)
-                        .FirstOrDefault();
+                        .Min();
 
                     // Check if the header length is more than 0 before reading data
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
@@ -86,8 +85,7 @@ namespace SabreTools.Serialization.Wrappers
                     uint firstSectionAddress = Model.SectionTable
                         .Select(s => s?.PointerToRawData ?? 0)
                         .Where(s => s != 0 && s >= headerStartAddress)
-                        .OrderBy(s => s)
-                        .FirstOrDefault();
+                        .Min();
 
                     // Check if the header length is more than 0 before reading strings
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
