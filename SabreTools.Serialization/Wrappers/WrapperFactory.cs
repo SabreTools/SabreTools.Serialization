@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Serialization.Interfaces;
+using static SabreTools.Matching.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -13,51 +14,51 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public static IWrapper? CreateWrapper(WrapperType fileType, Stream? data)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case WrapperType.AACSMediaKeyBlock: return AACSMediaKeyBlock.Create(data);
-                case WrapperType.BDPlusSVM: return BDPlusSVM.Create(data);
-                case WrapperType.BFPK: return BFPK.Create(data);
-                case WrapperType.BSP: return BSP.Create(data);
-                case WrapperType.BZip2: return null; // TODO: Implement wrapper
-                case WrapperType.CFB: return CFB.Create(data);
-                case WrapperType.CHD: return CHD.Create(data);
-                case WrapperType.CIA: return CIA.Create(data);
-                case WrapperType.Executable: return CreateExecutableWrapper(data);
-                case WrapperType.GCF: return GCF.Create(data);
-                case WrapperType.GZIP: return null; // TODO: Implement wrapper
-                case WrapperType.IniFile: return null; // TODO: Implement wrapper
-                case WrapperType.InstallShieldArchiveV3: return null; // TODO: Implement wrapper
-                case WrapperType.InstallShieldCAB: return InstallShieldCabinet.Create(data);
-                case WrapperType.LDSCRYPT: return null; // TODO: Implement wrapper
-                case WrapperType.MicrosoftCAB: return MicrosoftCabinet.Create(data);
-                case WrapperType.MicrosoftLZ: return null; // TODO: Implement wrapper
-                case WrapperType.MoPaQ: return MoPaQ.Create(data);
-                case WrapperType.N3DS: return N3DS.Create(data);
-                case WrapperType.NCF: return NCF.Create(data);
-                case WrapperType.Nitro: return Nitro.Create(data);
-                case WrapperType.PAK: return PAK.Create(data);
-                case WrapperType.PFF: return PFF.Create(data);
-                case WrapperType.PIC: return PIC.Create(data);
-                case WrapperType.PKZIP: return PKZIP.Create(data);
-                case WrapperType.PlayJAudioFile: return PlayJAudioFile.Create(data);
-                case WrapperType.PlayJPlaylist: return PlayJPlaylist.Create(data);
-                case WrapperType.Quantum: return Quantum.Create(data);
-                case WrapperType.RAR: return null; // TODO: Implement wrapper
-                case WrapperType.RealArcadeInstaller: return null; // TODO: Implement wrapper
-                case WrapperType.RealArcadeMezzanine: return null; // TODO: Implement wrapper
-                case WrapperType.SevenZip: return null; // TODO: Implement wrapper
-                case WrapperType.SFFS: return null; // TODO: Implement wrapper
-                case WrapperType.SGA: return SGA.Create(data);
-                case WrapperType.TapeArchive: return null; // TODO: Implement wrapper
-                case WrapperType.Textfile: return null; // TODO: Implement wrapper
-                case WrapperType.VBSP: return VBSP.Create(data);
-                case WrapperType.VPK: return VPK.Create(data);
-                case WrapperType.WAD: return WAD.Create(data);
-                case WrapperType.XZ: return null; // TODO: Implement wrapper
-                case WrapperType.XZP: return XZP.Create(data);
-                default: return null;
-            }
+                WrapperType.AACSMediaKeyBlock => AACSMediaKeyBlock.Create(data),
+                WrapperType.BDPlusSVM => BDPlusSVM.Create(data),
+                WrapperType.BFPK => BFPK.Create(data),
+                WrapperType.BSP => BSP.Create(data),
+                WrapperType.BZip2 => null,// TODO: Implement wrapper
+                WrapperType.CFB => CFB.Create(data),
+                WrapperType.CHD => CHD.Create(data),
+                WrapperType.CIA => CIA.Create(data),
+                WrapperType.Executable => CreateExecutableWrapper(data),
+                WrapperType.GCF => GCF.Create(data),
+                WrapperType.GZIP => null,// TODO: Implement wrapper
+                WrapperType.IniFile => null,// TODO: Implement wrapper
+                WrapperType.InstallShieldArchiveV3 => null,// TODO: Implement wrapper
+                WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
+                WrapperType.LDSCRYPT => null,// TODO: Implement wrapper
+                WrapperType.MicrosoftCAB => MicrosoftCabinet.Create(data),
+                WrapperType.MicrosoftLZ => null,// TODO: Implement wrapper
+                WrapperType.MoPaQ => MoPaQ.Create(data),
+                WrapperType.N3DS => N3DS.Create(data),
+                WrapperType.NCF => NCF.Create(data),
+                WrapperType.Nitro => Nitro.Create(data),
+                WrapperType.PAK => PAK.Create(data),
+                WrapperType.PFF => PFF.Create(data),
+                WrapperType.PIC => PIC.Create(data),
+                WrapperType.PKZIP => PKZIP.Create(data),
+                WrapperType.PlayJAudioFile => PlayJAudioFile.Create(data),
+                WrapperType.PlayJPlaylist => PlayJPlaylist.Create(data),
+                WrapperType.Quantum => Quantum.Create(data),
+                WrapperType.RAR => null,// TODO: Implement wrapper
+                WrapperType.RealArcadeInstaller => null,// TODO: Implement wrapper
+                WrapperType.RealArcadeMezzanine => null,// TODO: Implement wrapper
+                WrapperType.SevenZip => null,// TODO: Implement wrapper
+                WrapperType.SFFS => null,// TODO: Implement wrapper
+                WrapperType.SGA => SGA.Create(data),
+                WrapperType.TapeArchive => null,// TODO: Implement wrapper
+                WrapperType.Textfile => null,// TODO: Implement wrapper
+                WrapperType.VBSP => VBSP.Create(data),
+                WrapperType.VPK => VPK.Create(data),
+                WrapperType.WAD => WAD.Create(data),
+                WrapperType.XZ => null,// TODO: Implement wrapper
+                WrapperType.XZP => XZP.Create(data),
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -91,22 +92,35 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // New Executable
+#if NET20
+            else if (Matching.Extensions.StartsWith(magic, Models.NewExecutable.Constants.SignatureBytes))
+#else
             else if (magic.StartsWith(Models.NewExecutable.Constants.SignatureBytes))
+#endif
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 return NewExecutable.Create(stream);
             }
 
             // Linear Executable
+#if NET20
+            else if (Matching.Extensions.StartsWith(magic, Models.LinearExecutable.Constants.LESignatureBytes)
+                || Matching.Extensions.StartsWith(magic, Models.LinearExecutable.Constants.LXSignatureBytes))
+#else
             else if (magic.StartsWith(Models.LinearExecutable.Constants.LESignatureBytes)
                 || magic.StartsWith(Models.LinearExecutable.Constants.LXSignatureBytes))
+#endif
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 return LinearExecutable.Create(stream);
             }
 
             // Portable Executable
+#if NET20
+            else if (Matching.Extensions.StartsWith(magic, Models.PortableExecutable.Constants.SignatureBytes))
+#else
             else if (magic.StartsWith(Models.PortableExecutable.Constants.SignatureBytes))
+#endif
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 return PortableExecutable.Create(stream);
@@ -133,11 +147,19 @@ namespace SabreTools.Serialization.Wrappers
             #region AACSMediaKeyBlock
 
             // Block starting with verify media key record
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x81, 0x00, 0x00, 0x14 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x81, 0x00, 0x00, 0x14 }))
+#endif
                 return WrapperType.AACSMediaKeyBlock;
 
             // Block starting with type and version record
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x10, 0x00, 0x00, 0x0C }))
+#else
             if (magic.StartsWith(new byte?[] { 0x10, 0x00, 0x00, 0x0C }))
+#endif
                 return WrapperType.AACSMediaKeyBlock;
 
             // Shares an extension with INF setup information so it can't be used accurately
@@ -153,7 +175,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region BDPlusSVM
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x42, 0x44, 0x53, 0x56, 0x4D, 0x5F, 0x43, 0x43 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x42, 0x44, 0x53, 0x56, 0x4D, 0x5F, 0x43, 0x43 }))
+#endif
                 return WrapperType.BDPlusSVM;
 
             if (extension.Equals("svm", StringComparison.OrdinalIgnoreCase))
@@ -163,7 +189,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region BFPK
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x42, 0x46, 0x50, 0x4b }))
+#else
             if (magic.StartsWith(new byte?[] { 0x42, 0x46, 0x50, 0x4b }))
+#endif
                 return WrapperType.BFPK;
 
             #endregion
@@ -172,19 +202,31 @@ namespace SabreTools.Serialization.Wrappers
 
             // Shares a first 4 bytes with some .mc files
             // Shares an extension with VBSP
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x1d, 0x00, 0x00, 0x00 }) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+#else
             if (magic.StartsWith(new byte?[] { 0x1d, 0x00, 0x00, 0x00 }) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+#endif
                 return WrapperType.BSP;
 
             // Shares a first 4 bytes with some .mc files
             // Shares an extension with VBSP
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x1e, 0x00, 0x00, 0x00 }) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+#else
             if (magic.StartsWith(new byte?[] { 0x1e, 0x00, 0x00, 0x00 }) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+#endif
                 return WrapperType.BSP;
 
             #endregion
 
             #region BZip2
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x42, 0x52, 0x68 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x42, 0x52, 0x68 }))
+#endif
                 return WrapperType.BZip2;
 
             if (extension.Equals("bz2", StringComparison.OrdinalIgnoreCase))
@@ -194,7 +236,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region CFB
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 }))
+#else
             if (magic.StartsWith(new byte?[] { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 }))
+#endif
                 return WrapperType.CFB;
 
             // Installer package
@@ -221,7 +267,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region CHD
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4D, 0x43, 0x6F, 0x6D, 0x70, 0x72, 0x48, 0x44 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4D, 0x43, 0x6F, 0x6D, 0x70, 0x72, 0x48, 0x44 }))
+#endif
                 return WrapperType.CHD;
 
             #endregion
@@ -236,34 +286,62 @@ namespace SabreTools.Serialization.Wrappers
             #region Executable
 
             // DOS MZ executable file format (and descendants)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4d, 0x5a }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4d, 0x5a }))
+#endif
                 return WrapperType.Executable;
 
             /*
             // None of the following are supported yet
 
             // Executable and Linkable Format
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x7f, 0x45, 0x4c, 0x46 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x7f, 0x45, 0x4c, 0x46 }))
+#endif
                 return FileTypes.Executable;
 
             // Mach-O binary (32-bit)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xfe, 0xed, 0xfa, 0xce }))
+#else
             if (magic.StartsWith(new byte?[] { 0xfe, 0xed, 0xfa, 0xce }))
+#endif
                 return FileTypes.Executable;
 
             // Mach-O binary (32-bit, reverse byte ordering scheme)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xce, 0xfa, 0xed, 0xfe }))
+#else
             if (magic.StartsWith(new byte?[] { 0xce, 0xfa, 0xed, 0xfe }))
+#endif
                 return FileTypes.Executable;
 
             // Mach-O binary (64-bit)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xfe, 0xed, 0xfa, 0xcf }))
+#else
             if (magic.StartsWith(new byte?[] { 0xfe, 0xed, 0xfa, 0xcf }))
+#endif
                 return FileTypes.Executable;
 
             // Mach-O binary (64-bit, reverse byte ordering scheme)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xcf, 0xfa, 0xed, 0xfe }))
+#else
             if (magic.StartsWith(new byte?[] { 0xcf, 0xfa, 0xed, 0xfe }))
+#endif
                 return FileTypes.Executable;
 
             // Prefrred Executable File Format
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4a, 0x6f, 0x79, 0x21, 0x70, 0x65, 0x66, 0x66 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4a, 0x6f, 0x79, 0x21, 0x70, 0x65, 0x66, 0x66 }))
+#endif
                 return FileTypes.Executable;
             */
 
@@ -279,7 +357,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region GCF
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }))
+#endif
                 return WrapperType.GCF;
 
             if (extension.Equals("gcf", StringComparison.OrdinalIgnoreCase))
@@ -289,7 +371,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region GZIP
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x1f, 0x8b }))
+#else
             if (magic.StartsWith(new byte?[] { 0x1f, 0x8b }))
+#endif
                 return WrapperType.GZIP;
 
             if (extension.Equals("gz", StringComparison.OrdinalIgnoreCase))
@@ -306,7 +392,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region InstallShieldArchiveV3
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x13, 0x5D, 0x65, 0x8C }))
+#else
             if (magic.StartsWith(new byte?[] { 0x13, 0x5D, 0x65, 0x8C }))
+#endif
                 return WrapperType.InstallShieldArchiveV3;
 
             if (extension.Equals("z", StringComparison.OrdinalIgnoreCase))
@@ -316,7 +406,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region InstallShieldCAB
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x49, 0x53, 0x63 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x49, 0x53, 0x63 }))
+#endif
                 return WrapperType.InstallShieldCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
@@ -325,14 +419,22 @@ namespace SabreTools.Serialization.Wrappers
 
             #region LDSCRYPT
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4C, 0x44, 0x53, 0x43, 0x52, 0x59, 0x50, 0x54 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4C, 0x44, 0x53, 0x43, 0x52, 0x59, 0x50, 0x54 }))
+#endif
                 return WrapperType.LDSCRYPT;
 
             #endregion
 
             #region MicrosoftCAB
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4d, 0x53, 0x43, 0x46 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4d, 0x53, 0x43, 0x46 }))
+#endif
                 return WrapperType.MicrosoftCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
@@ -341,17 +443,29 @@ namespace SabreTools.Serialization.Wrappers
 
             #region MicrosoftLZ
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x53, 0x5a, 0x44, 0x44, 0x88, 0xf0, 0x27, 0x33 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x53, 0x5a, 0x44, 0x44, 0x88, 0xf0, 0x27, 0x33 }))
+#endif
                 return WrapperType.MicrosoftLZ;
 
             #endregion
 
             #region MoPaQ
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4d, 0x50, 0x51, 0x1a }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4d, 0x50, 0x51, 0x1a }))
+#endif
                 return WrapperType.MoPaQ;
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x4d, 0x50, 0x51, 0x1b }))
+#else
             if (magic.StartsWith(new byte?[] { 0x4d, 0x50, 0x51, 0x1b }))
+#endif
                 return WrapperType.MoPaQ;
 
             if (extension.Equals("mpq", StringComparison.OrdinalIgnoreCase))
@@ -373,7 +487,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region NCF
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00 }))
+#endif
                 return WrapperType.NCF;
 
             if (extension.Equals("ncf", StringComparison.OrdinalIgnoreCase))
@@ -403,7 +521,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region PAK
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x50, 0x41, 0x43, 0x4B }))
+#else
             if (magic.StartsWith(new byte?[] { 0x50, 0x41, 0x43, 0x4B }))
+#endif
                 return WrapperType.PAK;
 
             // Both PAK and Quantum share one extension
@@ -415,15 +537,27 @@ namespace SabreTools.Serialization.Wrappers
             #region PFF
 
             // Version 2
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x32 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x32 }))
+#endif
                 return WrapperType.PFF;
 
             // Version 3
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x33 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x33 }))
+#endif
                 return WrapperType.PFF;
 
             // Version 4
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x34 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x34 }))
+#endif
                 return WrapperType.PFF;
 
             if (extension.Equals("pff", StringComparison.OrdinalIgnoreCase))
@@ -434,19 +568,35 @@ namespace SabreTools.Serialization.Wrappers
             #region PKZIP
 
             // PKZIP (Unknown)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x50, 0x4b, 0x00, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x50, 0x4b, 0x00, 0x00 }))
+#endif
                 return WrapperType.PKZIP;
 
             // PKZIP
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x50, 0x4b, 0x03, 0x04 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x50, 0x4b, 0x03, 0x04 }))
+#endif
                 return WrapperType.PKZIP;
 
             // PKZIP (Empty Archive)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x50, 0x4b, 0x05, 0x06 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x50, 0x4b, 0x05, 0x06 }))
+#endif
                 return WrapperType.PKZIP;
 
             // PKZIP (Spanned Archive)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x50, 0x4b, 0x07, 0x08 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x50, 0x4b, 0x07, 0x08 }))
+#endif
                 return WrapperType.PKZIP;
 
             // PKZIP
@@ -538,7 +688,11 @@ namespace SabreTools.Serialization.Wrappers
             #region PLJ
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xFF, 0x9D, 0x53, 0x4B }))
+#else
             if (magic.StartsWith(new byte?[] { 0xFF, 0x9D, 0x53, 0x4B }))
+#endif
                 return WrapperType.PlayJAudioFile;
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
@@ -549,7 +703,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region Quantum
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x44, 0x53 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x44, 0x53 }))
+#endif
                 return WrapperType.Quantum;
 
             if (extension.Equals("q", StringComparison.OrdinalIgnoreCase))
@@ -564,11 +722,19 @@ namespace SabreTools.Serialization.Wrappers
             #region RAR
 
             // RAR archive version 1.50 onwards
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00 }))
+#endif
                 return WrapperType.RAR;
 
             // RAR archive version 5.0 onwards
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x01, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x01, 0x00 }))
+#endif
                 return WrapperType.RAR;
 
             if (extension.Equals("rar", StringComparison.OrdinalIgnoreCase))
@@ -580,19 +746,31 @@ namespace SabreTools.Serialization.Wrappers
 
             // RASGI2.0
             // Found in the ".rgs files in IA item "Nova_RealArcadeCD_USA".
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x52, 0x41, 0x53, 0x47, 0x49, 0x32, 0x2E, 0x30 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x52, 0x41, 0x53, 0x47, 0x49, 0x32, 0x2E, 0x30 }))
+#endif
                 return WrapperType.RealArcadeInstaller;
 
             // XZip2.0
             // Found in the ".mez" files in IA item "Nova_RealArcadeCD_USA".
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x58, 0x5A, 0x69, 0x70, 0x32, 0x2E, 0x30 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x58, 0x5A, 0x69, 0x70, 0x32, 0x2E, 0x30 }))
+#endif
                 return WrapperType.RealArcadeMezzanine;
 
             #endregion
 
             #region SevenZip
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c }))
+#else
             if (magic.StartsWith(new byte?[] { 0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c }))
+#endif
                 return WrapperType.SevenZip;
 
             if (extension.Equals("7z", StringComparison.OrdinalIgnoreCase))
@@ -603,14 +781,22 @@ namespace SabreTools.Serialization.Wrappers
             #region SFFS
 
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x53, 0x46, 0x46, 0x53 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x53, 0x46, 0x46, 0x53 }))
+#endif
                 return WrapperType.SFFS;
 
             #endregion 
 
             #region SGA
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x5F, 0x41, 0x52, 0x43, 0x48, 0x49, 0x56, 0x45 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x5F, 0x41, 0x52, 0x43, 0x48, 0x49, 0x56, 0x45 }))
+#endif
                 return WrapperType.SGA;
 
             if (extension.Equals("sga", StringComparison.OrdinalIgnoreCase))
@@ -620,10 +806,18 @@ namespace SabreTools.Serialization.Wrappers
 
             #region TapeArchive
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x75, 0x73, 0x74, 0x61, 0x72, 0x00, 0x30, 0x30 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x75, 0x73, 0x74, 0x61, 0x72, 0x00, 0x30, 0x30 }))
+#endif
                 return WrapperType.TapeArchive;
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x75, 0x73, 0x74, 0x61, 0x72, 0x20, 0x20, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x75, 0x73, 0x74, 0x61, 0x72, 0x20, 0x20, 0x00 }))
+#endif
                 return WrapperType.TapeArchive;
 
             if (extension.Equals("tar", StringComparison.OrdinalIgnoreCase))
@@ -636,32 +830,60 @@ namespace SabreTools.Serialization.Wrappers
             // Not all textfiles can be determined through magic number
 
             // HTML
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x3c, 0x68, 0x74, 0x6d, 0x6c }))
+#else
             if (magic.StartsWith(new byte?[] { 0x3c, 0x68, 0x74, 0x6d, 0x6c }))
+#endif
                 return WrapperType.Textfile;
 
             // HTML and XML
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x3c, 0x21, 0x44, 0x4f, 0x43, 0x54, 0x59, 0x50, 0x45 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x3c, 0x21, 0x44, 0x4f, 0x43, 0x54, 0x59, 0x50, 0x45 }))
+#endif
                 return WrapperType.Textfile;
 
             // InstallShield Compiled Rules
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x61, 0x4C, 0x75, 0x5A }))
+#else
             if (magic.StartsWith(new byte?[] { 0x61, 0x4C, 0x75, 0x5A }))
+#endif
                 return WrapperType.Textfile;
 
             // Microsoft Office File (old)
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 }))
+#else
             if (magic.StartsWith(new byte?[] { 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 }))
+#endif
                 return WrapperType.Textfile;
 
             // Rich Text File
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x7b, 0x5c, 0x72, 0x74, 0x66, 0x31 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x7b, 0x5c, 0x72, 0x74, 0x66, 0x31 }))
+#endif
                 return WrapperType.Textfile;
 
             // Windows Help File
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x3F, 0x5F, 0x03, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x3F, 0x5F, 0x03, 0x00 }))
+#endif
                 return WrapperType.Textfile;
 
             // XML 
             // "<?xml"
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x3C, 0x3F, 0x78, 0x6D, 0x6C }))
+#else
             if (magic.StartsWith(new byte?[] { 0x3C, 0x3F, 0x78, 0x6D, 0x6C }))
+#endif
                 return WrapperType.Textfile;
 
             // "Description in Zip"
@@ -714,7 +936,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region VBSP
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x56, 0x42, 0x53, 0x50 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x56, 0x42, 0x53, 0x50 }))
+#endif
                 return WrapperType.VBSP;
 
             // Shares an extension with BSP
@@ -725,7 +951,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region VPK
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x34, 0x12, 0xaa, 0x55 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x34, 0x12, 0xaa, 0x55 }))
+#endif
                 return WrapperType.VPK;
 
             // Common extension so this cannot be used accurately
@@ -736,7 +966,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region WAD
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x57, 0x41, 0x44, 0x33 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x57, 0x41, 0x44, 0x33 }))
+#endif
                 return WrapperType.WAD;
 
             // Common extension so this cannot be used accurately
@@ -747,7 +981,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region XZ
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00 }))
+#else
             if (magic.StartsWith(new byte?[] { 0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00 }))
+#endif
                 return WrapperType.XZ;
 
             if (extension.Equals("xz", StringComparison.OrdinalIgnoreCase))
@@ -757,7 +995,11 @@ namespace SabreTools.Serialization.Wrappers
 
             #region XZP
 
+#if NET20
+            if (Matching.Extensions.StartsWith(magic, new byte?[] { 0x70, 0x69, 0x5A, 0x78 }))
+#else
             if (magic.StartsWith(new byte?[] { 0x70, 0x69, 0x5A, 0x78 }))
+#endif
                 return WrapperType.XZP;
 
             if (extension.Equals("xzp", StringComparison.OrdinalIgnoreCase))

@@ -124,8 +124,6 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.Length, $"Length");
             builder.AppendLine(header.Version, $"Version");
 
-            // TODO: Remove this hack when actual compressor names are supported
-            // builder.AppendLine(header.Compressors, $"Compressors");
             string compressorsLine = "Compressors: ";
             if (header.Compressors == null)
             {
@@ -136,7 +134,7 @@ namespace SabreTools.Serialization.Printers
                 var compressors = new List<string>();
                 for (int i = 0; i < header.Compressors.Length; i++)
                 {
-                    uint compressor = header.Compressors[i];
+                    uint compressor = (uint)header.Compressors[i];
                     byte[] compressorBytes = BitConverter.GetBytes(compressor);
                     Array.Reverse(compressorBytes);
                     string compressorString = Encoding.ASCII.GetString(compressorBytes);

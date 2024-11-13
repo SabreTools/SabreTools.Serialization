@@ -232,10 +232,10 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             header.Version = data.ReadUInt32BigEndian();
-            header.Compressors = new uint[4];
+            header.Compressors = new CodecType[4];
             for (int i = 0; i < header.Compressors.Length; i++)
             {
-                header.Compressors[i] = data.ReadUInt32BigEndian();
+                header.Compressors[i] = (CodecType)data.ReadUInt32BigEndian();
             }
 
             header.LogicalBytes = data.ReadUInt64BigEndian();

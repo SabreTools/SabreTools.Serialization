@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Serializers
                 return null;
 
             byte[] bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
+            int read = stream.Read(bytes, 0, bytes.Length);
             return bytes;
         }
 
