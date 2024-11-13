@@ -122,21 +122,17 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>True if the data source is valid, false otherwise</returns>
         public bool DataSourceIsValid()
         {
-            switch (_dataSource)
+            return _dataSource switch
             {
                 // Byte array data requires both a valid array and offset
-                case DataSource.ByteArray:
-                    return _byteArrayData != null && _byteArrayOffset >= 0;
+                DataSource.ByteArray => _byteArrayData != null && _byteArrayOffset >= 0,
 
                 // Stream data requires both a valid stream
-                case DataSource.Stream:
-                    return _streamData != null && _streamData.CanRead && _streamData.CanSeek;
+                DataSource.Stream => _streamData != null && _streamData.CanRead && _streamData.CanSeek,
 
                 // Everything else is invalid
-                case DataSource.UNKNOWN:
-                default:
-                    return false;
-            }
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -155,19 +151,14 @@ namespace SabreTools.Serialization.Wrappers
             if (position < 0 || position >= GetEndOfFile())
                 return false;
 
-            switch (_dataSource)
+            return _dataSource switch
             {
-                case DataSource.ByteArray:
-                    return _byteArrayOffset + position + length <= _byteArrayData!.Length;
-
-                case DataSource.Stream:
-                    return position + length <= _streamData!.Length;
+                DataSource.ByteArray => _byteArrayOffset + position + length <= _byteArrayData!.Length,
+                DataSource.Stream => position + length <= _streamData!.Length,
 
                 // Everything else is invalid
-                case DataSource.UNKNOWN:
-                default:
-                    return false;
-            }
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -236,8 +227,10 @@ namespace SabreTools.Serialization.Wrappers
 
             // Deduplicate the string list for storage
             List<string> sourceStrings = [.. asciiStrings, .. utf8Strings, .. unicodeStrings];
-            sourceStrings = [.. sourceStrings.Distinct().OrderBy(s => s)];
+            sourceStrings = [.. sourceStrings.Distinct()];
 
+            // Sort the strings and return
+            sourceStrings.Sort();
             return sourceStrings;
         }
 
@@ -252,18 +245,12 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Return the effective endpoint
-            switch (_dataSource)
+            return _dataSource switch
             {
-                case DataSource.ByteArray:
-                    return _byteArrayData!.Length - _byteArrayOffset;
-
-                case DataSource.Stream:
-                    return (int)_streamData!.Length;
-
-                case DataSource.UNKNOWN:
-                default:
-                    return -1;
-            }
+                DataSource.ByteArray => _byteArrayData!.Length - _byteArrayOffset,
+                DataSource.Stream => (int)_streamData!.Length,
+                _ => -1,
+            };
         }
 
         /// <summary>
