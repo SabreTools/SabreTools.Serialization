@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
@@ -225,9 +224,8 @@ namespace SabreTools.Serialization.Wrappers
             // We are limiting the check for Unicode characters with a second byte of 0x00 for now
             var unicodeStrings = ReadStringsWithEncoding(sourceData, charLimit, Encoding.Unicode);
 
-            // Deduplicate the string list for storage
+            // Ignore duplicate strings across encodings
             List<string> sourceStrings = [.. asciiStrings, .. utf8Strings, .. unicodeStrings];
-            sourceStrings = [.. sourceStrings.Distinct()];
 
             // Sort the strings and return
             sourceStrings.Sort();
@@ -261,14 +259,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="encoding">Character encoding to use for checking</param>
         /// <returns>String list containing the requested data, empty on error</returns>
         /// <remarks>TODO: Move to IO?</remarks>
-        private List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+        private HashSet<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
         {
             // If we have an invalid character limit, default to 5
             if (charLimit <= 0)
                 charLimit = 5;
 
-            // Create the string list to return
-            var sourceStrings = new List<string>();
+            // Create the string hash set to return
+            var sourceStrings = new HashSet<string>();
 
             // Setup cached data
             int sourceDataIndex = 0;
