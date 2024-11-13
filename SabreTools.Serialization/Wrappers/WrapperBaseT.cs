@@ -285,7 +285,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Setup cached data
             int sourceDataIndex = 0;
-            string cachedString = string.Empty;
+            List<char> cachedChars = [];
 
             // Check for strings
             while (sourceDataIndex < sourceData.Length)
@@ -298,32 +298,32 @@ namespace SabreTools.Serialization.Wrappers
                 if (!isValid)
                 {
                     // If we have no cached string
-                    if (cachedString.Length == 0)
+                    if (cachedChars.Count == 0)
                         continue;
 
                     // If we have a cached string greater than the limit
-                    if (cachedString.Length >= charLimit)
-                        sourceStrings.Add(cachedString);
+                    if (cachedChars.Count >= charLimit)
+                        sourceStrings.Add(new string([.. cachedChars]));
 
-                    cachedString = string.Empty;
+                    cachedChars.Clear();
                     continue;
                 }
 
                 // If a long repeating string is found, discard it
-                if (cachedString.Length >= 64 && cachedString.All(c => c == cachedString[0]))
+                if (cachedChars.Count >= 64 && cachedChars.TrueForAll(c => c == cachedChars[0]))
                 {
-                    cachedString = string.Empty;
+                    cachedChars.Clear();
                     continue;
                 }
 
                 // Append the character to the cached string
-                cachedString += ch;
+                cachedChars.Add(ch);
                 sourceDataIndex++;
             }
 
             // If we have a cached string greater than the limit
-            if (cachedString.Length >= charLimit)
-                sourceStrings.Add(cachedString);
+            if (cachedChars.Count >= charLimit)
+                sourceStrings.Add(new string([.. cachedChars]));
 
             return sourceStrings;
         }
