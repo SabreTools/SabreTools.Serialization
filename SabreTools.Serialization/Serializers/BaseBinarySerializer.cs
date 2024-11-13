@@ -120,19 +120,23 @@ namespace SabreTools.Serialization.Serializers
                     return default;
 
                 // If not all types can be loaded, use the ones that could be
-                List<Type> assemblyTypes = [];
+                Type?[] assemblyTypes = [];
                 try
                 {
-                    assemblyTypes = [.. assembly.GetTypes()];
+                    assemblyTypes = assembly.GetTypes();
                 }
                 catch (ReflectionTypeLoadException rtle)
                 {
-                    assemblyTypes = [.. rtle.Types];
+                    assemblyTypes = rtle.Types ?? [];
                 }
 
                 // Loop through all types 
-                foreach (Type type in assemblyTypes)
+                foreach (Type? type in assemblyTypes)
                 {
+                    // If the type is invalid
+                    if (type == null)
+                        continue;
+
                     // If the type isn't a class
                     if (!type.IsClass)
                         continue;
