@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.Models.N3DS;
+using static SabreTools.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -264,6 +265,60 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             return fileHeader.FileName == ".code\0\0\0";
+        }
+
+        /// <summary>
+        /// Get the initial value for the plain counter
+        /// </summary>
+        public byte[] PlainIV(int partitionIndex)
+        {
+            if (Model.Partitions == null)
+                return [];
+            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+                return [];
+
+            var header = Model.Partitions[partitionIndex];
+            if (header == null)
+                return [];
+
+            byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            return [.. partitionIdBytes, .. PlainCounter];
+        }
+
+        /// <summary>
+        /// Get the initial value for the ExeFS counter
+        /// </summary>
+        public byte[] ExeFSIV(int partitionIndex)
+        {
+            if (Model.Partitions == null)
+                return [];
+            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+                return [];
+
+            var header = Model.Partitions[partitionIndex];
+            if (header == null)
+                return [];
+
+            byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            return [.. partitionIdBytes, .. ExefsCounter];
+        }
+
+        /// <summary>
+        /// Get the initial value for the RomFS counter
+        /// </summary>
+        public byte[] RomFSIV(int partitionIndex)
+        {
+            if (Model.Partitions == null)
+                return [];
+            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+                return [];
+
+            var header = Model.Partitions[partitionIndex];
+            if (header == null)
+                return [];
+
+            byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            return [.. partitionIdBytes, .. RomfsCounter];
         }
 
         /// <summary>
