@@ -17,6 +17,11 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <summary>
+        /// Backup header
+        /// </summary>
+        public NCCHHeader? BackupHeader => Model.CardInfoHeader?.InitialData?.BackupHeader;
+
+        /// <summary>
         /// Backup Write Wait Time (The time to wait to write save to backup after the card is recognized (0-255
         /// seconds)). NATIVE_FIRM loads this flag from the gamecard NCSD header starting with 6.0.0-11.
         /// </summary>
