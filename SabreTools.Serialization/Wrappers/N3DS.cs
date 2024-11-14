@@ -4,7 +4,7 @@ using SabreTools.Models.N3DS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class N3DS : WrapperBase<Models.N3DS.Cart>
+    public class N3DS : WrapperBase<Cart>
     {
         #region Descriptive Properties
 
@@ -179,14 +179,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public N3DS(Models.N3DS.Cart? model, byte[]? data, int offset)
+        public N3DS(Cart? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public N3DS(Models.N3DS.Cart? model, Stream? data)
+        public N3DS(Cart? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             if (fsIndex < 0 || fsIndex >= Model.ExeFSHeaders.Length)
                 return false;
-            
+
             var fsHeader = Model.ExeFSHeaders[fsIndex];
             if (fsHeader?.FileHeaders == null)
                 return false;
@@ -286,6 +286,171 @@ namespace SabreTools.Serialization.Wrappers
 #else
             return partition.Flags.BitMasks.HasFlag(BitMasks.NoCrypto);
 #endif
+        }
+
+        #endregion
+
+        #region Offsets
+
+        /// <summary>
+        /// Get the offset of a partition ExeFS
+        /// </summary>
+        /// <returns>Offset to the ExeFS of the partition, 0 on error</returns>
+        public uint GetExeFSOffset(int index)
+        {
+            // Empty partitions table means no size is available
+            var partitionsTable = Model.Header?.PartitionsTable;
+            if (partitionsTable == null)
+                return 0;
+
+            // Invalid partition table entry means no size is available
+            var entry = partitionsTable[index];
+            if (entry == null)
+                return 0;
+
+            // Empty partitions array means no size is available
+            var partitions = Model.Partitions;
+            if (partitions == null)
+                return 0;
+
+            // Invalid partition means no size is available
+            var header = partitions[index];
+            if (header == null)
+                return 0;
+
+            // If the offset is 0, return 0
+            uint exeFsOffsetMU = header.ExeFSOffsetInMediaUnits;
+            if (exeFsOffsetMU == 0)
+                return 0;
+
+            // Return the adjusted offset
+            uint partitionOffsetMU = entry.Offset;
+            return (partitionOffsetMU + exeFsOffsetMU) * MediaUnitSize;
+        }
+
+        /// <summary>
+        /// Get the offset of a partition
+        /// </summary>
+        /// <returns>Offset to the partition, 0 on error</returns>
+        public uint GetPartitionOffset(int index)
+        {
+            // Empty partitions table means no size is available
+            var partitionsTable = Model.Header?.PartitionsTable;
+            if (partitionsTable == null)
+                return 0;
+
+            // Invalid partition table entry means no size is available
+            var entry = partitionsTable[index];
+            if (entry == null)
+                return 0;
+
+            // Return the adjusted offset
+            uint partitionOffsetMU = entry.Offset;
+            if (entry.Offset == 0)
+                return 0;
+
+            // Return the adjusted offset
+            return partitionOffsetMU * MediaUnitSize;
+        }
+
+        /// <summary>
+        /// Get the offset of a partition RomFS
+        /// </summary>
+        /// <returns>Offset to the RomFS of the partition, 0 on error</returns>
+        public uint GetRomFSOffset(int index)
+        {
+            // Empty partitions table means no size is available
+            var partitionsTable = Model.Header?.PartitionsTable;
+            if (partitionsTable == null)
+                return 0;
+
+            // Invalid partition table entry means no size is available
+            var entry = partitionsTable[index];
+            if (entry == null)
+                return 0;
+
+            // Empty partitions array means no size is available
+            var partitions = Model.Partitions;
+            if (partitions == null)
+                return 0;
+
+            // Invalid partition means no size is available
+            var header = partitions[index];
+            if (header == null)
+                return 0;
+
+            // If the offset is 0, return 0
+            uint romFsOffsetMU = header.RomFSOffsetInMediaUnits;
+            if (romFsOffsetMU == 0)
+                return 0;
+
+            // Return the adjusted offset
+            uint partitionOffsetMU = entry.Offset;
+            return (partitionOffsetMU + romFsOffsetMU) * MediaUnitSize;
+        }
+
+        #endregion
+
+        #region Sizes
+
+        /// <summary>
+        /// Get the size of a partition ExeFS
+        /// </summary>
+        /// <returns>Size of the partition ExeFS in bytes, 0 on error</returns>
+        public uint GetExeFSSize(int index)
+        {
+            // Empty partitions array means no size is available
+            var partitions = Model.Partitions;
+            if (partitions == null)
+                return 0;
+
+            // Invalid partition header means no size is available
+            var header = partitions[index];
+            if (header == null)
+                return 0;
+
+            // Return the adjusted size
+            return header.ExeFSSizeInMediaUnits * MediaUnitSize;
+        }
+
+        /// <summary>
+        /// Get the size of a partition extended header
+        /// </summary>
+        /// <returns>Size of the partition extended header in bytes, 0 on error</returns>
+        public uint GetExtendedHeaderSize(int index)
+        {
+            // Empty partitions array means no size is available
+            var partitions = Model.Partitions;
+            if (partitions == null)
+                return 0;
+
+            // Invalid partition header means no size is available
+            var header = partitions[index];
+            if (header == null)
+                return 0;
+
+            // Return the adjusted size
+            return header.ExtendedHeaderSizeInBytes;
+        }
+
+        /// <summary>
+        /// Get the size of a partition RomFS
+        /// </summary>
+        /// <returns>Size of the partition RomFS in bytes, 0 on error</returns>
+        public uint GetRomFSSize(int index)
+        {
+            // Empty partitions array means no size is available
+            var partitions = Model.Partitions;
+            if (partitions == null)
+                return 0;
+
+            // Invalid partition header means no size is available
+            var header = partitions[index];
+            if (header == null)
+                return 0;
+
+            // Return the adjusted size
+            return header.RomFSSizeInMediaUnits * MediaUnitSize;
         }
 
         #endregion

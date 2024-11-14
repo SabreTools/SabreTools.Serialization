@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Extended Headers
 
             // Create the extended header table
-            cart.ExtendedHeaders = new NCCHExtendedHeader[8];
+            cart.ExtendedHeaders = new NCCHExtendedHeader?[8];
 
             // Iterate and build the extended headers
             for (int i = 0; i < 8; i++)
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Deserializers
             #region ExeFS Headers
 
             // Create the ExeFS header table
-            cart.ExeFSHeaders = new ExeFSHeader[8];
+            cart.ExeFSHeaders = new ExeFSHeader?[8];
 
             // Iterate and build the ExeFS headers
             for (int i = 0; i < 8; i++)
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Deserializers
             #region RomFS Headers
 
             // Create the RomFS header table
-            cart.RomFSHeaders = new RomFSHeader[8];
+            cart.RomFSHeaders = new RomFSHeader?[8];
 
             // Iterate and build the RomFS headers
             for (int i = 0; i < 8; i++)
@@ -305,25 +305,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled development card info header on success, null on error</returns>
         public static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
         {
-            // TODO: Go back to `data.ReadType<DevelopmentCardInfoHeader>();` when Models is fixed
-            var header = new DevelopmentCardInfoHeader();
-
-            header.CardDeviceReserved1 = data.ReadBytes(0x200);
-            header.TitleKey = data.ReadBytes(0x10);
-            header.CardDeviceReserved2 = data.ReadBytes(0x1BF0);
-            header.TestData = ParseTestData(data);
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into test data
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled test data on success, null on error</returns>
-        public static TestData? ParseTestData(Stream data)
-        {
-            return data.ReadType<TestData>();
+            return data.ReadType<DevelopmentCardInfoHeader>();
         }
 
         /// <summary>
