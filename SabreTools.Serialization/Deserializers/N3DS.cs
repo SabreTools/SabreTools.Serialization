@@ -329,7 +329,51 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled NCCH extended header on success, null on error</returns>
         public static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
         {
-            return data.ReadType<NCCHExtendedHeader>();
+            // TODO: Replace with `data.ReadType<NCCHExtendedHeader>();` when enum serialization fixed
+            var header = new NCCHExtendedHeader();
+
+            header.SCI = data.ReadType<SystemControlInfo>();
+            header.ACI = ParseAccessControlInfo(data);
+            header.AccessDescSignature = data.ReadBytes(0x100);
+            header.NCCHHDRPublicKey = data.ReadBytes(0x100);
+            header.ACIForLimitations = ParseAccessControlInfo(data);
+
+            return header;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an access control info
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled access control info on success, null on error</returns>
+        public static AccessControlInfo? ParseAccessControlInfo(Stream data)
+        {
+            var aci = new AccessControlInfo();
+
+            aci.ARM11LocalSystemCapabilities = data.ReadType<ARM11LocalSystemCapabilities>();
+            aci.ARM11KernelCapabilities = data.ReadType<ARM11KernelCapabilities>();
+            aci.ARM9AccessControl = ParseARM9AccessControl(data);
+
+            return aci;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ARM9 access control
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ARM9 access control on success, null on error</returns>
+        public static ARM9AccessControl? ParseARM9AccessControl(Stream data)
+        {
+            var a9ac = new ARM9AccessControl();
+
+            a9ac.Descriptors = new ARM9AccessControlDescriptors[15];
+            for (int i = 0; i < a9ac.Descriptors.Length; i++)
+            {
+                a9ac.Descriptors[i] = (ARM9AccessControlDescriptors)data.ReadByteValue();
+            }
+            a9ac.DescriptorVersion = data.ReadByteValue();
+
+            return a9ac;
         }
 
         /// <summary>

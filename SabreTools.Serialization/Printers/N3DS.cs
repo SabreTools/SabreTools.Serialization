@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using SabreTools.Models.N3DS;
 using SabreTools.Serialization.Interfaces;
@@ -491,7 +492,13 @@ namespace SabreTools.Serialization.Printers
                     }
                     else
                     {
-                        builder.AppendLine($"        Descriptors: {entry.ACI.ARM9AccessControl.Descriptors} (0x{entry.ACI.ARM9AccessControl.Descriptors:X})");
+                        string descriptorsStr = "[NULL]";
+                        if (entry.ACI.ARM9AccessControl.Descriptors != null)
+                        {
+                            var descriptors = Array.ConvertAll(entry.ACI.ARM9AccessControl.Descriptors, d => d.ToString());
+                            descriptorsStr = string.Join(", ", descriptors);
+                        }
+                        builder.AppendLine(descriptorsStr, "        Descriptors");
                         builder.AppendLine(entry.ACI.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
                     }
 
@@ -559,7 +566,13 @@ namespace SabreTools.Serialization.Printers
                     }
                     else
                     {
-                        builder.AppendLine($"        Descriptors: {entry.ACIForLimitations.ARM9AccessControl.Descriptors} (0x{entry.ACIForLimitations.ARM9AccessControl.Descriptors:X})");
+                        string descriptorsStr = "[NULL]";
+                        if (entry.ACIForLimitations.ARM9AccessControl.Descriptors != null)
+                        {
+                            var descriptors = Array.ConvertAll(entry.ACIForLimitations.ARM9AccessControl.Descriptors, d => d.ToString());
+                            descriptorsStr = string.Join(", ", descriptors);
+                        }
+                        builder.AppendLine(descriptorsStr, "        Descriptors");
                         builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
                     }
                 }
