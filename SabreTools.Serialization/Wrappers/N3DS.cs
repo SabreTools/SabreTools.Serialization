@@ -22,76 +22,10 @@ namespace SabreTools.Serialization.Wrappers
         public NCCHHeader? BackupHeader => Model.CardInfoHeader?.InitialData?.BackupHeader;
 
         /// <summary>
-        /// Backup Write Wait Time (The time to wait to write save to backup after the card is recognized (0-255
-        /// seconds)). NATIVE_FIRM loads this flag from the gamecard NCSD header starting with 6.0.0-11.
+        /// ExeFS headers
         /// </summary>
-        public byte BackupWriteWaitTime
-        {
-            get
-            {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
-                return Model.Header.PartitionFlags[(int)NCSDFlags.BackupWriteWaitTime];
-            }
-        }
-
-        /// <summary>
-        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (Only SDK 2.X)
-        /// </summary>
-        public MediaCardDeviceType MediaCardDevice2X
-        {
-            get
-            {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
-                return (MediaCardDeviceType)Model.Header.PartitionFlags[(int)NCSDFlags.MediaCardDevice2X];
-            }
-        }
-
-        /// <summary>
-        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (SDK 3.X+)
-        /// </summary>
-        public MediaCardDeviceType MediaCardDevice3X
-        {
-            get
-            {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
-                return (MediaCardDeviceType)Model.Header.PartitionFlags[(int)NCSDFlags.MediaCardDevice3X];
-            }
-        }
-
-        /// <summary>
-        /// Media Platform Index (1 = CTR)
-        /// </summary>
-        public MediaPlatformIndex MediaPlatformIndex
-        {
-            get
-            {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
-                return (MediaPlatformIndex)Model.Header.PartitionFlags[(int)NCSDFlags.MediaPlatformIndex];
-            }
-        }
-
-        /// <summary>
-        /// Media Type Index (0 = Inner Device, 1 = Card1, 2 = Card2, 3 = Extended Device)
-        /// </summary>
-        public MediaTypeIndex MediaTypeIndex
-        {
-            get
-            {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
-                return (MediaTypeIndex)Model.Header.PartitionFlags[(int)NCSDFlags.MediaTypeIndex];
-            }
-        }
-
+        public ExeFSHeader?[] ExeFSHeaders => Model.ExeFSHeaders ?? [];
+        
         /// <summary>
         /// Media unit size in bytes
         /// </summary>
@@ -106,7 +40,17 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        #region Partition Entries
+        /// <summary>
+        /// Partitions data table
+        /// </summary>
+        public NCCHHeader?[] Partitions => Model.Partitions ?? [];
+
+        /// <summary>
+        /// Partitions header table
+        /// </summary>
+        public PartitionTableEntry?[] PartitionsTable => Model.Header?.PartitionsTable ?? [];
+
+        #region Named Partition Entries
 
         /// <summary>
         /// Partition table entry for Executable Content (CXI)
@@ -115,10 +59,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionsTable == null)
+                if (PartitionsTable == null || PartitionsTable.Length == 0)
                     return null;
 
-                return Model.Header.PartitionsTable[0];
+                return PartitionsTable[0];
             }
         }
 
@@ -129,10 +73,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionsTable == null)
+                if (PartitionsTable == null || PartitionsTable.Length == 0)
                     return null;
 
-                return Model.Header.PartitionsTable[1];
+                return PartitionsTable[1];
             }
         }
 
@@ -143,10 +87,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionsTable == null)
+                if (PartitionsTable == null || PartitionsTable.Length == 0)
                     return null;
 
-                return Model.Header.PartitionsTable[2];
+                return PartitionsTable[2];
             }
         }
 
@@ -157,10 +101,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionsTable == null)
+                if (PartitionsTable == null || PartitionsTable.Length == 0)
                     return null;
 
-                return Model.Header.PartitionsTable[6];
+                return PartitionsTable[6];
             }
         }
 
@@ -171,10 +115,90 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionsTable == null)
+                if (PartitionsTable == null || PartitionsTable.Length == 0)
                     return null;
 
-                return Model.Header.PartitionsTable[7];
+                return PartitionsTable[7];
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Partitions flags
+        /// </summary>
+        public byte[] PartitionFlags => Model.Header?.PartitionFlags ?? [];
+
+        #region Partition Flags
+
+        /// <summary>
+        /// Backup Write Wait Time (The time to wait to write save to backup after the card is recognized (0-255
+        /// seconds)). NATIVE_FIRM loads this flag from the gamecard NCSD header starting with 6.0.0-11.
+        /// </summary>
+        public byte BackupWriteWaitTime
+        {
+            get
+            {
+                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                    return default;
+
+                return PartitionFlags[(int)NCSDFlags.BackupWriteWaitTime];
+            }
+        }
+
+        /// <summary>
+        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (Only SDK 2.X)
+        /// </summary>
+        public MediaCardDeviceType MediaCardDevice2X
+        {
+            get
+            {
+                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                    return default;
+
+                return (MediaCardDeviceType)PartitionFlags[(int)NCSDFlags.MediaCardDevice2X];
+            }
+        }
+
+        /// <summary>
+        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (SDK 3.X+)
+        /// </summary>
+        public MediaCardDeviceType MediaCardDevice3X
+        {
+            get
+            {
+                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                    return default;
+
+                return (MediaCardDeviceType)PartitionFlags[(int)NCSDFlags.MediaCardDevice3X];
+            }
+        }
+
+        /// <summary>
+        /// Media Platform Index (1 = CTR)
+        /// </summary>
+        public MediaPlatformIndex MediaPlatformIndex
+        {
+            get
+            {
+                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                    return default;
+
+                return (MediaPlatformIndex)PartitionFlags[(int)NCSDFlags.MediaPlatformIndex];
+            }
+        }
+
+        /// <summary>
+        /// Media Type Index (0 = Inner Device, 1 = Card1, 2 = Card2, 3 = Extended Device)
+        /// </summary>
+        public MediaTypeIndex MediaTypeIndex
+        {
+            get
+            {
+                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                    return default;
+
+                return (MediaTypeIndex)PartitionFlags[(int)NCSDFlags.MediaTypeIndex];
             }
         }
 
@@ -251,14 +275,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the bit masks for a partition
         /// </summary>
-        public BitMasks GetBitMasks(int partitionIndex)
+        public BitMasks GetBitMasks(int index)
         {
-            if (Model.Partitions == null)
+            if (Partitions == null)
                 return 0;
-            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
-            var partition = Model.Partitions[partitionIndex];
+            var partition = Partitions[index];
             if (partition?.Flags == null)
                 return 0;
 
@@ -266,16 +290,33 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the crypto method for a partition
+        /// </summary>
+        public CryptoMethod GetCryptoMethod(int index)
+        {
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
+                return 0;
+
+            var partition = Partitions[index];
+            if (partition?.Flags == null)
+                return 0;
+
+            return partition.Flags.CryptoMethod;
+        }
+
+        /// <summary>
         /// Determines if a file header represents a CODE block
         /// </summary>
         public bool IsCodeBinary(int fsIndex, int headerIndex)
         {
-            if (Model.ExeFSHeaders == null)
+            if (ExeFSHeaders == null)
                 return false;
-            if (fsIndex < 0 || fsIndex >= Model.ExeFSHeaders.Length)
+            if (fsIndex < 0 || fsIndex >= ExeFSHeaders.Length)
                 return false;
 
-            var fsHeader = Model.ExeFSHeaders[fsIndex];
+            var fsHeader = ExeFSHeaders[fsIndex];
             if (fsHeader?.FileHeaders == null)
                 return false;
 
@@ -292,15 +333,15 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the initial value for the plain counter
         /// </summary>
-        public byte[] PlainIV(int partitionIndex)
+        public byte[] PlainIV(int index)
         {
-            if (Model.Partitions == null)
+            if (Partitions == null)
                 return [];
-            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+            if (index < 0 || index >= Partitions.Length)
                 return [];
 
-            var header = Model.Partitions[partitionIndex];
-            if (header == null)
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
@@ -311,15 +352,15 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the initial value for the ExeFS counter
         /// </summary>
-        public byte[] ExeFSIV(int partitionIndex)
+        public byte[] ExeFSIV(int index)
         {
-            if (Model.Partitions == null)
+            if (Partitions == null)
                 return [];
-            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+            if (index < 0 || index >= Partitions.Length)
                 return [];
 
-            var header = Model.Partitions[partitionIndex];
-            if (header == null)
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
@@ -330,15 +371,15 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the initial value for the RomFS counter
         /// </summary>
-        public byte[] RomFSIV(int partitionIndex)
+        public byte[] RomFSIV(int index)
         {
-            if (Model.Partitions == null)
+            if (Partitions == null)
                 return [];
-            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+            if (index < 0 || index >= Partitions.Length)
                 return [];
 
-            var header = Model.Partitions[partitionIndex];
-            if (header == null)
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
@@ -351,20 +392,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public bool PossiblyDecrypted(int index)
         {
-            if (Model.Partitions == null)
-                return false;
-
-            if (index < 0 || index >= Model.Partitions.Length)
-                return false;
-
-            var partition = Model.Partitions[index];
-            if (partition?.Flags == null)
-                return false;
-
+            var bitMasks = GetBitMasks(index);
 #if NET20 || NET35
-            return (partition.Flags.BitMasks & BitMasks.NoCrypto) != 0;
+            return (bitMasks & BitMasks.NoCrypto) != 0;
 #else
-            return partition.Flags.BitMasks.HasFlag(BitMasks.NoCrypto);
+            return bitMasks.HasFlag(BitMasks.NoCrypto);
 #endif
         }
 
@@ -378,24 +410,20 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Offset to the ExeFS of the partition, 0 on error</returns>
         public uint GetExeFSOffset(int index)
         {
-            // Empty partitions table means no size is available
-            var partitionsTable = Model.Header?.PartitionsTable;
-            if (partitionsTable == null)
+            // No partitions means no size is available
+            if (PartitionsTable == null || Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition table entry means no size is available
-            var entry = partitionsTable[index];
+            var entry = PartitionsTable[index];
             if (entry == null)
                 return 0;
 
-            // Empty partitions array means no size is available
-            var partitions = Model.Partitions;
-            if (partitions == null)
-                return 0;
-
             // Invalid partition means no size is available
-            var header = partitions[index];
-            if (header == null)
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -414,13 +442,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Offset to the partition, 0 on error</returns>
         public uint GetPartitionOffset(int index)
         {
-            // Empty partitions table means no size is available
-            var partitionsTable = Model.Header?.PartitionsTable;
-            if (partitionsTable == null)
+            // No partitions means no size is available
+            if (PartitionsTable == null)
+                return 0;
+            if (index < 0 || index >= PartitionsTable.Length)
                 return 0;
 
             // Invalid partition table entry means no size is available
-            var entry = partitionsTable[index];
+            var entry = PartitionsTable[index];
             if (entry == null)
                 return 0;
 
@@ -439,24 +468,20 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Offset to the RomFS of the partition, 0 on error</returns>
         public uint GetRomFSOffset(int index)
         {
-            // Empty partitions table means no size is available
-            var partitionsTable = Model.Header?.PartitionsTable;
-            if (partitionsTable == null)
+            // No partitions means no size is available
+            if (PartitionsTable == null || Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition table entry means no size is available
-            var entry = partitionsTable[index];
+            var entry = PartitionsTable[index];
             if (entry == null)
                 return 0;
 
-            // Empty partitions array means no size is available
-            var partitions = Model.Partitions;
-            if (partitions == null)
-                return 0;
-
             // Invalid partition means no size is available
-            var header = partitions[index];
-            if (header == null)
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -480,12 +505,13 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetExeFSSize(int index)
         {
             // Empty partitions array means no size is available
-            var partitions = Model.Partitions;
-            if (partitions == null)
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
-            var header = partitions[index];
+            var header = Partitions[index];
             if (header == null)
                 return 0;
 
@@ -500,12 +526,13 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetExtendedHeaderSize(int index)
         {
             // Empty partitions array means no size is available
-            var partitions = Model.Partitions;
-            if (partitions == null)
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
-            var header = partitions[index];
+            var header = Partitions[index];
             if (header == null)
                 return 0;
 
@@ -520,12 +547,13 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetRomFSSize(int index)
         {
             // Empty partitions array means no size is available
-            var partitions = Model.Partitions;
-            if (partitions == null)
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
-            var header = partitions[index];
+            var header = Partitions[index];
             if (header == null)
                 return 0;
 
