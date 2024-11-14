@@ -327,7 +327,7 @@ namespace SabreTools.Serialization.Wrappers
             if (fileHeader == null)
                 return false;
 
-            return fileHeader.FileName == ".code\0\0\0";
+            return fileHeader.FileName == ".code";
         }
 
         /// <summary>
