@@ -304,6 +304,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            Array.Reverse(partitionIdBytes);
             return [.. partitionIdBytes, .. PlainCounter];
         }
 
@@ -322,6 +323,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            Array.Reverse(partitionIdBytes);
             return [.. partitionIdBytes, .. ExefsCounter];
         }
 
@@ -340,6 +342,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            Array.Reverse(partitionIdBytes);
             return [.. partitionIdBytes, .. RomfsCounter];
         }
 
