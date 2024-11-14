@@ -249,6 +249,23 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
+        /// Get the bit masks for a partition
+        /// </summary>
+        public BitMasks GetBitMasks(int partitionIndex)
+        {
+            if (Model.Partitions == null)
+                return 0;
+            if (partitionIndex < 0 || partitionIndex >= Model.Partitions.Length)
+                return 0;
+
+            var partition = Model.Partitions[partitionIndex];
+            if (partition?.Flags == null)
+                return 0;
+
+            return partition.Flags.BitMasks;
+        }
+
+        /// <summary>
         /// Determines if a file header represents a CODE block
         /// </summary>
         public bool IsCodeBinary(int fsIndex, int headerIndex)
