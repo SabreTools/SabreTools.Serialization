@@ -264,23 +264,18 @@ namespace SabreTools.Serialization.Deserializers
 
             header.WritableAddressMediaUnits = data.ReadUInt32();
             header.CardInfoBitmask = data.ReadUInt32();
-            header.Reserved3 = data.ReadBytes(0x108);
+            header.Reserved1 = data.ReadBytes(0xF8);
+            header.FilledSize = data.ReadUInt32();
+            header.Reserved2 = data.ReadBytes(0x0C);
             header.TitleVersion = data.ReadUInt16();
             header.CardRevision = data.ReadUInt16();
+            header.Reserved3 = data.ReadBytes(0x0C);
+            header.CVerTitleID = data.ReadBytes(0x08);
+            header.CVerVersionNumber = data.ReadUInt16();
             header.Reserved4 = data.ReadBytes(0xCD6);
             header.InitialData = ParseInitialData(data);
 
             return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a development card info header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled development card info header on success, null on error</returns>
-        public static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
-        {
-            return data.ReadType<DevelopmentCardInfoHeader>();
         }
 
         /// <summary>
@@ -301,6 +296,34 @@ namespace SabreTools.Serialization.Deserializers
             id.BackupHeader = ParseNCCHHeader(data, skipSignature: true);
 
             return id;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a development card info header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled development card info header on success, null on error</returns>
+        public static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
+        {
+            // TODO: Go back to `data.ReadType<DevelopmentCardInfoHeader>();` when Models is fixed
+            var header = new DevelopmentCardInfoHeader();
+
+            header.CardDeviceReserved1 = data.ReadBytes(0x200);
+            header.TitleKey = data.ReadBytes(0x10);
+            header.CardDeviceReserved2 = data.ReadBytes(0x1BF0);
+            header.TestData = ParseTestData(data);
+
+            return header;
+        }
+
+        /// <summary>
+        /// Parse a Stream into test data
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled test data on success, null on error</returns>
+        public static TestData? ParseTestData(Stream data)
+        {
+            return data.ReadType<TestData>();
         }
 
         /// <summary>

@@ -13,6 +13,169 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <summary>
+        /// Backup Write Wait Time (The time to wait to write save to backup after the card is recognized (0-255
+        /// seconds)). NATIVE_FIRM loads this flag from the gamecard NCSD header starting with 6.0.0-11.
+        /// </summary>
+        public byte BackupWriteWaitTime
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return Model.Header.PartitionFlags[(int)NCSDFlags.BackupWriteWaitTime];
+            }
+        }
+
+        /// <summary>
+        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (Only SDK 2.X)
+        /// </summary>
+        public MediaCardDeviceType MediaCardDevice2X
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return (MediaCardDeviceType)Model.Header.PartitionFlags[(int)NCSDFlags.MediaCardDevice2X];
+            }
+        }
+
+        /// <summary>
+        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (SDK 3.X+)
+        /// </summary>
+        public MediaCardDeviceType MediaCardDevice3X
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return (MediaCardDeviceType)Model.Header.PartitionFlags[(int)NCSDFlags.MediaCardDevice3X];
+            }
+        }
+
+        /// <summary>
+        /// Media Platform Index (1 = CTR)
+        /// </summary>
+        public MediaPlatformIndex MediaPlatformIndex
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return (MediaPlatformIndex)Model.Header.PartitionFlags[(int)NCSDFlags.MediaPlatformIndex];
+            }
+        }
+
+        /// <summary>
+        /// Media Type Index (0 = Inner Device, 1 = Card1, 2 = Card2, 3 = Extended Device)
+        /// </summary>
+        public MediaTypeIndex MediaTypeIndex
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return (MediaTypeIndex)Model.Header.PartitionFlags[(int)NCSDFlags.MediaTypeIndex];
+            }
+        }
+
+        /// <summary>
+        /// Media unit size in bytes
+        /// </summary>
+        public uint MediaUnitSize
+        {
+            get
+            {
+                if (Model.Header?.PartitionFlags == null)
+                    return default;
+
+                return (uint)(0x200 * Math.Pow(2, Model.Header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
+            }
+        }
+
+        #region Partition Entries
+
+        /// <summary>
+        /// Partition table entry for Executable Content (CXI)
+        /// </summary>
+        public PartitionTableEntry? ExecutableContentEntry
+        {
+            get
+            {
+                if (Model.Header?.PartitionsTable == null)
+                    return null;
+
+                return Model.Header.PartitionsTable[0];
+            }
+        }
+
+        /// <summary>
+        /// Partition table entry for E-Manual (CFA)
+        /// </summary>
+        public PartitionTableEntry? EManualEntry
+        {
+            get
+            {
+                if (Model.Header?.PartitionsTable == null)
+                    return null;
+
+                return Model.Header.PartitionsTable[1];
+            }
+        }
+
+        /// <summary>
+        /// Partition table entry for Download Play Child container (CFA)
+        /// </summary>
+        public PartitionTableEntry? DownloadPlayChildContainerEntry
+        {
+            get
+            {
+                if (Model.Header?.PartitionsTable == null)
+                    return null;
+
+                return Model.Header.PartitionsTable[2];
+            }
+        }
+
+        /// <summary>
+        /// Partition table entry for New3DS Update Data (CFA)
+        /// </summary>
+        public PartitionTableEntry? New3DSUpdateDataEntry
+        {
+            get
+            {
+                if (Model.Header?.PartitionsTable == null)
+                    return null;
+
+                return Model.Header.PartitionsTable[6];
+            }
+        }
+
+        /// <summary>
+        /// Partition table entry for Update Data (CFA)
+        /// </summary>
+        public PartitionTableEntry? UpdateDataEntry
+        {
+            get
+            {
+                if (Model.Header?.PartitionsTable == null)
+                    return null;
+
+                return Model.Header.PartitionsTable[7];
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -77,176 +240,53 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        // TODO: Hook these up for external use
-        #region Currently Unused Extensions
-
-        #region ExeFSFileHeader
+        #region Data
 
         /// <summary>
         /// Determines if a file header represents a CODE block
         /// </summary>
-        public static bool IsCodeBinary(ExeFSFileHeader? header)
+        public bool IsCodeBinary(int fsIndex, int headerIndex)
         {
-            if (header == null)
+            if (Model.ExeFSHeaders == null)
+                return false;
+            if (fsIndex < 0 || fsIndex >= Model.ExeFSHeaders.Length)
+                return false;
+            
+            var fsHeader = Model.ExeFSHeaders[fsIndex];
+            if (fsHeader?.FileHeaders == null)
                 return false;
 
-            return header.FileName == ".code\0\0\0";
+            if (headerIndex < 0 || headerIndex >= fsHeader.FileHeaders.Length)
+                return false;
+
+            var fileHeader = fsHeader.FileHeaders[headerIndex];
+            if (fileHeader == null)
+                return false;
+
+            return fileHeader.FileName == ".code\0\0\0";
         }
-
-        #endregion
-
-        #region NCCHHeaderFlags
 
         /// <summary>
         /// Get if the NoCrypto bit is set
         /// </summary>
-        public static bool PossiblyDecrypted(NCCHHeaderFlags flags)
+        public bool PossiblyDecrypted(int index)
         {
-            if (flags == null)
+            if (Model.Partitions == null)
+                return false;
+
+            if (index < 0 || index >= Model.Partitions.Length)
+                return false;
+
+            var partition = Model.Partitions[index];
+            if (partition?.Flags == null)
                 return false;
 
 #if NET20 || NET35
-            return (flags.BitMasks & BitMasks.NoCrypto) != 0;
+            return (partition.Flags.BitMasks & BitMasks.NoCrypto) != 0;
 #else
-            return flags.BitMasks.HasFlag(BitMasks.NoCrypto);
+            return partition.Flags.BitMasks.HasFlag(BitMasks.NoCrypto);
 #endif
         }
-
-        #endregion
-
-        #region NCSDHeader
-
-        /// <summary>
-        /// Partition table entry for Executable Content (CXI)
-        /// </summary>
-        public static PartitionTableEntry? ExecutableContent(NCSDHeader? header)
-        {
-            if (header?.PartitionsTable == null)
-                return null;
-
-            return header.PartitionsTable[0];
-        }
-
-        /// <summary>
-        /// Partition table entry for E-Manual (CFA)
-        /// </summary>
-        public static PartitionTableEntry? EManual(NCSDHeader? header)
-        {
-            if (header?.PartitionsTable == null)
-                return null;
-
-            return header.PartitionsTable[1];
-        }
-
-        /// <summary>
-        /// Partition table entry for Download Play Child container (CFA)
-        /// </summary>
-        public static PartitionTableEntry? DownloadPlayChildContainer(NCSDHeader? header)
-        {
-            if (header?.PartitionsTable == null)
-                return null;
-
-            return header.PartitionsTable[2];
-        }
-
-        /// <summary>
-        /// Partition table entry for New3DS Update Data (CFA)
-        /// </summary>
-        public static PartitionTableEntry? New3DSUpdateData(NCSDHeader? header)
-        {
-            if (header?.PartitionsTable == null)
-                return null;
-
-            return header.PartitionsTable[6];
-        }
-
-        /// <summary>
-        /// Partition table entry for Update Data (CFA)
-        /// </summary>
-        public static PartitionTableEntry? UpdateData(NCSDHeader? header)
-        {
-            if (header?.PartitionsTable == null)
-                return null;
-
-            return header.PartitionsTable[7];
-        }
-
-        /// <summary>
-        /// Backup Write Wait Time (The time to wait to write save to backup after the card is recognized (0-255
-        /// seconds)).NATIVE_FIRM loads this flag from the gamecard NCSD header starting with 6.0.0-11.
-        /// </summary>
-        public static byte BackupWriteWaitTime(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return header.PartitionFlags[(int)NCSDFlags.BackupWriteWaitTime];
-        }
-
-        /// <summary>
-        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (SDK 3.X+)
-        /// </summary>
-        public static MediaCardDeviceType MediaCardDevice3X(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return (MediaCardDeviceType)header.PartitionFlags[(int)NCSDFlags.MediaCardDevice3X];
-        }
-
-        /// <summary>
-        /// Media Platform Index (1 = CTR)
-        /// </summary>
-        public static MediaPlatformIndex MediaPlatformIndex(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return (MediaPlatformIndex)header.PartitionFlags[(int)NCSDFlags.MediaPlatformIndex];
-        }
-
-        /// <summary>
-        /// Media Type Index (0 = Inner Device, 1 = Card1, 2 = Card2, 3 = Extended Device)
-        /// </summary>
-        public static MediaTypeIndex MediaTypeIndex(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return (MediaTypeIndex)header.PartitionFlags[(int)NCSDFlags.MediaTypeIndex];
-        }
-
-        /// <summary>
-        /// Media Unit Size i.e. u32 MediaUnitSize = 0x200*2^flags[6];
-        /// </summary>
-        public static uint MediaUnitSize(Cart cart)
-        {
-            return MediaUnitSize(cart.Header);
-        }
-
-        /// <summary>
-        /// Media Unit Size i.e. u32 MediaUnitSize = 0x200*2^flags[6];
-        /// </summary>
-        public static uint MediaUnitSize(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return (uint)(0x200 * Math.Pow(2, header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
-        }
-
-        /// <summary>
-        /// Media Card Device (1 = NOR Flash, 2 = None, 3 = BT) (Only SDK 2.X)
-        /// </summary>
-        public static MediaCardDeviceType MediaCardDevice2X(NCSDHeader? header)
-        {
-            if (header?.PartitionFlags == null)
-                return default;
-
-            return (MediaCardDeviceType)header.PartitionFlags[(int)NCSDFlags.MediaCardDevice2X];
-        }
-
-        #endregion
 
         #endregion
     }

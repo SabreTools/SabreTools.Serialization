@@ -44,26 +44,26 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.PartitionsCryptType, "  Partitions crypt type");
             builder.AppendLine();
 
-            builder.AppendLine("  Partition table:");
-            builder.AppendLine("  -------------------------");
+            builder.AppendLine("    Partition table:");
+            builder.AppendLine("    -------------------------");
             if (header.PartitionsTable == null || header.PartitionsTable.Length == 0)
             {
-                builder.AppendLine("  No partition table entries");
+                builder.AppendLine("    No partition table entries");
             }
             else
             {
                 for (int i = 0; i < header.PartitionsTable.Length; i++)
                 {
                     var partitionTableEntry = header.PartitionsTable[i];
-                    builder.AppendLine($"  Partition table entry {i}");
+                    builder.AppendLine($"    Partition table entry {i}");
                     if (partitionTableEntry == null)
                     {
-                        builder.AppendLine("    [NULL]");
+                        builder.AppendLine("      [NULL]");
                         continue;
                     }
 
-                    builder.AppendLine(partitionTableEntry.Offset, "    Offset");
-                    builder.AppendLine(partitionTableEntry.Length, "    Length");
+                    builder.AppendLine(partitionTableEntry.Offset, "      Offset");
+                    builder.AppendLine(partitionTableEntry.Length, "      Length");
                 }
             }
             builder.AppendLine();
@@ -77,17 +77,17 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(header.PartitionFlags, "  Partition flags");
                 builder.AppendLine();
 
-                builder.AppendLine("  Partition ID table:");
-                builder.AppendLine("  -------------------------");
+                builder.AppendLine("    Partition ID table:");
+                builder.AppendLine("    -------------------------");
                 if (header.PartitionIdTable == null || header.PartitionIdTable.Length == 0)
                 {
-                    builder.AppendLine("  No partition ID table entries");
+                    builder.AppendLine("    No partition ID table entries");
                 }
                 else
                 {
                     for (int i = 0; i < header.PartitionIdTable.Length; i++)
                     {
-                        builder.AppendLine(header.PartitionIdTable[i], $"  Partition {i} ID");
+                        builder.AppendLine(header.PartitionIdTable[i], $"    Partition {i} ID");
                     }
                 }
                 builder.AppendLine();
@@ -145,62 +145,6 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine();
                 return;
             }
-
-            builder.AppendLine();
-            builder.AppendLine("  Initial Data:");
-            builder.AppendLine("  -------------------------");
-            if (header.InitialData == null)
-            {
-                builder.AppendLine("  No initial data");
-            }
-            else
-            {
-                builder.AppendLine(header.InitialData.CardSeedKeyY, "  Card seed keyY");
-                builder.AppendLine(header.InitialData.EncryptedCardSeed, "  Encrypted card seed");
-                builder.AppendLine(header.InitialData.CardSeedAESMAC, "  Card seed AES-MAC");
-                builder.AppendLine(header.InitialData.CardSeedNonce, "  Card seed nonce");
-                builder.AppendLine(header.InitialData.Reserved, "  Reserved");
-                builder.AppendLine();
-
-                builder.AppendLine("  Backup Header:");
-                builder.AppendLine("  -------------------------");
-                if (header.InitialData.BackupHeader == null)
-                {
-                    builder.AppendLine("  No backup header");
-                }
-                else
-                {
-                    builder.AppendLine(header.InitialData.BackupHeader.MagicID, "    Magic ID");
-                    builder.AppendLine(header.InitialData.BackupHeader.ContentSizeInMediaUnits, "    Content size in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.PartitionId, "    Partition ID");
-                    builder.AppendLine(header.InitialData.BackupHeader.MakerCode, "    Maker code");
-                    builder.AppendLine(header.InitialData.BackupHeader.Version, "    Version");
-                    builder.AppendLine(header.InitialData.BackupHeader.VerificationHash, "    Verification hash");
-                    builder.AppendLine(header.InitialData.BackupHeader.ProgramId, "    Program ID");
-                    builder.AppendLine(header.InitialData.BackupHeader.Reserved1, "    Reserved 1");
-                    builder.AppendLine(header.InitialData.BackupHeader.LogoRegionHash, "    Logo region SHA-256 hash");
-                    builder.AppendLine(header.InitialData.BackupHeader.ProductCode, "    Product code");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExtendedHeaderHash, "    Extended header SHA-256 hash");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExtendedHeaderSizeInBytes, "    Extended header size in bytes");
-                    builder.AppendLine(header.InitialData.BackupHeader.Reserved2, "    Reserved 2");
-                    builder.AppendLine($"    Flags: {header.InitialData.BackupHeader.Flags} (0x{header.InitialData.BackupHeader.Flags:X})");
-                    builder.AppendLine(header.InitialData.BackupHeader.PlainRegionOffsetInMediaUnits, "    Plain region offset, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.PlainRegionSizeInMediaUnits, "    Plain region size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.LogoRegionOffsetInMediaUnits, "    Logo region offset, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.LogoRegionSizeInMediaUnits, "    Logo region size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExeFSOffsetInMediaUnits, "    ExeFS offset, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExeFSSizeInMediaUnits, "    ExeFS size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExeFSHashRegionSizeInMediaUnits, "    ExeFS hash region size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.Reserved3, "    Reserved 3");
-                    builder.AppendLine(header.InitialData.BackupHeader.RomFSOffsetInMediaUnits, "    RomFS offset, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.RomFSSizeInMediaUnits, "    RomFS size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.RomFSHashRegionSizeInMediaUnits, "    RomFS hash region size, in media units");
-                    builder.AppendLine(header.InitialData.BackupHeader.Reserved4, "    Reserved 4");
-                    builder.AppendLine(header.InitialData.BackupHeader.ExeFSSuperblockHash, "    ExeFS superblock SHA-256 hash");
-                    builder.AppendLine(header.InitialData.BackupHeader.RomFSSuperblockHash, "    RomFS superblock SHA-256 hash");
-                }
-            }
-            builder.AppendLine();
 
             builder.AppendLine(header.CardDeviceReserved1, "  Card device reserved 1");
             builder.AppendLine(header.TitleKey, "  Title key");
