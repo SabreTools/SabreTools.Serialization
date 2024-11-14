@@ -78,8 +78,14 @@ namespace SabreTools.Serialization.Deserializers
             // Iterate and build the partitions
             for (int i = 0; i < 8; i++)
             {
-                // Cache the offset of the partition
-                initialOffset = data.Position;
+                // Find the offset to the partition
+                long partitionOffset = cart.Header.PartitionsTable?[i]?.Offset ?? 0;
+                partitionOffset *= mediaUnitSize;
+                if (partitionOffset == 0)
+                    continue;
+
+                // Seek to the start of the partition
+                data.Seek(partitionOffset, SeekOrigin.Begin);
 
                 // Handle the normal header
                 var partition = ParseNCCHHeader(data);
@@ -101,7 +107,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (partition.ExeFSSizeInMediaUnits > 0)
                 {
                     long offset = partition.ExeFSOffsetInMediaUnits * mediaUnitSize;
-                    data.Seek(initialOffset + offset, SeekOrigin.Begin);
+                    data.Seek(partitionOffset + offset, SeekOrigin.Begin);
 
                     var exeFsHeader = ParseExeFSHeader(data);
                     if (exeFsHeader == null)
@@ -114,7 +120,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (partition.RomFSSizeInMediaUnits > 0)
                 {
                     long offset = partition.RomFSOffsetInMediaUnits * mediaUnitSize;
-                    data.Seek(initialOffset + offset, SeekOrigin.Begin);
+                    data.Seek(partitionOffset + offset, SeekOrigin.Begin);
 
                     var romFsHeader = ParseRomFSHeader(data);
                     if (romFsHeader == null)
@@ -124,10 +130,6 @@ namespace SabreTools.Serialization.Deserializers
 
                     cart.RomFSHeaders[i] = romFsHeader;
                 }
-
-                // Skip past other data
-                long partitionSize = partition.ContentSizeInMediaUnits * mediaUnitSize;
-                data.Seek(initialOffset + partitionSize, SeekOrigin.Begin);
             }
 
             #endregion
