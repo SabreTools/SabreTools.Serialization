@@ -501,10 +501,10 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine(descriptorsStr, "        Descriptors");
                         builder.AppendLine(entry.ACI.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
                     }
-
-                    builder.AppendLine(entry.AccessDescSignature, "    AccessDec signature (RSA-2048-SHA256)");
-                    builder.AppendLine(entry.NCCHHDRPublicKey, "    NCCH HDR RSA-2048 public key");
                 }
+
+                builder.AppendLine(entry.AccessDescSignature, "    AccessDec signature (RSA-2048-SHA256)");
+                builder.AppendLine(entry.NCCHHDRPublicKey, "    NCCH HDR RSA-2048 public key");
 
                 builder.AppendLine("    Access control info (for limitations of first ACI):");
                 if (entry.ACIForLimitations == null)
