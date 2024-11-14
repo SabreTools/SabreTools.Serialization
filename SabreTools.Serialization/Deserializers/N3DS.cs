@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             // Cache the current offset
-            int initialOffset = (int)data.Position;
+            long initialOffset = data.Position;
 
             // Create a new cart image to fill
             var cart = new Cart();
@@ -62,118 +62,72 @@ namespace SabreTools.Serialization.Deserializers
 
             #endregion
 
-            #region Partitions
-
-            // Create the partition table
-            cart.Partitions = new NCCHHeader[8];
-
-            // Iterate and build the partitions
-            for (int i = 0; i < 8; i++)
-            {
-                cart.Partitions[i] = ParseNCCHHeader(data);
-            }
-
-            #endregion
-
             // Cache the media unit size for further use
             long mediaUnitSize = 0;
             if (header.PartitionFlags != null)
                 mediaUnitSize = (uint)(0x200 * Math.Pow(2, header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
 
-            #region Extended Headers
+            #region Partitions
 
-            // Create the extended header table
+            // Create the tables
+            cart.Partitions = new NCCHHeader[8];
             cart.ExtendedHeaders = new NCCHExtendedHeader?[8];
-
-            // Iterate and build the extended headers
-            for (int i = 0; i < 8; i++)
-            {
-                // If we have an encrypted or invalid partition
-                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
-                    continue;
-
-                // If we have no partitions table
-                if (cart.Header!.PartitionsTable == null)
-                    continue;
-
-                // Get the extended header offset
-                long offset = (cart.Header.PartitionsTable[i]!.Offset * mediaUnitSize) + 0x200;
-                if (offset < 0 || offset >= data.Length)
-                    continue;
-
-                // Seek to the extended header
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Parse the extended header
-                var extendedHeader = ParseNCCHExtendedHeader(data);
-                if (extendedHeader != null)
-                    cart.ExtendedHeaders[i] = extendedHeader;
-            }
-
-            #endregion
-
-            #region ExeFS Headers
-
-            // Create the ExeFS header table
             cart.ExeFSHeaders = new ExeFSHeader?[8];
-
-            // Iterate and build the ExeFS headers
-            for (int i = 0; i < 8; i++)
-            {
-                // If we have an encrypted or invalid partition
-                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
-                    continue;
-
-                // If we have no partitions table
-                if (cart.Header!.PartitionsTable == null)
-                    continue;
-
-                // Get the ExeFS header offset
-                long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.ExeFSOffsetInMediaUnits) * mediaUnitSize;
-                if (offset < 0 || offset >= data.Length)
-                    continue;
-
-                // Seek to the ExeFS header
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Parse the ExeFS header
-                var exeFsHeader = ParseExeFSHeader(data);
-                if (exeFsHeader == null)
-                    return null;
-
-                cart.ExeFSHeaders[i] = exeFsHeader;
-            }
-
-            #endregion
-
-            #region RomFS Headers
-
-            // Create the RomFS header table
             cart.RomFSHeaders = new RomFSHeader?[8];
 
-            // Iterate and build the RomFS headers
+            // Iterate and build the partitions
             for (int i = 0; i < 8; i++)
             {
-                // If we have an encrypted or invalid partition
-                if (cart.Partitions[i]!.MagicID != NCCHMagicNumber)
+                // Cache the offset of the partition
+                initialOffset = data.Position;
+
+                // Handle the normal header
+                var partition = ParseNCCHHeader(data);
+                if (partition == null || partition.MagicID != NCCHMagicNumber)
                     continue;
 
-                // If we have no partitions table
-                if (cart.Header!.PartitionsTable == null)
-                    continue;
+                // Set the normal header
+                cart.Partitions[i] = partition;
 
-                // Get the RomFS header offset
-                long offset = (cart.Header.PartitionsTable[i]!.Offset + cart.Partitions[i]!.RomFSOffsetInMediaUnits) * mediaUnitSize;
-                if (offset < 0 || offset >= data.Length)
-                    continue;
+                // Handle the extended header, if it exists
+                if (partition.ExtendedHeaderSizeInBytes > 0)
+                {
+                    var extendedHeader = ParseNCCHExtendedHeader(data);
+                    if (extendedHeader != null)
+                        cart.ExtendedHeaders[i] = extendedHeader;
+                }
 
-                // Seek to the RomFS header
-                data.Seek(offset, SeekOrigin.Begin);
+                // Handle the ExeFS, if it exists
+                if (partition.ExeFSSizeInMediaUnits > 0)
+                {
+                    long offset = partition.ExeFSOffsetInMediaUnits * mediaUnitSize;
+                    data.Seek(initialOffset + offset, SeekOrigin.Begin);
 
-                // Parse the RomFS header
-                var romFsHeader = ParseRomFSHeader(data);
-                if (romFsHeader != null)
+                    var exeFsHeader = ParseExeFSHeader(data);
+                    if (exeFsHeader == null)
+                        return null;
+
+                    cart.ExeFSHeaders[i] = exeFsHeader;
+                }
+
+                // Handle the RomFS, if it exists
+                if (partition.RomFSSizeInMediaUnits > 0)
+                {
+                    long offset = partition.RomFSOffsetInMediaUnits * mediaUnitSize;
+                    data.Seek(initialOffset + offset, SeekOrigin.Begin);
+
+                    var romFsHeader = ParseRomFSHeader(data);
+                    if (romFsHeader == null)
+                        continue;
+                    else if (romFsHeader.MagicString != RomFSMagicNumber || romFsHeader.MagicNumber != RomFSSecondMagicNumber)
+                        continue;
+
                     cart.RomFSHeaders[i] = romFsHeader;
+                }
+
+                // Skip past other data
+                long partitionSize = partition.ContentSizeInMediaUnits * mediaUnitSize;
+                data.Seek(initialOffset + partitionSize, SeekOrigin.Begin);
             }
 
             #endregion
