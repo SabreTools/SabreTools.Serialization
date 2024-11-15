@@ -437,6 +437,38 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the offset of a partition logo
+        /// </summary>
+        /// <returns>Offset to the logo of the partition, 0 on error</returns>
+        public uint GetLogoOffset(int index)
+        {
+            // No partitions means no size is available
+            if (PartitionsTable == null || Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
+                return 0;
+
+            // Invalid partition table entry means no size is available
+            var entry = PartitionsTable[index];
+            if (entry == null)
+                return 0;
+
+            // Invalid partition means no size is available
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
+                return 0;
+
+            // If the offset is 0, return 0
+            uint logoOffsetMU = header.LogoRegionOffsetInMediaUnits;
+            if (logoOffsetMU == 0)
+                return 0;
+
+            // Return the adjusted offset
+            uint partitionOffsetMU = entry.Offset;
+            return (partitionOffsetMU + logoOffsetMU) * MediaUnitSize;
+        }
+
+        /// <summary>
         /// Get the offset of a partition
         /// </summary>
         /// <returns>Offset to the partition, 0 on error</returns>
@@ -460,6 +492,38 @@ namespace SabreTools.Serialization.Wrappers
 
             // Return the adjusted offset
             return partitionOffsetMU * MediaUnitSize;
+        }
+
+        /// <summary>
+        /// Get the offset of a partition plain region
+        /// </summary>
+        /// <returns>Offset to the plain region of the partition, 0 on error</returns>
+        public uint GetPlainRegionOffset(int index)
+        {
+            // No partitions means no size is available
+            if (PartitionsTable == null || Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
+                return 0;
+
+            // Invalid partition table entry means no size is available
+            var entry = PartitionsTable[index];
+            if (entry == null)
+                return 0;
+
+            // Invalid partition means no size is available
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
+                return 0;
+
+            // If the offset is 0, return 0
+            uint prOffsetMU = header.PlainRegionOffsetInMediaUnits;
+            if (prOffsetMU == 0)
+                return 0;
+
+            // Return the adjusted offset
+            uint partitionOffsetMU = entry.Offset;
+            return (partitionOffsetMU + prOffsetMU) * MediaUnitSize;
         }
 
         /// <summary>
