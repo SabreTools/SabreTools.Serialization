@@ -437,10 +437,10 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get the offset of a partition logo
+        /// Get the offset of a partition logo region
         /// </summary>
-        /// <returns>Offset to the logo of the partition, 0 on error</returns>
-        public uint GetLogoOffset(int index)
+        /// <returns>Offset to the logo region of the partition, 0 on error</returns>
+        public uint GetLogoRegionOffset(int index)
         {
             // No partitions means no size is available
             if (PartitionsTable == null || Partitions == null)
@@ -602,6 +602,48 @@ namespace SabreTools.Serialization.Wrappers
 
             // Return the adjusted size
             return header.ExtendedHeaderSizeInBytes;
+        }
+
+        /// <summary>
+        /// Get the size of a partition logo region
+        /// </summary>
+        /// <returns>Size of the partition logo region in bytes, 0 on error</returns>
+        public uint GetLogoRegionSize(int index)
+        {
+            // Empty partitions array means no size is available
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
+                return 0;
+
+            // Invalid partition header means no size is available
+            var header = Partitions[index];
+            if (header == null)
+                return 0;
+
+            // Return the adjusted size
+            return header.LogoRegionSizeInMediaUnits * MediaUnitSize;
+        }
+
+        /// <summary>
+        /// Get the size of a partition plain region
+        /// </summary>
+        /// <returns>Size of the partition plain region in bytes, 0 on error</returns>
+        public uint GetPlainRegionSize(int index)
+        {
+            // Empty partitions array means no size is available
+            if (Partitions == null)
+                return 0;
+            if (index < 0 || index >= Partitions.Length)
+                return 0;
+
+            // Invalid partition header means no size is available
+            var header = Partitions[index];
+            if (header == null)
+                return 0;
+
+            // Return the adjusted size
+            return header.PlainRegionSizeInMediaUnits * MediaUnitSize;
         }
 
         /// <summary>
