@@ -331,23 +331,21 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get the initial value for the plain counter
+        /// Get if the NoCrypto bit is set
         /// </summary>
-        public byte[] PlainIV(int index)
+        public bool PossiblyDecrypted(int index)
         {
-            if (Partitions == null)
-                return [];
-            if (index < 0 || index >= Partitions.Length)
-                return [];
-
-            var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
-                return [];
-
-            byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
-            Array.Reverse(partitionIdBytes);
-            return [.. partitionIdBytes, .. PlainCounter];
+            var bitMasks = GetBitMasks(index);
+#if NET20 || NET35
+            return (bitMasks & BitMasks.NoCrypto) != 0;
+#else
+            return bitMasks.HasFlag(BitMasks.NoCrypto);
+#endif
         }
+
+        #endregion
+
+        #region Encryption
 
         /// <summary>
         /// Get the initial value for the ExeFS counter
@@ -369,6 +367,25 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the initial value for the plain counter
+        /// </summary>
+        public byte[] PlainIV(int index)
+        {
+            if (Partitions == null)
+                return [];
+            if (index < 0 || index >= Partitions.Length)
+                return [];
+
+            var header = Partitions[index];
+            if (header == null || header.MagicID != NCCHMagicNumber)
+                return [];
+
+            byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
+            Array.Reverse(partitionIdBytes);
+            return [.. partitionIdBytes, .. PlainCounter];
+        }
+
+        /// <summary>
         /// Get the initial value for the RomFS counter
         /// </summary>
         public byte[] RomFSIV(int index)
@@ -385,19 +402,6 @@ namespace SabreTools.Serialization.Wrappers
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
             Array.Reverse(partitionIdBytes);
             return [.. partitionIdBytes, .. RomfsCounter];
-        }
-
-        /// <summary>
-        /// Get if the NoCrypto bit is set
-        /// </summary>
-        public bool PossiblyDecrypted(int index)
-        {
-            var bitMasks = GetBitMasks(index);
-#if NET20 || NET35
-            return (bitMasks & BitMasks.NoCrypto) != 0;
-#else
-            return bitMasks.HasFlag(BitMasks.NoCrypto);
-#endif
         }
 
         #endregion
