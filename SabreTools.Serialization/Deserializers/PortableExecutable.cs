@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if NET35_OR_GREATER || NETCOREAPP
 using System.Linq;
+#endif
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
@@ -1052,28 +1054,62 @@ namespace SabreTools.Serialization.Deserializers
                 // If we have import lookup tables
                 if (importTable.ImportLookupTables != null && importLookupTables.Count > 0)
                 {
+#if NET20
+                    var addresses = new List<int>();
+                    foreach (var kvp in importTable.ImportLookupTables)
+                    {
+                        if (kvp.Value == null)
+                            continue;
+
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                            ilte => ilte == null ? 0 : (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        addresses.AddRange(vaddrs);
+                    }
+#else
                     var addresses = importTable.ImportLookupTables
                         .SelectMany(kvp => kvp.Value ?? [])
                         .Where(ilte => ilte != null)
                         .Select(ilte => (int)ilte!.HintNameTableRVA.ConvertVirtualAddress(sections));
+#endif
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
                 // If we have import address tables
                 if (importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
                 {
+#if NET20
+                    var addresses = new List<int>();
+                    foreach (var kvp in importTable.ImportAddressTables)
+                    {
+                        if (kvp.Value == null)
+                            continue;
+
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                            iate => iate == null ? 0 : (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        addresses.AddRange(vaddrs);
+                    }
+#else
                     var addresses = importTable.ImportAddressTables
                         .SelectMany(kvp => kvp.Value ?? [])
                         .Where(iate => iate != null)
                         .Select(iate => (int)iate!.HintNameTableRVA.ConvertVirtualAddress(sections));
+#endif
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
                 // Sanitize the addresses
-                hintNameTableEntryAddresses = hintNameTableEntryAddresses.Where(addr => addr != 0)
-                    .Distinct()
-                    .OrderBy(a => a)
-                    .ToList();
+                hintNameTableEntryAddresses = hintNameTableEntryAddresses.FindAll(addr => addr != 0);
+#if NET20
+                var temp = new List<int>();
+                foreach (int value in hintNameTableEntryAddresses)
+                {
+                    if (!temp.Contains(value))
+                        temp.Add(value);
+                }
+#else
+                hintNameTableEntryAddresses = hintNameTableEntryAddresses.Distinct().ToList();
+#endif
+                hintNameTableEntryAddresses.Sort();
 
                 // If we have any addresses, add them to the table
                 if (hintNameTableEntryAddresses.Count > 0)
@@ -1214,11 +1250,12 @@ namespace SabreTools.Serialization.Deserializers
                 return resourceDirectoryTable;
 
             // If we're not aligned to a section
-            if (!sections.Any(s => s != null && s.PointerToRawData == initialOffset))
+            var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == initialOffset);
+            if (firstSection == null)
                 return resourceDirectoryTable;
 
             // Get the section size
-            int size = (int)sections.First(s => s != null && s.PointerToRawData == initialOffset)!.SizeOfRawData;
+            int size = (int)firstSection.SizeOfRawData;
 
             // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
             while (data.Position - initialOffset < size && data.Position % 0x200 != 0 && data.Position < data.Length - 1)

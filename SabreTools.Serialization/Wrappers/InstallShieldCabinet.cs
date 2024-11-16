@@ -1,5 +1,5 @@
+using System;
 using System.IO;
-using System.Linq;
 using SabreTools.Models.InstallShieldCabinet;
 
 namespace SabreTools.Serialization.Wrappers
@@ -289,7 +289,7 @@ namespace SabreTools.Serialization.Wrappers
             if (Model.FileGroups == null)
                 return null;
 
-            return Model.FileGroups.FirstOrDefault(fg => fg != null && string.Equals(fg.Name, name));
+            return Array.Find(Model.FileGroups, fg => fg != null && string.Equals(fg.Name, name));
         }
 
         /// <summary>

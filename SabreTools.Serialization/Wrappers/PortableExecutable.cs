@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+#if NET35_OR_GREATER || NETCOREAPP
 using System.Linq;
+#endif
 using System.Text;
 using SabreTools.IO.Extensions;
 
@@ -41,10 +43,17 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Populate the raw header padding data based on the source
                     uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = Model.SectionTable
-                        .Select(s => s?.PointerToRawData ?? 0)
-                        .Where(s => s != 0 && s >= headerStartAddress)
-                        .Min();
+                    uint firstSectionAddress = uint.MaxValue;
+                    foreach (var s in Model.SectionTable)
+                    {
+                        if (s == null || s.PointerToRawData == 0)
+                            continue;
+                        if (s.PointerToRawData < headerStartAddress)
+                            continue;
+
+                        if (s.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = s.PointerToRawData;
+                    }
 
                     // Check if the header length is more than 0 before reading data
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
@@ -82,10 +91,17 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Populate the header padding strings based on the source
                     uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = Model.SectionTable
-                        .Select(s => s?.PointerToRawData ?? 0)
-                        .Where(s => s != 0 && s >= headerStartAddress)
-                        .Min();
+                    uint firstSectionAddress = uint.MaxValue;
+                    foreach (var s in Model.SectionTable)
+                    {
+                        if (s == null || s.PointerToRawData == 0)
+                            continue;
+                        if (s.PointerToRawData < headerStartAddress)
+                            continue;
+
+                        if (s.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = s.PointerToRawData;
+                    }
 
                     // Check if the header length is more than 0 before reading strings
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
@@ -643,10 +659,9 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 var manifest = GetAssemblyManifest();
-                return manifest?
-                    .AssemblyIdentities?
-                    .FirstOrDefault(ai => !string.IsNullOrEmpty(ai?.Version))?
-                    .Version;
+                var identities = manifest?.AssemblyIdentities ?? [];
+                var versionIdentity = Array.Find(identities, ai => !string.IsNullOrEmpty(ai?.Version));
+                return versionIdentity?.Version;
             }
         }
 
@@ -837,9 +852,22 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Try to find a key that matches
+#if NET20
+            Models.PortableExecutable.StringData? match = null;
+            foreach (var st in stringTable)
+            {
+                if (st?.Children == null)
+                    continue;
+
+                match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+                if (match != null)
+                    break;
+            }
+#else
             var match = stringTable
                 .SelectMany(st => st?.Children ?? [])
                 .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+#endif
 
             // Return either the match or null
             return match?.Value?.TrimEnd('\0');
@@ -878,19 +906,29 @@ namespace SabreTools.Serialization.Wrappers
             if (DebugData == null)
                 return [];
 
-            var nb10Found = DebugData.Select(r => r.Value)
-                .Select(r => r as SabreTools.Models.PortableExecutable.NB10ProgramDatabase)
-                .Where(n => n != null)
-                .Where(n => n?.PdbFileName?.Contains(path) == true)
-                .Select(n => n as object);
+            var debugFound = new List<object?>();
+            foreach (var data in DebugData.Values)
+            {
+                if (data == null)
+                    continue;
 
-            var rsdsFound = DebugData.Select(r => r.Value)
-                .Select(r => r as SabreTools.Models.PortableExecutable.RSDSProgramDatabase)
-                .Where(r => r != null)
-                .Where(r => r?.PathAndFileName?.Contains(path) == true)
-                .Select(r => r as object);
+                if (data is Models.PortableExecutable.NB10ProgramDatabase n)
+                {
+                    if (n.PdbFileName == null || !n.PdbFileName.Contains(path))
+                        continue;
 
-            return nb10Found.Concat(rsdsFound);
+                    debugFound.Add(n);
+                }
+                else if (data is Models.PortableExecutable.RSDSProgramDatabase r)
+                {
+                    if (r.PathAndFileName == null || !r.PathAndFileName.Contains(path))
+                        continue;
+
+                    debugFound.Add(r);
+                }
+            }
+
+            return debugFound;
         }
 
         /// <summary>
@@ -904,37 +942,49 @@ namespace SabreTools.Serialization.Wrappers
             if (DebugData == null)
                 return [];
 
-            return DebugData.Select(r => r.Value)
-                .Select(b => b as byte[])
-                .Where(b => b != null)
-                .Where(b =>
+            var table = new List<byte[]?>();
+            foreach (var data in DebugData.Values)
+            {
+                if (data == null)
+                    continue;
+                if (data is not byte[] b || b == null)
+                    continue;
+
+                try
                 {
-                    try
+                    string? arrayAsASCII = Encoding.ASCII.GetString(b);
+                    if (arrayAsASCII.Contains(value))
                     {
-                        string? arrayAsASCII = Encoding.ASCII.GetString(b!);
-                        if (arrayAsASCII.Contains(value))
-                            return true;
+                        table.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
 
-                    try
+                try
+                {
+                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b);
+                    if (arrayAsUTF8.Contains(value))
                     {
-                        string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
-                        if (arrayAsUTF8.Contains(value))
-                            return true;
+                        table.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
 
-                    try
+                try
+                {
+                    string? arrayAsUnicode = Encoding.Unicode.GetString(b);
+                    if (arrayAsUnicode.Contains(value))
                     {
-                        string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
-                        if (arrayAsUnicode.Contains(value))
-                            return true;
+                        table.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
+            }
 
-                    return false;
-                });
+            return table;
         }
 
         #endregion
@@ -1027,14 +1077,21 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-            return ResourceData.Select(r => r.Value)
-                .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
-                .Where(d => d != null)
-                .Where(d =>
-                {
-                    return (d?.DialogTemplate?.TitleResource?.Contains(title) ?? false)
-                        || (d?.ExtendedDialogTemplate?.TitleResource?.Contains(title) ?? false);
-                });
+            var resources = new List<Models.PortableExecutable.DialogBoxResource?>();
+            foreach (var resource in ResourceData.Values)
+            {
+                if (resource == null)
+                    continue;
+                if (resource is not Models.PortableExecutable.DialogBoxResource dbr || dbr == null)
+                    continue;
+
+                if (dbr.DialogTemplate?.TitleResource?.Contains(title) ?? false)
+                    resources.Add(dbr);
+                else if (dbr.ExtendedDialogTemplate?.TitleResource?.Contains(title) ?? false)
+                    resources.Add(dbr);
+            }
+
+            return resources;
         }
 
         /// <summary>
@@ -1048,26 +1105,29 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-            return ResourceData.Select(r => r.Value)
-                .Select(r => r as SabreTools.Models.PortableExecutable.DialogBoxResource)
-                .Where(d => d != null)
-                .Where(d =>
-                {
-                    if (d?.DialogItemTemplates != null)
-                    {
-                        return d.DialogItemTemplates
-                            .Where(dit => dit?.TitleResource != null)
-                            .Any(dit => dit?.TitleResource?.Contains(title) == true);
-                    }
-                    else if (d?.ExtendedDialogItemTemplates != null)
-                    {
-                        return d.ExtendedDialogItemTemplates
-                            .Where(edit => edit?.TitleResource != null)
-                            .Any(edit => edit?.TitleResource?.Contains(title) == true);
-                    }
+            var resources = new List<Models.PortableExecutable.DialogBoxResource?>();
+            foreach (var resource in ResourceData.Values)
+            {
+                if (resource == null)
+                    continue;
+                if (resource is not Models.PortableExecutable.DialogBoxResource dbr || dbr == null)
+                    continue;
 
-                    return false;
-                });
+                if (dbr.DialogItemTemplates != null)
+                {
+                    var templates = Array.FindAll(dbr.DialogItemTemplates, dit => dit?.TitleResource != null);
+                    if (Array.FindIndex(templates, dit => dit?.TitleResource?.Contains(title) == true) > -1)
+                        resources.Add(dbr);
+                }
+                else if (dbr.ExtendedDialogItemTemplates != null)
+                {
+                    var templates = Array.FindAll(dbr.ExtendedDialogItemTemplates, edit => edit?.TitleResource != null);
+                    if (Array.FindIndex(templates, edit => edit?.TitleResource?.Contains(title) == true) > -1)
+                        resources.Add(dbr);
+                }
+            }
+
+            return resources;
         }
 
         /// <summary>
@@ -1081,11 +1141,26 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-            return ResourceData.Select(r => r.Value)
+#if NET20
+            var stringTables = new List<Dictionary<int, string?>?>();
+            foreach (var resource in ResourceData.Values)
+            {
+                if (resource == null)
+                    continue;
+                if (resource is not Dictionary<int, string?> st || st == null)
+                    continue;
+
+                
+            }
+
+            return stringTables;
+#else
+            return ResourceData.Values
                 .Select(r => r as Dictionary<int, string?>)
                 .Where(st => st != null)
                 .Where(st => st?.Select(kvp => kvp.Value)?
                     .Any(s => s != null && s.Contains(entry)) == true);
+#endif
         }
 
         /// <summary>
@@ -1099,9 +1174,24 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
+#if NET20
+            var resources = new List<byte[]?>();
+            foreach (var kvp in ResourceData)
+            {
+                if (!kvp.Key.Contains(typeName))
+                    continue;
+                if (kvp.Value == null || kvp.Value is not byte[] b || b == null)
+                    continue;
+
+                resources.Add(b);
+            }
+
+            return resources;
+#else
             return ResourceData.Where(kvp => kvp.Key.Contains(typeName))
                 .Select(kvp => kvp.Value as byte[])
                 .Where(b => b != null);
+#endif
         }
 
         /// <summary>
@@ -1115,37 +1205,49 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-            return ResourceData.Select(r => r.Value)
-                .Select(r => r as byte[])
-                .Where(b => b != null)
-                .Where(b =>
+            var resources = new List<byte[]?>();
+            foreach (var resource in ResourceData.Values)
+            {
+                if (resource == null)
+                    continue;
+                if (resource is not byte[] b || b == null)
+                    continue;
+
+                try
                 {
-                    try
+                    string? arrayAsASCII = Encoding.ASCII.GetString(b!);
+                    if (arrayAsASCII.Contains(value))
                     {
-                        string? arrayAsASCII = Encoding.ASCII.GetString(b!);
-                        if (arrayAsASCII.Contains(value))
-                            return true;
+                        resources.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
 
-                    try
+                try
+                {
+                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
+                    if (arrayAsUTF8.Contains(value))
                     {
-                        string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
-                        if (arrayAsUTF8.Contains(value))
-                            return true;
+                        resources.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
 
-                    try
+                try
+                {
+                    string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
+                    if (arrayAsUnicode.Contains(value))
                     {
-                        string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
-                        if (arrayAsUnicode.Contains(value))
-                            return true;
+                        resources.Add(b);
+                        continue;
                     }
-                    catch { }
+                }
+                catch { }
+            }
 
-                    return false;
-                });
+            return resources;
         }
 
         #endregion
@@ -1321,11 +1423,11 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we're checking exactly, return only exact matches
             if (exact)
-                return SectionNames.Any(n => n.Equals(sectionName));
+                return Array.FindIndex(SectionNames, n => n.Equals(sectionName)) > -1;
 
             // Otherwise, check if section name starts with the value
             else
-                return SectionNames.Any(n => n.StartsWith(sectionName));
+                return Array.FindIndex(SectionNames, n => n.StartsWith(sectionName)) > -1;
         }
 
         /// <summary>

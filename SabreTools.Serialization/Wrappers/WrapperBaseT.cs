@@ -259,14 +259,22 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="encoding">Character encoding to use for checking</param>
         /// <returns>String list containing the requested data, empty on error</returns>
         /// <remarks>TODO: Move to IO?</remarks>
+#if NET20
+        private List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+#else
         private HashSet<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+#endif
         {
             // If we have an invalid character limit, default to 5
             if (charLimit <= 0)
                 charLimit = 5;
 
             // Create the string hash set to return
+#if NET20
+            var sourceStrings = new List<string>();
+#else
             var sourceStrings = new HashSet<string>();
+#endif
 
             // Setup cached data
             int sourceDataIndex = 0;
