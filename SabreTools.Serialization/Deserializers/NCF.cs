@@ -91,10 +91,7 @@ namespace SabreTools.Serialization.Deserializers
                     {
                         data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);
                         byte[]? endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
-                        if (endingData != null)
-                            directoryName = Encoding.ASCII.GetString(endingData);
-                        else
-                            directoryName = null;
+                        directoryName = endingData != null ? Encoding.ASCII.GetString(endingData) : null;
                     }
 
                     file.DirectoryNames[nameOffset] = directoryName;

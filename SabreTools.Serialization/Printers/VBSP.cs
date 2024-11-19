@@ -65,318 +65,231 @@ namespace SabreTools.Serialization.Printers
                 switch ((LumpType)i)
                 {
                     case LumpType.LUMP_ENTITIES:
-                        if (model.Entities?.Entities == null || model.Entities.Entities.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.Entities.Entities.Length; j++)
-                            {
-                                // TODO: Implement entity printing
-                                var entity = model.Entities.Entities[j];
-                                builder.AppendLine($"    Entity {j}");
-                                builder.AppendLine("      Entity data is not parsed properly");
-                            }
-                        }
+                        Print(builder, model.Entities);
                         break;
                     case LumpType.LUMP_PLANES:
-                        if (model.PlanesLump?.Planes == null || model.PlanesLump.Planes.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.PlanesLump.Planes.Length; j++)
-                            {
-                                var plane = model.PlanesLump.Planes[j];
-                                builder.AppendLine($"    Plane {j}");
-                                builder.AppendLine($"      Normal vector: {plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z}");
-                                builder.AppendLine(plane.Distance, "      Distance");
-                                builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
-                            }
-                        }
+                        Print(builder, model.PlanesLump);
                         break;
                     case LumpType.LUMP_TEXTURES:
-                        if (model.TexdataLump?.Texdatas == null || model.TexdataLump.Texdatas.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.TexdataLump.Texdatas.Length; j++)
-                            {
-                                var texdata = model.TexdataLump.Texdatas[j];
-                                builder.AppendLine($"    Texture {j}");
-                                builder.AppendLine($"      Reflectivity: {texdata.Reflectivity.X}, {texdata.Reflectivity.Y}, {texdata.Reflectivity.Z}");
-                                builder.AppendLine(texdata.NameStringTableID, "      Name string table ID");
-                                builder.AppendLine(texdata.Width, "      Width");
-                                builder.AppendLine(texdata.Height, "      Height");
-                                builder.AppendLine(texdata.ViewWidth, "      View width");
-                                builder.AppendLine(texdata.ViewHeight, "      View height");
-                            }
-                        }
+                        Print(builder, model.TexdataLump);
                         break;
                     case LumpType.LUMP_VERTICES:
-                        if (model.VerticesLump?.Vertices == null || model.VerticesLump.Vertices.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.VerticesLump.Vertices.Length; j++)
-                            {
-                                var vertex = model.VerticesLump.Vertices[j];
-                                builder.AppendLine($"    Vertex {j}: {vertex.X}, {vertex.Y}, {vertex.Z}");
-                            }
-                        }
+                        Print(builder, model.VerticesLump);
                         break;
                     case LumpType.LUMP_VISIBILITY:
-                        if (model.VisibilityLump == null)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            builder.AppendLine(model.VisibilityLump.NumClusters, "    Cluster count");
-                            builder.AppendLine("    Byte offsets skipped...");
-                        }
+                        Print(builder, model.VisibilityLump);
                         break;
                     case LumpType.LUMP_NODES:
-                        if (model.NodesLump?.Nodes == null || model.NodesLump.Nodes.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.NodesLump.Nodes.Length; j++)
-                            {
-                                var node = model.NodesLump.Nodes[j];
-                                builder.AppendLine($"    Node {j}");
-                                builder.AppendLine(node.Children, "      Children");
-                                builder.AppendLine(node.Mins, "      Mins");
-                                builder.AppendLine(node.Maxs, "      Maxs");
-                                builder.AppendLine(node.FirstFace, "      First face index");
-                                builder.AppendLine(node.FaceCount, "      Count of faces");
-                                builder.AppendLine(node.Area, "      Area");
-                                builder.AppendLine(node.Padding, "      Padding");
-                            }
-                        }
+                        Print(builder, model.NodesLump);
                         break;
                     case LumpType.LUMP_TEXINFO:
-                        if (model.TexinfoLump?.Texinfos == null || model.TexinfoLump.Texinfos.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.TexinfoLump.Texinfos.Length; j++)
-                            {
-                                var texinfo = model.TexinfoLump.Texinfos[j];
-                                builder.AppendLine($"    Texinfo {j}");
-                                builder.AppendLine($"      Texture S-Vector: {texinfo.TextureSVector.X}, {texinfo.TextureSVector.Y}, {texinfo.TextureSVector.Z}");
-                                builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
-                                builder.AppendLine($"      Texture T-Vector: {texinfo.TextureTVector.X}, {texinfo.TextureTVector.Y}, {texinfo.TextureTVector.Z}");
-                                builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
-                                builder.AppendLine($"      Lightmap S-Vector: {texinfo.LightmapSVector.X}, {texinfo.LightmapSVector.Y}, {texinfo.LightmapSVector.Z}");
-                                builder.AppendLine(texinfo.TextureSShift, "      Lightmap shift in S direction");
-                                builder.AppendLine($"      Lightmap T-Vector: {texinfo.LightmapTVector.X}, {texinfo.LightmapTVector.Y}, {texinfo.LightmapTVector.Z}");
-                                builder.AppendLine(texinfo.TextureTShift, "      Lightmap shift in T direction");
-                                builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
-                                builder.AppendLine(texinfo.TexData, "      Pointer to texdata");
-                            }
-                        }
+                        Print(builder, model.TexinfoLump);
                         break;
                     case LumpType.LUMP_FACES:
-                        if (model.FacesLump?.Faces == null || model.FacesLump.Faces.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.FacesLump.Faces.Length; j++)
-                            {
-                                var face = model.FacesLump.Faces[j];
-                                builder.AppendLine($"    Face {j}");
-                                builder.AppendLine(face.PlaneNum, "      Plane number");
-                                builder.AppendLine(face.Side, "      Side");
-                                builder.AppendLine(face.OnNode, "      On node");
-                                builder.AppendLine(face.FirstEdgeIndex, "      First surfedge index");
-                                builder.AppendLine(face.NumberOfEdges, "      Surfedge count");
-                                builder.AppendLine(face.TextureInfoIndex, "      Texture info index");
-                                builder.AppendLine(face.DisplacementInfoIndex, "      Displacement info index");
-                                builder.AppendLine(face.SurfaceFogVolumeID, "      Surface fog volume ID");
-                                builder.AppendLine(face.Styles, "      Styles");
-                                builder.AppendLine(face.LightmapOffset, "      Lightmap offset");
-                                builder.AppendLine(face.Area, "      Area");
-                                builder.AppendLine(face.LightmapTextureMinsInLuxels, "      Lightmap texture mins in Luxels");
-                                builder.AppendLine(face.LightmapTextureSizeInLuxels, "      Lightmap texture size in Luxels");
-                                builder.AppendLine(face.OrigFace, "      Original face index");
-                                builder.AppendLine(face.PrimitiveCount, "      Primitive count");
-                                builder.AppendLine(face.FirstPrimitiveID, "      First primitive ID");
-                                builder.AppendLine(face.SmoothingGroups, "      Smoothing groups");
-                            }
-                        }
+                        Print(builder, model.FacesLump);
                         break;
                     case LumpType.LUMP_LIGHTING:
-                        if (model.LightmapLump?.Lightmap == null || model.LightmapLump.Lightmap.Length == 0)
-                            builder.AppendLine("    No data");
-                        else
-                            builder.AppendLine("    Lightmap data skipped...");
+                        Print(builder, model.LightmapLump);
                         break;
                     case LumpType.LUMP_CLIPNODES:
-                        if (model.OcclusionLump == null)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            builder.AppendLine(model.OcclusionLump.Count, "    Count");
-                            if (model.OcclusionLump.Data == null || model.OcclusionLump.Data.Length == 0)
-                            {
-                                builder.AppendLine("    No occluder data");
-                            }
-                            else
-                            {
-                                for (int j = 0; j < model.OcclusionLump.Data.Length; j++)
-                                {
-                                    var data = model.OcclusionLump.Data[j];
-                                    builder.AppendLine($"    Occluder Data {j}");
-                                    builder.AppendLine(data.Flags, "      Flags");
-                                    builder.AppendLine(data.FirstPoly, "      First poly");
-                                    builder.AppendLine(data.PolyCount, "      Poly count");
-                                    builder.AppendLine($"      Mins: {data.Mins.X}, {data.Mins.Y}, {data.Mins.Z}");
-                                    builder.AppendLine($"      Maxs: {data.Maxs.X}, {data.Maxs.Y}, {data.Maxs.Z}");
-                                    builder.AppendLine(data.Area, "      Area");
-                                }
-                            }
-                            builder.AppendLine(model.OcclusionLump.PolyDataCount, "    Polydata count");
-                            if (model.OcclusionLump.PolyData == null || model.OcclusionLump.PolyData.Length == 0)
-                            {
-                                builder.AppendLine("    No occluder polydata");
-                            }
-                            else
-                            {
-                                for (int j = 0; j < model.OcclusionLump.PolyData.Length; j++)
-                                {
-                                    var polydata = model.OcclusionLump.PolyData[j];
-                                    builder.AppendLine($"    Occluder Polydata {j}");
-                                    builder.AppendLine(polydata.FirstVertexIndex, "      First vertex index");
-                                    builder.AppendLine(polydata.VertexCount, "      Vertex count");
-                                    builder.AppendLine(polydata.PlanEnum, "      Plan enum");
-                                }
-                            }
-                            builder.AppendLine(model.OcclusionLump.VertexIndexCount, "    Vertex index count");
-                            if (model.OcclusionLump.VertexIndices == null || model.OcclusionLump.VertexIndices.Length == 0)
-                            {
-                                builder.AppendLine("    No vertex indicies");
-                            }
-                            else
-                            {
-                                for (int j = 0; j < model.OcclusionLump.VertexIndices.Length; j++)
-                                {
-                                    builder.AppendLine($"    Vertex Index {j}: {model.OcclusionLump.VertexIndices[j]}");
-                                }
-                            }
-                        }
+                        Print(builder, model.OcclusionLump);
                         break;
                     case LumpType.LUMP_LEAVES:
-                        if (model.LeavesLump?.Leaves == null || model.LeavesLump.Leaves.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.LeavesLump.Leaves.Length; j++)
-                            {
-                                var leaf = model.LeavesLump.Leaves[j];
-                                builder.AppendLine($"    Leaf {j}");
-                                builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
-                                builder.AppendLine(leaf.Cluster, "      Cluster");
-                                builder.AppendLine(leaf.AreaFlags, "      AreaFlags");
-                                builder.AppendLine(leaf.Mins, "      Mins");
-                                builder.AppendLine(leaf.Maxs, "      Maxs");
-                                builder.AppendLine(leaf.FirstLeafFace, "      First leaf face");
-                                builder.AppendLine(leaf.NumLeafFaces, "      Leaf faces count");
-                                builder.AppendLine(leaf.FirstLeafBrush, "      First leaf brush");
-                                builder.AppendLine(leaf.NumLeafBrushes, "      Leaf brushes count");
-                                builder.AppendLine(leaf.LeafWaterDataID, "      Leaf water data ID");
-                                if (lump.Version == 0)
-                                {
-                                    // TODO: Figure out how to print the colors array
-                                }
-                                else
-                                {
-                                    builder.AppendLine(leaf.Padding, "      Padding");
-                                }
-                            }
-                        }
+                        Print(builder, model.LeavesLump, lump.Version);
                         break;
                     case LumpType.LUMP_MARKSURFACES:
-                        if (model.MarksurfacesLump?.Marksurfaces == null || model.MarksurfacesLump.Marksurfaces.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.MarksurfacesLump.Marksurfaces.Length; j++)
-                            {
-                                var marksurface = model.MarksurfacesLump.Marksurfaces[j];
-                                builder.AppendLine($"    Marksurface {j}: {marksurface} (0x{marksurface:X4})");
-                            }
-                        }
+                        Print(builder, model.MarksurfacesLump);
                         break;
                     case LumpType.LUMP_EDGES:
-                        if (model.EdgesLump?.Edges == null || model.EdgesLump.Edges.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.EdgesLump.Edges.Length; j++)
-                            {
-                                var edge = model.EdgesLump.Edges[j];
-                                builder.AppendLine($"    Edge {j}");
-                                builder.AppendLine(edge.VertexIndices, "      Vertex indices");
-                            }
-                        }
+                        Print(builder, model.EdgesLump);
                         break;
                     case LumpType.LUMP_SURFEDGES:
-                        if (model.SurfedgesLump?.Surfedges == null || model.SurfedgesLump.Surfedges.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.SurfedgesLump.Surfedges.Length; j++)
-                            {
-                                var surfedge = model.SurfedgesLump.Surfedges[j];
-                                builder.AppendLine($"    Surfedge {j}: {surfedge} (0x{surfedge:X4})");
-                            }
-                        }
+                        Print(builder, model.SurfedgesLump);
                         break;
                     case LumpType.LUMP_MODELS:
-                        if (model.ModelsLump?.Models == null || model.ModelsLump.Models.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.ModelsLump.Models.Length; j++)
-                            {
-                                var bmodel = model.ModelsLump.Models[j];
-                                builder.AppendLine($"    Model {j}");
-                                builder.AppendLine($"      Mins: {bmodel.Mins.X}, {bmodel.Mins.Y}, {bmodel.Mins.Z}");
-                                builder.AppendLine($"      Maxs: {bmodel.Maxs.X}, {bmodel.Maxs.Y}, {bmodel.Maxs.Z}");
-                                builder.AppendLine($"      Origin vector: {bmodel.OriginVector.X}, {bmodel.OriginVector.Y}, {bmodel.OriginVector.Z}");
-                                builder.AppendLine(bmodel.HeadNode, "      Headnode index");
-                                builder.AppendLine(bmodel.FirstFaceIndex, "      First face index");
-                                builder.AppendLine(bmodel.FacesCount, "      Faces count");
-                            }
-                        }
+                        Print(builder, model.ModelsLump);
                         break;
-                    
-                    // TODO: Implement remaining printed lump types
+                    case LumpType.LUMP_WORLDLIGHTS:
+                        Print(builder, model.LDRWorldLightsLump);
+                        break;
+                    case LumpType.LUMP_LEAFFACES:
+                        Print(builder, model.LeafFacesLump);
+                        break;
+                    case LumpType.LUMP_LEAFBRUSHES:
+                        Print(builder, model.LeafBrushesLump);
+                        break;
+                    case LumpType.LUMP_BRUSHES:
+                        Print(builder, model.BrushesLump);
+                        break;
+                    case LumpType.LUMP_BRUSHSIDES:
+                        Print(builder, model.BrushsidesLump);
+                        break;
+                    case LumpType.LUMP_AREAS:
+                        // TODO: Support LUMP_AREAS [20] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_AREAPORTALS:
+                        // TODO: Support LUMP_AREAPORTALS [21] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PORTALS:
+                        // TODO: Support LUMP_PORTALS / LUMP_UNUSED0 / LUMP_PROPCOLLISION [22] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_CLUSTERS:
+                        // TODO: Support LUMP_CLUSTERS / LUMP_UNUSED1 / LUMP_PROPHULLS [23] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PORTALVERTS:
+                        // TODO: Support LUMP_PORTALVERTS / LUMP_UNUSED2 / LUMP_FAKEENTITIES / LUMP_PROPHULLVERTS [24] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_CLUSTERPORTALS:
+                        // TODO: Support LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS [25] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_DISPINFO:
+                        Print(builder, model.DispInfoLump);
+                        break;
+                    case LumpType.LUMP_ORIGINALFACES:
+                        Print(builder, model.OriginalFacesLump);
+                        break;
+                    case LumpType.LUMP_PHYSDISP:
+                        // TODO: Support LUMP_PHYSDISP [28] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PHYSCOLLIDE:
+                        // TODO: Support LUMP_PHYSCOLLIDE [29] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_VERTNORMALS:
+                        // TODO: Support LUMP_VERTNORMALS [30] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_VERTNORMALINDICES:
+                        // TODO: Support LUMP_VERTNORMALINDICES [31] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_DISP_LIGHTMAP_ALPHAS:
+                        // TODO: Support LUMP_DISP_LIGHTMAP_ALPHAS [32] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_DISP_VERTS:
+                        Print(builder, model.DispVertLump);
+                        break;
+                    case LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
+                        // TODO: Support LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_GAME_LUMP:
+                        Print(builder, model.GameLump);
+                        break;
+                    case LumpType.LUMP_LEAFWATERDATA:
+                        // TODO: Support LUMP_LEAFWATERDATA [36] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PRIMITIVES:
+                        // TODO: Support LUMP_PRIMITIVES [37] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PRIMVERTS:
+                        // TODO: Support LUMP_PRIMVERTS [38] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PRIMINDICES:
+                        // TODO: Support LUMP_PRIMINDICES [39] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PAKFILE:
+                        // TODO: Support LUMP_PAKFILE [40] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_CLIPPORTALVERTS:
+                        // TODO: Support LUMP_CLIPPORTALVERTS [41] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_CUBEMAPS:
+                        Print(builder, model.CubemapLump);
+                        break;
+                    case LumpType.LUMP_TEXDATA_STRING_DATA:
+                        Print(builder, model.TexdataStringData);
+                        break;
+                    case LumpType.LUMP_TEXDATA_STRING_TABLE:
+                        Print(builder, model.TexdataStringTable);
+                        break;
+                    case LumpType.LUMP_OVERLAYS:
+                        Print(builder, model.OverlaysLump);
+                        break;
+                    case LumpType.LUMP_LEAFMINDISTTOWATER:
+                        // TODO: Support LUMP_LEAFMINDISTTOWATER [46] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_FACE_MACRO_TEXTURE_INFO:
+                        // TODO: Support LUMP_FACE_MACRO_TEXTURE_INFO [47] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_DISP_TRIS:
+                        Print(builder, model.DispTrisLump);
+                        break;
+                    case LumpType.LUMP_PHYSCOLLIDESURFACE:
+                        // TODO: Support LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB [49] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_WATEROVERLAYS:
+                        // TODO: Support LUMP_WATEROVERLAYS [50] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_LIGHTMAPPAGES:
+                        Print(builder, model.HDRAmbientIndexLump);
+                        break;
+                    case LumpType.LUMP_LIGHTMAPPAGEINFOS:
+                        Print(builder, model.LDRAmbientIndexLump);
+                        break;
+                    case LumpType.LUMP_LIGHTING_HDR:
+                        // TODO: Support LUMP_LIGHTING_HDR [53] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_WORLDLIGHTS_HDR:
+                        Print(builder, model.WorldLightsLump);
+                        break;
+                    case LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
+                        Print(builder, model.HDRAmbientLightingLump);
+                        break;
+                    case LumpType.LUMP_LEAF_AMBIENT_LIGHTING:
+                        Print(builder, model.LDRAmbientLightingLump);
+                        break;
+                    case LumpType.LUMP_XZIPPAKFILE:
+                        // TODO: Support LUMP_XZIPPAKFILE [57] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_FACES_HDR:
+                        // TODO: Support LUMP_FACES_HDR [58] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_MAP_FLAGS:
+                        // TODO: Support LUMP_MAP_FLAGS [59] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_OVERLAY_FADES:
+                        // TODO: Support LUMP_OVERLAY_FADES [60] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_OVERLAY_SYSTEM_LEVELS:
+                        // TODO: Support LUMP_OVERLAY_SYSTEM_LEVELS [61] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_PHYSLEVEL:
+                        // TODO: Support LUMP_PHYSLEVEL [62] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+                    case LumpType.LUMP_DISP_MULTIBLEND:
+                        // TODO: Support LUMP_DISP_MULTIBLEND [63] when in Models
+                        builder.AppendLine("    Data not parsed...");
+                        break;
+
+                    default:
+                        builder.AppendLine($"    Unsupported lump type: {(LumpType)i} (0x{i:X4})");
+                        break;
                 }
             }
             builder.AppendLine();
@@ -452,6 +365,684 @@ namespace SabreTools.Serialization.Printers
                 LumpType.LUMP_DISP_MULTIBLEND => " - LUMP_DISP_MULTIBLEND",
                 _ => string.Empty,
             };
+        }
+
+        private static void Print(StringBuilder builder, EntitiesLump? lump)
+        {
+            if (lump?.Entities == null || lump.Entities.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Entities.Length; j++)
+            {
+                // TODO: Implement entity printing
+                var entity = lump.Entities[j];
+                builder.AppendLine($"    Entity {j}");
+                builder.AppendLine("      Entity data is not parsed properly");
+            }
+        }
+
+        private static void Print(StringBuilder builder, PlanesLump? lump)
+        {
+            if (lump?.Planes == null || lump.Planes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Planes.Length; j++)
+            {
+                var plane = lump.Planes[j];
+                builder.AppendLine($"    Plane {j}");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
+                builder.AppendLine(plane.Distance, "      Distance");
+                builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, TexdataLump? lump)
+        {
+            if (lump?.Texdatas == null || lump.Texdatas.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Texdatas.Length; j++)
+            {
+                var texdata = lump.Texdatas[j];
+                builder.AppendLine($"    Texture {j}");
+                builder.AppendLine($"      Reflectivity: ({texdata.Reflectivity.X}, {texdata.Reflectivity.Y}, {texdata.Reflectivity.Z})");
+                builder.AppendLine(texdata.NameStringTableID, "      Name string table ID");
+                builder.AppendLine(texdata.Width, "      Width");
+                builder.AppendLine(texdata.Height, "      Height");
+                builder.AppendLine(texdata.ViewWidth, "      View width");
+                builder.AppendLine(texdata.ViewHeight, "      View height");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VerticesLump? lump)
+        {
+            if (lump?.Vertices == null || lump.Vertices.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Vertices.Length; j++)
+            {
+                var vertex = lump.Vertices[j];
+                builder.AppendLine($"    Vertex {j}: ({vertex.X}, {vertex.Y}, {vertex.Z})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VisibilityLump? lump)
+        {
+            if (lump == null)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            builder.AppendLine(lump.NumClusters, "    Cluster count");
+            builder.AppendLine("    Byte offsets skipped...");
+        }
+
+        private static void Print(StringBuilder builder, VbspNodesLump? lump)
+        {
+            if (lump?.Nodes == null || lump.Nodes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Nodes.Length; j++)
+            {
+                var node = lump.Nodes[j];
+                builder.AppendLine($"    Node {j}");
+                builder.AppendLine(node.Children, "      Children");
+                builder.AppendLine(node.Mins, "      Mins");
+                builder.AppendLine(node.Maxs, "      Maxs");
+                builder.AppendLine(node.FirstFace, "      First face index");
+                builder.AppendLine(node.FaceCount, "      Count of faces");
+                builder.AppendLine(node.Area, "      Area");
+                builder.AppendLine(node.Padding, "      Padding");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VbspTexinfoLump? lump)
+        {
+            if (lump?.Texinfos == null || lump.Texinfos.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Texinfos.Length; j++)
+            {
+                var texinfo = lump.Texinfos[j];
+                builder.AppendLine($"    Texinfo {j}");
+                builder.AppendLine($"      Texture S-Vector: ({texinfo.TextureSVector.X}, {texinfo.TextureSVector.Y}, {texinfo.TextureSVector.Z})");
+                builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
+                builder.AppendLine($"      Texture T-Vector: ({texinfo.TextureTVector.X}, {texinfo.TextureTVector.Y}, {texinfo.TextureTVector.Z})");
+                builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
+                builder.AppendLine($"      Lightmap S-Vector: ({texinfo.LightmapSVector.X}, {texinfo.LightmapSVector.Y}, {texinfo.LightmapSVector.Z})");
+                builder.AppendLine(texinfo.TextureSShift, "      Lightmap shift in S direction");
+                builder.AppendLine($"      Lightmap T-Vector: ({texinfo.LightmapTVector.X}, {texinfo.LightmapTVector.Y}, {texinfo.LightmapTVector.Z})");
+                builder.AppendLine(texinfo.TextureTShift, "      Lightmap shift in T direction");
+                builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
+                builder.AppendLine(texinfo.TexData, "      Pointer to texdata");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VbspFacesLump? lump)
+        {
+            if (lump?.Faces == null || lump.Faces.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Faces.Length; j++)
+            {
+                var face = lump.Faces[j];
+                builder.AppendLine($"    Face {j}");
+                builder.AppendLine(face.PlaneNum, "      Plane number");
+                builder.AppendLine(face.Side, "      Side");
+                builder.AppendLine(face.OnNode, "      On node");
+                builder.AppendLine(face.FirstEdgeIndex, "      First surfedge index");
+                builder.AppendLine(face.NumberOfEdges, "      Surfedge count");
+                builder.AppendLine(face.TextureInfoIndex, "      Texture info index");
+                builder.AppendLine(face.DisplacementInfoIndex, "      Displacement info index");
+                builder.AppendLine(face.SurfaceFogVolumeID, "      Surface fog volume ID");
+                builder.AppendLine(face.Styles, "      Styles");
+                builder.AppendLine(face.LightmapOffset, "      Lightmap offset");
+                builder.AppendLine(face.Area, "      Area");
+                builder.AppendLine(face.LightmapTextureMinsInLuxels, "      Lightmap texture mins in Luxels");
+                builder.AppendLine(face.LightmapTextureSizeInLuxels, "      Lightmap texture size in Luxels");
+                builder.AppendLine(face.OrigFace, "      Original face index");
+                builder.AppendLine(face.PrimitiveCount, "      Primitive count");
+                builder.AppendLine(face.FirstPrimitiveID, "      First primitive ID");
+                builder.AppendLine(face.SmoothingGroups, "      Smoothing groups");
+            }
+        }
+
+        private static void Print(StringBuilder builder, LightmapLump? lump)
+        {
+            if (lump?.Lightmap == null || lump.Lightmap.Length == 0)
+                builder.AppendLine("    No data");
+            else
+                builder.AppendLine("    Lightmap data skipped...");
+        }
+
+        private static void Print(StringBuilder builder, OcclusionLump? lump)
+        {
+            if (lump == null)
+            {
+                builder.AppendLine("    No data");
+            }
+            else
+            {
+                builder.AppendLine(lump.Count, "    Count");
+                if (lump.Data == null || lump.Data.Length == 0)
+                {
+                    builder.AppendLine("    No occluder data");
+                }
+                else
+                {
+                    for (int j = 0; j < lump.Data.Length; j++)
+                    {
+                        var data = lump.Data[j];
+                        builder.AppendLine($"    Occluder Data {j}");
+                        builder.AppendLine(data.Flags, "      Flags");
+                        builder.AppendLine(data.FirstPoly, "      First poly");
+                        builder.AppendLine(data.PolyCount, "      Poly count");
+                        builder.AppendLine($"      Mins: {data.Mins.X}, {data.Mins.Y}, {data.Mins.Z}");
+                        builder.AppendLine($"      Maxs: {data.Maxs.X}, {data.Maxs.Y}, {data.Maxs.Z}");
+                        builder.AppendLine(data.Area, "      Area");
+                    }
+                }
+                builder.AppendLine(lump.PolyDataCount, "    Polydata count");
+                if (lump.PolyData == null || lump.PolyData.Length == 0)
+                {
+                    builder.AppendLine("    No occluder polydata");
+                }
+                else
+                {
+                    for (int j = 0; j < lump.PolyData.Length; j++)
+                    {
+                        var polydata = lump.PolyData[j];
+                        builder.AppendLine($"    Occluder Polydata {j}");
+                        builder.AppendLine(polydata.FirstVertexIndex, "      First vertex index");
+                        builder.AppendLine(polydata.VertexCount, "      Vertex count");
+                        builder.AppendLine(polydata.PlanEnum, "      Plan enum");
+                    }
+                }
+                builder.AppendLine(lump.VertexIndexCount, "    Vertex index count");
+                if (lump.VertexIndices == null || lump.VertexIndices.Length == 0)
+                {
+                    builder.AppendLine("    No vertex indicies");
+                }
+                else
+                {
+                    for (int j = 0; j < lump.VertexIndices.Length; j++)
+                    {
+                        builder.AppendLine($"    Vertex Index {j}: {lump.VertexIndices[j]}");
+                    }
+                }
+            }
+        }
+
+        private static void Print(StringBuilder builder, VbspLeavesLump? lump, uint version)
+        {
+            if (lump?.Leaves == null || lump.Leaves.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Leaves.Length; j++)
+            {
+                var leaf = lump.Leaves[j];
+                builder.AppendLine($"    Leaf {j}");
+                builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
+                builder.AppendLine(leaf.Cluster, "      Cluster");
+                builder.AppendLine(leaf.AreaFlags, "      AreaFlags");
+                builder.AppendLine(leaf.Mins, "      Mins");
+                builder.AppendLine(leaf.Maxs, "      Maxs");
+                builder.AppendLine(leaf.FirstLeafFace, "      First leaf face");
+                builder.AppendLine(leaf.NumLeafFaces, "      Leaf faces count");
+                builder.AppendLine(leaf.FirstLeafBrush, "      First leaf brush");
+                builder.AppendLine(leaf.NumLeafBrushes, "      Leaf brushes count");
+                builder.AppendLine(leaf.LeafWaterDataID, "      Leaf water data ID");
+                if (version == 0)
+                {
+                    // TODO: Figure out how to print the colors array
+                    builder.AppendLine("      Colors array skipped...");
+                }
+                else
+                {
+                    builder.AppendLine(leaf.Padding, "      Padding");
+                }
+            }
+        }
+
+        private static void Print(StringBuilder builder, MarksurfacesLump? lump)
+        {
+            if (lump?.Marksurfaces == null || lump.Marksurfaces.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Marksurfaces.Length; j++)
+            {
+                var marksurface = lump.Marksurfaces[j];
+                builder.AppendLine(marksurface, $"    Marksurface {j}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, EdgesLump? lump)
+        {
+            if (lump?.Edges == null || lump.Edges.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Edges.Length; j++)
+            {
+                var edge = lump.Edges[j];
+                builder.AppendLine($"    Edge {j}");
+                builder.AppendLine(edge.VertexIndices, "      Vertex indices");
+            }
+        }
+
+        private static void Print(StringBuilder builder, SurfedgesLump? lump)
+        {
+            if (lump?.Surfedges == null || lump.Surfedges.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Surfedges.Length; j++)
+            {
+                var surfedge = lump.Surfedges[j];
+                builder.AppendLine(surfedge, $"    Surfedge {j}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VbspModelsLump? lump)
+        {
+            if (lump?.Models == null || lump.Models.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Models.Length; j++)
+            {
+                var model = lump.Models[j];
+                builder.AppendLine($"    Model {j}");
+                builder.AppendLine($"      Mins: ({model.Mins.X}, {model.Mins.Y}, {model.Mins.Z})");
+                builder.AppendLine($"      Maxs: ({model.Maxs.X}, {model.Maxs.Y}, {model.Maxs.Z})");
+                builder.AppendLine($"      Origin vector: ({model.OriginVector.X}, {model.OriginVector.Y}, {model.OriginVector.Z})");
+                builder.AppendLine(model.HeadNode, "      Headnode index");
+                builder.AppendLine(model.FirstFaceIndex, "      First face index");
+                builder.AppendLine(model.FacesCount, "      Faces count");
+            }
+        }
+
+        private static void Print(StringBuilder builder, WorldLightsLump? lump)
+        {
+            if (lump?.WorldLights == null || lump.WorldLights.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.WorldLights.Length; j++)
+            {
+                var worldlight = lump.WorldLights[j];
+                builder.AppendLine($"    World Light {j}");
+                builder.AppendLine($"      Origin: ({worldlight.Origin.X}, {worldlight.Origin.Y}, {worldlight.Origin.Z})");
+                builder.AppendLine($"      Intensity: ({worldlight.Intensity.X}, {worldlight.Intensity.Y}, {worldlight.Intensity.Z})");
+                builder.AppendLine($"      Normal: ({worldlight.Normal.X}, {worldlight.Normal.Y}, {worldlight.Normal.Z})");
+                builder.AppendLine(worldlight.Cluster, "      Cluster");
+                builder.AppendLine($"      Emit type: {worldlight.EmitType} (0x{worldlight.EmitType:X})");
+                builder.AppendLine(worldlight.Style, "      Style");
+                builder.AppendLine(worldlight.StopDot, "      Start of penumbra");
+                builder.AppendLine(worldlight.StopDot2, "      End of penumbra");
+                builder.AppendLine(worldlight.Exponent, "      Exponent");
+                builder.AppendLine(worldlight.Radius, "      Radius");
+                builder.AppendLine(worldlight.ConstantAttn, "      Constant attn.");
+                builder.AppendLine(worldlight.LinearAttn, "      Linear attn.");
+                builder.AppendLine(worldlight.QuadraticAttn, "      Quadratic attn.");
+                builder.AppendLine(worldlight.Flags, "      Flags");
+                builder.AppendLine(worldlight.Texinfo, "      Texinfo");
+                builder.AppendLine(worldlight.Owner, "      Owner");
+            }
+        }
+
+        private static void Print(StringBuilder builder, LeafFacesLump? lump)
+        {
+            if (lump?.Map == null || lump.Map.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Map.Length; j++)
+            {
+                var entry = lump.Map[j];
+                builder.AppendLine($"    Map entry {j}: {entry}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, LeafBrushesLump? lump)
+        {
+            if (lump?.Map == null || lump.Map.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Map.Length; j++)
+            {
+                var entry = lump.Map[j];
+                builder.AppendLine($"    Map entry {j}: {entry}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BrushesLump? lump)
+        {
+            if (lump?.Brushes == null || lump.Brushes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Brushes.Length; j++)
+            {
+                var brush = lump.Brushes[j];
+                builder.AppendLine($"    Brush {j}");
+                builder.AppendLine(brush.FirstSide, "      First brushside");
+                builder.AppendLine(brush.NumSides, "      Number of brushsides");
+                builder.AppendLine($"      Contents: {brush.Contents} (0x{brush.Contents:X})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BrushsidesLump? lump)
+        {
+            if (lump?.Brushsides == null || lump.Brushsides.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Brushsides.Length; j++)
+            {
+                var brushside = lump.Brushsides[j];
+                builder.AppendLine($"    Brushside {j}");
+                builder.AppendLine(brushside.PlaneNum, "      Plane number");
+                builder.AppendLine(brushside.TextureInfo, "      Texture info");
+                builder.AppendLine(brushside.DisplacementInfo, "      Displacement info");
+                builder.AppendLine(brushside.Bevel, "      Bevel");
+            }
+        }
+
+        private static void Print(StringBuilder builder, DispInfosLump? lump)
+        {
+            if (lump?.Infos == null || lump.Infos.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Infos.Length; i++)
+            {
+                var info = lump.Infos[i];
+                builder.AppendLine($"    Disp Info {i}");
+                builder.AppendLine($"      Start position: ({info.startPosition.X}, {info.startPosition.Y}, {info.startPosition.Z})");
+                builder.AppendLine(info.DispVertStart, "      Index into disp verts");
+                builder.AppendLine(info.DispTriStart, "      Index into disp tris");
+                builder.AppendLine(info.Power, "      Power");
+                builder.AppendLine(info.MinTess, "      Minimum tesselation");
+                builder.AppendLine(info.SmoothingAngle, "      Smoothing angle");
+                builder.AppendLine(info.Contents, "      Contents");
+                builder.AppendLine(info.MapFace, "      Map face");
+                builder.AppendLine(info.LightmapAlphaStart, "      Lightmap alpha start");
+                builder.AppendLine(info.LightmapSamplePositionStart, "      Lightmap sample position start");
+                builder.AppendLine($"      Edge Neighbors:");
+                if (info.EdgeNeighbors == null || info.EdgeNeighbors.Length == 0)
+                {
+                    builder.AppendLine("      No edge neighbors");
+                }
+                else
+                {
+                    for (int j = 0; j < info.EdgeNeighbors.Length; j++)
+                    {
+                        var edgeNeighbor = info.EdgeNeighbors[j];
+                        builder.AppendLine($"        Edge Neighbor {j}");
+                        if (edgeNeighbor.SubNeighbors == null || edgeNeighbor.SubNeighbors.Length == 0)
+                        {
+                            builder.AppendLine("          No subneighbors");
+                        }
+                        else
+                        {
+                            for (int k = 0; k < edgeNeighbor.SubNeighbors.Length; k++)
+                            {
+                                var subNeighbor = edgeNeighbor.SubNeighbors[k];
+                                builder.AppendLine($"          Subneighbor {k}");
+                                builder.AppendLine(subNeighbor.NeighborIndex, "            Neighbor index");
+                                builder.AppendLine(subNeighbor.NeighborOrientation, "            Neighbor orientation");
+                                builder.AppendLine(subNeighbor.Span, "            Span");
+                                builder.AppendLine(subNeighbor.NeighborSpan, "            Neighbor span");
+                            }
+                        }
+                    }
+                }
+                builder.AppendLine($"      Corner Neighbors:");
+                if (info.CornerNeighbors == null || info.CornerNeighbors.Length == 0)
+                {
+                    builder.AppendLine("      No corner neighbors");
+                }
+                else
+                {
+                    for (int j = 0; j < info.CornerNeighbors.Length; j++)
+                    {
+                        var cornerNeighbor = info.CornerNeighbors[j];
+                        builder.AppendLine($"        Corner Neighbor {j}");
+                        builder.AppendLine(cornerNeighbor.Neighbors, "          Neighbors");
+                        builder.AppendLine(cornerNeighbor.NeighborCount, "          Neighbor count");
+                    }
+                }
+                builder.AppendLine(info.AllowedVerts, "      Allowed verts");
+            }
+        }
+
+        private static void Print(StringBuilder builder, DispVertsLump? lump)
+        {
+            if (lump?.Verts == null || lump.Verts.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Verts.Length; i++)
+            {
+                var vert = lump.Verts[i];
+                builder.AppendLine($"    Disp Vert {i}");
+                builder.AppendLine($"      Vec: ({vert.Vec.X}, {vert.Vec.Y}, {vert.Vec.Z})");
+                builder.AppendLine(vert.Dist, "      Dist");
+                builder.AppendLine(vert.Alpha, "      Alpha");
+            }
+        }
+
+        private static void Print(StringBuilder builder, GameLump? lump)
+        {
+            if (lump == null)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            builder.AppendLine(lump.LumpCount, "    Lump count");
+            if (lump.Directories == null || lump.Directories.Length == 0)
+            {
+                builder.AppendLine("    No directories");
+            }
+            else
+            {
+                for (int i = 0; i < lump.Directories.Length; i++)
+                {
+                    var dir = lump.Directories[i];
+                    builder.AppendLine($"    Game Lump Directory {i}");
+                    builder.AppendLine(dir.Id, "      Id");
+                    builder.AppendLine(dir.Flags, "      Flags");
+                    builder.AppendLine(dir.Version, "      Version");
+                    builder.AppendLine(dir.FileOffset, "      File offset");
+                    builder.AppendLine(dir.FileLength, "      File length");
+                }
+            }
+        }
+
+        private static void Print(StringBuilder builder, CubemapsLump? lump)
+        {
+            if (lump?.Cubemaps == null || lump.Cubemaps.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Cubemaps.Length; i++)
+            {
+                var cubemap = lump.Cubemaps[i];
+                builder.AppendLine($"    Cubemap {i}");
+                builder.AppendLine(cubemap.Origin, "      Origin");
+                builder.AppendLine(cubemap.Size, "      Size");
+            }
+        }
+
+        private static void Print(StringBuilder builder, TexdataStringData? lump)
+        {
+            if (lump?.Strings == null || lump.Strings.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Strings.Length; i++)
+            {
+                var str = lump.Strings[i];
+                builder.AppendLine($"    String {i}: {str}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, TexdataStringTable? lump)
+        {
+            if (lump?.Offsets == null || lump.Offsets.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Offsets.Length; i++)
+            {
+                var offset = lump.Offsets[i];
+                builder.AppendLine($"    Offset {i}: {offset}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, OverlaysLump? lump)
+        {
+            if (lump?.Overlays == null || lump.Overlays.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Overlays.Length; i++)
+            {
+                var overlay = lump.Overlays[i];
+                builder.AppendLine($"    Overlay {i}");
+                builder.AppendLine(overlay.Id, "      Id");
+                builder.AppendLine(overlay.TexInfo, "      Texinfo");
+                builder.AppendLine(overlay.FaceCountAndRenderOrder, "      Face count and render order");
+                builder.AppendLine(overlay.Ofaces, "      Ofaces");
+                builder.AppendLine(overlay.U, "      U");
+                builder.AppendLine(overlay.V, "      V");
+                if (overlay.UVPoints == null || overlay.UVPoints.Length == 0)
+                {
+                    builder.AppendLine("      No UV points");
+                }
+                else
+                {
+                    for (int j = 0; j < overlay.UVPoints.Length; j++)
+                    {
+                        var point = overlay.UVPoints[j];
+                        builder.AppendLine($"      UV Point {j}: ({point.X}, {point.Y}, {point.Z})");
+                    }
+                }
+                builder.AppendLine($"      Origin: ({overlay.Origin.X}, {overlay.Origin.Y}, {overlay.Origin.Z})");
+                builder.AppendLine($"      Basis normal: ({overlay.BasisNormal.X}, {overlay.BasisNormal.Y}, {overlay.BasisNormal.Z})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, DispTrisLump? lump)
+        {
+            if (lump?.Tris == null || lump.Tris.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Tris.Length; i++)
+            {
+                var tri = lump.Tris[i];
+                builder.AppendLine($"    Disp Tri {i}");
+                builder.AppendLine($"      Tags: {tri.Tags} (0x{tri.Tags:X})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, AmbientIndexLump? lump)
+        {
+            if (lump?.Indicies == null || lump.Indicies.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Indicies.Length; i++)
+            {
+                var index = lump.Indicies[i];
+                builder.AppendLine($"    Index {i}");
+                builder.AppendLine(index.AmbientSampleCount, "      Ambient sample count");
+                builder.AppendLine(index.FirstAmbientSample, "      First ambient sample");
+            }
+        }
+
+        private static void Print(StringBuilder builder, AmbientLightingLump? lump)
+        {
+            if (lump?.Lightings == null || lump.Lightings.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Lightings.Length; i++)
+            {
+                var lighting = lump.Lightings[i];
+                builder.AppendLine($"    Lighting {i}");
+                builder.AppendLine("      Colors array skipped...");
+                builder.AppendLine(lighting.X, "      X");
+                builder.AppendLine(lighting.Y, "      Y");
+                builder.AppendLine(lighting.Z, "      Z");
+                builder.AppendLine(lighting.Pad, "      Pad");
+            }
         }
     }
 }

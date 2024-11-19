@@ -17,9 +17,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Deserialize the SFB
             var sfb = data.ReadType<Models.PlayStation3.SFB>();
             if (sfb == null)

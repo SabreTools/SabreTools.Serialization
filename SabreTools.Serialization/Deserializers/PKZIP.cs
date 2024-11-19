@@ -168,7 +168,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Local File
 
             // Setup all of the collections
-            var localFileHeaders = new List<LocalFileHeader?>();
+            var localFileHeaders = new List<LocalFileHeader>();
             var encryptionHeaders = new List<byte[]?>();
             var fileData = new List<byte[]>(); // TODO: Should this data be read here?
             var dataDescriptors = new List<DataDescriptor?>();
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (localFileHeader == null)
                 {
                     // Add a placeholder null item
-                    localFileHeaders.Add(null);
+                    localFileHeaders.Add(new LocalFileHeader());
                     encryptionHeaders.Add(null);
                     fileData.Add([]);
                     dataDescriptors.Add(null);

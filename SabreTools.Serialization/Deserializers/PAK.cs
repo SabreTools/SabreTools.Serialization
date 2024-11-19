@@ -18,9 +18,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            long initialOffset = data.Position;
-
             // Create a new Half-Life Package to fill
             var file = new Models.PAK.File();
 
@@ -73,9 +70,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = data.ReadType<Header>();
 
-            if (header == null)
-                return null;
-            if (header.Signature != SignatureString)
+            if (header?.Signature != SignatureString)
                 return null;
 
             return header;

@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(svm.Day, "Day");
             builder.AppendLine(svm.Unknown2, "Unknown 2");
             builder.AppendLine(svm.Length, "Length");
-            //builder.AppendLine(svm.Data, "Data");
+            builder.AppendLine(svm.Length, "Data skipped...");
             builder.AppendLine();
         }
     }

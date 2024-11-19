@@ -21,9 +21,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new cabinet to fill
             var cabinet = new Cabinet();
 
@@ -337,9 +334,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var commonHeader = data.ReadType<CommonHeader>();
 
-            if (commonHeader == null)
-                return null;
-            if (commonHeader.Signature != SignatureString)
+            if (commonHeader?.Signature != SignatureString)
                 return null;
 
             return commonHeader;
@@ -353,7 +348,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled volume header on success, null on error</returns>
         public static VolumeHeader ParseVolumeHeader(Stream data, int majorVersion)
         {
-            VolumeHeader volumeHeader = new VolumeHeader();
+            var volumeHeader = new VolumeHeader();
 
             // Read the descriptor based on version
             if (majorVersion <= 5)
@@ -649,7 +644,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file descriptor on success, null on error</returns>
         public static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, uint descriptorOffset)
         {
-            FileDescriptor fileDescriptor = new FileDescriptor();
+            var fileDescriptor = new FileDescriptor();
 
             // Read the descriptor based on version
             if (majorVersion <= 5)

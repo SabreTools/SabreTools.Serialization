@@ -237,6 +237,21 @@ namespace SabreTools.Serialization
         }
 
         /// <summary>
+        /// Append a line containing a Single[] value to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, float[]? value, string prefixString)
+        {
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, u => u.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
         /// Append a line containing a Int64[] value to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, long[]? value, string prefixString)
@@ -255,6 +270,21 @@ namespace SabreTools.Serialization
         /// Append a line containing a UInt64[] value to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ulong[]? value, string prefixString)
+        {
+            string valueString = "[NULL]";
+            if (value != null)
+            {
+                var valueArr = Array.ConvertAll(value, u => u.ToString());
+                valueString = string.Join(", ", valueArr);
+            }
+
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a Double[] value to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, double[]? value, string prefixString)
         {
             string valueString = "[NULL]";
             if (value != null)

@@ -88,6 +88,8 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create lists for each hash type
             var sfvList = new List<SFV>();
+            var md2List = new List<MD2>();
+            var md4List = new List<MD4>();
             var md5List = new List<MD5>();
             var sha1List = new List<SHA1>();
             var sha256List = new List<SHA256>();
@@ -114,6 +116,22 @@ namespace SabreTools.Serialization.Deserializers
                             Hash = lineParts[lineParts.Length - 1],
                         };
                         sfvList.Add(sfv);
+                        break;
+                    case HashType.MD2:
+                        var md2 = new MD2
+                        {
+                            Hash = lineParts[0],
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                        };
+                        md2List.Add(md2);
+                        break;
+                    case HashType.MD4:
+                        var md4 = new MD4
+                        {
+                            Hash = lineParts[0],
+                            File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                        };
+                        md4List.Add(md4);
                         break;
                     case HashType.MD5:
                         var md5 = new MD5
@@ -171,6 +189,12 @@ namespace SabreTools.Serialization.Deserializers
             {
                 case HashType.CRC32:
                     dat.SFV = [.. sfvList];
+                    break;
+                case HashType.MD2:
+                    dat.MD2 = [.. md2List];
+                    break;
+                case HashType.MD4:
+                    dat.MD4 = [.. md4List];
                     break;
                 case HashType.MD5:
                     dat.MD5 = [.. md5List];

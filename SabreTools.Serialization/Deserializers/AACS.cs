@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -19,9 +18,6 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset is out of bounds
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
 
             // Create a new media key block to fill
             var mediaKeyBlock = new MediaKeyBlock();
@@ -73,38 +69,27 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled record on success, null on error</returns>
         private static Record? ParseRecord(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-
             // The first 4 bytes make up the type and length
-            byte[]? typeAndLength = data.ReadBytes(4);
-            if (typeAndLength == null)
-                return null;
-
-            RecordType type = (RecordType)typeAndLength[0];
-
-            // Remove the first byte and parse as big-endian
-            typeAndLength[0] = 0x00;
-            Array.Reverse(typeAndLength);
-            uint length = BitConverter.ToUInt32(typeAndLength, 0);
+            RecordType type = (RecordType)data.ReadByteValue();
+            uint length = data.ReadUInt24();
 
             // Create a record based on the type
-            switch (type)
+            return type switch
             {
-                // Recognized record types
-                case RecordType.EndOfMediaKeyBlock: return ParseEndOfMediaKeyBlockRecord(data, type, length);
-                case RecordType.ExplicitSubsetDifference: return ParseExplicitSubsetDifferenceRecord(data, type, length);
-                case RecordType.MediaKeyData: return ParseMediaKeyDataRecord(data, type, length);
-                case RecordType.SubsetDifferenceIndex: return ParseSubsetDifferenceIndexRecord(data, type, length);
-                case RecordType.TypeAndVersion: return ParseTypeAndVersionRecord(data, type, length);
-                case RecordType.DriveRevocationList: return ParseDriveRevocationListRecord(data, type, length);
-                case RecordType.HostRevocationList: return ParseHostRevocationListRecord(data, type, length);
-                case RecordType.VerifyMediaKey: return ParseVerifyMediaKeyRecord(data, type, length);
-                case RecordType.Copyright: return ParseCopyrightRecord(data, type, length);
-
-                // Unrecognized record type
-                default:
-                    return null;
-            }
+                // Known record types
+                RecordType.EndOfMediaKeyBlock => ParseEndOfMediaKeyBlockRecord(data, type, length),
+                RecordType.ExplicitSubsetDifference => ParseExplicitSubsetDifferenceRecord(data, type, length),
+                RecordType.MediaKeyData => ParseMediaKeyDataRecord(data, type, length),
+                RecordType.SubsetDifferenceIndex => ParseSubsetDifferenceIndexRecord(data, type, length),
+                RecordType.TypeAndVersion => ParseTypeAndVersionRecord(data, type, length),
+                RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data, type, length),
+                RecordType.HostRevocationList => ParseHostRevocationListRecord(data, type, length),
+                RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data, type, length),
+                RecordType.Copyright => ParseCopyrightRecord(data, type, length),
+                
+                // Unknown record type
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -118,7 +103,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.EndOfMediaKeyBlock)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new EndOfMediaKeyBlockRecord();
 
             record.RecordType = type;
@@ -140,7 +124,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.ExplicitSubsetDifference)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new ExplicitSubsetDifferenceRecord();
 
             record.RecordType = type;
@@ -184,7 +167,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.MediaKeyData)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new MediaKeyDataRecord();
 
             record.RecordType = type;
@@ -221,7 +203,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.SubsetDifferenceIndex)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new SubsetDifferenceIndexRecord();
 
             record.RecordType = type;
@@ -259,7 +240,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.TypeAndVersion)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new TypeAndVersionRecord();
 
             record.RecordType = type;
@@ -281,7 +261,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.DriveRevocationList)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new DriveRevocationListRecord();
 
             record.RecordType = type;
@@ -342,7 +321,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.HostRevocationList)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new HostRevocationListRecord();
 
             record.RecordType = type;
@@ -403,7 +381,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.VerifyMediaKey)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new VerifyMediaKeyRecord();
 
             record.RecordType = type;
@@ -424,7 +401,6 @@ namespace SabreTools.Serialization.Deserializers
             if (type != RecordType.Copyright)
                 return null;
 
-            // TODO: Use marshalling here instead of building
             var record = new CopyrightRecord();
 
             record.RecordType = type;

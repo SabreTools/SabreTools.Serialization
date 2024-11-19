@@ -17,9 +17,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new playlist to fill
             var playlist = new Playlist();
 
@@ -46,7 +43,7 @@ namespace SabreTools.Serialization.Deserializers
                 long currentOffset = data.Position;
                 var entryHeader = PlayJAudio.DeserializeStream(data, currentOffset);
                 if (entryHeader == null)
-                    return null;
+                    continue;
 
                 playlist.AudioFiles[i] = entryHeader;
             }
@@ -64,7 +61,7 @@ namespace SabreTools.Serialization.Deserializers
         private static PlaylistHeader ParsePlaylistHeader(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            PlaylistHeader playlistHeader = new PlaylistHeader();
+            var playlistHeader = new PlaylistHeader();
 
             playlistHeader.TrackCount = data.ReadUInt32();
             playlistHeader.Data = data.ReadBytes(52);

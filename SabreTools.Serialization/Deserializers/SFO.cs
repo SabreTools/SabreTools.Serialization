@@ -17,9 +17,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new SFO to fill
             var sfo = new Models.PlayStation3.SFO();
 

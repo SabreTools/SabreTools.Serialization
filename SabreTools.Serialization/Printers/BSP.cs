@@ -63,261 +63,53 @@ namespace SabreTools.Serialization.Printers
                 switch ((LumpType)i)
                 {
                     case LumpType.LUMP_ENTITIES:
-                        if (model.Entities?.Entities == null || model.Entities.Entities.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.Entities.Entities.Length; j++)
-                            {
-                                // TODO: Implement entity printing
-                                var entity = model.Entities.Entities[j];
-                                builder.AppendLine($"    Entity {j}");
-                                builder.AppendLine("      Entity data is not parsed properly");
-                            }
-                        }
+                        Print(builder, model.Entities);
                         break;
                     case LumpType.LUMP_PLANES:
-                        if (model.PlanesLump?.Planes == null || model.PlanesLump.Planes.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.PlanesLump.Planes.Length; j++)
-                            {
-                                var plane = model.PlanesLump.Planes[j];
-                                builder.AppendLine($"    Plane {j}");
-                                builder.AppendLine($"      Normal vector: {plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z}");
-                                builder.AppendLine(plane.Distance, "      Distance");
-                                builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
-                            }
-                        }
+                        Print(builder, model.PlanesLump);
                         break;
                     case LumpType.LUMP_TEXTURES:
-                        if (model.TextureLump?.Textures == null || model.TextureLump.Textures.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            var header = model.TextureLump.Header;
-                            if (header == null)
-                            {
-                                builder.AppendLine("    No texture header");
-                            }
-                            else
-                            {
-                                builder.AppendLine("    Texture Header:");
-                                builder.AppendLine(header.MipTextureCount, "      MipTexture count");
-                                builder.AppendLine(header.Offsets, "      Offsets");
-                            }
-
-                            builder.AppendLine("    Textures:");
-                            for (int j = 0; j < model.TextureLump.Textures.Length; j++)
-                            {
-                                var texture = model.TextureLump.Textures[j];
-                                builder.AppendLine($"      Texture {j}");
-                                builder.AppendLine(texture.Name, "        Name");
-                                builder.AppendLine(texture.Width, "        Width");
-                                builder.AppendLine(texture.Height, "        Height");
-                                builder.AppendLine(texture.Offsets, "        Offsets");
-                            }
-                        }
+                        Print(builder, model.TextureLump);
                         break;
                     case LumpType.LUMP_VERTICES:
-                        if (model.VerticesLump?.Vertices == null || model.VerticesLump.Vertices.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.VerticesLump.Vertices.Length; j++)
-                            {
-                                var vertex = model.VerticesLump.Vertices[j];
-                                builder.AppendLine($"    Vertex {j}: {vertex.X}, {vertex.Y}, {vertex.Z}");
-                            }
-                        }
+                        Print(builder, model.VerticesLump);
                         break;
                     case LumpType.LUMP_VISIBILITY:
                         // TODO: Implement when added to Models
-                        // if (model.VisibilityLump == null)
-                        // {
-                        //     builder.AppendLine("    No data");
-                        // }
-                        // else
-                        // {
-                        //     builder.AppendLine(model.VisibilityLump.NumClusters, "    Cluster count");
-                        //     builder.AppendLine(model.VisibilityLump.ByteOffsets, "    Byte offsets");
-                        // }
+                        // Print(builder, model.VisibilityLump);
                         break;
                     case LumpType.LUMP_NODES:
-                        if (model.NodesLump?.Nodes == null || model.NodesLump.Nodes.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.NodesLump.Nodes.Length; j++)
-                            {
-                                var node = model.NodesLump.Nodes[j];
-                                builder.AppendLine($"    Node {j}");
-                                builder.AppendLine(node.Children, "      Children");
-                                builder.AppendLine(node.Mins, "      Mins");
-                                builder.AppendLine(node.Maxs, "      Maxs");
-                                builder.AppendLine(node.FirstFace, "      First face index");
-                                builder.AppendLine(node.FaceCount, "      Count of faces");
-                            }
-                        }
+                        Print(builder, model.NodesLump);
                         break;
                     case LumpType.LUMP_TEXINFO:
-                        if (model.TexinfoLump?.Texinfos == null || model.TexinfoLump.Texinfos.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.TexinfoLump.Texinfos.Length; j++)
-                            {
-                                var texinfo = model.TexinfoLump.Texinfos[j];
-                                builder.AppendLine($"    Texinfo {j}");
-                                builder.AppendLine($"      S-Vector: {texinfo.SVector.X}, {texinfo.SVector.Y}, {texinfo.SVector.Z}");
-                                builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
-                                builder.AppendLine($"      T-Vector: {texinfo.TVector.X}, {texinfo.TVector.Y}, {texinfo.TVector.Z}");
-                                builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
-                                builder.AppendLine(texinfo.MiptexIndex, "      Miptex index");
-                                builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
-                            }
-                        }
+                        Print(builder, model.TexinfoLump);
                         break;
                     case LumpType.LUMP_FACES:
-                        if (model.FacesLump?.Faces == null || model.FacesLump.Faces.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.FacesLump.Faces.Length; j++)
-                            {
-                                var face = model.FacesLump.Faces[j];
-                                builder.AppendLine($"    Face {j}");
-                                builder.AppendLine(face.PlaneIndex, "      Plane index");
-                                builder.AppendLine(face.PlaneSideCount, "      Plane side count");
-                                builder.AppendLine(face.FirstEdgeIndex, "      First surfedge index");
-                                builder.AppendLine(face.NumberOfEdges, "      Surfedge count");
-                                builder.AppendLine(face.TextureInfoIndex, "      Texture info index");
-                                builder.AppendLine(face.LightingStyles, "      Lighting styles");
-                                builder.AppendLine(face.LightmapOffset, "      Lightmap offset");
-                            }
-                        }
+                        Print(builder, model.FacesLump);
                         break;
                     case LumpType.LUMP_LIGHTING:
-                        if (model.LightmapLump?.Lightmap == null || model.LightmapLump.Lightmap.Length == 0)
-                            builder.AppendLine("    No data");
-                        else
-                            builder.AppendLine("    Lightmap data skipped...");
+                        Print(builder, model.LightmapLump);
                         break;
                     case LumpType.LUMP_CLIPNODES:
-                        if (model.ClipnodesLump?.Clipnodes == null || model.ClipnodesLump.Clipnodes.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.ClipnodesLump.Clipnodes.Length; j++)
-                            {
-                                var clipnode = model.ClipnodesLump.Clipnodes[j];
-                                builder.AppendLine($"    Clipnode {j}");
-                                builder.AppendLine(clipnode.PlaneIndex, "      Plane index");
-                                builder.AppendLine(clipnode.ChildrenIndices, "      Children indices");
-                            }
-                        }
+                        Print(builder, model.ClipnodesLump);
                         break;
                     case LumpType.LUMP_LEAVES:
-                        if (model.LeavesLump?.Leaves == null || model.LeavesLump.Leaves.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.LeavesLump.Leaves.Length; j++)
-                            {
-                                var leaf = model.LeavesLump.Leaves[j];
-                                builder.AppendLine($"    Leaf {j}");
-                                builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
-                                builder.AppendLine(leaf.VisOffset, "      Visibility offset");
-                                builder.AppendLine(leaf.Mins, "      Mins");
-                                builder.AppendLine(leaf.Maxs, "      Maxs");
-                                builder.AppendLine(leaf.FirstMarkSurfaceIndex, "      First marksurface index");
-                                builder.AppendLine(leaf.MarkSurfacesCount, "      Marksurfaces count");
-                                builder.AppendLine(leaf.AmbientLevels, "      Ambient sound levels");
-                            }
-                        }
+                        Print(builder, model.LeavesLump);
                         break;
                     case LumpType.LUMP_MARKSURFACES:
-                        if (model.MarksurfacesLump?.Marksurfaces == null || model.MarksurfacesLump.Marksurfaces.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.MarksurfacesLump.Marksurfaces.Length; j++)
-                            {
-                                var marksurface = model.MarksurfacesLump.Marksurfaces[j];
-                                builder.AppendLine($"    Marksurface {j}: {marksurface} (0x{marksurface:X4})");
-                            }
-                        }
+                        Print(builder, model.MarksurfacesLump);
                         break;
                     case LumpType.LUMP_EDGES:
-                        if (model.EdgesLump?.Edges == null || model.EdgesLump.Edges.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.EdgesLump.Edges.Length; j++)
-                            {
-                                var edge = model.EdgesLump.Edges[j];
-                                builder.AppendLine($"    Edge {j}");
-                                builder.AppendLine(edge.VertexIndices, "      Vertex indices");
-                            }
-                        }
+                        Print(builder, model.EdgesLump);
                         break;
                     case LumpType.LUMP_SURFEDGES:
-                        if (model.SurfedgesLump?.Surfedges == null || model.SurfedgesLump.Surfedges.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.SurfedgesLump.Surfedges.Length; j++)
-                            {
-                                var surfedge = model.SurfedgesLump.Surfedges[j];
-                                builder.AppendLine($"    Surfedge {j}: {surfedge} (0x{surfedge:X4})");
-                            }
-                        }
+                        Print(builder, model.SurfedgesLump);
                         break;
                     case LumpType.LUMP_MODELS:
-                        if (model.ModelsLump?.Models == null || model.ModelsLump.Models.Length == 0)
-                        {
-                            builder.AppendLine("    No data");
-                        }
-                        else
-                        {
-                            for (int j = 0; j < model.ModelsLump.Models.Length; j++)
-                            {
-                                var bmodel = model.ModelsLump.Models[j];
-                                builder.AppendLine($"    Model {j}");
-                                builder.AppendLine($"      Mins: {bmodel.Mins.X}, {bmodel.Mins.Y}, {bmodel.Mins.Z}");
-                                builder.AppendLine($"      Maxs: {bmodel.Maxs.X}, {bmodel.Maxs.Y}, {bmodel.Maxs.Z}");
-                                builder.AppendLine($"      Origin vector: {bmodel.OriginVector.X}, {bmodel.OriginVector.Y}, {bmodel.OriginVector.Z}");
-                                builder.AppendLine(bmodel.HeadnodesIndex, "      Headnodes index");
-                                builder.AppendLine(bmodel.VisLeafsCount, "      ??? (VisLeafsCount)");
-                                builder.AppendLine(bmodel.FirstFaceIndex, "      First face index");
-                                builder.AppendLine(bmodel.FacesCount, "      Faces count");
-                            }
-                        }
+                        Print(builder, model.ModelsLump);
+                        break;
+                    default:
+                        builder.AppendLine($"    Unsupported lump type: {(LumpType)i} (0x{i:X4})");
                         break;
                 }
             }
@@ -345,6 +137,284 @@ namespace SabreTools.Serialization.Printers
                 LumpType.LUMP_MODELS => " - LUMP_MODELS",
                 _ => string.Empty,
             };
+        }
+
+        private static void Print(StringBuilder builder, EntitiesLump? lump)
+        {
+            if (lump?.Entities == null || lump.Entities.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Entities.Length; j++)
+            {
+                // TODO: Implement entity printing
+                var entity = lump.Entities[j];
+                builder.AppendLine($"    Entity {j}");
+                builder.AppendLine("      Entity data is not parsed properly");
+            }
+        }
+
+        private static void Print(StringBuilder builder, PlanesLump? lump)
+        {
+            if (lump?.Planes == null || lump.Planes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Planes.Length; j++)
+            {
+                var plane = lump.Planes[j];
+                builder.AppendLine($"    Plane {j}");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
+                builder.AppendLine(plane.Distance, "      Distance");
+                builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, TextureLump? lump)
+        {
+            if (lump == null)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            if (lump?.Header == null)
+            {
+                builder.AppendLine("    No texture header");
+            }
+            else
+            {
+                builder.AppendLine("    Texture Header:");
+                builder.AppendLine(lump.Header.MipTextureCount, "      MipTexture count");
+                builder.AppendLine(lump.Header.Offsets, "      Offsets");
+            }
+
+            if (lump?.Textures == null || lump.Textures.Length == 0)
+            {
+                builder.AppendLine("    No texture data");
+            }
+            else
+            {
+                builder.AppendLine("    Textures:");
+                for (int j = 0; j < lump.Textures.Length; j++)
+                {
+                    var texture = lump.Textures[j];
+                    builder.AppendLine($"      Texture {j}");
+                    builder.AppendLine(texture.Name, "        Name");
+                    builder.AppendLine(texture.Width, "        Width");
+                    builder.AppendLine(texture.Height, "        Height");
+                    builder.AppendLine(texture.Offsets, "        Offsets");
+                }
+            }
+        }
+
+        private static void Print(StringBuilder builder, VerticesLump? lump)
+        {
+            if (lump?.Vertices == null || lump.Vertices.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Vertices.Length; j++)
+            {
+                var vertex = lump.Vertices[j];
+                builder.AppendLine($"    Vertex {j}: ({vertex.X}, {vertex.Y}, {vertex.Z})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, VisibilityLump? lump)
+        {
+            if (lump == null)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            builder.AppendLine(lump.NumClusters, "    Cluster count");
+            builder.AppendLine("    Byte offsets skipped...");
+        }
+
+        private static void Print(StringBuilder builder, BspNodesLump? lump)
+        {
+            if (lump?.Nodes == null || lump.Nodes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Nodes.Length; j++)
+            {
+                var node = lump.Nodes[j];
+                builder.AppendLine($"    Node {j}");
+                builder.AppendLine(node.Children, "      Children");
+                builder.AppendLine(node.Mins, "      Mins");
+                builder.AppendLine(node.Maxs, "      Maxs");
+                builder.AppendLine(node.FirstFace, "      First face index");
+                builder.AppendLine(node.FaceCount, "      Count of faces");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BspTexinfoLump? lump)
+        {
+            if (lump?.Texinfos == null || lump.Texinfos.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Texinfos.Length; j++)
+            {
+                var texinfo = lump.Texinfos[j];
+                builder.AppendLine($"    Texinfo {j}");
+                builder.AppendLine($"      S-Vector: ({texinfo.SVector.X}, {texinfo.SVector.Y}, {texinfo.SVector.Z})");
+                builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
+                builder.AppendLine($"      T-Vector: ({texinfo.TVector.X}, {texinfo.TVector.Y}, {texinfo.TVector.Z})");
+                builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
+                builder.AppendLine(texinfo.MiptexIndex, "      Miptex index");
+                builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BspFacesLump? lump)
+        {
+            if (lump?.Faces == null || lump.Faces.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Faces.Length; j++)
+            {
+                var face = lump.Faces[j];
+                builder.AppendLine($"    Face {j}");
+                builder.AppendLine(face.PlaneIndex, "      Plane index");
+                builder.AppendLine(face.PlaneSideCount, "      Plane side count");
+                builder.AppendLine(face.FirstEdgeIndex, "      First surfedge index");
+                builder.AppendLine(face.NumberOfEdges, "      Surfedge count");
+                builder.AppendLine(face.TextureInfoIndex, "      Texture info index");
+                builder.AppendLine(face.LightingStyles, "      Lighting styles");
+                builder.AppendLine(face.LightmapOffset, "      Lightmap offset");
+            }
+        }
+
+        private static void Print(StringBuilder builder, LightmapLump? lump)
+        {
+            if (lump?.Lightmap == null || lump.Lightmap.Length == 0)
+                builder.AppendLine("    No data");
+            else
+                builder.AppendLine("    Lightmap data skipped...");
+        }
+
+        private static void Print(StringBuilder builder, ClipnodesLump? lump)
+        {
+            if (lump?.Clipnodes == null || lump.Clipnodes.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Clipnodes.Length; j++)
+            {
+                var clipnode = lump.Clipnodes[j];
+                builder.AppendLine($"    Clipnode {j}");
+                builder.AppendLine(clipnode.PlaneIndex, "      Plane index");
+                builder.AppendLine(clipnode.ChildrenIndices, "      Children indices");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BspLeavesLump? lump)
+        {
+            if (lump?.Leaves == null || lump.Leaves.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Leaves.Length; j++)
+            {
+                var leaf = lump.Leaves[j];
+                builder.AppendLine($"    Leaf {j}");
+                builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
+                builder.AppendLine(leaf.VisOffset, "      Visibility offset");
+                builder.AppendLine(leaf.Mins, "      Mins");
+                builder.AppendLine(leaf.Maxs, "      Maxs");
+                builder.AppendLine(leaf.FirstMarkSurfaceIndex, "      First marksurface index");
+                builder.AppendLine(leaf.MarkSurfacesCount, "      Marksurfaces count");
+                builder.AppendLine(leaf.AmbientLevels, "      Ambient sound levels");
+            }
+        }
+
+        private static void Print(StringBuilder builder, MarksurfacesLump? lump)
+        {
+            if (lump?.Marksurfaces == null || lump.Marksurfaces.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Marksurfaces.Length; j++)
+            {
+                var marksurface = lump.Marksurfaces[j];
+                builder.AppendLine(marksurface, $"    Marksurface {j}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, EdgesLump? lump)
+        {
+            if (lump?.Edges == null || lump.Edges.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Edges.Length; j++)
+            {
+                var edge = lump.Edges[j];
+                builder.AppendLine($"    Edge {j}");
+                builder.AppendLine(edge.VertexIndices, "      Vertex indices");
+            }
+        }
+
+        private static void Print(StringBuilder builder, SurfedgesLump? lump)
+        {
+            if (lump?.Surfedges == null || lump.Surfedges.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Surfedges.Length; j++)
+            {
+                var surfedge = lump.Surfedges[j];
+                builder.AppendLine(surfedge, $"    Surfedge {j}");
+            }
+        }
+
+        private static void Print(StringBuilder builder, BspModelsLump? lump)
+        {
+            if (lump?.Models == null || lump.Models.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int j = 0; j < lump.Models.Length; j++)
+            {
+                var bmodel = lump.Models[j];
+                builder.AppendLine($"    Model {j}");
+                builder.AppendLine($"      Mins: {bmodel.Mins.X}, {bmodel.Mins.Y}, {bmodel.Mins.Z}");
+                builder.AppendLine($"      Maxs: {bmodel.Maxs.X}, {bmodel.Maxs.Y}, {bmodel.Maxs.Z}");
+                builder.AppendLine($"      Origin vector: {bmodel.OriginVector.X}, {bmodel.OriginVector.Y}, {bmodel.OriginVector.Z}");
+                builder.AppendLine(bmodel.HeadnodesIndex, "      Headnodes index");
+                builder.AppendLine(bmodel.VisLeafsCount, "      ??? (VisLeafsCount)");
+                builder.AppendLine(bmodel.FirstFaceIndex, "      First face index");
+                builder.AppendLine(bmodel.FacesCount, "      Faces count");
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PFF;
@@ -19,9 +18,6 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset is out of bounds
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
 
             // Create a new archive to fill
             var archive = new Archive();
@@ -56,7 +52,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 var file = ParseSegment(data, header.FileSegmentSize);
                 if (file == null)
-                    return null;
+                    continue;
 
                 archive.Segments[i] = file;
             }

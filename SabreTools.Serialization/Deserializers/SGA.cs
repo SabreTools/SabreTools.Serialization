@@ -20,9 +20,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            long initialOffset = data.Position;
-
             // Create a new SGA to fill
             var file = new Models.SGA.File();
 
@@ -78,7 +75,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Versions 4 and 5 share the same header
                 case 4:
                 case 5:
-                    Header4 header4 = new Header4();
+                    var header4 = new Header4();
 
                     header4.Signature = signature;
                     header4.MajorVersion = majorVersion;
@@ -97,7 +94,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Versions 6 and 7 share the same header
                 case 6:
                 case 7:
-                    Header6 header6 = new Header6();
+                    var header6 = new Header6();
 
                     header6.Signature = signature;
                     header6.MajorVersion = majorVersion;
@@ -125,20 +122,24 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA directory on success, null on error</returns>
         private static Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
         {
-            #region Directory
-
-            // Create the appropriate type of directory
-            Models.SGA.Directory directory;
-            switch (majorVersion)
+            return majorVersion switch
             {
-                case 4: directory = new Directory4(); break;
-                case 5: directory = new Directory5(); break;
-                case 6: directory = new Directory6(); break;
-                case 7: directory = new Directory7(); break;
-                default: return null;
-            }
+                4 => ParseDirectory4(data),
+                5 => ParseDirectory5(data),
+                6 => ParseDirectory6(data),
+                7 => ParseDirectory7(data),
+                _ => null,
+            };
+        }
 
-            #endregion
+        /// <summary>
+        /// Parse a Stream into an SGA directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SGA directory on success, null on error</returns>
+        private static Directory4? ParseDirectory4(Stream data)
+        {
+            var directory = new Directory4();
 
             // Cache the current offset
             long currentOffset = data.Position;
@@ -146,36 +147,19 @@ namespace SabreTools.Serialization.Deserializers
             #region Directory Header
 
             // Try to parse the directory header
-            var directoryHeader = ParseDirectoryHeader(data, majorVersion);
+            var directoryHeader = ParseDirectory4Header(data);
             if (directoryHeader == null)
                 return null;
 
             // Set the directory header
-            switch (majorVersion)
-            {
-                case 4: (directory as Directory4)!.DirectoryHeader = directoryHeader as DirectoryHeader4; break;
-                case 5: (directory as Directory5)!.DirectoryHeader = directoryHeader as DirectoryHeader5; break;
-                case 6: (directory as Directory6)!.DirectoryHeader = directoryHeader as DirectoryHeader5; break;
-                case 7: (directory as Directory7)!.DirectoryHeader = directoryHeader as DirectoryHeader7; break;
-                default: return null;
-            }
+            directory.DirectoryHeader = directoryHeader;
 
             #endregion
 
             #region Sections
 
-            // Get the sections offset
-            long sectionOffset;
-            switch (majorVersion)
-            {
-                case 4: sectionOffset = (directoryHeader as DirectoryHeader4)!.SectionOffset; break;
-                case 5:
-                case 6: sectionOffset = (directoryHeader as DirectoryHeader5)!.SectionOffset; break;
-                case 7: sectionOffset = (directoryHeader as DirectoryHeader7)!.SectionOffset; break;
-                default: return null;
-            }
-
-            // Adjust the sections offset based on the directory
+            // Get and adjust the sections offset
+            long sectionOffset = directoryHeader.SectionOffset;
             sectionOffset += currentOffset;
 
             // Validate the offset
@@ -185,67 +169,21 @@ namespace SabreTools.Serialization.Deserializers
             // Seek to the sections
             data.Seek(sectionOffset, SeekOrigin.Begin);
 
-            // Get the section count
-            uint sectionCount;
-            switch (majorVersion)
-            {
-                case 4: sectionCount = (directoryHeader as DirectoryHeader4)!.SectionCount; break;
-                case 5:
-                case 6: sectionCount = (directoryHeader as DirectoryHeader5)!.SectionCount; break;
-                case 7: sectionCount = (directoryHeader as DirectoryHeader7)!.SectionCount; break;
-                default: return null;
-            }
-
             // Create the sections array
-            object[] sections;
-            switch (majorVersion)
-            {
-                case 4: sections = new Section4[sectionCount]; break;
-                case 5:
-                case 6:
-                case 7: sections = new Section5[sectionCount]; break;
-                default: return null;
-            }
+            directory.Sections = new Section4[directoryHeader.SectionCount];
 
             // Try to parse the sections
-            for (int i = 0; i < sections.Length; i++)
+            for (int i = 0; i < directory.Sections.Length; i++)
             {
-                switch (majorVersion)
-                {
-                    case 4: sections[i] = ParseSection4(data); break;
-                    case 5:
-                    case 6:
-                    case 7: sections[i] = ParseSection5(data); break;
-                    default: return null;
-                }
-            }
-
-            // Assign the sections
-            switch (majorVersion)
-            {
-                case 4: (directory as Directory4)!.Sections = sections as Section4[]; break;
-                case 5: (directory as Directory5)!.Sections = sections as Section5[]; break;
-                case 6: (directory as Directory6)!.Sections = sections as Section5[]; break;
-                case 7: (directory as Directory7)!.Sections = sections as Section5[]; break;
-                default: return null;
+                directory.Sections[i] = ParseSection4(data);
             }
 
             #endregion
 
             #region Folders
 
-            // Get the folders offset
-            long folderOffset;
-            switch (majorVersion)
-            {
-                case 4: folderOffset = (directoryHeader as DirectoryHeader4)!.FolderOffset; break;
-                case 5: folderOffset = (directoryHeader as DirectoryHeader5)!.FolderOffset; break;
-                case 6: folderOffset = (directoryHeader as DirectoryHeader5)!.FolderOffset; break;
-                case 7: folderOffset = (directoryHeader as DirectoryHeader7)!.FolderOffset; break;
-                default: return null;
-            }
-
-            // Adjust the folders offset based on the directory
+            // Get and adjust the folders offset
+            long folderOffset = directoryHeader.FolderOffset;
             folderOffset += currentOffset;
 
             // Validate the offset
@@ -255,67 +193,21 @@ namespace SabreTools.Serialization.Deserializers
             // Seek to the folders
             data.Seek(folderOffset, SeekOrigin.Begin);
 
-            // Get the folder count
-            uint folderCount;
-            switch (majorVersion)
-            {
-                case 4: folderCount = (directoryHeader as DirectoryHeader4)!.FolderCount; break;
-                case 5: folderCount = (directoryHeader as DirectoryHeader5)!.FolderCount; break;
-                case 6: folderCount = (directoryHeader as DirectoryHeader5)!.FolderCount; break;
-                case 7: folderCount = (directoryHeader as DirectoryHeader7)!.FolderCount; break;
-                default: return null;
-            }
-
             // Create the folders array
-            object[] folders;
-            switch (majorVersion)
-            {
-                case 4: folders = new Folder4[folderCount]; break;
-                case 5: folders = new Folder5[folderCount]; break;
-                case 6: folders = new Folder5[folderCount]; break;
-                case 7: folders = new Folder5[folderCount]; break;
-                default: return null;
-            }
+            directory.Folders = new Folder4[directoryHeader.FolderCount];
 
             // Try to parse the folders
-            for (int i = 0; i < folders.Length; i++)
+            for (int i = 0; i < directory.Folders.Length; i++)
             {
-                switch (majorVersion)
-                {
-                    case 4: folders[i] = ParseFolder4(data); break;
-                    case 5: folders[i] = ParseFolder5(data); break;
-                    case 6: folders[i] = ParseFolder5(data); break;
-                    case 7: folders[i] = ParseFolder5(data); break;
-                    default: return null;
-                }
-            }
-
-            // Assign the folders
-            switch (majorVersion)
-            {
-                case 4: (directory as Directory4)!.Folders = folders as Folder4[]; break;
-                case 5: (directory as Directory5)!.Folders = folders as Folder5[]; break;
-                case 6: (directory as Directory6)!.Folders = folders as Folder5[]; break;
-                case 7: (directory as Directory7)!.Folders = folders as Folder5[]; break;
-                default: return null;
+                directory.Folders[i] = ParseFolder4(data);
             }
 
             #endregion
 
             #region Files
 
-            // Get the files offset
-            long fileOffset;
-            switch (majorVersion)
-            {
-                case 4: fileOffset = (directoryHeader as DirectoryHeader4)!.FileOffset; break;
-                case 5: fileOffset = (directoryHeader as DirectoryHeader5)!.FileOffset; break;
-                case 6: fileOffset = (directoryHeader as DirectoryHeader5)!.FileOffset; break;
-                case 7: fileOffset = (directoryHeader as DirectoryHeader7)!.FileOffset; break;
-                default: return null;
-            }
-
-            // Adjust the files offset based on the directory
+            // Get and adjust the files offset
+            long fileOffset = directoryHeader.FileOffset;
             fileOffset += currentOffset;
 
             // Validate the offset
@@ -326,66 +218,23 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(fileOffset, SeekOrigin.Begin);
 
             // Get the file count
-            uint fileCount;
-            switch (majorVersion)
-            {
-                case 4: fileCount = (directoryHeader as DirectoryHeader4)!.FileCount; break;
-                case 5: fileCount = (directoryHeader as DirectoryHeader5)!.FileCount; break;
-                case 6: fileCount = (directoryHeader as DirectoryHeader5)!.FileCount; break;
-                case 7: fileCount = (directoryHeader as DirectoryHeader7)!.FileCount; break;
-                default: return null;
-            }
+            uint fileCount = directoryHeader.FileCount;
 
             // Create the files array
-            object[] files;
-            switch (majorVersion)
-            {
-                case 4: files = new File4[fileCount]; break;
-                case 5: files = new File4[fileCount]; break;
-                case 6: files = new File6[fileCount]; break;
-                case 7: files = new File7[fileCount]; break;
-                default: return null;
-            }
+            directory.Files = new File4[fileCount];
 
             // Try to parse the files
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < directory.Files.Length; i++)
             {
-                switch (majorVersion)
-                {
-                    case 4: files[i] = ParseFile4(data); break;
-                    case 5: files[i] = ParseFile4(data); break;
-                    case 6: files[i] = ParseFile6(data); break;
-                    case 7: files[i] = ParseFile7(data); break;
-                    default: return null;
-                }
-            }
-
-            // Assign the files
-            switch (majorVersion)
-            {
-                case 4: (directory as Directory4)!.Files = files as File4[]; break;
-                case 5: (directory as Directory5)!.Files = files as File4[]; break;
-                case 6: (directory as Directory6)!.Files = files as File6[]; break;
-                case 7: (directory as Directory7)!.Files = files as File7[]; break;
-                default: return null;
+                directory.Files[i] = ParseFile4(data);
             }
 
             #endregion
 
             #region String Table
 
-            // Get the string table offset
-            long stringTableOffset;
-            switch (majorVersion)
-            {
-                case 4: stringTableOffset = (directoryHeader as DirectoryHeader4)!.StringTableOffset; break;
-                case 5: stringTableOffset = (directoryHeader as DirectoryHeader5)!.StringTableOffset; break;
-                case 6: stringTableOffset = (directoryHeader as DirectoryHeader5)!.StringTableOffset; break;
-                case 7: stringTableOffset = (directoryHeader as DirectoryHeader7)!.StringTableOffset; break;
-                default: return null;
-            }
-
-            // Adjust the string table offset based on the directory
+            // Get and adjust the string table offset
+            long stringTableOffset = directoryHeader.StringTableOffset;
             stringTableOffset += currentOffset;
 
             // Validate the offset
@@ -395,87 +244,40 @@ namespace SabreTools.Serialization.Deserializers
             // Seek to the string table
             data.Seek(stringTableOffset, SeekOrigin.Begin);
 
-            // Get the string table count
-            uint stringCount;
-            switch (majorVersion)
-            {
-                case 4: stringCount = (directoryHeader as DirectoryHeader4)!.StringTableCount; break;
-                case 5: stringCount = (directoryHeader as DirectoryHeader5)!.StringTableCount; break;
-                case 6: stringCount = (directoryHeader as DirectoryHeader5)!.StringTableCount; break;
-                case 7: stringCount = (directoryHeader as DirectoryHeader7)!.StringTableCount; break;
-                default: return null;
-            }
-
             // TODO: Are these strings actually indexed by number and not position?
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            Dictionary<long, string?> strings = new Dictionary<long, string?>((int)stringCount);
+            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
 
             // Try to parse the strings
-            for (int i = 0; i < stringCount; i++)
+            for (int i = 0; i < directoryHeader.StringTableCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                strings[currentPosition] = data.ReadNullTerminatedAnsiString();
-            }
-
-            // Assign the files
-            switch (majorVersion)
-            {
-                case 4: (directory as Directory4)!.StringTable = strings; break;
-                case 5: (directory as Directory5)!.StringTable = strings; break;
-                case 6: (directory as Directory6)!.StringTable = strings; break;
-                case 7: (directory as Directory7)!.StringTable = strings; break;
-                default: return null;
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
             }
 
             // Loop through all folders to assign names
-            for (int i = 0; i < folderCount; i++)
+            for (int i = 0; i < directory.Folders.Length; i++)
             {
-                uint nameOffset;
-                switch (majorVersion)
-                {
-                    case 4: nameOffset = (directory as Directory4)!.Folders![i]!.NameOffset; break;
-                    case 5: nameOffset = (directory as Directory5)!.Folders![i]!.NameOffset; break;
-                    case 6: nameOffset = (directory as Directory6)!.Folders![i]!.NameOffset; break;
-                    case 7: nameOffset = (directory as Directory7)!.Folders![i]!.NameOffset; break;
-                    default: return null;
-                }
+                var folder = directory.Folders[i];
+                if (folder == null)
+                    continue;
 
-                switch (majorVersion)
-                {
-                    case 4: (directory as Directory4)!.Folders![i]!.Name = strings[nameOffset]; break;
-                    case 5: (directory as Directory5)!.Folders![i]!.Name = strings[nameOffset]; break;
-                    case 6: (directory as Directory6)!.Folders![i]!.Name = strings[nameOffset]; break;
-                    case 7: (directory as Directory7)!.Folders![i]!.Name = strings[nameOffset]; break;
-                    default: return null;
-                }
+                folder.Name = directory.StringTable[folder.NameOffset];
             }
 
             // Loop through all files to assign names
-            for (int i = 0; i < fileCount; i++)
+            for (int i = 0; i < directory.Files.Length; i++)
             {
-                uint nameOffset;
-                switch (majorVersion)
-                {
-                    case 4: nameOffset = (directory as Directory4)!.Files![i]!.NameOffset; break;
-                    case 5: nameOffset = (directory as Directory5)!.Files![i]!.NameOffset; break;
-                    case 6: nameOffset = (directory as Directory6)!.Files![i]!.NameOffset; break;
-                    case 7: nameOffset = (directory as Directory7)!.Files![i]!.NameOffset; break;
-                    default: return null;
-                }
+                var file = directory.Files[i];
+                if (file == null)
+                    continue;
 
-                switch (majorVersion)
-                {
-                    case 4: (directory as Directory4)!.Files![i]!.Name = strings[nameOffset]; break;
-                    case 5: (directory as Directory5)!.Files![i]!.Name = strings[nameOffset]; break;
-                    case 6: (directory as Directory6)!.Files![i]!.Name = strings[nameOffset]; break;
-                    case 7: (directory as Directory7)!.Files![i]!.Name = strings[nameOffset]; break;
-                    default: return null;
-                }
+                file.Name = directory.StringTable[file.NameOffset];
             }
 
             #endregion
@@ -484,21 +286,453 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an SGA directory header
+        /// Parse a Stream into an SGA directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="majorVersion">SGA major version</param>
-        /// <returns>Filled SGA directory header on success, null on error</returns>
-        private static object? ParseDirectoryHeader(Stream data, ushort majorVersion)
+        /// <returns>Filled SGA directory on success, null on error</returns>
+        private static Directory5? ParseDirectory5(Stream data)
         {
-            switch (majorVersion)
+            var directory = new Directory5();
+
+            // Cache the current offset
+            long currentOffset = data.Position;
+
+            #region Directory Header
+
+            // Try to parse the directory header
+            var directoryHeader = ParseDirectory5Header(data);
+            if (directoryHeader == null)
+                return null;
+
+            // Set the directory header
+            directory.DirectoryHeader = directoryHeader;
+
+            #endregion
+
+            #region Sections
+
+            // Get and adjust the sections offset
+            long sectionOffset = directoryHeader.SectionOffset;
+            sectionOffset += currentOffset;
+
+            // Validate the offset
+            if (sectionOffset < 0 || sectionOffset >= data.Length)
+                return null;
+
+            // Seek to the sections
+            data.Seek(sectionOffset, SeekOrigin.Begin);
+
+            // Create the sections array
+            directory.Sections = new Section5[directoryHeader.SectionCount];
+            
+            // Try to parse the sections
+            for (int i = 0; i < directory.Sections.Length; i++)
             {
-                case 4: return ParseDirectory4Header(data);
-                case 5: return ParseDirectory5Header(data);
-                case 6: return ParseDirectory5Header(data);
-                case 7: return ParseDirectory7Header(data);
-                default: return null;
+                directory.Sections[i] = ParseSection5(data);
             }
+
+            #endregion
+
+            #region Folders
+
+            // Get and adjust the folders offset
+            long folderOffset = directoryHeader.FolderOffset;
+            folderOffset += currentOffset;
+
+            // Validate the offset
+            if (folderOffset < 0 || folderOffset >= data.Length)
+                return null;
+
+            // Seek to the folders
+            data.Seek(folderOffset, SeekOrigin.Begin);
+
+            // Create the folders array
+            directory.Folders = new Folder5[directoryHeader.FolderCount];
+
+            // Try to parse the folders
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                directory.Folders[i] = ParseFolder5(data);
+            }
+
+            #endregion
+
+            #region Files
+
+            // Get and adjust the files offset
+            long fileOffset = directoryHeader.FileOffset;
+            fileOffset += currentOffset;
+
+            // Validate the offset
+            if (fileOffset < 0 || fileOffset >= data.Length)
+                return null;
+
+            // Seek to the files
+            data.Seek(fileOffset, SeekOrigin.Begin);
+
+            // Create the files array
+            directory.Files = new File4[directoryHeader.FileCount];
+
+            // Try to parse the files
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                directory.Files[i] = ParseFile4(data);
+            }
+
+            #endregion
+
+            #region String Table
+
+            // Get and adjust the string table offset
+            long stringTableOffset = directoryHeader.StringTableOffset;
+            stringTableOffset += currentOffset;
+
+            // Validate the offset
+            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+                return null;
+
+            // Seek to the string table
+            data.Seek(stringTableOffset, SeekOrigin.Begin);
+
+            // TODO: Are these strings actually indexed by number and not position?
+            // TODO: If indexed by position, I think it needs to be adjusted by start of table
+
+            // Create the strings dictionary
+            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+
+            // Get the current position to adjust the offsets
+            long stringTableStart = data.Position;
+
+            // Try to parse the strings
+            for (int i = 0; i < directoryHeader.StringTableCount; i++)
+            {
+                long currentPosition = data.Position - stringTableStart;
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+            }
+
+            // Loop through all folders to assign names
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                var folder = directory.Folders[i];
+                if (folder == null)
+                    continue;
+
+                folder.Name = directory.StringTable[folder.NameOffset];
+            }
+
+            // Loop through all files to assign names
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                var file = directory.Files[i];
+                if (file == null)
+                    continue;
+
+                file.Name = directory.StringTable[file.NameOffset];
+            }
+
+            #endregion
+
+            return directory;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an SGA directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SGA directory on success, null on error</returns>
+        private static Directory6? ParseDirectory6(Stream data)
+        {
+            var directory = new Directory6();
+
+            // Cache the current offset
+            long currentOffset = data.Position;
+
+            #region Directory Header
+
+            // Try to parse the directory header
+            var directoryHeader = ParseDirectory5Header(data);
+            if (directoryHeader == null)
+                return null;
+
+            // Set the directory header
+            directory.DirectoryHeader = directoryHeader;
+
+            #endregion
+
+            #region Sections
+
+            // Get and adjust the sections offset
+            long sectionOffset = directoryHeader.SectionOffset;
+            sectionOffset += currentOffset;
+
+            // Validate the offset
+            if (sectionOffset < 0 || sectionOffset >= data.Length)
+                return null;
+
+            // Seek to the sections
+            data.Seek(sectionOffset, SeekOrigin.Begin);
+
+            // Create the sections array
+            directory.Sections = new Section5[directoryHeader.SectionCount];
+
+            // Try to parse the sections
+            for (int i = 0; i < directory.Sections.Length; i++)
+            {
+                directory.Sections[i] = ParseSection5(data);
+            }
+
+            #endregion
+
+            #region Folders
+
+            // Get and adjust the folders offset
+            long folderOffset = directoryHeader.FolderOffset;
+            folderOffset += currentOffset;
+
+            // Validate the offset
+            if (folderOffset < 0 || folderOffset >= data.Length)
+                return null;
+
+            // Seek to the folders
+            data.Seek(folderOffset, SeekOrigin.Begin);
+
+            // Create the folders array
+            directory.Folders = new Folder5[directoryHeader.FolderCount];
+
+            // Try to parse the folders
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                directory.Folders[i] = ParseFolder5(data);
+            }
+
+            #endregion
+
+            #region Files
+
+            // Get and adjust the files offset
+            long fileOffset = directoryHeader.FileOffset;
+            fileOffset += currentOffset;
+
+            // Validate the offset
+            if (fileOffset < 0 || fileOffset >= data.Length)
+                return null;
+
+            // Seek to the files
+            data.Seek(fileOffset, SeekOrigin.Begin);
+
+            // Create the files array
+            directory.Files = new File6[directoryHeader.FileCount];
+
+            // Try to parse the files
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                directory.Files[i] = ParseFile6(data);
+            }
+
+            #endregion
+
+            #region String Table
+
+            // Get and adjust the string table offset
+            long stringTableOffset = directoryHeader.StringTableOffset;
+            stringTableOffset += currentOffset;
+
+            // Validate the offset
+            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+                return null;
+
+            // Seek to the string table
+            data.Seek(stringTableOffset, SeekOrigin.Begin);
+
+            // TODO: Are these strings actually indexed by number and not position?
+            // TODO: If indexed by position, I think it needs to be adjusted by start of table
+
+            // Create the strings dictionary
+            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+
+            // Get the current position to adjust the offsets
+            long stringTableStart = data.Position;
+
+            // Try to parse the strings
+            for (int i = 0; i < directoryHeader.StringTableCount; i++)
+            {
+                long currentPosition = data.Position - stringTableStart;
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+            }
+
+            // Loop through all folders to assign names
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                var folder = directory.Folders[i];
+                if (folder == null)
+                    continue;
+
+                folder.Name = directory.StringTable[folder.NameOffset];
+            }
+
+            // Loop through all files to assign names
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                var file = directory.Files[i];
+                if (file == null)
+                    continue;
+
+                file.Name = directory.StringTable[file.NameOffset];
+            }
+
+            #endregion
+
+            return directory;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an SGA directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SGA directory on success, null on error</returns>
+        private static Directory7? ParseDirectory7(Stream data)
+        {
+            var directory = new Directory7();
+
+            // Cache the current offset
+            long currentOffset = data.Position;
+
+            #region Directory Header
+
+            // Try to parse the directory header
+            var directoryHeader = ParseDirectory7Header(data);
+            if (directoryHeader == null)
+                return null;
+
+            // Set the directory header
+            directory.DirectoryHeader = directoryHeader;
+
+            #endregion
+
+            #region Sections
+
+            // Get and adjust the sections offset
+            long sectionOffset = directoryHeader.SectionOffset;
+            sectionOffset += currentOffset;
+
+            // Validate the offset
+            if (sectionOffset < 0 || sectionOffset >= data.Length)
+                return null;
+
+            // Seek to the sections
+            data.Seek(sectionOffset, SeekOrigin.Begin);
+
+            // Create the sections array
+            directory.Sections = new Section5[directoryHeader.SectionCount];
+
+            // Try to parse the sections
+            for (int i = 0; i < directory.Sections.Length; i++)
+            {
+                directory.Sections[i] = ParseSection5(data);
+            }
+
+            #endregion
+
+            #region Folders
+
+            // Get and adjust the folders offset
+            long folderOffset = directoryHeader.FolderOffset;
+            folderOffset += currentOffset;
+
+            // Validate the offset
+            if (folderOffset < 0 || folderOffset >= data.Length)
+                return null;
+
+            // Seek to the folders
+            data.Seek(folderOffset, SeekOrigin.Begin);
+
+            // Create the folders array
+            directory.Folders = new Folder5[directoryHeader.FolderCount];
+
+            // Try to parse the folders
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                directory.Folders[i] = ParseFolder5(data);
+            }
+
+            #endregion
+
+            #region Files
+
+            // Get and adjust the files offset
+            long fileOffset = directoryHeader.FileOffset;
+            fileOffset += currentOffset;
+
+            // Validate the offset
+            if (fileOffset < 0 || fileOffset >= data.Length)
+                return null;
+
+            // Seek to the files
+            data.Seek(fileOffset, SeekOrigin.Begin);
+
+            // Create the files array
+            directory.Files = new File7[directoryHeader.FileCount];
+
+            // Try to parse the files
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                directory.Files[i] = ParseFile7(data);
+            }
+
+            #endregion
+
+            #region String Table
+
+            // Get and adjust the string table offset
+            long stringTableOffset = directoryHeader.StringTableOffset;
+            stringTableOffset += currentOffset;
+
+            // Validate the offset
+            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+                return null;
+
+            // Seek to the string table
+            data.Seek(stringTableOffset, SeekOrigin.Begin);
+
+            // TODO: Are these strings actually indexed by number and not position?
+            // TODO: If indexed by position, I think it needs to be adjusted by start of table
+
+            // Create the strings dictionary
+            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+
+            // Get the current position to adjust the offsets
+            long stringTableStart = data.Position;
+
+            // Try to parse the strings
+            for (int i = 0; i < directoryHeader.StringTableCount; i++)
+            {
+                long currentPosition = data.Position - stringTableStart;
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+            }
+
+            // Loop through all folders to assign names
+            for (int i = 0; i < directory.Folders.Length; i++)
+            {
+                var folder = directory.Folders[i];
+                if (folder == null)
+                    continue;
+
+                folder.Name = directory.StringTable[folder.NameOffset];
+            }
+
+            // Loop through all files to assign names
+            for (int i = 0; i < directory.Files.Length; i++)
+            {
+                var file = directory.Files[i];
+                if (file == null)
+                    continue;
+
+                file.Name = directory.StringTable[file.NameOffset];
+            }
+
+            #endregion
+
+            return directory;
         }
 
         /// <summary>
@@ -508,7 +742,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA directory header version 4 on success, null on error</returns>
         private static DirectoryHeader4 ParseDirectory4Header(Stream data)
         {
-            DirectoryHeader4 directoryHeader4 = new DirectoryHeader4();
+            var directoryHeader4 = new DirectoryHeader4();
 
             directoryHeader4.SectionOffset = data.ReadUInt32();
             directoryHeader4.SectionCount = data.ReadUInt16();
@@ -529,7 +763,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA directory header version 5 on success, null on error</returns>
         private static DirectoryHeader5 ParseDirectory5Header(Stream data)
         {
-            DirectoryHeader5 directoryHeader5 = new DirectoryHeader5();
+            var directoryHeader5 = new DirectoryHeader5();
 
             directoryHeader5.SectionOffset = data.ReadUInt32();
             directoryHeader5.SectionCount = data.ReadUInt32();
@@ -550,7 +784,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA directory header version 7 on success, null on error</returns>
         private static DirectoryHeader7 ParseDirectory7Header(Stream data)
         {
-            DirectoryHeader7 directoryHeader7 = new DirectoryHeader7();
+            var directoryHeader7 = new DirectoryHeader7();
 
             directoryHeader7.SectionOffset = data.ReadUInt32();
             directoryHeader7.SectionCount = data.ReadUInt32();
@@ -574,7 +808,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA section version 4 on success, null on error</returns>
         private static Section4 ParseSection4(Stream data)
         {
-            Section4 section4 = new Section4();
+            var section4 = new Section4();
 
             byte[]? section4Alias = data.ReadBytes(64);
             if (section4Alias != null)
@@ -599,7 +833,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA section version 5 on success, null on error</returns>
         private static Section5 ParseSection5(Stream data)
         {
-            Section5 section5 = new Section5();
+            var section5 = new Section5();
 
             byte[]? section5Alias = data.ReadBytes(64);
             if (section5Alias != null)
@@ -624,7 +858,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA folder version 4 on success, null on error</returns>
         private static Folder4 ParseFolder4(Stream data)
         {
-            Folder4 folder4 = new Folder4();
+            var folder4 = new Folder4();
 
             folder4.NameOffset = data.ReadUInt32();
             folder4.Name = null; // Read from string table
@@ -644,7 +878,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA folder version 5 on success, null on error</returns>
         private static Folder5 ParseFolder5(Stream data)
         {
-            Folder5 folder5 = new Folder5();
+            var folder5 = new Folder5();
 
             folder5.NameOffset = data.ReadUInt32();
             folder5.Name = null; // Read from string table
@@ -664,7 +898,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA file version 4 on success, null on error</returns>
         private static File4 ParseFile4(Stream data)
         {
-            File4 file4 = new File4();
+            var file4 = new File4();
 
             file4.NameOffset = data.ReadUInt32();
             file4.Name = null; // Read from string table
@@ -686,7 +920,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA file version 6 on success, null on error</returns>
         private static File6 ParseFile6(Stream data)
         {
-            File6 file6 = new File6();
+            var file6 = new File6();
 
             file6.NameOffset = data.ReadUInt32();
             file6.Name = null; // Read from string table
@@ -709,7 +943,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA file version 7 on success, null on error</returns>
         private static File7 ParseFile7(Stream data)
         {
-            File7 file7 = new File7();
+            var file7 = new File7();
 
             file7.NameOffset = data.ReadUInt32();
             file7.Name = null; // Read from string table

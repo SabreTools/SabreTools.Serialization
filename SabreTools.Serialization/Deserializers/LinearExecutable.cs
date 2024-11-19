@@ -427,9 +427,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var informationBlock = data.ReadType<InformationBlock>();
 
-            if (informationBlock == null)
-                return null;
-            if (informationBlock.Signature != LESignatureString && informationBlock.Signature != LXSignatureString)
+            if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
                 return null;
 
             return informationBlock;

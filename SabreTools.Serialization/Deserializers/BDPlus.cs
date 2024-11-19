@@ -56,8 +56,8 @@ namespace SabreTools.Serialization.Deserializers
 
             svm.Unknown2 = data.ReadBytes(4);
             svm.Length = data.ReadUInt32();
-            // if (svm.Length > 0)
-            //     svm.Data = data.ReadBytes((int)svm.Length);
+            if (svm.Length > 0)
+                svm.Data = data.ReadBytes((int)svm.Length);
 
             return svm;
         }

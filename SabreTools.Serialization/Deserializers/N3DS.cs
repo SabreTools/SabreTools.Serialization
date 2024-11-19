@@ -20,9 +20,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            long initialOffset = data.Position;
-
             // Create a new cart image to fill
             var cart = new Cart();
 

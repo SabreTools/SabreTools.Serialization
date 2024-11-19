@@ -18,9 +18,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new archive to fill
             var archive = new Archive();
 
@@ -100,7 +97,7 @@ namespace SabreTools.Serialization.Deserializers
             
             if (header == null)
                 return null;
-            if (header.Signature1 != 0x8C655D13) // TODO: Move constant to Models
+            if (header?.Signature1 != Constants.HeaderSignature)
                 return null;
             if (header.TocAddress >= data.Length)
                 return null;

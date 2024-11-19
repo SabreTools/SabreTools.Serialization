@@ -21,9 +21,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new archive to fill
             var archive = new Archive();
 
@@ -32,7 +29,7 @@ namespace SabreTools.Serialization.Deserializers
             // Check for User Data
             uint possibleSignature = data.ReadUInt32();
             data.Seek(-4, SeekOrigin.Current);
-            if (possibleSignature == 0x1B51504D)
+            if (possibleSignature == UserDataSignatureUInt32)
             {
                 // Save the current position for offset correction
                 long basePtr = data.Position;
@@ -56,7 +53,7 @@ namespace SabreTools.Serialization.Deserializers
             // Check for the Header
             possibleSignature = data.ReadUInt32();
             data.Seek(-4, SeekOrigin.Current);
-            if (possibleSignature == 0x1A51504D)
+            if (possibleSignature == ArchiveHeaderSignatureUInt32)
             {
                 // Try to parse the archive header
                 var archiveHeader = ParseArchiveHeader(data);
@@ -406,9 +403,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var userData = data.ReadType<UserData>();
 
-            if (userData == null)
-                return null;
-            if (userData.Signature != UserDataSignatureString)
+            if (userData?.Signature != UserDataSignatureString)
                 return null;
 
             return userData;

@@ -40,23 +40,20 @@ namespace SabreTools.Serialization.Deserializers
             #region Files
 
             // If we have any files
-            if (header.Files > 0)
+            var files = new FileEntry[header.Files];
+
+            // Read all entries in turn
+            for (int i = 0; i < header.Files; i++)
             {
-                var files = new FileEntry[header.Files];
+                var file = ParseFileEntry(data);
+                if (file == null)
+                    return null;
 
-                // Read all entries in turn
-                for (int i = 0; i < header.Files; i++)
-                {
-                    var file = ParseFileEntry(data);
-                    if (file == null)
-                        return null;
-
-                    files[i] = file;
-                }
-
-                // Set the files
-                archive.Files = files;
+                files[i] = file;
             }
+
+            // Set the files
+            archive.Files = files;
 
             #endregion
 
@@ -72,9 +69,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = data.ReadType<Header>();
 
-            if (header == null)
-                return null;
-            if (header.Magic != SignatureString)
+            if (header?.Magic != SignatureString)
                 return null;
 
             return header;

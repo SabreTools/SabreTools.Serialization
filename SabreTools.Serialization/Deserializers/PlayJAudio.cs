@@ -303,7 +303,7 @@ namespace SabreTools.Serialization.Deserializers
         private static UnknownBlock1 ParseUnknownBlock1(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            UnknownBlock1 unknownBlock1 = new UnknownBlock1();
+            var unknownBlock1 = new UnknownBlock1();
 
             unknownBlock1.Length = data.ReadUInt32();
             unknownBlock1.Data = data.ReadBytes((int)unknownBlock1.Length);
@@ -319,7 +319,7 @@ namespace SabreTools.Serialization.Deserializers
         private static UnknownBlock3 ParseUnknownBlock3(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            UnknownBlock3 unknownBlock3 = new UnknownBlock3();
+            var unknownBlock3 = new UnknownBlock3();
 
             // No-op because we don't even know the length
 
@@ -334,7 +334,7 @@ namespace SabreTools.Serialization.Deserializers
         private static DataFile ParseDataFile(Stream data)
         {
             // TODO: Use marshalling here instead of building
-            DataFile dataFile = new DataFile();
+            var dataFile = new DataFile();
 
             dataFile.FileNameLength = data.ReadUInt16();
             byte[]? fileName = data.ReadBytes(dataFile.FileNameLength);

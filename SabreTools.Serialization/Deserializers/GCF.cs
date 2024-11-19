@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
@@ -173,7 +172,7 @@ namespace SabreTools.Serialization.Deserializers
                 long directoryNamesEnd = data.Position + directoryHeader.NameSize;
 
                 // Create the string dictionary
-                file.DirectoryNames = new Dictionary<long, string?>();
+                file.DirectoryNames = [];
 
                 // Loop and read the null-terminated strings
                 while (data.Position < directoryNamesEnd)
@@ -184,10 +183,7 @@ namespace SabreTools.Serialization.Deserializers
                     {
                         data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);
                         byte[]? endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
-                        if (endingData != null)
-                            directoryName = Encoding.ASCII.GetString(endingData);
-                        else
-                            directoryName = null;
+                        directoryName = endingData != null ? Encoding.ASCII.GetString(endingData) : null;
                     }
 
                     file.DirectoryNames[nameOffset] = directoryName;

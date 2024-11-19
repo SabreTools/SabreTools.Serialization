@@ -19,9 +19,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new archive to fill
             var archive = new Archive();
 
@@ -40,23 +37,20 @@ namespace SabreTools.Serialization.Deserializers
             #region File List
 
             // If we have any files
-            if (header.FileCount > 0)
+            var fileDescriptors = new FileDescriptor[header.FileCount];
+
+            // Read all entries in turn
+            for (int i = 0; i < header.FileCount; i++)
             {
-                var fileDescriptors = new FileDescriptor[header.FileCount];
+                var file = ParseFileDescriptor(data, header.MinorVersion);
+                if (file == null)
+                    return null;
 
-                // Read all entries in turn
-                for (int i = 0; i < header.FileCount; i++)
-                {
-                    var file = ParseFileDescriptor(data, header.MinorVersion);
-                    if (file == null)
-                        return null;
-
-                    fileDescriptors[i] = file;
-                }
-
-                // Set the file list
-                archive.FileList = fileDescriptors;
+                fileDescriptors[i] = file;
             }
+
+            // Set the file list
+            archive.FileList = fileDescriptors;
 
             #endregion
 
@@ -75,9 +69,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = data.ReadType<Header>();
 
-            if (header == null)
-                return null;
-            if (header.Signature != SignatureString)
+            if (header?.Signature != SignatureString)
                 return null;
 
             return header;

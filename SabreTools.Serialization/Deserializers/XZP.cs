@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.XZP;
 using static SabreTools.Models.XZP.Constants;
@@ -18,9 +17,6 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset is out of bounds
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
-
-            // Cache the current offset
-            long initialOffset = data.Position;
 
             // Create a new XBox Package File to fill
             var file = new Models.XZP.File();
@@ -43,11 +39,11 @@ namespace SabreTools.Serialization.Deserializers
             file.DirectoryEntries = new DirectoryEntry[header.DirectoryEntryCount];
 
             // Try to parse the directory entries
-            for (int i = 0; i < header.DirectoryEntryCount; i++)
+            for (int i = 0; i < file.DirectoryEntries.Length; i++)
             {
                 var directoryEntry = ParseDirectoryEntry(data);
                 if (directoryEntry == null)
-                    return null;
+                    continue;
 
                 file.DirectoryEntries[i] = directoryEntry;
             }
@@ -62,11 +58,11 @@ namespace SabreTools.Serialization.Deserializers
                 file.PreloadDirectoryEntries = new DirectoryEntry[header.PreloadDirectoryEntryCount];
 
                 // Try to parse the preload directory entries
-                for (int i = 0; i < header.PreloadDirectoryEntryCount; i++)
+                for (int i = 0; i < file.PreloadDirectoryEntries.Length; i++)
                 {
                     var directoryEntry = ParseDirectoryEntry(data);
                     if (directoryEntry == null)
-                        return null;
+                        continue;
 
                     file.PreloadDirectoryEntries[i] = directoryEntry;
                 }
@@ -82,11 +78,11 @@ namespace SabreTools.Serialization.Deserializers
                 file.PreloadDirectoryMappings = new DirectoryMapping[header.PreloadDirectoryEntryCount];
 
                 // Try to parse the preload directory mappings
-                for (int i = 0; i < header.PreloadDirectoryEntryCount; i++)
+                for (int i = 0; i < file.PreloadDirectoryMappings.Length; i++)
                 {
                     var directoryMapping = ParseDirectoryMapping(data);
                     if (directoryMapping == null)
-                        return null;
+                        continue;
 
                     file.PreloadDirectoryMappings[i] = directoryMapping;
                 }
@@ -110,7 +106,7 @@ namespace SabreTools.Serialization.Deserializers
                 file.DirectoryItems = new DirectoryItem[header.DirectoryItemCount];
 
                 // Try to parse the directory items
-                for (int i = 0; i < header.DirectoryItemCount; i++)
+                for (int i = 0; i < file.DirectoryItems.Length; i++)
                 {
                     var directoryItem = ParseDirectoryItem(data);
                     file.DirectoryItems[i] = directoryItem;
@@ -146,9 +142,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = data.ReadType<Header>();
 
-            if (header == null)
-                return null;
-            if (header.Signature != HeaderSignatureString)
+            if (header?.Signature != HeaderSignatureString)
                 return null;
             if (header.Version != 6)
                 return null;
@@ -214,9 +208,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var footer = data.ReadType<Footer>();
 
-            if (footer == null)
-                return null;
-            if (footer.Signature != FooterSignatureString)
+            if (footer?.Signature != FooterSignatureString)
                 return null;
 
             return footer;

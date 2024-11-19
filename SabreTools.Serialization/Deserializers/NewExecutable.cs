@@ -214,9 +214,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = data.ReadType<ExecutableHeader>();
 
-            if (header == null)
-                return null;
-            if (header.Magic != SignatureString)
+            if (header?.Magic != SignatureString)
                 return null;
 
             return header;
