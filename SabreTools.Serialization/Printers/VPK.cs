@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Printers
 
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Version, "  Version");
-            builder.AppendLine(header.DirectoryLength, "  Directory length");
+            builder.AppendLine(header.TreeSize, "  Tree size");
             builder.AppendLine();
         }
 
@@ -50,10 +50,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            builder.AppendLine(header.Dummy0, "  Dummy 0");
-            builder.AppendLine(header.ArchiveHashLength, "  Archive hash length");
-            builder.AppendLine(header.ExtraLength, "  Extra length");
-            builder.AppendLine(header.Dummy1, "  Dummy 1");
+            builder.AppendLine(header.FileDataSectionSize, "  File data section size");
+            builder.AppendLine(header.ArchiveMD5SectionSize, "  Archive MD5 section size");
+            builder.AppendLine(header.OtherMD5SectionSize, "  Other MD5 section size");
+            builder.AppendLine(header.SignatureSectionSize, "  Signature section size");
             builder.AppendLine();
         }
 

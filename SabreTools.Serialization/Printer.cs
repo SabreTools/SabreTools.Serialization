@@ -63,7 +63,7 @@ namespace SabreTools.Serialization
                 Wrapper.SGA item => item.PrettyPrint(),
                 Wrapper.VBSP item => item.PrettyPrint(),
                 Wrapper.VPK item => item.PrettyPrint(),
-                Wrapper.WAD item => item.PrettyPrint(),
+                Wrapper.WAD3 item => item.PrettyPrint(),
                 Wrapper.XeMID item => item.PrettyPrint(),
                 Wrapper.XMID item => item.PrettyPrint(),
                 Wrapper.XZP item => item.PrettyPrint(),
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization
                 Wrapper.SGA item => item.ExportJSON(),
                 Wrapper.VBSP item => item.ExportJSON(),
                 Wrapper.VPK item => item.ExportJSON(),
-                Wrapper.WAD item => item.ExportJSON(),
+                Wrapper.WAD3 item => item.ExportJSON(),
                 Wrapper.XeMID item => item.ExportJSON(),
                 Wrapper.XMID item => item.ExportJSON(),
                 Wrapper.XZP item => item.ExportJSON(),
@@ -412,10 +412,10 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Export the item information as pretty-printed text
         /// </summary>
-        private static StringBuilder PrettyPrint(this Wrapper.WAD item)
+        private static StringBuilder PrettyPrint(this Wrapper.WAD3 item)
         {
             var builder = new StringBuilder();
-            WAD.Print(builder, item.Model);
+            WAD3.Print(builder, item.Model);
             return builder;
         }
 

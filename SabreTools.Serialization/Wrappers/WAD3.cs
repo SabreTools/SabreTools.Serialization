@@ -2,38 +2,38 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class WAD : WrapperBase<Models.WAD.File>
+    public class WAD3 : WrapperBase<Models.WAD3.File>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "Half-Life Texture Package File (WAD)";
+        public override string DescriptionString => "Half-Life Texture Package File (WAD3)";
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public WAD(Models.WAD.File? model, byte[]? data, int offset)
+        public WAD3(Models.WAD3.File? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public WAD(Models.WAD.File? model, Stream? data)
+        public WAD3(Models.WAD3.File? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
         }
 
         /// <summary>
-        /// Create a WAD from a byte array and offset
+        /// Create a WAD3 from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the WAD</param>
+        /// <param name="data">Byte array representing the WAD3</param>
         /// <param name="offset">Offset within the array to parse</param>
-        /// <returns>A WAD wrapper on success, null on failure</returns>
-        public static WAD? Create(byte[]? data, int offset)
+        /// <returns>A WAD3 wrapper on success, null on failure</returns>
+        public static WAD3? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null)
@@ -49,23 +49,23 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a WAD from a Stream
+        /// Create a WAD3 from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the WAD</param>
-        /// <returns>An WAD wrapper on success, null on failure</returns>
-        public static WAD? Create(Stream? data)
+        /// <param name="data">Stream representing the WAD3</param>
+        /// <returns>An WAD3 wrapper on success, null on failure</returns>
+        public static WAD3? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Deserializers.WAD.DeserializeStream(data);
+            var file = Deserializers.WAD3.DeserializeStream(data);
             if (file == null)
                 return null;
 
             try
             {
-                return new WAD(file, data);
+                return new WAD3(file, data);
             }
             catch
             {

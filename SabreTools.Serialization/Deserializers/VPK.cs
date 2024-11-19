@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Deserializers
 
             #region Extended Header
 
-            if (header?.Version == 2)
+            if (header.Version == 2)
             {
                 // Try to parse the extended header
                 var extendedHeader = ParseExtendedHeader(data);
@@ -69,8 +69,8 @@ namespace SabreTools.Serialization.Deserializers
 
             if (header?.Version == 2
                 && file.ExtendedHeader != null
-                && file.ExtendedHeader.ArchiveHashLength > 0
-                && data.Position + file.ExtendedHeader.ArchiveHashLength <= data.Length)
+                && file.ExtendedHeader.ArchiveMD5SectionSize > 0
+                && data.Position + file.ExtendedHeader.ArchiveMD5SectionSize <= data.Length)
             {
                 // Create the archive hashes list
                 var archiveHashes = new List<ArchiveHash>();
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.Deserializers
                 initialOffset = data.Position;
 
                 // Try to parse the directory items
-                while (data.Position < initialOffset + file.ExtendedHeader.ArchiveHashLength)
+                while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
                 {
                     var archiveHash = ParseArchiveHash(data);
                     if (archiveHash == null)

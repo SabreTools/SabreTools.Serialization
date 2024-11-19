@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.Textfile => null,// TODO: Implement wrapper
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
-                WrapperType.WAD => WAD.Create(data),
+                WrapperType.WAD => WAD3.Create(data),
                 WrapperType.XZ => null,// TODO: Implement wrapper
                 WrapperType.XZP => XZP.Create(data),
                 _ => null,

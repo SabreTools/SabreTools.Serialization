@@ -85,6 +85,16 @@ namespace SabreTools.Serialization
         }
 
         /// <summary>
+        /// Append a line containing a Single to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, float? value, string prefixString)
+        {
+            value ??= 0;
+            string valueString = $"{value} (0x{value:X8})";
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
         /// Append a line containing a Int64 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, long? value, string prefixString)
@@ -98,6 +108,16 @@ namespace SabreTools.Serialization
         /// Append a line containing a UInt64 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ulong? value, string prefixString)
+        {
+            value ??= 0;
+            string valueString = $"{value} (0x{value:X16})";
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a Double to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, double? value, string prefixString)
         {
             value ??= 0;
             string valueString = $"{value} (0x{value:X16})";

@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class BSP : WrapperBase<Models.BSP.File>
+    public class BSP : WrapperBase<Models.BSP.BspFile>
     {
         #region Descriptive Properties
 
@@ -14,14 +14,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public BSP(Models.BSP.File? model, byte[]? data, int offset)
+        public BSP(Models.BSP.BspFile? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public BSP(Models.BSP.File? model, Stream? data)
+        public BSP(Models.BSP.BspFile? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class

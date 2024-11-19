@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
@@ -6,10 +7,10 @@ using static SabreTools.Models.BSP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class BSP : BaseBinaryDeserializer<Models.BSP.File>
+    public class BSP : BaseBinaryDeserializer<BspFile>
     {
         /// <inheritdoc/>
-        public override Models.BSP.File? Deserialize(Stream? data)
+        public override BspFile? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
@@ -23,13 +24,13 @@ namespace SabreTools.Serialization.Deserializers
             int initialOffset = (int)data.Position;
 
             // Create a new Half-Life Level to fill
-            var file = new Models.BSP.File();
+            var file = new BspFile();
 
             #region Header
 
             // Try to parse the header
             var header = ParseHeader(data);
-            if (header == null)
+            if (header?.Lumps == null)
                 return null;
 
             // Set the level header
@@ -39,59 +40,326 @@ namespace SabreTools.Serialization.Deserializers
 
             #region Lumps
 
-            // Create the lump array
-            file.Lumps = new Lump[HL_BSP_LUMP_COUNT];
-
-            // Try to parse the lumps
-            for (int i = 0; i < HL_BSP_LUMP_COUNT; i++)
+            // LUMP_ENTITIES [0]
+            var lumpEntry = header.Lumps[(int)LumpType.LUMP_ENTITIES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
             {
-                var lump = ParseLump(data);
-                if (lump == null)
-                    return null;
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
 
-                file.Lumps[i] = lump;
+                // Read the lump data
+                var entities = new List<Entity>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    // TODO: Read this into sets of key-value pairs
+                    var sb = new StringBuilder();
+                    char c = '\0';
+                    do
+                    {
+                        c = (char)data.ReadByteValue();
+                        sb.Append(c);
+                    } while (c != '}');
+
+                    var entity = new Entity();
+                    entity.Attributes = new List<KeyValuePair<string, string>>
+                    {
+                        new("REPLACE", sb.ToString()),
+                    };
+                    entities.Add(entity);
+                }
+
+                var lump = new EntitiesLump();
+                lump.Entities = [.. entities];
+
+                file.Entities = lump;
             }
 
-            #endregion
-
-            #region Texture header
-
-            // Try to get the texture header lump
-            var textureDataLump = file.Lumps[HL_BSP_LUMP_TEXTUREDATA];
-            if (textureDataLump == null || textureDataLump.Offset == 0 || textureDataLump.Length == 0)
-                return null;
-
-            // Seek to the texture header
-            data.Seek(textureDataLump.Offset, SeekOrigin.Begin);
-
-            // Try to parse the texture header
-            var textureHeader = ParseTextureHeader(data);
-            if (textureHeader == null)
-                return null;
-
-            // Set the texture header
-            file.TextureHeader = textureHeader;
-
-            #endregion
-
-            #region Textures
-
-            // Create the texture array
-            file.Textures = new Texture[textureHeader.TextureCount];
-
-            // Try to parse the textures
-            for (int i = 0; i < textureHeader.TextureCount; i++)
+            // LUMP_PLANES [1]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_PLANES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
             {
-                // Get the texture offset
-                int offset = (int)(textureHeader.Offsets![i] + file.Lumps[HL_BSP_LUMP_TEXTUREDATA]!.Offset);
-                if (offset < 0 || offset >= data.Length)
-                    continue;
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
 
-                // Seek to the texture
-                data.Seek(offset, SeekOrigin.Begin);
+                // Read the lump data
+                var planes = new List<Plane>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var plane = data.ReadType<Plane>();
+                    if (plane != null)
+                        planes.Add(plane);
+                }
 
-                var texture = ParseTexture(data);
-                file.Textures[i] = texture;
+                var lump = new PlanesLump();
+                lump.Planes = [.. planes];
+
+                file.PlanesLump = lump;
+            }
+
+            // LUMP_TEXTURES [2]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_TEXTURES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the header
+                var lump = new TextureLump();
+                lump.Header = ParseTextureHeader(data);
+
+                // Read the lump data
+                var textures = new List<MipTexture>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var texture = data.ReadType<MipTexture>();
+                    if (texture != null)
+                        textures.Add(texture);
+                }
+
+                lump.Textures = [.. textures];
+
+                file.TextureLump = lump;
+            }
+
+            // LUMP_VERTICES [3]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_VERTICES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var vertices = new List<Vector3D>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    vertices.Add(data.ReadType<Vector3D>());
+                }
+
+                var lump = new VerticesLump();
+                lump.Vertices = [.. vertices];
+
+                file.VerticesLump = lump;
+            }
+
+            // LUMP_VISIBILITY [4]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_VISIBILITY];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // TODO: Parse LUMP_VISIBILITY when added to model
+            }
+
+            // LUMP_NODES [5]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_NODES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var nodes = new List<BspNode>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var node = data.ReadType<BspNode>();
+                    if (node != null)
+                        nodes.Add(node);
+                }
+
+                var lump = new BspNodesLump();
+                lump.Nodes = [.. nodes];
+
+                file.NodesLump = lump;
+            }
+
+            // LUMP_TEXINFO [6]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_TEXINFO];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var texinfos = new List<BspTexinfo>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var texinfo = data.ReadType<BspTexinfo>();
+                    if (texinfo != null)
+                        texinfos.Add(texinfo);
+                }
+
+                var lump = new BspTexinfoLump();
+                lump.Texinfos = [.. texinfos];
+
+                file.TexinfoLump = lump;
+            }
+
+            // LUMP_FACES [7]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_FACES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var faces = new List<BspFace>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var face = data.ReadType<BspFace>();
+                    if (face != null)
+                        faces.Add(face);
+                }
+
+                var lump = new BspFacesLump();
+                lump.Faces = [.. faces];
+
+                file.FacesLump = lump;
+            }
+
+            // LUMP_LIGHTING [8]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_LIGHTING];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var lump = new LightmapLump();
+                lump.Lightmap = new byte[lumpEntry.Length / 3, 3];
+
+                for (int i = 0; i < lumpEntry.Length / 3; i++)
+                for (int j = 0; j < 3; j++)
+                {
+                    lump.Lightmap[i, j] = data.ReadByteValue();
+                }
+
+                file.LightmapLump = lump;
+            }
+
+            // LUMP_CLIPNODES [9]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_CLIPNODES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var clipnodes = new List<Clipnode>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var clipnode = data.ReadType<Clipnode>();
+                    if (clipnode != null)
+                        clipnodes.Add(clipnode);
+                }
+
+                var lump = new ClipnodesLump();
+                lump.Clipnodes = [.. clipnodes];
+
+                file.ClipnodesLump = lump;
+            }
+
+            // LUMP_LEAVES [10]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_LEAVES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var leaves = new List<BspLeaf>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var leaf = data.ReadType<BspLeaf>();
+                    if (leaf != null)
+                        leaves.Add(leaf);
+                }
+
+                var lump = new BspLeavesLump();
+                lump.Leaves = [.. leaves];
+
+                file.LeavesLump = lump;
+            }
+
+            // LUMP_MARKSURFACES [11]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_MARKSURFACES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var marksurfaces = new List<ushort>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    marksurfaces.Add(data.ReadUInt16());
+                }
+
+                var lump = new MarksurfacesLump();
+                lump.Marksurfaces = [.. marksurfaces];
+
+                file.MarksurfacesLump = lump;
+            }
+
+            // LUMP_EDGES [12]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_EDGES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var edges = new List<Edge>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var edge = data.ReadType<Edge>();
+                    if (edge != null)
+                        edges.Add(edge);
+                }
+
+                var lump = new EdgesLump();
+                lump.Edges = [.. edges];
+
+                file.EdgesLump = lump;
+            }
+
+            // LUMP_SURFEDGES [13]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_SURFEDGES];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var surfedges = new List<int>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    surfedges.Add(data.ReadInt32());
+                }
+
+                var lump = new SurfedgesLump();
+                lump.Surfedges = [.. surfedges];
+
+                file.SurfedgesLump = lump;
+            }
+
+            // LUMP_MODELS [14]
+            lumpEntry = header.Lumps[(int)LumpType.LUMP_MODELS];
+            if (lumpEntry != null && lumpEntry.Offset > 0 && lumpEntry.Length > 0)
+            {
+                // Seek to the lump offset
+                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                // Read the lump data
+                var models = new List<BspModel>();
+                while (data.Position < lumpEntry.Offset + lumpEntry.Length)
+                {
+                    var model = data.ReadType<BspModel>();
+                    if (model != null)
+                        models.Add(model);
+                }
+
+                var lump = new BspModelsLump();
+                lump.Models = [.. models];
+
+                file.ModelsLump = lump;
             }
 
             #endregion
@@ -105,26 +373,22 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Half-Life Level header on success, null on error</returns>
         /// <remarks>Only recognized versions are 29 and 30</remarks>
-        private static Header? ParseHeader(Stream data)
+        private static BspHeader? ParseHeader(Stream data)
         {
-            var header = data.ReadType<Header>();
+            // TODO: Use marshalling here later
+            var header = new BspHeader();
 
-            if (header == null)
+            header.Version = data.ReadInt32();
+            if (header.Version < 29 || header.Version > 30)
                 return null;
-            if (header.Version != 29 && header.Version != 30)
-                return null;
+
+            header.Lumps = new BspLumpEntry[BSP_HEADER_LUMPS];
+            for (int i = 0; i < BSP_HEADER_LUMPS; i++)
+            {
+                header.Lumps[i] = data.ReadType<BspLumpEntry>()!;
+            }
 
             return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a lump
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled lump on success, null on error</returns>
-        private static Lump? ParseLump(Stream data)
-        {
-            return data.ReadType<Lump>();
         }
 
         /// <summary>
@@ -137,80 +401,14 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Use marshalling here instead of building
             var textureHeader = new TextureHeader();
 
-            textureHeader.TextureCount = data.ReadUInt32();
-
-            var offsets = new uint[textureHeader.TextureCount];
-
-            for (int i = 0; i < textureHeader.TextureCount; i++)
+            textureHeader.MipTextureCount = data.ReadUInt32();
+            textureHeader.Offsets = new int[textureHeader.MipTextureCount];
+            for (int i = 0; i < textureHeader.Offsets.Length; i++)
             {
-                offsets[i] = data.ReadUInt32();
-                if (data.Position >= data.Length)
-                    break;
+                textureHeader.Offsets[i] = data.ReadInt32();
             }
-
-            textureHeader.Offsets = offsets;
 
             return textureHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a texture
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="mipmap">Mipmap level</param>
-        /// <returns>Filled texture on success, null on error</returns>
-        private static Texture ParseTexture(Stream data, uint mipmap = 0)
-        {
-            // TODO: Use marshalling here instead of building
-            var texture = new Texture();
-
-            byte[]? name = data.ReadBytes(16);
-            if (name != null)
-                texture.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
-            texture.Width = data.ReadUInt32();
-            texture.Height = data.ReadUInt32();
-            texture.Offsets = new uint[4];
-            for (int i = 0; i < 4; i++)
-            {
-                texture.Offsets[i] = data.ReadUInt32();
-            }
-
-            // Get the size of the pixel data
-            uint pixelSize = 0;
-            for (int i = 0; i < HL_BSP_MIPMAP_COUNT; i++)
-            {
-                if (texture.Offsets[i] != 0)
-                {
-                    pixelSize += (texture.Width >> i) * (texture.Height >> i);
-                }
-            }
-
-            // If we have no pixel data
-            if (pixelSize == 0)
-                return texture;
-
-            texture.TextureData = data.ReadBytes((int)pixelSize);
-            texture.PaletteSize = data.ReadUInt16();
-            texture.PaletteData = data.ReadBytes((int)(texture.PaletteSize * 3));
-
-            // Adjust the dimensions based on mipmap level
-            switch (mipmap)
-            {
-                case 1:
-                    texture.Width /= 2;
-                    texture.Height /= 2;
-                    break;
-                case 2:
-                    texture.Width /= 4;
-                    texture.Height /= 4;
-                    break;
-                case 3:
-                    texture.Width /= 8;
-                    texture.Height /= 8;
-                    break;
-            }
-
-            return texture;
         }
     }
 }
