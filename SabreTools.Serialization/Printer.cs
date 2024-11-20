@@ -328,7 +328,7 @@ namespace SabreTools.Serialization
             PIC.Print(builder, item.Model);
             return builder;
         }
-        
+
         /// <summary>
         /// Export the item information as pretty-printed text
         /// </summary>

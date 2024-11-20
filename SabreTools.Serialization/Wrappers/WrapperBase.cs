@@ -318,13 +318,17 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     // If we have no cached string
                     if (cachedChars.Count == 0)
+                    {
+                        sourceDataIndex++;
                         continue;
+                    }
 
                     // If we have a cached string greater than the limit
                     if (cachedChars.Count >= charLimit)
                         sourceStrings.Add(new string([.. cachedChars]));
 
                     cachedChars.Clear();
+                    sourceDataIndex++;
                     continue;
                 }
 
@@ -332,6 +336,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (cachedChars.Count >= 64 && cachedChars.TrueForAll(c => c == cachedChars[0]))
                 {
                     cachedChars.Clear();
+                    sourceDataIndex++;
                     continue;
                 }
 
