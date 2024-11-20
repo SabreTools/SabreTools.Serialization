@@ -159,11 +159,10 @@ namespace SabreTools.Serialization.Deserializers
                 miptex.MipImages[i] = ParseMipMap(data, miptex.Width, miptex.Height);
             }
             miptex.ColorsUsed = data.ReadUInt16();
-            miptex.Palette = new byte[miptex.ColorsUsed, 3];
+            miptex.Palette = new byte[miptex.ColorsUsed][];
             for (int i = 0; i < miptex.ColorsUsed; i++)
-            for (int j = 0; j < 3; j++)
             {
-                miptex.Palette[i, j] = data.ReadByteValue();
+                miptex.Palette[i] = data.ReadBytes(3);
             }
 
             return miptex;
@@ -178,11 +177,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var mipmap = new MipMap();
 
-            mipmap.Data = new byte[width, height];
+            mipmap.Data = new byte[width][];
             for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
             {
-                mipmap.Data[i, j] = data.ReadByteValue();
+                mipmap.Data[i] = data.ReadBytes((int)height);
             }
 
             return mipmap;
@@ -199,18 +197,16 @@ namespace SabreTools.Serialization.Deserializers
 
             qpic.Width = data.ReadUInt32();
             qpic.Height = data.ReadUInt32();
-            qpic.Data = new byte[qpic.Height, qpic.Width];
+            qpic.Data = new byte[qpic.Height][];
             for (int i = 0; i < qpic.Height; i++)
-            for (int j = 0; j < qpic.Width; j++)
             {
-                qpic.Data[i, j] = data.ReadByteValue();
+                qpic.Data[i] = data.ReadBytes((int)qpic.Width);
             }
             qpic.ColorsUsed = data.ReadUInt16();
-            qpic.Palette = new byte[qpic.ColorsUsed, 3];
+            qpic.Palette = new byte[qpic.ColorsUsed][];
             for (int i = 0; i < qpic.ColorsUsed; i++)
-            for (int j = 0; j < 3; j++)
             {
-                qpic.Palette[i, j] = data.ReadByteValue();
+                qpic.Palette[i] = data.ReadBytes(3);
             }
 
             return qpic;
@@ -234,18 +230,16 @@ namespace SabreTools.Serialization.Deserializers
             {
                 font.FontInfo[i] = ParseCharInfo(data);
             }
-            font.Data = new byte[font.Height, font.Width];
+            font.Data = new byte[font.Height][];
             for (int i = 0; i < font.Height; i++)
-            for (int j = 0; j < font.Width; j++)
             {
-                font.Data[i, j] = data.ReadByteValue();
+                font.Data[i] = data.ReadBytes((int)font.Width);
             }
             font.ColorsUsed = data.ReadUInt16();
-            font.Palette = new byte[font.ColorsUsed, 3];
+            font.Palette = new byte[font.ColorsUsed][];
             for (int i = 0; i < font.ColorsUsed; i++)
-            for (int j = 0; j < 3; j++)
             {
-                font.Palette[i, j] = data.ReadByteValue();
+                font.Palette[i] = data.ReadBytes(3);
             }
 
             return font;

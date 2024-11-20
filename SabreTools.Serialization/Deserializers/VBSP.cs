@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Deserializers
                         // TODO: Support LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS [25] when in Models
                         break;
                     case LumpType.LUMP_DISPINFO:
-                        file.DispInfoLump = ParseDispInfosLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.DispInfosLump = ParseDispInfosLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_ORIGINALFACES:
                         file.OriginalFacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Deserializers
                         // TODO: Support LUMP_PHYSDISP [28] when in Models
                         break;
                     case LumpType.LUMP_PHYSCOLLIDE:
-                        // TODO: Support LUMP_PHYSCOLLIDE [29] when in Models
+                        file.PhysCollideLump = ParsePhysCollideLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_VERTNORMALS:
                         // TODO: Support LUMP_VERTNORMALS [30] when in Models
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Deserializers
                         // TODO: Support LUMP_DISP_LIGHTMAP_ALPHAS [32] when in Models
                         break;
                     case LumpType.LUMP_DISP_VERTS:
-                        file.DispVertLump = ParseDispVertsLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.DispVertsLump = ParseDispVertsLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
                         // TODO: Support LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34] when in Models
@@ -174,13 +174,13 @@ namespace SabreTools.Serialization.Deserializers
                         // TODO: Support LUMP_PRIMINDICES [39] when in Models
                         break;
                     case LumpType.LUMP_PAKFILE:
-                        // TODO: Support LUMP_PAKFILE [40] when in Models
+                        file.PakfileLump = ParsePakfileLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_CLIPPORTALVERTS:
                         // TODO: Support LUMP_CLIPPORTALVERTS [41] when in Models
                         break;
                     case LumpType.LUMP_CUBEMAPS:
-                        file.CubemapLump = ParseCubemapsLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.CubemapsLump = ParseCubemapsLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_TEXDATA_STRING_DATA:
                         file.TexdataStringData = ParseTexdataStringData(data, lumpEntry.Offset, lumpEntry.Length);
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.Deserializers
                         // TODO: Support LUMP_LIGHTING_HDR [53] when in Models
                         break;
                     case LumpType.LUMP_WORLDLIGHTS_HDR:
-                        file.WorldLightsLump = ParseWorldLightsLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.HDRWorldLightsLump = ParseWorldLightsLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
                         file.HDRAmbientLightingLump = ParseAmbientLightingLump(data, lumpEntry.Offset, lumpEntry.Length);
@@ -378,12 +378,13 @@ namespace SabreTools.Serialization.Deserializers
             var lump = new VisibilityLump();
 
             lump.NumClusters = data.ReadInt32();
-            lump.ByteOffsets = new int[lump.NumClusters, 2];
+            lump.ByteOffsets = new int[lump.NumClusters][];
             for (int i = 0; i < lump.NumClusters; i++)
             {
+                lump.ByteOffsets[i] = new int[2];
                 for (int j = 0; j < 2; j++)
                 {
-                    lump.ByteOffsets[i, j] = data.ReadInt32();
+                    lump.ByteOffsets[i][j] = data.ReadInt32();
                 }
             }
 
@@ -445,6 +446,64 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into LUMP_PHYSCOLLIDE
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled LUMP_PHYSCOLLIDE on success, null on error</returns>
+        private static PhysCollideLump? ParsePhysCollideLump(Stream data, int offset, int length)
+        {
+            var models = new List<PhysModel>();
+            while (data.Position < offset + length)
+            {
+                var model = ParsePhysModel(data);
+                if (model != null)
+                    models.Add(model);
+            }
+
+            return new PhysCollideLump { Models = [.. models] };
+        }
+
+        /// <summary>
+        /// Parse a Stream into PhysModel
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PhysModel on success, null on error</returns>
+        private static PhysModel? ParsePhysModel(Stream data)
+        {
+            var model = new PhysModel();
+
+            model.ModelIndex = data.ReadInt32();
+            model.DataSize = data.ReadInt32();
+            model.KeydataSize = data.ReadInt32();
+            model.SolidCount = data.ReadInt32();
+            model.Solids = new PhysSolid[model.SolidCount];
+            for (int i = 0; i < model.Solids.Length; i++)
+            {
+                var solid = ParsePhysSolid(data);
+                if (solid != null)
+                    model.Solids[i] = solid;
+            }
+
+            return model;
+        }
+
+        /// <summary>
+        /// Parse a Stream into PhysSolid
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PhysSolid on success, null on error</returns>
+        private static PhysSolid? ParsePhysSolid(Stream data)
+        {
+            var solid = new PhysSolid();
+
+            solid.Size = data.ReadInt32();
+            if (solid.Size > 0)
+                solid.CollisionData = data.ReadBytes(solid.Size);
+
+            return solid;
+        }
+
+        /// <summary>
         /// Parse a Stream into LUMP_LIGHTING
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -452,14 +511,11 @@ namespace SabreTools.Serialization.Deserializers
         private static LightmapLump? ParseLightmapLump(Stream data, int offset, int length)
         {
             var lump = new LightmapLump();
-            lump.Lightmap = new byte[length / 3, 3];
+            lump.Lightmap = new byte[length / 3][];
 
             for (int i = 0; i < length / 3; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    lump.Lightmap[i, j] = data.ReadByteValue();
-                }
+                lump.Lightmap[i] = data.ReadBytes(3);
             }
 
             return lump;
@@ -491,10 +547,10 @@ namespace SabreTools.Serialization.Deserializers
                     lump.PolyData[i] = polyData;
             }
             lump.VertexIndexCount = data.ReadInt32();
-            lump.VertexIndices = new int[lump.VertexIndexCount];
+            lump.VertexIndicies = new int[lump.VertexIndexCount];
             for (int i = 0; i < lump.VertexIndexCount; i++)
             {
-                lump.VertexIndices[i] = data.ReadInt32();
+                lump.VertexIndicies[i] = data.ReadInt32();
             }
 
             return lump;
@@ -746,6 +802,20 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return new CubemapsLump { Cubemaps = [.. cubemaps] };
+        }
+
+        /// <summary>
+        /// Parse a Stream into LUMP_PAKFILE
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled LUMP_PAKFILE on success, null on error</returns>
+        private static PakfileLump? ParsePakfileLump(Stream data, int offset, int length)
+        {
+            var lump = new PakfileLump();
+
+            lump.Data = data.ReadBytes(length);
+
+            return lump;
         }
 
         /// <summary>

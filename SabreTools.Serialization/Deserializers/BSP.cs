@@ -262,12 +262,13 @@ namespace SabreTools.Serialization.Deserializers
             var lump = new VisibilityLump();
 
             lump.NumClusters = data.ReadInt32();
-            lump.ByteOffsets = new int[lump.NumClusters, 2];
+            lump.ByteOffsets = new int[lump.NumClusters][];
             for (int i = 0; i < lump.NumClusters; i++)
             {
+                lump.ByteOffsets[i] = new int[2];
                 for (int j = 0; j < 2; j++)
                 {
-                    lump.ByteOffsets[i, j] = data.ReadInt32();
+                    lump.ByteOffsets[i][j] = data.ReadInt32();
                 }
             }
 
@@ -336,14 +337,11 @@ namespace SabreTools.Serialization.Deserializers
         private static LightmapLump? ParseLightmapLump(Stream data, int offset, int length)
         {
             var lump = new LightmapLump();
-            lump.Lightmap = new byte[length / 3, 3];
+            lump.Lightmap = new byte[length / 3][];
 
             for (int i = 0; i < length / 3; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    lump.Lightmap[i, j] = data.ReadByteValue();
-                }
+                lump.Lightmap[i] =  data.ReadBytes(3);
             }
 
             return lump;

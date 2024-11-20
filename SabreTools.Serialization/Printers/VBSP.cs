@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_DISPINFO:
-                        Print(builder, model.DispInfoLump);
+                        Print(builder, model.DispInfosLump);
                         break;
                     case LumpType.LUMP_ORIGINALFACES:
                         Print(builder, model.OriginalFacesLump);
@@ -159,8 +159,7 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_PHYSCOLLIDE:
-                        // TODO: Support LUMP_PHYSCOLLIDE [29] when in Models
-                        builder.AppendLine("    Data not parsed...");
+                        Print(builder, model.PhysCollideLump);
                         break;
                     case LumpType.LUMP_VERTNORMALS:
                         // TODO: Support LUMP_VERTNORMALS [30] when in Models
@@ -175,7 +174,7 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_DISP_VERTS:
-                        Print(builder, model.DispVertLump);
+                        Print(builder, model.DispVertsLump);
                         break;
                     case LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
                         // TODO: Support LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34] when in Models
@@ -201,15 +200,14 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_PAKFILE:
-                        // TODO: Support LUMP_PAKFILE [40] when in Models
-                        builder.AppendLine("    Data not parsed...");
+                        Print(builder, model.PakfileLump);
                         break;
                     case LumpType.LUMP_CLIPPORTALVERTS:
                         // TODO: Support LUMP_CLIPPORTALVERTS [41] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_CUBEMAPS:
-                        Print(builder, model.CubemapLump);
+                        Print(builder, model.CubemapsLump);
                         break;
                     case LumpType.LUMP_TEXDATA_STRING_DATA:
                         Print(builder, model.TexdataStringData);
@@ -250,7 +248,7 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine("    Data not parsed...");
                         break;
                     case LumpType.LUMP_WORLDLIGHTS_HDR:
-                        Print(builder, model.WorldLightsLump);
+                        Print(builder, model.HDRWorldLightsLump);
                         break;
                     case LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
                         Print(builder, model.HDRAmbientLightingLump);
@@ -529,6 +527,40 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
+        private static void Print(StringBuilder builder, PhysCollideLump? lump)
+        {
+            if (lump?.Models == null || lump.Models.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            for (int i = 0; i < lump.Models.Length; i++)
+            {
+                var model = lump.Models[i];
+                builder.AppendLine($"    Model {i}");
+                builder.AppendLine(model.ModelIndex, "      Model index");
+                builder.AppendLine(model.DataSize, "      Data size");
+                builder.AppendLine(model.KeydataSize, "      Keydata size");
+                builder.AppendLine(model.SolidCount, "      Solid count");
+                if (model.Solids == null || model.Solids.Length == 0)
+                {
+                    builder.AppendLine("      No solids");
+                }
+                else
+                {
+                    for (int j = 0; j < model.Solids.Length; j++)
+                    {
+                        var solid = model.Solids[j];
+                        builder.AppendLine($"      Solid {j}");
+                        builder.AppendLine(solid.Size, "        Size");
+                        builder.AppendLine("        Collision data skipped...");
+                    }
+                }
+                builder.AppendLine("      Keydata skipped...");
+            }
+        }
+
         private static void Print(StringBuilder builder, LightmapLump? lump)
         {
             if (lump?.Lightmap == null || lump.Lightmap.Length == 0)
@@ -581,15 +613,15 @@ namespace SabreTools.Serialization.Printers
                     }
                 }
                 builder.AppendLine(lump.VertexIndexCount, "    Vertex index count");
-                if (lump.VertexIndices == null || lump.VertexIndices.Length == 0)
+                if (lump.VertexIndicies == null || lump.VertexIndicies.Length == 0)
                 {
                     builder.AppendLine("    No vertex indicies");
                 }
                 else
                 {
-                    for (int j = 0; j < lump.VertexIndices.Length; j++)
+                    for (int j = 0; j < lump.VertexIndicies.Length; j++)
                     {
-                        builder.AppendLine($"    Vertex Index {j}: {lump.VertexIndices[j]}");
+                        builder.AppendLine($"    Vertex Index {j}: {lump.VertexIndicies[j]}");
                     }
                 }
             }
@@ -806,7 +838,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var info = lump.Infos[i];
                 builder.AppendLine($"    Disp Info {i}");
-                builder.AppendLine($"      Start position: ({info.startPosition.X}, {info.startPosition.Y}, {info.startPosition.Z})");
+                builder.AppendLine($"      Start position: ({info.StartPosition.X}, {info.StartPosition.Y}, {info.StartPosition.Z})");
                 builder.AppendLine(info.DispVertStart, "      Index into disp verts");
                 builder.AppendLine(info.DispTriStart, "      Index into disp tris");
                 builder.AppendLine(info.Power, "      Power");
@@ -908,6 +940,17 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(dir.FileLength, "      File length");
                 }
             }
+        }
+
+        private static void Print(StringBuilder builder, PakfileLump? lump)
+        {
+            if (lump?.Data == null || lump.Data.Length == 0)
+            {
+                builder.AppendLine("    No data");
+                return;
+            }
+
+            builder.AppendLine("    Data skipped...");
         }
 
         private static void Print(StringBuilder builder, CubemapsLump? lump)
