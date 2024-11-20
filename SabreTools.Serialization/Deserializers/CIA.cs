@@ -154,8 +154,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled certificate on success, null on error</returns>
         public static Certificate? ParseCertificate(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            Certificate certificate = new Certificate();
+            var certificate = new Certificate();
 
             certificate.SignatureType = (SignatureType)data.ReadUInt32();
             switch (certificate.SignatureType)
@@ -230,8 +229,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ticket on success, null on error</returns>
         public static Ticket? ParseTicket(Stream data, bool fromCdn = false)
         {
-            // TODO: Use marshalling here instead of building
-            Ticket ticket = new Ticket();
+            var ticket = new Ticket();
 
             ticket.SignatureType = (SignatureType)data.ReadUInt32();
             switch (ticket.SignatureType)
@@ -335,7 +333,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled title metadata on success, null on error</returns>
         public static TitleMetadata? ParseTitleMetadata(Stream data, bool fromCdn = false)
         {
-            // TODO: Use marshalling here instead of building
             var titleMetadata = new TitleMetadata();
 
             titleMetadata.SignatureType = (SignatureType)data.ReadUInt32();

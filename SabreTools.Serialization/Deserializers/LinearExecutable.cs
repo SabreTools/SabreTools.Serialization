@@ -470,15 +470,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resident names table entry on success, null on error</returns>
         public static ResidentNamesTableEntry ParseResidentNamesTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new ResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
-                byte[]? name = data.ReadBytes(entry.Length);
-                if (name != null)
-                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(entry.Length);
+                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
             entry.OrdinalNumber = data.ReadUInt16();
 

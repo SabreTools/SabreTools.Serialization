@@ -635,10 +635,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Leaves.Length; j++)
+            for (int i = 0; i < lump.Leaves.Length; i++)
             {
-                var leaf = lump.Leaves[j];
-                builder.AppendLine($"    Leaf {j}");
+                var leaf = lump.Leaves[i];
+                builder.AppendLine($"    Leaf {i}");
                 builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
                 builder.AppendLine(leaf.Cluster, "      Cluster");
                 builder.AppendLine(leaf.AreaFlags, "      AreaFlags");
@@ -651,8 +651,22 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(leaf.LeafWaterDataID, "      Leaf water data ID");
                 if (version == 0)
                 {
-                    // TODO: Figure out how to print the colors array
-                    builder.AppendLine("      Colors array skipped...");
+                    if (leaf.AmbientLighting.Colors == null || leaf.AmbientLighting.Colors.Length == 0)
+                    {
+                        builder.AppendLine("      No ambient lighting colors");
+                    }
+                    else
+                    {
+                        for (int j = 0; j < leaf.AmbientLighting.Colors.Length; j++)
+                        {
+                            var color = leaf.AmbientLighting.Colors[j];
+                            builder.AppendLine($"      Ambient Lighting Color {j}");
+                            builder.AppendLine(color.Red, "        Red");
+                            builder.AppendLine(color.Green, "        Green");
+                            builder.AppendLine(color.Blue, "        Blue");
+                            builder.AppendLine(color.Exponent, "        Exponent");
+                        }
+                    }
                 }
                 else
                 {

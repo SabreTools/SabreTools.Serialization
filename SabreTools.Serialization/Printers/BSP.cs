@@ -75,8 +75,7 @@ namespace SabreTools.Serialization.Printers
                         Print(builder, model.VerticesLump);
                         break;
                     case LumpType.LUMP_VISIBILITY:
-                        // TODO: Implement when added to Models
-                        // Print(builder, model.VisibilityLump);
+                        Print(builder, model.VisibilityLump);
                         break;
                     case LumpType.LUMP_NODES:
                         Print(builder, model.NodesLump);

@@ -2,7 +2,6 @@
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Figure out extension properties
     public partial class MoPaQ : WrapperBase<Models.MoPaQ.Archive>
     {
         #region Descriptive Properties

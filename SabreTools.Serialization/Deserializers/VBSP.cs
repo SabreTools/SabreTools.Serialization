@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Deserializers
                         file.OcclusionLump = ParseOcclusionLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_LEAVES:
-                        file.LeavesLump = ParseLeavesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.LeavesLump = ParseLeavesLump(data, lumpEntry.Version, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_MARKSURFACES:
                         file.MarksurfacesLump = ParseMarksurfacesLump(data, lumpEntry.Offset, lumpEntry.Length);
@@ -561,18 +561,53 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_LEAVES on success, null on error</returns>
-        private static VbspLeavesLump? ParseLeavesLump(Stream data, int offset, int length)
+        private static VbspLeavesLump? ParseLeavesLump(Stream data, uint version, int offset, int length)
         {
             var leaves = new List<VbspLeaf>();
             while (data.Position < offset + length)
             {
-                // TODO: Fix parsing between V0 and V1+
-                var leaf = data.ReadType<VbspLeaf>();
+                var leaf = ParseVbspLeaf(data, version);
                 if (leaf != null)
                     leaves.Add(leaf);
             }
 
             return new VbspLeavesLump { Leaves = [.. leaves] };
+        }
+
+        /// <summary>
+        /// Parse a Stream into VbspLeaf
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled VbspLeaf on success, null on error</returns>
+        private static VbspLeaf? ParseVbspLeaf(Stream data, uint version)
+        {
+            var leaf = new VbspLeaf();
+
+            leaf.Contents = (VbspContents)data.ReadUInt32();
+            leaf.Cluster = data.ReadInt16();
+            leaf.AreaFlags = data.ReadInt16();
+            leaf.Mins = new short[3];
+            for (int i = 0; i < leaf.Mins.Length; i++)
+            {
+                leaf.Mins[i] = data.ReadInt16();
+            }
+            leaf.Maxs = new short[3];
+            for (int i = 0; i < leaf.Maxs.Length; i++)
+            {
+                leaf.Maxs[i] = data.ReadInt16();
+            }
+            leaf.FirstLeafFace = data.ReadUInt16();
+            leaf.NumLeafFaces = data.ReadUInt16();
+            leaf.FirstLeafBrush = data.ReadUInt16();
+            leaf.NumLeafBrushes = data.ReadUInt16();
+            leaf.LeafWaterDataID = data.ReadInt16();
+
+            if (version == 1)
+                leaf.AmbientLighting = data.ReadType<CompressedLightCube>();
+            else
+                leaf.Padding = data.ReadInt16();
+
+            return leaf;
         }
 
         /// <summary>

@@ -2,7 +2,6 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Figure out extension properties
     public class PIC : WrapperBase<Models.PIC.DiscInformation>
     {
         #region Descriptive Properties

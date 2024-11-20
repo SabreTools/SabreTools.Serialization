@@ -66,8 +66,7 @@ namespace SabreTools.Serialization.Deserializers
                         file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_VISIBILITY:
-                        // TODO: Assign when Models supports it
-                        _ = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
+                        file.VisibilityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
                         break;
                     case LumpType.LUMP_NODES:
                         file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
@@ -118,18 +117,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <remarks>Only recognized versions are 29 and 30</remarks>
         private static BspHeader? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here later
-            var header = new BspHeader();
-
-            header.Version = data.ReadInt32();
+            var header = data.ReadType<BspHeader>();
+            
+            if (header == null)
+                return null;
             if (header.Version < 29 || header.Version > 30)
                 return null;
-
-            header.Lumps = new BspLumpEntry[BSP_HEADER_LUMPS];
-            for (int i = 0; i < BSP_HEADER_LUMPS; i++)
-            {
-                header.Lumps[i] = data.ReadType<BspLumpEntry>()!;
-            }
 
             return header;
         }
@@ -223,7 +216,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life Level texture header on success, null on error</returns>
         private static TextureHeader ParseTextureHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var textureHeader = new TextureHeader();
 
             textureHeader.MipTextureCount = data.ReadUInt32();

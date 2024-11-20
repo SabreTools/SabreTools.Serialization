@@ -608,7 +608,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Half-Life Game Cache data block header on success, null on error</returns>
         private static DataBlockHeader? ParseDataBlockHeader(Stream data, uint minorVersion)
         {
-            // TODO: Use marshalling here instead of building
             var dataBlockHeader = new DataBlockHeader();
 
             // In version 3 the DataBlockHeader is missing the LastVersionPlayed field.

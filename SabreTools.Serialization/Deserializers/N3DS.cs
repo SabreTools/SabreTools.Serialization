@@ -141,14 +141,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled NCSD header on success, null on error</returns>
         public static NCSDHeader? ParseNCSDHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var header = new NCSDHeader();
 
             header.RSA2048Signature = data.ReadBytes(0x100);
-            byte[]? magicNumber = data.ReadBytes(4);
-            if (magicNumber == null)
-                return null;
-
+            byte[] magicNumber = data.ReadBytes(4);
             header.MagicNumber = Encoding.ASCII.GetString(magicNumber).TrimEnd('\0'); ;
             if (header.MagicNumber != NCSDMagicNumber)
                 return null;
