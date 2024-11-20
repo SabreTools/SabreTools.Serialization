@@ -514,15 +514,8 @@ namespace SabreTools.Serialization.Printers
                         {
                             foreach (TypeLengthValue tlv in topLevelValues)
                             {
-                                try
-                                {
-                                    string tlvString = tlv.Format(paddingLevel: 4);
-                                    builder.AppendLine(tlvString, "    Type-length-value");
-                                }
-                                catch
-                                {
-                                    builder.AppendLine("    Type-length-value: ERROR");
-                                }
+                                string tlvString = tlv.Format(paddingLevel: 4);
+                                builder.AppendLine(tlvString);
                             }
                         }
                     }

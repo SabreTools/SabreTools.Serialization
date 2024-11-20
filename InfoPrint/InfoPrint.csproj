@@ -30,4 +30,8 @@
         <ProjectReference Include="..\SabreTools.Serialization\SabreTools.Serialization.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="SabreTools.IO" Version="1.5.1" />
+    </ItemGroup>
+
 </Project>
