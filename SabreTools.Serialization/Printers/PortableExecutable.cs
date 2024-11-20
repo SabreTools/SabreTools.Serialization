@@ -1407,6 +1407,18 @@ namespace SabreTools.Serialization.Printers
                 {
                     builder.AppendLine($"{padding}Data: [Embedded OLE Library File]"); // TODO: Parse this out and print separately
                 }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x03 && magic[3] == 0x04)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x05 && magic[3] == 0x06)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded empty PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x07 && magic[3] == 0x08)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
+                }
                 else
                 {
                     builder.AppendLine(magic, $"{padding}Data");
@@ -1917,6 +1929,18 @@ namespace SabreTools.Serialization.Printers
                 else if (magic[0] == 0x4D && magic[1] == 0x53 && magic[2] == 0x46 && magic[3] == 0x54)
                 {
                     builder.AppendLine($"{padding}Data: [Embedded OLE Library File]"); // TODO: Parse this out and print separately
+                }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x03 && magic[3] == 0x04)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x05 && magic[3] == 0x06)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded empty PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x07 && magic[3] == 0x08)
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
                 }
                 else
                 {
