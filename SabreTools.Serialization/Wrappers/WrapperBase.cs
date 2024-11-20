@@ -347,7 +347,15 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we have a cached string greater than the limit
             if (cachedChars.Count >= charLimit)
-                sourceStrings.Add(new string([.. cachedChars]));
+            {
+                // Get the string from the cached characters
+                string cachedString = new([.. cachedChars]);
+                cachedString = cachedString.Trim();
+
+                // Only include trimmed strings over the limit
+                if (cachedString.Length >= charLimit)
+                    sourceStrings.Add(cachedString);
+            }
 
             return sourceStrings;
         }
