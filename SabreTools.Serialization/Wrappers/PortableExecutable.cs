@@ -902,7 +902,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find CodeView debug data by path
         /// </summary>
         /// <param name="path">Partial path to check for</param>
-        /// <returns>Enumerable of matching debug data</returns>
+        /// <returns>List of matching debug data</returns>
         public List<object?> FindCodeViewDebugTableByPath(string path)
         {
             // Ensure that we have the debug data cached
@@ -938,7 +938,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find unparsed debug data by string value
         /// </summary>
         /// <param name="value">String value to check for</param>
-        /// <returns>Enumerable of matching debug data</returns>
+        /// <returns>List of matching debug data</returns>
         public List<byte[]?> FindGenericDebugTableByValue(string value)
         {
             // Ensure that we have the resource data cached
@@ -1073,7 +1073,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find dialog box resources by title
         /// </summary>
         /// <param name="title">Dialog box title to check for</param>
-        /// <returns>Enumerable of matching resources</returns>
+        /// <returns>List of matching resources</returns>
         public List<Models.PortableExecutable.DialogBoxResource?> FindDialogByTitle(string title)
         {
             // Ensure that we have the resource data cached
@@ -1101,7 +1101,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find dialog box resources by contained item title
         /// </summary>
         /// <param name="title">Dialog box item title to check for</param>
-        /// <returns>Enumerable of matching resources</returns>
+        /// <returns>List of matching resources</returns>
         public List<Models.PortableExecutable.DialogBoxResource?> FindDialogBoxByItemTitle(string title)
         {
             // Ensure that we have the resource data cached
@@ -1137,7 +1137,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find string table resources by contained string entry
         /// </summary>
         /// <param name="entry">String entry to check for</param>
-        /// <returns>Enumerable of matching resources</returns>
+        /// <returns>List of matching resources</returns>
         public List<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
         {
             // Ensure that we have the resource data cached
@@ -1178,7 +1178,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find unparsed resources by type name
         /// </summary>
         /// <param name="typeName">Type name to check for</param>
-        /// <returns>Enumerable of matching resources</returns>
+        /// <returns>List of matching resources</returns>
         public List<byte[]?> FindResourceByNamedType(string typeName)
         {
             // Ensure that we have the resource data cached
@@ -1210,7 +1210,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find unparsed resources by string value
         /// </summary>
         /// <param name="value">String value to check for</param>
-        /// <returns>Enumerable of matching resources</returns>
+        /// <returns>List of matching resources</returns>
         public List<byte[]?> FindGenericResource(string value)
         {
             // Ensure that we have the resource data cached
