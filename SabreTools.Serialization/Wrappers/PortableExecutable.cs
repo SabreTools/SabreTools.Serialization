@@ -900,7 +900,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="path">Partial path to check for</param>
         /// <returns>Enumerable of matching debug data</returns>
-        public IEnumerable<object?> FindCodeViewDebugTableByPath(string path)
+        public List<object?> FindCodeViewDebugTableByPath(string path)
         {
             // Ensure that we have the debug data cached
             if (DebugData == null)
@@ -936,7 +936,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="value">String value to check for</param>
         /// <returns>Enumerable of matching debug data</returns>
-        public IEnumerable<byte[]?> FindGenericDebugTableByValue(string value)
+        public List<byte[]?> FindGenericDebugTableByValue(string value)
         {
             // Ensure that we have the resource data cached
             if (DebugData == null)
@@ -1071,7 +1071,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box title to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-        public IEnumerable<Models.PortableExecutable.DialogBoxResource?> FindDialogByTitle(string title)
+        public List<Models.PortableExecutable.DialogBoxResource?> FindDialogByTitle(string title)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
@@ -1099,7 +1099,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box item title to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-        public IEnumerable<Models.PortableExecutable.DialogBoxResource?> FindDialogBoxByItemTitle(string title)
+        public List<Models.PortableExecutable.DialogBoxResource?> FindDialogBoxByItemTitle(string title)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
@@ -1135,7 +1135,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="entry">String entry to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-        public IEnumerable<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
+        public List<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
@@ -1159,7 +1159,8 @@ namespace SabreTools.Serialization.Wrappers
                 .Select(r => r as Dictionary<int, string?>)
                 .Where(st => st != null)
                 .Where(st => st?.Select(kvp => kvp.Value)?
-                    .Any(s => s != null && s.Contains(entry)) == true);
+                    .Any(s => s != null && s.Contains(entry)) == true)
+                .ToList();
 #endif
         }
 
@@ -1168,7 +1169,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="typeName">Type name to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-        public IEnumerable<byte[]?> FindResourceByNamedType(string typeName)
+        public List<byte[]?> FindResourceByNamedType(string typeName)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
@@ -1190,7 +1191,8 @@ namespace SabreTools.Serialization.Wrappers
 #else
             return ResourceData.Where(kvp => kvp.Key.Contains(typeName))
                 .Select(kvp => kvp.Value as byte[])
-                .Where(b => b != null);
+                .Where(b => b != null)
+                .ToList();
 #endif
         }
 
@@ -1199,7 +1201,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="value">String value to check for</param>
         /// <returns>Enumerable of matching resources</returns>
-        public IEnumerable<byte[]?> FindGenericResource(string value)
+        public List<byte[]?> FindGenericResource(string value)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
