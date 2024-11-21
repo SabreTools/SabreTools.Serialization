@@ -859,18 +859,21 @@ namespace SabreTools.Serialization.Wrappers
                 if (st?.Children == null)
                     continue;
 
+                // Return the match if found
                 match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
-                    break;
+                    return match.Value?.TrimEnd('\0');
             }
+
+            return null;
 #else
             var match = stringTable
                 .SelectMany(st => st?.Children ?? [])
                 .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
-#endif
 
             // Return either the match or null
             return match?.Value?.TrimEnd('\0');
+#endif
         }
 
         /// <summary>
@@ -1150,7 +1153,14 @@ namespace SabreTools.Serialization.Wrappers
                 if (resource is not Dictionary<int, string?> st || st == null)
                     continue;
 
-                
+                foreach (var s in st.Values)
+                {
+                    if (s == null || !s.Contains(entry))
+                        continue;
+                    
+                    stringTables.Add(st);
+                    break;
+                }
             }
 
             return stringTables;

@@ -1061,8 +1061,9 @@ namespace SabreTools.Serialization.Deserializers
                         if (kvp.Value == null)
                             continue;
 
-                        var vaddrs = Array.ConvertAll(kvp.Value,
-                            ilte => ilte == null ? 0 : (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        var vaddrs = Array.ConvertAll(kvp.Value, ilte => ilte == null
+                            ? 0
+                            : (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
                         addresses.AddRange(vaddrs);
                     }
 #else
@@ -1084,8 +1085,9 @@ namespace SabreTools.Serialization.Deserializers
                         if (kvp.Value == null)
                             continue;
 
-                        var vaddrs = Array.ConvertAll(kvp.Value,
-                            iate => iate == null ? 0 : (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        var vaddrs = Array.ConvertAll(kvp.Value, iate => iate == null
+                            ? 0
+                            : (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
                         addresses.AddRange(vaddrs);
                     }
 #else
