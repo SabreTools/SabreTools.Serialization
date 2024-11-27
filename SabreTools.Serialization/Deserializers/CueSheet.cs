@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CueSheets;
@@ -31,7 +32,7 @@ namespace SabreTools.Serialization.Deserializers
             string? lastLine = null;
             while (true)
             {
-                string? line = lastLine ?? data.ReadQuotedString();
+                string? line = lastLine ?? ReadUntilNewline(data);
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -141,7 +142,7 @@ namespace SabreTools.Serialization.Deserializers
 
             while (true)
             {
-                string? line = lastLine ?? data.ReadQuotedString();
+                string? line = lastLine ?? ReadUntilNewline(data);
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -228,7 +229,7 @@ namespace SabreTools.Serialization.Deserializers
 
             while (true)
             {
-                string? line = lastLine ?? data.ReadQuotedString();
+                string? line = lastLine ?? ReadUntilNewline(data);
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -590,6 +591,52 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return flag;
+        }
+
+        /// <summary>
+        /// Read a string until a newline value is found
+        /// </summary>
+        /// <param name="data">Stream to pull from</param>
+        /// <returns>The next line from the data on success, null on error</returns>
+        private static string? ReadUntilNewline(Stream data)
+        {
+            // Validate the input
+            if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
+                return null;
+
+            // Read characters either until a newline or end of file
+            var lineBuilder = new StringBuilder();
+            while (data.Position < data.Length)
+            {
+                char c = data.ReadChar();
+
+                // Handle Windows and old Mac line endings
+                if (c == '\r')
+                {
+                    // Handle premature end of stream
+                    if (data.Position >= data.Length)
+                        break;
+
+                    // Handle Windows line endings
+                    c = data.ReadChar();
+                    if (c == '\n')
+                        break;
+
+                    // Seek backward if we had old Mac line endings instead
+                    data.Seek(-1, SeekOrigin.Current);
+                    break;
+                }
+
+                // Handle standard line endings
+                if (c == '\n')
+                    break;
+
+                // Handle all other characters
+                lineBuilder.Append(c);
+            }
+
+            // Return the line without trailing newline
+            return lineBuilder.ToString();
         }
 
         #endregion

@@ -150,7 +150,6 @@ namespace SabreTools.Serialization.Serializers
 
             // Write the header
             writer.WriteValues(longHeader ? HeaderArrayWithRomname : HeaderArrayWithoutRomname);
-            writer.WriteLine();
 
             // Write out the rows, if they exist
             WriteRows(obj.Row, writer, longHeader);
