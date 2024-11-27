@@ -1,3 +1,5 @@
+
+using SabreTools.Serialization.Deserializers;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.Deserializers
@@ -8,7 +10,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void NullString_Null()
         {
             string? data = null;
-            var deserializer = new Serialization.Deserializers.XMID();
+            var deserializer = new XMID();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -18,7 +20,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void EmptyString_Null()
         {
             string? data = string.Empty;
-            var deserializer = new Serialization.Deserializers.XMID();
+            var deserializer = new XMID();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -28,7 +30,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void InvalidString_Null()
         {
             string? data = "INVALID";
-            var deserializer = new Serialization.Deserializers.XMID();
+            var deserializer = new XMID();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);

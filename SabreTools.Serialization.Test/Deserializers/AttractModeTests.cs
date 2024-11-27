@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using SabreTools.Serialization.Deserializers;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.Deserializers
@@ -12,7 +13,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             byte[]? data = null;
             int offset = 0;
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -23,7 +24,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             byte[]? data = [];
             int offset = 0;
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -34,7 +35,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             byte[]? data = [.. Enumerable.Repeat<byte>(0xFF, 1024)];
             int offset = 0;
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -44,7 +45,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void NullStream_Null()
         {
             Stream? data = null;
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -54,7 +55,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void EmptyStream_Null()
         {
             Stream? data = new MemoryStream([]);
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -64,7 +65,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void InvalidStream_Null()
         {
             var data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
-            var deserializer = new Serialization.Deserializers.AttractMode();
+            var deserializer = new AttractMode();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -78,7 +79,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
 
             // Deserialize the file
-            var dat = Serialization.Deserializers.AttractMode.DeserializeFile(filename);
+            var dat = AttractMode.DeserializeFile(filename);
 
             // Validate texpected: he values
             Assert.NotNull(dat?.Row);
