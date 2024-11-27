@@ -55,41 +55,25 @@ namespace SabreTools.Serialization.Deserializers
                 // Set lines are unique
                 if (line.StartsWith("ROMs required for driver"))
                 {
-#if NETFRAMEWORK
                     string driver = line.Substring("ROMs required for driver".Length).Trim('"', ' ', '.');
-#else
-                    string driver = line["ROMs required for driver".Length..].Trim('"', ' ', '.');
-#endif
                     set = new Set { Driver = driver };
                     continue;
                 }
                 else if (line.StartsWith("No ROMs required for driver"))
                 {
-#if NETFRAMEWORK
                     string driver = line.Substring("No ROMs required for driver".Length).Trim('"', ' ', '.');
-#else
-                    string driver = line["No ROMs required for driver".Length..].Trim('"', ' ', '.');
-#endif
                     set = new Set { Driver = driver };
                     continue;
                 }
                 else if (line.StartsWith("ROMs required for device"))
                 {
-#if NETFRAMEWORK
                     string device = line.Substring("ROMs required for device".Length).Trim('"', ' ', '.');
-#else
-                    string device = line["ROMs required for device".Length..].Trim('"', ' ', '.');
-#endif
                     set = new Set { Device = device };
                     continue;
                 }
                 else if (line.StartsWith("No ROMs required for device"))
                 {
-#if NETFRAMEWORK
                     string device = line.Substring("No ROMs required for device".Length).Trim('"', ' ', '.');
-#else
-                    string device = line["No ROMs required for device".Length..].Trim('"', ' ', '.');
-#endif
                     set = new Set { Device = device };
                     continue;
                 }
@@ -120,11 +104,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the name and set the rest of the line for processing
                 string name = lineParts[0];
-#if NETFRAMEWORK
                 string trimmedLine = line.Substring(name.Length);
-#else
-                string trimmedLine = line[name.Length..];
-#endif
                 if (trimmedLine == null)
                     continue;
 
@@ -141,53 +121,31 @@ namespace SabreTools.Serialization.Deserializers
                     // Normal CHD (Name, MD5/SHA1)
                     case 1:
                         row.Name = name;
-#if NETFRAMEWORK
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[0].Substring("MD5".Length).Trim('(', ')');
                         else
                             row.SHA1 = lineParts[0].Substring("SHA1".Length).Trim('(', ')');
-#else
-                        if (line.Contains("MD5("))
-                            row.MD5 = lineParts[0]["MD5".Length..].Trim('(', ')');
-                        else
-                            row.SHA1 = lineParts[0]["SHA1".Length..].Trim('(', ')');
-#endif
                         break;
 
                     // Normal ROM (Name, Size, CRC, MD5/SHA1)
                     case 3 when line.Contains("CRC"):
                         row.Name = name;
                         row.Size = lineParts[0];
-#if NETFRAMEWORK
                         row.CRC = lineParts[1].Substring("CRC".Length).Trim('(', ')');
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[2].Substring("MD5".Length).Trim('(', ')');
                         else
                             row.SHA1 = lineParts[2].Substring("SHA1".Length).Trim('(', ')');
-#else
-                        row.CRC = lineParts[1]["CRC".Length..].Trim('(', ')');
-                        if (line.Contains("MD5("))
-                            row.MD5 = lineParts[2]["MD5".Length..].Trim('(', ')');
-                        else
-                            row.SHA1 = lineParts[2]["SHA1".Length..].Trim('(', ')');
-#endif
                         break;
 
                     // Bad CHD (Name, BAD, SHA1, BAD_DUMP)
                     case 3 when line.Contains("BAD_DUMP"):
                         row.Name = name;
                         row.Bad = true;
-#if NETFRAMEWORK
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[1].Substring("MD5".Length).Trim('(', ')');
                         else
                             row.SHA1 = lineParts[1].Substring("SHA1".Length).Trim('(', ')');
-#else
-                        if (line.Contains("MD5("))
-                            row.MD5 = lineParts[1]["MD5".Length..].Trim('(', ')');
-                        else
-                            row.SHA1 = lineParts[1]["SHA1".Length..].Trim('(', ')');
-#endif
                         break;
 
                     // Nodump CHD (Name, NO GOOD DUMP KNOWN)
@@ -201,19 +159,11 @@ namespace SabreTools.Serialization.Deserializers
                         row.Name = name;
                         row.Size = lineParts[0];
                         row.Bad = true;
-#if NETFRAMEWORK
                         row.CRC = lineParts[2].Substring("CRC".Length).Trim('(', ')');
                         if (line.Contains("MD5("))
                             row.MD5 = lineParts[3].Substring("MD5".Length).Trim('(', ')');
                         else
                             row.SHA1 = lineParts[3].Substring("SHA1".Length).Trim('(', ')');
-#else
-                        row.CRC = lineParts[2]["CRC".Length..].Trim('(', ')');
-                        if (line.Contains("MD5("))
-                            row.MD5 = lineParts[3]["MD5".Length..].Trim('(', ')');
-                        else
-                            row.SHA1 = lineParts[3]["SHA1".Length..].Trim('(', ')');
-#endif
                         break;
 
                     // Nodump ROM (Name, Size, NO GOOD DUMP KNOWN)
@@ -242,8 +192,13 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Add extra pieces and return
-            dat.Set = [.. sets];
-            return dat;
+            if (sets.Count > 0)
+            {
+                dat.Set = [.. sets];
+                return dat;
+            }
+
+            return null;
         }
     }
 }

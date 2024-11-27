@@ -36,14 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.RomCenter();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.Credits);
-            Assert.Null(actual.Dat);
-            Assert.Null(actual.Emulator);
-            Assert.Null(actual.Games);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -73,14 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.RomCenter();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.Credits);
-            Assert.Null(actual.Dat);
-            Assert.Null(actual.Emulator);
-            Assert.Null(actual.Games);
+            Assert.Null(actual);
         }
     }
 }

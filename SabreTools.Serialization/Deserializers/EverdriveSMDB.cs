@@ -58,8 +58,13 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Assign the rows to the Dat and return
-            dat.Row = [.. rows];
-            return dat;
+            if (rows.Count > 0)
+            {
+                dat.Row = [.. rows];
+                return dat;
+            }
+
+            return null;
         }
     }
 }

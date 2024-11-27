@@ -174,10 +174,13 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Add extra pieces and return
-            if (dat.Games != null)
+            if (dat.Games != null && roms.Count > 0)
+            {
                 dat.Games.Rom = [.. roms];
+                return dat;
+            }
 
-            return dat;
+            return null;
         }
     }
 }

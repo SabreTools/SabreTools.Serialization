@@ -36,12 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.Listrom();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.NotNull(actual.Set);
-            Assert.Empty(actual.Set);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -71,12 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.Listrom();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.NotNull(actual.Set);
-            Assert.Empty(actual.Set);
+            Assert.Null(actual);
         }
     }
 }

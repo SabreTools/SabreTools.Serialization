@@ -36,13 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.ClrMamePro();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Equal(default, actual.ClrMamePro);
-            Assert.NotNull(actual.Game);
-            Assert.Empty(actual.Game);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -72,13 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.ClrMamePro();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Equal(default, actual.ClrMamePro);
-            Assert.NotNull(actual.Game);
-            Assert.Empty(actual.Game);
+            Assert.Null(actual);
         }
     }
 }

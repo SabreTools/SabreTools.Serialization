@@ -36,15 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.AttractMode();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into a single, malformatted header line
-            Assert.NotNull(actual);
-            Assert.NotNull(actual.Header);
-            var col = Assert.Single(actual.Header);
-            Assert.Equal(1024, col.Length);
-            Assert.NotNull(actual.Row);
-            Assert.Empty(actual.Row);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -74,15 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.AttractMode();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into a single, malformatted header line
-            Assert.NotNull(actual);
-            Assert.NotNull(actual.Header);
-            var col = Assert.Single(actual.Header);
-            Assert.Equal(1024, col.Length);
-            Assert.NotNull(actual.Row);
-            Assert.Empty(actual.Row);
+            Assert.Null(actual);
         }
     }
 }

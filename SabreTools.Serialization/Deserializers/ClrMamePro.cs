@@ -381,8 +381,13 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Add extra pieces and return
-            dat.Game = [.. games];
-            return dat;
+            if (games.Count > 0)
+            {
+                dat.Game = [.. games];
+                return dat;
+            }
+
+            return null;
         }
 
         /// <summary>
