@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.CrossModel
     public partial class ClrMamePro : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, false);
+        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, true);
 
         /// <inheritdoc cref="Deserialize(Models.Metadata.MetadataFile)"/>
         public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj, bool game)
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.CrossModel
             if (machines != null && machines.Length > 0)
             {
                 metadataFile.Game
-                    = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m));
+                    = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
             }
 
             return metadataFile;
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Archive"/> to <cref="Models.ClrMamePro.Machine"/>
         /// </summary>
-        private static GameBase ConvertMachineFromInternalModel(Models.Metadata.Machine item, bool game = false)
+        private static GameBase ConvertMachineFromInternalModel(Models.Metadata.Machine item, bool game)
         {
             GameBase gameBase = game ? new Models.ClrMamePro.Game() : new Models.ClrMamePro.Machine();
 

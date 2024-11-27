@@ -44,6 +44,10 @@ namespace SabreTools.Serialization.CrossModel
 
             if (item.SFV != null && item.SFV.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SFV, ConvertToInternalModel);
+            else if (item.MD2 != null && item.MD2.Length > 0)
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD2, ConvertToInternalModel);
+            else if (item.MD4 != null && item.MD4.Length > 0)
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD4, ConvertToInternalModel);
             else if (item.MD5 != null && item.MD5.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD5, ConvertToInternalModel);
             else if (item.SHA1 != null && item.SHA1.Length > 0)
@@ -58,6 +62,32 @@ namespace SabreTools.Serialization.CrossModel
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SpamSum, ConvertToInternalModel);
 
             return machine;
+        }
+
+        /// <summary>
+        /// Convert from <cref="Models.Hashfile.MD2"/> to <cref="Models.Metadata.Rom"/>
+        /// </summary>
+        private static Models.Metadata.Rom ConvertToInternalModel(MD2 item)
+        {
+            var rom = new Models.Metadata.Rom
+            {
+                [Models.Metadata.Rom.MD2Key] = item.Hash,
+                [Models.Metadata.Rom.NameKey] = item.File,
+            };
+            return rom;
+        }
+
+        /// <summary>
+        /// Convert from <cref="Models.Hashfile.MD4"/> to <cref="Models.Metadata.Rom"/>
+        /// </summary>
+        private static Models.Metadata.Rom ConvertToInternalModel(MD4 item)
+        {
+            var rom = new Models.Metadata.Rom
+            {
+                [Models.Metadata.Rom.MD4Key] = item.Hash,
+                [Models.Metadata.Rom.NameKey] = item.File,
+            };
+            return rom;
         }
 
         /// <summary>

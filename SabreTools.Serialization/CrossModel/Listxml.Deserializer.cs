@@ -23,24 +23,6 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.MetadataFile"/> to <cref="Models.Listxml.Mame"/>
-        /// </summary>
-        public static Mame? ConvertMameFromInternalModel(Models.Metadata.MetadataFile? item)
-        {
-            if (item == null)
-                return null;
-
-            var header = item.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
-            var mame = header != null ? ConvertMameFromInternalModel(header) : new Mame();
-
-            var machines = item.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
-                mame.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
-
-            return mame;
-        }
-
-        /// <summary>
         /// Convert from <cref="Models.Metadata.Models.Metadata.Header"/> to <cref="Models.Listxml.Mame"/>
         /// </summary>
         private static Mame ConvertMameFromInternalModel(Models.Metadata.Header item)
@@ -518,10 +500,13 @@ namespace SabreTools.Serialization.CrossModel
                 Service = item.ReadString(Models.Metadata.Input.ServiceKey),
                 Tilt = item.ReadString(Models.Metadata.Input.TiltKey),
                 Players = item.ReadString(Models.Metadata.Input.PlayersKey),
-                ControlAttr = item.ReadString(Models.Metadata.Input.ControlKey),
                 Buttons = item.ReadString(Models.Metadata.Input.ButtonsKey),
                 Coins = item.ReadString(Models.Metadata.Input.CoinsKey),
             };
+
+            var controlAttr = item.ReadString(Models.Metadata.Input.ControlKey);
+            if (controlAttr != null)
+                input.ControlAttr = controlAttr;
 
             var controls = item.Read<Models.Metadata.Control[]>(Models.Metadata.Input.ControlKey);
             if (controls != null && controls.Length > 0)

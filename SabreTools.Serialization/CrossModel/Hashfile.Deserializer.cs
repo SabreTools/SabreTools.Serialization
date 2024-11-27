@@ -21,9 +21,12 @@ namespace SabreTools.Serialization.CrossModel
             if (machines == null || machines.Length == 0)
                 return null;
 
-            var hashfiles = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, hash));
+            var hashfiles = Array.ConvertAll(machines,
+                m => ConvertMachineFromInternalModel(m, hash));
 
             var sfvs = new List<SFV>();
+            var md2s = new List<MD2>();
+            var md4s = new List<MD4>();
             var md5s = new List<MD5>();
             var sha1s = new List<SHA1>();
             var sha256s = new List<SHA256>();
@@ -35,6 +38,10 @@ namespace SabreTools.Serialization.CrossModel
             {
                 if (hashfile.SFV != null && hashfile.SFV.Length > 0)
                     sfvs.AddRange(hashfile.SFV);
+                if (hashfile.MD2 != null && hashfile.MD2.Length > 0)
+                    md2s.AddRange(hashfile.MD2);
+                if (hashfile.MD4 != null && hashfile.MD4.Length > 0)
+                    md4s.AddRange(hashfile.MD4);
                 if (hashfile.MD5 != null && hashfile.MD5.Length > 0)
                     md5s.AddRange(hashfile.MD5);
                 if (hashfile.SHA1 != null && hashfile.SHA1.Length > 0)
@@ -53,6 +60,10 @@ namespace SabreTools.Serialization.CrossModel
 
             if (sfvs.Count > 0)
                 hashfileItem.SFV = [.. sfvs];
+            if (md2s.Count > 0)
+                hashfileItem.MD2 = [.. md2s];
+            if (md4s.Count > 0)
+                hashfileItem.MD4 = [.. md4s];
             if (md5s.Count > 0)
                 hashfileItem.MD5 = [.. md5s];
             if (sha1s.Count > 0)
@@ -70,21 +81,6 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.MetadataFile"/> to an array of <cref="Models.Hashfile.Hashfile"/>
-        /// </summary>
-        public static Models.Hashfile.Hashfile[]? ConvertArrayFromInternalModel(Models.Metadata.MetadataFile? item, HashType hash)
-        {
-            if (item == null)
-                return null;
-
-            var machines = item.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
-                return Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, hash));
-
-            return null;
-        }
-
-        /// <summary>
         /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.Hashfile.Hashfile"/>
         /// </summary>
         private static Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Models.Metadata.Machine item, HashType hash)
@@ -97,6 +93,12 @@ namespace SabreTools.Serialization.CrossModel
             {
                 SFV = hash == HashType.CRC32
                     ? Array.ConvertAll(roms, ConvertToSFV)
+                    : null,
+                MD2 = hash == HashType.MD2
+                    ? Array.ConvertAll(roms, ConvertToMD2)
+                    : null,
+                MD4 = hash == HashType.MD4
+                    ? Array.ConvertAll(roms, ConvertToMD4)
                     : null,
                 MD5 = hash == HashType.MD5
                     ? Array.ConvertAll(roms, ConvertToMD5)
@@ -117,6 +119,32 @@ namespace SabreTools.Serialization.CrossModel
                     ? Array.ConvertAll(roms, ConvertToSpamSum)
                     : null,
             };
+        }
+
+        /// <summary>
+        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.MD2"/>
+        /// </summary>
+        private static MD2 ConvertToMD2(Models.Metadata.Rom item)
+        {
+            var md2 = new MD2
+            {
+                Hash = item.ReadString(Models.Metadata.Rom.MD2Key),
+                File = item.ReadString(Models.Metadata.Rom.NameKey),
+            };
+            return md2;
+        }
+
+        /// <summary>
+        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.MD4"/>
+        /// </summary>
+        private static MD4 ConvertToMD4(Models.Metadata.Rom item)
+        {
+            var md4 = new MD4
+            {
+                Hash = item.ReadString(Models.Metadata.Rom.MD4Key),
+                File = item.ReadString(Models.Metadata.Rom.NameKey),
+            };
+            return md4;
         }
 
         /// <summary>

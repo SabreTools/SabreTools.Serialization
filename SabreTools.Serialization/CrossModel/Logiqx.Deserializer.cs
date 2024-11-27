@@ -15,16 +15,16 @@ namespace SabreTools.Serialization.CrossModel
             if (obj == null)
                 return null;
 
-            var datafile = new Datafile
-            {
-                Build = obj.ReadString(Models.Metadata.Header.BuildKey),
-                Debug = obj.ReadString(Models.Metadata.Header.DebugKey),
-                SchemaLocation = obj.ReadString(Models.Metadata.Header.SchemaLocationKey),
-            };
+            var datafile = new Datafile();
 
             var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
             if (header != null)
+            {
+                datafile.Build = header.ReadString(Models.Metadata.Header.BuildKey);
+                datafile.Debug = header.ReadString(Models.Metadata.Header.DebugKey);
+                datafile.SchemaLocation = header.ReadString(Models.Metadata.Header.SchemaLocationKey);
                 datafile.Header = ConvertHeaderFromInternalModel(header);
+            }
 
             // TODO: Handle Dir items - Currently need to be generated from the machines
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
@@ -56,38 +56,58 @@ namespace SabreTools.Serialization.CrossModel
                 Type = item.ReadString(Models.Metadata.Header.TypeKey),
             };
 
-            if (item.ContainsKey(Models.Metadata.Header.HeaderKey)
-                || item.ContainsKey(Models.Metadata.Header.ForceMergingKey)
-                || item.ContainsKey(Models.Metadata.Header.ForceNodumpKey)
-                || item.ContainsKey(Models.Metadata.Header.ForcePackingKey))
+            string? headerVal = item.ReadString(Models.Metadata.Header.HeaderKey);
+            string? forceMerging = item.ReadString(Models.Metadata.Header.ForceMergingKey);
+            string? forceNodump = item.ReadString(Models.Metadata.Header.ForceNodumpKey);
+            string? forceUnpacking = item.ReadString(Models.Metadata.Header.ForcePackingKey);
+
+            if (headerVal != null
+                || forceMerging != null
+                || forceNodump != null
+                || forceUnpacking != null)
             {
-                header.ClrMamePro = new Models.Logiqx.ClrMamePro
-                {
-                    Header = item.ReadString(Models.Metadata.Header.HeaderKey),
-                    ForceMerging = item.ReadString(Models.Metadata.Header.ForceMergingKey),
-                    ForceNodump = item.ReadString(Models.Metadata.Header.ForceNodumpKey),
-                    ForcePacking = item.ReadString(Models.Metadata.Header.ForcePackingKey),
-                };
+                header.ClrMamePro = new Models.Logiqx.ClrMamePro();
+                if (headerVal != null)
+                    header.ClrMamePro.Header = headerVal;
+                if (forceMerging != null)
+                    header.ClrMamePro.ForceMerging = forceMerging;
+                if (forceNodump != null)
+                    header.ClrMamePro.ForceNodump = forceNodump;
+                if (forceUnpacking != null)
+                    header.ClrMamePro.ForcePacking = forceUnpacking;
             }
 
-            if (item.ContainsKey(Models.Metadata.Header.PluginKey)
-                || item.ContainsKey(Models.Metadata.Header.RomModeKey)
-                || item.ContainsKey(Models.Metadata.Header.BiosModeKey)
-                || item.ContainsKey(Models.Metadata.Header.SampleModeKey)
-                || item.ContainsKey(Models.Metadata.Header.LockRomModeKey)
-                || item.ContainsKey(Models.Metadata.Header.LockBiosModeKey)
-                || item.ContainsKey(Models.Metadata.Header.LockSampleModeKey))
+            string? plugin = item.ReadString(Models.Metadata.Header.PluginKey);
+            string? romMode = item.ReadString(Models.Metadata.Header.RomModeKey);
+            string? biosMode = item.ReadString(Models.Metadata.Header.BiosModeKey);
+            string? sampleMode = item.ReadString(Models.Metadata.Header.SampleModeKey);
+            string? lockRomMode = item.ReadString(Models.Metadata.Header.LockRomModeKey);
+            string? lockBiosMode = item.ReadString(Models.Metadata.Header.LockBiosModeKey);
+            string? lockSampleMode = item.ReadString(Models.Metadata.Header.LockSampleModeKey);
+
+            if (plugin != null
+                || romMode != null
+                || biosMode != null
+                || sampleMode != null
+                || lockRomMode != null
+                || lockBiosMode != null
+                || lockSampleMode != null)
             {
-                header.RomCenter = new Models.Logiqx.RomCenter
-                {
-                    Plugin = item.ReadString(Models.Metadata.Header.PluginKey),
-                    RomMode = item.ReadString(Models.Metadata.Header.RomModeKey),
-                    BiosMode = item.ReadString(Models.Metadata.Header.BiosModeKey),
-                    SampleMode = item.ReadString(Models.Metadata.Header.SampleModeKey),
-                    LockRomMode = item.ReadString(Models.Metadata.Header.LockRomModeKey),
-                    LockBiosMode = item.ReadString(Models.Metadata.Header.LockBiosModeKey),
-                    LockSampleMode = item.ReadString(Models.Metadata.Header.LockSampleModeKey),
-                };
+                header.RomCenter = new Models.Logiqx.RomCenter();
+                if (plugin != null)
+                    header.RomCenter.Plugin = plugin;
+                if (romMode != null)
+                    header.RomCenter.RomMode = romMode;
+                if (biosMode != null)
+                    header.RomCenter.BiosMode = biosMode;
+                if (sampleMode != null)
+                    header.RomCenter.SampleMode = sampleMode;
+                if (lockRomMode != null)
+                    header.RomCenter.LockRomMode = lockRomMode;
+                if (lockBiosMode != null)
+                    header.RomCenter.LockBiosMode = lockBiosMode;
+                if (lockSampleMode != null)
+                    header.RomCenter.LockSampleMode = lockSampleMode;
             }
 
             return header;

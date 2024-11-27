@@ -58,6 +58,7 @@ namespace SabreTools.Serialization.CrossModel
                 Summation = item.ReadString(Models.Metadata.Rom.SummationKey),
                 MatrixNumber = item.ReadString(Models.Metadata.Rom.MatrixNumberKey),
                 CollectionCatalogNumber = item.ReadString(Models.Metadata.Rom.CollectionCatalogNumberKey),
+                Publisher = item.ReadString(Models.Metadata.Rom.PublisherKey),
                 Comment = item.ReadString(Models.Metadata.Rom.CommentKey),
 
                 ASRDetectedLang = item.ReadString(Models.Metadata.Rom.ASRDetectedLangKey),

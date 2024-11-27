@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var row = new Row
             {
-                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve
+                FileName = header?.ReadString("FILENAME"), // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
                 InternalName = header?.ReadString(Models.Metadata.Header.NameKey),
                 Description = header?.ReadString(Models.Metadata.Header.DescriptionKey),
                 GameName = parent.ReadString(Models.Metadata.Machine.NameKey),

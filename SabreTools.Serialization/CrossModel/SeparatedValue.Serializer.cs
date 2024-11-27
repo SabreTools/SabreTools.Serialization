@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
             if (item.Row != null && item.Row.Length > 0)
             {
                 var first = item.Row[0];
-                //header[Models.Metadata.Header.FileNameKey] = first.FileName; // Not possible to map
+                header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename
                 header[Models.Metadata.Header.NameKey] = first.FileName;
                 header[Models.Metadata.Header.DescriptionKey] = first.Description;
             }

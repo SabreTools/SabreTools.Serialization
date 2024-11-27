@@ -63,9 +63,9 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.DosCenter.File"/>
         /// </summary>
-        private static Models.DosCenter.File ConvertFromInternalModel(Models.Metadata.Rom item)
+        private static File ConvertFromInternalModel(Models.Metadata.Rom item)
         {
-            var file = new Models.DosCenter.File
+            var file = new File
             {
                 Name = item.ReadString(Models.Metadata.Rom.NameKey),
                 Size = item.ReadString(Models.Metadata.Rom.SizeKey),

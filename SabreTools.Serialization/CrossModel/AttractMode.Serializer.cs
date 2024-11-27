@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Machine.PlayedCountKey] = item.PlayedCount,
                 [Models.Metadata.Machine.PlayedTimeKey] = item.PlayedTime,
                 [Models.Metadata.Machine.PlayedTimeKey] = item.PlayedTime,
-                [Models.Metadata.Machine.RomKey] = ConvertToInternalModel(item),
+                [Models.Metadata.Machine.RomKey] = new Models.Metadata.Rom[] { ConvertToInternalModel(item) },
             };
             return machine;
         }
