@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Deserializers
         public MetadataFile? Deserialize(byte[]? data, int offset, bool quotes)
         {
             // If the data is invalid
-            if (data == null)
+            if (data == null || data.Length == 0)
                 return default;
 
             // If the offset is out of bounds
@@ -81,6 +81,17 @@ namespace SabreTools.Serialization.Deserializers
             // If the stream is null
             if (data == null)
                 return default;
+
+            try
+            {
+                // If the stream length and offset are invalid
+                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
+                    return default;
+            }
+            catch
+            {
+                // Ignore errors in getting position for compressed streams
+            }
 
             // Setup the reader and output
             var reader = new ClrMameProReader(data, Encoding.UTF8) { Quotes = quotes };

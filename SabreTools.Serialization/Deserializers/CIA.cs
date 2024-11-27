@@ -144,7 +144,22 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled CIA header on success, null on error</returns>
         public static CIAHeader? ParseCIAHeader(Stream data)
         {
-            return data.ReadType<CIAHeader>();
+            var header = data.ReadType<CIAHeader>();
+
+            if (header == null)
+                return null;
+            if (header.CertificateChainSize > data.Length)
+                return null;
+            if (header.TicketSize > data.Length)
+                return null;
+            if (header.TMDFileSize > data.Length)
+                return null;
+            if (header.MetaSize > data.Length)
+                return null;
+            if ((long)header.ContentSize > data.Length)
+                return null;
+
+            return header;
         }
 
         /// <summary>

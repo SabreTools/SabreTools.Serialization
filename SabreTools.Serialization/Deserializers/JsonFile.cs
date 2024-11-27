@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Deserializers
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class JsonFile<T> : BaseBinaryDeserializer<T>
+    public abstract class JsonFile<T> : BaseBinaryDeserializer<T>
     {
         #region IByteDeserializer
 
@@ -77,9 +77,20 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled object on success, null on error</returns>
         public T? Deserialize(Stream? data, Encoding encoding)
         {
-            // If the stream is null
-            if (data == null)
+            // If the stream is invalid
+            if (data == null || !data.CanRead)
                 return default;
+
+            try
+            {
+                // If the stream length and offset are invalid
+                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
+                    return default;
+            }
+            catch
+            {
+                // Ignore errors in getting position for compressed streams
+            }
 
             // Setup the serializer and the reader
             var serializer = JsonSerializer.Create();
@@ -87,7 +98,15 @@ namespace SabreTools.Serialization.Deserializers
             var jsonReader = new JsonTextReader(streamReader);
 
             // Perform the deserialization and return
-            return serializer.Deserialize<T>(jsonReader);
+            try
+            {
+                return serializer.Deserialize<T>(jsonReader);
+            }
+            catch
+            {
+                // Absorb all exceptions
+                return default;
+            }
         }
 
         #endregion

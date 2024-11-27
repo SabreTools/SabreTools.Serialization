@@ -113,7 +113,9 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            cueSheet.Files = [.. cueFiles];
+            if (cueFiles.Count > 0)
+                cueSheet.Files = [.. cueFiles];
+
             return cueSheet;
         }
 
@@ -195,7 +197,9 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            cueFile.Tracks = [.. cueTracks];
+            if (cueTracks.Count > 0)
+                cueFile.Tracks = [.. cueTracks];
+
             return cueFile;
         }
 
@@ -346,7 +350,9 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            cueTrack.Indices = [.. cueIndices];
+            if (cueIndices.Count > 0)
+                cueTrack.Indices = [.. cueIndices];
+
             return cueTrack;
         }
 

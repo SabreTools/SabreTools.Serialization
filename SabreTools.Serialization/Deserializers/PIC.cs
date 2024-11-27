@@ -26,6 +26,9 @@ namespace SabreTools.Serialization.Deserializers
 
             // Read the initial disc information
             di.DataStructureLength = data.ReadUInt16BigEndian();
+            if (di.DataStructureLength > data.Length)
+                return null;
+
             di.Reserved0 = data.ReadByteValue();
             di.Reserved1 = data.ReadByteValue();
 

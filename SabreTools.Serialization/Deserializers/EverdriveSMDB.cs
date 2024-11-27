@@ -11,9 +11,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If the data is invalid
+            if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
+                return null;
+
+            // If the offset is out of bounds
+            if (data.Position < 0 || data.Position >= data.Length)
+                return null;
 
             // Setup the reader and output
             var reader = new SeparatedValueReader(data, Encoding.UTF8)
@@ -30,6 +34,10 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // If we have no next line
                 if (!reader.ReadNextLine() || reader.Line == null)
+                    break;
+
+                // If the next line has an invalid count
+                if (reader.Line.Count < 5)
                     break;
 
                 // Parse the line into a row

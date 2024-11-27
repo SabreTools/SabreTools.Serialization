@@ -15,6 +15,17 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null)
                 return default;
 
+            try
+            {
+                // If the stream length and offset are invalid
+                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
+                    return default;
+            }
+            catch
+            {
+                // Ignore errors in getting position for compressed streams
+            }
+
             // Setup the reader and output
             var reader = new IniReader(data, Encoding.UTF8)
             {

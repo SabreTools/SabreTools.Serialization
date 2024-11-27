@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Deserializers
         public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
         {
             // If the data is invalid
-            if (data == null)
+            if (data == null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -82,6 +82,17 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null)
                 return default;
 
+            try
+            {
+                // If the stream length and offset are invalid
+                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
+                    return default;
+            }
+            catch
+            {
+                // Ignore errors in getting position for compressed streams
+            }
+
             // Setup the reader and output
             var reader = new StreamReader(data);
             var dat = new Models.Hashfile.Hashfile();
@@ -103,7 +114,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read and split the line
                 string? line = reader.ReadLine();
                 string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null)
+                if (lineParts == null || lineParts.Length < 2)
                     continue;
 
                 // Parse the line into a hash
@@ -188,31 +199,40 @@ namespace SabreTools.Serialization.Deserializers
             switch (hash)
             {
                 case HashType.CRC32:
-                    dat.SFV = [.. sfvList];
+                    if (sfvList.Count > 0)
+                        dat.SFV = [.. sfvList];
                     break;
                 case HashType.MD2:
-                    dat.MD2 = [.. md2List];
+                    if (md2List.Count > 0)
+                        dat.MD2 = [.. md2List];
                     break;
                 case HashType.MD4:
-                    dat.MD4 = [.. md4List];
+                    if (md4List.Count > 0)
+                        dat.MD4 = [.. md4List];
                     break;
                 case HashType.MD5:
-                    dat.MD5 = [.. md5List];
+                    if (md5List.Count > 0)
+                        dat.MD5 = [.. md5List];
                     break;
                 case HashType.SHA1:
-                    dat.SHA1 = [.. sha1List];
+                    if (sha1List.Count > 0)
+                        dat.SHA1 = [.. sha1List];
                     break;
                 case HashType.SHA256:
-                    dat.SHA256 = [.. sha256List];
+                    if (sha256List.Count > 0)
+                        dat.SHA256 = [.. sha256List];
                     break;
                 case HashType.SHA384:
-                    dat.SHA384 = [.. sha384List];
+                    if (sha384List.Count > 0)
+                        dat.SHA384 = [.. sha384List];
                     break;
                 case HashType.SHA512:
-                    dat.SHA512 = [.. sha512List];
+                    if (sha512List.Count > 0)
+                        dat.SHA512 = [.. sha512List];
                     break;
                 case HashType.SpamSum:
-                    dat.SpamSum = [.. spamsumList];
+                    if (spamsumList.Count > 0)
+                        dat.SpamSum = [.. spamsumList];
                     break;
             }
 
