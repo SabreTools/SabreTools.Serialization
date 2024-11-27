@@ -228,7 +228,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled segment table on success, null on error</returns>
         public static SegmentTableEntry[]? ParseSegmentTable(Stream data, int count)
         {
-            // TODO: Use marshalling here instead of building
             var segmentTable = new SegmentTableEntry[count];
 
             for (int i = 0; i < count; i++)
@@ -263,7 +262,6 @@ namespace SabreTools.Serialization.Deserializers
         {
             long initialOffset = data.Position;
 
-            // TODO: Use marshalling here instead of building
             var resourceTable = new ResourceTable();
 
             resourceTable.AlignmentShiftCount = data.ReadUInt16();
@@ -364,7 +362,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resource type and name string on success, null on error</returns>
         public static ResourceTypeAndNameString? ParseResourceTypeAndNameString(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var str = new ResourceTypeAndNameString();
 
             str.Length = data.ReadByteValue();
@@ -381,7 +378,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resident-name table on success, null on error</returns>
         public static ResidentNameTableEntry[]? ParseResidentNameTable(Stream data, int endOffset)
         {
-            // TODO: Use marshalling here instead of building
             var residentNameTable = new List<ResidentNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
@@ -403,7 +399,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resident-name table entry on success, null on error</returns>
         public static ResidentNameTableEntry? ParseResidentNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new ResidentNameTableEntry();
 
             entry.Length = data.ReadByteValue();
@@ -421,7 +416,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled module-reference table on success, null on error</returns>
         public static ModuleReferenceTableEntry[]? ParseModuleReferenceTable(Stream data, int count)
         {
-            // TODO: Use marshalling here instead of building
             var moduleReferenceTable = new ModuleReferenceTableEntry[count];
 
             for (int i = 0; i < count; i++)
@@ -454,7 +448,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled imported-name table on success, null on error</returns>
         public static Dictionary<ushort, ImportedNameTableEntry>? ParseImportedNameTable(Stream data, int endOffset)
         {
-            // TODO: Use marshalling here instead of building
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
@@ -477,7 +470,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled imported-name table entry on success, null on error</returns>
         public static ImportedNameTableEntry? ParseImportedNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new ImportedNameTableEntry();
 
             entry.Length = data.ReadByteValue();
@@ -494,7 +486,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled entry table on success, null on error</returns>
         public static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
         {
-            // TODO: Use marshalling here instead of building
             var entryTable = new List<EntryTableBundle>();
 
             while (data.Position < endOffset && data.Position < data.Length)
@@ -533,7 +524,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled nonresident-name table on success, null on error</returns>
         public static NonResidentNameTableEntry[]? ParseNonResidentNameTable(Stream data, int endOffset)
         {
-            // TODO: Use marshalling here instead of building
             var residentNameTable = new List<NonResidentNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
@@ -555,7 +545,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled nonresident-name table entry on success, null on error</returns>
         public static NonResidentNameTableEntry? ParseNonResidentNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new NonResidentNameTableEntry();
 
             entry.Length = data.ReadByteValue();

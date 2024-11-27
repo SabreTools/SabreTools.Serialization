@@ -280,8 +280,8 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
         private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
         {
-            // TODO: Fix the directory entry size const
             const int directoryEntrySize = 64 + 2 + 1 + 1 + 4 + 4 + 4 + 16 + 4 + 8 + 8 + 4 + 8;
+
             int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
             var directoryEntries = new DirectoryEntry[sectorCount];
 
@@ -309,9 +309,6 @@ namespace SabreTools.Serialization.Deserializers
 
             if (directoryEntry == null)
                 return null;
-
-            // TEMPORARY FIX FOR ASCII -> UNICODE
-            directoryEntry.Name = Encoding.Unicode.GetString(Encoding.ASCII.GetBytes(directoryEntry.Name!));
 
             // Handle version 3 entries
             if (majorVersion == 3)

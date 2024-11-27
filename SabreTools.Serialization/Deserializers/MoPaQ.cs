@@ -340,10 +340,7 @@ namespace SabreTools.Serialization.Deserializers
             ArchiveHeader archiveHeader = new ArchiveHeader();
 
             // V1 - Common
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(4);
             archiveHeader.Signature = Encoding.ASCII.GetString(signature);
             if (archiveHeader.Signature != ArchiveHeaderSignatureString)
                 return null;
@@ -419,10 +416,7 @@ namespace SabreTools.Serialization.Deserializers
             var hetTable = new HetTable();
 
             // Common Headers
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(4);
             hetTable.Signature = Encoding.ASCII.GetString(signature);
             if (hetTable.Signature != HetTableSignatureString)
                 return null;
@@ -456,10 +450,7 @@ namespace SabreTools.Serialization.Deserializers
             var betTable = new BetTable();
 
             // Common Headers
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(4);
             betTable.Signature = Encoding.ASCII.GetString(signature);
             if (betTable.Signature != BetTableSignatureString)
                 return null;
@@ -492,9 +483,8 @@ namespace SabreTools.Serialization.Deserializers
             betTable.FlagCount = data.ReadUInt32();
 
             betTable.FlagsArray = new uint[betTable.FlagCount];
-            byte[]? flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
-            if (flagsArray != null)
-                Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
+            byte[] flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
+            Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
 
             // TODO: Populate the file table
             // TODO: Populate the hash table

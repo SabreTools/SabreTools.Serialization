@@ -36,16 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.CueSheet();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.Catalog);
-            Assert.Null(actual.CdTextFile);
-            Assert.Null(actual.Performer);
-            Assert.Null(actual.Songwriter);
-            Assert.Null(actual.Title);
-            Assert.Null(actual.Files);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -75,16 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.CueSheet();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.Catalog);
-            Assert.Null(actual.CdTextFile);
-            Assert.Null(actual.Performer);
-            Assert.Null(actual.Songwriter);
-            Assert.Null(actual.Title);
-            Assert.Null(actual.Files);
+            Assert.Null(actual);
         }
     }
 }

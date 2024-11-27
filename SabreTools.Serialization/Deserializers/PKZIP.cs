@@ -354,7 +354,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled end of central directory record on success, null on error</returns>
         public static EndOfCentralDirectoryRecord? ParseEndOfCentralDirectoryRecord(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var record = new EndOfCentralDirectoryRecord();
 
             record.Signature = data.ReadUInt32();
@@ -446,7 +445,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ZIP64 end of central directory record on success, null on error</returns>
         public static EndOfCentralDirectoryRecord64? ParseEndOfCentralDirectoryRecord64(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var record = new EndOfCentralDirectoryRecord64();
 
             record.Signature = data.ReadUInt32();
@@ -476,7 +474,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled central directory file header on success, null on error</returns>
         public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var header = new CentralDirectoryFileHeader();
 
             header.Signature = data.ReadUInt32();
@@ -585,7 +582,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled archive extra data record on success, null on error</returns>
         public static ArchiveExtraDataRecord? ParseArchiveExtraDataRecord(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var record = new ArchiveExtraDataRecord();
 
             record.Signature = data.ReadUInt32();
@@ -612,7 +608,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled local file header on success, null on error</returns>
         public static LocalFileHeader? ParseLocalFileHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var header = new LocalFileHeader();
 
             header.Signature = data.ReadUInt32();
@@ -657,7 +652,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled data descriptor on success, null on error</returns>
         public static DataDescriptor? ParseDataDescriptor(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var dataDescriptor = new DataDescriptor();
 
             // Signatures are expected but not required
@@ -679,7 +673,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ZIP64 data descriptor on success, null on error</returns>
         public static DataDescriptor64? ParseDataDescriptor64(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var zip64DataDescriptor = new DataDescriptor64();
 
             // Signatures are expected but not required

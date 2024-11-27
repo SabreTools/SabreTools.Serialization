@@ -7,7 +7,6 @@ using SabreTools.Models.Hashfile;
 
 namespace SabreTools.Serialization.Serializers
 {
-    // TODO: Create variants for the implemented types
     public class Hashfile : BaseBinarySerializer<Models.Hashfile.Hashfile>
     {
         #region IByteSerializer
@@ -102,6 +101,12 @@ namespace SabreTools.Serialization.Serializers
                 case HashType.CRC32:
                     WriteSFV(obj.SFV, writer);
                     break;
+                case HashType.MD2:
+                    WriteMD2(obj.MD2, writer);
+                    break;
+                case HashType.MD4:
+                    WriteMD4(obj.MD4, writer);
+                    break;
                 case HashType.MD5:
                     WriteMD5(obj.MD5, writer);
                     break;
@@ -143,12 +148,54 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var sfv in sfvs)
             {
-                if (sfv == null)
-                    continue;
                 if (string.IsNullOrEmpty(sfv.File) || string.IsNullOrEmpty(sfv.Hash))
                     continue;
 
-                writer.WriteValues(new string[] { sfv.File!, sfv.Hash! });
+                writer.WriteValues([sfv.File!, sfv.Hash!]);
+                writer.Flush();
+            }
+        }
+
+        /// <summary>
+        /// Write MD2 information to the current writer
+        /// </summary>
+        /// <param name="md2s">Array of MD2 objects representing the files</param>
+        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        private static void WriteMD2(MD2[]? md2s, SeparatedValueWriter writer)
+        {
+            // If the item information is missing, we can't do anything
+            if (md2s == null || md2s.Length == 0)
+                return;
+
+            // Loop through and write out the items
+            foreach (var md2 in md2s)
+            {
+                if (string.IsNullOrEmpty(md2.Hash) || string.IsNullOrEmpty(md2.File))
+                    continue;
+
+                writer.WriteValues([md2.Hash!, md2.File!]);
+                writer.Flush();
+            }
+        }
+
+        /// <summary>
+        /// Write MD4 information to the current writer
+        /// </summary>
+        /// <param name="md4s">Array of MD4 objects representing the files</param>
+        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        private static void WriteMD4(MD4[]? md4s, SeparatedValueWriter writer)
+        {
+            // If the item information is missing, we can't do anything
+            if (md4s == null || md4s.Length == 0)
+                return;
+
+            // Loop through and write out the items
+            foreach (var md4 in md4s)
+            {
+                if (string.IsNullOrEmpty(md4.Hash) || string.IsNullOrEmpty(md4.File))
+                    continue;
+
+                writer.WriteValues([md4.Hash!, md4.File!]);
                 writer.Flush();
             }
         }
@@ -167,12 +214,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var md5 in md5s)
             {
-                if (md5 == null)
-                    continue;
                 if (string.IsNullOrEmpty(md5.Hash) || string.IsNullOrEmpty(md5.File))
                     continue;
 
-                writer.WriteValues(new string[] { md5.Hash!, md5.File! });
+                writer.WriteValues([md5.Hash!, md5.File!]);
                 writer.Flush();
             }
         }
@@ -191,12 +236,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var sha1 in sha1s)
             {
-                if (sha1 == null)
-                    continue;
                 if (string.IsNullOrEmpty(sha1.Hash) || string.IsNullOrEmpty(sha1.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha1.Hash!, sha1.File! });
+                writer.WriteValues([sha1.Hash!, sha1.File!]);
                 writer.Flush();
             }
         }
@@ -215,12 +258,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var sha256 in sha256s)
             {
-                if (sha256 == null)
-                    continue;
                 if (string.IsNullOrEmpty(sha256.Hash) || string.IsNullOrEmpty(sha256.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha256.Hash!, sha256.File! });
+                writer.WriteValues([sha256.Hash!, sha256.File!]);
                 writer.Flush();
             }
         }
@@ -239,12 +280,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var sha384 in sha384s)
             {
-                if (sha384 == null)
-                    continue;
                 if (string.IsNullOrEmpty(sha384.Hash) || string.IsNullOrEmpty(sha384.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha384.Hash!, sha384.File! });
+                writer.WriteValues([sha384.Hash!, sha384.File!]);
                 writer.Flush();
             }
         }
@@ -263,12 +302,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var sha512 in sha512s)
             {
-                if (sha512 == null)
-                    continue;
                 if (string.IsNullOrEmpty(sha512.Hash) || string.IsNullOrEmpty(sha512.File))
                     continue;
 
-                writer.WriteValues(new string[] { sha512.Hash!, sha512.File! });
+                writer.WriteValues([sha512.Hash!, sha512.File!]);
                 writer.Flush();
             }
         }
@@ -287,12 +324,10 @@ namespace SabreTools.Serialization.Serializers
             // Loop through and write out the items
             foreach (var spamsum in spamsums)
             {
-                if (spamsum == null)
-                    continue;
                 if (string.IsNullOrEmpty(spamsum.Hash) || string.IsNullOrEmpty(spamsum.File))
                     continue;
 
-                writer.WriteValues(new string[] { spamsum.Hash!, spamsum.File! });
+                writer.WriteValues([spamsum.Hash!, spamsum.File!]);
                 writer.Flush();
             }
         }

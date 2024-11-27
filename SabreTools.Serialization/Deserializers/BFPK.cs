@@ -82,15 +82,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file entry on success, null on error</returns>
         private static FileEntry? ParseFileEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var fileEntry = new FileEntry();
 
             fileEntry.NameSize = data.ReadInt32();
             if (fileEntry.NameSize > 0)
             {
-                byte[]? name = data.ReadBytes(fileEntry.NameSize);
-                if (name != null)
-                    fileEntry.Name = Encoding.ASCII.GetString(name);
+                byte[] name = data.ReadBytes(fileEntry.NameSize);
+                fileEntry.Name = Encoding.ASCII.GetString(name);
             }
 
             fileEntry.UncompressedSize = data.ReadInt32();

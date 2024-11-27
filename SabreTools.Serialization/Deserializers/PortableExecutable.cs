@@ -45,10 +45,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Signature
 
             data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(4);
             executable.Signature = Encoding.ASCII.GetString(signature);
             if (executable.Signature != SignatureString)
                 return null;
@@ -308,7 +305,6 @@ namespace SabreTools.Serialization.Deserializers
         {
             long initialOffset = data.Position;
 
-            // TODO: Use marshalling here instead of building
             var optionalHeader = new OptionalHeader();
 
             #region Standard Fields
@@ -431,7 +427,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled section table on success, null on error</returns>
         public static SectionHeader[] ParseSectionTable(Stream data, int count)
         {
-            // TODO: Use marshalling here instead of building
             var sectionTable = new SectionHeader[count];
 
             for (int i = 0; i < count; i++)
@@ -471,7 +466,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled COFF symbol table on success, null on error</returns>
         public static COFFSymbolTableEntry[] ParseCOFFSymbolTable(Stream data, uint count)
         {
-            // TODO: Use marshalling here instead of building
             var coffSymbolTable = new COFFSymbolTableEntry[count];
 
             int auxSymbolsRemaining = 0;
@@ -628,7 +622,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled COFF string table on success, null on error</returns>
         public static COFFStringTable ParseCOFFStringTable(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var coffStringTable = new COFFStringTable();
 
             coffStringTable.TotalSize = data.ReadUInt32();
@@ -702,7 +695,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled base relocation table on success, null on error</returns>
         public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader?[] sections)
         {
-            // TODO: Use marshalling here instead of building
             var baseRelocationTable = new List<BaseRelocationBlock>();
 
             while (data.Position < endOffset && data.Position < data.Length)
@@ -742,7 +734,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled debug table on success, null on error</returns>
         public static DebugTable? ParseDebugTable(Stream data, int endOffset)
         {
-            // TODO: Use marshalling here instead of building
             var debugTable = new DebugTable();
 
             var debugDirectoryTable = new List<DebugDirectoryEntry>();
@@ -772,7 +763,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled export table on success, null on error</returns>
         public static ExportTable? ParseExportTable(Stream data, SectionHeader?[] sections)
         {
-            // TODO: Use marshalling here instead of building
             var exportTable = new ExportTable();
 
             var exportDirectoryTable = new ExportDirectoryTable();
@@ -887,7 +877,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled import table on success, null on error</returns>
         public static ImportTable? ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
         {
-            // TODO: Use marshalling here instead of building
             var importTable = new ImportTable();
 
             // Import directory table
@@ -1155,7 +1144,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resource directory table on success, null on error</returns>
         public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader?[] sections, bool topLevel = false)
         {
-            // TODO: Use marshalling here instead of building
             var resourceDirectoryTable = new ResourceDirectoryTable();
 
             resourceDirectoryTable.Characteristics = data.ReadUInt32();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using SabreTools.IO.Extensions;
 using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Deserializers
@@ -14,17 +13,15 @@ namespace SabreTools.Serialization.Deserializers
         public override Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
+            if (data == null || data.Length == 0 || !data.CanRead)
                 return null;
 
             // If the offset is out of bounds
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
-            // Create a new cuesheet to fill
+            // Setup the reader and output
+            var reader = new StreamReader(data);
             var cueSheet = new Models.CueSheets.CueSheet();
             var cueFiles = new List<CueFile>();
 
@@ -32,7 +29,7 @@ namespace SabreTools.Serialization.Deserializers
             string? lastLine = null;
             while (true)
             {
-                string? line = lastLine ?? ReadUntilNewline(data);
+                string? line = lastLine ?? reader.ReadLine();
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -104,7 +101,7 @@ namespace SabreTools.Serialization.Deserializers
                         if (splitLine.Count < 3)
                             throw new FormatException($"FILE line malformed: {line}");
 
-                        var file = CreateCueFile(splitLine[1], splitLine[2], data, out lastLine);
+                        var file = CreateCueFile(splitLine[1], splitLine[2], reader, out lastLine);
                         if (file == default)
                             throw new FormatException($"FILE line malformed: {line}");
 
@@ -113,9 +110,10 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            if (cueFiles.Count > 0)
-                cueSheet.Files = [.. cueFiles];
+            if (cueFiles.Count == 0)
+                return null;
 
+            cueSheet.Files = [.. cueFiles];
             return cueSheet;
         }
 
@@ -124,27 +122,22 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="fileName">File name to set</param>
         /// <param name="fileType">File type to set</param>
-        /// <param name="data">Stream to pull from</param>
-        private static CueFile? CreateCueFile(string fileName, string fileType, Stream data, out string? lastLine)
+        /// <param name="reader">StreamReader to get lines from</param>
+        private static CueFile? CreateCueFile(string fileName, string fileType, StreamReader reader, out string? lastLine)
         {
             // Check the required parameters
-            if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
-                throw new ArgumentNullException(nameof(data));
-            if (data.Position < 0 || data.Position >= data.Length)
+            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+                throw new ArgumentNullException(nameof(reader));
+            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
                 throw new IndexOutOfRangeException();
 
             // Create the holding objects
             lastLine = null;
-            var cueFile = new CueFile();
             var cueTracks = new List<CueTrack>();
-
-            // Set the current fields
-            cueFile.FileName = fileName.Trim('"');
-            cueFile.FileType = GetFileType(fileType);
 
             while (true)
             {
-                string? line = lastLine ?? ReadUntilNewline(data);
+                string? line = lastLine ?? ReadQuotedString(reader);
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -176,7 +169,7 @@ namespace SabreTools.Serialization.Deserializers
                         if (splitLine.Count < 3)
                             throw new FormatException($"TRACK line malformed: {line}");
 
-                        var track = CreateCueTrack(splitLine[1], splitLine[2], data, out lastLine);
+                        var track = CreateCueTrack(splitLine[1], splitLine[2], reader, out lastLine);
                         if (track == default)
                             throw new FormatException($"TRACK line malformed: {line}");
 
@@ -186,21 +179,40 @@ namespace SabreTools.Serialization.Deserializers
                     // Next file found, return
                     case "FILE":
                         lastLine = line;
-                        cueFile.Tracks = [.. cueTracks];
-                        return cueFile;
+                        if (cueTracks.Count == 0)
+                            return null;
+
+                        return new CueFile
+                        {
+                            FileName = fileName.Trim('"'),
+                            FileType = GetFileType(fileType),
+                            Tracks = [.. cueTracks],
+                        };
 
                     // Default means return
                     default:
                         lastLine = line;
-                        cueFile.Tracks = [.. cueTracks];
-                        return cueFile;
+                        if (cueTracks.Count == 0)
+                            return null;
+
+                        return new CueFile
+                        {
+                            FileName = fileName.Trim('"'),
+                            FileType = GetFileType(fileType),
+                            Tracks = [.. cueTracks],
+                        };
                 }
             }
 
-            if (cueTracks.Count > 0)
-                cueFile.Tracks = [.. cueTracks];
+            if (cueTracks.Count == 0)
+                return null;
 
-            return cueFile;
+            return new CueFile
+            {
+                FileName = fileName.Trim('"'),
+                FileType = GetFileType(fileType),
+                Tracks = [.. cueTracks],
+            };
         }
 
         /// <summary>
@@ -208,13 +220,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="number">Number to set</param>
         /// <param name="dataType">Data type to set</param>
-        /// <param name="data">Stream to pull from</param>
-        private static CueTrack? CreateCueTrack(string number, string dataType, Stream data, out string? lastLine)
+        /// <param name="reader">StreamReader to get lines from</param>
+        private static CueTrack? CreateCueTrack(string number, string dataType, StreamReader reader, out string? lastLine)
         {
             // Check the required parameters
-            if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
-                throw new ArgumentNullException(nameof(data));
-            if (data.Position < 0 || data.Position >= data.Length)
+            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+                throw new ArgumentNullException(nameof(reader));
+            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
                 throw new IndexOutOfRangeException();
 
             // Set the current fields
@@ -233,7 +245,7 @@ namespace SabreTools.Serialization.Deserializers
 
             while (true)
             {
-                string? line = lastLine ?? ReadUntilNewline(data);
+                string? line = lastLine ?? ReadQuotedString(reader);
                 lastLine = null;
 
                 // If we have a null line, break from the loop
@@ -600,48 +612,34 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Read a string until a newline value is found
+        /// Read a potentially multi-line value using quotes as an indicator
         /// </summary>
-        /// <param name="data">Stream to pull from</param>
-        /// <returns>The next line from the data on success, null on error</returns>
-        private static string? ReadUntilNewline(Stream data)
+        private static string? ReadQuotedString(StreamReader reader)
         {
-            // Validate the input
-            if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                return null;
+            // Check the required parameters
+            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+                throw new ArgumentNullException(nameof(reader));
+            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
+                throw new IndexOutOfRangeException();
 
-            // Read characters either until a newline or end of file
+            // Use a string builder for the line
             var lineBuilder = new StringBuilder();
-            while (data.Position < data.Length)
+
+            // Loop until we have completed quotes
+            int quoteCount = 0;
+            do
             {
-                char c = data.ReadChar();
-
-                // Handle Windows and old Mac line endings
-                if (c == '\r')
-                {
-                    // Handle premature end of stream
-                    if (data.Position >= data.Length)
-                        break;
-
-                    // Handle Windows line endings
-                    c = data.ReadChar();
-                    if (c == '\n')
-                        break;
-
-                    // Seek backward if we had old Mac line endings instead
-                    data.Seek(-1, SeekOrigin.Current);
-                    break;
-                }
-
-                // Handle standard line endings
-                if (c == '\n')
+                // Read the next line
+                string? line = reader.ReadLine();
+                if (line == null)
                     break;
 
-                // Handle all other characters
-                lineBuilder.Append(c);
+                // Count the number of quotes and append
+                quoteCount += Array.FindAll(line.ToCharArray(), c => c == '"').Length;
+                lineBuilder.Append(line);
             }
+            while (quoteCount % 2 != 0);
 
-            // Return the line without trailing newline
             return lineBuilder.ToString();
         }
 

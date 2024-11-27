@@ -208,7 +208,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled card info header on success, null on error</returns>
         public static CardInfoHeader? ParseCardInfoHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var header = new CardInfoHeader();
 
             header.WritableAddressMediaUnits = data.ReadUInt32();
@@ -234,7 +233,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled initial data on success, null on error</returns>
         public static InitialData? ParseInitialData(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var id = new InitialData();
 
             id.CardSeedKeyY = data.ReadBytes(0x10);
@@ -265,15 +263,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled NCCH header on success, null on error</returns>
         public static NCCHHeader ParseNCCHHeader(Stream data, bool skipSignature = false)
         {
-            // TODO: Use marshalling here instead of building
             var header = new NCCHHeader();
 
             if (!skipSignature)
                 header.RSA2048Signature = data.ReadBytes(0x100);
 
-            byte[]? magicId = data.ReadBytes(4);
-            if (magicId != null)
-                header.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
+            byte[] magicId = data.ReadBytes(4);
+            header.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
             header.ContentSizeInMediaUnits = data.ReadUInt32();
             header.PartitionId = data.ReadUInt64();
             header.MakerCode = data.ReadUInt16();
@@ -282,9 +278,8 @@ namespace SabreTools.Serialization.Deserializers
             header.ProgramId = data.ReadBytes(8);
             header.Reserved1 = data.ReadBytes(0x10);
             header.LogoRegionHash = data.ReadBytes(0x20);
-            byte[]? productCode = data.ReadBytes(0x10);
-            if (productCode != null)
-                header.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
+            byte[] productCode = data.ReadBytes(0x10);
+            header.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
             header.ExtendedHeaderHash = data.ReadBytes(0x20);
             header.ExtendedHeaderSizeInBytes = data.ReadUInt32();
             header.Reserved2 = data.ReadUInt32();
@@ -324,51 +319,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled NCCH extended header on success, null on error</returns>
         public static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
         {
-            // TODO: Replace with `data.ReadType<NCCHExtendedHeader>();` when enum serialization fixed
-            var header = new NCCHExtendedHeader();
-
-            header.SCI = data.ReadType<SystemControlInfo>();
-            header.ACI = ParseAccessControlInfo(data);
-            header.AccessDescSignature = data.ReadBytes(0x100);
-            header.NCCHHDRPublicKey = data.ReadBytes(0x100);
-            header.ACIForLimitations = ParseAccessControlInfo(data);
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an access control info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled access control info on success, null on error</returns>
-        public static AccessControlInfo? ParseAccessControlInfo(Stream data)
-        {
-            var aci = new AccessControlInfo();
-
-            aci.ARM11LocalSystemCapabilities = data.ReadType<ARM11LocalSystemCapabilities>();
-            aci.ARM11KernelCapabilities = data.ReadType<ARM11KernelCapabilities>();
-            aci.ARM9AccessControl = ParseARM9AccessControl(data);
-
-            return aci;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an ARM9 access control
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ARM9 access control on success, null on error</returns>
-        public static ARM9AccessControl? ParseARM9AccessControl(Stream data)
-        {
-            var a9ac = new ARM9AccessControl();
-
-            a9ac.Descriptors = new ARM9AccessControlDescriptors[15];
-            for (int i = 0; i < a9ac.Descriptors.Length; i++)
-            {
-                a9ac.Descriptors[i] = (ARM9AccessControlDescriptors)data.ReadByteValue();
-            }
-            a9ac.DescriptorVersion = data.ReadByteValue();
-
-            return a9ac;
+            return data.ReadType<NCCHExtendedHeader>();
         }
 
         /// <summary>
@@ -378,7 +329,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ExeFS header on success, null on error</returns>
         public static ExeFSHeader? ParseExeFSHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var exeFSHeader = new ExeFSHeader();
 
             exeFSHeader.FileHeaders = new ExeFSFileHeader[10];
@@ -407,12 +357,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ExeFS file header on success, null on error</returns>
         public static ExeFSFileHeader? ParseExeFSFileHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var exeFSFileHeader = new ExeFSFileHeader();
 
-            byte[]? fileName = data.ReadBytes(8);
-            if (fileName != null)
-                exeFSFileHeader.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
+            byte[] fileName = data.ReadBytes(8);
+            exeFSFileHeader.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
             exeFSFileHeader.FileOffset = data.ReadUInt32();
             exeFSFileHeader.FileSize = data.ReadUInt32();
 

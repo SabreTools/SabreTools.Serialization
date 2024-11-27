@@ -94,10 +94,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = new CFHEADER();
 
-            byte[]? signature = data.ReadBytes(4);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(4);
             header.Signature = Encoding.ASCII.GetString(signature);
             if (header.Signature != SignatureString)
                 return null;

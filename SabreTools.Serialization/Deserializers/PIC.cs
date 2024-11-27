@@ -57,7 +57,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled disc information unit on success, null on error</returns>
         private static DiscInformationUnit? ParseDiscInformationUnit(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var unit = new DiscInformationUnit();
 
             #region Header
@@ -125,13 +124,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled disc information unit body on success, null on error</returns>
         private static DiscInformationUnitBody? ParseDiscInformationUnitBody(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var body = new DiscInformationUnitBody();
 
-            byte[]? dti = data.ReadBytes(3);
-            if (dti == null)
-                return null;
-
+            byte[] dti = data.ReadBytes(3);
             body.DiscTypeIdentifier = Encoding.ASCII.GetString(dti);
             body.DiscSizeClassVersion = data.ReadByteValue();
             switch (body.DiscTypeIdentifier)

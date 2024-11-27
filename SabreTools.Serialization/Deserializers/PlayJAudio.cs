@@ -180,7 +180,6 @@ namespace SabreTools.Serialization.Deserializers
             // Cache the current offset
             long initialOffset = data.Position;
 
-            // TODO: Use marshalling here instead of building
             AudioHeader audioHeader;
 
             // Get the common header pieces
@@ -255,41 +254,34 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             audioHeader.TrackLength = data.ReadUInt16();
-            byte[]? track = data.ReadBytes(audioHeader.TrackLength);
-            if (track != null)
-                audioHeader.Track = Encoding.ASCII.GetString(track);
+            byte[] track = data.ReadBytes(audioHeader.TrackLength);
+            audioHeader.Track = Encoding.ASCII.GetString(track);
 
             audioHeader.ArtistLength = data.ReadUInt16();
-            byte[]? artist = data.ReadBytes(audioHeader.ArtistLength);
-            if (artist != null)
-                audioHeader.Artist = Encoding.ASCII.GetString(artist);
+            byte[] artist = data.ReadBytes(audioHeader.ArtistLength);
+            audioHeader.Artist = Encoding.ASCII.GetString(artist);
 
             audioHeader.AlbumLength = data.ReadUInt16();
-            byte[]? album = data.ReadBytes(audioHeader.AlbumLength);
-            if (album != null)
-                audioHeader.Album = Encoding.ASCII.GetString(album);
+            byte[] album = data.ReadBytes(audioHeader.AlbumLength);
+            audioHeader.Album = Encoding.ASCII.GetString(album);
 
             audioHeader.WriterLength = data.ReadUInt16();
-            byte[]? writer = data.ReadBytes(audioHeader.WriterLength);
-            if (writer != null)
-                audioHeader.Writer = Encoding.ASCII.GetString(writer);
+            byte[] writer = data.ReadBytes(audioHeader.WriterLength);
+            audioHeader.Writer = Encoding.ASCII.GetString(writer);
 
             audioHeader.PublisherLength = data.ReadUInt16();
-            byte[]? publisher = data.ReadBytes(audioHeader.PublisherLength);
-            if (publisher != null)
-                audioHeader.Publisher = Encoding.ASCII.GetString(publisher);
+            byte[] publisher = data.ReadBytes(audioHeader.PublisherLength);
+            audioHeader.Publisher = Encoding.ASCII.GetString(publisher);
 
             audioHeader.LabelLength = data.ReadUInt16();
-            byte[]? label = data.ReadBytes(audioHeader.LabelLength);
-            if (label != null)
-                audioHeader.Label = Encoding.ASCII.GetString(label);
+            byte[] label = data.ReadBytes(audioHeader.LabelLength);
+            audioHeader.Label = Encoding.ASCII.GetString(label);
 
             if (data.Position - initialOffset < unknownOffset1)
             {
                 audioHeader.CommentsLength = data.ReadUInt16();
-                byte[]? comments = data.ReadBytes(audioHeader.CommentsLength);
-                if (comments != null)
-                    audioHeader.Comments = Encoding.ASCII.GetString(comments);
+                byte[] comments = data.ReadBytes(audioHeader.CommentsLength);
+                audioHeader.Comments = Encoding.ASCII.GetString(comments);
             }
 
             return audioHeader;
@@ -302,7 +294,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled unknown block 1 on success, null on error</returns>
         private static UnknownBlock1 ParseUnknownBlock1(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var unknownBlock1 = new UnknownBlock1();
 
             unknownBlock1.Length = data.ReadUInt32();
@@ -318,7 +309,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled unknown block 3 on success, null on error</returns>
         private static UnknownBlock3 ParseUnknownBlock3(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var unknownBlock3 = new UnknownBlock3();
 
             // No-op because we don't even know the length
@@ -333,14 +323,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled data file on success, null on error</returns>
         private static DataFile ParseDataFile(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var dataFile = new DataFile();
 
             dataFile.FileNameLength = data.ReadUInt16();
-            byte[]? fileName = data.ReadBytes(dataFile.FileNameLength);
-            if (fileName != null)
-                dataFile.FileName = Encoding.ASCII.GetString(fileName);
-
+            byte[] fileName = data.ReadBytes(dataFile.FileNameLength);
+            dataFile.FileName = Encoding.ASCII.GetString(fileName);
             dataFile.DataLength = data.ReadUInt32();
             dataFile.Data = data.ReadBytes((int)dataFile.DataLength);
 

@@ -56,11 +56,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SGA header on success, null on error</returns>
         private static Header? ParseHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
-            byte[]? signatureBytes = data.ReadBytes(8);
-            if (signatureBytes == null)
-                return null;
-
+            byte[] signatureBytes = data.ReadBytes(8);
             string signature = Encoding.ASCII.GetString(signatureBytes);
             if (signature != SignatureString)
                 return null;
@@ -81,9 +77,8 @@ namespace SabreTools.Serialization.Deserializers
                     header4.MajorVersion = majorVersion;
                     header4.MinorVersion = minorVersion;
                     header4.FileMD5 = data.ReadBytes(0x10);
-                    byte[]? header4Name = data.ReadBytes(count: 128);
-                    if (header4Name != null)
-                        header4.Name = Encoding.Unicode.GetString(header4Name).TrimEnd('\0');
+                    byte[] header4Name = data.ReadBytes(count: 128);
+                    header4.Name = Encoding.Unicode.GetString(header4Name).TrimEnd('\0');
                     header4.HeaderMD5 = data.ReadBytes(0x10);
                     header4.HeaderLength = data.ReadUInt32();
                     header4.FileDataOffset = data.ReadUInt32();
@@ -99,9 +94,8 @@ namespace SabreTools.Serialization.Deserializers
                     header6.Signature = signature;
                     header6.MajorVersion = majorVersion;
                     header6.MinorVersion = minorVersion;
-                    byte[]? header6Name = data.ReadBytes(count: 128);
-                    if (header6Name != null)
-                        header6.Name = Encoding.Unicode.GetString(header6Name).TrimEnd('\0');
+                    byte[] header6Name = data.ReadBytes(count: 128);
+                    header6.Name = Encoding.Unicode.GetString(header6Name).TrimEnd('\0');
                     header6.HeaderLength = data.ReadUInt32();
                     header6.FileDataOffset = data.ReadUInt32();
                     header6.Dummy0 = data.ReadUInt32();
@@ -324,7 +318,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create the sections array
             directory.Sections = new Section5[directoryHeader.SectionCount];
-            
+
             // Try to parse the sections
             for (int i = 0; i < directory.Sections.Length; i++)
             {
@@ -810,12 +804,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var section4 = new Section4();
 
-            byte[]? section4Alias = data.ReadBytes(64);
-            if (section4Alias != null)
-                section4.Alias = Encoding.ASCII.GetString(section4Alias).TrimEnd('\0');
-            byte[]? section4Name = data.ReadBytes(64);
-            if (section4Name != null)
-                section4.Name = Encoding.ASCII.GetString(section4Name).TrimEnd('\0');
+            byte[] section4Alias = data.ReadBytes(64);
+            section4.Alias = Encoding.ASCII.GetString(section4Alias).TrimEnd('\0');
+            byte[] section4Name = data.ReadBytes(64);
+            section4.Name = Encoding.ASCII.GetString(section4Name).TrimEnd('\0');
             section4.FolderStartIndex = data.ReadUInt16();
             section4.FolderEndIndex = data.ReadUInt16();
             section4.FileStartIndex = data.ReadUInt16();
@@ -835,12 +827,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var section5 = new Section5();
 
-            byte[]? section5Alias = data.ReadBytes(64);
-            if (section5Alias != null)
-                section5.Alias = Encoding.ASCII.GetString(section5Alias).TrimEnd('\0');
-            byte[]? section5Name = data.ReadBytes(64);
-            if (section5Name != null)
-                section5.Name = Encoding.ASCII.GetString(section5Name).TrimEnd('\0');
+            byte[] section5Alias = data.ReadBytes(64);
+            section5.Alias = Encoding.ASCII.GetString(section5Alias).TrimEnd('\0');
+            byte[] section5Name = data.ReadBytes(64);
+            section5.Name = Encoding.ASCII.GetString(section5Name).TrimEnd('\0');
             section5.FolderStartIndex = data.ReadUInt32();
             section5.FolderEndIndex = data.ReadUInt32();
             section5.FileStartIndex = data.ReadUInt32();

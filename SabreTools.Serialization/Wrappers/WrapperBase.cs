@@ -286,9 +286,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>String list containing the requested data, empty on error</returns>
         /// <remarks>TODO: Move to IO?</remarks>
 #if NET20
-        private List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+        private static List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
 #else
-        private HashSet<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
+        private static HashSet<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
 #endif
         {
             // If we have an invalid character limit, default to 5

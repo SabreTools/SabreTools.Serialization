@@ -6,7 +6,6 @@ using SabreTools.Models.SeparatedValue;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    // TODO: Create variants for the 3 common types: CSV, SSV, TSV
     public class SeparatedValue : BaseBinaryDeserializer<MetadataFile>
     {
         #region Constants
@@ -125,7 +124,7 @@ namespace SabreTools.Serialization.Deserializers
                     break;
 
                 // Parse the line into a row
-                Row? row = null;
+                Row row;
                 if (reader.Line.Count < HeaderWithExtendedHashesCount)
                 {
                     row = new Row

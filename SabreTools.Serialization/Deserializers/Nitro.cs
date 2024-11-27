@@ -144,7 +144,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled name table on success, null on error</returns>
         private static NameTable? ParseNameTable(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var nameTable = new NameTable();
 
             // Create a variable-length table
@@ -203,7 +202,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled name list entry on success, null on error</returns>
         private static NameListEntry? ParseNameListEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new NameListEntry();
 
             byte flagAndSize = data.ReadByteValue();
@@ -215,9 +213,8 @@ namespace SabreTools.Serialization.Deserializers
             byte size = (byte)(flagAndSize & ~0x80);
             if (size > 0)
             {
-                byte[]? name = data.ReadBytes(size);
-                if (name != null)
-                    entry.Name = Encoding.UTF8.GetString(name);
+                byte[] name = data.ReadBytes(size);
+                entry.Name = Encoding.UTF8.GetString(name);
             }
 
             if (entry.Folder)

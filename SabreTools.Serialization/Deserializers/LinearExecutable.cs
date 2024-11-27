@@ -490,7 +490,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled entry table bundle on success, null on error</returns>
         public static EntryTableBundle? ParseEntryTableBundle(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var bundle = new EntryTableBundle();
 
             bundle.Entries = data.ReadByteValue();
@@ -583,7 +582,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled fix-up record table entry on success, null on error</returns>
         public static FixupRecordTableEntry? ParseFixupRecordTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new FixupRecordTableEntry();
 
             entry.SourceType = (FixupRecordSourceType)data.ReadByteValue();
@@ -802,15 +800,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled import module name table entry on success, null on error</returns>
         public static ImportModuleNameTableEntry ParseImportModuleNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new ImportModuleNameTableEntry();
 
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
-                byte[]? name = data.ReadBytes(entry.Length);
-                if (name != null)
-                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(entry.Length);
+                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
             return entry;
@@ -823,15 +819,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled import module name table entry on success, null on error</returns>
         public static ImportModuleProcedureNameTableEntry ParseImportModuleProcedureNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new ImportModuleProcedureNameTableEntry();
 
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
-                byte[]? name = data.ReadBytes(entry.Length);
-                if (name != null)
-                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(entry.Length);
+                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
             return entry;
@@ -854,15 +848,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled non-resident names table entry on success, null on error</returns>
         public static NonResidentNamesTableEntry ParseNonResidentNameTableEntry(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var entry = new NonResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
             if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
             {
-                byte[]? name = data.ReadBytes(entry.Length);
-                if (name != null)
-                    entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(entry.Length);
+                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
             entry.OrdinalNumber = data.ReadUInt16();
 
@@ -877,13 +869,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled debug information on success, null on error</returns>
         public static DebugInformation? ParseDebugInformation(Stream data, long size)
         {
-            // TODO: Use marshalling here instead of building
             var debugInformation = new DebugInformation();
 
-            byte[]? signature = data.ReadBytes(3);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(3);
             debugInformation.Signature = Encoding.ASCII.GetString(signature);
             if (debugInformation.Signature != DebugInformationSignatureString)
                 return null;

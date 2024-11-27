@@ -204,13 +204,11 @@ namespace SabreTools.Serialization.Deserializers
 
             certificate.Signature = data.ReadBytes(certificate.SignatureSize);
             certificate.Padding = data.ReadBytes(certificate.PaddingSize);
-            byte[]? issuer = data.ReadBytes(0x40);
-            if (issuer != null)
-                certificate.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            byte[] issuer = data.ReadBytes(0x40);
+            certificate.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             certificate.KeyType = (PublicKeyType)data.ReadUInt32();
-            byte[]? name = data.ReadBytes(0x40);
-            if (name != null)
-                certificate.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            byte[] name = data.ReadBytes(0x40);
+            certificate.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             certificate.ExpirationTime = data.ReadUInt32();
 
             switch (certificate.KeyType)
@@ -279,9 +277,8 @@ namespace SabreTools.Serialization.Deserializers
 
             ticket.Signature = data.ReadBytes(ticket.SignatureSize);
             ticket.Padding = data.ReadBytes(ticket.PaddingSize);
-            byte[]? issuer = data.ReadBytes(0x40);
-            if (issuer != null)
-                ticket.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            byte[] issuer = data.ReadBytes(0x40);
+            ticket.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             ticket.ECCPublicKey = data.ReadBytes(0x3C);
             ticket.Version = data.ReadByteValue();
             ticket.CaCrlVersion = data.ReadByteValue();
@@ -311,12 +308,7 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(4, SeekOrigin.Current);
 
             // Read the size (big-endian)
-            byte[]? contentIndexSize = data.ReadBytes(4);
-            if (contentIndexSize != null)
-            {
-                Array.Reverse(contentIndexSize);
-                ticket.ContentIndexSize = BitConverter.ToUInt32(contentIndexSize, 0);
-            }
+            ticket.ContentIndexSize = data.ReadUInt32BigEndian();
 
             // Seek back to the start of the content index
             data.Seek(-8, SeekOrigin.Current);
@@ -383,9 +375,8 @@ namespace SabreTools.Serialization.Deserializers
 
             titleMetadata.Signature = data.ReadBytes(titleMetadata.SignatureSize);
             titleMetadata.Padding1 = data.ReadBytes(titleMetadata.PaddingSize);
-            byte[]? issuer = data.ReadBytes(0x40);
-            if (issuer != null)
-                titleMetadata.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            byte[] issuer = data.ReadBytes(0x40);
+            titleMetadata.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
             titleMetadata.Version = data.ReadByteValue();
             titleMetadata.CaCrlVersion = data.ReadByteValue();
             titleMetadata.SignerCrlVersion = data.ReadByteValue();
@@ -401,15 +392,7 @@ namespace SabreTools.Serialization.Deserializers
             titleMetadata.Reserved3 = data.ReadBytes(0x31);
             titleMetadata.AccessRights = data.ReadUInt32();
             titleMetadata.TitleVersion = data.ReadUInt16();
-
-            // Read the content count (big-endian)
-            byte[]? contentCount = data.ReadBytes(2);
-            if (contentCount != null)
-            {
-                Array.Reverse(contentCount);
-                titleMetadata.ContentCount = BitConverter.ToUInt16(contentCount, 0);
-            }
-
+            titleMetadata.ContentCount = data.ReadUInt16BigEndian();
             titleMetadata.BootContent = data.ReadUInt16();
             titleMetadata.Padding2 = data.ReadBytes(2);
             titleMetadata.SHA256HashContentInfoRecords = data.ReadBytes(0x20);

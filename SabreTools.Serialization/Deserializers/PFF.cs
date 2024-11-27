@@ -130,16 +130,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file entry on success, null on error</returns>
         private static Segment ParseSegment(Stream data, uint segmentSize)
         {
-            // TODO: Use marshalling here instead of building
             var segment = new Segment();
 
             segment.Deleted = data.ReadUInt32();
             segment.FileLocation = data.ReadUInt32();
             segment.FileSize = data.ReadUInt32();
             segment.PackedDate = data.ReadUInt32();
-            byte[]? fileName = data.ReadBytes(0x10);
-            if (fileName != null)
-                segment.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
+            byte[] fileName = data.ReadBytes(0x10);
+            segment.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
             if (segmentSize > Version2SegmentSize)
                 segment.ModifiedDate = data.ReadUInt32();
             if (segmentSize > Version3SegmentSize)

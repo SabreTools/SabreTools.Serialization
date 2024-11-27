@@ -66,15 +66,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled executable header on success, null on error</returns>
         private static ExecutableHeader? ParseExecutableHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var header = new ExecutableHeader();
 
             #region Standard Fields
 
-            byte[]? magic = data.ReadBytes(2);
-            if (magic == null)
-                return null;
-
+            byte[] magic = data.ReadBytes(2);
             header.Magic = Encoding.ASCII.GetString(magic);
             if (header.Magic != SignatureString)
                 return null;
@@ -128,7 +124,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled relocation table on success, null on error</returns>
         private static RelocationEntry[]? ParseRelocationTable(Stream data, int count)
         {
-            // TODO: Use marshalling here instead of building
             var relocationTable = new RelocationEntry[count];
 
             for (int i = 0; i < count; i++)

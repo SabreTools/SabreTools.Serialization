@@ -366,7 +366,6 @@ namespace SabreTools.Serialization.Deserializers
             }
             else
             {
-                // TODO: Should standard and high values be combined?
                 volumeHeader.DataOffset = data.ReadUInt32();
                 volumeHeader.DataOffsetHigh = data.ReadUInt32();
                 volumeHeader.FirstFileIndex = data.ReadUInt32();

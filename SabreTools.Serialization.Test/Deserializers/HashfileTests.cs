@@ -36,19 +36,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.Hashfile();
 
             var actual = deserializer.Deserialize(data, offset);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.SFV);
-            Assert.Null(actual.MD2);
-            Assert.Null(actual.MD4);
-            Assert.Null(actual.MD5);
-            Assert.Null(actual.SHA1);
-            Assert.Null(actual.SHA256);
-            Assert.Null(actual.SHA384);
-            Assert.Null(actual.SHA512);
-            Assert.Null(actual.SpamSum);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -78,19 +66,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             var deserializer = new Serialization.Deserializers.Hashfile();
 
             var actual = deserializer.Deserialize(data);
-
-            // TODO: Unexpected result
-            // Turns into an empty model
-            Assert.NotNull(actual);
-            Assert.Null(actual.SFV);
-            Assert.Null(actual.MD2);
-            Assert.Null(actual.MD4);
-            Assert.Null(actual.MD5);
-            Assert.Null(actual.SHA1);
-            Assert.Null(actual.SHA256);
-            Assert.Null(actual.SHA384);
-            Assert.Null(actual.SHA512);
-            Assert.Null(actual.SpamSum);
+            Assert.Null(actual);
         }
     }
 }

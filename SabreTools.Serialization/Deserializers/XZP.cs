@@ -177,7 +177,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled XBox Package File directory item on success, null on error</returns>
         private static DirectoryItem ParseDirectoryItem(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var directoryItem = new DirectoryItem();
 
             directoryItem.FileNameCRC = data.ReadUInt32();

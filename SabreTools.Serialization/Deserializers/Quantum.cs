@@ -83,23 +83,20 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled file descriptor on success, null on error</returns>
         private static FileDescriptor ParseFileDescriptor(Stream data, byte minorVersion)
         {
-            // TODO: Use marshalling here instead of building
             var fileDescriptor = new FileDescriptor();
 
             fileDescriptor.FileNameSize = ReadVariableLength(data);
             if (fileDescriptor.FileNameSize > 0)
             {
-                byte[]? fileName = data.ReadBytes(fileDescriptor.FileNameSize);
-                if (fileName != null)
-                    fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
+                byte[] fileName = data.ReadBytes(fileDescriptor.FileNameSize);
+                fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
             }
 
             fileDescriptor.CommentFieldSize = ReadVariableLength(data);
             if (fileDescriptor.CommentFieldSize > 0)
             {
-                byte[]? commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
-                if (commentField != null)
-                    fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
+                byte[] commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
+                fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
             }
 
             fileDescriptor.ExpandedFileSize = data.ReadUInt32();

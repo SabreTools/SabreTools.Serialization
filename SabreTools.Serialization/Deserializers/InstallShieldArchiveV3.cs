@@ -117,7 +117,6 @@ namespace SabreTools.Serialization.Deserializers
             directory.FileCount = data.ReadUInt16();
             directory.ChunkSize = data.ReadUInt16();
 
-            // TODO: Is there any equivilent automatic type for UInt16-prefixed ANSI?
             ushort nameLength = data.ReadUInt16();
             byte[] nameBytes = data.ReadBytes(nameLength);
             directory.Name = Encoding.ASCII.GetString(nameBytes);

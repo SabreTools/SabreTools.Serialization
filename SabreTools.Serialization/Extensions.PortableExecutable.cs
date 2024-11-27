@@ -1256,9 +1256,8 @@ namespace SabreTools.Serialization
                     if (stringData.ValueLength > 0)
                     {
                         int bytesReadable = Math.Min(stringData.ValueLength * sizeof(ushort), stringData.Length - (offset - dataStartOffset));
-                        byte[]? valueBytes = data.ReadBytes(ref offset, bytesReadable);
-                        if (valueBytes != null)
-                            stringData.Value = Encoding.Unicode.GetString(valueBytes);
+                        byte[] valueBytes = data.ReadBytes(ref offset, bytesReadable);
+                        stringData.Value = Encoding.Unicode.GetString(valueBytes);
                     }
 
                     // Align to the DWORD boundary if we're not at the end

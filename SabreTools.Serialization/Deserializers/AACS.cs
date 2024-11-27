@@ -181,9 +181,8 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the media keys
             while (data.Position < initialOffset + length)
             {
-                byte[]? mediaKey = data.ReadBytes(0x10);
-                if (mediaKey != null)
-                    mediaKeys.Add(mediaKey);
+                byte[] mediaKey = data.ReadBytes(0x10);
+                mediaKeys.Add(mediaKey);
             }
 
             // Set the media keys
@@ -407,9 +406,8 @@ namespace SabreTools.Serialization.Deserializers
             record.RecordLength = length;
             if (length > 4)
             {
-                byte[]? copyright = data.ReadBytes((int)(length - 4));
-                if (copyright != null)
-                    record.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
+                byte[] copyright = data.ReadBytes((int)(length - 4));
+                record.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
             }
 
             return record;

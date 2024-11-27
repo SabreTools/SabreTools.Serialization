@@ -5,7 +5,6 @@ using SabreTools.Models.SeparatedValue;
 
 namespace SabreTools.Serialization.Serializers
 {
-    // TODO: Create variants for the 3 common types: CSV, SSV, TSV
     public class SeparatedValue : BaseBinarySerializer<MetadataFile>
     {
         #region IByteSerializer
@@ -87,7 +86,11 @@ namespace SabreTools.Serialization.Serializers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new SeparatedValueWriter(stream, Encoding.UTF8) { Separator = delim, Quotes = true };
+            var writer = new SeparatedValueWriter(stream, Encoding.UTF8)
+            {
+                Separator = delim,
+                Quotes = true
+            };
 
             // Write the header
             WriteHeader(writer, longHeader);
@@ -107,7 +110,7 @@ namespace SabreTools.Serialization.Serializers
         /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
         private static void WriteHeader(SeparatedValueWriter writer, bool longHeader)
         {
-            string?[] headerArray;
+            string[] headerArray;
             if (longHeader)
             {
                 headerArray =

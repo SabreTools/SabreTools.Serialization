@@ -33,13 +33,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled SVM on success, null on error</returns>
         private static SVM? ParseSVMData(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var svm = new SVM();
 
-            byte[]? signature = data.ReadBytes(8);
-            if (signature == null)
-                return null;
-
+            byte[] signature = data.ReadBytes(8);
             svm.Signature = Encoding.ASCII.GetString(signature);
             if (svm.Signature != SignatureString)
                 return null;

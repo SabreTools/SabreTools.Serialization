@@ -60,7 +60,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled playlist header on success, null on error</returns>
         private static PlaylistHeader? ParsePlaylistHeader(Stream data)
         {
-            // TODO: Use marshalling here instead of building
             var playlistHeader = new PlaylistHeader();
 
             playlistHeader.TrackCount = data.ReadUInt32();
