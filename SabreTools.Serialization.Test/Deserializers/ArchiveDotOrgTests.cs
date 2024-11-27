@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -67,6 +68,31 @@ namespace SabreTools.Serialization.Test.Deserializers
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
+        }
+
+        [Theory]
+        [InlineData("test-archivedotorg-files1.xml", 22)]
+        [InlineData("test-archivedotorg-files2.xml", 13)]
+        [InlineData("test-archivedotorg-files3.xml", 21)]
+        [InlineData("test-archivedotorg-files4.xml", 19)]
+        [InlineData("test-archivedotorg-files5.xml", 1390)]
+        public void ValidFile_NonNull(string path, long count)
+        {
+            // Open the file for reading
+            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+
+            // Deserialize the file
+            var dat = Serialization.Deserializers.ArchiveDotOrg.DeserializeFile(filename);
+
+            // Validate the values
+            Assert.NotNull(dat?.File);
+            Assert.Equal(count, dat.File.Length);
+
+            // Validate we're not missing any attributes or elements
+            foreach (var file in dat.File)
+            {
+                Assert.NotNull(file);
+            }
         }
     }
 }

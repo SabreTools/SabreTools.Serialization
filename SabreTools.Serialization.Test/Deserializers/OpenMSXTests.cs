@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -67,6 +68,22 @@ namespace SabreTools.Serialization.Test.Deserializers
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
+        }
+
+        [Theory]
+        [InlineData("test-openmsx-files.xml", 2550)]
+        public void ValidFile_NonNull(string path, long count)
+        {
+            // Open the file for reading
+            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+
+            // Deserialize the file
+            var dat = Serialization.Deserializers.OpenMSX.DeserializeFile(filename);
+
+            // Validate the values
+            Assert.NotNull(dat);
+            Assert.NotNull(dat.Software);
+            Assert.Equal(count, dat.Software.Length);
         }
     }
 }

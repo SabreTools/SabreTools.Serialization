@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -67,6 +68,29 @@ namespace SabreTools.Serialization.Test.Deserializers
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
+        }
+    
+        [Theory]
+        [InlineData("test-doscenter-files1.dat.gz", 34965)]
+        [InlineData("test-doscenter-files2.dat.gz", 7189)]
+        public void ValidFile_NonNull(string path, long count)
+        {
+            // Open the file for reading
+            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+
+            // Deserialize the file
+            var dat = Serialization.Deserializers.DosCenter.DeserializeFile(filename);
+
+            // Validate the values
+            Assert.NotNull(dat?.DosCenter);
+
+            Assert.NotNull(dat?.Game);
+            Assert.Equal(count, dat.Game.Length);
+
+            foreach (var game in dat.Game)
+            {
+                Assert.NotNull(game.File);
+            }
         }
     }
 }

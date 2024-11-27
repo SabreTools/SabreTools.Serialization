@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -67,6 +68,21 @@ namespace SabreTools.Serialization.Test.Deserializers
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
+        }
+
+        [Theory]
+        [InlineData("test-offlinelist-files.xml", 6750)]
+        public void ValidFile_NonNull(string path, long count)
+        {
+            // Open the file for reading
+            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
+
+            // Deserialize the file
+            var dat = Serialization.Deserializers.OfflineList.DeserializeFile(filename);
+
+            // Validate the values
+            Assert.NotNull(dat?.Games?.Game);
+            Assert.Equal(count, dat.Games.Game.Length);
         }
     }
 }
