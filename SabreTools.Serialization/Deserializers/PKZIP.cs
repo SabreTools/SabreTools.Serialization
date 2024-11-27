@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(eocdlOffset, SeekOrigin.Begin);
 
                 // Read the ZIP64 end of central directory locator
-                var eocdl64 = ParseEndOfCentralDirectoryLocator64(data);
+                var eocdl64 = data.ReadType<EndOfCentralDirectoryLocator64>();
                 if (eocdl64 == null)
                     return null;
 
@@ -426,16 +426,6 @@ namespace SabreTools.Serialization.Deserializers
             // No signature was found
             data.Seek(current, SeekOrigin.Begin);
             return -1;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a ZIP64 end of central directory locator
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ZIP64 end of central directory locator on success, null on error</returns>
-        public static EndOfCentralDirectoryLocator64? ParseEndOfCentralDirectoryLocator64(Stream data)
-        {
-            return data.ReadType<EndOfCentralDirectoryLocator64>();
         }
 
         /// <summary>

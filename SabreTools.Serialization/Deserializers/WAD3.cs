@@ -25,8 +25,8 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Signature != SignatureString)
                 return null;
 
             // Set the package header
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Deserializers
             file.DirEntries = new DirEntry[header.NumDirs];
             for (int i = 0; i < header.NumDirs; i++)
             {
-                var lump = ParseDirEntry(data);
+                var lump = data.ReadType<DirEntry>();
                 if (lump == null)
                     return null;
 
@@ -88,33 +88,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header == null)
-                return null;
-            if (header.Signature != SignatureString)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package directory entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package directory entry on success, null on error</returns>
-        private static DirEntry? ParseDirEntry(Stream data)
-        {
-            return data.ReadType<DirEntry>();
         }
 
         /// <summary>
@@ -228,7 +201,9 @@ namespace SabreTools.Serialization.Deserializers
             font.FontInfo = new CharInfo[256];
             for (int i = 0; i < font.FontInfo.Length; i++)
             {
-                font.FontInfo[i] = ParseCharInfo(data);
+                var fontInfo = data.ReadType<CharInfo>();
+                if (fontInfo != null)
+                    font.FontInfo[i] = fontInfo;
             }
             font.Data = new byte[font.Height][];
             for (int i = 0; i < font.Height; i++)
@@ -243,21 +218,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return font;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package CharInfo
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package CharInfo on success, null on error</returns>
-        private static CharInfo ParseCharInfo(Stream data)
-        {
-            var charinfo = new CharInfo();
-
-            charinfo.StartOffset = data.ReadUInt16();
-            charinfo.CharWidth = data.ReadUInt16();
-
-            return charinfo;
         }
     }
 }

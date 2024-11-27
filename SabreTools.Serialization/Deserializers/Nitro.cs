@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseCommonHeader(data);
+            var header = data.ReadType<CommonHeader>();
             if (header == null)
                 return null;
 
@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.Deserializers
             // If we have a DSi-compatible cartridge
             if (header.UnitCode == Unitcode.NDSPlusDSi || header.UnitCode == Unitcode.DSi)
             {
-                var extendedDSiHeader = ParseExtendedDSiHeader(data);
+                var extendedDSiHeader = data.ReadType<ExtendedDSiHeader>();
                 if (extendedDSiHeader == null)
                     return null;
 
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the file allocation table
             while (data.Position - fileAllocationTableOffset < header.FileAllocationTableLength)
             {
-                var entry = ParseFileAllocationTableEntry(data);
+                var entry = data.ReadType<FileAllocationTableEntry>();
                 if (entry == null)
                     return null;
                 
@@ -118,26 +118,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a common header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled common header on success, null on error</returns>
-        private static CommonHeader? ParseCommonHeader(Stream data)
-        {
-            return data.ReadType<CommonHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into an extended DSi header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled extended DSi header on success, null on error</returns>
-        private static ExtendedDSiHeader? ParseExtendedDSiHeader(Stream data)
-        {
-            return data.ReadType<ExtendedDSiHeader>();
-        }
-
-        /// <summary>
         /// Parse a Stream into a name table
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -151,7 +131,7 @@ namespace SabreTools.Serialization.Deserializers
             int entryCount = int.MaxValue;
             while (entryCount > 0)
             {
-                var entry = ParseFolderAllocationTableEntry(data);
+                var entry = data.ReadType<FolderAllocationTableEntry>();
                 if (entry == null)
                     return null;
                 
@@ -186,16 +166,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a folder allocation table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled folder allocation table entry on success, null on error</returns>
-        private static FolderAllocationTableEntry? ParseFolderAllocationTableEntry(Stream data)
-        {
-            return data.ReadType<FolderAllocationTableEntry>();
-        }
-
-        /// <summary>
         /// Parse a Stream into a name list entry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -221,16 +191,6 @@ namespace SabreTools.Serialization.Deserializers
                 entry.Index = data.ReadUInt16();
 
             return entry;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a name list entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled name list entry on success, null on error</returns>
-        private static FileAllocationTableEntry? ParseFileAllocationTableEntry(Stream data)
-        {
-            return data.ReadType<FileAllocationTableEntry>();
         }
     }
 }

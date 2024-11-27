@@ -19,9 +19,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            long initialOffset = data.Position;
-
             // Create a new Valve Package to fill
             var file = new Models.VPK.File();
 
@@ -29,8 +26,10 @@ namespace SabreTools.Serialization.Deserializers
 
             // Try to parse the header
             // The original version had no signature.
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Signature != SignatureUInt32)
+                return null;
+            if (header.Version > 2)
                 return null;
 
             // Set the package header
@@ -43,7 +42,7 @@ namespace SabreTools.Serialization.Deserializers
             if (header.Version == 2)
             {
                 // Try to parse the extended header
-                var extendedHeader = ParseExtendedHeader(data);
+                var extendedHeader = data.ReadType<ExtendedHeader>();
                 if (extendedHeader == null)
                     return null;
 
@@ -76,12 +75,12 @@ namespace SabreTools.Serialization.Deserializers
                 var archiveHashes = new List<ArchiveHash>();
 
                 // Cache the current offset
-                initialOffset = data.Position;
+                long initialOffset = data.Position;
 
                 // Try to parse the directory items
                 while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
                 {
-                    var archiveHash = ParseArchiveHash(data);
+                    var archiveHash = data.ReadType<ArchiveHash>();
                     if (archiveHash == null)
                         return null;
                     
@@ -94,45 +93,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Valve Package header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Valve Package header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header == null)
-                return null;
-            if (header.Signature != SignatureUInt32)
-                return null;
-            if (header.Version > 2)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Valve Package extended header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Valve Package extended header on success, null on error</returns>
-        private static ExtendedHeader? ParseExtendedHeader(Stream data)
-        {
-            return data.ReadType<ExtendedHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Valve Package archive hash
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Valve Package archive hash on success, null on error</returns>
-        private static ArchiveHash? ParseArchiveHash(Stream data)
-        {
-            return data.ReadType<ArchiveHash>();
         }
 
         /// <summary>
@@ -212,7 +172,7 @@ namespace SabreTools.Serialization.Deserializers
             directoryItem.Name = name;
 
             // Get the directory entry
-            var directoryEntry = ParseDirectoryEntry(data);
+            var directoryEntry = data.ReadType<DirectoryEntry>();
             if (directoryEntry == null)
                 return null;
 
@@ -257,16 +217,6 @@ namespace SabreTools.Serialization.Deserializers
             directoryItem.PreloadData = preloadData;
 
             return directoryItem;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Valve Package directory entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Valve Package directory entry on success, null on error</returns>
-        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
-        {
-            return data.ReadType<DirectoryEntry>();
         }
     }
 }

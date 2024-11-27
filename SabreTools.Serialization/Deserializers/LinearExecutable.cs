@@ -42,8 +42,8 @@ namespace SabreTools.Serialization.Deserializers
 
             // Try to parse the executable header
             data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            var informationBlock = ParseInformationBlock(data);
-            if (informationBlock == null)
+            var informationBlock = data.ReadType<InformationBlock>();
+            if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
                 return null;
 
             // Set the executable header
@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the object table
                 for (int i = 0; i < executable.ObjectTable.Length; i++)
                 {
-                    var entry = ParseObjectTableEntry(data);
+                    var entry = data.ReadType<ObjectTableEntry>();
                     if (entry == null)
                         return null;
 
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the object page map
                 for (int i = 0; i < executable.ObjectPageMap.Length; i++)
                 {
-                    var entry = ParseObjectPageMapEntry(data);
+                    var entry = data.ReadType<ObjectPageMapEntry>();
                     if (entry == null)
                         return null;
 
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the resource table
                 for (int i = 0; i < executable.ResourceTable.Length; i++)
                 {
-                    var entry = ParseResourceTableEntry(data);
+                    var entry = data.ReadType<ResourceTableEntry>();
                     if (entry == null)
                         return null;
 
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the module format directives table
                 for (int i = 0; i < executable.ModuleFormatDirectivesTable.Length; i++)
                 {
-                    var entry = ParseModuleFormatDirectivesTableEntry(data);
+                    var entry = data.ReadType<ModuleFormatDirectivesTableEntry>();
                     if (entry == null)
                         return null;
 
@@ -248,7 +248,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the fix-up page table
                 for (int i = 0; i < executable.FixupPageTable.Length; i++)
                 {
-                    var entry = ParseFixupPageTableEntry(data);
+                    var entry = data.ReadType<FixupPageTableEntry>();
                     if (entry == null)
                         return null;
 
@@ -356,7 +356,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the per-page checksum name table
                 for (int i = 0; i < executable.PerPageChecksumTable.Length; i++)
                 {
-                    var entry = ParsePerPageChecksumTableEntry(data);
+                    var entry = data.ReadType<PerPageChecksumTableEntry>();
                     if (entry == null)
                         return null;
 
@@ -416,51 +416,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return executable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an information block
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled information block on success, null on error</returns>
-        public static InformationBlock? ParseInformationBlock(Stream data)
-        {
-            var informationBlock = data.ReadType<InformationBlock>();
-
-            if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
-                return null;
-
-            return informationBlock;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an object table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled object table entry on success, null on error</returns>
-        public static ObjectTableEntry? ParseObjectTableEntry(Stream data)
-        {
-            return data.ReadType<ObjectTableEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into an object page map entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled object page map entry on success, null on error</returns>
-        public static ObjectPageMapEntry? ParseObjectPageMapEntry(Stream data)
-        {
-            return data.ReadType<ObjectPageMapEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a resource table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled resource table entry on success, null on error</returns>
-        public static ResourceTableEntry? ParseResourceTableEntry(Stream data)
-        {
-            return data.ReadType<ResourceTableEntry>();
         }
 
         /// <summary>
@@ -543,36 +498,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return bundle;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a module format directives table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled module format directives table entry on success, null on error</returns>
-        public static ModuleFormatDirectivesTableEntry? ParseModuleFormatDirectivesTableEntry(Stream data)
-        {
-            return data.ReadType<ModuleFormatDirectivesTableEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a verify record directive table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled verify record directive table entry on success, null on error</returns>
-        public static VerifyRecordDirectiveTableEntry? ParseVerifyRecordDirectiveTableEntry(Stream data)
-        {
-            return data.ReadType<VerifyRecordDirectiveTableEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a fix-up page table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled fix-up page table entry on success, null on error</returns>
-        public static FixupPageTableEntry? ParseFixupPageTableEntry(Stream data)
-        {
-            return data.ReadType<FixupPageTableEntry>();
         }
 
         /// <summary>
@@ -829,16 +754,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return entry;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a per-page checksum table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled per-page checksum table entry on success, null on error</returns>
-        public static PerPageChecksumTableEntry? ParsePerPageChecksumTableEntry(Stream data)
-        {
-            return data.ReadType<PerPageChecksumTableEntry>();
         }
 
         /// <summary>

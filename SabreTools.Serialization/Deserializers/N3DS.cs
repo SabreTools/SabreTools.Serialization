@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Development Card Info Header
 
             // Try to parse the development card info header
-            var developmentCardInfoHeader = ParseDevelopmentCardInfoHeader(data);
+            var developmentCardInfoHeader = data.ReadType<DevelopmentCardInfoHeader>();
             if (developmentCardInfoHeader == null)
                 return null;
 
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Handle the extended header, if it exists
                 if (partition.ExtendedHeaderSizeInBytes > 0)
                 {
-                    var extendedHeader = ParseNCCHExtendedHeader(data);
+                    var extendedHeader = data.ReadType<NCCHExtendedHeader>();
                     if (extendedHeader != null)
                         cart.ExtendedHeaders[i] = extendedHeader;
                 }
@@ -119,10 +119,10 @@ namespace SabreTools.Serialization.Deserializers
                     long offset = partition.RomFSOffsetInMediaUnits * mediaUnitSize;
                     data.Seek(partitionOffset + offset, SeekOrigin.Begin);
 
-                    var romFsHeader = ParseRomFSHeader(data);
-                    if (romFsHeader == null)
+                    var romFsHeader = data.ReadType<RomFSHeader>();
+                    if (romFsHeader?.MagicString != RomFSMagicNumber)
                         continue;
-                    else if (romFsHeader.MagicString != RomFSMagicNumber || romFsHeader.MagicNumber != RomFSSecondMagicNumber)
+                    if (romFsHeader?.MagicNumber != RomFSSecondMagicNumber)
                         continue;
 
                     cart.RomFSHeaders[i] = romFsHeader;
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.Deserializers
             header.PartitionsTable = new PartitionTableEntry[8];
             for (int i = 0; i < 8; i++)
             {
-                var partitionTableEntry = ParsePartitionTableEntry(data);
+                var partitionTableEntry = data.ReadType<PartitionTableEntry>();
                 if (partitionTableEntry == null)
                     return null;
 
@@ -189,16 +189,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a partition table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled partition table entry on success, null on error</returns>
-        public static PartitionTableEntry? ParsePartitionTableEntry(Stream data)
-        {
-            return data.ReadType<PartitionTableEntry>();
         }
 
         /// <summary>
@@ -246,16 +236,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a development card info header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled development card info header on success, null on error</returns>
-        public static DevelopmentCardInfoHeader? ParseDevelopmentCardInfoHeader(Stream data)
-        {
-            return data.ReadType<DevelopmentCardInfoHeader>();
-        }
-
-        /// <summary>
         /// Parse a Stream into an NCCH header
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -283,7 +263,7 @@ namespace SabreTools.Serialization.Deserializers
             header.ExtendedHeaderHash = data.ReadBytes(0x20);
             header.ExtendedHeaderSizeInBytes = data.ReadUInt32();
             header.Reserved2 = data.ReadUInt32();
-            header.Flags = ParseNCCHHeaderFlags(data);
+            header.Flags = data.ReadType<NCCHHeaderFlags>();
             header.PlainRegionOffsetInMediaUnits = data.ReadUInt32();
             header.PlainRegionSizeInMediaUnits = data.ReadUInt32();
             header.LogoRegionOffsetInMediaUnits = data.ReadUInt32();
@@ -300,26 +280,6 @@ namespace SabreTools.Serialization.Deserializers
             header.RomFSSuperblockHash = data.ReadBytes(0x20);
 
             return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an NCCH header flags
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled NCCH header flags on success, null on error</returns>
-        public static NCCHHeaderFlags? ParseNCCHHeaderFlags(Stream data)
-        {
-            return data.ReadType<NCCHHeaderFlags>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into an NCCH extended header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled NCCH extended header on success, null on error</returns>
-        public static NCCHExtendedHeader? ParseNCCHExtendedHeader(Stream data)
-        {
-            return data.ReadType<NCCHExtendedHeader>();
         }
 
         /// <summary>
@@ -365,25 +325,6 @@ namespace SabreTools.Serialization.Deserializers
             exeFSFileHeader.FileSize = data.ReadUInt32();
 
             return exeFSFileHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an RomFS header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled RomFS header on success, null on error</returns>
-        public static RomFSHeader? ParseRomFSHeader(Stream data)
-        {
-            var romFSHeader = data.ReadType<RomFSHeader>();
-
-            if (romFSHeader == null)
-                return null;
-            if (romFSHeader.MagicString != RomFSMagicNumber)
-                return null;
-            if (romFSHeader.MagicNumber != RomFSSecondMagicNumber)
-                return null;
-
-            return romFSHeader;
         }
     }
 }

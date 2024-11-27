@@ -19,9 +19,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Try to parse the SVM
             return ParseSVMData(data);
         }

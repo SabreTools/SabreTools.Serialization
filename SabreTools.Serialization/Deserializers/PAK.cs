@@ -24,8 +24,8 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Signature != SignatureString)
                 return null;
 
             // Set the package header
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory items
             for (int i = 0; i < file.DirectoryItems.Length; i++)
             {
-                var directoryItem = ParseDirectoryItem(data);
+                var directoryItem = data.ReadType<DirectoryItem>();
                 if (directoryItem == null)
                     return null;
 
@@ -59,31 +59,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Package header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Package header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header?.Signature != SignatureString)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Package directory item
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Package directory item on success, null on error</returns>
-        private static DirectoryItem? ParseDirectoryItem(Stream data)
-        {
-            return data.ReadType<DirectoryItem>();
         }
     }
 }

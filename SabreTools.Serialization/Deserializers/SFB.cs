@@ -19,10 +19,10 @@ namespace SabreTools.Serialization.Deserializers
 
             // Deserialize the SFB
             var sfb = data.ReadType<Models.PlayStation3.SFB>();
-            if (sfb == null)
+            if (sfb?.Magic == null)
                 return null;
 
-            string magic = Encoding.ASCII.GetString(sfb!.Magic!);
+            string magic = Encoding.ASCII.GetString(sfb.Magic);
             if (magic != ".SFB")
                 return null;
 

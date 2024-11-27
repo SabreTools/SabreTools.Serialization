@@ -61,9 +61,9 @@ namespace SabreTools.Serialization.Deserializers
 
             #region Header
 
-            // Try to parse the header
-            var header = ParseDiscInformationUnitHeader(data);
-            if (header == null)
+            // We only accept Disc Information units, not Emergency Brake or other
+            var header = data.ReadType<DiscInformationUnitHeader>();
+            if (header?.DiscInformationIdentifier != "DI")
                 return null;
 
             // Set the information unit header
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Deserializers
             if (unit.Body.DiscTypeIdentifier == DiscTypeIdentifierReWritable || unit.Body.DiscTypeIdentifier == DiscTypeIdentifierRecordable)
             {
                 // Try to parse the trailer
-                var trailer = ParseDiscInformationUnitTrailer(data);
+                var trailer = data.ReadType<DiscInformationUnitTrailer>();
                 if (trailer == null)
                     return null;
 
@@ -99,22 +99,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return unit;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a disc information unit header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled disc information unit header on success, null on error</returns>
-        private static DiscInformationUnitHeader? ParseDiscInformationUnitHeader(Stream data)
-        {
-            var header = data.ReadType<DiscInformationUnitHeader>();
-
-            // We only accept Disc Information units, not Emergency Brake or other
-            if (header?.DiscInformationIdentifier != "DI")
-                return null;
-
-            return header;
         }
 
         /// <summary>
@@ -143,16 +127,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return body;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a disc information unit trailer
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled disc information unit trailer on success, null on error</returns>
-        private static DiscInformationUnitTrailer? ParseDiscInformationUnitTrailer(Stream data)
-        {
-            return data.ReadType<DiscInformationUnitTrailer>();
         }
 
         #endregion

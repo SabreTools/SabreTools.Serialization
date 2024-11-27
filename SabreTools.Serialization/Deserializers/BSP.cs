@@ -27,8 +27,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
+            var header = data.ReadType<BspHeader>();
             if (header?.Lumps == null)
+                return null;
+            if (header.Version < 29 || header.Version > 30)
                 return null;
 
             // Set the level header
@@ -107,24 +109,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Level header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Level header on success, null on error</returns>
-        /// <remarks>Only recognized versions are 29 and 30</remarks>
-        private static BspHeader? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<BspHeader>();
-            
-            if (header == null)
-                return null;
-            if (header.Version < 29 || header.Version > 30)
-                return null;
-
-            return header;
         }
 
         /// <summary>

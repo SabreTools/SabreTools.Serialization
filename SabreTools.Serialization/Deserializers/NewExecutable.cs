@@ -41,12 +41,12 @@ namespace SabreTools.Serialization.Deserializers
 
             // Try to parse the executable header
             data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            var executableHeader = ParseExecutableHeader(data);
-            if (executableHeader == null)
+            var header = data.ReadType<ExecutableHeader>();
+            if (header?.Magic != SignatureString)
                 return null;
 
             // Set the executable header
-            executable.Header = executableHeader;
+            executable.Header = header;
 
             #endregion
 
@@ -55,13 +55,13 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the segment table doesn't exist
             int tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.SegmentTableOffset;
+                + header.SegmentTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
             // Try to parse the segment table
             data.Seek(tableAddress, SeekOrigin.Begin);
-            var segmentTable = ParseSegmentTable(data, executableHeader.FileSegmentCount);
+            var segmentTable = ParseSegmentTable(data, header.FileSegmentCount);
             if (segmentTable == null)
                 return null;
 
@@ -75,13 +75,13 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the segment table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.ResourceTableOffset;
+                + header.ResourceTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
             // Try to parse the resource table
             data.Seek(tableAddress, SeekOrigin.Begin);
-            var resourceTable = ParseResourceTable(data, executableHeader.ResourceEntriesCount);
+            var resourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
             if (resourceTable == null)
                 return null;
 
@@ -95,10 +95,10 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the resident-name table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.ResidentNameTableOffset;
+                + header.ResidentNameTableOffset;
             int endOffset = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.ModuleReferenceTableOffset;
+                + header.ModuleReferenceTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
@@ -118,13 +118,13 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the module-reference table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.ModuleReferenceTableOffset;
+                + header.ModuleReferenceTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
             // Try to parse the module-reference table
             data.Seek(tableAddress, SeekOrigin.Begin);
-            var moduleReferenceTable = ParseModuleReferenceTable(data, executableHeader.ModuleReferenceTableSize);
+            var moduleReferenceTable = ParseModuleReferenceTable(data, header.ModuleReferenceTableSize);
             if (moduleReferenceTable == null)
                 return null;
 
@@ -138,10 +138,10 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the imported-name table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.ImportedNamesTableOffset;
+                + header.ImportedNamesTableOffset;
             endOffset = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.EntryTableOffset;
+                + header.EntryTableOffset;
             if (tableAddress >= data.Length)
                 return executable;
 
@@ -161,11 +161,11 @@ namespace SabreTools.Serialization.Deserializers
             // If the offset for the imported-name table doesn't exist
             tableAddress = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.EntryTableOffset;
+                + header.EntryTableOffset;
             endOffset = initialOffset
                 + (int)stub.Header.NewExeHeaderAddr
-                + executableHeader.EntryTableOffset
-                + executableHeader.EntryTableSize;
+                + header.EntryTableOffset
+                + header.EntryTableSize;
             if (tableAddress >= data.Length)
                 return executable;
 
@@ -184,10 +184,10 @@ namespace SabreTools.Serialization.Deserializers
 
             // If the offset for the nonresident-name table doesn't exist
             tableAddress = initialOffset
-                + (int)executableHeader.NonResidentNamesTableOffset;
+                + (int)header.NonResidentNamesTableOffset;
             endOffset = initialOffset
-                + (int)executableHeader.NonResidentNamesTableOffset
-                + executableHeader.NonResidentNameTableSize;
+                + (int)header.NonResidentNamesTableOffset
+                + header.NonResidentNameTableSize;
             if (tableAddress >= data.Length)
                 return executable;
 
@@ -206,21 +206,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a New Executable header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled executable header on success, null on error</returns>
-        public static ExecutableHeader? ParseExecutableHeader(Stream data)
-        {
-            var header = data.ReadType<ExecutableHeader>();
-
-            if (header?.Magic != SignatureString)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
         /// Parse a Stream into a segment table
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -232,7 +217,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < count; i++)
             {
-                var entry = ParseSegmentTableEntry(data);
+                var entry = data.ReadType<SegmentTableEntry>();
                 if (entry == null)
                     return null;
 
@@ -240,16 +225,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return segmentTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a segment table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled segment table entry on success, null on error</returns>
-        public static SegmentTableEntry? ParseSegmentTableEntry(Stream data)
-        {
-            return data.ReadType<SegmentTableEntry>();
         }
 
         /// <summary>
@@ -286,7 +261,7 @@ namespace SabreTools.Serialization.Deserializers
                 for (int j = 0; j < entry.ResourceCount; j++)
                 {
                     // TODO: Should we read and store the resource data?
-                    var resource = ParseResourceTypeResourceEntry(data);
+                    var resource = data.ReadType<ResourceTypeResourceEntry>();
                     if (resource == null)
                         return null;
 
@@ -342,17 +317,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return resourceTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a resource entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled resource entry on success, null on error</returns>
-        public static ResourceTypeResourceEntry? ParseResourceTypeResourceEntry(Stream data)
-        {
-            // TODO: Should we read and store the resource data?
-            return data.ReadType<ResourceTypeResourceEntry>();
         }
 
         /// <summary>
@@ -420,7 +384,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < count; i++)
             {
-                var entry = ParseModuleReferenceTableEntry(data);
+                var entry = data.ReadType<ModuleReferenceTableEntry>();
                 if (entry == null)
                     return null;
 
@@ -428,16 +392,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return moduleReferenceTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a module-reference table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled module-reference table entry on success, null on error</returns>
-        public static ModuleReferenceTableEntry? ParseModuleReferenceTableEntry(Stream data)
-        {
-            return data.ReadType<ModuleReferenceTableEntry>();
         }
 
         /// <summary>

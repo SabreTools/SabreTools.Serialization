@@ -24,8 +24,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Signature1 != Constants.HeaderSignature)
+                return null;
+            if (header.TocAddress >= data.Length)
                 return null;
 
             // Set the archive header
@@ -69,7 +71,7 @@ namespace SabreTools.Serialization.Deserializers
                 var directory = archive.Directories[i];
                 for (int j = 0; j < directory.FileCount; j++)
                 {
-                    var file = ParseFile(data);
+                    var file = data.ReadType<Models.InstallShieldArchiveV3.File>();
                     if (file?.Name == null)
                         return null;
 
@@ -84,25 +86,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return archive;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled header on success, null on error</returns>
-        public static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-            
-            if (header == null)
-                return null;
-            if (header?.Signature1 != Constants.HeaderSignature)
-                return null;
-            if (header.TocAddress >= data.Length)
-                return null;
-
-            return header;
         }
 
         /// <summary>
@@ -122,16 +105,6 @@ namespace SabreTools.Serialization.Deserializers
             directory.Name = Encoding.ASCII.GetString(nameBytes);
 
             return directory;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a file
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled file on success, null on error</returns>
-        public static Models.InstallShieldArchiveV3.File? ParseFile(Stream data)
-        {
-            return data.ReadType<Models.InstallShieldArchiveV3.File>();
         }
     }
 }

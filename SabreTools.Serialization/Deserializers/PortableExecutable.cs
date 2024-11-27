@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Deserializers
             #region COFF File Header
 
             // Try to parse the COFF file header
-            var coffFileHeader = ParseCOFFFileHeader(data);
+            var coffFileHeader = data.ReadType<COFFFileHeader>();
             if (coffFileHeader == null)
                 return null;
 
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the delay-load directory table
                 data.Seek(delayLoadDirectoryTableAddress, SeekOrigin.Begin);
-                var delayLoadDirectoryTable = ParseDelayLoadDirectoryTable(data);
+                var delayLoadDirectoryTable = data.ReadType<DelayLoadDirectoryTable>();
                 if (delayLoadDirectoryTable == null)
                     return null;
 
@@ -283,16 +283,6 @@ namespace SabreTools.Serialization.Deserializers
 
             // TODO: Finish implementing PE parsing
             return executable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Portable Executable COFF file header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled executable header on success, null on error</returns>
-        public static COFFFileHeader? ParseCOFFFileHeader(Stream data)
-        {
-            return data.ReadType<COFFFileHeader>();
         }
 
         /// <summary>
@@ -674,16 +664,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return [.. attributeCertificateTable];
-        }
-
-        /// <summary>
-        /// Parse a byte array into a delay-load directory table
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled delay-load directory table on success, null on error</returns>
-        public static DelayLoadDirectoryTable? ParseDelayLoadDirectoryTable(Stream data)
-        {
-            return data.ReadType<DelayLoadDirectoryTable>();
         }
 
         /// <summary>
@@ -1110,7 +1090,7 @@ namespace SabreTools.Serialization.Deserializers
                         int hintNameTableEntryAddress = hintNameTableEntryAddresses[i];
                         data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
 
-                        var hintNameTableEntry = ParseHintNameTableEntry(data);
+                        var hintNameTableEntry = data.ReadType<HintNameTableEntry>();
                         if (hintNameTableEntry == null)
                             return null;
 
@@ -1122,16 +1102,6 @@ namespace SabreTools.Serialization.Deserializers
             importTable.HintNameTable = [.. importHintNameTable];
 
             return importTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a hint name table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled hint name table entry on success, null on error</returns>
-        public static HintNameTableEntry? ParseHintNameTableEntry(Stream data)
-        {
-            return data.ReadType<HintNameTableEntry>();
         }
 
         /// <summary>

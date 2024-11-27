@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(offset, SeekOrigin.Begin);
 
             // Try to parse the footer
-            var footer = ParseFooter(data);
+            var footer = data.ReadType<Footer>();
             if (footer == null)
                 return null;
 
@@ -90,10 +90,7 @@ namespace SabreTools.Serialization.Deserializers
         private static Header? ParseHeader(Stream data)
         {
             var header = data.ReadType<Header>();
-            if (header == null)
-                return null;
-
-            return header.Signature switch
+            return header?.Signature switch
             {
                 Version0SignatureString when header.FileSegmentSize != Version0HSegmentSize => null,
                 Version0SignatureString => header,
@@ -110,16 +107,6 @@ namespace SabreTools.Serialization.Deserializers
 
                 _ => null,
             };
-        }
-
-        /// <summary>
-        /// Parse a Stream into a footer
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled footer on success, null on error</returns>
-        private static Footer? ParseFooter(Stream data)
-        {
-            return data.ReadType<Footer>();
         }
 
         /// <summary>

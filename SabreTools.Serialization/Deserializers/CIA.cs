@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
@@ -25,8 +24,18 @@ namespace SabreTools.Serialization.Deserializers
             #region CIA Header
 
             // Try to parse the header
-            var header = ParseCIAHeader(data);
+            var header = data.ReadType<CIAHeader>();
             if (header == null)
+                return null;
+            if (header.CertificateChainSize > data.Length)
+                return null;
+            if (header.TicketSize > data.Length)
+                return null;
+            if (header.TMDFileSize > data.Length)
+                return null;
+            if (header.MetaSize > data.Length)
+                return null;
+            if ((long)header.ContentSize > data.Length)
                 return null;
 
             // Set the CIA archive header
@@ -124,7 +133,7 @@ namespace SabreTools.Serialization.Deserializers
             if (header.MetaSize > 0)
             {
                 // Try to parse the meta
-                var meta = ParseMetaData(data);
+                var meta = data.ReadType<MetaData>();
                 if (meta == null)
                     return null;
 
@@ -135,31 +144,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return cia;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a CIA header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled CIA header on success, null on error</returns>
-        public static CIAHeader? ParseCIAHeader(Stream data)
-        {
-            var header = data.ReadType<CIAHeader>();
-
-            if (header == null)
-                return null;
-            if (header.CertificateChainSize > data.Length)
-                return null;
-            if (header.TicketSize > data.Length)
-                return null;
-            if (header.TMDFileSize > data.Length)
-                return null;
-            if (header.MetaSize > data.Length)
-                return null;
-            if ((long)header.ContentSize > data.Length)
-                return null;
-
-            return header;
         }
 
         /// <summary>
@@ -399,20 +383,20 @@ namespace SabreTools.Serialization.Deserializers
             titleMetadata.ContentInfoRecords = new ContentInfoRecord[64];
             for (int i = 0; i < 64; i++)
             {
-                var contentInfoRecord = ParseContentInfoRecord(data);
+                var contentInfoRecord = data.ReadType<ContentInfoRecord>();
                 if (contentInfoRecord == null)
                     return null;
 
-                titleMetadata.ContentInfoRecords[i] = ParseContentInfoRecord(data);
+                titleMetadata.ContentInfoRecords[i] = contentInfoRecord;
             }
             titleMetadata.ContentChunkRecords = new ContentChunkRecord[titleMetadata.ContentCount];
             for (int i = 0; i < titleMetadata.ContentCount; i++)
             {
-                var contentChunkRecord = ParseContentChunkRecord(data);
+                var contentChunkRecord = data.ReadType<ContentChunkRecord>();
                 if (contentChunkRecord == null)
                     return null;
 
-                titleMetadata.ContentChunkRecords[i] = ParseContentChunkRecord(data);
+                titleMetadata.ContentChunkRecords[i] = contentChunkRecord;
             }
 
             // Certificates only exist in standalone TMD files
@@ -430,36 +414,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return titleMetadata;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a content info record
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled content info record on success, null on error</returns>
-        public static ContentInfoRecord? ParseContentInfoRecord(Stream data)
-        {
-            return data.ReadType<ContentInfoRecord>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a content chunk record
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled content chunk record on success, null on error</returns>
-        public static ContentChunkRecord? ParseContentChunkRecord(Stream data)
-        {
-            return data.ReadType<ContentChunkRecord>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a meta data
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled meta data on success, null on error</returns>
-        public static MetaData? ParseMetaData(Stream data)
-        {
-            return data.ReadType<MetaData>();
         }
     }
 }

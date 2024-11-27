@@ -27,8 +27,12 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Dummy0 != 0x00000001)
+                return null;
+            if (header?.MajorVersion != 0x00000001)
+                return null;
+            if (header.MinorVersion != 3 && header.MinorVersion != 5 && header.MinorVersion != 6)
                 return null;
 
             // Set the game cache header
@@ -39,7 +43,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Block Entry Header
 
             // Try to parse the block entry header
-            var blockEntryHeader = ParseBlockEntryHeader(data);
+            var blockEntryHeader = data.ReadType<BlockEntryHeader>();
             if (blockEntryHeader == null)
                 return null;
 
@@ -56,7 +60,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the block entries
             for (int i = 0; i < blockEntryHeader.BlockCount; i++)
             {
-                var blockEntry = ParseBlockEntry(data);
+                var blockEntry = data.ReadType<BlockEntry>();
                 if (blockEntry == null)
                     return null;
 
@@ -68,7 +72,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Fragmentation Map Header
 
             // Try to parse the fragmentation map header
-            var fragmentationMapHeader = ParseFragmentationMapHeader(data);
+            var fragmentationMapHeader = data.ReadType<FragmentationMapHeader>();
             if (fragmentationMapHeader == null)
                 return null;
 
@@ -85,7 +89,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the fragmentation maps
             for (int i = 0; i < fragmentationMapHeader.BlockCount; i++)
             {
-                var fragmentationMap = ParseFragmentationMap(data);
+                var fragmentationMap = data.ReadType<FragmentationMap>();
                 if (fragmentationMap == null)
                     return null;
 
@@ -99,7 +103,7 @@ namespace SabreTools.Serialization.Deserializers
             if (header.MinorVersion < 6)
             {
                 // Try to parse the block entry map header
-                var blockEntryMapHeader = ParseBlockEntryMapHeader(data);
+                var blockEntryMapHeader = data.ReadType<BlockEntryMapHeader>();
                 if (blockEntryMapHeader == null)
                     return null;
 
@@ -119,7 +123,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the block entry maps
                 for (int i = 0; i < file.BlockEntryMapHeader.BlockCount; i++)
                 {
-                    var blockEntryMap = ParseBlockEntryMap(data);
+                    var blockEntryMap = data.ReadType<BlockEntryMap>();
                     if (blockEntryMap == null)
                         return null;
 
@@ -135,7 +139,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Directory Header
 
             // Try to parse the directory header
-            var directoryHeader = ParseDirectoryHeader(data);
+            var directoryHeader = data.ReadType<DirectoryHeader>();
             if (directoryHeader == null)
                 return null;
 
@@ -152,7 +156,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory entries
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
-                var directoryEntry = ParseDirectoryEntry(data);
+                var directoryEntry = data.ReadType<DirectoryEntry>();
                 if (directoryEntry == null)
                     return null;
                 
@@ -200,7 +204,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory info 1 entries
             for (int i = 0; i < directoryHeader.Info1Count; i++)
             {
-                var directoryInfo1Entry = ParseDirectoryInfo1Entry(data);
+                var directoryInfo1Entry = data.ReadType<DirectoryInfo1Entry>();
                 if (directoryInfo1Entry == null)
                     return null;
 
@@ -217,7 +221,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory info 2 entries
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
-                var directoryInfo2Entry = ParseDirectoryInfo2Entry(data);
+                var directoryInfo2Entry = data.ReadType<DirectoryInfo2Entry>();
                 if (directoryInfo2Entry == null)
                     return null;
 
@@ -234,7 +238,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory copy entries
             for (int i = 0; i < directoryHeader.CopyCount; i++)
             {
-                var directoryCopyEntry = ParseDirectoryCopyEntry(data);
+                var directoryCopyEntry = data.ReadType<DirectoryCopyEntry>();
                 if (directoryCopyEntry == null)
                     return null;
 
@@ -251,7 +255,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory local entries
             for (int i = 0; i < directoryHeader.LocalCount; i++)
             {
-                var directoryLocalEntry = ParseDirectoryLocalEntry(data);
+                var directoryLocalEntry = data.ReadType<DirectoryLocalEntry>();
                 if (directoryLocalEntry == null)
                     return null;
 
@@ -268,9 +272,11 @@ namespace SabreTools.Serialization.Deserializers
             if (header.MinorVersion >= 5)
             {
                 // Try to parse the directory map header
-                var directoryMapHeader = ParseDirectoryMapHeader(data);
-                if (directoryMapHeader == null)
-                    return null;
+                var directoryMapHeader = data.ReadType<DirectoryMapHeader>();
+            if (directoryMapHeader?.Dummy0 != 0x00000001)
+                return null;
+            if (directoryMapHeader?.Dummy1 != 0x00000000)
+                return null;
 
                 // Set the game cache directory map header
                 file.DirectoryMapHeader = directoryMapHeader;
@@ -286,7 +292,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory map entries
             for (int i = 0; i < directoryHeader.ItemCount; i++)
             {
-                var directoryMapEntry = ParseDirectoryMapEntry(data);
+                var directoryMapEntry = data.ReadType<DirectoryMapEntry>();
                 if (directoryMapEntry == null)
                     return null;
 
@@ -298,8 +304,8 @@ namespace SabreTools.Serialization.Deserializers
             #region Checksum Header
 
             // Try to parse the checksum header
-            var checksumHeader = ParseChecksumHeader(data);
-            if (checksumHeader == null)
+            var checksumHeader = data.ReadType<ChecksumHeader>();
+            if (checksumHeader?.Dummy0 != 0x00000001)
                 return null;
 
             // Set the game cache checksum header
@@ -313,8 +319,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Checksum Map Header
 
             // Try to parse the checksum map header
-            var checksumMapHeader = ParseChecksumMapHeader(data);
-            if (checksumMapHeader == null)
+            var checksumMapHeader = data.ReadType<ChecksumMapHeader>();
+            if (checksumMapHeader?.Dummy0 != 0x14893721)
+                return null;
+            if (checksumMapHeader?.Dummy1 != 0x00000001)
                 return null;
 
             // Set the game cache checksum map header
@@ -330,7 +338,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the checksum map entries
             for (int i = 0; i < checksumMapHeader.ItemCount; i++)
             {
-                var checksumMapEntry = ParseChecksumMapEntry(data);
+                var checksumMapEntry = data.ReadType<ChecksumMapEntry>();
                 if (checksumMapEntry == null)
                     return null;
 
@@ -347,7 +355,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the checksum entries
             for (int i = 0; i < checksumMapHeader.ChecksumCount; i++)
             {
-                var checksumEntry = ParseChecksumEntry(data);
+                var checksumEntry = data.ReadType<ChecksumEntry>();
                 if (checksumEntry == null)
                     return null;
 
@@ -372,232 +380,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header == null)
-                return null;
-            if (header.Dummy0 != 0x00000001)
-                return null;
-            if (header.MajorVersion != 0x00000001)
-                return null;
-            if (header.MinorVersion != 3 && header.MinorVersion != 5 && header.MinorVersion != 6)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache block entry header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache block entry header on success, null on error</returns>
-        private static BlockEntryHeader? ParseBlockEntryHeader(Stream data)
-        {
-            return data.ReadType<BlockEntryHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache block entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache block entry on success, null on error</returns>
-        private static BlockEntry? ParseBlockEntry(Stream data)
-        {
-            return data.ReadType<BlockEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache fragmentation map header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache fragmentation map header on success, null on error</returns>
-        private static FragmentationMapHeader? ParseFragmentationMapHeader(Stream data)
-        {
-            return data.ReadType<FragmentationMapHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache fragmentation map
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache fragmentation map on success, null on error</returns>
-        private static FragmentationMap? ParseFragmentationMap(Stream data)
-        {
-            return data.ReadType<FragmentationMap>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache block entry map header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache block entry map header on success, null on error</returns>
-        private static BlockEntryMapHeader? ParseBlockEntryMapHeader(Stream data)
-        {
-            return data.ReadType<BlockEntryMapHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache block entry map
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache block entry map on success, null on error</returns>
-        private static BlockEntryMap? ParseBlockEntryMap(Stream data)
-        {
-            return data.ReadType<BlockEntryMap>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory header on success, null on error</returns>
-        private static DirectoryHeader? ParseDirectoryHeader(Stream data)
-        {
-            return data.ReadType<DirectoryHeader>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory entry on success, null on error</returns>
-        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
-        {
-            return data.ReadType<DirectoryEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory info 1 entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory info 1 entry on success, null on error</returns>
-        private static DirectoryInfo1Entry? ParseDirectoryInfo1Entry(Stream data)
-        {
-            return data.ReadType<DirectoryInfo1Entry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory info 2 entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory info 2 entry on success, null on error</returns>
-        private static DirectoryInfo2Entry? ParseDirectoryInfo2Entry(Stream data)
-        {
-            return data.ReadType<DirectoryInfo2Entry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory copy entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory copy entry on success, null on error</returns>
-        private static DirectoryCopyEntry? ParseDirectoryCopyEntry(Stream data)
-        {
-            return data.ReadType<DirectoryCopyEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory local entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory local entry on success, null on error</returns>
-        private static DirectoryLocalEntry? ParseDirectoryLocalEntry(Stream data)
-        {
-            return data.ReadType<DirectoryLocalEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory map header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory map header on success, null on error</returns>
-        private static DirectoryMapHeader? ParseDirectoryMapHeader(Stream data)
-        {
-            var directoryMapHeader = data.ReadType<DirectoryMapHeader>();
-
-            if (directoryMapHeader == null)
-                return null;
-            if (directoryMapHeader.Dummy0 != 0x00000001)
-                return null;
-            if (directoryMapHeader.Dummy1 != 0x00000000)
-                return null;
-
-            return directoryMapHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache directory map entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache directory map entry on success, null on error</returns>
-        private static DirectoryMapEntry? ParseDirectoryMapEntry(Stream data)
-        {
-            return data.ReadType<DirectoryMapEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache checksum header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache checksum header on success, null on error</returns>
-        private static ChecksumHeader? ParseChecksumHeader(Stream data)
-        {
-            var checksumHeader = data.ReadType<ChecksumHeader>();
-
-            if (checksumHeader == null)
-                return null;
-            if (checksumHeader.Dummy0 != 0x00000001)
-                return null;
-
-            return checksumHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache checksum map header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache checksum map header on success, null on error</returns>
-        private static ChecksumMapHeader? ParseChecksumMapHeader(Stream data)
-        {
-            var checksumMapHeader = data.ReadType<ChecksumMapHeader>();
-
-            if (checksumMapHeader == null)
-                return null;
-            if (checksumMapHeader.Dummy0 != 0x14893721)
-                return null;
-            if (checksumMapHeader.Dummy1 != 0x00000001)
-                return null;
-
-            return checksumMapHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache checksum map entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache checksum map entry on success, null on error</returns>
-        private static ChecksumMapEntry? ParseChecksumMapEntry(Stream data)
-        {
-            return data.ReadType<ChecksumMapEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Game Cache checksum entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Game Cache checksum entry on success, null on error</returns>
-        private static ChecksumEntry? ParseChecksumEntry(Stream data)
-        {
-            return data.ReadType<ChecksumEntry>();
         }
 
         /// <summary>

@@ -27,8 +27,12 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header?.Lumps == null)
+            var header = data.ReadType<VbspHeader>();
+            if (header?.Signature != SignatureString)
+                return null;
+            if (Array.IndexOf([17, 18, 19, 20, 21, 22, 23, 25, 27, 29, 0x00040014], header.Version) > -1)
+                return null;
+            if (header.Lumps == null)
                 return null;
 
             // Set the package header
@@ -255,23 +259,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life 2 Level header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life 2 Level header on success, null on error</returns>
-        private static VbspHeader? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<VbspHeader>();
-
-            if (header?.Signature != SignatureString)
-                return null;
-            if (Array.IndexOf([17, 18, 19, 20, 21, 22, 23, 25, 27, 29, 0x00040014], header.Version) > -1)
-                return null;
-
-            return header;
         }
 
         /// <summary>

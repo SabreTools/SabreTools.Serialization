@@ -35,8 +35,8 @@ namespace SabreTools.Serialization.Deserializers
                 long basePtr = data.Position;
 
                 // Deserialize the user data, returning null if invalid
-                var userData = ParseUserData(data);
-                if (userData == null)
+                var userData = data.ReadType<UserData>();
+                if (userData?.Signature != UserDataSignatureString)
                     return null;
 
                 // Set the user data
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < hashTableEnd)
                     {
-                        var hashEntry = ParseHashEntry(data);
+                        var hashEntry = data.ReadType<HashEntry>();
                         if (hashEntry == null)
                             return null;
 
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < hashTableEnd)
                     {
-                        var hashEntry = ParseHashEntry(data);
+                        var hashEntry = data.ReadType<HashEntry>();
                         if (hashEntry == null)
                             return null;
 
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < hashTableEnd)
                     {
-                        var hashEntry = ParseHashEntry(data);
+                        var hashEntry = data.ReadType<HashEntry>();
                         if (hashEntry == null)
                             return null;
 
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < blockTableEnd)
                     {
-                        var blockEntry = ParseBlockEntry(data);
+                        var blockEntry = data.ReadType<BlockEntry>();
                         if (blockEntry == null)
                             return null;
 
@@ -212,7 +212,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < blockTableEnd)
                     {
-                        var blockEntry = ParseBlockEntry(data);
+                        var blockEntry = data.ReadType<BlockEntry>();
                         if (blockEntry == null)
                             return null;
 
@@ -241,7 +241,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     while (data.Position < blockTableEnd)
                     {
-                        var blockEntry = ParseBlockEntry(data);
+                        var blockEntry = data.ReadType<BlockEntry>();
                         if (blockEntry == null)
                             return null;
 
@@ -392,21 +392,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a user data object
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled user data on success, null on error</returns>
-        private static UserData? ParseUserData(Stream data)
-        {
-            var userData = data.ReadType<UserData>();
-
-            if (userData?.Signature != UserDataSignatureString)
-                return null;
-
-            return userData;
-        }
-
-        /// <summary>
         /// Parse a Stream into a HET table
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -490,36 +475,6 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Populate the hash table
 
             return betTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a hash entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled hash entry on success, null on error</returns>
-        private static HashEntry? ParseHashEntry(Stream data)
-        {
-            return data.ReadType<HashEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a block entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled block entry on success, null on error</returns>
-        private static BlockEntry? ParseBlockEntry(Stream data)
-        {
-            return data.ReadType<BlockEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a patch info
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled patch info on success, null on error</returns>
-        private static PatchInfo? ParsePatchInfo(Stream data)
-        {
-            return data.ReadType<PatchInfo>();
         }
 
         #region Helpers

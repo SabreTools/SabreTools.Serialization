@@ -27,8 +27,8 @@ namespace SabreTools.Serialization.Deserializers
             #region Common Header
 
             // Try to parse the cabinet header
-            var commonHeader = ParseCommonHeader(data);
-            if (commonHeader == null)
+            var commonHeader = data.ReadType<CommonHeader>();
+            if (commonHeader?.Signature != SignatureString)
                 return null;
 
             // Set the cabinet header
@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(descriptorOffset, SeekOrigin.Begin);
 
             // Try to parse the descriptor
-            var descriptor = ParseDescriptor(data);
+            var descriptor = data.ReadType<Descriptor>();
             if (descriptor == null)
                 return null;
 
@@ -326,21 +326,6 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a common header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled common header on success, null on error</returns>
-        public static CommonHeader? ParseCommonHeader(Stream data)
-        {
-            var commonHeader = data.ReadType<CommonHeader>();
-
-            if (commonHeader?.Signature != SignatureString)
-                return null;
-
-            return commonHeader;
-        }
-
-        /// <summary>
         /// Parse a Stream into a volume header
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -385,16 +370,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return volumeHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a descriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled descriptor on success, null on error</returns>
-        public static Descriptor? ParseDescriptor(Stream data)
-        {
-            return data.ReadType<Descriptor>();
         }
 
         /// <summary>

@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < count; i++)
             {
-                var entry = ParseRelocationEntry(data);
+                var entry = data.ReadType<RelocationEntry>();
                 if (entry == null)
                     return null;
 
@@ -136,16 +136,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return relocationTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a relocation table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled relocation table entry on success, null on error</returns>
-        public static RelocationEntry? ParseRelocationEntry(Stream data)
-        {
-            return data.ReadType<RelocationEntry>();
         }
     }
 }

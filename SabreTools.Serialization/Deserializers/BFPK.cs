@@ -28,8 +28,8 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Magic != SignatureString)
                 return null;
 
             // Set the archive header
@@ -58,21 +58,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return archive;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header?.Magic != SignatureString)
-                return null;
-
-            return header;
         }
 
         /// <summary>

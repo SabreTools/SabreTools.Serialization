@@ -24,8 +24,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Header
 
             // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
+            var header = data.ReadType<Header>();
+            if (header?.Signature != HeaderSignatureString)
+                return null;
+            if (header.Version != 6)
                 return null;
 
             // Set the package header
@@ -41,7 +43,7 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the directory entries
             for (int i = 0; i < file.DirectoryEntries.Length; i++)
             {
-                var directoryEntry = ParseDirectoryEntry(data);
+                var directoryEntry = data.ReadType<DirectoryEntry>();
                 if (directoryEntry == null)
                     continue;
 
@@ -60,7 +62,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the preload directory entries
                 for (int i = 0; i < file.PreloadDirectoryEntries.Length; i++)
                 {
-                    var directoryEntry = ParseDirectoryEntry(data);
+                    var directoryEntry = data.ReadType<DirectoryEntry>();
                     if (directoryEntry == null)
                         continue;
 
@@ -80,7 +82,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the preload directory mappings
                 for (int i = 0; i < file.PreloadDirectoryMappings.Length; i++)
                 {
-                    var directoryMapping = ParseDirectoryMapping(data);
+                    var directoryMapping = data.ReadType<DirectoryMapping>();
                     if (directoryMapping == null)
                         continue;
 
@@ -121,8 +123,8 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(-8, SeekOrigin.End);
 
             // Try to parse the footer
-            var footer = ParseFooter(data);
-            if (footer == null)
+            var footer = data.ReadType<Footer>();
+            if (footer?.Signature != FooterSignatureString)
                 return null;
 
             // Set the package footer
@@ -131,43 +133,6 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             return file;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a XBox Package File header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled XBox Package File header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
-        {
-            var header = data.ReadType<Header>();
-
-            if (header?.Signature != HeaderSignatureString)
-                return null;
-            if (header.Version != 6)
-                return null;
-
-            return header;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a XBox Package File directory entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled XBox Package File directory entry on success, null on error</returns>
-        private static DirectoryEntry? ParseDirectoryEntry(Stream data)
-        {
-            return data.ReadType<DirectoryEntry>();
-        }
-
-        /// <summary>
-        /// Parse a Stream into a XBox Package File directory mapping
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled XBox Package File directory mapping on success, null on error</returns>
-        private static DirectoryMapping? ParseDirectoryMapping(Stream data)
-        {
-            return data.ReadType<DirectoryMapping>();
         }
 
         /// <summary>
@@ -196,21 +161,6 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(currentPosition, SeekOrigin.Begin);
 
             return directoryItem;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a XBox Package File footer
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled XBox Package File footer on success, null on error</returns>
-        private static Footer? ParseFooter(Stream data)
-        {
-            var footer = data.ReadType<Footer>();
-
-            if (footer?.Signature != FooterSignatureString)
-                return null;
-
-            return footer;
         }
     }
 }
