@@ -1,8 +1,9 @@
 using System.IO;
+using SabreTools.Models.BSP;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class VBSP : WrapperBase<Models.BSP.VbspFile>
+    public class VBSP : WrapperBase<VbspFile>
     {
         #region Descriptive Properties
 
@@ -14,14 +15,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public VBSP(Models.BSP.VbspFile? model, byte[]? data, int offset)
+        public VBSP(VbspFile? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public VBSP(Models.BSP.VbspFile? model, Stream? data)
+        public VBSP(VbspFile? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -71,6 +72,94 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Extraction
+
+        /// <summary>
+        /// Extract raw lump data for all indicies
+        /// </summary>
+        /// <returns>True if the extraction was successful, false otherwise</returns>
+        public bool ExtractAllRawLumpData(string outputDirectory)
+        {
+            // If we have no lumps
+            if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
+                return false;
+
+            // Loop through and extract all lumps to the output
+            bool allExtracted = true;
+            for (int i = 0; i < Model.Header.Lumps.Length; i++)
+            {
+                allExtracted &= ExtractRawLumpData(i, outputDirectory);
+            }
+
+            return allExtracted;
+        }
+
+        /// <summary>
+        /// Extract raw lump data for a particular index
+        /// </summary>
+        /// <param name="index">Lump index to extract</param>
+        /// <returns>True if the extraction was successful, false otherwise</returns>
+        public bool ExtractRawLumpData(int index, string outputDirectory)
+        {
+            // If we have no lumps
+            if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
+                return false;
+
+            // If the lumps index is invalid
+            if (index < 0 || index >= Model.Header.Lumps.Length)
+                return false;
+
+            // Get the lump
+            var lump = Model.Header.Lumps[index];
+            if (lump == null)
+                return false;
+
+            // Read the data
+            var data = ReadFromDataSource(lump.Offset, lump.Length);
+            if (data == null)
+                return false;
+
+            // Create the filename
+            string filename = $"lump_{index}.bin";
+            switch ((LumpType)index)
+            {
+                case LumpType.LUMP_ENTITIES:
+                    filename = "entities.ent";
+                    break;
+                case LumpType.LUMP_PAKFILE:
+                    filename = "pakfile.zip";
+                    break;
+            }
+
+            // If we have an invalid output directory
+            if (string.IsNullOrEmpty(outputDirectory))
+                return false;
+
+            // Create the full output path
+            filename = Path.Combine(outputDirectory, filename);
+
+            // Ensure the output directory is created
+            var directoryName = Path.GetDirectoryName(filename);
+            if (directoryName != null)
+                Directory.CreateDirectory(directoryName);
+
+            // Try to write the data
+            try
+            {
+                // Open the output file for writing
+                using Stream fs = File.OpenWrite(filename);
+                fs.Write(data, 0, data.Length);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
