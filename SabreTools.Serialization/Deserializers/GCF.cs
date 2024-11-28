@@ -18,9 +18,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            long initialOffset = data.Position;
-
             // Create a new Half-Life Game Cache to fill
             var file = new Models.GCF.File();
 
@@ -134,7 +131,7 @@ namespace SabreTools.Serialization.Deserializers
             #endregion
 
             // Cache the current offset
-            initialOffset = data.Position;
+            long initialOffset = data.Position;
 
             #region Directory Header
 

@@ -104,7 +104,8 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Version 2 and 3
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2 || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
+            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
+                || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
             {
                 // If we have a hash table
                 long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
@@ -195,7 +196,8 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Version 2 and 3
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2 || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
+            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
+                || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
             {
                 // If we have a block table
                 long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;

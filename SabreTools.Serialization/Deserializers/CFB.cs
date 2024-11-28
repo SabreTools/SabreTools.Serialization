@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CFB;
 using static SabreTools.Models.CFB.Constants;
@@ -279,41 +280,24 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
         private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
         {
-            const int directoryEntrySize = 64 + 2 + 1 + 1 + 4 + 4 + 4 + 16 + 4 + 8 + 8 + 4 + 8;
-
+            int directoryEntrySize = Marshal.SizeOf<DirectoryEntry>();
             int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
             var directoryEntries = new DirectoryEntry[sectorCount];
 
             for (int i = 0; i < directoryEntries.Length; i++)
             {
-                var directoryEntry = ParseDirectoryEntry(data, majorVersion);
+                var directoryEntry = data.ReadType<DirectoryEntry>();
                 if (directoryEntry == null)
                     return null;
+
+                // Handle version 3 entries
+                if (majorVersion == 3)
+                    directoryEntry.StreamSize &= 0x0000FFFF;
 
                 directoryEntries[i] = directoryEntry;
             }
 
             return directoryEntries;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a directory entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="majorVersion">Major version from the header</param>
-        /// <returns>Filled directory entry on success, null on error</returns>
-        private static DirectoryEntry? ParseDirectoryEntry(Stream data, ushort majorVersion)
-        {
-            var directoryEntry = data.ReadType<DirectoryEntry>();
-
-            if (directoryEntry == null)
-                return null;
-
-            // Handle version 3 entries
-            if (majorVersion == 3)
-                directoryEntry.StreamSize &= 0x0000FFFF;
-
-            return directoryEntry;
         }
     }
 }

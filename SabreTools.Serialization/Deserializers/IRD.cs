@@ -21,9 +21,6 @@ namespace SabreTools.Serialization.Deserializers
             var ird = new Models.IRD.File();
 
             ird.Magic = data.ReadBytes(4);
-            if (ird.Magic == null)
-                return null;
-
             string magic = Encoding.ASCII.GetString(ird.Magic);
             if (magic != "3IRD")
                 return null;
@@ -32,35 +29,20 @@ namespace SabreTools.Serialization.Deserializers
             if (ird.Version < 6)
                 return null;
 
-            var titleId = data.ReadBytes(9);
-            if (titleId == null)
-                return null;
-
+            byte[] titleId = data.ReadBytes(9);
             ird.TitleID = Encoding.ASCII.GetString(titleId);
 
             ird.TitleLength = data.ReadByteValue();
-            var title = data.ReadBytes(ird.TitleLength);
-            if (title == null)
-                return null;
-
+            byte[] title = data.ReadBytes(ird.TitleLength);
             ird.Title = Encoding.ASCII.GetString(title);
 
-            var systemVersion = data.ReadBytes(4);
-            if (systemVersion == null)
-                return null;
-
+            byte[] systemVersion = data.ReadBytes(4);
             ird.SystemVersion = Encoding.ASCII.GetString(systemVersion);
 
-            var gameVersion = data.ReadBytes(5);
-            if (gameVersion == null)
-                return null;
-
+            byte[] gameVersion = data.ReadBytes(5);
             ird.GameVersion = Encoding.ASCII.GetString(gameVersion);
 
-            var appVersion = data.ReadBytes(5);
-            if (appVersion == null)
-                return null;
-
+            byte[] appVersion = data.ReadBytes(5);
             ird.AppVersion = Encoding.ASCII.GetString(appVersion);
 
             if (ird.Version == 7)

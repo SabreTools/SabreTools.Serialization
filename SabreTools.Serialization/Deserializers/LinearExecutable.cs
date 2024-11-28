@@ -428,13 +428,13 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
+            if (entry.Length > 0)
             {
                 byte[] name = data.ReadBytes(entry.Length);
                 entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
-            entry.OrdinalNumber = data.ReadUInt16();
 
+            entry.OrdinalNumber = data.ReadUInt16();
             return entry;
         }
 
@@ -728,7 +728,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ImportModuleNameTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
+            if (entry.Length > 0)
             {
                 byte[] name = data.ReadBytes(entry.Length);
                 entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
@@ -747,7 +747,7 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new ImportModuleProcedureNameTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
+            if (entry.Length > 0)
             {
                 byte[] name = data.ReadBytes(entry.Length);
                 entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
@@ -766,13 +766,13 @@ namespace SabreTools.Serialization.Deserializers
             var entry = new NonResidentNamesTableEntry();
 
             entry.Length = data.ReadByteValue();
-            if (entry.Length > 0 && data.Position + entry.Length <= data.Length)
+            if (entry.Length > 0)
             {
                 byte[] name = data.ReadBytes(entry.Length);
                 entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
-            entry.OrdinalNumber = data.ReadUInt16();
 
+            entry.OrdinalNumber = data.ReadUInt16();
             return entry;
         }
 

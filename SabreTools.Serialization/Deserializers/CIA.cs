@@ -159,29 +159,23 @@ namespace SabreTools.Serialization.Deserializers
             switch (certificate.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
-                    certificate.SignatureSize = 0x200;
-                    certificate.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.RSA_2048_SHA1:
-                    certificate.SignatureSize = 0x100;
-                    certificate.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.ECDSA_SHA1:
-                    certificate.SignatureSize = 0x3C;
-                    certificate.PaddingSize = 0x40;
-                    break;
                 case SignatureType.RSA_4096_SHA256:
                     certificate.SignatureSize = 0x200;
                     certificate.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
                     certificate.SignatureSize = 0x100;
                     certificate.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
                     certificate.SignatureSize = 0x3C;
                     certificate.PaddingSize = 0x40;
                     break;
+
                 default:
                     return null;
             }
@@ -232,29 +226,23 @@ namespace SabreTools.Serialization.Deserializers
             switch (ticket.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
-                    ticket.SignatureSize = 0x200;
-                    ticket.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.RSA_2048_SHA1:
-                    ticket.SignatureSize = 0x100;
-                    ticket.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.ECDSA_SHA1:
-                    ticket.SignatureSize = 0x3C;
-                    ticket.PaddingSize = 0x40;
-                    break;
                 case SignatureType.RSA_4096_SHA256:
                     ticket.SignatureSize = 0x200;
                     ticket.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
                     ticket.SignatureSize = 0x100;
                     ticket.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
                     ticket.SignatureSize = 0x3C;
                     ticket.PaddingSize = 0x40;
                     break;
+
                 default:
                     return null;
             }
@@ -330,29 +318,23 @@ namespace SabreTools.Serialization.Deserializers
             switch (titleMetadata.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
-                    titleMetadata.SignatureSize = 0x200;
-                    titleMetadata.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.RSA_2048_SHA1:
-                    titleMetadata.SignatureSize = 0x100;
-                    titleMetadata.PaddingSize = 0x3C;
-                    break;
-                case SignatureType.ECDSA_SHA1:
-                    titleMetadata.SignatureSize = 0x3C;
-                    titleMetadata.PaddingSize = 0x40;
-                    break;
                 case SignatureType.RSA_4096_SHA256:
                     titleMetadata.SignatureSize = 0x200;
                     titleMetadata.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
                     titleMetadata.SignatureSize = 0x100;
                     titleMetadata.PaddingSize = 0x3C;
                     break;
+
+                case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
                     titleMetadata.SignatureSize = 0x3C;
                     titleMetadata.PaddingSize = 0x40;
                     break;
+
                 default:
                     return null;
             }

@@ -294,10 +294,11 @@ namespace SabreTools.Serialization.Deserializers
             exeFSHeader.FileHeaders = new ExeFSFileHeader[10];
             for (int i = 0; i < 10; i++)
             {
-                var exeFsFileHeader = ParseExeFSFileHeader(data);
+                var exeFsFileHeader = data.ReadType<ExeFSFileHeader>();
                 if (exeFsFileHeader == null)
                     return null;
 
+                exeFsFileHeader.FileName = exeFsFileHeader.FileName?.TrimEnd('\0');
                 exeFSHeader.FileHeaders[i] = exeFsFileHeader;
             }
             exeFSHeader.Reserved = data.ReadBytes(0x20);
@@ -308,23 +309,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return exeFSHeader;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an ExeFS file header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ExeFS file header on success, null on error</returns>
-        public static ExeFSFileHeader? ParseExeFSFileHeader(Stream data)
-        {
-            var exeFSFileHeader = new ExeFSFileHeader();
-
-            byte[] fileName = data.ReadBytes(8);
-            exeFSFileHeader.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
-            exeFSFileHeader.FileOffset = data.ReadUInt32();
-            exeFSFileHeader.FileSize = data.ReadUInt32();
-
-            return exeFSFileHeader;
         }
     }
 }

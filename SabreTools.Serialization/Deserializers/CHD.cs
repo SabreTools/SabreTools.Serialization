@@ -83,30 +83,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         private static HeaderV1? ParseHeaderV1(Stream data)
         {
-            var header = new HeaderV1();
-
-            byte[] tagBytes = data.ReadBytes(8);
-            header.Tag = Encoding.ASCII.GetString(tagBytes);
-            if (header.Tag != Constants.SignatureString)
+            var header = data.ReadType<HeaderV1>();
+            if (header?.Tag != Constants.SignatureString)
                 return null;
-
-            header.Length = data.ReadUInt32BigEndian();
             if (header.Length != Constants.HeaderV1Size)
                 return null;
-
-            header.Version = data.ReadUInt32BigEndian();
-            header.Flags = (Flags)data.ReadUInt32BigEndian();
-            header.Compression = (CompressionType)data.ReadUInt32BigEndian();
             if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
                 return null;
-
-            header.HunkSize = data.ReadUInt32BigEndian();
-            header.TotalHunks = data.ReadUInt32BigEndian();
-            header.Cylinders = data.ReadUInt32BigEndian();
-            header.Heads = data.ReadUInt32BigEndian();
-            header.Sectors = data.ReadUInt32BigEndian();
-            header.MD5 = data.ReadBytes(16);
-            header.ParentMD5 = data.ReadBytes(16);
 
             return header;
         }
@@ -116,31 +99,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         private static HeaderV2? ParseHeaderV2(Stream data)
         {
-            var header = new HeaderV2();
-
-            byte[] tagBytes = data.ReadBytes(8);
-            header.Tag = Encoding.ASCII.GetString(tagBytes);
-            if (header.Tag != Constants.SignatureString)
+            var header = data.ReadType<HeaderV2>();
+            if (header?.Tag != Constants.SignatureString)
                 return null;
-
-            header.Length = data.ReadUInt32BigEndian();
             if (header.Length != Constants.HeaderV2Size)
                 return null;
-
-            header.Version = data.ReadUInt32BigEndian();
-            header.Flags = (Flags)data.ReadUInt32BigEndian();
-            header.Compression = (CompressionType)data.ReadUInt32BigEndian();
             if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
                 return null;
-
-            header.HunkSize = data.ReadUInt32BigEndian();
-            header.TotalHunks = data.ReadUInt32BigEndian();
-            header.Cylinders = data.ReadUInt32BigEndian();
-            header.Heads = data.ReadUInt32BigEndian();
-            header.Sectors = data.ReadUInt32BigEndian();
-            header.MD5 = data.ReadBytes(16);
-            header.ParentMD5 = data.ReadBytes(16);
-            header.BytesPerSector = data.ReadUInt32BigEndian();
 
             return header;
         }
@@ -150,31 +115,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         private static HeaderV3? ParseHeaderV3(Stream data)
         {
-            var header = new HeaderV3();
-
-            byte[] tagBytes = data.ReadBytes(8);
-            header.Tag = Encoding.ASCII.GetString(tagBytes);
-            if (header.Tag != Constants.SignatureString)
+            var header = data.ReadType<HeaderV3>();
+            if (header?.Tag != Constants.SignatureString)
                 return null;
-
-            header.Length = data.ReadUInt32BigEndian();
             if (header.Length != Constants.HeaderV3Size)
                 return null;
-
-            header.Version = data.ReadUInt32BigEndian();
-            header.Flags = (Flags)data.ReadUInt32BigEndian();
-            header.Compression = (CompressionType)data.ReadUInt32BigEndian();
             if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB_PLUS)
                 return null;
-
-            header.TotalHunks = data.ReadUInt32BigEndian();
-            header.LogicalBytes = data.ReadUInt64BigEndian();
-            header.MetaOffset = data.ReadUInt64BigEndian();
-            header.MD5 = data.ReadBytes(16);
-            header.ParentMD5 = data.ReadBytes(16);
-            header.HunkBytes = data.ReadUInt32BigEndian();
-            header.SHA1 = data.ReadBytes(20);
-            header.ParentSHA1 = data.ReadBytes(20);
 
             return header;
         }
@@ -184,30 +131,13 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         private static HeaderV4? ParseHeaderV4(Stream data)
         {
-            var header = new HeaderV4();
-
-            byte[] tagBytes = data.ReadBytes(8);
-            header.Tag = Encoding.ASCII.GetString(tagBytes);
-            if (header.Tag != Constants.SignatureString)
+            var header = data.ReadType<HeaderV4>();
+            if (header?.Tag != Constants.SignatureString)
                 return null;
-
-            header.Length = data.ReadUInt32BigEndian();
             if (header.Length != Constants.HeaderV4Size)
                 return null;
-
-            header.Version = data.ReadUInt32BigEndian();
-            header.Flags = (Flags)data.ReadUInt32BigEndian();
-            header.Compression = (CompressionType)data.ReadUInt32BigEndian();
             if (header.Compression > CompressionType.CHDCOMPRESSION_AV)
                 return null;
-
-            header.TotalHunks = data.ReadUInt32BigEndian();
-            header.LogicalBytes = data.ReadUInt64BigEndian();
-            header.MetaOffset = data.ReadUInt64BigEndian();
-            header.HunkBytes = data.ReadUInt32BigEndian();
-            header.SHA1 = data.ReadBytes(20);
-            header.ParentSHA1 = data.ReadBytes(20);
-            header.RawSHA1 = data.ReadBytes(20);
 
             return header;
         }
@@ -217,32 +147,11 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         private static HeaderV5? ParseHeaderV5(Stream data)
         {
-            var header = new HeaderV5();
-
-            byte[] tagBytes = data.ReadBytes(8);
-            header.Tag = Encoding.ASCII.GetString(tagBytes);
-            if (header.Tag != Constants.SignatureString)
+            var header = data.ReadType<HeaderV5>();
+            if (header?.Tag != Constants.SignatureString)
                 return null;
-
-            header.Length = data.ReadUInt32BigEndian();
             if (header.Length != Constants.HeaderV5Size)
                 return null;
-
-            header.Version = data.ReadUInt32BigEndian();
-            header.Compressors = new CodecType[4];
-            for (int i = 0; i < header.Compressors.Length; i++)
-            {
-                header.Compressors[i] = (CodecType)data.ReadUInt32BigEndian();
-            }
-
-            header.LogicalBytes = data.ReadUInt64BigEndian();
-            header.MapOffset = data.ReadUInt64BigEndian();
-            header.MetaOffset = data.ReadUInt64BigEndian();
-            header.HunkBytes = data.ReadUInt32BigEndian();
-            header.UnitBytes = data.ReadUInt32BigEndian();
-            header.RawSHA1 = data.ReadBytes(20);
-            header.SHA1 = data.ReadBytes(20);
-            header.ParentSHA1 = data.ReadBytes(20);
 
             return header;
         }

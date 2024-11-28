@@ -19,9 +19,6 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position < 0 || data.Position >= data.Length)
                 return null;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
             // Create a new archive to fill
             var archive = new Archive();
 
@@ -45,11 +42,7 @@ namespace SabreTools.Serialization.Deserializers
             // Read all entries in turn
             for (int i = 0; i < header.Files; i++)
             {
-                var file = ParseFileEntry(data);
-                if (file == null)
-                    return null;
-
-                files[i] = file;
+                files[i] = ParseFileEntry(data);
             }
 
             // Set the files
@@ -65,7 +58,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled file entry on success, null on error</returns>
-        private static FileEntry? ParseFileEntry(Stream data)
+        private static FileEntry ParseFileEntry(Stream data)
         {
             var fileEntry = new FileEntry();
 
