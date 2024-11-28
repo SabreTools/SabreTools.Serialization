@@ -394,7 +394,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var plane = lump.Planes[j];
                 builder.AppendLine($"    Plane {j}");
-                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector?.X}, {plane.NormalVector?.Y}, {plane.NormalVector?.Z})");
                 builder.AppendLine(plane.Distance, "      Distance");
                 builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
             }
@@ -412,7 +412,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var texdata = lump.Texdatas[j];
                 builder.AppendLine($"    Texture {j}");
-                builder.AppendLine($"      Reflectivity: ({texdata.Reflectivity.X}, {texdata.Reflectivity.Y}, {texdata.Reflectivity.Z})");
+                builder.AppendLine($"      Reflectivity: ({texdata.Reflectivity?.X}, {texdata.Reflectivity?.Y}, {texdata.Reflectivity?.Z})");
                 builder.AppendLine(texdata.NameStringTableID, "      Name string table ID");
                 builder.AppendLine(texdata.Width, "      Width");
                 builder.AppendLine(texdata.Height, "      Height");
@@ -482,13 +482,13 @@ namespace SabreTools.Serialization.Printers
             {
                 var texinfo = lump.Texinfos[j];
                 builder.AppendLine($"    Texinfo {j}");
-                builder.AppendLine($"      Texture S-Vector: ({texinfo.TextureSVector.X}, {texinfo.TextureSVector.Y}, {texinfo.TextureSVector.Z})");
+                builder.AppendLine($"      Texture S-Vector: ({texinfo.TextureSVector?.X}, {texinfo.TextureSVector?.Y}, {texinfo.TextureSVector?.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
-                builder.AppendLine($"      Texture T-Vector: ({texinfo.TextureTVector.X}, {texinfo.TextureTVector.Y}, {texinfo.TextureTVector.Z})");
+                builder.AppendLine($"      Texture T-Vector: ({texinfo.TextureTVector?.X}, {texinfo.TextureTVector?.Y}, {texinfo.TextureTVector?.Z})");
                 builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
-                builder.AppendLine($"      Lightmap S-Vector: ({texinfo.LightmapSVector.X}, {texinfo.LightmapSVector.Y}, {texinfo.LightmapSVector.Z})");
+                builder.AppendLine($"      Lightmap S-Vector: ({texinfo.LightmapSVector?.X}, {texinfo.LightmapSVector?.Y}, {texinfo.LightmapSVector?.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Lightmap shift in S direction");
-                builder.AppendLine($"      Lightmap T-Vector: ({texinfo.LightmapTVector.X}, {texinfo.LightmapTVector.Y}, {texinfo.LightmapTVector.Z})");
+                builder.AppendLine($"      Lightmap T-Vector: ({texinfo.LightmapTVector?.X}, {texinfo.LightmapTVector?.Y}, {texinfo.LightmapTVector?.Z})");
                 builder.AppendLine(texinfo.TextureTShift, "      Lightmap shift in T direction");
                 builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
                 builder.AppendLine(texinfo.TexData, "      Pointer to texdata");
@@ -591,8 +591,8 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine(data.Flags, "      Flags");
                         builder.AppendLine(data.FirstPoly, "      First poly");
                         builder.AppendLine(data.PolyCount, "      Poly count");
-                        builder.AppendLine($"      Mins: {data.Mins.X}, {data.Mins.Y}, {data.Mins.Z}");
-                        builder.AppendLine($"      Maxs: {data.Maxs.X}, {data.Maxs.Y}, {data.Maxs.Z}");
+                        builder.AppendLine($"      Mins: {data.Mins?.X}, {data.Mins?.Y}, {data.Mins?.Z}");
+                        builder.AppendLine($"      Maxs: {data.Maxs?.X}, {data.Maxs?.Y}, {data.Maxs?.Z}");
                         builder.AppendLine(data.Area, "      Area");
                     }
                 }
@@ -651,7 +651,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(leaf.LeafWaterDataID, "      Leaf water data ID");
                 if (version == 0)
                 {
-                    if (leaf.AmbientLighting.Colors == null || leaf.AmbientLighting.Colors.Length == 0)
+                    if (leaf.AmbientLighting?.Colors == null || leaf.AmbientLighting.Colors.Length == 0)
                     {
                         builder.AppendLine("      No ambient lighting colors");
                     }
@@ -733,9 +733,9 @@ namespace SabreTools.Serialization.Printers
             {
                 var model = lump.Models[j];
                 builder.AppendLine($"    Model {j}");
-                builder.AppendLine($"      Mins: ({model.Mins.X}, {model.Mins.Y}, {model.Mins.Z})");
-                builder.AppendLine($"      Maxs: ({model.Maxs.X}, {model.Maxs.Y}, {model.Maxs.Z})");
-                builder.AppendLine($"      Origin vector: ({model.OriginVector.X}, {model.OriginVector.Y}, {model.OriginVector.Z})");
+                builder.AppendLine($"      Mins: ({model.Mins?.X}, {model.Mins?.Y}, {model.Mins?.Z})");
+                builder.AppendLine($"      Maxs: ({model.Maxs?.X}, {model.Maxs?.Y}, {model.Maxs?.Z})");
+                builder.AppendLine($"      Origin vector: ({model.OriginVector?.X}, {model.OriginVector?.Y}, {model.OriginVector?.Z})");
                 builder.AppendLine(model.HeadNode, "      Headnode index");
                 builder.AppendLine(model.FirstFaceIndex, "      First face index");
                 builder.AppendLine(model.FacesCount, "      Faces count");
@@ -754,9 +754,9 @@ namespace SabreTools.Serialization.Printers
             {
                 var worldlight = lump.WorldLights[j];
                 builder.AppendLine($"    World Light {j}");
-                builder.AppendLine($"      Origin: ({worldlight.Origin.X}, {worldlight.Origin.Y}, {worldlight.Origin.Z})");
-                builder.AppendLine($"      Intensity: ({worldlight.Intensity.X}, {worldlight.Intensity.Y}, {worldlight.Intensity.Z})");
-                builder.AppendLine($"      Normal: ({worldlight.Normal.X}, {worldlight.Normal.Y}, {worldlight.Normal.Z})");
+                builder.AppendLine($"      Origin: ({worldlight.Origin?.X}, {worldlight.Origin?.Y}, {worldlight.Origin?.Z})");
+                builder.AppendLine($"      Intensity: ({worldlight.Intensity?.X}, {worldlight.Intensity?.Y}, {worldlight.Intensity?.Z})");
+                builder.AppendLine($"      Normal: ({worldlight.Normal?.X}, {worldlight.Normal?.Y}, {worldlight.Normal?.Z})");
                 builder.AppendLine(worldlight.Cluster, "      Cluster");
                 builder.AppendLine($"      Emit type: {worldlight.EmitType} (0x{worldlight.EmitType:X})");
                 builder.AppendLine(worldlight.Style, "      Style");
@@ -852,7 +852,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var info = lump.Infos[i];
                 builder.AppendLine($"    Disp Info {i}");
-                builder.AppendLine($"      Start position: ({info.StartPosition.X}, {info.StartPosition.Y}, {info.StartPosition.Z})");
+                builder.AppendLine($"      Start position: ({info.StartPosition?.X}, {info.StartPosition?.Y}, {info.StartPosition?.Z})");
                 builder.AppendLine(info.DispVertStart, "      Index into disp verts");
                 builder.AppendLine(info.DispTriStart, "      Index into disp tris");
                 builder.AppendLine(info.Power, "      Power");
@@ -922,7 +922,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var vert = lump.Verts[i];
                 builder.AppendLine($"    Disp Vert {i}");
-                builder.AppendLine($"      Vec: ({vert.Vec.X}, {vert.Vec.Y}, {vert.Vec.Z})");
+                builder.AppendLine($"      Vec: ({vert.Vec?.X}, {vert.Vec?.Y}, {vert.Vec?.Z})");
                 builder.AppendLine(vert.Dist, "      Dist");
                 builder.AppendLine(vert.Alpha, "      Alpha");
             }
@@ -1044,8 +1044,8 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine($"      UV Point {j}: ({point.X}, {point.Y}, {point.Z})");
                     }
                 }
-                builder.AppendLine($"      Origin: ({overlay.Origin.X}, {overlay.Origin.Y}, {overlay.Origin.Z})");
-                builder.AppendLine($"      Basis normal: ({overlay.BasisNormal.X}, {overlay.BasisNormal.Y}, {overlay.BasisNormal.Z})");
+                builder.AppendLine($"      Origin: ({overlay.Origin?.X}, {overlay.Origin?.Y}, {overlay.Origin?.Z})");
+                builder.AppendLine($"      Basis normal: ({overlay.BasisNormal?.X}, {overlay.BasisNormal?.Y}, {overlay.BasisNormal?.Z})");
             }
         }
 

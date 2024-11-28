@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.Printers
             {
                 var plane = lump.Planes[j];
                 builder.AppendLine($"    Plane {j}");
-                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector?.X}, {plane.NormalVector?.Y}, {plane.NormalVector?.Z})");
                 builder.AppendLine(plane.Distance, "      Distance");
                 builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
             }
@@ -270,9 +270,9 @@ namespace SabreTools.Serialization.Printers
             {
                 var texinfo = lump.Texinfos[j];
                 builder.AppendLine($"    Texinfo {j}");
-                builder.AppendLine($"      S-Vector: ({texinfo.SVector.X}, {texinfo.SVector.Y}, {texinfo.SVector.Z})");
+                builder.AppendLine($"      S-Vector: ({texinfo.SVector?.X}, {texinfo.SVector?.Y}, {texinfo.SVector?.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
-                builder.AppendLine($"      T-Vector: ({texinfo.TVector.X}, {texinfo.TVector.Y}, {texinfo.TVector.Z})");
+                builder.AppendLine($"      T-Vector: ({texinfo.TVector?.X}, {texinfo.TVector?.Y}, {texinfo.TVector?.Z})");
                 builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
                 builder.AppendLine(texinfo.MiptexIndex, "      Miptex index");
                 builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
@@ -406,9 +406,9 @@ namespace SabreTools.Serialization.Printers
             {
                 var bmodel = lump.Models[j];
                 builder.AppendLine($"    Model {j}");
-                builder.AppendLine($"      Mins: {bmodel.Mins.X}, {bmodel.Mins.Y}, {bmodel.Mins.Z}");
-                builder.AppendLine($"      Maxs: {bmodel.Maxs.X}, {bmodel.Maxs.Y}, {bmodel.Maxs.Z}");
-                builder.AppendLine($"      Origin vector: {bmodel.OriginVector.X}, {bmodel.OriginVector.Y}, {bmodel.OriginVector.Z}");
+                builder.AppendLine($"      Mins: {bmodel.Mins?.X}, {bmodel.Mins?.Y}, {bmodel.Mins?.Z}");
+                builder.AppendLine($"      Maxs: {bmodel.Maxs?.X}, {bmodel.Maxs?.Y}, {bmodel.Maxs?.Z}");
+                builder.AppendLine($"      Origin vector: {bmodel.OriginVector?.X}, {bmodel.OriginVector?.Y}, {bmodel.OriginVector?.Z}");
                 builder.AppendLine(bmodel.HeadnodesIndex, "      Headnodes index");
                 builder.AppendLine(bmodel.VisLeafsCount, "      ??? (VisLeafsCount)");
                 builder.AppendLine(bmodel.FirstFaceIndex, "      First face index");
