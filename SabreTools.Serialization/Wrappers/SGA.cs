@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
@@ -8,6 +9,49 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public override string DescriptionString => "SGA";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <summary>
+        /// Directory data
+        /// </summary>
+        public Models.SGA.Directory? Directory => Model.Directory;
+
+        /// <summary>
+        /// Number of files in the directory
+        /// </summary>
+        public int FileCount
+        {
+            get
+            {
+                return Directory switch
+                {
+                    Models.SGA.Directory4 d4 => d4.Files?.Length ?? 0,
+                    Models.SGA.Directory5 d5 => d5.Files?.Length ?? 0,
+                    Models.SGA.Directory6 d6 => d6.Files?.Length ?? 0,
+                    Models.SGA.Directory7 d7 => d7.Files?.Length ?? 0,
+                    _ => 0,
+                };
+            }
+        }
+
+        /// <summary>
+        /// Offset to the file data
+        /// </summary>
+        public long FileDataOffset
+        {
+            get
+            {
+                return Model.Header switch
+                {
+                    Models.SGA.Header4 h4 => h4.FileDataOffset,
+                    Models.SGA.Header6 h6 => h6.FileDataOffset,
+                    _ => -1,
+                };
+            }
+        }
 
         #endregion
 
@@ -71,6 +115,113 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region File
+
+        /// <summary>
+        /// Get the compressed size of a file
+        /// </summary>
+        public long GetCompressedSize(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return -1;
+
+            // Get the file and return the name
+            var file = GetFile(index);
+            return file?.Size ?? -1L;
+        }
+
+        /// <summary>
+        /// Get the uncompressed size of a file
+        /// </summary>
+        public long GetUncompressedSize(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return -1;
+
+            // Get the file and return the name
+            var file = GetFile(index);
+            return file?.SizeOnDisk ?? -1L;
+        }
+
+        /// <summary>
+        /// Get a file header from the archive
+        /// </summary>
+        public Models.SGA.File4? GetFile(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return null;
+
+            return Directory switch
+            {
+                Models.SGA.Directory4 d4 => d4.Files![index],
+                Models.SGA.Directory5 d5 => d5.Files![index],
+                Models.SGA.Directory6 d6 => d6.Files![index],
+                Models.SGA.Directory7 d7 => d7.Files![index],
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get a file name from the archive
+        /// </summary>
+        public string? GetFileName(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return null;
+
+            // Get the file and return the name
+            var file = GetFile(index);
+            return file?.Name;
+        }
+
+        /// <summary>
+        /// Get a file offset from the archive
+        /// </summary>
+        public long GetFileOffset(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return -1;
+
+            // Get the file and return the name
+            var file = GetFile(index);
+            return file?.Offset ?? -1L;
+        }
+
+        /// <summary>
+        /// Get the parent name for a file
+        /// </summary>
+        public string? GetParentName(int index)
+        {
+            // If the index is invalid
+            if (index < 0 || index >= FileCount)
+                return null;
+
+            // Get the folder
+            object? folder = Directory switch
+            {
+                Models.SGA.Directory4 d4 => Array.Find(d4.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Models.SGA.Directory5 d5 => Array.Find(d5.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Models.SGA.Directory6 d6 => Array.Find(d6.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Models.SGA.Directory7 d7 => Array.Find(d7.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                _ => default,
+            };
+
+            // Get the folder name
+            return folder switch
+            {
+                Models.SGA.Folder4 f4 => f4.Name,
+                Models.SGA.Folder5 f5 => f5.Name,
+                _ => null,
+            };
         }
 
         #endregion

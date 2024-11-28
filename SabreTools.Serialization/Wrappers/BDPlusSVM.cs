@@ -12,6 +12,15 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <summary>
+        /// Human-readable version of the date
+        /// </summary>
+        public string Date => $"{Model.Year:0000}-{Model.Month:00}-{Model.Day:00}";
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
