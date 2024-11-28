@@ -130,6 +130,9 @@ namespace SabreTools.Serialization.Wrappers
                 case LumpType.LUMP_ENTITIES:
                     filename = "entities.ent";
                     break;
+                case LumpType.LUMP_TEXTURES:
+                    filename = "texture_data.bin";
+                    break;
             }
 
             // If we have an invalid output directory
