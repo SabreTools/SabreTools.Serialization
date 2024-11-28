@@ -90,7 +90,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, float? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X8})";
+            string valueString = $"{value}";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -120,7 +120,7 @@ namespace SabreTools.Serialization
         public static StringBuilder AppendLine(this StringBuilder sb, double? value, string prefixString)
         {
             value ??= 0;
-            string valueString = $"{value} (0x{value:X16})";
+            string valueString = $"{value}";
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 

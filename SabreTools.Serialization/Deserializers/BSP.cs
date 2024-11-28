@@ -244,6 +244,12 @@ namespace SabreTools.Serialization.Deserializers
             var lump = new VisibilityLump();
 
             lump.NumClusters = data.ReadInt32();
+
+            // BSP29 has an incompatible value here
+            int bytesNeeded = lump.NumClusters * 8;
+            if (bytesNeeded > length)
+                return null;
+
             lump.ByteOffsets = new int[lump.NumClusters][];
             for (int i = 0; i < lump.NumClusters; i++)
             {
@@ -323,7 +329,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < length / 3; i++)
             {
-                lump.Lightmap[i] =  data.ReadBytes(3);
+                lump.Lightmap[i] = data.ReadBytes(3);
             }
 
             return lump;
