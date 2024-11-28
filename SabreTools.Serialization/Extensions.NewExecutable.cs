@@ -10,9 +10,7 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource type information entry to check</param>
         /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
         public static bool IsIntegerType(this ResourceTypeInformationEntry entry)
-        {
-            return (entry.TypeID & 0x8000) != 0;
-        }
+            => (entry.TypeID & 0x8000) != 0;
 
         /// <summary>
         /// Determine if a resource type resource entry is an integer or offset
@@ -20,9 +18,7 @@ namespace SabreTools.Serialization
         /// <param name="entry">Resource type resource entry to check</param>
         /// <returns>True if the entry is an integer type, false if an offset, null on error</returns>
         public static bool IsIntegerType(this ResourceTypeResourceEntry entry)
-        {
-            return (entry.ResourceID & 0x8000) != 0;
-        }
+            => (entry.ResourceID & 0x8000) != 0;
 
         /// <summary>
         /// Get the segment entry type for an entry table bundle

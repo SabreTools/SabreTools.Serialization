@@ -102,10 +102,7 @@ namespace SabreTools.Serialization
         public static NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
         {
             var nb10ProgramDatabase = data.ReadType<NB10ProgramDatabase>(ref offset);
-
-            if (nb10ProgramDatabase == null)
-                return null;
-            if (nb10ProgramDatabase.Signature != 0x3031424E)
+            if (nb10ProgramDatabase?.Signature != 0x3031424E)
                 return null;
 
             return nb10ProgramDatabase;
@@ -120,10 +117,7 @@ namespace SabreTools.Serialization
         public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[] data, ref int offset)
         {
             var rsdsProgramDatabase = data.ReadType<RSDSProgramDatabase>(ref offset);
-
-            if (rsdsProgramDatabase == null)
-                return null;
-            if (rsdsProgramDatabase.Signature != 0x53445352)
+            if (rsdsProgramDatabase?.Signature != 0x53445352)
                 return null;
 
 #if NET20 || NET35 || NET40 || NET452 || NET462
@@ -211,6 +205,7 @@ namespace SabreTools.Serialization
 
             // Read in the table
             var header = new ResourceHeader();
+
             header.DataSize = data.ReadUInt32(ref offset);
             header.HeaderSize = data.ReadUInt32(ref offset);
             header.ResourceType = (ResourceType)data.ReadUInt32(ref offset); // TODO: Could be a string too
@@ -1127,10 +1122,7 @@ namespace SabreTools.Serialization
             if (versionInfo.ValueLength > 0 && offset + versionInfo.ValueLength <= entry.Data.Length)
             {
                 var fixedFileInfo = entry.Data.ReadType<FixedFileInfo>(ref offset);
-
-                if (fixedFileInfo == null)
-                    return null;
-                if (fixedFileInfo.Signature != 0xFEEF04BD)
+                if (fixedFileInfo?.Signature != 0xFEEF04BD)
                     return null;
 
                 versionInfo.Value = fixedFileInfo;
