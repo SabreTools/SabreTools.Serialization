@@ -79,10 +79,11 @@ namespace SabreTools.Serialization.Wrappers
         #region Extraction
 
         /// <summary>
-        /// Extract raw lump data for all indicies
+        /// Extract all lumps from the BSP to an output directory
         /// </summary>
-        /// <returns>True if the extraction was successful, false otherwise</returns>
-        public bool ExtractAllRawLumpData(string outputDirectory)
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if all lumps extracted, false otherwise</returns>
+        public bool ExtractAllLumps(string outputDirectory)
         {
             // If we have no lumps
             if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
@@ -92,18 +93,19 @@ namespace SabreTools.Serialization.Wrappers
             bool allExtracted = true;
             for (int i = 0; i < Model.Header.Lumps.Length; i++)
             {
-                allExtracted &= ExtractRawLumpData(i, outputDirectory);
+                allExtracted &= ExtractLump(i, outputDirectory);
             }
 
             return allExtracted;
         }
 
         /// <summary>
-        /// Extract raw lump data for a particular index
+        /// Extract a lump from the BSP to an output directory by index
         /// </summary>
         /// <param name="index">Lump index to extract</param>
-        /// <returns>True if the extraction was successful, false otherwise</returns>
-        public bool ExtractRawLumpData(int index, string outputDirectory)
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if the lump extracted, false otherwise</returns>
+        public bool ExtractLump(int index, string outputDirectory)
         {
             // If we have no lumps
             if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
