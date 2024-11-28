@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Deserializers
                 RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data, type, length),
                 RecordType.HostRevocationList => ParseHostRevocationListRecord(data, type, length),
                 RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data, type, length),
-                //RecordType.Copyright => ParseCopyrightRecord(data, type, length), // TODO: REENABLE WHEN MODELS UPDATED
+                RecordType.Copyright => ParseCopyrightRecord(data, type, length),
                 
                 // Unknown record type
                 _ => null,

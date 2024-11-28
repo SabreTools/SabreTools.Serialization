@@ -349,7 +349,11 @@ namespace SabreTools.Serialization.Deserializers
             var vertices = new List<Vector3D>();
             while (data.Position < offset + length)
             {
-                vertices.Add(data.ReadType<Vector3D>());
+                var vertex = data.ReadType<Vector3D>();
+                if (vertex == null)
+                    break;
+
+                vertices.Add(vertex);
             }
 
             return new VerticesLump { Vertices = [.. vertices] };
