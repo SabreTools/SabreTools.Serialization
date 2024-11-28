@@ -280,7 +280,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
         private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
         {
+#if NET20 || NET35 || NET40
+            int directoryEntrySize = Marshal.SizeOf(new DirectoryEntry());
+#else
             int directoryEntrySize = Marshal.SizeOf<DirectoryEntry>();
+#endif
             int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
             var directoryEntries = new DirectoryEntry[sectorCount];
 
