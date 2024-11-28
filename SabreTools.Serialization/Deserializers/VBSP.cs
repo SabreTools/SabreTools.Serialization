@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
             if (Array.IndexOf([17, 18, 19, 20, 21, 22, 23, 25, 27, 29, 0x00040014], header.Version) > -1)
                 return null;
-            if (header.Lumps == null)
+            if (header.Lumps == null || header.Lumps.Length != VBSP_HEADER_LUMPS)
                 return null;
 
             // Set the package header

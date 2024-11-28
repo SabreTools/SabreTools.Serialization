@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Try to parse the header
             var header = data.ReadType<BspHeader>();
-            if (header?.Lumps == null)
+            if (header?.Lumps == null || header.Lumps.Length != BSP_HEADER_LUMPS)
                 return null;
             if (header.Version < 29 || header.Version > 30)
                 return null;
