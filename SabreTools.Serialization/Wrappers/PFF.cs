@@ -1,8 +1,9 @@
 using System.IO;
+using SabreTools.Models.PFF;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PFF : WrapperBase<Models.PFF.Archive>
+    public class PFF : WrapperBase<Archive>
     {
         #region Descriptive Properties
 
@@ -11,17 +12,29 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <summary>
+        /// Number of files in the archive
+        /// </summary>
+        public long FileCount => Model.Header?.NumberOfFiles ?? 0;
+
+        /// <inheritdoc cref="Archive.Segments"/>
+        public Segment?[] Segments => Model.Segments ?? [];
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
-        public PFF(Models.PFF.Archive? model, byte[]? data, int offset)
+        public PFF(Archive? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public PFF(Models.PFF.Archive? model, Stream? data)
+        public PFF(Archive? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -85,12 +98,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAll(string outputDirectory)
         {
             // If we have no segments
-            if (Model.Segments == null || Model.Segments.Length == 0)
+            if (Segments == null || Segments.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.Segments.Length; i++)
+            for (int i = 0; i < Segments.Length; i++)
             {
                 allExtracted &= ExtractSegment(i, outputDirectory);
             }
@@ -107,19 +120,19 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractSegment(int index, string outputDirectory)
         {
             // If we have no files
-            if (Model.Header?.NumberOfFiles == null || Model.Header.NumberOfFiles == 0)
+            if (FileCount == 0)
                 return false;
 
             // If we have no segments
-            if (Model.Segments == null || Model.Segments.Length == 0)
+            if (Segments == null || Segments.Length == 0)
                 return false;
 
             // If we have an invalid index
-            if (index < 0 || index >= Model.Segments.Length)
+            if (index < 0 || index >= Segments.Length)
                 return false;
 
             // Get the segment information
-            var file = Model.Segments[index];
+            var file = Segments[index];
             if (file == null)
                 return false;
 

@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.Models.PAK;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -8,6 +9,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public override string DescriptionString => "Half-Life Package File (PAK)";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.PAK.File.DirectoryItems"/>
+        public DirectoryItem?[] DirectoryItems => Model.DirectoryItems ?? [];
 
         #endregion
 
@@ -85,12 +93,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAll(string outputDirectory)
         {
             // If we have no directory items
-            if (Model.DirectoryItems == null || Model.DirectoryItems.Length == 0)
+            if (DirectoryItems == null || DirectoryItems.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.DirectoryItems.Length; i++)
+            for (int i = 0; i < DirectoryItems.Length; i++)
             {
                 allExtracted &= ExtractFile(i, outputDirectory);
             }
@@ -107,15 +115,15 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory)
         {
             // If we have no directory items
-            if (Model.DirectoryItems == null || Model.DirectoryItems.Length == 0)
+            if (DirectoryItems == null || DirectoryItems.Length == 0)
                 return false;
 
             // If the directory item index is invalid
-            if (index < 0 || index >= Model.DirectoryItems.Length)
+            if (index < 0 || index >= DirectoryItems.Length)
                 return false;
 
             // Get the directory item
-            var directoryItem = Model.DirectoryItems[index];
+            var directoryItem = DirectoryItems[index];
             if (directoryItem == null)
                 return false;
 
@@ -143,7 +151,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Open the output file for writing
-                using Stream fs = File.OpenWrite(filename);
+                using Stream fs = System.IO.File.OpenWrite(filename);
                 fs.Write(data, 0, data.Length);
             }
             catch

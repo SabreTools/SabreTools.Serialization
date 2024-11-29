@@ -1,8 +1,9 @@
 using System.IO;
+using SabreTools.Models.PIC;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PIC : WrapperBase<Models.PIC.DiscInformation>
+    public class PIC : WrapperBase<DiscInformation>
     {
         #region Descriptive Properties
 
@@ -11,17 +12,24 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="DiscInformation.Units"/>
+        public DiscInformationUnit?[] Units => Model.Units ?? [];
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
-        public PIC(Models.PIC.DiscInformation? model, byte[]? data, int offset)
+        public PIC(DiscInformation? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public PIC(Models.PIC.DiscInformation? model, Stream? data)
+        public PIC(DiscInformation? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
