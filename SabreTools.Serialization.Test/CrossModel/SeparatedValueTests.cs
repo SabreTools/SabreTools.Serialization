@@ -167,6 +167,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", row.GameDescription);
             Assert.Equal("rom", row.Type);
             Assert.Equal("XXXXXX", row.RomName);
+            Assert.Null(row.DiskName);
             Assert.Equal("XXXXXX", row.Size);
             Assert.Equal("XXXXXX", row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
