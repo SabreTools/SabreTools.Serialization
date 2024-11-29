@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using SabreTools.Models.Nitro;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class Nitro : WrapperBase<Models.Nitro.Cart>
+    public class Nitro : WrapperBase<Cart>
     {
         #region Descriptive Properties
 
@@ -11,17 +12,24 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Methods
+
+        /// <inheritdoc cref="Cart.CommonHeader"/>
+        public CommonHeader? CommonHeader => Model.CommonHeader;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
-        public Nitro(Models.Nitro.Cart? model, byte[]? data, int offset)
+        public Nitro(Cart? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public Nitro(Models.Nitro.Cart? model, Stream? data)
+        public Nitro(Cart? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
