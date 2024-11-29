@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Deserializers
         public override Models.PAK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
+            if (data == null || data.Length == 0 || !data.CanRead)
                 return null;
 
             // If the offset is out of bounds
