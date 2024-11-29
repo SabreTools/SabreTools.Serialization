@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Deserializers
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0 || !data.CanRead)
+            if (data == null || !data.CanRead)
                 return null;
 
             // If the offset is out of bounds

@@ -89,7 +89,6 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-
                 var xmid = Deserializers.XMID.DeserializeString(data);
                 if (xmid == null)
                     return null;

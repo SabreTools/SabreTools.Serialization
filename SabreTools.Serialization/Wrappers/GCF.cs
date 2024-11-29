@@ -212,7 +212,7 @@ namespace SabreTools.Serialization.Wrappers
         public static GCF? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0 || !data.CanRead)
+            if (data == null || !data.CanRead)
                 return null;
 
             try

@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.Wrappers
                 throw new ArgumentNullException(nameof(model));
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            if (data.Length == 0 || !data.CanSeek || !data.CanRead)
+            if (!data.CanSeek || !data.CanRead)
                 throw new ArgumentOutOfRangeException(nameof(data));
 
             Model = model;
