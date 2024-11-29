@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
         public static XZP? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null)
+            if (data == null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
