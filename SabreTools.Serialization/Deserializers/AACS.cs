@@ -52,12 +52,13 @@ namespace SabreTools.Serialization.Deserializers
                     }
                 }
 
-                // Set the records
-                mediaKeyBlock.Records = [.. records];
-
                 #endregion
 
-                return mediaKeyBlock;
+                // Set the records
+                if (records.Count > 0)
+                    return new MediaKeyBlock { Records = [.. records ]};
+
+                return null;
             }
             catch
             {
