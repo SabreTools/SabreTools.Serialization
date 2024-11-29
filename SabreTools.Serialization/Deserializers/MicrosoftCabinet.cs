@@ -16,73 +16,77 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
-            // Create a new cabinet to fill
-            var cabinet = new Cabinet();
-
-            #region Cabinet Header
-
-            // Try to parse the cabinet header
-            var cabinetHeader = ParseCabinetHeader(data);
-            if (cabinetHeader == null)
-                return null;
-
-            // Set the cabinet header
-            cabinet.Header = cabinetHeader;
-
-            #endregion
-
-            #region Folders
-
-            // Set the folder array
-            cabinet.Folders = new CFFOLDER[cabinetHeader.FolderCount];
-
-            // Try to parse each folder, if we have any
-            for (int i = 0; i < cabinetHeader.FolderCount; i++)
+            try
             {
-                var folder = ParseFolder(data, cabinetHeader);
-                if (folder == null)
+                // Cache the current offset
+                int initialOffset = (int)data.Position;
+
+                // Create a new cabinet to fill
+                var cabinet = new Cabinet();
+
+                #region Cabinet Header
+
+                // Try to parse the cabinet header
+                var cabinetHeader = ParseCabinetHeader(data);
+                if (cabinetHeader == null)
                     return null;
 
-                // Set the folder
-                cabinet.Folders[i] = folder;
-            }
+                // Set the cabinet header
+                cabinet.Header = cabinetHeader;
 
-            #endregion
+                #endregion
 
-            #region Files
+                #region Folders
 
-            // Get the files offset
-            int filesOffset = (int)cabinetHeader.FilesOffset + initialOffset;
-            if (filesOffset > data.Length)
-                return null;
+                // Set the folder array
+                cabinet.Folders = new CFFOLDER[cabinetHeader.FolderCount];
 
-            // Seek to the offset
-            data.Seek(filesOffset, SeekOrigin.Begin);
+                // Try to parse each folder, if we have any
+                for (int i = 0; i < cabinetHeader.FolderCount; i++)
+                {
+                    var folder = ParseFolder(data, cabinetHeader);
+                    if (folder == null)
+                        return null;
 
-            // Set the file array
-            cabinet.Files = new CFFILE[cabinetHeader.FileCount];
+                    // Set the folder
+                    cabinet.Folders[i] = folder;
+                }
 
-            // Try to parse each file, if we have any
-            for (int i = 0; i < cabinetHeader.FileCount; i++)
-            {
-                var file = ParseFile(data);
-                if (file == null)
+                #endregion
+
+                #region Files
+
+                // Get the files offset
+                int filesOffset = (int)cabinetHeader.FilesOffset + initialOffset;
+                if (filesOffset > data.Length)
                     return null;
 
-                // Set the file
-                cabinet.Files[i] = file;
+                // Seek to the offset
+                data.Seek(filesOffset, SeekOrigin.Begin);
+
+                // Set the file array
+                cabinet.Files = new CFFILE[cabinetHeader.FileCount];
+
+                // Try to parse each file, if we have any
+                for (int i = 0; i < cabinetHeader.FileCount; i++)
+                {
+                    var file = ParseFile(data);
+                    if (file == null)
+                        return null;
+
+                    // Set the file
+                    cabinet.Files[i] = file;
+                }
+
+                #endregion
+
+                return cabinet;
             }
-
-            #endregion
-
-            return cabinet;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

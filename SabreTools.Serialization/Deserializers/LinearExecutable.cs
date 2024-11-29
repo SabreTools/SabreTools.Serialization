@@ -16,406 +16,410 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
-            // Create a new executable to fill
-            var executable = new Executable();
-
-            #region MS-DOS Stub
-
-            // Parse the MS-DOS stub
-            var stub = new MSDOS().Deserialize(data);
-            if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
-                return null;
-
-            // Set the MS-DOS stub
-            executable.Stub = stub;
-
-            #endregion
-
-            #region Information Block
-
-            // Try to parse the executable header
-            data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            var informationBlock = data.ReadType<InformationBlock>();
-            if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
-                return null;
-
-            // Set the executable header
-            executable.InformationBlock = informationBlock;
-
-            #endregion
-
-            #region Object Table
-
-            // Get the object table offset
-            long offset = informationBlock.ObjectTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+            try
             {
-                // Seek to the object table
-                data.Seek(offset, SeekOrigin.Begin);
+                // Cache the current offset
+                int initialOffset = (int)data.Position;
 
-                // Create the object table
-                executable.ObjectTable = new ObjectTableEntry[informationBlock.ObjectTableCount];
+                // Create a new executable to fill
+                var executable = new Executable();
 
-                // Try to parse the object table
-                for (int i = 0; i < executable.ObjectTable.Length; i++)
-                {
-                    var entry = data.ReadType<ObjectTableEntry>();
-                    if (entry == null)
-                        return null;
+                #region MS-DOS Stub
 
-                    executable.ObjectTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Object Page Map
-
-            // Get the object page map offset
-            offset = informationBlock.ObjectPageMapOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the object page map
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the object page map
-                executable.ObjectPageMap = new ObjectPageMapEntry[informationBlock.ObjectTableCount];
-
-                // Try to parse the object page map
-                for (int i = 0; i < executable.ObjectPageMap.Length; i++)
-                {
-                    var entry = data.ReadType<ObjectPageMapEntry>();
-                    if (entry == null)
-                        return null;
-
-                    executable.ObjectPageMap[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Object Iterate Data Map
-
-            offset = informationBlock.ObjectIterateDataMapOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the object page map
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // TODO: Implement when model found
-                // No model has been found in the documentation about what
-                // each of the entries looks like for this map.
-            }
-
-            #endregion
-
-            #region Resource Table
-
-            // Get the resource table offset
-            offset = informationBlock.ResourceTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the resource table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the resource table
-                executable.ResourceTable = new ResourceTableEntry[informationBlock.ResourceTableCount];
-
-                // Try to parse the resource table
-                for (int i = 0; i < executable.ResourceTable.Length; i++)
-                {
-                    var entry = data.ReadType<ResourceTableEntry>();
-                    if (entry == null)
-                        return null;
-
-                    executable.ResourceTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Resident Names Table
-
-            // Get the resident names table offset
-            offset = informationBlock.ResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the resident names table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the resident names table
-                var residentNamesTable = new List<ResidentNamesTableEntry>();
-
-                // Try to parse the resident names table
-                while (true)
-                {
-                    var entry = ParseResidentNamesTableEntry(data);
-                    residentNamesTable.Add(entry);
-
-                    // If we have a 0-length entry
-                    if (entry.Length == 0)
-                        break;
-                }
-
-                // Assign the resident names table
-                executable.ResidentNamesTable = [.. residentNamesTable];
-            }
-
-            #endregion
-
-            #region Entry Table
-
-            // Get the entry table offset
-            offset = informationBlock.EntryTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the entry table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the entry table
-                var entryTable = new List<EntryTableBundle>();
-
-                // Try to parse the entry table
-                while (true)
-                {
-                    var bundle = ParseEntryTableBundle(data);
-                    if (bundle != null)
-                        entryTable.Add(bundle);
-
-                    // If we have a 0-length entry
-                    if (bundle == null || bundle.Entries == 0)
-                        break;
-                }
-
-                // Assign the entry table
-                executable.EntryTable = [.. entryTable];
-            }
-
-            #endregion
-
-            #region Module Format Directives Table
-
-            // Get the module format directives table offset
-            offset = informationBlock.ModuleDirectivesTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the module format directives table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the module format directives table
-                executable.ModuleFormatDirectivesTable = new ModuleFormatDirectivesTableEntry[informationBlock.ModuleDirectivesCount];
-
-                // Try to parse the module format directives table
-                for (int i = 0; i < executable.ModuleFormatDirectivesTable.Length; i++)
-                {
-                    var entry = data.ReadType<ModuleFormatDirectivesTableEntry>();
-                    if (entry == null)
-                        return null;
-
-                    executable.ModuleFormatDirectivesTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Verify Record Directive Table
-
-            // TODO: Figure out where the offset to this table is stored
-            // The documentation suggests it's either part of or immediately following
-            // the Module Format Directives Table
-
-            #endregion
-
-            #region Fix-up Page Table
-
-            // Get the fix-up page table offset
-            offset = informationBlock.FixupPageTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the fix-up page table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the fix-up page table
-                executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
-
-                // Try to parse the fix-up page table
-                for (int i = 0; i < executable.FixupPageTable.Length; i++)
-                {
-                    var entry = data.ReadType<FixupPageTableEntry>();
-                    if (entry == null)
-                        return null;
-
-                    executable.FixupPageTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Fix-up Record Table
-
-            // Get the fix-up record table offset
-            offset = informationBlock.FixupRecordTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the fix-up record table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the fix-up record table
-                executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
-
-                // Try to parse the fix-up record table
-                for (int i = 0; i < executable.FixupRecordTable.Length; i++)
-                {
-                    var entry = ParseFixupRecordTableEntry(data);
-                    if (entry == null)
-                        return null;
-
-                    executable.FixupRecordTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Imported Module Name Table
-
-            // Get the imported module name table offset
-            offset = informationBlock.ImportedModulesNameTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the imported module name table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the imported module name table
-                executable.ImportModuleNameTable = new ImportModuleNameTableEntry[informationBlock.ImportedModulesCount];
-
-                // Try to parse the imported module name table
-                for (int i = 0; i < executable.ImportModuleNameTable.Length; i++)
-                {
-                    var entry = ParseImportModuleNameTableEntry(data);
-                    if (entry == null)
-                        return null;
-
-                    executable.ImportModuleNameTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Imported Module Procedure Name Table
-
-            // Get the imported module procedure name table offset
-            offset = informationBlock.ImportProcedureNameTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the imported module procedure name table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Get the size of the imported module procedure name table
-                long tableSize = informationBlock.FixupPageTableOffset
-                    + informationBlock.FixupSectionSize
-                    - informationBlock.ImportProcedureNameTableOffset;
-
-                // Create the imported module procedure name table
-                var importModuleProcedureNameTable = new List<ImportModuleProcedureNameTableEntry>();
-
-                // Try to parse the imported module procedure name table
-                while (data.Position < offset + tableSize)
-                {
-                    var entry = ParseImportModuleProcedureNameTableEntry(data);
-                    if (entry == null)
-                        return null;
-
-                    importModuleProcedureNameTable.Add(entry);
-                }
-
-                // Assign the resident names table
-                executable.ImportModuleProcedureNameTable = [.. importModuleProcedureNameTable];
-            }
-
-            #endregion
-
-            #region Per-Page Checksum Table
-
-            // Get the per-page checksum table offset
-            offset = informationBlock.PerPageChecksumTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the per-page checksum name table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the per-page checksum name table
-                executable.PerPageChecksumTable = new PerPageChecksumTableEntry[informationBlock.ModuleNumberPages];
-
-                // Try to parse the per-page checksum name table
-                for (int i = 0; i < executable.PerPageChecksumTable.Length; i++)
-                {
-                    var entry = data.ReadType<PerPageChecksumTableEntry>();
-                    if (entry == null)
-                        return null;
-
-                    executable.PerPageChecksumTable[i] = entry;
-                }
-            }
-
-            #endregion
-
-            #region Non-Resident Names Table
-
-            // Get the non-resident names table offset
-            offset = informationBlock.NonResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the non-resident names table
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create the non-resident names table
-                var nonResidentNamesTable = new List<NonResidentNamesTableEntry>();
-
-                // Try to parse the non-resident names table
-                while (true)
-                {
-                    var entry = ParseNonResidentNameTableEntry(data);
-                    nonResidentNamesTable.Add(entry);
-
-                    // If we have a 0-length entry
-                    if (entry.Length == 0)
-                        break;
-                }
-
-                // Assign the non-resident names table
-                executable.NonResidentNamesTable = [.. nonResidentNamesTable];
-            }
-
-            #endregion
-
-            #region Debug Information
-
-            // Get the debug information offset
-            offset = informationBlock.DebugInformationOffset + stub.Header.NewExeHeaderAddr;
-            if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
-            {
-                // Seek to the debug information
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Try to parse the debug information
-                var debugInformation = ParseDebugInformation(data, informationBlock.DebugInformationLength);
-                if (debugInformation == null)
+                // Parse the MS-DOS stub
+                var stub = new MSDOS().Deserialize(data);
+                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
                     return null;
 
-                // Set the debug information
-                executable.DebugInformation = debugInformation;
+                // Set the MS-DOS stub
+                executable.Stub = stub;
+
+                #endregion
+
+                #region Information Block
+
+                // Try to parse the executable header
+                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                var informationBlock = data.ReadType<InformationBlock>();
+                if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
+                    return null;
+
+                // Set the executable header
+                executable.InformationBlock = informationBlock;
+
+                #endregion
+
+                #region Object Table
+
+                // Get the object table offset
+                long offset = informationBlock.ObjectTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the object table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the object table
+                    executable.ObjectTable = new ObjectTableEntry[informationBlock.ObjectTableCount];
+
+                    // Try to parse the object table
+                    for (int i = 0; i < executable.ObjectTable.Length; i++)
+                    {
+                        var entry = data.ReadType<ObjectTableEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.ObjectTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Object Page Map
+
+                // Get the object page map offset
+                offset = informationBlock.ObjectPageMapOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the object page map
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the object page map
+                    executable.ObjectPageMap = new ObjectPageMapEntry[informationBlock.ObjectTableCount];
+
+                    // Try to parse the object page map
+                    for (int i = 0; i < executable.ObjectPageMap.Length; i++)
+                    {
+                        var entry = data.ReadType<ObjectPageMapEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.ObjectPageMap[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Object Iterate Data Map
+
+                offset = informationBlock.ObjectIterateDataMapOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the object page map
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // TODO: Implement when model found
+                    // No model has been found in the documentation about what
+                    // each of the entries looks like for this map.
+                }
+
+                #endregion
+
+                #region Resource Table
+
+                // Get the resource table offset
+                offset = informationBlock.ResourceTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the resource table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the resource table
+                    executable.ResourceTable = new ResourceTableEntry[informationBlock.ResourceTableCount];
+
+                    // Try to parse the resource table
+                    for (int i = 0; i < executable.ResourceTable.Length; i++)
+                    {
+                        var entry = data.ReadType<ResourceTableEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.ResourceTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Resident Names Table
+
+                // Get the resident names table offset
+                offset = informationBlock.ResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the resident names table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the resident names table
+                    var residentNamesTable = new List<ResidentNamesTableEntry>();
+
+                    // Try to parse the resident names table
+                    while (true)
+                    {
+                        var entry = ParseResidentNamesTableEntry(data);
+                        residentNamesTable.Add(entry);
+
+                        // If we have a 0-length entry
+                        if (entry.Length == 0)
+                            break;
+                    }
+
+                    // Assign the resident names table
+                    executable.ResidentNamesTable = [.. residentNamesTable];
+                }
+
+                #endregion
+
+                #region Entry Table
+
+                // Get the entry table offset
+                offset = informationBlock.EntryTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the entry table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the entry table
+                    var entryTable = new List<EntryTableBundle>();
+
+                    // Try to parse the entry table
+                    while (true)
+                    {
+                        var bundle = ParseEntryTableBundle(data);
+                        if (bundle != null)
+                            entryTable.Add(bundle);
+
+                        // If we have a 0-length entry
+                        if (bundle == null || bundle.Entries == 0)
+                            break;
+                    }
+
+                    // Assign the entry table
+                    executable.EntryTable = [.. entryTable];
+                }
+
+                #endregion
+
+                #region Module Format Directives Table
+
+                // Get the module format directives table offset
+                offset = informationBlock.ModuleDirectivesTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the module format directives table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the module format directives table
+                    executable.ModuleFormatDirectivesTable = new ModuleFormatDirectivesTableEntry[informationBlock.ModuleDirectivesCount];
+
+                    // Try to parse the module format directives table
+                    for (int i = 0; i < executable.ModuleFormatDirectivesTable.Length; i++)
+                    {
+                        var entry = data.ReadType<ModuleFormatDirectivesTableEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.ModuleFormatDirectivesTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Verify Record Directive Table
+
+                // TODO: Figure out where the offset to this table is stored
+                // The documentation suggests it's either part of or immediately following
+                // the Module Format Directives Table
+
+                #endregion
+
+                #region Fix-up Page Table
+
+                // Get the fix-up page table offset
+                offset = informationBlock.FixupPageTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the fix-up page table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the fix-up page table
+                    executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
+
+                    // Try to parse the fix-up page table
+                    for (int i = 0; i < executable.FixupPageTable.Length; i++)
+                    {
+                        var entry = data.ReadType<FixupPageTableEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.FixupPageTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Fix-up Record Table
+
+                // Get the fix-up record table offset
+                offset = informationBlock.FixupRecordTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the fix-up record table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the fix-up record table
+                    executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
+
+                    // Try to parse the fix-up record table
+                    for (int i = 0; i < executable.FixupRecordTable.Length; i++)
+                    {
+                        var entry = ParseFixupRecordTableEntry(data);
+                        if (entry == null)
+                            return null;
+
+                        executable.FixupRecordTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Imported Module Name Table
+
+                // Get the imported module name table offset
+                offset = informationBlock.ImportedModulesNameTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the imported module name table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the imported module name table
+                    executable.ImportModuleNameTable = new ImportModuleNameTableEntry[informationBlock.ImportedModulesCount];
+
+                    // Try to parse the imported module name table
+                    for (int i = 0; i < executable.ImportModuleNameTable.Length; i++)
+                    {
+                        var entry = ParseImportModuleNameTableEntry(data);
+                        if (entry == null)
+                            return null;
+
+                        executable.ImportModuleNameTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Imported Module Procedure Name Table
+
+                // Get the imported module procedure name table offset
+                offset = informationBlock.ImportProcedureNameTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the imported module procedure name table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Get the size of the imported module procedure name table
+                    long tableSize = informationBlock.FixupPageTableOffset
+                        + informationBlock.FixupSectionSize
+                        - informationBlock.ImportProcedureNameTableOffset;
+
+                    // Create the imported module procedure name table
+                    var importModuleProcedureNameTable = new List<ImportModuleProcedureNameTableEntry>();
+
+                    // Try to parse the imported module procedure name table
+                    while (data.Position < offset + tableSize)
+                    {
+                        var entry = ParseImportModuleProcedureNameTableEntry(data);
+                        if (entry == null)
+                            return null;
+
+                        importModuleProcedureNameTable.Add(entry);
+                    }
+
+                    // Assign the resident names table
+                    executable.ImportModuleProcedureNameTable = [.. importModuleProcedureNameTable];
+                }
+
+                #endregion
+
+                #region Per-Page Checksum Table
+
+                // Get the per-page checksum table offset
+                offset = informationBlock.PerPageChecksumTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the per-page checksum name table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the per-page checksum name table
+                    executable.PerPageChecksumTable = new PerPageChecksumTableEntry[informationBlock.ModuleNumberPages];
+
+                    // Try to parse the per-page checksum name table
+                    for (int i = 0; i < executable.PerPageChecksumTable.Length; i++)
+                    {
+                        var entry = data.ReadType<PerPageChecksumTableEntry>();
+                        if (entry == null)
+                            return null;
+
+                        executable.PerPageChecksumTable[i] = entry;
+                    }
+                }
+
+                #endregion
+
+                #region Non-Resident Names Table
+
+                // Get the non-resident names table offset
+                offset = informationBlock.NonResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the non-resident names table
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create the non-resident names table
+                    var nonResidentNamesTable = new List<NonResidentNamesTableEntry>();
+
+                    // Try to parse the non-resident names table
+                    while (true)
+                    {
+                        var entry = ParseNonResidentNameTableEntry(data);
+                        nonResidentNamesTable.Add(entry);
+
+                        // If we have a 0-length entry
+                        if (entry.Length == 0)
+                            break;
+                    }
+
+                    // Assign the non-resident names table
+                    executable.NonResidentNamesTable = [.. nonResidentNamesTable];
+                }
+
+                #endregion
+
+                #region Debug Information
+
+                // Get the debug information offset
+                offset = informationBlock.DebugInformationOffset + stub.Header.NewExeHeaderAddr;
+                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                {
+                    // Seek to the debug information
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Try to parse the debug information
+                    var debugInformation = ParseDebugInformation(data, informationBlock.DebugInformationLength);
+                    if (debugInformation == null)
+                        return null;
+
+                    // Set the debug information
+                    executable.DebugInformation = debugInformation;
+                }
+
+                #endregion
+
+                return executable;
             }
-
-            #endregion
-
-            return executable;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

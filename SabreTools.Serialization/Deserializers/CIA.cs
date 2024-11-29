@@ -14,136 +14,140 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new CIA archive to fill
-            var cia = new Models.N3DS.CIA();
-
-            #region CIA Header
-
-            // Try to parse the header
-            var header = data.ReadType<CIAHeader>();
-            if (header == null)
-                return null;
-            if (header.CertificateChainSize > data.Length)
-                return null;
-            if (header.TicketSize > data.Length)
-                return null;
-            if (header.TMDFileSize > data.Length)
-                return null;
-            if (header.MetaSize > data.Length)
-                return null;
-            if ((long)header.ContentSize > data.Length)
-                return null;
-
-            // Set the CIA archive header
-            cia.Header = header;
-
-            #endregion
-
-            // Align to 64-byte boundary, if needed
-            while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+            try
             {
-                _ = data.ReadByteValue();
-            }
+                // Create a new CIA archive to fill
+                var cia = new Models.N3DS.CIA();
 
-            #region Certificate Chain
+                #region CIA Header
 
-            // Create the certificate chain
-            cia.CertificateChain = new Certificate[3];
-
-            // Try to parse the certificates
-            for (int i = 0; i < 3; i++)
-            {
-                var certificate = ParseCertificate(data);
-                if (certificate == null)
+                // Try to parse the header
+                var header = data.ReadType<CIAHeader>();
+                if (header == null)
+                    return null;
+                if (header.CertificateChainSize > data.Length)
+                    return null;
+                if (header.TicketSize > data.Length)
+                    return null;
+                if (header.TMDFileSize > data.Length)
+                    return null;
+                if (header.MetaSize > data.Length)
+                    return null;
+                if ((long)header.ContentSize > data.Length)
                     return null;
 
-                cia.CertificateChain[i] = certificate;
-            }
+                // Set the CIA archive header
+                cia.Header = header;
 
-            #endregion
+                #endregion
 
-            // Align to 64-byte boundary, if needed
-            while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-            {
-                _ = data.ReadByteValue();
-            }
+                // Align to 64-byte boundary, if needed
+                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+                {
+                    _ = data.ReadByteValue();
+                }
 
-            #region Ticket
+                #region Certificate Chain
 
-            // Try to parse the ticket
-            var ticket = ParseTicket(data);
-            if (ticket == null)
-                return null;
+                // Create the certificate chain
+                cia.CertificateChain = new Certificate[3];
 
-            // Set the ticket
-            cia.Ticket = ticket;
+                // Try to parse the certificates
+                for (int i = 0; i < 3; i++)
+                {
+                    var certificate = ParseCertificate(data);
+                    if (certificate == null)
+                        return null;
 
-            #endregion
+                    cia.CertificateChain[i] = certificate;
+                }
 
-            // Align to 64-byte boundary, if needed
-            while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-            {
-                _ = data.ReadByteValue();
-            }
+                #endregion
 
-            #region Title Metadata
+                // Align to 64-byte boundary, if needed
+                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+                {
+                    _ = data.ReadByteValue();
+                }
 
-            // Try to parse the title metadata
-            var titleMetadata = ParseTitleMetadata(data);
-            if (titleMetadata == null)
-                return null;
+                #region Ticket
 
-            // Set the title metadata
-            cia.TMDFileData = titleMetadata;
-
-            #endregion
-
-            // Align to 64-byte boundary, if needed
-            while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-            {
-                _ = data.ReadByteValue();
-            }
-
-            #region Content File Data
-
-            // Create the partition table
-            cia.Partitions = new NCCHHeader[8];
-
-            // Iterate and build the partitions
-            for (int i = 0; i < 8; i++)
-            {
-                cia.Partitions[i] = N3DS.ParseNCCHHeader(data);
-            }
-
-            #endregion
-
-            // Align to 64-byte boundary, if needed
-            while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-            {
-                _ = data.ReadByteValue();
-            }
-
-            #region Meta Data
-
-            // If we have a meta data
-            if (header.MetaSize > 0)
-            {
-                // Try to parse the meta
-                var meta = data.ReadType<MetaData>();
-                if (meta == null)
+                // Try to parse the ticket
+                var ticket = ParseTicket(data);
+                if (ticket == null)
                     return null;
 
-                // Set the meta
-                cia.MetaData = meta;
+                // Set the ticket
+                cia.Ticket = ticket;
+
+                #endregion
+
+                // Align to 64-byte boundary, if needed
+                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+                {
+                    _ = data.ReadByteValue();
+                }
+
+                #region Title Metadata
+
+                // Try to parse the title metadata
+                var titleMetadata = ParseTitleMetadata(data);
+                if (titleMetadata == null)
+                    return null;
+
+                // Set the title metadata
+                cia.TMDFileData = titleMetadata;
+
+                #endregion
+
+                // Align to 64-byte boundary, if needed
+                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+                {
+                    _ = data.ReadByteValue();
+                }
+
+                #region Content File Data
+
+                // Create the partition table
+                cia.Partitions = new NCCHHeader[8];
+
+                // Iterate and build the partitions
+                for (int i = 0; i < 8; i++)
+                {
+                    cia.Partitions[i] = N3DS.ParseNCCHHeader(data);
+                }
+
+                #endregion
+
+                // Align to 64-byte boundary, if needed
+                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
+                {
+                    _ = data.ReadByteValue();
+                }
+
+                #region Meta Data
+
+                // If we have a meta data
+                if (header.MetaSize > 0)
+                {
+                    // Try to parse the meta
+                    var meta = data.ReadType<MetaData>();
+                    if (meta == null)
+                        return null;
+
+                    // Set the meta
+                    cia.MetaData = meta;
+                }
+
+                #endregion
+
+                return cia;
             }
-
-            #endregion
-
-            return cia;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

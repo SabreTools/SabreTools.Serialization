@@ -15,49 +15,53 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new archive to fill
-            var archive = new Archive();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<Header>();
-            if (header?.Signature != SignatureString)
-                return null;
-
-            // Set the archive header
-            archive.Header = header;
-
-            #endregion
-
-            #region File List
-
-            // If we have any files
-            var fileDescriptors = new FileDescriptor[header.FileCount];
-
-            // Read all entries in turn
-            for (int i = 0; i < header.FileCount; i++)
+            try
             {
-                var file = ParseFileDescriptor(data, header.MinorVersion);
-                if (file == null)
+                // Create a new archive to fill
+                var archive = new Archive();
+
+                #region Header
+
+                // Try to parse the header
+                var header = data.ReadType<Header>();
+                if (header?.Signature != SignatureString)
                     return null;
 
-                fileDescriptors[i] = file;
+                // Set the archive header
+                archive.Header = header;
+
+                #endregion
+
+                #region File List
+
+                // If we have any files
+                var fileDescriptors = new FileDescriptor[header.FileCount];
+
+                // Read all entries in turn
+                for (int i = 0; i < header.FileCount; i++)
+                {
+                    var file = ParseFileDescriptor(data, header.MinorVersion);
+                    if (file == null)
+                        return null;
+
+                    fileDescriptors[i] = file;
+                }
+
+                // Set the file list
+                archive.FileList = fileDescriptors;
+
+                #endregion
+
+                // Cache the compressed data offset
+                archive.CompressedDataOffset = data.Position;
+
+                return archive;
             }
-
-            // Set the file list
-            archive.FileList = fileDescriptors;
-
-            #endregion
-
-            // Cache the compressed data offset
-            archive.CompressedDataOffset = data.Position;
-
-            return archive;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

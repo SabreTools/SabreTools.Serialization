@@ -20,37 +20,26 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
-            }
-            catch
-            {
-                // Ignore errors in getting position for compressed streams
-            }
-
-            // Setup the serializer and the reader
-            var serializer = new XmlSerializer(typeof(T));
-            var settings = new XmlReaderSettings
-            {
-                CheckCharacters = false,
+                // Setup the serializer and the reader
+                var serializer = new XmlSerializer(typeof(T));
+                var settings = new XmlReaderSettings
+                {
+                    CheckCharacters = false,
 #if NET40_OR_GREATER || NETCOREAPP
-                DtdProcessing = DtdProcessing.Ignore,
+                    DtdProcessing = DtdProcessing.Ignore,
 #endif
-                ValidationFlags = XmlSchemaValidationFlags.None,
-                ValidationType = ValidationType.None,
-            };
-            var streamReader = new StreamReader(data);
-            var xmlReader = XmlReader.Create(streamReader, settings);
+                    ValidationFlags = XmlSchemaValidationFlags.None,
+                    ValidationType = ValidationType.None,
+                };
+                var streamReader = new StreamReader(data);
+                var xmlReader = XmlReader.Create(streamReader, settings);
 
-            // Perform the deserialization and return
-            try
-            {
+                // Perform the deserialization and return
                 return (T?)serializer.Deserialize(xmlReader);
             }
             catch
             {
-                // Absorb all exceptions
+                // Ignore the actual error
                 return default;
             }
         }

@@ -17,319 +17,323 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new archive to fill
-            var archive = new Archive();
-
-            #region User Data
-
-            // Check for User Data
-            uint possibleSignature = data.ReadUInt32();
-            data.Seek(-4, SeekOrigin.Current);
-            if (possibleSignature == UserDataSignatureUInt32)
+            try
             {
-                // Save the current position for offset correction
-                long basePtr = data.Position;
+                // Create a new archive to fill
+                var archive = new Archive();
 
-                // Deserialize the user data, returning null if invalid
-                var userData = data.ReadType<UserData>();
-                if (userData?.Signature != UserDataSignatureString)
-                    return null;
+                #region User Data
 
-                // Set the user data
-                archive.UserData = userData;
-
-                // Set the starting position according to the header offset
-                data.Seek(basePtr + (int)archive.UserData.HeaderOffset, SeekOrigin.Begin);
-            }
-
-            #endregion
-
-            #region Archive Header
-
-            // Check for the Header
-            possibleSignature = data.ReadUInt32();
-            data.Seek(-4, SeekOrigin.Current);
-            if (possibleSignature == ArchiveHeaderSignatureUInt32)
-            {
-                // Try to parse the archive header
-                var archiveHeader = ParseArchiveHeader(data);
-                if (archiveHeader == null)
-                    return null;
-
-                // Set the archive header
-                archive.ArchiveHeader = archiveHeader;
-            }
-            else
-            {
-                return null;
-            }
-
-            #endregion
-
-            #region Hash Table
-
-            // TODO: The hash table has to be be decrypted before reading
-
-            // Version 1
-            if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
-            {
-                // If we have a hash table
-                long hashTableOffset = archive.ArchiveHeader.HashTablePosition;
-                if (hashTableOffset != 0)
+                // Check for User Data
+                uint possibleSignature = data.ReadUInt32();
+                data.Seek(-4, SeekOrigin.Current);
+                if (possibleSignature == UserDataSignatureUInt32)
                 {
-                    // Seek to the offset
-                    data.Seek(hashTableOffset, SeekOrigin.Begin);
+                    // Save the current position for offset correction
+                    long basePtr = data.Position;
 
-                    // Find the ending offset based on size
-                    long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
-
-                    // Read in the hash table
-                    var hashTable = new List<HashEntry>();
-
-                    while (data.Position < hashTableEnd)
-                    {
-                        var hashEntry = data.ReadType<HashEntry>();
-                        if (hashEntry == null)
-                            return null;
-
-                        hashTable.Add(hashEntry);
-                    }
-
-                    archive.HashTable = [.. hashTable];
-                }
-            }
-
-            // Version 2 and 3
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
-                || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
-            {
-                // If we have a hash table
-                long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
-                if (hashTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(hashTableOffset, SeekOrigin.Begin);
-
-                    // Find the ending offset based on size
-                    long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
-
-                    // Read in the hash table
-                    var hashTable = new List<HashEntry>();
-
-                    while (data.Position < hashTableEnd)
-                    {
-                        var hashEntry = data.ReadType<HashEntry>();
-                        if (hashEntry == null)
-                            return null;
-
-                        hashTable.Add(hashEntry);
-                    }
-
-                    archive.HashTable = [.. hashTable];
-                }
-            }
-
-            // Version 4
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
-            {
-                // If we have a hash table
-                long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
-                if (hashTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(hashTableOffset, SeekOrigin.Begin);
-
-                    // Find the ending offset based on size
-                    long hashTableEnd = hashTableOffset + (long)archive.ArchiveHeader.HashTableSizeLong;
-
-                    // Read in the hash table
-                    var hashTable = new List<HashEntry>();
-
-                    while (data.Position < hashTableEnd)
-                    {
-                        var hashEntry = data.ReadType<HashEntry>();
-                        if (hashEntry == null)
-                            return null;
-
-                        hashTable.Add(hashEntry);
-                    }
-
-                    archive.HashTable = [.. hashTable];
-                }
-            }
-
-            #endregion
-
-            #region Block Table
-
-            // Version 1
-            if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
-            {
-                // If we have a block table
-                long blockTableOffset = archive.ArchiveHeader.BlockTablePosition;
-                if (blockTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                    // Find the ending offset based on size
-                    long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
-
-                    // Read in the block table
-                    var blockTable = new List<BlockEntry>();
-
-                    while (data.Position < blockTableEnd)
-                    {
-                        var blockEntry = data.ReadType<BlockEntry>();
-                        if (blockEntry == null)
-                            return null;
-
-                        blockTable.Add(blockEntry);
-                    }
-
-                    archive.BlockTable = [.. blockTable];
-                }
-            }
-
-            // Version 2 and 3
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
-                || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
-            {
-                // If we have a block table
-                long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
-                if (blockTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                    // Find the ending offset based on size
-                    long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
-
-                    // Read in the block table
-                    var blockTable = new List<BlockEntry>();
-
-                    while (data.Position < blockTableEnd)
-                    {
-                        var blockEntry = data.ReadType<BlockEntry>();
-                        if (blockEntry == null)
-                            return null;
-
-                        blockTable.Add(blockEntry);
-                    }
-
-                    archive.BlockTable = [.. blockTable];
-                }
-            }
-
-            // Version 4
-            else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
-            {
-                // If we have a block table
-                long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
-                if (blockTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                    // Find the ending offset based on size
-                    long blockTableEnd = blockTableOffset + (long)archive.ArchiveHeader.BlockTableSizeLong;
-
-                    // Read in the block table
-                    var blockTable = new List<BlockEntry>();
-
-                    while (data.Position < blockTableEnd)
-                    {
-                        var blockEntry = data.ReadType<BlockEntry>();
-                        if (blockEntry == null)
-                            return null;
-
-                        blockTable.Add(blockEntry);
-                    }
-
-                    archive.BlockTable = [.. blockTable];
-                }
-            }
-
-            #endregion
-
-            #region Hi-Block Table
-
-            // Version 2, 3, and 4
-            if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format2)
-            {
-                // If we have a hi-block table
-                long hiBlockTableOffset = (long)archive.ArchiveHeader.HiBlockTablePosition;
-                if (hiBlockTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(hiBlockTableOffset, SeekOrigin.Begin);
-
-                    // Read in the hi-block table
-                    var hiBlockTable = new List<short>();
-
-                    for (int i = 0; i < (archive.BlockTable?.Length ?? 0); i++)
-                    {
-                        short hiBlockEntry = data.ReadInt16();
-                        hiBlockTable.Add(hiBlockEntry);
-                    }
-
-                    archive.HiBlockTable = [.. hiBlockTable];
-                }
-            }
-
-            #endregion
-
-            #region BET Table
-
-            // Version 3 and 4
-            if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
-            {
-                // If we have a BET table
-                long betTableOffset = (long)archive.ArchiveHeader.BetTablePosition;
-                if (betTableOffset != 0)
-                {
-                    // Seek to the offset
-                    data.Seek(betTableOffset, SeekOrigin.Begin);
-
-                    // Read in the BET table
-                    var betTable = ParseBetTable(data);
-                    if (betTable != null)
+                    // Deserialize the user data, returning null if invalid
+                    var userData = data.ReadType<UserData>();
+                    if (userData?.Signature != UserDataSignatureString)
                         return null;
 
-                    archive.BetTable = betTable;
+                    // Set the user data
+                    archive.UserData = userData;
+
+                    // Set the starting position according to the header offset
+                    data.Seek(basePtr + (int)archive.UserData.HeaderOffset, SeekOrigin.Begin);
                 }
-            }
 
-            #endregion
+                #endregion
 
-            #region HET Table
+                #region Archive Header
 
-            // Version 3 and 4
-            if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
-            {
-                // If we have a HET table
-                long hetTableOffset = (long)archive.ArchiveHeader.HetTablePosition;
-                if (hetTableOffset != 0)
+                // Check for the Header
+                possibleSignature = data.ReadUInt32();
+                data.Seek(-4, SeekOrigin.Current);
+                if (possibleSignature == ArchiveHeaderSignatureUInt32)
                 {
-                    // Seek to the offset
-                    data.Seek(hetTableOffset, SeekOrigin.Begin);
-
-                    // Read in the HET table
-                    var hetTable = ParseHetTable(data);
-                    if (hetTable != null)
+                    // Try to parse the archive header
+                    var archiveHeader = ParseArchiveHeader(data);
+                    if (archiveHeader == null)
                         return null;
 
-                    archive.HetTable = hetTable;
+                    // Set the archive header
+                    archive.ArchiveHeader = archiveHeader;
                 }
+                else
+                {
+                    return null;
+                }
+
+                #endregion
+
+                #region Hash Table
+
+                // TODO: The hash table has to be be decrypted before reading
+
+                // Version 1
+                if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
+                {
+                    // If we have a hash table
+                    long hashTableOffset = archive.ArchiveHeader.HashTablePosition;
+                    if (hashTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(hashTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
+
+                        // Read in the hash table
+                        var hashTable = new List<HashEntry>();
+
+                        while (data.Position < hashTableEnd)
+                        {
+                            var hashEntry = data.ReadType<HashEntry>();
+                            if (hashEntry == null)
+                                return null;
+
+                            hashTable.Add(hashEntry);
+                        }
+
+                        archive.HashTable = [.. hashTable];
+                    }
+                }
+
+                // Version 2 and 3
+                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
+                    || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
+                {
+                    // If we have a hash table
+                    long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
+                    if (hashTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(hashTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
+
+                        // Read in the hash table
+                        var hashTable = new List<HashEntry>();
+
+                        while (data.Position < hashTableEnd)
+                        {
+                            var hashEntry = data.ReadType<HashEntry>();
+                            if (hashEntry == null)
+                                return null;
+
+                            hashTable.Add(hashEntry);
+                        }
+
+                        archive.HashTable = [.. hashTable];
+                    }
+                }
+
+                // Version 4
+                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
+                {
+                    // If we have a hash table
+                    long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
+                    if (hashTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(hashTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long hashTableEnd = hashTableOffset + (long)archive.ArchiveHeader.HashTableSizeLong;
+
+                        // Read in the hash table
+                        var hashTable = new List<HashEntry>();
+
+                        while (data.Position < hashTableEnd)
+                        {
+                            var hashEntry = data.ReadType<HashEntry>();
+                            if (hashEntry == null)
+                                return null;
+
+                            hashTable.Add(hashEntry);
+                        }
+
+                        archive.HashTable = [.. hashTable];
+                    }
+                }
+
+                #endregion
+
+                #region Block Table
+
+                // Version 1
+                if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
+                {
+                    // If we have a block table
+                    long blockTableOffset = archive.ArchiveHeader.BlockTablePosition;
+                    if (blockTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(blockTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
+
+                        // Read in the block table
+                        var blockTable = new List<BlockEntry>();
+
+                        while (data.Position < blockTableEnd)
+                        {
+                            var blockEntry = data.ReadType<BlockEntry>();
+                            if (blockEntry == null)
+                                return null;
+
+                            blockTable.Add(blockEntry);
+                        }
+
+                        archive.BlockTable = [.. blockTable];
+                    }
+                }
+
+                // Version 2 and 3
+                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
+                    || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
+                {
+                    // If we have a block table
+                    long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
+                    if (blockTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(blockTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
+
+                        // Read in the block table
+                        var blockTable = new List<BlockEntry>();
+
+                        while (data.Position < blockTableEnd)
+                        {
+                            var blockEntry = data.ReadType<BlockEntry>();
+                            if (blockEntry == null)
+                                return null;
+
+                            blockTable.Add(blockEntry);
+                        }
+
+                        archive.BlockTable = [.. blockTable];
+                    }
+                }
+
+                // Version 4
+                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
+                {
+                    // If we have a block table
+                    long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
+                    if (blockTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(blockTableOffset, SeekOrigin.Begin);
+
+                        // Find the ending offset based on size
+                        long blockTableEnd = blockTableOffset + (long)archive.ArchiveHeader.BlockTableSizeLong;
+
+                        // Read in the block table
+                        var blockTable = new List<BlockEntry>();
+
+                        while (data.Position < blockTableEnd)
+                        {
+                            var blockEntry = data.ReadType<BlockEntry>();
+                            if (blockEntry == null)
+                                return null;
+
+                            blockTable.Add(blockEntry);
+                        }
+
+                        archive.BlockTable = [.. blockTable];
+                    }
+                }
+
+                #endregion
+
+                #region Hi-Block Table
+
+                // Version 2, 3, and 4
+                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format2)
+                {
+                    // If we have a hi-block table
+                    long hiBlockTableOffset = (long)archive.ArchiveHeader.HiBlockTablePosition;
+                    if (hiBlockTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(hiBlockTableOffset, SeekOrigin.Begin);
+
+                        // Read in the hi-block table
+                        var hiBlockTable = new List<short>();
+
+                        for (int i = 0; i < (archive.BlockTable?.Length ?? 0); i++)
+                        {
+                            short hiBlockEntry = data.ReadInt16();
+                            hiBlockTable.Add(hiBlockEntry);
+                        }
+
+                        archive.HiBlockTable = [.. hiBlockTable];
+                    }
+                }
+
+                #endregion
+
+                #region BET Table
+
+                // Version 3 and 4
+                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
+                {
+                    // If we have a BET table
+                    long betTableOffset = (long)archive.ArchiveHeader.BetTablePosition;
+                    if (betTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(betTableOffset, SeekOrigin.Begin);
+
+                        // Read in the BET table
+                        var betTable = ParseBetTable(data);
+                        if (betTable != null)
+                            return null;
+
+                        archive.BetTable = betTable;
+                    }
+                }
+
+                #endregion
+
+                #region HET Table
+
+                // Version 3 and 4
+                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
+                {
+                    // If we have a HET table
+                    long hetTableOffset = (long)archive.ArchiveHeader.HetTablePosition;
+                    if (hetTableOffset != 0)
+                    {
+                        // Seek to the offset
+                        data.Seek(hetTableOffset, SeekOrigin.Begin);
+
+                        // Read in the HET table
+                        var hetTable = ParseHetTable(data);
+                        if (hetTable != null)
+                            return null;
+
+                        archive.HetTable = hetTable;
+                    }
+                }
+
+                #endregion
+
+                return archive;
             }
-
-            #endregion
-
-            return archive;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

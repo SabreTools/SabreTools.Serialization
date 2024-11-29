@@ -15,42 +15,46 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new archive to fill
-            var archive = new Archive();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<Header>();
-            if (header?.Magic != SignatureString)
-                return null;
-
-            // Set the archive header
-            archive.Header = header;
-
-            #endregion
-
-            #region Files
-
-            // If we have any files
-            var files = new FileEntry[header.Files];
-
-            // Read all entries in turn
-            for (int i = 0; i < header.Files; i++)
+            try
             {
-                files[i] = ParseFileEntry(data);
+                // Create a new archive to fill
+                var archive = new Archive();
+
+                #region Header
+
+                // Try to parse the header
+                var header = data.ReadType<Header>();
+                if (header?.Magic != SignatureString)
+                    return null;
+
+                // Set the archive header
+                archive.Header = header;
+
+                #endregion
+
+                #region Files
+
+                // If we have any files
+                var files = new FileEntry[header.Files];
+
+                // Read all entries in turn
+                for (int i = 0; i < header.Files; i++)
+                {
+                    files[i] = ParseFileEntry(data);
+                }
+
+                // Set the files
+                archive.Files = files;
+
+                #endregion
+
+                return archive;
             }
-
-            // Set the files
-            archive.Files = files;
-
-            #endregion
-
-            return archive;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

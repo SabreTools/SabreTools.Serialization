@@ -16,23 +16,27 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Determine the header version
-            uint version = GetVersion(data);
-
-            // Read and return the current CHD
-            return version switch
+            try
             {
-                1 => ParseHeaderV1(data),
-                2 => ParseHeaderV2(data),
-                3 => ParseHeaderV3(data),
-                4 => ParseHeaderV4(data),
-                5 => ParseHeaderV5(data),
-                _ => null,
-            };
+                // Determine the header version
+                uint version = GetVersion(data);
+
+                // Read and return the current CHD
+                return version switch
+                {
+                    1 => ParseHeaderV1(data),
+                    2 => ParseHeaderV2(data),
+                    3 => ParseHeaderV3(data),
+                    4 => ParseHeaderV4(data),
+                    5 => ParseHeaderV5(data),
+                    _ => null,
+                };
+            }
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

@@ -13,44 +13,48 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new playlist to fill
-            var playlist = new Playlist();
-
-            #region Playlist Header
-
-            // Try to parse the playlist header
-            var playlistHeader = ParsePlaylistHeader(data);
-            if (playlistHeader == null)
-                return null;
-
-            // Set the playlist header
-            playlist.Header = playlistHeader;
-
-            #endregion
-
-            #region Audio Files
-
-            // Create the audio files array
-            playlist.AudioFiles = new AudioFile[playlistHeader.TrackCount];
-
-            // Try to parse the audio files
-            for (int i = 0; i < playlist.AudioFiles.Length; i++)
+            try
             {
-                long currentOffset = data.Position;
-                var entryHeader = PlayJAudio.DeserializeStream(data, currentOffset);
-                if (entryHeader == null)
-                    continue;
+                // Create a new playlist to fill
+                var playlist = new Playlist();
 
-                playlist.AudioFiles[i] = entryHeader;
+                #region Playlist Header
+
+                // Try to parse the playlist header
+                var playlistHeader = ParsePlaylistHeader(data);
+                if (playlistHeader == null)
+                    return null;
+
+                // Set the playlist header
+                playlist.Header = playlistHeader;
+
+                #endregion
+
+                #region Audio Files
+
+                // Create the audio files array
+                playlist.AudioFiles = new AudioFile[playlistHeader.TrackCount];
+
+                // Try to parse the audio files
+                for (int i = 0; i < playlist.AudioFiles.Length; i++)
+                {
+                    long currentOffset = data.Position;
+                    var entryHeader = PlayJAudio.DeserializeStream(data, currentOffset);
+                    if (entryHeader == null)
+                        continue;
+
+                    playlist.AudioFiles[i] = entryHeader;
+                }
+
+                #endregion
+
+                return playlist;
             }
-
-            #endregion
-
-            return playlist;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

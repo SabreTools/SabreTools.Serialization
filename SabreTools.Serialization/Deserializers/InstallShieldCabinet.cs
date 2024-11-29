@@ -17,312 +17,316 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new cabinet to fill
-            var cabinet = new Cabinet();
-
-            #region Common Header
-
-            // Try to parse the cabinet header
-            var commonHeader = data.ReadType<CommonHeader>();
-            if (commonHeader?.Signature != SignatureString)
-                return null;
-
-            // Set the cabinet header
-            cabinet.CommonHeader = commonHeader;
-
-            #endregion
-
-            #region Volume Header
-
-            // Try to parse the volume header
-            var volumeHeader = ParseVolumeHeader(data, GetMajorVersion(commonHeader));
-            if (volumeHeader == null)
-                return null;
-
-            // Set the volume header
-            cabinet.VolumeHeader = volumeHeader;
-
-            #endregion
-
-            #region Descriptor
-
-            // Get the descriptor offset
-            uint descriptorOffset = commonHeader.DescriptorOffset;
-            if (descriptorOffset < 0 || descriptorOffset >= data.Length)
-                return null;
-
-            // Seek to the descriptor
-            data.Seek(descriptorOffset, SeekOrigin.Begin);
-
-            // Try to parse the descriptor
-            var descriptor = data.ReadType<Descriptor>();
-            if (descriptor == null)
-                return null;
-
-            // Set the descriptor
-            cabinet.Descriptor = descriptor;
-
-            #endregion
-
-            #region File Descriptor Offsets
-
-            // Get the file table offset
-            uint fileTableOffset = commonHeader.DescriptorOffset + descriptor.FileTableOffset;
-            if (fileTableOffset < 0 || fileTableOffset >= data.Length)
-                return null;
-
-            // Seek to the file table
-            data.Seek(fileTableOffset, SeekOrigin.Begin);
-
-            // Get the number of file table items
-            uint fileTableItems;
-            if (GetMajorVersion(commonHeader) <= 5)
-                fileTableItems = descriptor.DirectoryCount + descriptor.FileCount;
-            else
-                fileTableItems = descriptor.DirectoryCount;
-
-            // Create and fill the file table
-            cabinet.FileDescriptorOffsets = new uint[fileTableItems];
-            for (int i = 0; i < cabinet.FileDescriptorOffsets.Length; i++)
+            try
             {
-                cabinet.FileDescriptorOffsets[i] = data.ReadUInt32();
-            }
+                // Create a new cabinet to fill
+                var cabinet = new Cabinet();
 
-            #endregion
+                #region Common Header
 
-            #region Directory Descriptors
+                // Try to parse the cabinet header
+                var commonHeader = data.ReadType<CommonHeader>();
+                if (commonHeader?.Signature != SignatureString)
+                    return null;
 
-            // Create and fill the directory descriptors
-            cabinet.DirectoryNames = new string[descriptor.DirectoryCount];
-            for (int i = 0; i < descriptor.DirectoryCount; i++)
-            {
-                // Get the directory descriptor offset
-                uint offset = descriptorOffset
-                    + descriptor.FileTableOffset
-                    + cabinet.FileDescriptorOffsets[i];
+                // Set the cabinet header
+                cabinet.CommonHeader = commonHeader;
 
-                // If we have an invalid offset
-                if (offset < 0 || offset >= data.Length)
-                    continue;
+                #endregion
 
-                // Seek to the file descriptor offset
-                data.Seek(offset, SeekOrigin.Begin);
+                #region Volume Header
 
-                // Create and add the file descriptor
-                string? directoryName = ParseDirectoryName(data, GetMajorVersion(commonHeader));
-                if (directoryName != null)
-                    cabinet.DirectoryNames[i] = directoryName;
-            }
+                // Try to parse the volume header
+                var volumeHeader = ParseVolumeHeader(data, GetMajorVersion(commonHeader));
+                if (volumeHeader == null)
+                    return null;
 
-            #endregion
+                // Set the volume header
+                cabinet.VolumeHeader = volumeHeader;
 
-            #region File Descriptors
+                #endregion
 
-            // Create and fill the file descriptors
-            cabinet.FileDescriptors = new FileDescriptor[descriptor.FileCount];
-            for (int i = 0; i < descriptor.FileCount; i++)
-            {
-                // Get the file descriptor offset
-                uint offset;
+                #region Descriptor
+
+                // Get the descriptor offset
+                uint descriptorOffset = commonHeader.DescriptorOffset;
+                if (descriptorOffset < 0 || descriptorOffset >= data.Length)
+                    return null;
+
+                // Seek to the descriptor
+                data.Seek(descriptorOffset, SeekOrigin.Begin);
+
+                // Try to parse the descriptor
+                var descriptor = data.ReadType<Descriptor>();
+                if (descriptor == null)
+                    return null;
+
+                // Set the descriptor
+                cabinet.Descriptor = descriptor;
+
+                #endregion
+
+                #region File Descriptor Offsets
+
+                // Get the file table offset
+                uint fileTableOffset = commonHeader.DescriptorOffset + descriptor.FileTableOffset;
+                if (fileTableOffset < 0 || fileTableOffset >= data.Length)
+                    return null;
+
+                // Seek to the file table
+                data.Seek(fileTableOffset, SeekOrigin.Begin);
+
+                // Get the number of file table items
+                uint fileTableItems;
                 if (GetMajorVersion(commonHeader) <= 5)
-                {
-                    offset = descriptorOffset
-                        + descriptor.FileTableOffset
-                        + cabinet.FileDescriptorOffsets[descriptor.DirectoryCount + i];
-                }
+                    fileTableItems = descriptor.DirectoryCount + descriptor.FileCount;
                 else
+                    fileTableItems = descriptor.DirectoryCount;
+
+                // Create and fill the file table
+                cabinet.FileDescriptorOffsets = new uint[fileTableItems];
+                for (int i = 0; i < cabinet.FileDescriptorOffsets.Length; i++)
                 {
-                    offset = descriptorOffset
+                    cabinet.FileDescriptorOffsets[i] = data.ReadUInt32();
+                }
+
+                #endregion
+
+                #region Directory Descriptors
+
+                // Create and fill the directory descriptors
+                cabinet.DirectoryNames = new string[descriptor.DirectoryCount];
+                for (int i = 0; i < descriptor.DirectoryCount; i++)
+                {
+                    // Get the directory descriptor offset
+                    uint offset = descriptorOffset
                         + descriptor.FileTableOffset
-                        + descriptor.FileTableOffset2
-                        + (uint)(i * 0x57);
+                        + cabinet.FileDescriptorOffsets[i];
+
+                    // If we have an invalid offset
+                    if (offset < 0 || offset >= data.Length)
+                        continue;
+
+                    // Seek to the file descriptor offset
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create and add the file descriptor
+                    string? directoryName = ParseDirectoryName(data, GetMajorVersion(commonHeader));
+                    if (directoryName != null)
+                        cabinet.DirectoryNames[i] = directoryName;
                 }
 
-                // If we have an invalid offset
-                if (offset < 0 || offset >= data.Length)
-                    continue;
+                #endregion
 
-                // Seek to the file descriptor offset
-                data.Seek(offset, SeekOrigin.Begin);
+                #region File Descriptors
 
-                // Create and add the file descriptor
-                FileDescriptor fileDescriptor = ParseFileDescriptor(data, GetMajorVersion(commonHeader), descriptorOffset + descriptor.FileTableOffset);
-                cabinet.FileDescriptors[i] = fileDescriptor;
-            }
-
-            #endregion
-
-            #region File Group Offsets
-
-            // Create and fill the file group offsets
-            cabinet.FileGroupOffsets = new Dictionary<long, OffsetList?>();
-            for (int i = 0; i < (descriptor.FileGroupOffsets?.Length ?? 0); i++)
-            {
-                // Get the file group offset
-                uint offset = descriptor.FileGroupOffsets![i];
-                if (offset == 0)
-                    continue;
-
-                // Adjust the file group offset
-                offset += commonHeader.DescriptorOffset;
-                if (offset < 0 || offset >= data.Length)
-                    continue;
-
-                // Seek to the file group offset
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create and add the offset
-                OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                cabinet.FileGroupOffsets[descriptor.FileGroupOffsets[i]] = offsetList;
-
-                // If we have a nonzero next offset
-                uint nextOffset = offsetList.NextOffset;
-                while (nextOffset != 0)
+                // Create and fill the file descriptors
+                cabinet.FileDescriptors = new FileDescriptor[descriptor.FileCount];
+                for (int i = 0; i < descriptor.FileCount; i++)
                 {
-                    // Get the next offset to read
-                    uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
+                    // Get the file descriptor offset
+                    uint offset;
+                    if (GetMajorVersion(commonHeader) <= 5)
+                    {
+                        offset = descriptorOffset
+                            + descriptor.FileTableOffset
+                            + cabinet.FileDescriptorOffsets[descriptor.DirectoryCount + i];
+                    }
+                    else
+                    {
+                        offset = descriptorOffset
+                            + descriptor.FileTableOffset
+                            + descriptor.FileTableOffset2
+                            + (uint)(i * 0x57);
+                    }
+
+                    // If we have an invalid offset
+                    if (offset < 0 || offset >= data.Length)
+                        continue;
+
+                    // Seek to the file descriptor offset
+                    data.Seek(offset, SeekOrigin.Begin);
+
+                    // Create and add the file descriptor
+                    FileDescriptor fileDescriptor = ParseFileDescriptor(data, GetMajorVersion(commonHeader), descriptorOffset + descriptor.FileTableOffset);
+                    cabinet.FileDescriptors[i] = fileDescriptor;
+                }
+
+                #endregion
+
+                #region File Group Offsets
+
+                // Create and fill the file group offsets
+                cabinet.FileGroupOffsets = new Dictionary<long, OffsetList?>();
+                for (int i = 0; i < (descriptor.FileGroupOffsets?.Length ?? 0); i++)
+                {
+                    // Get the file group offset
+                    uint offset = descriptor.FileGroupOffsets![i];
+                    if (offset == 0)
+                        continue;
+
+                    // Adjust the file group offset
+                    offset += commonHeader.DescriptorOffset;
+                    if (offset < 0 || offset >= data.Length)
+                        continue;
 
                     // Seek to the file group offset
-                    data.Seek(internalOffset, SeekOrigin.Begin);
+                    data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
-                    offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    cabinet.FileGroupOffsets[nextOffset] = offsetList;
+                    OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                    cabinet.FileGroupOffsets[descriptor.FileGroupOffsets[i]] = offsetList;
 
-                    // Set the next offset
-                    nextOffset = offsetList.NextOffset;
-                }
-            }
+                    // If we have a nonzero next offset
+                    uint nextOffset = offsetList.NextOffset;
+                    while (nextOffset != 0)
+                    {
+                        // Get the next offset to read
+                        uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
 
-            #endregion
+                        // Seek to the file group offset
+                        data.Seek(internalOffset, SeekOrigin.Begin);
 
-            #region File Groups
+                        // Create and add the offset
+                        offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                        cabinet.FileGroupOffsets[nextOffset] = offsetList;
 
-            // Create the file groups array
-            cabinet.FileGroups = new FileGroup[cabinet.FileGroupOffsets.Count];
-
-            // Create and fill the file groups
-            int fileGroupId = 0;
-            foreach (var kvp in cabinet.FileGroupOffsets)
-            {
-                // Get the offset
-                OffsetList? list = kvp.Value;
-                if (list == null)
-                {
-                    fileGroupId++;
-                    continue;
+                        // Set the next offset
+                        nextOffset = offsetList.NextOffset;
+                    }
                 }
 
-                // If we have an invalid offset
-                if (list.DescriptorOffset <= 0)
+                #endregion
+
+                #region File Groups
+
+                // Create the file groups array
+                cabinet.FileGroups = new FileGroup[cabinet.FileGroupOffsets.Count];
+
+                // Create and fill the file groups
+                int fileGroupId = 0;
+                foreach (var kvp in cabinet.FileGroupOffsets)
                 {
-                    fileGroupId++;
-                    continue;
+                    // Get the offset
+                    OffsetList? list = kvp.Value;
+                    if (list == null)
+                    {
+                        fileGroupId++;
+                        continue;
+                    }
+
+                    // If we have an invalid offset
+                    if (list.DescriptorOffset <= 0)
+                    {
+                        fileGroupId++;
+                        continue;
+                    }
+
+                    /// Seek to the file group
+                    data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
+
+                    // Try to parse the file group
+                    var fileGroup = ParseFileGroup(data, GetMajorVersion(commonHeader), descriptorOffset);
+                    if (fileGroup == null)
+                        return null;
+
+                    // Add the file group
+                    cabinet.FileGroups[fileGroupId++] = fileGroup;
                 }
 
-                /// Seek to the file group
-                data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
+                #endregion
 
-                // Try to parse the file group
-                var fileGroup = ParseFileGroup(data, GetMajorVersion(commonHeader), descriptorOffset);
-                if (fileGroup == null)
-                    return null;
+                #region Component Offsets
 
-                // Add the file group
-                cabinet.FileGroups[fileGroupId++] = fileGroup;
-            }
-
-            #endregion
-
-            #region Component Offsets
-
-            // Create and fill the component offsets
-            cabinet.ComponentOffsets = new Dictionary<long, OffsetList?>();
-            for (int i = 0; i < (descriptor.ComponentOffsets?.Length ?? 0); i++)
-            {
-                // Get the component offset
-                uint offset = descriptor.ComponentOffsets![i];
-                if (offset == 0)
-                    continue;
-
-                // Adjust the component offset
-                offset += commonHeader.DescriptorOffset;
-                if (offset < 0 || offset >= data.Length)
-                    continue;
-
-                // Seek to the component offset
-                data.Seek(offset, SeekOrigin.Begin);
-
-                // Create and add the offset
-                OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                cabinet.ComponentOffsets[descriptor.ComponentOffsets[i]] = offsetList;
-
-                // If we have a nonzero next offset
-                uint nextOffset = offsetList.NextOffset;
-                while (nextOffset != 0)
+                // Create and fill the component offsets
+                cabinet.ComponentOffsets = new Dictionary<long, OffsetList?>();
+                for (int i = 0; i < (descriptor.ComponentOffsets?.Length ?? 0); i++)
                 {
-                    // Get the next offset to read
-                    uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
+                    // Get the component offset
+                    uint offset = descriptor.ComponentOffsets![i];
+                    if (offset == 0)
+                        continue;
 
-                    // Seek to the file group offset
-                    data.Seek(internalOffset, SeekOrigin.Begin);
+                    // Adjust the component offset
+                    offset += commonHeader.DescriptorOffset;
+                    if (offset < 0 || offset >= data.Length)
+                        continue;
+
+                    // Seek to the component offset
+                    data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
-                    offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    cabinet.ComponentOffsets[nextOffset] = offsetList;
+                    OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                    cabinet.ComponentOffsets[descriptor.ComponentOffsets[i]] = offsetList;
 
-                    // Set the next offset
-                    nextOffset = offsetList.NextOffset;
+                    // If we have a nonzero next offset
+                    uint nextOffset = offsetList.NextOffset;
+                    while (nextOffset != 0)
+                    {
+                        // Get the next offset to read
+                        uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
+
+                        // Seek to the file group offset
+                        data.Seek(internalOffset, SeekOrigin.Begin);
+
+                        // Create and add the offset
+                        offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                        cabinet.ComponentOffsets[nextOffset] = offsetList;
+
+                        // Set the next offset
+                        nextOffset = offsetList.NextOffset;
+                    }
                 }
+
+                #endregion
+
+                #region Components
+
+                // Create the components array
+                cabinet.Components = new Component[cabinet.ComponentOffsets.Count];
+
+                // Create and fill the components
+                int componentId = 0;
+                foreach (KeyValuePair<long, OffsetList?> kvp in cabinet.ComponentOffsets)
+                {
+                    // Get the offset
+                    OffsetList? list = kvp.Value;
+                    if (list == null)
+                    {
+                        componentId++;
+                        continue;
+                    }
+
+                    // If we have an invalid offset
+                    if (list.DescriptorOffset <= 0)
+                    {
+                        componentId++;
+                        continue;
+                    }
+
+                    // Seek to the component
+                    data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
+
+                    // Try to parse the component
+                    var component = ParseComponent(data, GetMajorVersion(commonHeader), descriptorOffset);
+                    if (component == null)
+                        return null;
+
+                    // Add the component
+                    cabinet.Components[componentId++] = component;
+                }
+
+                #endregion
+
+                // TODO: Parse setup types
+
+                return cabinet;
             }
-
-            #endregion
-
-            #region Components
-
-            // Create the components array
-            cabinet.Components = new Component[cabinet.ComponentOffsets.Count];
-
-            // Create and fill the components
-            int componentId = 0;
-            foreach (KeyValuePair<long, OffsetList?> kvp in cabinet.ComponentOffsets)
+            catch
             {
-                // Get the offset
-                OffsetList? list = kvp.Value;
-                if (list == null)
-                {
-                    componentId++;
-                    continue;
-                }
-
-                // If we have an invalid offset
-                if (list.DescriptorOffset <= 0)
-                {
-                    componentId++;
-                    continue;
-                }
-
-                // Seek to the component
-                data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
-
-                // Try to parse the component
-                var component = ParseComponent(data, GetMajorVersion(commonHeader), descriptorOffset);
-                if (component == null)
-                    return null;
-
-                // Add the component
-                cabinet.Components[componentId++] = component;
+                // Ignore the actual error
+                return null;
             }
-
-            #endregion
-
-            // TODO: Parse setup types
-
-            return cabinet;
         }
 
         /// <summary>

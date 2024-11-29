@@ -15,71 +15,75 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new archive to fill
-            var archive = new Archive();
-
-            #region Header
-
-            // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
-                return null;
-
-            // Set the archive header
-            archive.Header = header;
-
-            #endregion
-
-            #region Segments
-
-            // Get the segments
-            long offset = header.FileListOffset;
-            if (offset < 0 || offset >= data.Length)
-                return null;
-
-            // Seek to the segments
-            data.Seek(offset, SeekOrigin.Begin);
-
-            // Create the segments array
-            archive.Segments = new Segment[header.NumberOfFiles];
-
-            // Read all segments in turn
-            for (int i = 0; i < header.NumberOfFiles; i++)
+            try
             {
-                var file = ParseSegment(data, header.FileSegmentSize);
-                if (file == null)
-                    continue;
+                // Create a new archive to fill
+                var archive = new Archive();
 
-                archive.Segments[i] = file;
+                #region Header
+
+                // Try to parse the header
+                var header = ParseHeader(data);
+                if (header == null)
+                    return null;
+
+                // Set the archive header
+                archive.Header = header;
+
+                #endregion
+
+                #region Segments
+
+                // Get the segments
+                long offset = header.FileListOffset;
+                if (offset < 0 || offset >= data.Length)
+                    return null;
+
+                // Seek to the segments
+                data.Seek(offset, SeekOrigin.Begin);
+
+                // Create the segments array
+                archive.Segments = new Segment[header.NumberOfFiles];
+
+                // Read all segments in turn
+                for (int i = 0; i < header.NumberOfFiles; i++)
+                {
+                    var file = ParseSegment(data, header.FileSegmentSize);
+                    if (file == null)
+                        continue;
+
+                    archive.Segments[i] = file;
+                }
+
+                #endregion
+
+                #region Footer
+
+                // Get the footer offset
+                offset = header.FileListOffset + (header.FileSegmentSize * header.NumberOfFiles);
+                if (offset < 0 || offset >= data.Length)
+                    return null;
+
+                // Seek to the footer
+                data.Seek(offset, SeekOrigin.Begin);
+
+                // Try to parse the footer
+                var footer = data.ReadType<Footer>();
+                if (footer == null)
+                    return null;
+
+                // Set the archive footer
+                archive.Footer = footer;
+
+                #endregion
+
+                return archive;
             }
-
-            #endregion
-
-            #region Footer
-
-            // Get the footer offset
-            offset = header.FileListOffset + (header.FileSegmentSize * header.NumberOfFiles);
-            if (offset < 0 || offset >= data.Length)
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Seek to the footer
-            data.Seek(offset, SeekOrigin.Begin);
-
-            // Try to parse the footer
-            var footer = data.ReadType<Footer>();
-            if (footer == null)
-                return null;
-
-            // Set the archive footer
-            archive.Footer = footer;
-
-            #endregion
-
-            return archive;
+            }
         }
 
         /// <summary>

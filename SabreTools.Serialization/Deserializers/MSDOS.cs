@@ -15,48 +15,52 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
+            try
+            {
+                // Cache the current offset
+                int initialOffset = (int)data.Position;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
+                // Create a new executable to fill
+                var executable = new Executable();
 
-            // Create a new executable to fill
-            var executable = new Executable();
+                #region Executable Header
 
-            #region Executable Header
+                // Try to parse the executable header
+                var executableHeader = ParseExecutableHeader(data);
+                if (executableHeader == null)
+                    return null;
 
-            // Try to parse the executable header
-            var executableHeader = ParseExecutableHeader(data);
-            if (executableHeader == null)
-                return null;
+                // Set the executable header
+                executable.Header = executableHeader;
 
-            // Set the executable header
-            executable.Header = executableHeader;
+                #endregion
 
-            #endregion
+                #region Relocation Table
 
-            #region Relocation Table
+                // If the offset for the relocation table doesn't exist
+                int tableAddress = initialOffset + executableHeader.RelocationTableAddr;
+                if (tableAddress >= data.Length)
+                    return executable;
 
-            // If the offset for the relocation table doesn't exist
-            int tableAddress = initialOffset + executableHeader.RelocationTableAddr;
-            if (tableAddress >= data.Length)
+                // Try to parse the relocation table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var relocationTable = ParseRelocationTable(data, executableHeader.RelocationItems);
+                if (relocationTable == null)
+                    return null;
+
+                // Set the relocation table
+                executable.RelocationTable = relocationTable;
+
+                #endregion
+
+                // Return the executable
                 return executable;
-
-            // Try to parse the relocation table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var relocationTable = ParseRelocationTable(data, executableHeader.RelocationItems);
-            if (relocationTable == null)
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Set the relocation table
-            executable.RelocationTable = relocationTable;
-
-            #endregion
-
-            // Return the executable
-            return executable;
+            }
         }
 
         /// <summary>

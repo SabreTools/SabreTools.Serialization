@@ -15,51 +15,55 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new media key block to fill
-            var mediaKeyBlock = new MediaKeyBlock();
-
-            #region Records
-
-            // Create the records list
-            var records = new List<Record>();
-
-            // Try to parse the records
-            while (data.Position < data.Length)
+            try
             {
-                // Try to parse the record
-                var record = ParseRecord(data);
-                if (record == null)
-                    return null;
+                // Create a new media key block to fill
+                var mediaKeyBlock = new MediaKeyBlock();
 
-                // Add the record
-                records.Add(record);
+                #region Records
 
-                // If we have an end of media key block record
-                if (record.RecordType == RecordType.EndOfMediaKeyBlock)
-                    break;
+                // Create the records list
+                var records = new List<Record>();
 
-                // Align to the 4-byte boundary if we're not at the end
-                if (data.Position < data.Length)
+                // Try to parse the records
+                while (data.Position < data.Length)
                 {
-                    while (data.Position < data.Length && (data.Position % 4) != 0)
-                        _ = data.ReadByteValue();
+                    // Try to parse the record
+                    var record = ParseRecord(data);
+                    if (record == null)
+                        return null;
+
+                    // Add the record
+                    records.Add(record);
+
+                    // If we have an end of media key block record
+                    if (record.RecordType == RecordType.EndOfMediaKeyBlock)
+                        break;
+
+                    // Align to the 4-byte boundary if we're not at the end
+                    if (data.Position < data.Length)
+                    {
+                        while (data.Position < data.Length && (data.Position % 4) != 0)
+                            _ = data.ReadByteValue();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    break;
-                }
+
+                // Set the records
+                mediaKeyBlock.Records = [.. records];
+
+                #endregion
+
+                return mediaKeyBlock;
             }
-
-            // Set the records
-            mediaKeyBlock.Records = [.. records];
-
-            #endregion
-
-            return mediaKeyBlock;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace SabreTools.Serialization.Deserializers
                 RecordType.HostRevocationList => ParseHostRevocationListRecord(data, type, length),
                 RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data, type, length),
                 RecordType.Copyright => ParseCopyrightRecord(data, type, length),
-                
+
                 // Unknown record type
                 _ => null,
             };

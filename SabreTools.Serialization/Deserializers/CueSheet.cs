@@ -16,105 +16,109 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var cueSheet = new Models.CueSheets.CueSheet();
-            var cueFiles = new List<CueFile>();
-
-            // Read the next line from the input
-            string? lastLine = null;
-            while (true)
+            try
             {
-                string? line = lastLine ?? reader.ReadLine();
-                lastLine = null;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var cueSheet = new Models.CueSheets.CueSheet();
+                var cueFiles = new List<CueFile>();
 
-                // If we have a null line, break from the loop
-                if (line == null)
-                    break;
-
-                // If we have an empty line, we skip
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
-                var splitLine = new List<string>();
-                foreach (Match? match in matchCol)
+                // Read the next line from the input
+                string? lastLine = null;
+                while (true)
                 {
-                    if (match != null)
-                        splitLine.Add(match.Groups[0].Value);
+                    string? line = lastLine ?? reader.ReadLine();
+                    lastLine = null;
+
+                    // If we have a null line, break from the loop
+                    if (line == null)
+                        break;
+
+                    // If we have an empty line, we skip
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
+                    var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
+                    var splitLine = new List<string>();
+                    foreach (Match? match in matchCol)
+                    {
+                        if (match != null)
+                            splitLine.Add(match.Groups[0].Value);
+                    }
+
+                    switch (splitLine[0])
+                    {
+                        // Read comments
+                        case "REM":
+                            // We ignore all comments for now
+                            break;
+
+                        // Read MCN
+                        case "CATALOG":
+                            if (splitLine.Count < 2)
+                                throw new FormatException($"CATALOG line malformed: {line}");
+
+                            cueSheet.Catalog = splitLine[1].Trim('"');
+                            break;
+
+                        // Read external CD-Text file path
+                        case "CDTEXTFILE":
+                            if (splitLine.Count < 2)
+                                throw new FormatException($"CDTEXTFILE line malformed: {line}");
+
+                            cueSheet.CdTextFile = splitLine[1].Trim('"');
+                            break;
+
+                        // Read CD-Text enhanced performer
+                        case "PERFORMER":
+                            if (splitLine.Count < 2)
+                                throw new FormatException($"PERFORMER line malformed: {line}");
+
+                            cueSheet.Performer = splitLine[1].Trim('"');
+                            break;
+
+                        // Read CD-Text enhanced songwriter
+                        case "SONGWRITER":
+                            if (splitLine.Count < 2)
+                                throw new FormatException($"SONGWRITER line malformed: {line}");
+
+                            cueSheet.Songwriter = splitLine[1].Trim('"');
+                            break;
+
+                        // Read CD-Text enhanced title
+                        case "TITLE":
+                            if (splitLine.Count < 2)
+                                throw new FormatException($"TITLE line malformed: {line}");
+
+                            cueSheet.Title = splitLine[1].Trim('"');
+                            break;
+
+                        // Read file information
+                        case "FILE":
+                            if (splitLine.Count < 3)
+                                throw new FormatException($"FILE line malformed: {line}");
+
+                            var file = CreateCueFile(splitLine[1], splitLine[2], reader, out lastLine);
+                            if (file == default)
+                                throw new FormatException($"FILE line malformed: {line}");
+
+                            cueFiles.Add(file);
+                            break;
+                    }
                 }
 
-                switch (splitLine[0])
-                {
-                    // Read comments
-                    case "REM":
-                        // We ignore all comments for now
-                        break;
+                if (cueFiles.Count == 0)
+                    return null;
 
-                    // Read MCN
-                    case "CATALOG":
-                        if (splitLine.Count < 2)
-                            throw new FormatException($"CATALOG line malformed: {line}");
-
-                        cueSheet.Catalog = splitLine[1].Trim('"');
-                        break;
-
-                    // Read external CD-Text file path
-                    case "CDTEXTFILE":
-                        if (splitLine.Count < 2)
-                            throw new FormatException($"CDTEXTFILE line malformed: {line}");
-
-                        cueSheet.CdTextFile = splitLine[1].Trim('"');
-                        break;
-
-                    // Read CD-Text enhanced performer
-                    case "PERFORMER":
-                        if (splitLine.Count < 2)
-                            throw new FormatException($"PERFORMER line malformed: {line}");
-
-                        cueSheet.Performer = splitLine[1].Trim('"');
-                        break;
-
-                    // Read CD-Text enhanced songwriter
-                    case "SONGWRITER":
-                        if (splitLine.Count < 2)
-                            throw new FormatException($"SONGWRITER line malformed: {line}");
-
-                        cueSheet.Songwriter = splitLine[1].Trim('"');
-                        break;
-
-                    // Read CD-Text enhanced title
-                    case "TITLE":
-                        if (splitLine.Count < 2)
-                            throw new FormatException($"TITLE line malformed: {line}");
-
-                        cueSheet.Title = splitLine[1].Trim('"');
-                        break;
-
-                    // Read file information
-                    case "FILE":
-                        if (splitLine.Count < 3)
-                            throw new FormatException($"FILE line malformed: {line}");
-
-                        var file = CreateCueFile(splitLine[1], splitLine[2], reader, out lastLine);
-                        if (file == default)
-                            throw new FormatException($"FILE line malformed: {line}");
-
-                        cueFiles.Add(file);
-                        break;
-                }
+                cueSheet.Files = [.. cueFiles];
+                return cueSheet;
             }
-
-            if (cueFiles.Count == 0)
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            cueSheet.Files = [.. cueFiles];
-            return cueSheet;
+            }
         }
 
         /// <summary>

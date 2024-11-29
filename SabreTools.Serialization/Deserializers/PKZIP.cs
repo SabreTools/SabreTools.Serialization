@@ -20,283 +20,287 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            var archive = new Archive();
-
-            #region End of Central Directory Record
-
-            // Find the end of central directory record
-            long eocdrOffset = SearchForEndOfCentralDirectoryRecord(data);
-            if (eocdrOffset < 0 || eocdrOffset >= data.Length)
-                return null;
-
-            // Seek to the end of central directory record
-            data.Seek(eocdrOffset, SeekOrigin.Begin);
-
-            // Read the end of central directory record
-            var eocdr = ParseEndOfCentralDirectoryRecord(data);
-            if (eocdr == null)
-                return null;
-
-            // Assign the end of central directory record
-            archive.EndOfCentralDirectoryRecord = eocdr;
-
-            #endregion
-
-            #region ZIP64 End of Central Directory Locator and Record
-
-            // Set a flag for ZIP64 not found by default
-            bool zip64 = false;
-
-            // Process ZIP64 if any fields are set to max value
-            if (eocdr.DiskNumber == 0xFFFF
-                || eocdr.StartDiskNumber == 0xFFFF
-                || eocdr.TotalEntriesOnDisk == 0xFFFF
-                || eocdr.TotalEntries == 0xFFFF
-                || eocdr.CentralDirectorySize == 0xFFFFFFFF
-                || eocdr.CentralDirectoryOffset == 0xFFFFFFFF)
+            try
             {
-                // Set the ZIP64 flag
-                zip64 = true;
+                var archive = new Archive();
 
-                // Find the ZIP64 end of central directory locator
-                long eocdlOffset = SearchForZIP64EndOfCentralDirectoryLocator(data);
-                if (eocdlOffset < 0 || eocdlOffset >= data.Length)
+                #region End of Central Directory Record
+
+                // Find the end of central directory record
+                long eocdrOffset = SearchForEndOfCentralDirectoryRecord(data);
+                if (eocdrOffset < 0 || eocdrOffset >= data.Length)
                     return null;
 
-                // Seek to the ZIP64 end of central directory locator
-                data.Seek(eocdlOffset, SeekOrigin.Begin);
+                // Seek to the end of central directory record
+                data.Seek(eocdrOffset, SeekOrigin.Begin);
 
-                // Read the ZIP64 end of central directory locator
-                var eocdl64 = data.ReadType<EndOfCentralDirectoryLocator64>();
-                if (eocdl64 == null)
+                // Read the end of central directory record
+                var eocdr = ParseEndOfCentralDirectoryRecord(data);
+                if (eocdr == null)
                     return null;
 
-                // Assign the ZIP64 end of central directory record
-                archive.ZIP64EndOfCentralDirectoryLocator = eocdl64;
+                // Assign the end of central directory record
+                archive.EndOfCentralDirectoryRecord = eocdr;
 
-                // Try to get the ZIP64 end of central directory record offset
-                if ((long)eocdl64.CentralDirectoryOffset < 0 || (long)eocdl64.CentralDirectoryOffset >= data.Length)
-                    return null;
+                #endregion
 
-                // Seek to the ZIP64 end of central directory record
-                data.Seek((long)eocdl64.CentralDirectoryOffset, SeekOrigin.Begin);
+                #region ZIP64 End of Central Directory Locator and Record
 
-                // Read the ZIP64 end of central directory record
-                var eocdr64 = ParseEndOfCentralDirectoryRecord64(data);
-                if (eocdr64 == null)
-                    return null;
+                // Set a flag for ZIP64 not found by default
+                bool zip64 = false;
 
-                // Assign the ZIP64 end of central directory record
-                archive.ZIP64EndOfCentralDirectoryRecord = eocdr64;
-            }
-
-            #endregion
-
-            #region Central Directory Records
-
-            // Try to get the central directory record offset
-            long cdrOffset, cdrSize;
-            if (zip64 && archive.ZIP64EndOfCentralDirectoryRecord != null)
-            {
-                cdrOffset = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectoryOffset;
-                cdrSize = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectorySize;
-            }
-            else if (archive.EndOfCentralDirectoryRecord != null)
-            {
-                cdrOffset = archive.EndOfCentralDirectoryRecord.CentralDirectoryOffset;
-                cdrSize = archive.EndOfCentralDirectoryRecord.CentralDirectorySize;
-            }
-            else
-            {
-                return null;
-            }
-
-            // Try to get the central directory record offset
-            if (cdrOffset < 0 || cdrOffset >= data.Length)
-                return null;
-
-            // Seek to the first central directory record
-            data.Seek(cdrOffset, SeekOrigin.Begin);
-
-            // Cache the current offset
-            long currentOffset = data.Position;
-
-            // Read the central directory records
-            var cdrs = new List<CentralDirectoryFileHeader>();
-            while (data.Position < currentOffset + cdrSize)
-            {
-                // Read the central directory record
-                var cdr = ParseCentralDirectoryFileHeader(data);
-                if (cdr == null)
-                    return null;
-
-                // Add the central directory record
-                cdrs.Add(cdr);
-            }
-
-            // Assign the central directory records
-            archive.CentralDirectoryHeaders = [.. cdrs];
-
-            #endregion
-
-            // TODO: Handle digital signature -- immediately following central directory records
-
-            #region Archive Extra Data Record
-
-            // Find the archive extra data record
-            long aedrOffset = SearchForArchiveExtraDataRecord(data, cdrOffset);
-            if (aedrOffset >= 0 && aedrOffset < data.Length)
-            {
-                // Seek to the archive extra data record
-                data.Seek(aedrOffset, SeekOrigin.Begin);
-
-                // Read the archive extra data record
-                var aedr = ParseArchiveExtraDataRecord(data);
-                if (aedr == null)
-                    return null;
-
-                // Assign the archive extra data record
-                archive.ArchiveExtraDataRecord = aedr;
-            }
-
-            #endregion
-
-            #region Local File
-
-            // Setup all of the collections
-            var localFileHeaders = new List<LocalFileHeader>();
-            var encryptionHeaders = new List<byte[]?>();
-            var fileData = new List<byte[]>(); // TODO: Should this data be read here?
-            var dataDescriptors = new List<DataDescriptor?>();
-            var zip64DataDescriptors = new List<DataDescriptor64?>();
-
-            // Read the local file headers
-            for (int i = 0; i < archive.CentralDirectoryHeaders.Length; i++)
-            {
-                var header = archive.CentralDirectoryHeaders[i];
-
-                // Get the local file header offset
-                long headerOffset = header.RelativeOffsetOfLocalHeader;
-                if (headerOffset == 0xFFFFFFFF && header.ExtraField != null)
+                // Process ZIP64 if any fields are set to max value
+                if (eocdr.DiskNumber == 0xFFFF
+                    || eocdr.StartDiskNumber == 0xFFFF
+                    || eocdr.TotalEntriesOnDisk == 0xFFFF
+                    || eocdr.TotalEntries == 0xFFFF
+                    || eocdr.CentralDirectorySize == 0xFFFFFFFF
+                    || eocdr.CentralDirectoryOffset == 0xFFFFFFFF)
                 {
-                    // TODO: Parse into a proper structure instead of this
-                    byte[] extraData = header.ExtraField;
-                    if (BitConverter.ToUInt16(extraData, 0) == 0x0001)
-                        headerOffset = BitConverter.ToInt64(extraData, 4);
+                    // Set the ZIP64 flag
+                    zip64 = true;
+
+                    // Find the ZIP64 end of central directory locator
+                    long eocdlOffset = SearchForZIP64EndOfCentralDirectoryLocator(data);
+                    if (eocdlOffset < 0 || eocdlOffset >= data.Length)
+                        return null;
+
+                    // Seek to the ZIP64 end of central directory locator
+                    data.Seek(eocdlOffset, SeekOrigin.Begin);
+
+                    // Read the ZIP64 end of central directory locator
+                    var eocdl64 = data.ReadType<EndOfCentralDirectoryLocator64>();
+                    if (eocdl64 == null)
+                        return null;
+
+                    // Assign the ZIP64 end of central directory record
+                    archive.ZIP64EndOfCentralDirectoryLocator = eocdl64;
+
+                    // Try to get the ZIP64 end of central directory record offset
+                    if ((long)eocdl64.CentralDirectoryOffset < 0 || (long)eocdl64.CentralDirectoryOffset >= data.Length)
+                        return null;
+
+                    // Seek to the ZIP64 end of central directory record
+                    data.Seek((long)eocdl64.CentralDirectoryOffset, SeekOrigin.Begin);
+
+                    // Read the ZIP64 end of central directory record
+                    var eocdr64 = ParseEndOfCentralDirectoryRecord64(data);
+                    if (eocdr64 == null)
+                        return null;
+
+                    // Assign the ZIP64 end of central directory record
+                    archive.ZIP64EndOfCentralDirectoryRecord = eocdr64;
                 }
 
-                if (headerOffset < 0 || headerOffset >= data.Length)
-                    return null;
+                #endregion
 
-                // Seek to the local file header
-                data.Seek(headerOffset, SeekOrigin.Begin);
+                #region Central Directory Records
 
-                // Try to parse the local header
-                var localFileHeader = ParseLocalFileHeader(data);
-                if (localFileHeader == null)
+                // Try to get the central directory record offset
+                long cdrOffset, cdrSize;
+                if (zip64 && archive.ZIP64EndOfCentralDirectoryRecord != null)
                 {
-                    // Add a placeholder null item
-                    localFileHeaders.Add(new LocalFileHeader());
-                    encryptionHeaders.Add(null);
-                    fileData.Add([]);
-                    dataDescriptors.Add(null);
-                    zip64DataDescriptors.Add(null);
-                    continue;
+                    cdrOffset = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectoryOffset;
+                    cdrSize = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectorySize;
+                }
+                else if (archive.EndOfCentralDirectoryRecord != null)
+                {
+                    cdrOffset = archive.EndOfCentralDirectoryRecord.CentralDirectoryOffset;
+                    cdrSize = archive.EndOfCentralDirectoryRecord.CentralDirectorySize;
+                }
+                else
+                {
+                    return null;
                 }
 
-                // Add the local file header
-                localFileHeaders.Add(localFileHeader);
+                // Try to get the central directory record offset
+                if (cdrOffset < 0 || cdrOffset >= data.Length)
+                    return null;
 
-                // Only read the encryption header if necessary
+                // Seek to the first central directory record
+                data.Seek(cdrOffset, SeekOrigin.Begin);
+
+                // Cache the current offset
+                long currentOffset = data.Position;
+
+                // Read the central directory records
+                var cdrs = new List<CentralDirectoryFileHeader>();
+                while (data.Position < currentOffset + cdrSize)
+                {
+                    // Read the central directory record
+                    var cdr = ParseCentralDirectoryFileHeader(data);
+                    if (cdr == null)
+                        return null;
+
+                    // Add the central directory record
+                    cdrs.Add(cdr);
+                }
+
+                // Assign the central directory records
+                archive.CentralDirectoryHeaders = [.. cdrs];
+
+                #endregion
+
+                // TODO: Handle digital signature -- immediately following central directory records
+
+                #region Archive Extra Data Record
+
+                // Find the archive extra data record
+                long aedrOffset = SearchForArchiveExtraDataRecord(data, cdrOffset);
+                if (aedrOffset >= 0 && aedrOffset < data.Length)
+                {
+                    // Seek to the archive extra data record
+                    data.Seek(aedrOffset, SeekOrigin.Begin);
+
+                    // Read the archive extra data record
+                    var aedr = ParseArchiveExtraDataRecord(data);
+                    if (aedr == null)
+                        return null;
+
+                    // Assign the archive extra data record
+                    archive.ArchiveExtraDataRecord = aedr;
+                }
+
+                #endregion
+
+                #region Local File
+
+                // Setup all of the collections
+                var localFileHeaders = new List<LocalFileHeader>();
+                var encryptionHeaders = new List<byte[]?>();
+                var fileData = new List<byte[]>(); // TODO: Should this data be read here?
+                var dataDescriptors = new List<DataDescriptor?>();
+                var zip64DataDescriptors = new List<DataDescriptor64?>();
+
+                // Read the local file headers
+                for (int i = 0; i < archive.CentralDirectoryHeaders.Length; i++)
+                {
+                    var header = archive.CentralDirectoryHeaders[i];
+
+                    // Get the local file header offset
+                    long headerOffset = header.RelativeOffsetOfLocalHeader;
+                    if (headerOffset == 0xFFFFFFFF && header.ExtraField != null)
+                    {
+                        // TODO: Parse into a proper structure instead of this
+                        byte[] extraData = header.ExtraField;
+                        if (BitConverter.ToUInt16(extraData, 0) == 0x0001)
+                            headerOffset = BitConverter.ToInt64(extraData, 4);
+                    }
+
+                    if (headerOffset < 0 || headerOffset >= data.Length)
+                        return null;
+
+                    // Seek to the local file header
+                    data.Seek(headerOffset, SeekOrigin.Begin);
+
+                    // Try to parse the local header
+                    var localFileHeader = ParseLocalFileHeader(data);
+                    if (localFileHeader == null)
+                    {
+                        // Add a placeholder null item
+                        localFileHeaders.Add(new LocalFileHeader());
+                        encryptionHeaders.Add(null);
+                        fileData.Add([]);
+                        dataDescriptors.Add(null);
+                        zip64DataDescriptors.Add(null);
+                        continue;
+                    }
+
+                    // Add the local file header
+                    localFileHeaders.Add(localFileHeader);
+
+                    // Only read the encryption header if necessary
 #if NET20 || NET35
                 if ((header.Flags & GeneralPurposeBitFlags.FileEncrypted) != 0)
 #else
-                if (header.Flags.HasFlag(GeneralPurposeBitFlags.FileEncrypted))
+                    if (header.Flags.HasFlag(GeneralPurposeBitFlags.FileEncrypted))
 #endif
-                {
-                    // Try to read the encryption header data -- TODO: Verify amount to read
-                    byte[] encryptionHeader = data.ReadBytes(12);
-                    if (encryptionHeader.Length != 12)
-                        return null;
-
-                    // Add the encryption header
-                    encryptionHeaders.Add(encryptionHeader);
-                }
-                else
-                {
-                    // Add the null encryption header
-                    encryptionHeaders.Add(null);
-                }
-
-                // Try to read the file data
-                byte[] fileDatum = data.ReadBytes((int)header.CompressedSize);
-                if (fileDatum.Length < header.CompressedSize)
-                    return null;
-
-                // Add the file data
-                fileData.Add(fileDatum);
-
-                // Only read the data descriptor if necessary
-#if NET20 || NET35
-                if ((header.Flags & GeneralPurposeBitFlags.NoCRC) != 0)
-#else
-                if (header.Flags.HasFlag(GeneralPurposeBitFlags.NoCRC))
-#endif
-                {
-                    // Select the data descriptor that is being used
-                    if (zip64)
                     {
-                        // Try to parse the data descriptor
-                        var dataDescriptor64 = ParseDataDescriptor64(data);
-                        if (dataDescriptor64 == null)
+                        // Try to read the encryption header data -- TODO: Verify amount to read
+                        byte[] encryptionHeader = data.ReadBytes(12);
+                        if (encryptionHeader.Length != 12)
                             return null;
 
-                        // Add the data descriptor
-                        dataDescriptors.Add(null);
-                        zip64DataDescriptors.Add(dataDescriptor64);
+                        // Add the encryption header
+                        encryptionHeaders.Add(encryptionHeader);
                     }
                     else
                     {
-                        // Try to parse the data descriptor
-                        var dataDescriptor = ParseDataDescriptor(data);
-                        if (dataDescriptor == null)
-                            return null;
+                        // Add the null encryption header
+                        encryptionHeaders.Add(null);
+                    }
 
-                        // Add the data descriptor
-                        dataDescriptors.Add(dataDescriptor);
+                    // Try to read the file data
+                    byte[] fileDatum = data.ReadBytes((int)header.CompressedSize);
+                    if (fileDatum.Length < header.CompressedSize)
+                        return null;
+
+                    // Add the file data
+                    fileData.Add(fileDatum);
+
+                    // Only read the data descriptor if necessary
+#if NET20 || NET35
+                if ((header.Flags & GeneralPurposeBitFlags.NoCRC) != 0)
+#else
+                    if (header.Flags.HasFlag(GeneralPurposeBitFlags.NoCRC))
+#endif
+                    {
+                        // Select the data descriptor that is being used
+                        if (zip64)
+                        {
+                            // Try to parse the data descriptor
+                            var dataDescriptor64 = ParseDataDescriptor64(data);
+                            if (dataDescriptor64 == null)
+                                return null;
+
+                            // Add the data descriptor
+                            dataDescriptors.Add(null);
+                            zip64DataDescriptors.Add(dataDescriptor64);
+                        }
+                        else
+                        {
+                            // Try to parse the data descriptor
+                            var dataDescriptor = ParseDataDescriptor(data);
+                            if (dataDescriptor == null)
+                                return null;
+
+                            // Add the data descriptor
+                            dataDescriptors.Add(dataDescriptor);
+                            zip64DataDescriptors.Add(null);
+                        }
+                    }
+                    else
+                    {
+                        // Add the null data descriptor
+                        dataDescriptors.Add(null);
                         zip64DataDescriptors.Add(null);
                     }
                 }
-                else
-                {
-                    // Add the null data descriptor
-                    dataDescriptors.Add(null);
-                    zip64DataDescriptors.Add(null);
-                }
+
+                // Assign the local file headers
+                archive.LocalFileHeaders = [.. localFileHeaders];
+
+                // Assign the encryption headers
+                archive.EncryptionHeaders = [.. encryptionHeaders];
+
+                // Assign the file data
+                archive.FileData = [.. fileData];
+
+                // Assign the data descriptors
+                archive.DataDescriptors = [.. dataDescriptors];
+                archive.ZIP64DataDescriptors = [.. zip64DataDescriptors];
+
+                #endregion
+
+                // TODO: Handle archive decryption header
+
+                return archive;
             }
-
-            // Assign the local file headers
-            archive.LocalFileHeaders = [.. localFileHeaders];
-
-            // Assign the encryption headers
-            archive.EncryptionHeaders = [.. encryptionHeaders];
-
-            // Assign the file data
-            archive.FileData = [.. fileData];
-
-            // Assign the data descriptors
-            archive.DataDescriptors = [.. dataDescriptors];
-            archive.ZIP64DataDescriptors = [.. zip64DataDescriptors];
-
-            #endregion
-
-            // TODO: Handle archive decryption header
-
-            return archive;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

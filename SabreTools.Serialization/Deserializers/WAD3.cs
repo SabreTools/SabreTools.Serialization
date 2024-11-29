@@ -15,79 +15,83 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new Half-Life Texture Package to fill
-            var file = new Models.WAD3.File();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<Header>();
-            if (header?.Signature != SignatureString)
-                return null;
-
-            // Set the package header
-            file.Header = header;
-
-            #endregion
-
-            #region Directory Entries
-
-            // Get the directory offset
-            uint dirOffset = header.DirOffset;
-            if (dirOffset < 0 || dirOffset >= data.Length)
-                return null;
-
-            // Seek to the lump offset
-            data.Seek(dirOffset, SeekOrigin.Begin);
-
-            // Create the lump array
-            file.DirEntries = new DirEntry[header.NumDirs];
-            for (int i = 0; i < header.NumDirs; i++)
+            try
             {
-                var lump = data.ReadType<DirEntry>();
-                if (lump == null)
+                // Create a new Half-Life Texture Package to fill
+                var file = new Models.WAD3.File();
+
+                #region Header
+
+                // Try to parse the header
+                var header = data.ReadType<Header>();
+                if (header?.Signature != SignatureString)
                     return null;
 
-                file.DirEntries[i] = lump;
+                // Set the package header
+                file.Header = header;
+
+                #endregion
+
+                #region Directory Entries
+
+                // Get the directory offset
+                uint dirOffset = header.DirOffset;
+                if (dirOffset < 0 || dirOffset >= data.Length)
+                    return null;
+
+                // Seek to the lump offset
+                data.Seek(dirOffset, SeekOrigin.Begin);
+
+                // Create the lump array
+                file.DirEntries = new DirEntry[header.NumDirs];
+                for (int i = 0; i < header.NumDirs; i++)
+                {
+                    var lump = data.ReadType<DirEntry>();
+                    if (lump == null)
+                        return null;
+
+                    file.DirEntries[i] = lump;
+                }
+
+                #endregion
+
+                #region File Entries
+
+                // Create the file entry array
+                file.FileEntries = new FileEntry?[header.NumDirs];
+                for (int i = 0; i < header.NumDirs; i++)
+                {
+                    var dirEntry = file.DirEntries[i];
+                    if (dirEntry == null)
+                        continue;
+
+                    // TODO: Handle compressed entries
+                    if (dirEntry.Compression != 0)
+                        continue;
+
+                    // Get the file entry offset
+                    uint fileEntryOffset = dirEntry.Offset;
+                    if (fileEntryOffset < 0 || fileEntryOffset >= data.Length)
+                        continue;
+
+                    // Seek to the file entry offset
+                    data.Seek(fileEntryOffset, SeekOrigin.Begin);
+
+                    // Try to parse the file entry
+                    var fileEntry = ParseFileEntry(data, dirEntry.Type);
+                    if (fileEntry != null)
+                        file.FileEntries[i] = fileEntry;
+                }
+
+                #endregion
+
+                return file;
             }
-
-            #endregion
-
-            #region File Entries
-
-            // Create the file entry array
-            file.FileEntries = new FileEntry?[header.NumDirs];
-            for (int i = 0; i < header.NumDirs; i++)
+            catch
             {
-                var dirEntry = file.DirEntries[i];
-                if (dirEntry == null)
-                    continue;
-
-                // TODO: Handle compressed entries
-                if (dirEntry.Compression != 0)
-                    continue;
-
-                // Get the file entry offset
-                uint fileEntryOffset = dirEntry.Offset;
-                if (fileEntryOffset < 0 || fileEntryOffset >= data.Length)
-                    continue;
-
-                // Seek to the file entry offset
-                data.Seek(fileEntryOffset, SeekOrigin.Begin);
-
-                // Try to parse the file entry
-                var fileEntry = ParseFileEntry(data, dirEntry.Type);
-                if (fileEntry != null)
-                    file.FileEntries[i] = fileEntry;
+                // Ignore the actual error
+                return null;
             }
-
-            #endregion
-
-            return file;
         }
 
         /// <summary>

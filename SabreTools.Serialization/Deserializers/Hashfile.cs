@@ -96,160 +96,140 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSFV(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var sfvList = new List<SFV>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    var sfv = new SFV
+                    {
+                        File = string.Join(" ", lineParts, 0, lineParts.Length - 1),
+                        Hash = lineParts[lineParts.Length - 1],
+                    };
+                    sfvList.Add(sfv);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (sfvList.Count > 0)
+                    return new Models.Hashfile.Hashfile { SFV = [.. sfvList] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var sfvList = new List<SFV>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                var sfv = new SFV
-                {
-                    File = string.Join(" ", lineParts, 0, lineParts.Length - 1),
-                    Hash = lineParts[lineParts.Length - 1],
-                };
-                sfvList.Add(sfv);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (sfvList.Count > 0)
-                return new Models.Hashfile.Hashfile { SFV = [.. sfvList] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD2(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var md2List = new List<MD2>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var md2 = new MD2
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    md2List.Add(md2);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (md2List.Count > 0)
+                    return new Models.Hashfile.Hashfile { MD2 = [.. md2List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var md2List = new List<MD2>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var md2 = new MD2
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                md2List.Add(md2);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (md2List.Count > 0)
-                return new Models.Hashfile.Hashfile { MD2 = [.. md2List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD4(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var md4List = new List<MD4>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var md4 = new MD4
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    md4List.Add(md4);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (md4List.Count > 0)
+                    return new Models.Hashfile.Hashfile { MD4 = [.. md4List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var md4List = new List<MD4>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var md4 = new MD4
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                md4List.Add(md4);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (md4List.Count > 0)
-                return new Models.Hashfile.Hashfile { MD4 = [.. md4List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD5(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
-
-            try
-            {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
-            }
-            catch
-            {
-                // Ignore errors in getting position for compressed streams
-            }
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             // Setup the reader and output
             var reader = new StreamReader(data);
@@ -283,236 +263,221 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA1(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var sha1List = new List<SHA1>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var sha1 = new SHA1
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    sha1List.Add(sha1);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (sha1List.Count > 0)
+                    return new Models.Hashfile.Hashfile { SHA1 = [.. sha1List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var sha1List = new List<SHA1>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var sha1 = new SHA1
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                sha1List.Add(sha1);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (sha1List.Count > 0)
-                return new Models.Hashfile.Hashfile { SHA1 = [.. sha1List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA256(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var sha256List = new List<SHA256>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var sha256 = new SHA256
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    sha256List.Add(sha256);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (sha256List.Count > 0)
+                    return new Models.Hashfile.Hashfile { SHA256 = [.. sha256List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var sha256List = new List<SHA256>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var sha256 = new SHA256
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                sha256List.Add(sha256);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (sha256List.Count > 0)
-                return new Models.Hashfile.Hashfile { SHA256 = [.. sha256List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA384(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var sha384List = new List<SHA384>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var sha384 = new SHA384
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    sha384List.Add(sha384);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (sha384List.Count > 0)
+                    return new Models.Hashfile.Hashfile { SHA384 = [.. sha384List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var sha384List = new List<SHA384>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var sha384 = new SHA384
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                sha384List.Add(sha384);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (sha384List.Count > 0)
-                return new Models.Hashfile.Hashfile { SHA384 = [.. sha384List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA512(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var sha512List = new List<SHA512>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var sha512 = new SHA512
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    sha512List.Add(sha512);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (sha512List.Count > 0)
+                    return new Models.Hashfile.Hashfile { SHA512 = [.. sha512List] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var sha512List = new List<SHA512>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var sha512 = new SHA512
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                sha512List.Add(sha512);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (sha512List.Count > 0)
-                return new Models.Hashfile.Hashfile { SHA512 = [.. sha512List] };
-
-            return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSpamSum(Stream? data)
         {
-            // If the stream is null
-            if (data == null)
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
                 return default;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new StreamReader(data);
+                var spamsumList = new List<SpamSum>();
+
+                // Loop through the rows and parse out values
+                while (!reader.EndOfStream)
+                {
+                    // Read and split the line
+                    string? line = reader.ReadLine();
+                    string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                    if (lineParts == null || lineParts.Length < 2)
+                        continue;
+
+                    // Parse the line into a hash
+                    var spamSum = new SpamSum
+                    {
+                        Hash = lineParts[0],
+                        File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                    };
+                    spamsumList.Add(spamSum);
+                }
+
+                // Assign the hashes to the hashfile and return
+                if (spamsumList.Count > 0)
+                    return new Models.Hashfile.Hashfile { SpamSum = [.. spamsumList] };
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new StreamReader(data);
-            var spamsumList = new List<SpamSum>();
-
-            // Loop through the rows and parse out values
-            while (!reader.EndOfStream)
-            {
-                // Read and split the line
-                string? line = reader.ReadLine();
-                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
-                    continue;
-
-                // Parse the line into a hash
-                var spamSum = new SpamSum
-                {
-                    Hash = lineParts[0],
-                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
-                };
-                spamsumList.Add(spamSum);
-            }
-
-            // Assign the hashes to the hashfile and return
-            if (spamsumList.Count > 0)
-                return new Models.Hashfile.Hashfile { SpamSum = [.. spamsumList] };
-
-            return null;
         }
 
         #endregion

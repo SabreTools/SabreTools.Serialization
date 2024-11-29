@@ -18,36 +18,40 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            var di = new DiscInformation();
-
-            // Read the initial disc information
-            di.DataStructureLength = data.ReadUInt16BigEndian();
-            if (di.DataStructureLength > data.Length)
-                return null;
-
-            di.Reserved0 = data.ReadByteValue();
-            di.Reserved1 = data.ReadByteValue();
-
-            // Create a list for the units
-            var diUnits = new List<DiscInformationUnit>();
-
-            // Loop and read all available units
-            for (int i = 0; i < 32; i++)
+            try
             {
-                var unit = ParseDiscInformationUnit(data);
-                if (unit == null)
-                    continue;
+                var di = new DiscInformation();
 
-                diUnits.Add(unit);
+                // Read the initial disc information
+                di.DataStructureLength = data.ReadUInt16BigEndian();
+                if (di.DataStructureLength > data.Length)
+                    return null;
+
+                di.Reserved0 = data.ReadByteValue();
+                di.Reserved1 = data.ReadByteValue();
+
+                // Create a list for the units
+                var diUnits = new List<DiscInformationUnit>();
+
+                // Loop and read all available units
+                for (int i = 0; i < 32; i++)
+                {
+                    var unit = ParseDiscInformationUnit(data);
+                    if (unit == null)
+                        continue;
+
+                    diUnits.Add(unit);
+                }
+
+                // Assign the units and return
+                di.Units = [.. diUnits];
+                return di;
             }
-
-            // Assign the units and return
-            di.Units = [.. diUnits];
-            return di;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

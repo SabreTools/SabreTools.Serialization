@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Deserializers
             var deserializer = new PlayJAudio();
             return deserializer.Deserialize(data, adjust);
         }
-        
+
         /// <inheritdoc/>
         public override AudioFile? Deserialize(Stream? data)
             => Deserialize(data, 0);
@@ -27,147 +27,147 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
-            // Create a new audio file to fill
-            var audioFile = new AudioFile();
-
-            #region Audio Header
-
-            // Try to parse the audio header
-            var audioHeader = ParseAudioHeader(data);
-            if (audioHeader == null)
-                return null;
-
-            // Set the audio header
-            audioFile.Header = audioHeader;
-
-            #endregion
-
-            #region Unknown Block 1
-
-            uint unknownOffset1 = (audioHeader.Version == 0x00000000)
-                ? (audioHeader as AudioHeaderV1)?.UnknownOffset1 ?? 0
-                : ((audioHeader as AudioHeaderV2)?.UnknownOffset1 ?? 0) + 0x54;
-
-            // If we have an unknown block 1 offset
-            if (unknownOffset1 > 0)
+            try
             {
-                // Get the unknown block 1 offset
-                long offset = unknownOffset1 + adjust;
-                if (offset < 0 || offset >= data.Length)
+                // Create a new audio file to fill
+                var audioFile = new AudioFile();
+
+                #region Audio Header
+
+                // Try to parse the audio header
+                var audioHeader = ParseAudioHeader(data);
+                if (audioHeader == null)
                     return null;
 
-                // Seek to the unknown block 1
-                data.Seek(offset, SeekOrigin.Begin);
-            }
+                // Set the audio header
+                audioFile.Header = audioHeader;
 
-            // Try to parse the unknown block 1
-            var unknownBlock1 = ParseUnknownBlock1(data);
-            if (unknownBlock1 == null)
-                return null;
+                #endregion
 
-            // Set the unknown block 1
-            audioFile.UnknownBlock1 = unknownBlock1;
+                #region Unknown Block 1
 
-            #endregion
+                uint unknownOffset1 = (audioHeader.Version == 0x00000000)
+                    ? (audioHeader as AudioHeaderV1)?.UnknownOffset1 ?? 0
+                    : ((audioHeader as AudioHeaderV2)?.UnknownOffset1 ?? 0) + 0x54;
 
-            #region V1 Only
-
-            // If we have a V1 file
-            if (audioHeader.Version == 0x00000000)
-            {
-                #region Unknown Value 2
-
-                // Get the V1 unknown offset 2
-                uint? unknownOffset2 = (audioHeader as AudioHeaderV1)?.UnknownOffset2;
-
-                // If we have an unknown value 2 offset
-                if (unknownOffset2 != null && unknownOffset2 > 0)
+                // If we have an unknown block 1 offset
+                if (unknownOffset1 > 0)
                 {
-                    // Get the unknown value 2 offset
-                    long offset = unknownOffset2.Value + adjust;
+                    // Get the unknown block 1 offset
+                    long offset = unknownOffset1 + adjust;
                     if (offset < 0 || offset >= data.Length)
                         return null;
 
-                    // Seek to the unknown value 2
+                    // Seek to the unknown block 1
                     data.Seek(offset, SeekOrigin.Begin);
                 }
 
-                // Set the unknown value 2
-                audioFile.UnknownValue2 = data.ReadUInt32();
-
-                #endregion
-
-                #region Unknown Block 3
-
-                // Get the V1 unknown offset 3
-                uint? unknownOffset3 = (audioHeader as AudioHeaderV1)?.UnknownOffset3;
-
-                // If we have an unknown block 3 offset
-                if (unknownOffset3 != null && unknownOffset3 > 0)
-                {
-                    // Get the unknown block 3 offset
-                    long offset = unknownOffset3.Value + adjust;
-                    if (offset < 0 || offset >= data.Length)
-                        return null;
-
-                    // Seek to the unknown block 3
-                    data.Seek(offset, SeekOrigin.Begin);
-                }
-
-                // Try to parse the unknown block 3
-                var unknownBlock3 = ParseUnknownBlock3(data);
-                if (unknownBlock3 == null)
+                // Try to parse the unknown block 1
+                var unknownBlock1 = ParseUnknownBlock1(data);
+                if (unknownBlock1 == null)
                     return null;
 
-                // Set the unknown block 3
-                audioFile.UnknownBlock3 = unknownBlock3;
-
-                #endregion
-            }
-
-            #endregion
-
-            #region V2 Only
-
-            // If we have a V2 file
-            if (audioHeader.Version == 0x0000000A)
-            {
-                #region Data Files Count
-
-                // Set the data files count
-                audioFile.DataFilesCount = data.ReadUInt32();
+                // Set the unknown block 1
+                audioFile.UnknownBlock1 = unknownBlock1;
 
                 #endregion
 
-                #region Data Files
+                #region V1 Only
 
-                // Create the data files array
-                audioFile.DataFiles = new DataFile[audioFile.DataFilesCount];
-
-                // Try to parse the data files
-                for (int i = 0; i < audioFile.DataFiles.Length; i++)
+                // If we have a V1 file
+                if (audioHeader.Version == 0x00000000)
                 {
-                    var dataFile = ParseDataFile(data);
-                    if (dataFile == null)
+                    #region Unknown Value 2
+
+                    // Get the V1 unknown offset 2
+                    uint? unknownOffset2 = (audioHeader as AudioHeaderV1)?.UnknownOffset2;
+
+                    // If we have an unknown value 2 offset
+                    if (unknownOffset2 != null && unknownOffset2 > 0)
+                    {
+                        // Get the unknown value 2 offset
+                        long offset = unknownOffset2.Value + adjust;
+                        if (offset < 0 || offset >= data.Length)
+                            return null;
+
+                        // Seek to the unknown value 2
+                        data.Seek(offset, SeekOrigin.Begin);
+                    }
+
+                    // Set the unknown value 2
+                    audioFile.UnknownValue2 = data.ReadUInt32();
+
+                    #endregion
+
+                    #region Unknown Block 3
+
+                    // Get the V1 unknown offset 3
+                    uint? unknownOffset3 = (audioHeader as AudioHeaderV1)?.UnknownOffset3;
+
+                    // If we have an unknown block 3 offset
+                    if (unknownOffset3 != null && unknownOffset3 > 0)
+                    {
+                        // Get the unknown block 3 offset
+                        long offset = unknownOffset3.Value + adjust;
+                        if (offset < 0 || offset >= data.Length)
+                            return null;
+
+                        // Seek to the unknown block 3
+                        data.Seek(offset, SeekOrigin.Begin);
+                    }
+
+                    // Try to parse the unknown block 3
+                    var unknownBlock3 = ParseUnknownBlock3(data);
+                    if (unknownBlock3 == null)
                         return null;
 
-                    audioFile.DataFiles[i] = dataFile;
+                    // Set the unknown block 3
+                    audioFile.UnknownBlock3 = unknownBlock3;
+
+                    #endregion
                 }
 
+                #endregion
+
+                #region V2 Only
+
+                // If we have a V2 file
+                if (audioHeader.Version == 0x0000000A)
+                {
+                    #region Data Files Count
+
+                    // Set the data files count
+                    audioFile.DataFilesCount = data.ReadUInt32();
+
+                    #endregion
+
+                    #region Data Files
+
+                    // Create the data files array
+                    audioFile.DataFiles = new DataFile[audioFile.DataFilesCount];
+
+                    // Try to parse the data files
+                    for (int i = 0; i < audioFile.DataFiles.Length; i++)
+                    {
+                        var dataFile = ParseDataFile(data);
+                        if (dataFile == null)
+                            return null;
+
+                        audioFile.DataFiles[i] = dataFile;
+                    }
+
+                    #endregion
+                }
 
                 #endregion
+
+                return audioFile;
             }
-
-            #endregion
-
-            return audioFile;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

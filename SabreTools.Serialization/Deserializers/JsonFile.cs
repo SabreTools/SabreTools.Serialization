@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Deserializers
         public T? Deserialize(byte[]? data, int offset, Encoding encoding)
         {
             // If the data is invalid
-            if (data == null)
+            if (data == null || data.Length == 0)
                 return default;
 
             // If the offset is out of bounds
@@ -83,28 +83,17 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
-            }
-            catch
-            {
-                // Ignore errors in getting position for compressed streams
-            }
+                // Setup the serializer and the reader
+                var serializer = JsonSerializer.Create();
+                var streamReader = new StreamReader(data, encoding);
+                var jsonReader = new JsonTextReader(streamReader);
 
-            // Setup the serializer and the reader
-            var serializer = JsonSerializer.Create();
-            var streamReader = new StreamReader(data, encoding);
-            var jsonReader = new JsonTextReader(streamReader);
-
-            // Perform the deserialization and return
-            try
-            {
+                // Perform the deserialization and return
                 return serializer.Deserialize<T>(jsonReader);
             }
             catch
             {
-                // Absorb all exceptions
+                // Ignore the actual error
                 return default;
             }
         }

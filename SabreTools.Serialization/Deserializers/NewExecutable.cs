@@ -15,194 +15,198 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
+            try
+            {
+                // Cache the current offset
+                int initialOffset = (int)data.Position;
 
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
+                // Create a new executable to fill
+                var executable = new Executable();
 
-            // Create a new executable to fill
-            var executable = new Executable();
+                #region MS-DOS Stub
 
-            #region MS-DOS Stub
+                // Parse the MS-DOS stub
+                var stub = new MSDOS().Deserialize(data);
+                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
+                    return null;
 
-            // Parse the MS-DOS stub
-            var stub = new MSDOS().Deserialize(data);
-            if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
-                return null;
+                // Set the MS-DOS stub
+                executable.Stub = stub;
 
-            // Set the MS-DOS stub
-            executable.Stub = stub;
+                #endregion
 
-            #endregion
+                #region Executable Header
 
-            #region Executable Header
+                // Try to parse the executable header
+                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                var header = data.ReadType<ExecutableHeader>();
+                if (header?.Magic != SignatureString)
+                    return null;
 
-            // Try to parse the executable header
-            data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            var header = data.ReadType<ExecutableHeader>();
-            if (header?.Magic != SignatureString)
-                return null;
+                // Set the executable header
+                executable.Header = header;
 
-            // Set the executable header
-            executable.Header = header;
+                #endregion
 
-            #endregion
+                #region Segment Table
 
-            #region Segment Table
+                // If the offset for the segment table doesn't exist
+                int tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.SegmentTableOffset;
+                if (tableAddress >= data.Length)
+                    return executable;
 
-            // If the offset for the segment table doesn't exist
-            int tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.SegmentTableOffset;
-            if (tableAddress >= data.Length)
+                // Try to parse the segment table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var segmentTable = ParseSegmentTable(data, header.FileSegmentCount);
+                if (segmentTable == null)
+                    return null;
+
+                // Set the segment table
+                executable.SegmentTable = segmentTable;
+
+                #endregion
+
+                #region Resource Table
+
+                // If the offset for the segment table doesn't exist
+                tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.ResourceTableOffset;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the resource table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var resourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
+                if (resourceTable == null)
+                    return null;
+
+                // Set the resource table
+                executable.ResourceTable = resourceTable;
+
+                #endregion
+
+                #region Resident-Name Table
+
+                // If the offset for the resident-name table doesn't exist
+                tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.ResidentNameTableOffset;
+                int endOffset = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.ModuleReferenceTableOffset;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the resident-name table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var residentNameTable = ParseResidentNameTable(data, endOffset);
+                if (residentNameTable == null)
+                    return null;
+
+                // Set the resident-name table
+                executable.ResidentNameTable = residentNameTable;
+
+                #endregion
+
+                #region Module-Reference Table
+
+                // If the offset for the module-reference table doesn't exist
+                tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.ModuleReferenceTableOffset;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the module-reference table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var moduleReferenceTable = ParseModuleReferenceTable(data, header.ModuleReferenceTableSize);
+                if (moduleReferenceTable == null)
+                    return null;
+
+                // Set the module-reference table
+                executable.ModuleReferenceTable = moduleReferenceTable;
+
+                #endregion
+
+                #region Imported-Name Table
+
+                // If the offset for the imported-name table doesn't exist
+                tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.ImportedNamesTableOffset;
+                endOffset = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.EntryTableOffset;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the imported-name table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var importedNameTable = ParseImportedNameTable(data, endOffset);
+                if (importedNameTable == null)
+                    return null;
+
+                // Set the imported-name table
+                executable.ImportedNameTable = importedNameTable;
+
+                #endregion
+
+                #region Entry Table
+
+                // If the offset for the imported-name table doesn't exist
+                tableAddress = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.EntryTableOffset;
+                endOffset = initialOffset
+                    + (int)stub.Header.NewExeHeaderAddr
+                    + header.EntryTableOffset
+                    + header.EntryTableSize;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the imported-name table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var entryTable = ParseEntryTable(data, endOffset);
+                if (entryTable == null)
+                    return null;
+
+                // Set the entry table
+                executable.EntryTable = entryTable;
+
+                #endregion
+
+                #region Nonresident-Name Table
+
+                // If the offset for the nonresident-name table doesn't exist
+                tableAddress = initialOffset
+                    + (int)header.NonResidentNamesTableOffset;
+                endOffset = initialOffset
+                    + (int)header.NonResidentNamesTableOffset
+                    + header.NonResidentNameTableSize;
+                if (tableAddress >= data.Length)
+                    return executable;
+
+                // Try to parse the nonresident-name table
+                data.Seek(tableAddress, SeekOrigin.Begin);
+                var nonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
+                if (nonResidentNameTable == null)
+                    return null;
+
+                // Set the nonresident-name table
+                executable.NonResidentNameTable = nonResidentNameTable;
+
+                #endregion
+
                 return executable;
-
-            // Try to parse the segment table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var segmentTable = ParseSegmentTable(data, header.FileSegmentCount);
-            if (segmentTable == null)
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Set the segment table
-            executable.SegmentTable = segmentTable;
-
-            #endregion
-
-            #region Resource Table
-
-            // If the offset for the segment table doesn't exist
-            tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.ResourceTableOffset;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the resource table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var resourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
-            if (resourceTable == null)
-                return null;
-
-            // Set the resource table
-            executable.ResourceTable = resourceTable;
-
-            #endregion
-
-            #region Resident-Name Table
-
-            // If the offset for the resident-name table doesn't exist
-            tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.ResidentNameTableOffset;
-            int endOffset = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.ModuleReferenceTableOffset;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the resident-name table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var residentNameTable = ParseResidentNameTable(data, endOffset);
-            if (residentNameTable == null)
-                return null;
-
-            // Set the resident-name table
-            executable.ResidentNameTable = residentNameTable;
-
-            #endregion
-
-            #region Module-Reference Table
-
-            // If the offset for the module-reference table doesn't exist
-            tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.ModuleReferenceTableOffset;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the module-reference table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var moduleReferenceTable = ParseModuleReferenceTable(data, header.ModuleReferenceTableSize);
-            if (moduleReferenceTable == null)
-                return null;
-
-            // Set the module-reference table
-            executable.ModuleReferenceTable = moduleReferenceTable;
-
-            #endregion
-
-            #region Imported-Name Table
-
-            // If the offset for the imported-name table doesn't exist
-            tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.ImportedNamesTableOffset;
-            endOffset = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.EntryTableOffset;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the imported-name table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var importedNameTable = ParseImportedNameTable(data, endOffset);
-            if (importedNameTable == null)
-                return null;
-
-            // Set the imported-name table
-            executable.ImportedNameTable = importedNameTable;
-
-            #endregion
-
-            #region Entry Table
-
-            // If the offset for the imported-name table doesn't exist
-            tableAddress = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.EntryTableOffset;
-            endOffset = initialOffset
-                + (int)stub.Header.NewExeHeaderAddr
-                + header.EntryTableOffset
-                + header.EntryTableSize;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the imported-name table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var entryTable = ParseEntryTable(data, endOffset);
-            if (entryTable == null)
-                return null;
-
-            // Set the entry table
-            executable.EntryTable = entryTable;
-
-            #endregion
-
-            #region Nonresident-Name Table
-
-            // If the offset for the nonresident-name table doesn't exist
-            tableAddress = initialOffset
-                + (int)header.NonResidentNamesTableOffset;
-            endOffset = initialOffset
-                + (int)header.NonResidentNamesTableOffset
-                + header.NonResidentNameTableSize;
-            if (tableAddress >= data.Length)
-                return executable;
-
-            // Try to parse the nonresident-name table
-            data.Seek(tableAddress, SeekOrigin.Begin);
-            var nonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
-            if (nonResidentNameTable == null)
-                return null;
-
-            // Set the nonresident-name table
-            executable.NonResidentNameTable = nonResidentNameTable;
-
-            #endregion
-
-            return executable;
+            }
         }
 
         /// <summary>

@@ -14,51 +14,55 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new Half-Life Package to fill
-            var file = new Models.PAK.File();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<Header>();
-            if (header?.Signature != SignatureString)
-                return null;
-
-            // Set the package header
-            file.Header = header;
-
-            #endregion
-
-            #region Directory Items
-
-            // Get the directory items offset
-            uint directoryItemsOffset = header.DirectoryOffset;
-            if (directoryItemsOffset < 0 || directoryItemsOffset >= data.Length)
-                return null;
-
-            // Seek to the directory items
-            data.Seek(directoryItemsOffset, SeekOrigin.Begin);
-
-            // Create the directory item array
-            file.DirectoryItems = new DirectoryItem[header.DirectoryLength / 64];
-
-            // Try to parse the directory items
-            for (int i = 0; i < file.DirectoryItems.Length; i++)
+            try
             {
-                var directoryItem = data.ReadType<DirectoryItem>();
-                if (directoryItem == null)
+                // Create a new Half-Life Package to fill
+                var file = new Models.PAK.File();
+
+                #region Header
+
+                // Try to parse the header
+                var header = data.ReadType<Header>();
+                if (header?.Signature != SignatureString)
                     return null;
 
-                file.DirectoryItems[i] = directoryItem;
+                // Set the package header
+                file.Header = header;
+
+                #endregion
+
+                #region Directory Items
+
+                // Get the directory items offset
+                uint directoryItemsOffset = header.DirectoryOffset;
+                if (directoryItemsOffset < 0 || directoryItemsOffset >= data.Length)
+                    return null;
+
+                // Seek to the directory items
+                data.Seek(directoryItemsOffset, SeekOrigin.Begin);
+
+                // Create the directory item array
+                file.DirectoryItems = new DirectoryItem[header.DirectoryLength / 64];
+
+                // Try to parse the directory items
+                for (int i = 0; i < file.DirectoryItems.Length; i++)
+                {
+                    var directoryItem = data.ReadType<DirectoryItem>();
+                    if (directoryItem == null)
+                        return null;
+
+                    file.DirectoryItems[i] = directoryItem;
+                }
+
+                #endregion
+
+                return file;
             }
-
-            #endregion
-
-            return file;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
     }
 }

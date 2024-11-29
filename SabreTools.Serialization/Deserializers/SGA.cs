@@ -16,37 +16,42 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
+            try
+            {
+                // Create a new SGA to fill
+                var file = new Models.SGA.File();
+
+                #region Header
+
+                // Try to parse the header
+                var header = ParseHeader(data);
+                if (header == null)
+                    return null;
+
+                // Set the SGA header
+                file.Header = header;
+
+                #endregion
+
+                #region Directory
+
+                // Try to parse the directory
+                var directory = ParseDirectory(data, header.MajorVersion);
+                if (directory == null)
+                    return null;
+
+                // Set the SGA directory
+                file.Directory = directory;
+
+                #endregion
+
+                return file;
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Create a new SGA to fill
-            var file = new Models.SGA.File();
-
-            #region Header
-
-            // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
-                return null;
-
-            // Set the SGA header
-            file.Header = header;
-
-            #endregion
-
-            #region Directory
-
-            // Try to parse the directory
-            var directory = ParseDirectory(data, header.MajorVersion);
-            if (directory == null)
-                return null;
-
-            // Set the SGA directory
-            file.Directory = directory;
-            #endregion
-
-            return file;
+            }
         }
 
         /// <summary>

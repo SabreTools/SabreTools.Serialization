@@ -78,316 +78,313 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public MetadataFile? Deserialize(Stream? data, bool quotes)
         {
-            // If the stream is null
-            if (data == null)
-                return default;
+            // If tthe data is invalid
+            if (data == null || !data.CanRead)
+                return null;
 
             try
             {
-                // If the stream length and offset are invalid
-                if (data.Length == 0 || data.Position < 0 || data.Position >= data.Length)
-                    return default;
+                // Setup the reader and output
+                var reader = new ClrMameProReader(data, Encoding.UTF8) { Quotes = quotes };
+                var dat = new MetadataFile();
+
+                // Loop through and parse out the values
+                string? lastTopLevel = reader.TopLevel;
+
+                GameBase? game = null;
+                var games = new List<GameBase>();
+                var releases = new List<Release>();
+                var biosSets = new List<BiosSet>();
+                var roms = new List<Rom>();
+                var disks = new List<Disk>();
+                var medias = new List<Media>();
+                var samples = new List<Sample>();
+                var archives = new List<Archive>();
+                var chips = new List<Chip>();
+                var videos = new List<Video>();
+                var dipSwitches = new List<DipSwitch>();
+
+                while (!reader.EndOfStream)
+                {
+                    // If we have no next line
+                    if (!reader.ReadNextLine())
+                        break;
+
+                    // Ignore certain row types
+                    switch (reader.RowType)
+                    {
+                        case CmpRowType.None:
+                        case CmpRowType.Comment:
+                            continue;
+                        case CmpRowType.EndTopLevel:
+                            switch (lastTopLevel)
+                            {
+                                case "game":
+                                case "machine":
+                                case "resource":
+                                case "set":
+                                    if (game != null)
+                                    {
+                                        game.Release = [.. releases];
+                                        game.BiosSet = [.. biosSets];
+                                        game.Rom = [.. roms];
+                                        game.Disk = [.. disks];
+                                        game.Media = [.. medias];
+                                        game.Sample = [.. samples];
+                                        game.Archive = [.. archives];
+                                        game.Chip = [.. chips];
+                                        game.Video = [.. videos];
+                                        game.DipSwitch = [.. dipSwitches];
+
+                                        games.Add(game);
+                                        game = null;
+                                    }
+
+                                    releases.Clear();
+                                    biosSets.Clear();
+                                    roms.Clear();
+                                    disks.Clear();
+                                    medias.Clear();
+                                    samples.Clear();
+                                    archives.Clear();
+                                    chips.Clear();
+                                    videos.Clear();
+                                    dipSwitches.Clear();
+                                    break;
+                            }
+                            continue;
+                    }
+
+                    // If we're at the root
+                    if (reader.RowType == CmpRowType.TopLevel)
+                    {
+                        lastTopLevel = reader.TopLevel;
+                        switch (reader.TopLevel)
+                        {
+                            case "clrmamepro":
+                                dat.ClrMamePro = new Models.ClrMamePro.ClrMamePro();
+                                break;
+                            case "game":
+                                game = new Game();
+                                break;
+                            case "machine":
+                                game = new Machine();
+                                break;
+                            case "resource":
+                                game = new Resource();
+                                break;
+                            case "set":
+                                game = new Set();
+                                break;
+                        }
+                    }
+
+                    // If we're in the doscenter block
+                    else if (reader.TopLevel == "clrmamepro"
+                        && reader.RowType == CmpRowType.Standalone)
+                    {
+                        // Create the block if we haven't already
+                        dat.ClrMamePro ??= new Models.ClrMamePro.ClrMamePro();
+
+                        switch (reader.Standalone?.Key?.ToLowerInvariant())
+                        {
+                            case "name":
+                                dat.ClrMamePro.Name = reader.Standalone?.Value;
+                                break;
+                            case "description":
+                                dat.ClrMamePro.Description = reader.Standalone?.Value;
+                                break;
+                            case "rootdir":
+                                dat.ClrMamePro.RootDir = reader.Standalone?.Value;
+                                break;
+                            case "category":
+                                dat.ClrMamePro.Category = reader.Standalone?.Value;
+                                break;
+                            case "version":
+                                dat.ClrMamePro.Version = reader.Standalone?.Value;
+                                break;
+                            case "date":
+                                dat.ClrMamePro.Date = reader.Standalone?.Value;
+                                break;
+                            case "author":
+                                dat.ClrMamePro.Author = reader.Standalone?.Value;
+                                break;
+                            case "homepage":
+                                dat.ClrMamePro.Homepage = reader.Standalone?.Value;
+                                break;
+                            case "url":
+                                dat.ClrMamePro.Url = reader.Standalone?.Value;
+                                break;
+                            case "comment":
+                                dat.ClrMamePro.Comment = reader.Standalone?.Value;
+                                break;
+                            case "header":
+                                dat.ClrMamePro.Header = reader.Standalone?.Value;
+                                break;
+                            case "type":
+                                dat.ClrMamePro.Type = reader.Standalone?.Value;
+                                break;
+                            case "forcemerging":
+                                dat.ClrMamePro.ForceMerging = reader.Standalone?.Value;
+                                break;
+                            case "forcezipping":
+                                dat.ClrMamePro.ForceZipping = reader.Standalone?.Value;
+                                break;
+                            case "forcepacking":
+                                dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
+                                break;
+                        }
+                    }
+
+                    // If we're in a game, machine, resource, or set block
+                    else if ((reader.TopLevel == "game"
+                            || reader.TopLevel == "machine"
+                            || reader.TopLevel == "resource"
+                            || reader.TopLevel == "set")
+                        && reader.RowType == CmpRowType.Standalone)
+                    {
+                        // Create the block if we haven't already
+                        game ??= reader.TopLevel switch
+                        {
+                            "game" => new Game(),
+                            "machine" => new Machine(),
+                            "resource" => new Resource(),
+                            "set" => new Set(),
+                            _ => throw new FormatException($"Unknown top-level block: {reader.TopLevel}"),
+                        };
+
+                        switch (reader.Standalone?.Key?.ToLowerInvariant())
+                        {
+                            case "name":
+                                game.Name = reader.Standalone?.Value;
+                                break;
+                            case "description":
+                                game.Description = reader.Standalone?.Value;
+                                break;
+                            case "year":
+                                game.Year = reader.Standalone?.Value;
+                                break;
+                            case "manufacturer":
+                                game.Manufacturer = reader.Standalone?.Value;
+                                break;
+                            case "category":
+                                game.Category = reader.Standalone?.Value;
+                                break;
+                            case "cloneof":
+                                game.CloneOf = reader.Standalone?.Value;
+                                break;
+                            case "romof":
+                                game.RomOf = reader.Standalone?.Value;
+                                break;
+                            case "sampleof":
+                                game.SampleOf = reader.Standalone?.Value;
+                                break;
+                            case "sample":
+                                var sample = new Sample
+                                {
+                                    Name = reader.Standalone?.Value ?? string.Empty,
+                                };
+                                samples.Add(sample);
+                                break;
+                        }
+                    }
+
+                    // If we're in an item block
+                    else if ((reader.TopLevel == "game"
+                            || reader.TopLevel == "machine"
+                            || reader.TopLevel == "resource"
+                            || reader.TopLevel == "set")
+                        && game != null
+                        && reader.RowType == CmpRowType.Internal)
+                    {
+                        // Create the block
+                        switch (reader.InternalName)
+                        {
+                            case "release":
+                                var release = CreateRelease(reader);
+                                if (release != null)
+                                    releases.Add(release);
+                                break;
+                            case "biosset":
+                                var biosSet = CreateBiosSet(reader);
+                                if (biosSet != null)
+                                    biosSets.Add(biosSet);
+                                break;
+                            case "rom":
+                                var rom = CreateRom(reader);
+                                if (rom != null)
+                                    roms.Add(rom);
+                                break;
+                            case "disk":
+                                var disk = CreateDisk(reader);
+                                if (disk != null)
+                                    disks.Add(disk);
+                                break;
+                            case "media":
+                                var media = CreateMedia(reader);
+                                if (media != null)
+                                    medias.Add(media);
+                                break;
+                            case "sample":
+                                var sample = CreateSample(reader);
+                                if (sample != null)
+                                    samples.Add(sample);
+                                break;
+                            case "archive":
+                                var archive = CreateArchive(reader);
+                                if (archive != null)
+                                    archives.Add(archive);
+                                break;
+                            case "chip":
+                                var chip = CreateChip(reader);
+                                if (chip != null)
+                                    chips.Add(chip);
+                                break;
+                            case "video":
+                                var video = CreateVideo(reader);
+                                if (video != null)
+                                    videos.Add(video);
+                                break;
+                            case "sound":
+                                var sound = CreateSound(reader);
+                                if (sound != null)
+                                    game.Sound = sound;
+                                break;
+                            case "input":
+                                var input = CreateInput(reader);
+                                if (input != null)
+                                    game.Input = input;
+                                break;
+                            case "dipswitch":
+                                var dipSwitch = CreateDipSwitch(reader);
+                                if (dipSwitch != null)
+                                    dipSwitches.Add(dipSwitch);
+                                break;
+                            case "driver":
+                                var driver = CreateDriver(reader);
+                                if (driver != null)
+                                    game.Driver = driver;
+                                break;
+                            default:
+                                continue;
+                        }
+                    }
+                }
+
+                // Add extra pieces and return
+                if (games.Count > 0)
+                {
+                    dat.Game = [.. games];
+                    return dat;
+                }
+
+                return null;
             }
             catch
             {
-                // Ignore errors in getting position for compressed streams
+                // Ignore the actual error
+                return null;
             }
-
-            // Setup the reader and output
-            var reader = new ClrMameProReader(data, Encoding.UTF8) { Quotes = quotes };
-            var dat = new MetadataFile();
-
-            // Loop through and parse out the values
-            string? lastTopLevel = reader.TopLevel;
-
-            GameBase? game = null;
-            var games = new List<GameBase>();
-            var releases = new List<Release>();
-            var biosSets = new List<BiosSet>();
-            var roms = new List<Rom>();
-            var disks = new List<Disk>();
-            var medias = new List<Media>();
-            var samples = new List<Sample>();
-            var archives = new List<Archive>();
-            var chips = new List<Chip>();
-            var videos = new List<Video>();
-            var dipSwitches = new List<DipSwitch>();
-
-            while (!reader.EndOfStream)
-            {
-                // If we have no next line
-                if (!reader.ReadNextLine())
-                    break;
-
-                // Ignore certain row types
-                switch (reader.RowType)
-                {
-                    case CmpRowType.None:
-                    case CmpRowType.Comment:
-                        continue;
-                    case CmpRowType.EndTopLevel:
-                        switch (lastTopLevel)
-                        {
-                            case "game":
-                            case "machine":
-                            case "resource":
-                            case "set":
-                                if (game != null)
-                                {
-                                    game.Release = [.. releases];
-                                    game.BiosSet = [.. biosSets];
-                                    game.Rom = [.. roms];
-                                    game.Disk = [.. disks];
-                                    game.Media = [.. medias];
-                                    game.Sample = [.. samples];
-                                    game.Archive = [.. archives];
-                                    game.Chip = [.. chips];
-                                    game.Video = [.. videos];
-                                    game.DipSwitch = [.. dipSwitches];
-
-                                    games.Add(game);
-                                    game = null;
-                                }
-
-                                releases.Clear();
-                                biosSets.Clear();
-                                roms.Clear();
-                                disks.Clear();
-                                medias.Clear();
-                                samples.Clear();
-                                archives.Clear();
-                                chips.Clear();
-                                videos.Clear();
-                                dipSwitches.Clear();
-                                break;
-                        }
-                        continue;
-                }
-
-                // If we're at the root
-                if (reader.RowType == CmpRowType.TopLevel)
-                {
-                    lastTopLevel = reader.TopLevel;
-                    switch (reader.TopLevel)
-                    {
-                        case "clrmamepro":
-                            dat.ClrMamePro = new Models.ClrMamePro.ClrMamePro();
-                            break;
-                        case "game":
-                            game = new Game();
-                            break;
-                        case "machine":
-                            game = new Machine();
-                            break;
-                        case "resource":
-                            game = new Resource();
-                            break;
-                        case "set":
-                            game = new Set();
-                            break;
-                    }
-                }
-
-                // If we're in the doscenter block
-                else if (reader.TopLevel == "clrmamepro"
-                    && reader.RowType == CmpRowType.Standalone)
-                {
-                    // Create the block if we haven't already
-                    dat.ClrMamePro ??= new Models.ClrMamePro.ClrMamePro();
-
-                    switch (reader.Standalone?.Key?.ToLowerInvariant())
-                    {
-                        case "name":
-                            dat.ClrMamePro.Name = reader.Standalone?.Value;
-                            break;
-                        case "description":
-                            dat.ClrMamePro.Description = reader.Standalone?.Value;
-                            break;
-                        case "rootdir":
-                            dat.ClrMamePro.RootDir = reader.Standalone?.Value;
-                            break;
-                        case "category":
-                            dat.ClrMamePro.Category = reader.Standalone?.Value;
-                            break;
-                        case "version":
-                            dat.ClrMamePro.Version = reader.Standalone?.Value;
-                            break;
-                        case "date":
-                            dat.ClrMamePro.Date = reader.Standalone?.Value;
-                            break;
-                        case "author":
-                            dat.ClrMamePro.Author = reader.Standalone?.Value;
-                            break;
-                        case "homepage":
-                            dat.ClrMamePro.Homepage = reader.Standalone?.Value;
-                            break;
-                        case "url":
-                            dat.ClrMamePro.Url = reader.Standalone?.Value;
-                            break;
-                        case "comment":
-                            dat.ClrMamePro.Comment = reader.Standalone?.Value;
-                            break;
-                        case "header":
-                            dat.ClrMamePro.Header = reader.Standalone?.Value;
-                            break;
-                        case "type":
-                            dat.ClrMamePro.Type = reader.Standalone?.Value;
-                            break;
-                        case "forcemerging":
-                            dat.ClrMamePro.ForceMerging = reader.Standalone?.Value;
-                            break;
-                        case "forcezipping":
-                            dat.ClrMamePro.ForceZipping = reader.Standalone?.Value;
-                            break;
-                        case "forcepacking":
-                            dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
-                            break;
-                    }
-                }
-
-                // If we're in a game, machine, resource, or set block
-                else if ((reader.TopLevel == "game"
-                        || reader.TopLevel == "machine"
-                        || reader.TopLevel == "resource"
-                        || reader.TopLevel == "set")
-                    && reader.RowType == CmpRowType.Standalone)
-                {
-                    // Create the block if we haven't already
-                    game ??= reader.TopLevel switch
-                    {
-                        "game" => new Game(),
-                        "machine" => new Machine(),
-                        "resource" => new Resource(),
-                        "set" => new Set(),
-                        _ => throw new FormatException($"Unknown top-level block: {reader.TopLevel}"),
-                    };
-
-                    switch (reader.Standalone?.Key?.ToLowerInvariant())
-                    {
-                        case "name":
-                            game.Name = reader.Standalone?.Value;
-                            break;
-                        case "description":
-                            game.Description = reader.Standalone?.Value;
-                            break;
-                        case "year":
-                            game.Year = reader.Standalone?.Value;
-                            break;
-                        case "manufacturer":
-                            game.Manufacturer = reader.Standalone?.Value;
-                            break;
-                        case "category":
-                            game.Category = reader.Standalone?.Value;
-                            break;
-                        case "cloneof":
-                            game.CloneOf = reader.Standalone?.Value;
-                            break;
-                        case "romof":
-                            game.RomOf = reader.Standalone?.Value;
-                            break;
-                        case "sampleof":
-                            game.SampleOf = reader.Standalone?.Value;
-                            break;
-                        case "sample":
-                            var sample = new Sample
-                            {
-                                Name = reader.Standalone?.Value ?? string.Empty,
-                            };
-                            samples.Add(sample);
-                            break;
-                    }
-                }
-
-                // If we're in an item block
-                else if ((reader.TopLevel == "game"
-                        || reader.TopLevel == "machine"
-                        || reader.TopLevel == "resource"
-                        || reader.TopLevel == "set")
-                    && game != null
-                    && reader.RowType == CmpRowType.Internal)
-                {
-                    // Create the block
-                    switch (reader.InternalName)
-                    {
-                        case "release":
-                            var release = CreateRelease(reader);
-                            if (release != null)
-                                releases.Add(release);
-                            break;
-                        case "biosset":
-                            var biosSet = CreateBiosSet(reader);
-                            if (biosSet != null)
-                                biosSets.Add(biosSet);
-                            break;
-                        case "rom":
-                            var rom = CreateRom(reader);
-                            if (rom != null)
-                                roms.Add(rom);
-                            break;
-                        case "disk":
-                            var disk = CreateDisk(reader);
-                            if (disk != null)
-                                disks.Add(disk);
-                            break;
-                        case "media":
-                            var media = CreateMedia(reader);
-                            if (media != null)
-                                medias.Add(media);
-                            break;
-                        case "sample":
-                            var sample = CreateSample(reader);
-                            if (sample != null)
-                                samples.Add(sample);
-                            break;
-                        case "archive":
-                            var archive = CreateArchive(reader);
-                            if (archive != null)
-                                archives.Add(archive);
-                            break;
-                        case "chip":
-                            var chip = CreateChip(reader);
-                            if (chip != null)
-                                chips.Add(chip);
-                            break;
-                        case "video":
-                            var video = CreateVideo(reader);
-                            if (video != null)
-                                videos.Add(video);
-                            break;
-                        case "sound":
-                            var sound = CreateSound(reader);
-                            if (sound != null)
-                                game.Sound = sound;
-                            break;
-                        case "input":
-                            var input = CreateInput(reader);
-                            if (input != null)
-                                game.Input = input;
-                            break;
-                        case "dipswitch":
-                            var dipSwitch = CreateDipSwitch(reader);
-                            if (dipSwitch != null)
-                                dipSwitches.Add(dipSwitch);
-                            break;
-                        case "driver":
-                            var driver = CreateDriver(reader);
-                            if (driver != null)
-                                game.Driver = driver;
-                            break;
-                        default:
-                            continue;
-                    }
-                }
-            }
-
-            // Add extra pieces and return
-            if (games.Count > 0)
-            {
-                dat.Game = [.. games];
-                return dat;
-            }
-
-            return null;
         }
 
         /// <summary>

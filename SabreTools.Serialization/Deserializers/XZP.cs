@@ -14,125 +14,129 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new XBox Package File to fill
-            var file = new Models.XZP.File();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<Header>();
-            if (header?.Signature != HeaderSignatureString)
-                return null;
-            if (header.Version != 6)
-                return null;
-
-            // Set the package header
-            file.Header = header;
-
-            #endregion
-
-            #region Directory Entries
-
-            // Create the directory entry array
-            file.DirectoryEntries = new DirectoryEntry[header.DirectoryEntryCount];
-
-            // Try to parse the directory entries
-            for (int i = 0; i < file.DirectoryEntries.Length; i++)
+            try
             {
-                var directoryEntry = data.ReadType<DirectoryEntry>();
-                if (directoryEntry == null)
-                    continue;
+                // Create a new XBox Package File to fill
+                var file = new Models.XZP.File();
 
-                file.DirectoryEntries[i] = directoryEntry;
-            }
+                #region Header
 
-            #endregion
+                // Try to parse the header
+                var header = data.ReadType<Header>();
+                if (header?.Signature != HeaderSignatureString)
+                    return null;
+                if (header.Version != 6)
+                    return null;
 
-            #region Preload Directory Entries
+                // Set the package header
+                file.Header = header;
 
-            if (header.PreloadBytes > 0)
-            {
-                // Create the preload directory entry array
-                file.PreloadDirectoryEntries = new DirectoryEntry[header.PreloadDirectoryEntryCount];
+                #endregion
 
-                // Try to parse the preload directory entries
-                for (int i = 0; i < file.PreloadDirectoryEntries.Length; i++)
+                #region Directory Entries
+
+                // Create the directory entry array
+                file.DirectoryEntries = new DirectoryEntry[header.DirectoryEntryCount];
+
+                // Try to parse the directory entries
+                for (int i = 0; i < file.DirectoryEntries.Length; i++)
                 {
                     var directoryEntry = data.ReadType<DirectoryEntry>();
                     if (directoryEntry == null)
                         continue;
 
-                    file.PreloadDirectoryEntries[i] = directoryEntry;
+                    file.DirectoryEntries[i] = directoryEntry;
                 }
-            }
 
-            #endregion
+                #endregion
 
-            #region Preload Directory Mappings
+                #region Preload Directory Entries
 
-            if (header.PreloadBytes > 0)
-            {
-                // Create the preload directory mapping array
-                file.PreloadDirectoryMappings = new DirectoryMapping[header.PreloadDirectoryEntryCount];
-
-                // Try to parse the preload directory mappings
-                for (int i = 0; i < file.PreloadDirectoryMappings.Length; i++)
+                if (header.PreloadBytes > 0)
                 {
-                    var directoryMapping = data.ReadType<DirectoryMapping>();
-                    if (directoryMapping == null)
-                        continue;
+                    // Create the preload directory entry array
+                    file.PreloadDirectoryEntries = new DirectoryEntry[header.PreloadDirectoryEntryCount];
 
-                    file.PreloadDirectoryMappings[i] = directoryMapping;
+                    // Try to parse the preload directory entries
+                    for (int i = 0; i < file.PreloadDirectoryEntries.Length; i++)
+                    {
+                        var directoryEntry = data.ReadType<DirectoryEntry>();
+                        if (directoryEntry == null)
+                            continue;
+
+                        file.PreloadDirectoryEntries[i] = directoryEntry;
+                    }
                 }
-            }
 
-            #endregion
+                #endregion
 
-            #region Directory Items
+                #region Preload Directory Mappings
 
-            if (header.DirectoryItemCount > 0)
-            {
-                // Get the directory item offset
-                uint directoryItemOffset = header.DirectoryItemOffset;
-                if (directoryItemOffset < 0 || directoryItemOffset >= data.Length)
+                if (header.PreloadBytes > 0)
+                {
+                    // Create the preload directory mapping array
+                    file.PreloadDirectoryMappings = new DirectoryMapping[header.PreloadDirectoryEntryCount];
+
+                    // Try to parse the preload directory mappings
+                    for (int i = 0; i < file.PreloadDirectoryMappings.Length; i++)
+                    {
+                        var directoryMapping = data.ReadType<DirectoryMapping>();
+                        if (directoryMapping == null)
+                            continue;
+
+                        file.PreloadDirectoryMappings[i] = directoryMapping;
+                    }
+                }
+
+                #endregion
+
+                #region Directory Items
+
+                if (header.DirectoryItemCount > 0)
+                {
+                    // Get the directory item offset
+                    uint directoryItemOffset = header.DirectoryItemOffset;
+                    if (directoryItemOffset < 0 || directoryItemOffset >= data.Length)
+                        return null;
+
+                    // Seek to the directory items
+                    data.Seek(directoryItemOffset, SeekOrigin.Begin);
+
+                    // Create the directory item array
+                    file.DirectoryItems = new DirectoryItem[header.DirectoryItemCount];
+
+                    // Try to parse the directory items
+                    for (int i = 0; i < file.DirectoryItems.Length; i++)
+                    {
+                        var directoryItem = ParseDirectoryItem(data);
+                        file.DirectoryItems[i] = directoryItem;
+                    }
+                }
+
+                #endregion
+
+                #region Footer
+
+                // Seek to the footer
+                data.Seek(-8, SeekOrigin.End);
+
+                // Try to parse the footer
+                var footer = data.ReadType<Footer>();
+                if (footer?.Signature != FooterSignatureString)
                     return null;
 
-                // Seek to the directory items
-                data.Seek(directoryItemOffset, SeekOrigin.Begin);
+                // Set the package footer
+                file.Footer = footer;
 
-                // Create the directory item array
-                file.DirectoryItems = new DirectoryItem[header.DirectoryItemCount];
+                #endregion
 
-                // Try to parse the directory items
-                for (int i = 0; i < file.DirectoryItems.Length; i++)
-                {
-                    var directoryItem = ParseDirectoryItem(data);
-                    file.DirectoryItems[i] = directoryItem;
-                }
+                return file;
             }
-
-            #endregion
-
-            #region Footer
-
-            // Seek to the footer
-            data.Seek(-8, SeekOrigin.End);
-
-            // Try to parse the footer
-            var footer = data.ReadType<Footer>();
-            if (footer?.Signature != FooterSignatureString)
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Set the package footer
-            file.Footer = footer;
-
-            #endregion
-
-            return file;
+            }
         }
 
         /// <summary>

@@ -20,269 +20,273 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
+            try
+            {
+                // Cache the current offset
+                int initialOffset = (int)data.Position;
+
+                // Create a new executable to fill
+                var executable = new Executable();
+
+                #region MS-DOS Stub
+
+                // Parse the MS-DOS stub
+                var stub = new MSDOS().Deserialize(data);
+                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
+                    return null;
+
+                // Set the MS-DOS stub
+                executable.Stub = stub;
+
+                #endregion
+
+                #region Signature
+
+                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                byte[] signature = data.ReadBytes(4);
+                executable.Signature = Encoding.ASCII.GetString(signature);
+                if (executable.Signature != SignatureString)
+                    return null;
+
+                #endregion
+
+                #region COFF File Header
+
+                // Try to parse the COFF file header
+                var coffFileHeader = data.ReadType<COFFFileHeader>();
+                if (coffFileHeader == null)
+                    return null;
+
+                // Set the COFF file header
+                executable.COFFFileHeader = coffFileHeader;
+
+                #endregion
+
+                #region Optional Header
+
+                // Try to parse the optional header
+                var optionalHeader = ParseOptionalHeader(data, coffFileHeader.SizeOfOptionalHeader);
+                if (optionalHeader == null)
+                    return null;
+
+                // Set the optional header
+                executable.OptionalHeader = optionalHeader;
+
+                #endregion
+
+                #region Section Table
+
+                // Try to parse the section table
+                var sectionTable = ParseSectionTable(data, coffFileHeader.NumberOfSections);
+                if (sectionTable == null)
+                    return null;
+
+                // Set the section table
+                executable.SectionTable = sectionTable;
+
+                #endregion
+
+                #region COFF Symbol Table and COFF String Table
+
+                // TODO: Validate that this is correct with an "old" PE
+                if (coffFileHeader.PointerToSymbolTable.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the COFF symbol table doesn't exist
+                    int symbolTableAddress = initialOffset
+                        + (int)coffFileHeader.PointerToSymbolTable.ConvertVirtualAddress(executable.SectionTable);
+                    if (symbolTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the COFF symbol table
+                    data.Seek(symbolTableAddress, SeekOrigin.Begin);
+                    var coffSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
+                    if (coffSymbolTable == null)
+                        return null;
+
+                    // Set the COFF symbol table
+                    executable.COFFSymbolTable = coffSymbolTable;
+
+                    // Try to parse the COFF string table
+                    var coffStringTable = ParseCOFFStringTable(data);
+                    if (coffStringTable == null)
+                        return null;
+
+                    // Set the COFF string table
+                    executable.COFFStringTable = coffStringTable;
+                }
+
+                #endregion
+
+                #region Attribute Certificate Table
+
+                if (optionalHeader.CertificateTable != null && optionalHeader.CertificateTable.VirtualAddress != 0)
+                {
+                    // If the offset for the attribute certificate table doesn't exist
+                    int certificateTableAddress = initialOffset
+                        + (int)optionalHeader.CertificateTable.VirtualAddress;
+                    if (certificateTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the attribute certificate table
+                    data.Seek(certificateTableAddress, SeekOrigin.Begin);
+                    int endOffset = (int)(certificateTableAddress + optionalHeader.CertificateTable.Size);
+                    var attributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
+                    if (attributeCertificateTable == null)
+                        return null;
+
+                    // Set the attribute certificate table
+                    executable.AttributeCertificateTable = attributeCertificateTable;
+                }
+
+                #endregion
+
+                #region Delay-Load Directory Table
+
+                if (optionalHeader.DelayImportDescriptor != null && optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the delay-load directory table doesn't exist
+                    int delayLoadDirectoryTableAddress = initialOffset
+                        + (int)optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (delayLoadDirectoryTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the delay-load directory table
+                    data.Seek(delayLoadDirectoryTableAddress, SeekOrigin.Begin);
+                    var delayLoadDirectoryTable = data.ReadType<DelayLoadDirectoryTable>();
+                    if (delayLoadDirectoryTable == null)
+                        return null;
+
+                    // Set the delay-load directory table
+                    executable.DelayLoadDirectoryTable = delayLoadDirectoryTable;
+                }
+
+                #endregion
+
+                #region Base Relocation Table
+
+                // Should also be in a '.reloc' section
+                if (optionalHeader.BaseRelocationTable != null && optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the base relocation table doesn't exist
+                    int baseRelocationTableAddress = initialOffset
+                        + (int)optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (baseRelocationTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the base relocation table
+                    data.Seek(baseRelocationTableAddress, SeekOrigin.Begin);
+                    int endOffset = (int)(baseRelocationTableAddress + optionalHeader.BaseRelocationTable.Size);
+                    var baseRelocationTable = ParseBaseRelocationTable(data, endOffset, executable.SectionTable);
+                    if (baseRelocationTable == null)
+                        return null;
+
+                    // Set the base relocation table
+                    executable.BaseRelocationTable = baseRelocationTable;
+                }
+
+                #endregion
+
+                #region Debug Table
+
+                // Should also be in a '.debug' section
+                if (optionalHeader.Debug != null && optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the debug table doesn't exist
+                    int debugTableAddress = initialOffset
+                        + (int)optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (debugTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the debug table
+                    data.Seek(debugTableAddress, SeekOrigin.Begin);
+                    int endOffset = (int)(debugTableAddress + optionalHeader.Debug.Size);
+                    var debugTable = ParseDebugTable(data, endOffset);
+                    if (debugTable == null)
+                        return null;
+
+                    // Set the debug table
+                    executable.DebugTable = debugTable;
+                }
+
+                #endregion
+
+                #region Export Table
+
+                // Should also be in a '.edata' section
+                if (optionalHeader.ExportTable != null && optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the export table doesn't exist
+                    int exportTableAddress = initialOffset
+                        + (int)optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (exportTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the export table
+                    data.Seek(exportTableAddress, SeekOrigin.Begin);
+                    var exportTable = ParseExportTable(data, executable.SectionTable);
+                    if (exportTable == null)
+                        return null;
+
+                    // Set the export table
+                    executable.ExportTable = exportTable;
+                }
+
+                #endregion
+
+                #region Import Table
+
+                // Should also be in a '.idata' section
+                if (optionalHeader.ImportTable != null && optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the import table doesn't exist
+                    int importTableAddress = initialOffset
+                        + (int)optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (importTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the import table
+                    data.Seek(importTableAddress, SeekOrigin.Begin);
+                    var importTable = ParseImportTable(data, optionalHeader.Magic, executable.SectionTable);
+                    if (importTable == null)
+                        return null;
+
+                    // Set the import table
+                    executable.ImportTable = importTable;
+                }
+
+                #endregion
+
+                #region Resource Directory Table
+
+                // Should also be in a '.rsrc' section
+                if (optionalHeader.ResourceTable != null && optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
+                {
+                    // If the offset for the resource directory table doesn't exist
+                    int resourceTableAddress = initialOffset
+                        + (int)optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                    if (resourceTableAddress >= data.Length)
+                        return executable;
+
+                    // Try to parse the resource directory table
+                    data.Seek(resourceTableAddress, SeekOrigin.Begin);
+                    var resourceDirectoryTable = ParseResourceDirectoryTable(data, data.Position, executable.SectionTable, true);
+                    if (resourceDirectoryTable == null)
+                        return null;
+
+                    // Set the resource directory table
+                    executable.ResourceDirectoryTable = resourceDirectoryTable;
+                }
+
+                #endregion
+
+                // TODO: Finish implementing PE parsing
+                return executable;
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Cache the current offset
-            int initialOffset = (int)data.Position;
-
-            // Create a new executable to fill
-            var executable = new Executable();
-
-            #region MS-DOS Stub
-
-            // Parse the MS-DOS stub
-            var stub = new MSDOS().Deserialize(data);
-            if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
-                return null;
-
-            // Set the MS-DOS stub
-            executable.Stub = stub;
-
-            #endregion
-
-            #region Signature
-
-            data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-            byte[] signature = data.ReadBytes(4);
-            executable.Signature = Encoding.ASCII.GetString(signature);
-            if (executable.Signature != SignatureString)
-                return null;
-
-            #endregion
-
-            #region COFF File Header
-
-            // Try to parse the COFF file header
-            var coffFileHeader = data.ReadType<COFFFileHeader>();
-            if (coffFileHeader == null)
-                return null;
-
-            // Set the COFF file header
-            executable.COFFFileHeader = coffFileHeader;
-
-            #endregion
-
-            #region Optional Header
-
-            // Try to parse the optional header
-            var optionalHeader = ParseOptionalHeader(data, coffFileHeader.SizeOfOptionalHeader);
-            if (optionalHeader == null)
-                return null;
-
-            // Set the optional header
-            executable.OptionalHeader = optionalHeader;
-
-            #endregion
-
-            #region Section Table
-
-            // Try to parse the section table
-            var sectionTable = ParseSectionTable(data, coffFileHeader.NumberOfSections);
-            if (sectionTable == null)
-                return null;
-
-            // Set the section table
-            executable.SectionTable = sectionTable;
-
-            #endregion
-
-            #region COFF Symbol Table and COFF String Table
-
-            // TODO: Validate that this is correct with an "old" PE
-            if (coffFileHeader.PointerToSymbolTable.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the COFF symbol table doesn't exist
-                int symbolTableAddress = initialOffset
-                    + (int)coffFileHeader.PointerToSymbolTable.ConvertVirtualAddress(executable.SectionTable);
-                if (symbolTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the COFF symbol table
-                data.Seek(symbolTableAddress, SeekOrigin.Begin);
-                var coffSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
-                if (coffSymbolTable == null)
-                    return null;
-
-                // Set the COFF symbol table
-                executable.COFFSymbolTable = coffSymbolTable;
-
-                // Try to parse the COFF string table
-                var coffStringTable = ParseCOFFStringTable(data);
-                if (coffStringTable == null)
-                    return null;
-
-                // Set the COFF string table
-                executable.COFFStringTable = coffStringTable;
             }
-
-            #endregion
-
-            #region Attribute Certificate Table
-
-            if (optionalHeader.CertificateTable != null && optionalHeader.CertificateTable.VirtualAddress != 0)
-            {
-                // If the offset for the attribute certificate table doesn't exist
-                int certificateTableAddress = initialOffset
-                    + (int)optionalHeader.CertificateTable.VirtualAddress;
-                if (certificateTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the attribute certificate table
-                data.Seek(certificateTableAddress, SeekOrigin.Begin);
-                int endOffset = (int)(certificateTableAddress + optionalHeader.CertificateTable.Size);
-                var attributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
-                if (attributeCertificateTable == null)
-                    return null;
-
-                // Set the attribute certificate table
-                executable.AttributeCertificateTable = attributeCertificateTable;
-            }
-
-            #endregion
-
-            #region Delay-Load Directory Table
-
-            if (optionalHeader.DelayImportDescriptor != null && optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the delay-load directory table doesn't exist
-                int delayLoadDirectoryTableAddress = initialOffset
-                    + (int)optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (delayLoadDirectoryTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the delay-load directory table
-                data.Seek(delayLoadDirectoryTableAddress, SeekOrigin.Begin);
-                var delayLoadDirectoryTable = data.ReadType<DelayLoadDirectoryTable>();
-                if (delayLoadDirectoryTable == null)
-                    return null;
-
-                // Set the delay-load directory table
-                executable.DelayLoadDirectoryTable = delayLoadDirectoryTable;
-            }
-
-            #endregion
-
-            #region Base Relocation Table
-
-            // Should also be in a '.reloc' section
-            if (optionalHeader.BaseRelocationTable != null && optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the base relocation table doesn't exist
-                int baseRelocationTableAddress = initialOffset
-                    + (int)optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (baseRelocationTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the base relocation table
-                data.Seek(baseRelocationTableAddress, SeekOrigin.Begin);
-                int endOffset = (int)(baseRelocationTableAddress + optionalHeader.BaseRelocationTable.Size);
-                var baseRelocationTable = ParseBaseRelocationTable(data, endOffset, executable.SectionTable);
-                if (baseRelocationTable == null)
-                    return null;
-
-                // Set the base relocation table
-                executable.BaseRelocationTable = baseRelocationTable;
-            }
-
-            #endregion
-
-            #region Debug Table
-
-            // Should also be in a '.debug' section
-            if (optionalHeader.Debug != null && optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the debug table doesn't exist
-                int debugTableAddress = initialOffset
-                    + (int)optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (debugTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the debug table
-                data.Seek(debugTableAddress, SeekOrigin.Begin);
-                int endOffset = (int)(debugTableAddress + optionalHeader.Debug.Size);
-                var debugTable = ParseDebugTable(data, endOffset);
-                if (debugTable == null)
-                    return null;
-
-                // Set the debug table
-                executable.DebugTable = debugTable;
-            }
-
-            #endregion
-
-            #region Export Table
-
-            // Should also be in a '.edata' section
-            if (optionalHeader.ExportTable != null && optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the export table doesn't exist
-                int exportTableAddress = initialOffset
-                    + (int)optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (exportTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the export table
-                data.Seek(exportTableAddress, SeekOrigin.Begin);
-                var exportTable = ParseExportTable(data, executable.SectionTable);
-                if (exportTable == null)
-                    return null;
-
-                // Set the export table
-                executable.ExportTable = exportTable;
-            }
-
-            #endregion
-
-            #region Import Table
-
-            // Should also be in a '.idata' section
-            if (optionalHeader.ImportTable != null && optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the import table doesn't exist
-                int importTableAddress = initialOffset
-                    + (int)optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (importTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the import table
-                data.Seek(importTableAddress, SeekOrigin.Begin);
-                var importTable = ParseImportTable(data, optionalHeader.Magic, executable.SectionTable);
-                if (importTable == null)
-                    return null;
-
-                // Set the import table
-                executable.ImportTable = importTable;
-            }
-
-            #endregion
-
-            #region Resource Directory Table
-
-            // Should also be in a '.rsrc' section
-            if (optionalHeader.ResourceTable != null && optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable) != 0)
-            {
-                // If the offset for the resource directory table doesn't exist
-                int resourceTableAddress = initialOffset
-                    + (int)optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
-                if (resourceTableAddress >= data.Length)
-                    return executable;
-
-                // Try to parse the resource directory table
-                data.Seek(resourceTableAddress, SeekOrigin.Begin);
-                var resourceDirectoryTable = ParseResourceDirectoryTable(data, data.Position, executable.SectionTable, true);
-                if (resourceDirectoryTable == null)
-                    return null;
-
-                // Set the resource directory table
-                executable.ResourceDirectoryTable = resourceDirectoryTable;
-            }
-
-            #endregion
-
-            // TODO: Finish implementing PE parsing
-            return executable;
         }
 
         /// <summary>

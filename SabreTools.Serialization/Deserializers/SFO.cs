@@ -13,47 +13,51 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
+            try
+            {
+                // Create a new SFO to fill
+                var sfo = new Models.PlayStation3.SFO();
+
+                #region Header
+
+                // Try to parse the header
+                var header = ParseHeader(data);
+                if (header == null)
+                    return null;
+
+                // Assign the header
+                sfo.Header = header;
+
+                #endregion
+
+                #region Index Table
+
+                // TODO: Determine how many entries are in the index table
+
+                #endregion
+
+                #region Key Table
+
+                // TODO: Finish implementation
+
+                #endregion
+
+                // Padding
+                // TODO: Finish implementation
+
+                #region Data Table
+
+                // TODO: Finish implementation
+
+                #endregion
+
+                return sfo;
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            // Create a new SFO to fill
-            var sfo = new Models.PlayStation3.SFO();
-
-            #region Header
-
-            // Try to parse the header
-            var header = ParseHeader(data);
-            if (header == null)
-                return null;
-
-            // Assign the header
-            sfo.Header = header;
-
-            #endregion
-
-            #region Index Table
-
-            // TODO: Determine how many entries are in the index table
-
-            #endregion
-
-            #region Key Table
-
-            // TODO: Finish implementation
-
-            #endregion
-
-            // Padding
-            // TODO: Finish implementation
-
-            #region Data Table
-
-            // TODO: Finish implementation
-
-            #endregion
-
-            return sfo;
+            }
         }
 
         /// <summary>
@@ -61,10 +65,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SFO header on success, null on error</returns>
-        public Models.PlayStation3.SFOHeader? ParseHeader(Stream data)
+        public static Models.PlayStation3.SFOHeader? ParseHeader(Stream data)
         {
             var sfoHeader = data.ReadType<Models.PlayStation3.SFOHeader>();
-
             if (sfoHeader == null)
                 return null;
 
@@ -74,13 +77,13 @@ namespace SabreTools.Serialization.Deserializers
 
             return sfoHeader;
         }
-    
+
         /// <summary>
         /// Parse a Stream into an SFO index table entry
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SFO index table entry on success, null on error</returns>
-        public Models.PlayStation3.SFOIndexTableEntry? ParseIndexTableEntry(Stream data)
+        public static Models.PlayStation3.SFOIndexTableEntry? ParseIndexTableEntry(Stream data)
         {
             return data.ReadType<Models.PlayStation3.SFOIndexTableEntry>();
         }

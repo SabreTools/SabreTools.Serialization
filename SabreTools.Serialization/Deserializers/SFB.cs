@@ -13,20 +13,24 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
+            try
+            {
+                // Deserialize the SFB
+                var sfb = data.ReadType<Models.PlayStation3.SFB>();
+                if (sfb?.Magic == null)
+                    return null;
 
-            // Deserialize the SFB
-            var sfb = data.ReadType<Models.PlayStation3.SFB>();
-            if (sfb?.Magic == null)
-                return null;
+                string magic = Encoding.ASCII.GetString(sfb.Magic);
+                if (magic != ".SFB")
+                    return null;
 
-            string magic = Encoding.ASCII.GetString(sfb.Magic);
-            if (magic != ".SFB")
+                return sfb;
+            }
+            catch
+            {
+                // Ignore the actual error
                 return null;
-
-            return sfb;
+            }
         }
     }
 }

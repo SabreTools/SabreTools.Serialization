@@ -17,98 +17,102 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new Half-Life Level to fill
-            var file = new BspFile();
-
-            #region Header
-
-            // Try to parse the header
-            var header = data.ReadType<BspHeader>();
-            if (header?.Lumps == null || header.Lumps.Length != BSP_HEADER_LUMPS)
-                return null;
-            if (header.Version < 29 || header.Version > 30)
-                return null;
-
-            // Set the level header
-            file.Header = header;
-
-            #endregion
-
-            #region Lumps
-
-            for (int l = 0; l < BSP_HEADER_LUMPS; l++)
+            try
             {
-                // Get the next lump entry
-                var lumpEntry = header.Lumps[l];
-                if (lumpEntry == null)
-                    continue;
-                if (lumpEntry.Offset == 0 || lumpEntry.Length == 0)
-                    continue;
+                // Create a new Half-Life Level to fill
+                var file = new BspFile();
 
-                // Seek to the lump offset
-                data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+                #region Header
 
-                // Read according to the lump type
-                switch ((LumpType)l)
+                // Try to parse the header
+                var header = data.ReadType<BspHeader>();
+                if (header?.Lumps == null || header.Lumps.Length != BSP_HEADER_LUMPS)
+                    return null;
+                if (header.Version < 29 || header.Version > 30)
+                    return null;
+
+                // Set the level header
+                file.Header = header;
+
+                #endregion
+
+                #region Lumps
+
+                for (int l = 0; l < BSP_HEADER_LUMPS; l++)
                 {
-                    case LumpType.LUMP_ENTITIES:
-                        file.Entities = ParseEntitiesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_PLANES:
-                        file.PlanesLump = ParsePlanesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_TEXTURES:
-                        file.TextureLump = ParseTextureLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_VERTICES:
-                        file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_VISIBILITY:
-                        file.VisibilityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_NODES:
-                        file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_TEXINFO:
-                        file.TexinfoLump = ParseTexinfoLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_FACES:
-                        file.FacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_LIGHTING:
-                        file.LightmapLump = ParseLightmapLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_CLIPNODES:
-                        file.ClipnodesLump = ParseClipnodesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_LEAVES:
-                        file.LeavesLump = ParseLeavesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_MARKSURFACES:
-                        file.MarksurfacesLump = ParseMarksurfacesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_EDGES:
-                        file.EdgesLump = ParseEdgesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_SURFEDGES:
-                        file.SurfedgesLump = ParseSurfedgesLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    case LumpType.LUMP_MODELS:
-                        file.ModelsLump = ParseModelsLump(data, lumpEntry.Offset, lumpEntry.Length);
-                        break;
-                    default:
-                        // Unsupported LumpType value, ignore
-                        break;
+                    // Get the next lump entry
+                    var lumpEntry = header.Lumps[l];
+                    if (lumpEntry == null)
+                        continue;
+                    if (lumpEntry.Offset == 0 || lumpEntry.Length == 0)
+                        continue;
+
+                    // Seek to the lump offset
+                    data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+
+                    // Read according to the lump type
+                    switch ((LumpType)l)
+                    {
+                        case LumpType.LUMP_ENTITIES:
+                            file.Entities = ParseEntitiesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_PLANES:
+                            file.PlanesLump = ParsePlanesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_TEXTURES:
+                            file.TextureLump = ParseTextureLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_VERTICES:
+                            file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_VISIBILITY:
+                            file.VisibilityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_NODES:
+                            file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_TEXINFO:
+                            file.TexinfoLump = ParseTexinfoLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_FACES:
+                            file.FacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_LIGHTING:
+                            file.LightmapLump = ParseLightmapLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_CLIPNODES:
+                            file.ClipnodesLump = ParseClipnodesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_LEAVES:
+                            file.LeavesLump = ParseLeavesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_MARKSURFACES:
+                            file.MarksurfacesLump = ParseMarksurfacesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_EDGES:
+                            file.EdgesLump = ParseEdgesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_SURFEDGES:
+                            file.SurfedgesLump = ParseSurfedgesLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        case LumpType.LUMP_MODELS:
+                            file.ModelsLump = ParseModelsLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            break;
+                        default:
+                            // Unsupported LumpType value, ignore
+                            break;
+                    }
                 }
+
+                #endregion
+
+                return file;
             }
-
-            #endregion
-
-            return file;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>

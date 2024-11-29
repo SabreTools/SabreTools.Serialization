@@ -15,84 +15,87 @@ namespace SabreTools.Serialization.Deserializers
             if (data == null || !data.CanRead)
                 return null;
 
-            // If the offset is out of bounds
-            if (data.Position < 0 || data.Position >= data.Length)
-                return null;
-
-            // Create a new Valve Package to fill
-            var file = new Models.VPK.File();
-
-            #region Header
-
-            // Try to parse the header
-            // The original version had no signature.
-            var header = data.ReadType<Header>();
-            if (header?.Signature != SignatureUInt32)
-                return null;
-            if (header.Version > 2)
-                return null;
-
-            // Set the package header
-            file.Header = header;
-
-            #endregion
-
-            #region Extended Header
-
-            if (header.Version == 2)
+            try
             {
-                // Try to parse the extended header
-                var extendedHeader = data.ReadType<ExtendedHeader>();
-                if (extendedHeader == null)
+                // Create a new Valve Package to fill
+                var file = new Models.VPK.File();
+
+                #region Header
+
+                // The original version had no signature.
+                var header = data.ReadType<Header>();
+                if (header?.Signature != SignatureUInt32)
+                    return null;
+                if (header.Version > 2)
                     return null;
 
-                // Set the package extended header
-                file.ExtendedHeader = extendedHeader;
-            }
+                // Set the package header
+                file.Header = header;
 
-            #endregion
+                #endregion
 
-            #region Directory Items
+                #region Extended Header
 
-            // Create the directory items tree
-            var directoryItems = ParseDirectoryItemTree(data);
-            if (directoryItems == null)
-                return null;
-
-            // Set the directory items
-            file.DirectoryItems = directoryItems;
-
-            #endregion
-
-            #region Archive Hashes
-
-            if (header?.Version == 2
-                && file.ExtendedHeader != null
-                && file.ExtendedHeader.ArchiveMD5SectionSize > 0
-                && data.Position + file.ExtendedHeader.ArchiveMD5SectionSize <= data.Length)
-            {
-                // Create the archive hashes list
-                var archiveHashes = new List<ArchiveHash>();
-
-                // Cache the current offset
-                long initialOffset = data.Position;
-
-                // Try to parse the directory items
-                while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
+                if (header.Version == 2)
                 {
-                    var archiveHash = data.ReadType<ArchiveHash>();
-                    if (archiveHash == null)
+                    // Try to parse the extended header
+                    var extendedHeader = data.ReadType<ExtendedHeader>();
+                    if (extendedHeader == null)
                         return null;
-                    
-                    archiveHashes.Add(archiveHash);
+
+                    // Set the package extended header
+                    file.ExtendedHeader = extendedHeader;
                 }
 
-                file.ArchiveHashes = [.. archiveHashes];
+                #endregion
+
+                #region Directory Items
+
+                // Create the directory items tree
+                var directoryItems = ParseDirectoryItemTree(data);
+                if (directoryItems == null)
+                    return null;
+
+                // Set the directory items
+                file.DirectoryItems = directoryItems;
+
+                #endregion
+
+                #region Archive Hashes
+
+                if (header?.Version == 2
+                    && file.ExtendedHeader != null
+                    && file.ExtendedHeader.ArchiveMD5SectionSize > 0
+                    && data.Position + file.ExtendedHeader.ArchiveMD5SectionSize <= data.Length)
+                {
+                    // Create the archive hashes list
+                    var archiveHashes = new List<ArchiveHash>();
+
+                    // Cache the current offset
+                    long initialOffset = data.Position;
+
+                    // Try to parse the directory items
+                    while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
+                    {
+                        var archiveHash = data.ReadType<ArchiveHash>();
+                        if (archiveHash == null)
+                            return null;
+
+                        archiveHashes.Add(archiveHash);
+                    }
+
+                    file.ArchiveHashes = [.. archiveHashes];
+                }
+
+                #endregion
+
+                return file;
             }
-
-            #endregion
-
-            return file;
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         /// <summary>
