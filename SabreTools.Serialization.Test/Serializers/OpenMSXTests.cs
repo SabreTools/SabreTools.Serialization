@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Security.Cryptography;
+using SabreTools.Hashing;
 using SabreTools.Serialization.Serializers;
 using Xunit;
 
@@ -28,24 +28,20 @@ namespace SabreTools.Serialization.Test.Serializers
         public void SerializeStream_Valid_Filled()
         {
             // Create the object for serialization
-            var dat = GenerateOpenMSX();
+            var dat = Build();
 
             // Deserialize the file
-            var stream = OpenMSX.SerializeStream(dat) as MemoryStream;
+            var actual = OpenMSX.SerializeStream(dat);
+            actual?.Seek(0, SeekOrigin.Begin);
 
             // Validate the values
-            Assert.NotNull(stream);
-            byte[] hash = SHA1.HashData(stream.GetBuffer());
-            string hashstr = BitConverter.ToString(hash).Replace("-", string.Empty);
-            Assert.Equal("CCBFAAB56BAAF6BE56A85918055784A615379659", hashstr);
+            Assert.NotNull(actual);
+            string? actualHash = HashTool.GetStreamHash(actual, HashType.SHA1);
+            Assert.NotNull(actualHash);
+            Assert.Equal("285864811c15ad0f3b18c605c62ae3907f3e2f27", actualHash);
         }
 
-        #region Payload Generators
-
-        /// <summary>
-        /// Generate a consistent OpenMSX SoftwareDb for testing
-        /// </summary>
-        private static Models.OpenMSX.SoftwareDb GenerateOpenMSX()
+        private static Models.OpenMSX.SoftwareDb Build()
         {
             var original = new Models.OpenMSX.Original
             {
@@ -101,7 +97,5 @@ namespace SabreTools.Serialization.Test.Serializers
                 Software = [software],
             };
         }
-
-        #endregion
     }
 }
