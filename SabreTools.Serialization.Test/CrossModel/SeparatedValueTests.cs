@@ -116,9 +116,16 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", row.GameName);
             Assert.Equal("XXXXXX", row.GameDescription);
             Assert.Equal("disk", row.Type);
+            Assert.Null(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
+            Assert.Null(row.Size);
+            Assert.Null(row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
+            Assert.Null(row.SHA256);
+            Assert.Null(row.SHA384);
+            Assert.Null(row.SHA512);
+            Assert.Null(row.SpamSum);
             Assert.Equal("XXXXXX", row.Status);
         }
 
@@ -134,11 +141,17 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", row.GameName);
             Assert.Equal("XXXXXX", row.GameDescription);
             Assert.Equal("media", row.Type);
+            Assert.Null(row.RomName);
             Assert.Equal("XXXXXX", row.DiskName);
+            Assert.Null(row.Size);
+            Assert.Null(row.CRC);
             Assert.Equal("XXXXXX", row.MD5);
             Assert.Equal("XXXXXX", row.SHA1);
             Assert.Equal("XXXXXX", row.SHA256);
+            Assert.Null(row.SHA384);
+            Assert.Null(row.SHA512);
             Assert.Equal("XXXXXX", row.SpamSum);
+            Assert.Null(row.Status);
         }
 
         /// <summary>

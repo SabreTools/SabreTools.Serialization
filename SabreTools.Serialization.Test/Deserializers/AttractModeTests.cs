@@ -91,5 +91,148 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Assert.NotNull(file);
             }
         }
+
+        [Fact]
+        public void RoundTripShortTest()
+        {
+            // Get the serializer and deserializer
+            var deserializer = new Serialization.Deserializers.AttractMode();
+            var serializer = new Serialization.Serializers.AttractMode();
+
+            // Build the data
+            Models.AttractMode.MetadataFile mf = Build();
+
+            // Serialize to stream
+            Stream? actual = serializer.Serialize(mf, longHeader: false);
+            Assert.NotNull(actual);
+
+            // Serialize back to original model
+            Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
+
+            // Validate the data
+            Assert.NotNull(newMf);
+            Validate(newMf.Header, longHeader: false);
+            Assert.NotNull(newMf.Row);
+            var newRow = Assert.Single(newMf.Row);
+            Validate(newRow, longHeader: false);
+        }
+
+        [Fact]
+        public void RoundTripLongTest()
+        {
+            // Get the serializer and deserializer
+            var deserializer = new Serialization.Deserializers.AttractMode();
+            var serializer = new Serialization.Serializers.AttractMode();
+
+            // Build the data
+            Models.AttractMode.MetadataFile mf = Build();
+
+            // Serialize to stream
+            Stream? actual = serializer.Serialize(mf, longHeader: true);
+            Assert.NotNull(actual);
+
+            // Serialize back to original model
+            Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
+
+            // Validate the data
+            Assert.NotNull(newMf);
+            Validate(newMf.Header, longHeader: true);
+            Assert.NotNull(newMf.Row);
+            var newRow = Assert.Single(newMf.Row);
+            Validate(newRow, longHeader: true);
+        }
+
+        /// <summary>
+        /// Build model for serialization and deserialization
+        /// </summary>
+        private static Models.AttractMode.MetadataFile Build()
+        {
+            string[] header = ["header"];
+
+            var row = new Models.AttractMode.Row
+            {
+                Name = "XXXXXX",
+                Title = "XXXXXX",
+                Emulator = "XXXXXX",
+                CloneOf = "XXXXXX",
+                Year = "XXXXXX",
+                Manufacturer = "XXXXXX",
+                Category = "XXXXXX",
+                Players = "XXXXXX",
+                Rotation = "XXXXXX",
+                Control = "XXXXXX",
+                Status = "XXXXXX",
+                DisplayCount = "XXXXXX",
+                DisplayType = "XXXXXX",
+                AltRomname = "XXXXXX",
+                AltTitle = "XXXXXX",
+                Extra = "XXXXXX",
+                Buttons = "XXXXXX",
+                Favorite = "XXXXXX",
+                Tags = "XXXXXX",
+                PlayedCount = "XXXXXX",
+                PlayedTime = "XXXXXX",
+                FileIsAvailable = "XXXXXX",
+            };
+
+            return new Models.AttractMode.MetadataFile
+            {
+                Header = header,
+                Row = [row],
+            };
+        }
+
+        /// <summary>
+        /// Validate a header
+        /// </summary>
+        private static void Validate(string[]? header, bool longHeader)
+        {
+            Assert.NotNull(header);
+            if (longHeader)
+                Assert.True(Serialization.Serializers.AttractMode.HeaderArrayWithRomname.SequenceEqual(header));
+            else
+                Assert.True(Serialization.Serializers.AttractMode.HeaderArrayWithoutRomname.SequenceEqual(header));
+        }
+
+        /// <summary>
+        /// Validate a Row
+        /// </summary>
+        private static void Validate(Models.AttractMode.Row? row, bool longHeader)
+        {
+            Assert.NotNull(row);
+            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("XXXXXX", row.Title);
+            Assert.Equal("XXXXXX", row.Emulator);
+            Assert.Equal("XXXXXX", row.CloneOf);
+            Assert.Equal("XXXXXX", row.Year);
+            Assert.Equal("XXXXXX", row.Manufacturer);
+            Assert.Equal("XXXXXX", row.Category);
+            Assert.Equal("XXXXXX", row.Players);
+            Assert.Equal("XXXXXX", row.Rotation);
+            Assert.Equal("XXXXXX", row.Control);
+            Assert.Equal("XXXXXX", row.Status);
+            Assert.Equal("XXXXXX", row.DisplayCount);
+            Assert.Equal("XXXXXX", row.DisplayType);
+            Assert.Equal("XXXXXX", row.AltRomname);
+            Assert.Equal("XXXXXX", row.AltTitle);
+            Assert.Equal("XXXXXX", row.Extra);
+            Assert.Equal("XXXXXX", row.Buttons);
+            if (longHeader)
+            {
+                Assert.Equal("XXXXXX", row.Favorite);
+                Assert.Equal("XXXXXX", row.Tags);
+                Assert.Equal("XXXXXX", row.PlayedCount);
+                Assert.Equal("XXXXXX", row.PlayedTime);
+                Assert.Equal("XXXXXX", row.FileIsAvailable);
+            }
+            else
+            {
+                Assert.Null(row.Favorite);
+                Assert.Null(row.Tags);
+                Assert.Null(row.PlayedCount);
+                Assert.Null(row.PlayedTime);
+                Assert.Null(row.FileIsAvailable);
+            }
+        }
     }
 }

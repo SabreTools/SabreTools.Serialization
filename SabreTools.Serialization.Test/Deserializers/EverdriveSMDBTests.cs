@@ -85,5 +85,64 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.NotNull(dat?.Row);
             Assert.Equal(count, dat.Row.Length);
         }
+
+        [Fact]
+        public void RoundTripTest()
+        {
+            // Get the serializer and deserializer
+            var deserializer = new Serialization.Deserializers.EverdriveSMDB();
+            var serializer = new Serialization.Serializers.EverdriveSMDB();
+
+            // Build the data
+            Models.EverdriveSMDB.MetadataFile mf = Build();
+
+            // Serialize to stream
+            Stream? actual = serializer.Serialize(mf);
+            Assert.NotNull(actual);
+
+            // Serialize back to original model
+            Models.EverdriveSMDB.MetadataFile? newMf = deserializer.Deserialize(actual);
+
+            // Validate the data
+            Assert.NotNull(newMf);
+            Assert.NotNull(newMf.Row);
+            var newRow = Assert.Single(newMf.Row);
+            Validate(newRow);
+        }
+
+        /// <summary>
+        /// Build model for serialization and deserialization
+        /// </summary>
+        private static Models.EverdriveSMDB.MetadataFile Build()
+        {
+            var row = new Models.EverdriveSMDB.Row
+            {
+                SHA256 = "XXXXXX",
+                Name = "XXXXXX",
+                SHA1 = "XXXXXX",
+                MD5 = "XXXXXX",
+                CRC32 = "XXXXXX",
+                Size = "XXXXXX",
+            };
+
+            return new Models.EverdriveSMDB.MetadataFile
+            {
+                Row = [row],
+            };
+        }
+
+        /// <summary>
+        /// Validate a Row
+        /// </summary>
+        private static void Validate(Models.EverdriveSMDB.Row? row)
+        {
+            Assert.NotNull(row);
+            Assert.Equal("XXXXXX", row.SHA256);
+            Assert.Equal("XXXXXX", row.Name);
+            Assert.Equal("XXXXXX", row.SHA1);
+            Assert.Equal("XXXXXX", row.MD5);
+            Assert.Equal("XXXXXX", row.CRC32);
+            Assert.Equal("XXXXXX", row.Size);
+        }
     }
 }

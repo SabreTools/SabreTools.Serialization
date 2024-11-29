@@ -7,6 +7,49 @@ namespace SabreTools.Serialization.Serializers
 {
     public class SeparatedValue : BaseBinarySerializer<MetadataFile>
     {
+        #region Constants
+
+        public static readonly string[] HeaderArrayStandard =
+        [
+            "File Name",
+            "Internal Name",
+            "Description",
+            "Game Name",
+            "Game Description",
+            "Type",
+            "Rom Name",
+            "Disk Name",
+            "Size",
+            "CRC",
+            "MD5",
+            "SHA1",
+            "SHA256",
+            "Status",
+        ];
+
+        public static readonly string[] HeaderArrayExtended =
+        [
+            "File Name",
+            "Internal Name",
+            "Description",
+            "Game Name",
+            "Game Description",
+            "Type",
+            "Rom Name",
+            "Disk Name",
+            "Size",
+            "CRC",
+            "MD5",
+            "SHA1",
+            "SHA256",
+            "SHA384",
+            "SHA512",
+            "SpamSum",
+            "Status",
+        ];
+
+        #endregion
+
         #region IByteSerializer
 
         /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
@@ -110,51 +153,7 @@ namespace SabreTools.Serialization.Serializers
         /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
         private static void WriteHeader(SeparatedValueWriter writer, bool longHeader)
         {
-            string[] headerArray;
-            if (longHeader)
-            {
-                headerArray =
-                [
-                    "File Name",
-                    "Internal Name",
-                    "Description",
-                    "Game Name",
-                    "Game Description",
-                    "Type",
-                    "Rom Name",
-                    "Disk Name",
-                    "Size",
-                    "CRC",
-                    "MD5",
-                    "SHA1",
-                    "SHA256",
-                    "SHA384",
-                    "SHA512",
-                    "SpamSum",
-                    "Status",
-                ];
-            }
-            else
-            {
-                headerArray =
-                [
-                    "File Name",
-                    "Internal Name",
-                    "Description",
-                    "Game Name",
-                    "Game Description",
-                    "Type",
-                    "Rom Name",
-                    "Disk Name",
-                    "Size",
-                    "CRC",
-                    "MD5",
-                    "SHA1",
-                    "SHA256",
-                    "Status",
-                ];
-            }
-
+            string[] headerArray = longHeader ? HeaderArrayExtended : HeaderArrayStandard;
             writer.WriteHeader(headerArray);
             writer.Flush();
         }

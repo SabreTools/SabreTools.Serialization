@@ -95,6 +95,11 @@ namespace SabreTools.Serialization.Deserializers
                             AltTitle = reader.Line[14],
                             Extra = reader.Line[15],
                             Buttons = reader.Line[16],
+                            Favorite = reader.Line[17],
+                            Tags = reader.Line[18],
+                            PlayedCount = reader.Line[19],
+                            PlayedTime = reader.Line[20],
+                            FileIsAvailable = reader.Line[21],
                         };
                     }
 
