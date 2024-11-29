@@ -60,12 +60,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var executable = Deserializers.LinearExecutable.DeserializeStream(data);
-            if (executable == null)
-                return null;
-
             try
             {
+                var executable = Deserializers.LinearExecutable.DeserializeStream(data);
+                if (executable == null)
+                    return null;
+
                 return new LinearExecutable(executable, data);
             }
             catch

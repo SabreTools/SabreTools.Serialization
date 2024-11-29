@@ -60,12 +60,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.PKZIP.DeserializeStream(data);
-            if (archive == null)
-                return null;
-
             try
             {
+                var archive = Deserializers.PKZIP.DeserializeStream(data);
+                if (archive == null)
+                    return null;
+
                 return new PKZIP(archive, data);
             }
             catch

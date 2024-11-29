@@ -59,12 +59,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var audioFile = Deserializers.PlayJAudio.DeserializeStream(data);
-            if (audioFile == null)
-                return null;
-
             try
             {
+                var audioFile = Deserializers.PlayJAudio.DeserializeStream(data);
+                if (audioFile == null)
+                    return null;
+
                 return new PlayJAudioFile(audioFile, data);
             }
             catch

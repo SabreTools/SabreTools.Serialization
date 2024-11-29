@@ -59,13 +59,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.Nitro.DeserializeStream(data);
-            if (archive == null)
-                return null;
-
             try
             {
-                return new Nitro(archive, data);
+                var cart = Deserializers.Nitro.DeserializeStream(data);
+                if (cart == null)
+                    return null;
+
+                return new Nitro(cart, data);
             }
             catch
             {

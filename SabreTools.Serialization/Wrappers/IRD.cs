@@ -59,13 +59,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var ird = Deserializers.IRD.DeserializeStream(data);
-            if (ird == null)
-                return null;
-
             try
             {
-                return new IRD(ird, data);
+                var file = Deserializers.IRD.DeserializeStream(data);
+                if (file == null)
+                    return null;
+
+                return new IRD(file, data);
             }
             catch
             {

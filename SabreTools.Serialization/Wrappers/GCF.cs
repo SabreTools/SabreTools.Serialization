@@ -215,12 +215,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var file = Deserializers.GCF.DeserializeStream(data);
-            if (file == null)
-                return null;
-
             try
             {
+                var file = Deserializers.GCF.DeserializeStream(data);
+                if (file == null)
+                    return null;
+
                 return new GCF(file, data);
             }
             catch

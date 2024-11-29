@@ -75,12 +75,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var binary = Deserializers.CFB.DeserializeStream(data);
-            if (binary == null)
-                return null;
-
             try
             {
+                var binary = Deserializers.CFB.DeserializeStream(data);
+                if (binary == null)
+                    return null;
+
                 return new CFB(binary, data);
             }
             catch

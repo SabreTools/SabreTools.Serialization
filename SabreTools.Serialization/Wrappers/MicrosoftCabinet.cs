@@ -60,12 +60,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var cabinet = Deserializers.MicrosoftCabinet.DeserializeStream(data);
-            if (cabinet == null)
-                return null;
-
             try
             {
+                var cabinet = Deserializers.MicrosoftCabinet.DeserializeStream(data);
+                if (cabinet == null)
+                    return null;
+
                 return new MicrosoftCabinet(cabinet, data);
             }
             catch

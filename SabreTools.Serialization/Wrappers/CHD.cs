@@ -95,19 +95,19 @@ namespace SabreTools.Serialization.Wrappers
         /// Create a CHD header from a Stream
         /// </summary>
         /// <param name="data">Stream representing the archive</param>
-        /// <returns>An CHD header on success, null on failure</returns>
+        /// <returns>A CHD header on success, null on failure</returns>
         public static CHD? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var header = Deserializers.CHD.DeserializeStream(data);
-            if (header == null)
-                return null;
-
             try
             {
+                var header = Deserializers.CHD.DeserializeStream(data);
+                if (header == null)
+                    return null;
+
                 return new CHD(header, data);
             }
             catch

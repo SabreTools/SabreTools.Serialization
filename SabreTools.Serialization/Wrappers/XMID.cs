@@ -87,14 +87,15 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0)
                 return null;
 
-            var binary = Deserializers.XMID.DeserializeString(data);
-            if (binary == null)
-                return null;
-
             try
             {
+
+                var xmid = Deserializers.XMID.DeserializeString(data);
+                if (xmid == null)
+                    return null;
+
                 var ms = new MemoryStream(Encoding.ASCII.GetBytes(data));
-                return new XMID(binary, ms);
+                return new XMID(xmid, ms);
             }
             catch
             {

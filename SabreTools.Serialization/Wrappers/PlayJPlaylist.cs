@@ -59,12 +59,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var playlist = Deserializers.PlayJPlaylist.DeserializeStream(data);
-            if (playlist == null)
-                return null;
-
             try
             {
+                var playlist = Deserializers.PlayJPlaylist.DeserializeStream(data);
+                if (playlist == null)
+                    return null;
+
                 return new PlayJPlaylist(playlist, data);
             }
             catch

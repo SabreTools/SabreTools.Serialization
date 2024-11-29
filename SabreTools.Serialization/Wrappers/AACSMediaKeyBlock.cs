@@ -69,13 +69,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var mediaKeyBlock = Deserializers.AACS.DeserializeStream(data);
-            if (mediaKeyBlock == null)
-                return null;
-
             try
             {
-                return new AACSMediaKeyBlock(mediaKeyBlock, data);
+                var mkb = Deserializers.AACS.DeserializeStream(data);
+                if (mkb == null)
+                    return null;
+
+                return new AACSMediaKeyBlock(mkb, data);
             }
             catch
             {

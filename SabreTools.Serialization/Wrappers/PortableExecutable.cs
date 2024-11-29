@@ -806,12 +806,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var executable = Deserializers.PortableExecutable.DeserializeStream(data);
-            if (executable == null)
-                return null;
-
             try
             {
+                var executable = Deserializers.PortableExecutable.DeserializeStream(data);
+                if (executable == null)
+                    return null;
+
                 return new PortableExecutable(executable, data);
             }
             catch

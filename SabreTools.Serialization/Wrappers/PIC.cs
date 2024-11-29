@@ -34,13 +34,13 @@ namespace SabreTools.Serialization.Wrappers
         {
             // All logic is handled by the base class
         }
-        
+
         /// <summary>
-         /// Create a PIC disc information object from a byte array and offset
-         /// </summary>
-         /// <param name="data">Byte array representing the information</param>
-         /// <param name="offset">Offset within the array to parse</param>
-         /// <returns>A PIC disc information wrapper on success, null on failure</returns>
+        /// Create a PIC disc information object from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the information</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>A PIC disc information wrapper on success, null on failure</returns>
         public static PIC? Create(byte[]? data, int offset)
         {
             // If the data is invalid
@@ -67,13 +67,14 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var info = Deserializers.PIC.DeserializeStream(data);
-            if (info == null)
-                return null;
-
             try
             {
-                return new PIC(info, data);
+
+                var di = Deserializers.PIC.DeserializeStream(data);
+                if (di == null)
+                    return null;
+
+                return new PIC(di, data);
             }
             catch
             {

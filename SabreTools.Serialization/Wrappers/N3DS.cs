@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Wrappers
         /// ExeFS headers
         /// </summary>
         public ExeFSHeader?[] ExeFSHeaders => Model.ExeFSHeaders ?? [];
-        
+
         /// <summary>
         /// Media unit size in bytes
         /// </summary>
@@ -254,13 +254,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.N3DS.DeserializeStream(data);
-            if (archive == null)
-                return null;
-
             try
             {
-                return new N3DS(archive, data);
+                var cart = Deserializers.N3DS.DeserializeStream(data);
+                if (cart == null)
+                    return null;
+
+                return new N3DS(cart, data);
             }
             catch
             {

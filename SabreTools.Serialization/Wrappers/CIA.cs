@@ -60,13 +60,13 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var archive = Deserializers.CIA.DeserializeStream(data);
-            if (archive == null)
-                return null;
-
             try
             {
-                return new CIA(archive, data);
+                var cia = Deserializers.CIA.DeserializeStream(data);
+                if (cia == null)
+                    return null;
+
+                return new CIA(cia, data);
             }
             catch
             {

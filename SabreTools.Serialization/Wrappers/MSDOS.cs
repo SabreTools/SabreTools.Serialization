@@ -59,12 +59,12 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || data.Length == 0 || !data.CanSeek || !data.CanRead)
                 return null;
 
-            var executable = Deserializers.MSDOS.DeserializeStream(data);
-            if (executable == null)
-                return null;
-
             try
             {
+                var executable = Deserializers.MSDOS.DeserializeStream(data);
+                if (executable == null)
+                    return null;
+
                 return new MSDOS(executable, data);
             }
             catch
