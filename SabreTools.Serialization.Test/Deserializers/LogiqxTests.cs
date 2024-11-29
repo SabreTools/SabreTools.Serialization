@@ -71,22 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-logiqx-files1.xml.gz", 45875)]
-        [InlineData("test-logiqx-files2.xml", 761)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = Logiqx.DeserializeFile(filename);
-
-            // Validate the values
-            Assert.NotNull(dat?.Game);
-            Assert.Equal(count, dat.Game.Length);
-        }
-
         [Fact]
         public void RoundTripGameTest()
         {

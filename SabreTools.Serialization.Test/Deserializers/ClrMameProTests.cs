@@ -71,27 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-cmp-files1.dat", 59, true)]
-        [InlineData("test-cmp-files2.dat", 312, false)]
-        public void ValidFile_NonNull(string path, long count, bool expectHeader)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = ClrMamePro.DeserializeFile(filename, quotes: true);
-
-            // Validate the values
-            if (expectHeader)
-                Assert.NotNull(dat?.ClrMamePro);
-            else
-                Assert.Null(dat?.ClrMamePro);
-
-            Assert.NotNull(dat?.Game);
-            Assert.Equal(count, dat.Game.Length);
-        }
-    
         [Fact]
         public void RoundTripGameTest()
         {

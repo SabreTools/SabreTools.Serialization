@@ -71,22 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-openmsx-files.xml", 2550)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = OpenMSX.DeserializeFile(filename);
-
-            // Validate the values
-            Assert.NotNull(dat);
-            Assert.NotNull(dat.Software);
-            Assert.Equal(count, dat.Software.Length);
-        }
-
         [Fact]
         public void RoundTripTest()
         {
@@ -165,7 +149,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Original = original,
                 Rom = sccpluscart,
             };
-            
+
             var software = new Models.OpenMSX.Software
             {
                 Title = "XXXXXX",

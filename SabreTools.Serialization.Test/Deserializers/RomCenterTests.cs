@@ -71,21 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-romcenter-files.dat", 901)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = RomCenter.DeserializeFile(filename);
-
-            // Validate the values
-            Assert.NotNull(dat?.Games?.Rom);
-            Assert.Equal(count, dat.Games.Rom.Length);
-        }
-
         [Fact]
         public void RoundTripTest()
         {

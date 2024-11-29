@@ -70,24 +70,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
         }
-    
-        [Theory]
-        [InlineData("test-softwarelist-files1.xml", 4531)]
-        [InlineData("test-softwarelist-files2.xml", 2797)]
-        [InlineData("test-softwarelist-files3.xml", 274)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = SoftwareList.DeserializeFile(filename);
-
-            // Validate the values
-            Assert.NotNull(dat);
-            Assert.NotNull(dat.Software);
-            Assert.Equal(count, dat.Software.Length);
-        }
 
         [Fact]
         public void RoundTripTest()

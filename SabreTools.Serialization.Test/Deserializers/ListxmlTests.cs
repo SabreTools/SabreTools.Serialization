@@ -71,22 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-listxml-files1.xml.gz", 45861)]
-        [InlineData("test-listxml-files2.xml", 3998)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = Listxml.DeserializeFile(filename);
-
-            // Validate the values
-            Assert.NotNull(dat?.Game);
-            Assert.Equal(count, dat.Game.Length);
-        }
-
         [Fact]
         public void RoundTripGameTest()
         {

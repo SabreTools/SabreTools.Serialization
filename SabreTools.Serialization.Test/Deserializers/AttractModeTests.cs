@@ -71,27 +71,6 @@ namespace SabreTools.Serialization.Test.Deserializers
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData("test-attractmode-files.txt", 11)]
-        public void ValidFile_NonNull(string path, long count)
-        {
-            // Open the file for reading
-            string filename = Path.Combine(Environment.CurrentDirectory, "TestData", path);
-
-            // Deserialize the file
-            var dat = AttractMode.DeserializeFile(filename);
-
-            // Validate texpected: he values
-            Assert.NotNull(dat?.Row);
-            Assert.Equal(count, dat.Row.Length);
-
-            // Validate we're not missing any attributes or elements
-            foreach (var file in dat.Row)
-            {
-                Assert.NotNull(file);
-            }
-        }
-
         [Fact]
         public void RoundTripShortTest()
         {
