@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Read the next line from the input
                 string? lastLine = null;
-                while (true)
+                while (!reader.EndOfStream)
                 {
                     string? line = lastLine ?? reader.ReadLine();
                     lastLine = null;
@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.Deserializers
             lastLine = null;
             var cueTracks = new List<CueTrack>();
 
-            while (true)
+            while (!reader.EndOfStream)
             {
                 string? line = lastLine ?? ReadQuotedString(reader);
                 lastLine = null;
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Deserializers
             cueTrack.Number = parsedNumber;
             cueTrack.DataType = GetDataType(dataType);
 
-            while (true)
+            while (!reader.EndOfStream)
             {
                 string? line = lastLine ?? ReadQuotedString(reader);
                 lastLine = null;
