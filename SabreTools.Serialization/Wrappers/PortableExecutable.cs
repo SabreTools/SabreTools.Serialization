@@ -714,22 +714,22 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached raw section data
         /// </summary>
-        private byte[]?[]? _sectionData = null;
+        private byte[][]? _sectionData = null;
 
         /// <summary>
         /// Cached found string data in sections
         /// </summary>
-        private List<string>?[]? _sectionStringData = null;
+        private List<string>[]? _sectionStringData = null;
 
         /// <summary>
         /// Cached raw table data
         /// </summary>
-        private byte[]?[]? _tableData = null;
+        private byte[][]? _tableData = null;
 
         /// <summary>
         /// Cached found string data in tables
         /// </summary>
-        private List<string>?[]? _tableStringData = null;
+        private List<string>[]? _tableStringData = null;
 
         /// <summary>
         /// Cached debug data
@@ -1601,14 +1601,14 @@ namespace SabreTools.Serialization.Wrappers
                 _sectionData ??= new byte[SectionNames.Length][];
 
                 // If we already have cached data, just use that immediately
-                if (_sectionData[index] != null)
+                if (_sectionData[index].Length > 0)
                     return _sectionData[index];
 
                 // Populate the raw section data based on the source
                 byte[]? sectionData = ReadFromDataSource((int)address, (int)size);
 
                 // Cache and return the section data, even if null
-                _sectionData[index] = sectionData;
+                _sectionData[index] = sectionData ?? [];
                 return sectionData;
             }
         }
@@ -1687,14 +1687,14 @@ namespace SabreTools.Serialization.Wrappers
                 _sectionStringData ??= new List<string>[SectionNames.Length];
 
                 // If we already have cached data, just use that immediately
-                if (_sectionStringData[index] != null)
+                if (_sectionStringData[index].Count > 0)
                     return _sectionStringData[index];
 
                 // Populate the section string data based on the source
                 List<string>? sectionStringData = ReadStringsFromDataSource((int)address, (int)size);
 
                 // Cache and return the section string data, even if null
-                _sectionStringData[index] = sectionStringData;
+                _sectionStringData[index] = sectionStringData ?? [];
                 return sectionStringData;
             }
         }
@@ -1799,14 +1799,14 @@ namespace SabreTools.Serialization.Wrappers
                 _tableData ??= new byte[16][];
 
                 // If we already have cached data, just use that immediately
-                if (_tableData[index] != null)
+                if (_tableData[index].Length > 0)
                     return _tableData[index];
 
                 // Populate the raw table data based on the source
                 byte[]? tableData = ReadFromDataSource((int)address, (int)size);
 
                 // Cache and return the table data, even if null
-                _tableData[index] = tableData;
+                _tableData[index] = tableData ?? [];
                 return tableData;
             }
         }
@@ -1907,14 +1907,14 @@ namespace SabreTools.Serialization.Wrappers
                 _tableStringData ??= new List<string>[16];
 
                 // If we already have cached data, just use that immediately
-                if (_tableStringData[index] != null)
+                if (_tableStringData[index].Count > 0)
                     return _tableStringData[index];
 
                 // Populate the table string data based on the source
                 List<string>? tableStringData = ReadStringsFromDataSource((int)address, (int)size);
 
                 // Cache and return the table string data, even if null
-                _tableStringData[index] = tableStringData;
+                _tableStringData[index] = tableStringData ?? [];
                 return tableStringData;
             }
         }
