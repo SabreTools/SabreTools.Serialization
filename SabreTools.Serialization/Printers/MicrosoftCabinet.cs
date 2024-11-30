@@ -95,13 +95,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Folder {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Folder {i}");
                 builder.AppendLine(entry.CabStartOffset, "    Cab start offset");
                 builder.AppendLine(entry.DataCount, "    Data count");
                 builder.AppendLine($"    Compression type: {entry.CompressionType} (0x{entry.CompressionType:X})");
@@ -120,13 +115,8 @@ namespace SabreTools.Serialization.Printers
                 for (int j = 0; j < entry.DataBlocks.Length; j++)
                 {
                     var dataBlock = entry.DataBlocks[j];
-                    builder.AppendLine($"    Data Block {j}");
-                    if (dataBlock == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Data Block {j}");
                     builder.AppendLine(dataBlock.Checksum, "      Checksum");
                     builder.AppendLine(dataBlock.CompressedSize, "      Compressed size");
                     builder.AppendLine(dataBlock.UncompressedSize, "      Uncompressed size");
@@ -134,6 +124,7 @@ namespace SabreTools.Serialization.Printers
                     //builder.AppendLine(dataBlock.CompressedData, "      Compressed data");
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -151,13 +142,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  File {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  File {i}");
                 builder.AppendLine(entry.FileSize, "    File size");
                 builder.AppendLine(entry.FolderStartOffset, "    Folder start offset");
                 builder.AppendLine($"    Folder index: {entry.FolderIndex} (0x{entry.FolderIndex:X})");
@@ -166,6 +152,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine($"    Attributes: {entry.Attributes} (0x{entry.Attributes:X})");
                 builder.AppendLine(entry.Name, "    Name");
             }
+
             builder.AppendLine();
         }
     }

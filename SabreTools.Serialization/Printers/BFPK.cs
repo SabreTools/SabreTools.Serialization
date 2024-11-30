@@ -37,26 +37,21 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry[]? files)
+        private static void Print(StringBuilder builder, FileEntry[]? entries)
         {
             builder.AppendLine("  File Table Information:");
             builder.AppendLine("  -------------------------");
-            if (files == null || files.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No file table items");
                 return;
             }
 
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = files[i];
-                builder.AppendLine($"  File Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
+                var entry = entries[i];
 
+                builder.AppendLine($"  File Table Entry {i}");
                 builder.AppendLine(entry.NameSize, "    Name size");
                 builder.AppendLine(entry.Name, "    Name");
                 builder.AppendLine(entry.UncompressedSize, "    Uncompressed size");

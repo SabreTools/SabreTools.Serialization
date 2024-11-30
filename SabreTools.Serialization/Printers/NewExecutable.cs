@@ -129,18 +129,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Segment Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Segment Table Entry {i}");
                 builder.AppendLine(entry.Offset, "    Offset");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine($"    Flag word: {entry.FlagWord} (0x{entry.FlagWord:X})");
                 builder.AppendLine(entry.MinimumAllocationSize, "    Minimum allocation size");
             }
+
             builder.AppendLine();
         }
 
@@ -166,13 +162,8 @@ namespace SabreTools.Serialization.Printers
                 {
                     // TODO: If not integer type, print out name
                     var entry = table.ResourceTypes[i];
-                    builder.AppendLine($"  Resource Table Entry {i}");
-                    if (entry == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"  Resource Table Entry {i}");
                     builder.AppendLine(entry.TypeID, "    Type ID");
                     builder.AppendLine(entry.ResourceCount, "    Resource count");
                     builder.AppendLine(entry.Reserved, "    Reserved");
@@ -240,17 +231,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Resident-Name Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Resident-Name Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.NameString, "    Name string", Encoding.ASCII);
                 builder.AppendLine(entry.OrdinalNumber, "    Ordinal number");
             }
+
             builder.AppendLine();
         }
 
@@ -269,15 +256,11 @@ namespace SabreTools.Serialization.Printers
             {
                 // TODO: Read the imported names table and print value here
                 var entry = entries[i];
-                builder.AppendLine($"  Module-Reference Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Module-Reference Table Entry {i}");
                 builder.AppendLine($"    Offset: {entry.Offset} (adjusted to be {entry.Offset + (stub?.NewExeHeaderAddr ?? 0) + (header?.ImportedNamesTableOffset ?? 0)})");
             }
+
             builder.AppendLine();
         }
 
@@ -321,13 +304,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Entry Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Entry Table Entry {i}");
                 builder.AppendLine(entry.EntryCount, "    Entry count");
                 builder.AppendLine(entry.SegmentIndicator, "    Segment indicator");
                 switch (entry.GetEntryType())
@@ -344,6 +322,7 @@ namespace SabreTools.Serialization.Printers
                         break;
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -361,17 +340,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Nonresident-Name Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Nonresident-Name Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.NameString, "    Name string", Encoding.ASCII);
                 builder.AppendLine(entry.OrdinalNumber, "    Ordinal number");
             }
+
             builder.AppendLine();
         }
     }

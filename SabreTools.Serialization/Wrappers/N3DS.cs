@@ -420,12 +420,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
-            // Invalid partition table entry means no size is available
-            var entry = PartitionsTable[index];
-            if (entry == null)
-                return 0;
-
             // Invalid partition means no size is available
+            var entry = PartitionsTable[index];
             var header = Partitions[index];
             if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;
@@ -452,12 +448,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
-            // Invalid partition table entry means no size is available
-            var entry = PartitionsTable[index];
-            if (entry == null)
-                return 0;
-
             // Invalid partition means no size is available
+            var entry = PartitionsTable[index];
             var header = Partitions[index];
             if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;
@@ -484,12 +476,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= PartitionsTable.Length)
                 return 0;
 
-            // Invalid partition table entry means no size is available
-            var entry = PartitionsTable[index];
-            if (entry == null)
-                return 0;
-
             // Return the adjusted offset
+            var entry = PartitionsTable[index];
             uint partitionOffsetMU = entry.Offset;
             if (entry.Offset == 0)
                 return 0;
@@ -510,12 +498,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
-            // Invalid partition table entry means no size is available
-            var entry = PartitionsTable[index];
-            if (entry == null)
-                return 0;
-
             // Invalid partition means no size is available
+            var entry = PartitionsTable[index];
             var header = Partitions[index];
             if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;
@@ -542,12 +526,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
-            // Invalid partition table entry means no size is available
-            var entry = PartitionsTable[index];
-            if (entry == null)
-                return 0;
-
             // Invalid partition means no size is available
+            var entry = PartitionsTable[index];
             var header = Partitions[index];
             if (header == null || header.MagicID != NCCHMagicNumber)
                 return 0;

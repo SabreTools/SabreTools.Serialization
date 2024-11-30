@@ -52,13 +52,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Entry {i}");
                 builder.AppendLine(entry.Offset, "    Offset");
                 builder.AppendLine(entry.DiskLength, "    Disk length");
                 builder.AppendLine(entry.Length, "    Length");
@@ -67,6 +62,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.Padding, "    Padding");
                 builder.AppendLine(entry.Name, "    Name");
             }
+
             builder.AppendLine();
         }
 
@@ -84,13 +80,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
+
                 builder.AppendLine($"  File Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
-                
                 if (entry is MipTex mipTex)
                 {
                     builder.AppendLine(mipTex.Name, "    Name");
@@ -125,6 +116,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine("    Unrecognized entry type");
                 }
             }
+
             builder.AppendLine();
         }
     }

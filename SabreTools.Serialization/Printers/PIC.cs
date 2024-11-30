@@ -36,13 +36,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Disc Information Unit {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Disc Information Unit {i}");
                 if (entry.Header == null)
                 {
                     builder.AppendLine("    No header");
@@ -81,6 +76,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(trailer.ProductRevisionNumber, "    Product revision number");
                 }
             }
+
             builder.AppendLine();
         }
     }

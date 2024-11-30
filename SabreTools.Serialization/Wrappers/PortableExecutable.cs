@@ -1007,9 +1007,6 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < Model.DebugTable.DebugDirectoryTable.Length; i++)
             {
                 var entry = Model.DebugTable.DebugDirectoryTable[i];
-                if (entry == null)
-                    continue;
-
                 uint address = entry.PointerToRawData;
                 uint size = entry.SizeOfData;
 
@@ -1277,9 +1274,6 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < table.Entries.Length; i++)
             {
                 var entry = table.Entries[i];
-                if (entry == null)
-                    continue;
-
                 var newTypes = new List<object>(types ?? []);
 
                 if (entry.Name?.UnicodeString != null)

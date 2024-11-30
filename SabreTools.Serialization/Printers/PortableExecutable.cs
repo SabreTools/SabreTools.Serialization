@@ -274,20 +274,20 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SectionHeader[]? table)
+        private static void Print(StringBuilder builder, SectionHeader[]? entries)
         {
             builder.AppendLine("  Section Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null || table.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No section table items");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < table!.Length; i++)
+            for (int i = 0; i < entries!.Length; i++)
             {
-                var entry = table[i];
+                var entry = entries[i];
                 builder.AppendLine($"  Section Table Entry {i}");
                 if (entry == null)
                 {
@@ -298,7 +298,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.Name, "    Name", Encoding.ASCII);
                 builder.AppendLine(entry.VirtualSize, "    Virtual size");
                 builder.AppendLine(entry.VirtualAddress, "    Virtual address");
-                builder.AppendLine(entry.VirtualAddress.ConvertVirtualAddress(table), "    Physical address");
+                builder.AppendLine(entry.VirtualAddress.ConvertVirtualAddress(entries), "    Physical address");
                 builder.AppendLine(entry.SizeOfRawData, "    Size of raw data");
                 builder.AppendLine(entry.PointerToRawData, "    Pointer to raw data");
                 builder.AppendLine(entry.PointerToRelocations, "    Pointer to relocations");
@@ -312,11 +312,11 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, COFFSymbolTableEntry[]? symbolTable)
+        private static void Print(StringBuilder builder, COFFSymbolTableEntry[]? entries)
         {
             builder.AppendLine("  COFF Symbol Table Information:");
             builder.AppendLine("  -------------------------");
-            if (symbolTable == null || symbolTable.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No COFF symbol table items");
                 builder.AppendLine();
@@ -326,9 +326,9 @@ namespace SabreTools.Serialization.Printers
             int auxSymbolsRemaining = 0;
             int currentSymbolType = 0;
 
-            for (int i = 0; i < symbolTable.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = symbolTable[i];
+                var entry = entries[i];
                 builder.AppendLine($"  COFF Symbol Table Entry {i} (Subtype {currentSymbolType})");
                 if (entry == null)
                 {
@@ -466,6 +466,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine($"  COFF String Table Entry {i})");
                 builder.AppendLine(entry, "    Value");
             }
+
             builder.AppendLine();
         }
 
@@ -574,13 +575,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var baseRelocationTableEntry = entries[i];
-                builder.AppendLine($"  Base Relocation Table Entry {i}");
-                if (baseRelocationTableEntry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Base Relocation Table Entry {i}");
                 builder.AppendLine(baseRelocationTableEntry.PageRVA, "    Page RVA");
                 builder.AppendLine(baseRelocationTableEntry.PageRVA.ConvertVirtualAddress(table), "    Page physical address");
                 builder.AppendLine(baseRelocationTableEntry.BlockSize, "    Block size");
@@ -596,13 +592,8 @@ namespace SabreTools.Serialization.Printers
                 for (int j = 0; j < baseRelocationTableEntry.TypeOffsetFieldEntries.Length; j++)
                 {
                     var typeOffsetFieldEntry = baseRelocationTableEntry.TypeOffsetFieldEntries[j];
-                    builder.AppendLine($"    Type and Offset Entry {j}");
-                    if (typeOffsetFieldEntry == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Type and Offset Entry {j}");
                     builder.AppendLine($"      Type: {typeOffsetFieldEntry.BaseRelocationType} (0x{typeOffsetFieldEntry.BaseRelocationType:X})");
                     builder.AppendLine(typeOffsetFieldEntry.Offset, "      Offset");
                 }
@@ -689,13 +680,8 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < table.ExportAddressTable.Length; i++)
                 {
                     var exportAddressTableEntry = table.ExportAddressTable[i];
-                    builder.AppendLine($"    Export Address Table Entry {i}");
-                    if (exportAddressTableEntry == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Export Address Table Entry {i}");
                     builder.AppendLine(exportAddressTableEntry.ExportRVA, "      Export RVA / Forwarder RVA");
                 }
             }
@@ -776,13 +762,8 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < table.ImportDirectoryTable.Length; i++)
                 {
                     var importDirectoryTableEntry = table.ImportDirectoryTable[i];
-                    builder.AppendLine($"    Import Directory Table Entry {i}");
-                    if (importDirectoryTableEntry == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Import Directory Table Entry {i}");
                     builder.AppendLine(importDirectoryTableEntry.ImportLookupTableRVA, "      Import lookup table RVA");
                     builder.AppendLine(importDirectoryTableEntry.ImportLookupTableRVA.ConvertVirtualAddress(sectionTable), "      Import lookup table Physical Address");
                     builder.AppendLine(importDirectoryTableEntry.TimeDateStamp, "      Time/Date stamp");
@@ -793,6 +774,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(importDirectoryTableEntry.ImportAddressTableRVA.ConvertVirtualAddress(sectionTable), "      Import address table Physical Address");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine("    Import Lookup Tables Information:");
@@ -820,13 +802,8 @@ namespace SabreTools.Serialization.Printers
                     for (int i = 0; i < importLookupTable.Length; i++)
                     {
                         var importLookupTableEntry = importLookupTable[i];
-                        builder.AppendLine($"      Import Lookup Table {index} Entry {i}");
-                        if (importLookupTableEntry == null)
-                        {
-                            builder.AppendLine("        [NULL]");
-                            continue;
-                        }
 
+                        builder.AppendLine($"      Import Lookup Table {index} Entry {i}");
                         builder.AppendLine(importLookupTableEntry.OrdinalNameFlag, "        Ordinal/Name flag");
                         if (importLookupTableEntry.OrdinalNameFlag)
                         {
@@ -867,13 +844,8 @@ namespace SabreTools.Serialization.Printers
                     for (int i = 0; i < importAddressTable.Length; i++)
                     {
                         var importAddressTableEntry = importAddressTable[i];
-                        builder.AppendLine($"      Import Address Table {index} Entry {i}");
-                        if (importAddressTableEntry == null)
-                        {
-                            builder.AppendLine("        [NULL]");
-                            continue;
-                        }
 
+                        builder.AppendLine($"      Import Address Table {index} Entry {i}");
                         builder.AppendLine(importAddressTableEntry.OrdinalNameFlag, "        Ordinal/Name flag");
                         if (importAddressTableEntry.OrdinalNameFlag)
                         {
@@ -900,13 +872,8 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < table.HintNameTable.Length; i++)
                 {
                     var hintNameTableEntry = table.HintNameTable[i];
-                    builder.AppendLine($"    Hint/Name Table Entry {i}");
-                    if (hintNameTableEntry == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Hint/Name Table Entry {i}");
                     builder.AppendLine(hintNameTableEntry.Hint, "      Hint");
                     builder.AppendLine(hintNameTableEntry.Name, "      Name");
                 }

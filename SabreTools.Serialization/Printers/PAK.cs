@@ -51,17 +51,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Item {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Item {i}");
                 builder.AppendLine(entry.ItemName, "    Item name");
                 builder.AppendLine(entry.ItemOffset, "    Item offset");
                 builder.AppendLine(entry.ItemLength, "    Item length");
             }
+
             builder.AppendLine();
         }
     }

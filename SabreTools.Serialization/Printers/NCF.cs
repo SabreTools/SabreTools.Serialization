@@ -105,13 +105,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Entry {i}");
                 builder.AppendLine(entry.NameOffset, "    Name offset");
                 builder.AppendLine(entryNames![entry.NameOffset], "    Name");
                 builder.AppendLine(entry.ItemSize, "    Item size");
@@ -121,6 +116,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.NextIndex, "    Next index");
                 builder.AppendLine(entry.FirstIndex, "    First index");
             }
+
             builder.AppendLine();
         }
 
@@ -138,15 +134,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Info 1 Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Info 1 Entry {i}");
                 builder.AppendLine(entry.Dummy0, "    Dummy 0");
             }
+
             builder.AppendLine();
         }
 
@@ -164,15 +156,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Info 2 Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Info 2 Entry {i}");
                 builder.AppendLine(entry.Dummy0, "    Dummy 0");
             }
+
             builder.AppendLine();
         }
 
@@ -190,15 +178,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Copy Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Copy Entry {i}");
                 builder.AppendLine(entry.DirectoryIndex, "    Directory index");
             }
+
             builder.AppendLine();
         }
 
@@ -216,15 +200,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Local Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Local Entry {i}");
                 builder.AppendLine(entry.DirectoryIndex, "    Directory index");
             }
+
             builder.AppendLine();
         }
 
@@ -258,15 +238,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Unknown Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Unknown Entry {i}");
                 builder.AppendLine(entry.Dummy0, "    Dummy 0");
             }
+
             builder.AppendLine();
         }
 
@@ -318,16 +294,12 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Checksum Map Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Checksum Map Entry {i}");
                 builder.AppendLine(entry.ChecksumCount, "    Checksum count");
                 builder.AppendLine(entry.FirstChecksumIndex, "    First checksum index");
             }
+
             builder.AppendLine();
         }
 
@@ -345,15 +317,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Checksum Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Checksum Entry {i}");
                 builder.AppendLine(entry.Checksum, "    Checksum");
             }
+
             builder.AppendLine();
         }
     }

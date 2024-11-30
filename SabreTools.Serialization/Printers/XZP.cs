@@ -61,17 +61,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Entry {i}");
                 builder.AppendLine(entry.FileNameCRC, "    File name CRC");
                 builder.AppendLine(entry.EntryLength, "    Entry length");
                 builder.AppendLine(entry.EntryOffset, "    Entry offset");
             }
+
             builder.AppendLine();
         }
 
@@ -89,15 +85,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Mapping {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Mapping {i}");
                 builder.AppendLine(entry.PreloadDirectoryEntryIndex, "    Preload directory entry index");
             }
+
             builder.AppendLine();
         }
 
@@ -115,18 +107,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Item {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Item {i}");
                 builder.AppendLine(entry.FileNameCRC, "    File name CRC");
                 builder.AppendLine(entry.NameOffset, "    Name offset");
                 builder.AppendLine(entry.Name, "    Name");
                 builder.AppendLine(entry.TimeCreated, "    Time created");
             }
+
             builder.AppendLine();
         }
 

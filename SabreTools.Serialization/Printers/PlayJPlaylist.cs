@@ -50,13 +50,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Audio File {i}:");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Audio File {i}:");
                 Print(builder, entry.Header);
                 Print(builder, entry.UnknownBlock1);
 
@@ -70,6 +65,7 @@ namespace SabreTools.Serialization.Printers
                     Print(builder, entry.DataFilesCount, entry.DataFiles);
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -208,18 +204,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"    Data File {i}:");
-                if (entry == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"    Data File {i}:");
                 builder.AppendLine(entry.FileNameLength, "      File name length");
                 builder.AppendLine(entry.FileName, "      File name");
                 builder.AppendLine(entry.DataLength, "      Data length");
                 builder.AppendLine(entry.Data, "      Data");
             }
+
             builder.AppendLine();
         }
     }

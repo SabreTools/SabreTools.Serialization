@@ -237,13 +237,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  File Descriptor {i}:");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  File Descriptor {i}:");
                 builder.AppendLine(entry.NameOffset, "    Name offset");
                 builder.AppendLine(entry.Name, "    Name");
                 builder.AppendLine(entry.DirectoryIndex, "    Directory index");
@@ -257,6 +252,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.LinkNext, "    Link next");
                 builder.AppendLine($"    Link flags: {entry.LinkFlags} (0x{entry.LinkFlags:X})");
             }
+
             builder.AppendLine();
         }
 

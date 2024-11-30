@@ -98,13 +98,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < directoryEntries.Length; i++)
             {
                 var directoryEntry = directoryEntries[i];
-                builder.AppendLine($"  Directory Entry {i}");
-                if (directoryEntry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Entry {i}");
                 builder.AppendLine(directoryEntry.Name, "    Name");
                 builder.AppendLine(directoryEntry.NameLength, "    Name length");
                 builder.AppendLine($"    Object type: {directoryEntry.ObjectType} (0x{directoryEntry.ObjectType:X})");
@@ -119,6 +114,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(directoryEntry.StartingSectorLocation, "    Staring sector location");
                 builder.AppendLine(directoryEntry.StreamSize, "    Stream size");
             }
+
             builder.AppendLine();
         }
     }

@@ -56,17 +56,13 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < header.PartitionsTable.Length; i++)
                 {
                     var partitionTableEntry = header.PartitionsTable[i];
-                    builder.AppendLine($"    Partition table entry {i}");
-                    if (partitionTableEntry == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"    Partition table entry {i}");
                     builder.AppendLine(partitionTableEntry.Offset, "      Offset");
                     builder.AppendLine(partitionTableEntry.Length, "      Length");
                 }
             }
+
             builder.AppendLine();
 
             // If we have a cart image
@@ -91,6 +87,7 @@ namespace SabreTools.Serialization.Printers
                         builder.AppendLine(header.PartitionIdTable[i], $"    Partition {i} ID");
                     }
                 }
+
                 builder.AppendLine();
 
                 builder.AppendLine(header.Reserved1, "  Reserved 1");
@@ -278,69 +275,67 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  NCCH Partition Header {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  NCCH Partition Header {i}");
                 if (entry.MagicID == string.Empty)
                 {
                     builder.AppendLine("    Empty partition, no data can be parsed");
+                    continue;
                 }
-                else if (entry.MagicID != Constants.NCCHMagicNumber)
+
+                if (entry.MagicID != Constants.NCCHMagicNumber)
                 {
                     builder.AppendLine("    Unrecognized partition data, no data can be parsed");
+                    continue;
+                }
+
+                builder.AppendLine(entry.RSA2048Signature, "    RSA-2048 SHA-256 signature");
+                builder.AppendLine(entry.MagicID, "    Magic ID");
+                builder.AppendLine(entry.ContentSizeInMediaUnits, "    Content size in media units");
+                builder.AppendLine(entry.PartitionId, "    Partition ID");
+                builder.AppendLine(entry.MakerCode, "    Maker code");
+                builder.AppendLine(entry.Version, "    Version");
+                builder.AppendLine(entry.VerificationHash, "    Verification hash");
+                builder.AppendLine(entry.ProgramId, "    Program ID");
+                builder.AppendLine(entry.Reserved1, "    Reserved 1");
+                builder.AppendLine(entry.LogoRegionHash, "    Logo region SHA-256 hash");
+                builder.AppendLine(entry.ProductCode, "    Product code");
+                builder.AppendLine(entry.ExtendedHeaderHash, "    Extended header SHA-256 hash");
+                builder.AppendLine(entry.ExtendedHeaderSizeInBytes, "    Extended header size in bytes");
+                builder.AppendLine(entry.Reserved2, "    Reserved 2");
+                builder.AppendLine("    Flags:");
+                if (entry.Flags == null)
+                {
+                    builder.AppendLine("      [NULL]");
                 }
                 else
                 {
-                    builder.AppendLine(entry.RSA2048Signature, "    RSA-2048 SHA-256 signature");
-                    builder.AppendLine(entry.MagicID, "    Magic ID");
-                    builder.AppendLine(entry.ContentSizeInMediaUnits, "    Content size in media units");
-                    builder.AppendLine(entry.PartitionId, "    Partition ID");
-                    builder.AppendLine(entry.MakerCode, "    Maker code");
-                    builder.AppendLine(entry.Version, "    Version");
-                    builder.AppendLine(entry.VerificationHash, "    Verification hash");
-                    builder.AppendLine(entry.ProgramId, "    Program ID");
-                    builder.AppendLine(entry.Reserved1, "    Reserved 1");
-                    builder.AppendLine(entry.LogoRegionHash, "    Logo region SHA-256 hash");
-                    builder.AppendLine(entry.ProductCode, "    Product code");
-                    builder.AppendLine(entry.ExtendedHeaderHash, "    Extended header SHA-256 hash");
-                    builder.AppendLine(entry.ExtendedHeaderSizeInBytes, "    Extended header size in bytes");
-                    builder.AppendLine(entry.Reserved2, "    Reserved 2");
-                    builder.AppendLine("    Flags:");
-                    if (entry.Flags == null)
-                    {
-                        builder.AppendLine("      [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.Flags.Reserved0, "      Reserved 0");
-                        builder.AppendLine(entry.Flags.Reserved1, "      Reserved 1");
-                        builder.AppendLine(entry.Flags.Reserved2, "      Reserved 2");
-                        builder.AppendLine($"      Crypto method: {entry.Flags.CryptoMethod} (0x{entry.Flags.CryptoMethod:X})");
-                        builder.AppendLine($"      Content platform: {entry.Flags.ContentPlatform} (0x{entry.Flags.ContentPlatform:X})");
-                        builder.AppendLine($"      Content type: {entry.Flags.MediaPlatformIndex} (0x{entry.Flags.MediaPlatformIndex:X})");
-                        builder.AppendLine(entry.Flags.ContentUnitSize, "      Content unit size");
-                        builder.AppendLine($"      Bitmasks: {entry.Flags.BitMasks} (0x{entry.Flags.BitMasks:X})");
-                    }
-                    builder.AppendLine(entry.PlainRegionOffsetInMediaUnits, "    Plain region offset, in media units");
-                    builder.AppendLine(entry.PlainRegionSizeInMediaUnits, "    Plain region size, in media units");
-                    builder.AppendLine(entry.LogoRegionOffsetInMediaUnits, "    Logo region offset, in media units");
-                    builder.AppendLine(entry.LogoRegionSizeInMediaUnits, "    Logo region size, in media units");
-                    builder.AppendLine(entry.ExeFSOffsetInMediaUnits, "    ExeFS offset, in media units");
-                    builder.AppendLine(entry.ExeFSSizeInMediaUnits, "    ExeFS size, in media units");
-                    builder.AppendLine(entry.ExeFSHashRegionSizeInMediaUnits, "    ExeFS hash region size, in media units");
-                    builder.AppendLine(entry.Reserved3, "    Reserved 3");
-                    builder.AppendLine(entry.RomFSOffsetInMediaUnits, "    RomFS offset, in media units");
-                    builder.AppendLine(entry.RomFSSizeInMediaUnits, "    RomFS size, in media units");
-                    builder.AppendLine(entry.RomFSHashRegionSizeInMediaUnits, "    RomFS hash region size, in media units");
-                    builder.AppendLine(entry.Reserved4, "    Reserved 4");
-                    builder.AppendLine(entry.ExeFSSuperblockHash, "    ExeFS superblock SHA-256 hash");
-                    builder.AppendLine(entry.RomFSSuperblockHash, "    RomFS superblock SHA-256 hash");
+                    builder.AppendLine(entry.Flags.Reserved0, "      Reserved 0");
+                    builder.AppendLine(entry.Flags.Reserved1, "      Reserved 1");
+                    builder.AppendLine(entry.Flags.Reserved2, "      Reserved 2");
+                    builder.AppendLine($"      Crypto method: {entry.Flags.CryptoMethod} (0x{entry.Flags.CryptoMethod:X})");
+                    builder.AppendLine($"      Content platform: {entry.Flags.ContentPlatform} (0x{entry.Flags.ContentPlatform:X})");
+                    builder.AppendLine($"      Content type: {entry.Flags.MediaPlatformIndex} (0x{entry.Flags.MediaPlatformIndex:X})");
+                    builder.AppendLine(entry.Flags.ContentUnitSize, "      Content unit size");
+                    builder.AppendLine($"      Bitmasks: {entry.Flags.BitMasks} (0x{entry.Flags.BitMasks:X})");
                 }
+
+                builder.AppendLine(entry.PlainRegionOffsetInMediaUnits, "    Plain region offset, in media units");
+                builder.AppendLine(entry.PlainRegionSizeInMediaUnits, "    Plain region size, in media units");
+                builder.AppendLine(entry.LogoRegionOffsetInMediaUnits, "    Logo region offset, in media units");
+                builder.AppendLine(entry.LogoRegionSizeInMediaUnits, "    Logo region size, in media units");
+                builder.AppendLine(entry.ExeFSOffsetInMediaUnits, "    ExeFS offset, in media units");
+                builder.AppendLine(entry.ExeFSSizeInMediaUnits, "    ExeFS size, in media units");
+                builder.AppendLine(entry.ExeFSHashRegionSizeInMediaUnits, "    ExeFS hash region size, in media units");
+                builder.AppendLine(entry.Reserved3, "    Reserved 3");
+                builder.AppendLine(entry.RomFSOffsetInMediaUnits, "    RomFS offset, in media units");
+                builder.AppendLine(entry.RomFSSizeInMediaUnits, "    RomFS size, in media units");
+                builder.AppendLine(entry.RomFSHashRegionSizeInMediaUnits, "    RomFS hash region size, in media units");
+                builder.AppendLine(entry.Reserved4, "    Reserved 4");
+                builder.AppendLine(entry.ExeFSSuperblockHash, "    ExeFS superblock SHA-256 hash");
+                builder.AppendLine(entry.RomFSSuperblockHash, "    RomFS superblock SHA-256 hash");
             }
+
             builder.AppendLine();
         }
 
@@ -358,13 +353,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  NCCH Extended Header {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    Unrecognized partition data, no data can be parsed");
-                    continue;
-                }
 
+                builder.AppendLine($"  NCCH Extended Header {i}");
                 builder.AppendLine("    System control info:");
                 if (entry.SCI == null)
                 {
@@ -594,13 +584,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  ExeFS Header {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    Unrecognized partition data, no data can be parsed");
-                    continue;
-                }
 
+                builder.AppendLine($"  ExeFS Header {i}");
                 builder.AppendLine("    File headers:");
                 if (entry.FileHeaders == null || entry.FileHeaders.Length == 0)
                 {

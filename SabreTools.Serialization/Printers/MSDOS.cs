@@ -62,16 +62,12 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Relocation Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Relocation Table Entry {i}");
                 builder.AppendLine(entry.Offset, "    Offset");
                 builder.AppendLine(entry.Segment, "    Segment");
             }
+            
             builder.AppendLine();
         }
     }

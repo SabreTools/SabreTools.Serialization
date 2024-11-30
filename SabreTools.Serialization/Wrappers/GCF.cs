@@ -37,8 +37,6 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the directory entry
                     var directoryEntry = Model.DirectoryEntries[i];
                     var directoryMapEntry = Model.DirectoryMapEntries[i];
-                    if (directoryEntry == null || directoryMapEntry == null)
-                        continue;
 
                     // If we have a directory, skip for now
 #if NET20 || NET35
@@ -59,16 +57,13 @@ namespace SabreTools.Serialization.Wrappers
 #endif
                     };
                     var pathParts = new List<string> { Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
-                    var blockEntries = new List<Models.GCF.BlockEntry?>();
+                    var blockEntries = new List<Models.GCF.BlockEntry>();
 
                     // Traverse the parent tree
                     uint index = directoryEntry.ParentIndex;
                     while (index != 0xFFFFFFFF)
                     {
                         var parentDirectoryEntry = Model.DirectoryEntries[index];
-                        if (parentDirectoryEntry == null)
-                            break;
-
                         pathParts.Add(Model.DirectoryNames![parentDirectoryEntry.NameOffset] ?? string.Empty);
                         index = parentDirectoryEntry.ParentIndex;
                     }
@@ -284,8 +279,6 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < file.BlockEntries.Length; i++)
             {
                 var blockEntry = file.BlockEntries[i];
-                if (blockEntry == null)
-                    continue;
 
                 uint dataBlockIndex = blockEntry.FirstDataBlockIndex;
                 long blockEntrySize = blockEntry.FileDataSize;

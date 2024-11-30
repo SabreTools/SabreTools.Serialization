@@ -176,19 +176,15 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Hash Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Hash Table Entry {i}");
                 builder.AppendLine(entry.NameHashPartA, "    Name hash, part A");
                 builder.AppendLine(entry.NameHashPartB, "    Name hash, part B");
                 builder.AppendLine($"    Locale: {entry.Locale} (0x{entry.Locale:X})");
                 builder.AppendLine(entry.Platform, "    Platform");
                 builder.AppendLine(entry.BlockIndex, "    BlockIndex");
             }
+
             builder.AppendLine();
         }
 
@@ -206,18 +202,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Block Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Block Table Entry {i}");
                 builder.AppendLine(entry.FilePosition, "    File position");
                 builder.AppendLine(entry.CompressedSize, "    Compressed size");
                 builder.AppendLine(entry.UncompressedSize, "    Uncompressed size");
                 builder.AppendLine($"    Flags: {entry.Flags} (0x{entry.Flags:X})");
             }
+
             builder.AppendLine();
         }
 
@@ -237,6 +229,7 @@ namespace SabreTools.Serialization.Printers
                 var entry = entries[i];
                 builder.AppendLine($"  Hi-block Table Entry {i}: {entry}");
             }
+
             builder.AppendLine();
         }
     }

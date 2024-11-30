@@ -177,13 +177,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Folder Allocation Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Folder Allocation Table Entry {i}");
                 builder.AppendLine(entry.StartOffset, "    Start offset");
                 builder.AppendLine(entry.FirstFileIndex, "    First file index");
                 if (entry.Unknown == 0xF0)
@@ -197,6 +192,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(totalEntries, "    Total entries");
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -214,18 +210,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Name List Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Name List Entry {i}");
                 builder.AppendLine(entry.Folder, "    Folder");
                 builder.AppendLine(entry.Name, "    Name");
                 if (entry.Folder)
                     builder.AppendLine(entry.Index, "    Index");
             }
+
             builder.AppendLine();
         }
 
@@ -243,16 +235,12 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  File Allocation Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  File Allocation Table Entry {i}");
                 builder.AppendLine(entry.StartOffset, "    Start offset");
                 builder.AppendLine(entry.EndOffset, "    End offset");
             }
+
             builder.AppendLine();
         }
     }

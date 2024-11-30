@@ -71,18 +71,14 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Archive Hash {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Archive Hash {i}");
                 builder.AppendLine(entry.ArchiveIndex, "    Archive index");
                 builder.AppendLine(entry.ArchiveOffset, "    Archive offset");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Hash, "    Hash");
             }
+
             builder.AppendLine();
         }
 
@@ -100,14 +96,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Directory Item {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    builder.AppendLine();
-                    continue;
-                }
 
+                builder.AppendLine($"  Directory Item {i}");
                 builder.AppendLine(entry.Extension, "    Extension");
                 builder.AppendLine(entry.Path, "    Path");
                 builder.AppendLine(entry.Name, "    Name");
@@ -116,6 +106,7 @@ namespace SabreTools.Serialization.Printers
                 Print(builder, entry.DirectoryEntry);
                 // TODO: Print out preload data?
             }
+
             builder.AppendLine();
         }
 

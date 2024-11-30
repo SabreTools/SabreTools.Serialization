@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Wrappers
                 ushort archiveCount = 0;
                 foreach (var di in Model.DirectoryItems ?? [])
                 {
-                    if (di?.DirectoryEntry == null)
+                    if (di.DirectoryEntry == null)
                         continue;
                     if (di.DirectoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE)
                         continue;
@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the directory item
             var directoryItem = Model.DirectoryItems[index];
-            if (directoryItem?.DirectoryEntry == null)
+            if (directoryItem.DirectoryEntry == null)
                 return false;
 
             // If we have an item with no archive

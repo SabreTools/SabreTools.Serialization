@@ -152,13 +152,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Object Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Object Table Entry {i}");
                 builder.AppendLine(entry.VirtualSegmentSize, "    Virtual segment size");
                 builder.AppendLine(entry.RelocationBaseAddress, "    Relocation base address");
                 builder.AppendLine($"    Object flags: {entry.ObjectFlags} (0x{entry.ObjectFlags:X})");
@@ -166,6 +161,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.PageTableEntries, "    Page table entries");
                 builder.AppendLine(entry.Reserved, "    Reserved");
             }
+
             builder.AppendLine();
         }
 
@@ -183,17 +179,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Object Page Map Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Object Page Map Entry {i}");
                 builder.AppendLine(entry.PageDataOffset, "    Page data offset");
                 builder.AppendLine(entry.DataSize, "    Data size");
                 builder.AppendLine($"    Flags: {entry.Flags} (0x{entry.Flags:X})");
             }
+
             builder.AppendLine();
         }
 
@@ -211,19 +203,15 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Resource Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Resource Table Entry {i}");
                 builder.AppendLine($"    Type ID: {entry.TypeID} (0x{entry.TypeID:X})");
                 builder.AppendLine(entry.NameID, "    Name ID");
                 builder.AppendLine(entry.ResourceSize, "    Resource size");
                 builder.AppendLine(entry.ObjectNumber, "    Object number");
                 builder.AppendLine(entry.Offset, "    Offset");
             }
+
             builder.AppendLine();
         }
 
@@ -241,17 +229,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Resident Names Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Resident Names Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Name, "    Name");
                 builder.AppendLine(entry.OrdinalNumber, "    Ordinal number");
             }
+
             builder.AppendLine();
         }
 
@@ -269,76 +253,71 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < bundles.Length; i++)
             {
                 var bundle = bundles[i];
-                builder.AppendLine($"  Entry Table Bundle {i}");
-                if (bundle == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Entry Table Bundle {i}");
                 builder.AppendLine(bundle.Entries, "    Entries");
                 builder.AppendLine($"    Bundle type: {bundle.BundleType} (0x{bundle.BundleType:X})");
                 builder.AppendLine();
+                Print(builder, bundle.TableEntries, bundle.BundleType);
+            }
 
-                builder.AppendLine("    Entry Table Entries:");
-                builder.AppendLine("    -------------------------");
-                if (bundle.TableEntries == null || bundle.TableEntries.Length == 0)
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, EntryTableEntry[]? entries, BundleType type)
+        {
+            builder.AppendLine("    Entry Table Entries:");
+            builder.AppendLine("    -------------------------");
+            if (entries == null || entries.Length == 0)
+            {
+                builder.AppendLine("    No entry table entries");
+                builder.AppendLine();
+                return;
+            }
+
+            for (int j = 0; j < entries.Length; j++)
+            {
+                var entry = entries[j];
+
+                builder.AppendLine($"    Entry Table Entry {j}");
+                switch (type & ~BundleType.ParameterTypingInformationPresent)
                 {
-                    builder.AppendLine("    No entry table entries");
-                    builder.AppendLine();
-                    continue;
-                }
+                    case BundleType.UnusedEntry:
+                        builder.AppendLine("      Unused, empty entry");
+                        break;
 
-                for (int j = 0; j < bundle.TableEntries.Length; j++)
-                {
-                    var entry = bundle.TableEntries[j];
-                    builder.AppendLine($"    Entry Table Entry {j}");
-                    if (entry == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
+                    case BundleType.SixteenBitEntry:
+                        builder.AppendLine(entry.SixteenBitObjectNumber, "      Object number");
+                        builder.AppendLine($"      Entry flags: {entry.SixteenBitEntryFlags} (0x{entry.SixteenBitEntryFlags:X})");
+                        builder.AppendLine(entry.SixteenBitOffset, "      Offset");
+                        break;
 
-                    switch (bundle.BundleType & ~BundleType.ParameterTypingInformationPresent)
-                    {
-                        case BundleType.UnusedEntry:
-                            builder.AppendLine("      Unused, empty entry");
-                            break;
+                    case BundleType.TwoEightySixCallGateEntry:
+                        builder.AppendLine(entry.TwoEightySixObjectNumber, "      Object number");
+                        builder.AppendLine($"      Entry flags: {entry.TwoEightySixEntryFlags} (0x{entry.TwoEightySixEntryFlags:X})");
+                        builder.AppendLine(entry.TwoEightySixOffset, "      Offset");
+                        builder.AppendLine(entry.TwoEightySixCallgate, "      Callgate");
+                        break;
 
-                        case BundleType.SixteenBitEntry:
-                            builder.AppendLine(entry.SixteenBitObjectNumber, "      Object number");
-                            builder.AppendLine($"      Entry flags: {entry.SixteenBitEntryFlags} (0x{entry.SixteenBitEntryFlags:X})");
-                            builder.AppendLine(entry.SixteenBitOffset, "      Offset");
-                            break;
+                    case BundleType.ThirtyTwoBitEntry:
+                        builder.AppendLine(entry.ThirtyTwoBitObjectNumber, "      Object number");
+                        builder.AppendLine($"      Entry flags: {entry.ThirtyTwoBitEntryFlags} (0x{entry.ThirtyTwoBitEntryFlags:X})");
+                        builder.AppendLine(entry.ThirtyTwoBitOffset, "      Offset");
+                        break;
 
-                        case BundleType.TwoEightySixCallGateEntry:
-                            builder.AppendLine(entry.TwoEightySixObjectNumber, "      Object number");
-                            builder.AppendLine($"      Entry flags: {entry.TwoEightySixEntryFlags} (0x{entry.TwoEightySixEntryFlags:X})");
-                            builder.AppendLine(entry.TwoEightySixOffset, "      Offset");
-                            builder.AppendLine(entry.TwoEightySixCallgate, "      Callgate");
-                            break;
+                    case BundleType.ForwarderEntry:
+                        builder.AppendLine(entry.ForwarderReserved, "      Reserved");
+                        builder.AppendLine($"      Forwarder flags: {entry.ForwarderFlags} (0x{entry.ForwarderFlags:X})");
+                        builder.AppendLine(entry.ForwarderModuleOrdinalNumber, "      Module ordinal number");
+                        builder.AppendLine(entry.ProcedureNameOffset, "      Procedure name offset");
+                        builder.AppendLine(entry.ImportOrdinalNumber, "      Import ordinal number");
+                        break;
 
-                        case BundleType.ThirtyTwoBitEntry:
-                            builder.AppendLine(entry.ThirtyTwoBitObjectNumber, "      Object number");
-                            builder.AppendLine($"      Entry flags: {entry.ThirtyTwoBitEntryFlags} (0x{entry.ThirtyTwoBitEntryFlags:X})");
-                            builder.AppendLine(entry.ThirtyTwoBitOffset, "      Offset");
-                            break;
-
-                        case BundleType.ForwarderEntry:
-                            builder.AppendLine(entry.ForwarderReserved, "      Reserved");
-                            builder.AppendLine($"      Forwarder flags: {entry.ForwarderFlags} (0x{entry.ForwarderFlags:X})");
-                            builder.AppendLine(entry.ForwarderModuleOrdinalNumber, "      Module ordinal number");
-                            builder.AppendLine(entry.ProcedureNameOffset, "      Procedure name offset");
-                            builder.AppendLine(entry.ImportOrdinalNumber, "      Import ordinal number");
-                            break;
-
-                        default:
-                            builder.AppendLine($"      Unknown entry type {bundle.BundleType}");
-                            break;
-                    }
+                    default:
+                        builder.AppendLine($"      Unknown entry type {type}");
+                        break;
                 }
             }
-            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, ModuleFormatDirectivesTableEntry[]? entries)
@@ -355,17 +334,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Moduile Format Directives Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Moduile Format Directives Table Entry {i}");
                 builder.AppendLine($"    Directive number: {entry.DirectiveNumber} (0x{entry.DirectiveNumber:X})");
                 builder.AppendLine(entry.DirectiveDataLength, "    Directive data length");
                 builder.AppendLine(entry.DirectiveDataOffset, "    Directive data offset");
             }
+
             builder.AppendLine();
         }
 
@@ -383,13 +358,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Verify Record Directive Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Verify Record Directive Table Entry {i}");
                 builder.AppendLine(entry.EntryCount, "    Entry count");
                 builder.AppendLine(entry.OrdinalIndex, "    Ordinal index");
                 builder.AppendLine(entry.Version, "    Version");
@@ -398,6 +368,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.ObjectLoadBaseAddress, "    Object load base address");
                 builder.AppendLine(entry.ObjectVirtualAddressSize, "    Object virtual address size");
             }
+
             builder.AppendLine();
         }
 
@@ -415,15 +386,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Fix-up Page Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Fix-up Page Table Entry {i}");
                 builder.AppendLine(entry.Offset, "    Offset");
             }
+
             builder.AppendLine();
         }
 
@@ -441,13 +408,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Fix-up Record Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Fix-up Record Table Entry {i}");
                 builder.AppendLine($"    Source type: {entry.SourceType} (0x{entry.SourceType:X})");
                 builder.AppendLine($"    Target flags: {entry.TargetFlags} (0x{entry.TargetFlags:X})");
 
@@ -669,16 +631,12 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Import Module Name Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Import Module Name Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Name, "    Name");
             }
+
             builder.AppendLine();
         }
 
@@ -696,16 +654,12 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Import Module Procedure Name Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Import Module Procedure Name Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Name, "    Name");
             }
+
             builder.AppendLine();
         }
 
@@ -723,15 +677,11 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($" Per-Page Checksum Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($" Per-Page Checksum Table Entry {i}");
                 builder.AppendLine(entry.Checksum, "    Checksum");
             }
+
             builder.AppendLine();
         }
 
@@ -749,17 +699,13 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                builder.AppendLine($"  Non-Resident Names Table Entry {i}");
-                if (entry == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  Non-Resident Names Table Entry {i}");
                 builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Name, "    Name");
                 builder.AppendLine(entry.OrdinalNumber, "    Ordinal number");
             }
+
             builder.AppendLine();
         }
 
