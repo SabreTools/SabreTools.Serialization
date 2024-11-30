@@ -35,6 +35,7 @@ namespace SabreTools.Serialization.Printers
                 var record = records[i];
                 Print(builder, record, i);
             }
+
             builder.AppendLine();
         }
 
@@ -84,17 +85,11 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, EndOfMediaKeyBlockRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine(record.SignatureData, "    Signature data");
         }
 
-        private static void Print(StringBuilder builder, ExplicitSubsetDifferenceRecord? record)
+        private static void Print(StringBuilder builder, ExplicitSubsetDifferenceRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine("    Subset Differences:");
             builder.AppendLine("    -------------------------");
             if (record?.SubsetDifferences == null || record.SubsetDifferences.Length == 0)
@@ -103,27 +98,18 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < record.SubsetDifferences.Length; j++)
+            for (int i = 0; i < record.SubsetDifferences.Length; i++)
             {
-                var sd = record.SubsetDifferences[j];
-                builder.AppendLine($"    Subset Difference {j}");
-                if (sd == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine(sd.Mask, "      Mask");
-                    builder.AppendLine(sd.Number, "      Number");
-                }
+                var sd = record.SubsetDifferences[i];
+
+                builder.AppendLine($"    Subset Difference {i}");
+                builder.AppendLine(sd.Mask, "      Mask");
+                builder.AppendLine(sd.Number, "      Number");
             }
         }
 
-        private static void Print(StringBuilder builder, MediaKeyDataRecord? record)
+        private static void Print(StringBuilder builder, MediaKeyDataRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine("    Media Keys:");
             builder.AppendLine("    -------------------------");
             if (record?.MediaKeyData == null || record.MediaKeyData.Length == 0)
@@ -132,18 +118,15 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < record.MediaKeyData.Length; j++)
+            for (int i = 0; i < record.MediaKeyData.Length; i++)
             {
-                var mk = record.MediaKeyData[j];
-                builder.AppendLine(mk, $"      Media key {j}");
+                var mk = record.MediaKeyData[i];
+                builder.AppendLine(mk, $"      Media key {i}");
             }
         }
 
-        private static void Print(StringBuilder builder, SubsetDifferenceIndexRecord? record)
+        private static void Print(StringBuilder builder, SubsetDifferenceIndexRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine($"    Span: {record.Span} (0x{record.Span:X})");
             builder.AppendLine("    Offsets:");
             builder.AppendLine("    -------------------------");
@@ -153,27 +136,21 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < record.Offsets.Length; j++)
+            for (int i = 0; i < record.Offsets.Length; i++)
             {
-                var offset = record.Offsets[j];
-                builder.AppendLine(offset, $"      Offset {j}");
+                var offset = record.Offsets[i];
+                builder.AppendLine(offset, $"      Offset {i}");
             }
         }
 
-        private static void Print(StringBuilder builder, TypeAndVersionRecord? record)
+        private static void Print(StringBuilder builder, TypeAndVersionRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine($"    Media key block type: {record.MediaKeyBlockType} (0x{record.MediaKeyBlockType:X})");
             builder.AppendLine(record.VersionNumber, "    Version number");
         }
 
-        private static void Print(StringBuilder builder, DriveRevocationListRecord? record)
+        private static void Print(StringBuilder builder, DriveRevocationListRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine(record.TotalNumberOfEntries, "    Total number of entries");
             builder.AppendLine("    Signature Blocks:");
             builder.AppendLine("    -------------------------");
@@ -183,48 +160,33 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < record.SignatureBlocks.Length; j++)
+            for (int i = 0; i < record.SignatureBlocks.Length; i++)
             {
-                var block = record.SignatureBlocks[j];
-                builder.AppendLine($"    Signature Block {j}");
-                if (block == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                    continue;
-                }
+                var block = record.SignatureBlocks[i];
 
+                builder.AppendLine($"    Signature Block {i}");
                 builder.AppendLine(block.NumberOfEntries, "      Number of entries");
                 builder.AppendLine("      Entry Fields:");
                 builder.AppendLine("      -------------------------");
                 if (block.EntryFields == null || block.EntryFields.Length == 0)
                 {
                     builder.AppendLine("      No entry fields");
+                    continue;
                 }
-                else
+
+                for (int j = 0; j < block.EntryFields.Length; j++)
                 {
-                    for (int k = 0; k < block.EntryFields.Length; k++)
-                    {
-                        var ef = block.EntryFields[k];
-                        builder.AppendLine($"      Entry {k}");
-                        if (ef == null)
-                        {
-                            builder.AppendLine("        [NULL]");
-                        }
-                        else
-                        {
-                            builder.AppendLine(ef.Range, "        Range");
-                            builder.AppendLine(ef.DriveID, "        Drive ID");
-                        }
-                    }
+                    var ef = block.EntryFields[j];
+
+                    builder.AppendLine($"      Entry {j}");
+                    builder.AppendLine(ef.Range, "        Range");
+                    builder.AppendLine(ef.DriveID, "        Drive ID");
                 }
             }
         }
 
-        private static void Print(StringBuilder builder, HostRevocationListRecord? record)
+        private static void Print(StringBuilder builder, HostRevocationListRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine($"    Total number of entries: {record.TotalNumberOfEntries} (0x{record.TotalNumberOfEntries:X})");
             builder.AppendLine("    Signature Blocks:");
             builder.AppendLine("    -------------------------");
@@ -234,16 +196,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < record.SignatureBlocks.Length; j++)
+            for (int i = 0; i < record.SignatureBlocks.Length; i++)
             {
-                builder.AppendLine($"    Signature Block {j}");
-                var block = record.SignatureBlocks[j];
-                if (block == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                    continue;
-                }
+                var block = record.SignatureBlocks[i];
 
+                builder.AppendLine($"    Signature Block {i}");
                 builder.AppendLine(block.NumberOfEntries, "      Number of entries");
                 builder.AppendLine("      Entry Fields:");
                 builder.AppendLine("      -------------------------");
@@ -253,37 +210,24 @@ namespace SabreTools.Serialization.Printers
                     continue;
                 }
 
-                for (int k = 0; k < block.EntryFields.Length; k++)
+                for (int j = 0; j < block.EntryFields.Length; j++)
                 {
-                    var ef = block.EntryFields[k];
-                    builder.AppendLine($"      Entry {k}");
-                    if (ef == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
+                    var ef = block.EntryFields[j];
 
-                        builder.AppendLine(ef.Range, "        Range");
-                        builder.AppendLine(ef.HostID, "        Host ID");
-                    }
+                    builder.AppendLine($"      Entry {j}");
+                    builder.AppendLine(ef.Range, "        Range");
+                    builder.AppendLine(ef.HostID, "        Host ID");
                 }
             }
         }
 
-        private static void Print(StringBuilder builder, VerifyMediaKeyRecord? record)
+        private static void Print(StringBuilder builder, VerifyMediaKeyRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine(record.CiphertextValue, "    Ciphertext value");
         }
 
-        private static void Print(StringBuilder builder, CopyrightRecord? record)
+        private static void Print(StringBuilder builder, CopyrightRecord record)
         {
-            if (record == null)
-                return;
-
             builder.AppendLine(record.Copyright, "    Copyright");
         }
     }

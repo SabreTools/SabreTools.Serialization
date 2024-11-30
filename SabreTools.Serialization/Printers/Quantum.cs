@@ -56,13 +56,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < entries.Length; i++)
             {
                 var fileDescriptor = entries[i];
-                builder.AppendLine($"  File Descriptor {i}");
-                if (fileDescriptor == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  File Descriptor {i}");
                 builder.AppendLine(fileDescriptor.FileNameSize, "    File name size");
                 builder.AppendLine(fileDescriptor.FileName, "    File name");
                 builder.AppendLine(fileDescriptor.CommentFieldSize, "    Comment field size");
@@ -73,6 +68,7 @@ namespace SabreTools.Serialization.Printers
                 if (fileDescriptor.Unknown != null)
                     builder.AppendLine(fileDescriptor.Unknown.Value, "    Unknown (Checksum?)");
             }
+
             builder.AppendLine();
         }
     }

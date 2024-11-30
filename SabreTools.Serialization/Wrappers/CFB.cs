@@ -98,14 +98,14 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="startingSector">Initial FAT sector</param>
         /// <returns>Ordered list of sector numbers, null on error</returns>
-        public List<Models.CFB.SectorNumber?>? GetFATSectorChain(Models.CFB.SectorNumber? startingSector)
+        public List<Models.CFB.SectorNumber>? GetFATSectorChain(Models.CFB.SectorNumber? startingSector)
         {
             // If we have an invalid sector
             if (startingSector == null || startingSector < 0 || Model.FATSectorNumbers == null || (long)startingSector >= Model.FATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
-            var sectors = new List<Models.CFB.SectorNumber?> { startingSector };
+            var sectors = new List<Models.CFB.SectorNumber> { startingSector.Value };
 
             var lastSector = startingSector;
             while (true)
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.Wrappers
         public long FATSectorToFileOffset(Models.CFB.SectorNumber? sector)
         {
             // If we have an invalid sector number
-            if (sector == null || sector > SabreTools.Models.CFB.SectorNumber.MAXREGSECT)
+            if (sector == null || sector > Models.CFB.SectorNumber.MAXREGSECT)
                 return -1;
 
             // Convert based on the sector shift value
@@ -185,14 +185,14 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="startingSector">Initial Mini FAT sector</param>
         /// <returns>Ordered list of sector numbers, null on error</returns>
-        public List<Models.CFB.SectorNumber?>? GetMiniFATSectorChain(Models.CFB.SectorNumber? startingSector)
+        public List<Models.CFB.SectorNumber>? GetMiniFATSectorChain(Models.CFB.SectorNumber? startingSector)
         {
             // If we have an invalid sector
             if (startingSector == null || startingSector < 0 || Model.MiniFATSectorNumbers == null || (long)startingSector >= Model.MiniFATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
-            var sectors = new List<Models.CFB.SectorNumber?> { startingSector };
+            var sectors = new List<Models.CFB.SectorNumber> { startingSector.Value };
 
             var lastSector = startingSector;
             while (true)
@@ -256,7 +256,7 @@ namespace SabreTools.Serialization.Wrappers
         public long MiniFATSectorToFileOffset(Models.CFB.SectorNumber? sector)
         {
             // If we have an invalid sector number
-            if (sector == null || sector > SabreTools.Models.CFB.SectorNumber.MAXREGSECT)
+            if (sector == null || sector > Models.CFB.SectorNumber.MAXREGSECT)
                 return -1;
 
             // Convert based on the sector shift value

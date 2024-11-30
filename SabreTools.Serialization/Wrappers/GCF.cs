@@ -73,9 +73,6 @@ namespace SabreTools.Serialization.Wrappers
                     while (index != Model.DataBlockHeader?.BlockCount)
                     {
                         var nextBlock = Model.BlockEntries[index];
-                        if (nextBlock == null)
-                            break;
-
                         blockEntries.Add(nextBlock);
                         index = nextBlock.NextBlockEntryIndex;
                     }

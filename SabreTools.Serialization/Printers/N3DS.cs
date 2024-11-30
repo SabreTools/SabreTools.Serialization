@@ -55,11 +55,11 @@ namespace SabreTools.Serialization.Printers
             {
                 for (int i = 0; i < header.PartitionsTable.Length; i++)
                 {
-                    var partitionTableEntry = header.PartitionsTable[i];
+                    var entry = header.PartitionsTable[i];
 
                     builder.AppendLine($"    Partition table entry {i}");
-                    builder.AppendLine(partitionTableEntry.Offset, "      Offset");
-                    builder.AppendLine(partitionTableEntry.Length, "      Length");
+                    builder.AppendLine(entry.Offset, "      Offset");
+                    builder.AppendLine(entry.Length, "      Length");
                 }
             }
 
@@ -168,6 +168,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(header.TestData.FilledAA, "  Filled with AA");
                 builder.AppendLine(header.TestData.FinalByte, "  Final byte");
             }
+
             builder.AppendLine();
         }
 
@@ -206,58 +207,60 @@ namespace SabreTools.Serialization.Printers
             if (header.MagicID == string.Empty)
             {
                 builder.AppendLine("      Empty backup header, no data can be parsed");
+                builder.AppendLine();
+                return;
             }
             else if (header.MagicID != Constants.NCCHMagicNumber)
             {
                 builder.AppendLine("      Unrecognized backup header, no data can be parsed");
+                builder.AppendLine();
+                return;
+            }
+
+            // Backup header omits RSA signature
+            builder.AppendLine(header.MagicID, "      Magic ID");
+            builder.AppendLine(header.ContentSizeInMediaUnits, "      Content size in media units");
+            builder.AppendLine(header.PartitionId, "      Partition ID");
+            builder.AppendLine(header.MakerCode, "      Maker code");
+            builder.AppendLine(header.Version, "      Version");
+            builder.AppendLine(header.VerificationHash, "      Verification hash");
+            builder.AppendLine(header.ProgramId, "      Program ID");
+            builder.AppendLine(header.Reserved1, "      Reserved 1");
+            builder.AppendLine(header.LogoRegionHash, "      Logo region SHA-256 hash");
+            builder.AppendLine(header.ProductCode, "      Product code");
+            builder.AppendLine(header.ExtendedHeaderHash, "      Extended header SHA-256 hash");
+            builder.AppendLine(header.ExtendedHeaderSizeInBytes, "      Extended header size in bytes");
+            builder.AppendLine(header.Reserved2, "      Reserved 2");
+            builder.AppendLine("      Flags:");
+            if (header.Flags == null)
+            {
+                builder.AppendLine("        [NULL]");
             }
             else
             {
-                // Backup header omits RSA signature
-                builder.AppendLine(header.MagicID, "      Magic ID");
-                builder.AppendLine(header.ContentSizeInMediaUnits, "      Content size in media units");
-                builder.AppendLine(header.PartitionId, "      Partition ID");
-                builder.AppendLine(header.MakerCode, "      Maker code");
-                builder.AppendLine(header.Version, "      Version");
-                builder.AppendLine(header.VerificationHash, "      Verification hash");
-                builder.AppendLine(header.ProgramId, "      Program ID");
-                builder.AppendLine(header.Reserved1, "      Reserved 1");
-                builder.AppendLine(header.LogoRegionHash, "      Logo region SHA-256 hash");
-                builder.AppendLine(header.ProductCode, "      Product code");
-                builder.AppendLine(header.ExtendedHeaderHash, "      Extended header SHA-256 hash");
-                builder.AppendLine(header.ExtendedHeaderSizeInBytes, "      Extended header size in bytes");
-                builder.AppendLine(header.Reserved2, "      Reserved 2");
-                builder.AppendLine("      Flags:");
-                if (header.Flags == null)
-                {
-                    builder.AppendLine("        [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine(header.Flags.Reserved0, "        Reserved 0");
-                    builder.AppendLine(header.Flags.Reserved1, "        Reserved 1");
-                    builder.AppendLine(header.Flags.Reserved2, "        Reserved 2");
-                    builder.AppendLine($"        Crypto method: {header.Flags.CryptoMethod} (0x{header.Flags.CryptoMethod:X})");
-                    builder.AppendLine($"        Content platform: {header.Flags.ContentPlatform} (0x{header.Flags.ContentPlatform:X})");
-                    builder.AppendLine($"        Content type: {header.Flags.MediaPlatformIndex} (0x{header.Flags.MediaPlatformIndex:X})");
-                    builder.AppendLine(header.Flags.ContentUnitSize, "        Content unit size");
-                    builder.AppendLine($"        Bitmasks: {header.Flags.BitMasks} (0x{header.Flags.BitMasks:X})");
-                }
-                builder.AppendLine(header.PlainRegionOffsetInMediaUnits, "      Plain region offset, in media units");
-                builder.AppendLine(header.PlainRegionSizeInMediaUnits, "      Plain region size, in media units");
-                builder.AppendLine(header.LogoRegionOffsetInMediaUnits, "      Logo region offset, in media units");
-                builder.AppendLine(header.LogoRegionSizeInMediaUnits, "      Logo region size, in media units");
-                builder.AppendLine(header.ExeFSOffsetInMediaUnits, "      ExeFS offset, in media units");
-                builder.AppendLine(header.ExeFSSizeInMediaUnits, "      ExeFS size, in media units");
-                builder.AppendLine(header.ExeFSHashRegionSizeInMediaUnits, "      ExeFS hash region size, in media units");
-                builder.AppendLine(header.Reserved3, "      Reserved 3");
-                builder.AppendLine(header.RomFSOffsetInMediaUnits, "      RomFS offset, in media units");
-                builder.AppendLine(header.RomFSSizeInMediaUnits, "      RomFS size, in media units");
-                builder.AppendLine(header.RomFSHashRegionSizeInMediaUnits, "      RomFS hash region size, in media units");
-                builder.AppendLine(header.Reserved4, "      Reserved 4");
-                builder.AppendLine(header.ExeFSSuperblockHash, "      ExeFS superblock SHA-256 hash");
-                builder.AppendLine(header.RomFSSuperblockHash, "      RomFS superblock SHA-256 hash");
+                builder.AppendLine(header.Flags.Reserved0, "        Reserved 0");
+                builder.AppendLine(header.Flags.Reserved1, "        Reserved 1");
+                builder.AppendLine(header.Flags.Reserved2, "        Reserved 2");
+                builder.AppendLine($"        Crypto method: {header.Flags.CryptoMethod} (0x{header.Flags.CryptoMethod:X})");
+                builder.AppendLine($"        Content platform: {header.Flags.ContentPlatform} (0x{header.Flags.ContentPlatform:X})");
+                builder.AppendLine($"        Content type: {header.Flags.MediaPlatformIndex} (0x{header.Flags.MediaPlatformIndex:X})");
+                builder.AppendLine(header.Flags.ContentUnitSize, "        Content unit size");
+                builder.AppendLine($"        Bitmasks: {header.Flags.BitMasks} (0x{header.Flags.BitMasks:X})");
             }
+            builder.AppendLine(header.PlainRegionOffsetInMediaUnits, "      Plain region offset, in media units");
+            builder.AppendLine(header.PlainRegionSizeInMediaUnits, "      Plain region size, in media units");
+            builder.AppendLine(header.LogoRegionOffsetInMediaUnits, "      Logo region offset, in media units");
+            builder.AppendLine(header.LogoRegionSizeInMediaUnits, "      Logo region size, in media units");
+            builder.AppendLine(header.ExeFSOffsetInMediaUnits, "      ExeFS offset, in media units");
+            builder.AppendLine(header.ExeFSSizeInMediaUnits, "      ExeFS size, in media units");
+            builder.AppendLine(header.ExeFSHashRegionSizeInMediaUnits, "      ExeFS hash region size, in media units");
+            builder.AppendLine(header.Reserved3, "      Reserved 3");
+            builder.AppendLine(header.RomFSOffsetInMediaUnits, "      RomFS offset, in media units");
+            builder.AppendLine(header.RomFSSizeInMediaUnits, "      RomFS size, in media units");
+            builder.AppendLine(header.RomFSHashRegionSizeInMediaUnits, "      RomFS hash region size, in media units");
+            builder.AppendLine(header.Reserved4, "      Reserved 4");
+            builder.AppendLine(header.ExeFSSuperblockHash, "      ExeFS superblock SHA-256 hash");
+            builder.AppendLine(header.RomFSSuperblockHash, "      RomFS superblock SHA-256 hash");
             builder.AppendLine();
         }
 
@@ -586,29 +589,7 @@ namespace SabreTools.Serialization.Printers
                 var entry = entries[i];
 
                 builder.AppendLine($"  ExeFS Header {i}");
-                builder.AppendLine("    File headers:");
-                if (entry.FileHeaders == null || entry.FileHeaders.Length == 0)
-                {
-                    builder.AppendLine("    No file headers");
-                }
-                else
-                {
-                    for (int j = 0; j < entry.FileHeaders.Length; j++)
-                    {
-                        var fileHeader = entry.FileHeaders[j];
-                        builder.AppendLine($"    File Header {j}");
-                        if (fileHeader == null)
-                        {
-                            builder.AppendLine("      [NULL]");
-                            continue;
-                        }
-
-                        builder.AppendLine(fileHeader.FileName, "      File name");
-                        builder.AppendLine(fileHeader.FileOffset, "      File offset");
-                        builder.AppendLine(fileHeader.FileSize, "      File size");
-                    }
-                }
-
+                Print(builder, entry.FileHeaders);
                 builder.AppendLine(entry.Reserved, "    Reserved");
 
                 builder.AppendLine("    File hashes:");
@@ -621,18 +602,34 @@ namespace SabreTools.Serialization.Printers
                     for (int j = 0; j < entry.FileHashes.Length; j++)
                     {
                         var fileHash = entry.FileHashes[j];
-                        builder.AppendLine($"    File Hash {j}");
-                        if (fileHash == null)
-                        {
-                            builder.AppendLine("      [NULL]");
-                            continue;
-                        }
 
+                        builder.AppendLine($"    File Hash {j}");
                         builder.AppendLine(fileHash, "      SHA-256");
                     }
                 }
             }
+
             builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, ExeFSFileHeader[]? entries)
+        {
+            builder.AppendLine("    File headers:");
+            if (entries == null || entries.Length == 0)
+            {
+                builder.AppendLine("    No file headers");
+                return;
+            }
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+
+                builder.AppendLine($"    File Header {i}");
+                builder.AppendLine(entry.FileName, "      File name");
+                builder.AppendLine(entry.FileOffset, "      File offset");
+                builder.AppendLine(entry.FileSize, "      File size");
+            }
         }
 
         private static void Print(StringBuilder builder, RomFSHeader[]? entries)
@@ -648,32 +645,28 @@ namespace SabreTools.Serialization.Printers
 
             for (int i = 0; i < entries.Length; i++)
             {
-                var romFSHeader = entries[i];
-                builder.AppendLine($"  RomFS Header {i}");
-                if (romFSHeader == null)
-                {
-                    builder.AppendLine("    Unrecognized RomFS data, no data can be parsed");
-                    continue;
-                }
+                var entry = entries[i];
 
-                builder.AppendLine(romFSHeader.MagicString, "    Magic string");
-                builder.AppendLine(romFSHeader.MagicNumber, "    Magic number");
-                builder.AppendLine(romFSHeader.MasterHashSize, "    Master hash size");
-                builder.AppendLine(romFSHeader.Level1LogicalOffset, "    Level 1 logical offset");
-                builder.AppendLine(romFSHeader.Level1HashdataSize, "    Level 1 hashdata size");
-                builder.AppendLine(romFSHeader.Level1BlockSizeLog2, "    Level 1 block size");
-                builder.AppendLine(romFSHeader.Reserved1, "    Reserved 1");
-                builder.AppendLine(romFSHeader.Level2LogicalOffset, "    Level 2 logical offset");
-                builder.AppendLine(romFSHeader.Level2HashdataSize, "    Level 2 hashdata size");
-                builder.AppendLine(romFSHeader.Level2BlockSizeLog2, "    Level 2 block size");
-                builder.AppendLine(romFSHeader.Reserved2, "    Reserved 2");
-                builder.AppendLine(romFSHeader.Level3LogicalOffset, "    Level 3 logical offset");
-                builder.AppendLine(romFSHeader.Level3HashdataSize, "    Level 3 hashdata size");
-                builder.AppendLine(romFSHeader.Level3BlockSizeLog2, "    Level 3 block size");
-                builder.AppendLine(romFSHeader.Reserved3, "    Reserved 3");
-                builder.AppendLine(romFSHeader.Reserved4, "    Reserved 4");
-                builder.AppendLine(romFSHeader.OptionalInfoSize, "    Optional info size");
+                builder.AppendLine($"  RomFS Header {i}");
+                builder.AppendLine(entry.MagicString, "    Magic string");
+                builder.AppendLine(entry.MagicNumber, "    Magic number");
+                builder.AppendLine(entry.MasterHashSize, "    Master hash size");
+                builder.AppendLine(entry.Level1LogicalOffset, "    Level 1 logical offset");
+                builder.AppendLine(entry.Level1HashdataSize, "    Level 1 hashdata size");
+                builder.AppendLine(entry.Level1BlockSizeLog2, "    Level 1 block size");
+                builder.AppendLine(entry.Reserved1, "    Reserved 1");
+                builder.AppendLine(entry.Level2LogicalOffset, "    Level 2 logical offset");
+                builder.AppendLine(entry.Level2HashdataSize, "    Level 2 hashdata size");
+                builder.AppendLine(entry.Level2BlockSizeLog2, "    Level 2 block size");
+                builder.AppendLine(entry.Reserved2, "    Reserved 2");
+                builder.AppendLine(entry.Level3LogicalOffset, "    Level 3 logical offset");
+                builder.AppendLine(entry.Level3HashdataSize, "    Level 3 hashdata size");
+                builder.AppendLine(entry.Level3BlockSizeLog2, "    Level 3 block size");
+                builder.AppendLine(entry.Reserved3, "    Reserved 3");
+                builder.AppendLine(entry.Reserved4, "    Reserved 4");
+                builder.AppendLine(entry.OptionalInfoSize, "    Optional info size");
             }
+
             builder.AppendLine();
         }
     }

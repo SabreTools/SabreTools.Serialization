@@ -63,56 +63,58 @@ namespace SabreTools.Serialization.Printers
             {
                 builder.AppendLine($"    DIFAT Entry {i}: {header.DIFAT[i]} (0x{header.DIFAT[i]:X})");
             }
+
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SectorNumber[]? sectorNumbers, string name)
+        private static void Print(StringBuilder builder, SectorNumber[]? entries, string name)
         {
             builder.AppendLine($"  {name} Sectors Information:");
             builder.AppendLine("  -------------------------");
-            if (sectorNumbers == null || sectorNumbers.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine($"  No {name} sectors");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < sectorNumbers.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                builder.AppendLine($"  {name} Sector Entry {i}: {sectorNumbers[i]} (0x{sectorNumbers[i]:X})");
+                builder.AppendLine($"  {name} Sector Entry {i}: {entries[i]} (0x{entries[i]:X})");
             }
+
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry[]? directoryEntries)
+        private static void Print(StringBuilder builder, DirectoryEntry[]? entries)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (directoryEntries == null || directoryEntries.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No directory entries");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < directoryEntries.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var directoryEntry = directoryEntries[i];
+                var entry = entries[i];
 
                 builder.AppendLine($"  Directory Entry {i}");
-                builder.AppendLine(directoryEntry.Name, "    Name");
-                builder.AppendLine(directoryEntry.NameLength, "    Name length");
-                builder.AppendLine($"    Object type: {directoryEntry.ObjectType} (0x{directoryEntry.ObjectType:X})");
-                builder.AppendLine($"    Color flag: {directoryEntry.ColorFlag} (0x{directoryEntry.ColorFlag:X})");
-                builder.AppendLine($"    Left sibling ID: {directoryEntry.LeftSiblingID} (0x{directoryEntry.LeftSiblingID:X})");
-                builder.AppendLine($"    Right sibling ID: {directoryEntry.RightSiblingID} (0x{directoryEntry.RightSiblingID:X})");
-                builder.AppendLine($"    Child ID: {directoryEntry.ChildID} (0x{directoryEntry.ChildID:X})");
-                builder.AppendLine(directoryEntry.CLSID, "    CLSID");
-                builder.AppendLine(directoryEntry.StateBits, "    State bits");
-                builder.AppendLine(directoryEntry.CreationTime, "    Creation time");
-                builder.AppendLine(directoryEntry.ModifiedTime, "    Modification time");
-                builder.AppendLine(directoryEntry.StartingSectorLocation, "    Staring sector location");
-                builder.AppendLine(directoryEntry.StreamSize, "    Stream size");
+                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.NameLength, "    Name length");
+                builder.AppendLine($"    Object type: {entry.ObjectType} (0x{entry.ObjectType:X})");
+                builder.AppendLine($"    Color flag: {entry.ColorFlag} (0x{entry.ColorFlag:X})");
+                builder.AppendLine($"    Left sibling ID: {entry.LeftSiblingID} (0x{entry.LeftSiblingID:X})");
+                builder.AppendLine($"    Right sibling ID: {entry.RightSiblingID} (0x{entry.RightSiblingID:X})");
+                builder.AppendLine($"    Child ID: {entry.ChildID} (0x{entry.ChildID:X})");
+                builder.AppendLine(entry.CLSID, "    CLSID");
+                builder.AppendLine(entry.StateBits, "    State bits");
+                builder.AppendLine(entry.CreationTime, "    Creation time");
+                builder.AppendLine(entry.ModifiedTime, "    Modification time");
+                builder.AppendLine(entry.StartingSectorLocation, "    Staring sector location");
+                builder.AppendLine(entry.StreamSize, "    Stream size");
             }
 
             builder.AppendLine();

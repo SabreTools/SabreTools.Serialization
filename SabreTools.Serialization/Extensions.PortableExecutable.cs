@@ -27,26 +27,26 @@ namespace SabreTools.Serialization
                 return 0;
 
             // If the RVA matches a section start exactly, use that
-            var matchingSection = Array.Find(sections, s => s != null && s.VirtualAddress == rva);
+            var matchingSection = Array.Find(sections, s => s.VirtualAddress == rva);
             if (matchingSection != null)
                 return rva - matchingSection.VirtualAddress + matchingSection.PointerToRawData;
 
             // Loop through all of the sections
             for (int i = 0; i < sections.Length; i++)
             {
-                // If the section is invalid, just skip it
-                if (sections[i] == null)
+                // If the section "starts" at 0, just skip it
+                var section = sections[i];
+                if (section.PointerToRawData == 0)
                     continue;
 
-                // If the section "starts" at 0, just skip it
-                if (sections[i]!.PointerToRawData == 0)
+                // If the virtual address is greater than the RVA
+                if (rva < section.VirtualAddress)
                     continue;
 
                 // Attempt to derive the physical address from the current section
-                var section = sections[i]!;
-                if (rva >= section.VirtualAddress && section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
+                if (section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return rva - section.VirtualAddress + section.PointerToRawData;
-                else if (rva >= section.VirtualAddress && section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
+                else if (section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
                     return rva - section.VirtualAddress + section.PointerToRawData;
             }
 
@@ -72,19 +72,19 @@ namespace SabreTools.Serialization
             // Loop through all of the sections
             for (int i = 0; i < sections.Length; i++)
             {
-                // If the section is invalid, just skip it
-                var section = sections[i];
-                if (section == null)
-                    continue;
-
                 // If the section "starts" at 0, just skip it
+                var section = sections[i];
                 if (section.PointerToRawData == 0)
                     continue;
 
+                // If the virtual address is greater than the RVA
+                if (rva < section.VirtualAddress)
+                    continue;
+
                 // Attempt to derive the physical address from the current section
-                if (rva >= section.VirtualAddress && section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
+                if (section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return i;
-                else if (rva >= section.VirtualAddress && section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
+                else if (section.SizeOfRawData != 0 && rva <= section.VirtualAddress + section.SizeOfRawData)
                     return i;
             }
 

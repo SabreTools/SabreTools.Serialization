@@ -214,6 +214,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(typeAndNameString.Value.Text, "    Text", Encoding.ASCII);
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -278,15 +279,10 @@ namespace SabreTools.Serialization.Printers
             foreach (var entry in entries)
             {
                 builder.AppendLine($"  Imported-Name Table at Offset {entry.Key}");
-                if (entry.Value == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
-
                 builder.AppendLine(entry.Value.Length, "    Length");
                 builder.AppendLine(entry.Value.NameString, "    Name string", Encoding.ASCII);
             }
+
             builder.AppendLine();
         }
 

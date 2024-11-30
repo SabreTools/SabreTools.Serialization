@@ -131,14 +131,10 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Segments.Length)
                 return false;
 
-            // Get the segment information
-            var file = Segments[index];
-            if (file == null)
-                return false;
-
             // Get the read index and length
-            int offset = (int)file.FileLocation;
-            int size = (int)file.FileSize;
+            var segment = Segments[index];
+            int offset = (int)segment.FileLocation;
+            int size = (int)segment.FileSize;
 
             try
             {
@@ -146,7 +142,7 @@ namespace SabreTools.Serialization.Wrappers
                 Directory.CreateDirectory(outputDirectory);
 
                 // Create the output path
-                string filePath = Path.Combine(outputDirectory, file.FileName ?? $"file{index}");
+                string filePath = Path.Combine(outputDirectory, segment.FileName ?? $"file{index}");
                 using FileStream fs = File.OpenWrite(filePath);
 
                 // Read the data block

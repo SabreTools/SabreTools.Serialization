@@ -71,12 +71,6 @@ namespace SabreTools.Serialization.Printers
                 }
 
                 builder.AppendLine($"  Certificate {i}{certificateName}");
-                if (certificate == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
-
                 builder.AppendLine($"    Signature type: {certificate.SignatureType} (0x{certificate.SignatureType:X})");
                 builder.AppendLine(certificate.SignatureSize, "    Signature size");
                 builder.AppendLine(certificate.PaddingSize, "    Padding size");
@@ -100,6 +94,7 @@ namespace SabreTools.Serialization.Printers
                         break;
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -175,12 +170,6 @@ namespace SabreTools.Serialization.Printers
                     }
 
                     builder.AppendLine($"  Certificate {i}{certificateName}");
-                    if (certificate == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
-
                     builder.AppendLine($"    Signature type: {certificate.SignatureType} (0x{certificate.SignatureType:X})");
                     builder.AppendLine(certificate.SignatureSize, "    Signature size");
                     builder.AppendLine(certificate.PaddingSize, "    Padding size");
@@ -205,6 +194,7 @@ namespace SabreTools.Serialization.Printers
                     }
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -257,18 +247,14 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < tmd.ContentInfoRecords.Length; i++)
                 {
                     var contentInfoRecord = tmd.ContentInfoRecords[i];
-                    builder.AppendLine($"  Content Info Record {i}");
-                    if (contentInfoRecord == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"  Content Info Record {i}");
                     builder.AppendLine(contentInfoRecord.ContentIndexOffset, "    Content index offset");
                     builder.AppendLine(contentInfoRecord.ContentCommandCount, "    Content command count");
                     builder.AppendLine(contentInfoRecord.UnhashedContentRecordsSHA256Hash, $"    SHA-256 hash of the next {contentInfoRecord.ContentCommandCount} records not hashed");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine("  Ticket Content Chunk Records Information:");
@@ -282,13 +268,8 @@ namespace SabreTools.Serialization.Printers
                 for (int i = 0; i < tmd.ContentChunkRecords.Length; i++)
                 {
                     var contentChunkRecord = tmd.ContentChunkRecords[i];
-                    builder.AppendLine($"  Content Chunk Record {i}");
-                    if (contentChunkRecord == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
 
+                    builder.AppendLine($"  Content Chunk Record {i}");
                     builder.AppendLine(contentChunkRecord.ContentId, "    Content ID");
                     builder.AppendLine($"    Content index: {contentChunkRecord.ContentIndex} (0x{contentChunkRecord.ContentIndex:X})");
                     builder.AppendLine($"    Content type: {contentChunkRecord.ContentType} (0x{contentChunkRecord.ContentType:X})");
@@ -296,6 +277,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(contentChunkRecord.SHA256Hash, "    SHA-256 hash");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine("  Ticket Certificate Chain Information:");
@@ -318,12 +300,6 @@ namespace SabreTools.Serialization.Printers
                     }
 
                     builder.AppendLine($"  Certificate {i}{certificateName}");
-                    if (certificate == null)
-                    {
-                        builder.AppendLine("    [NULL]");
-                        continue;
-                    }
-
                     builder.AppendLine($"    Signature type: {certificate.SignatureType} (0x{certificate.SignatureType:X})");
                     builder.AppendLine(certificate.SignatureSize, "    Signature size");
                     builder.AppendLine(certificate.PaddingSize, "    Padding size");
@@ -348,6 +324,7 @@ namespace SabreTools.Serialization.Printers
                     }
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -365,13 +342,8 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < partitions.Length; i++)
             {
                 var partitionHeader = partitions[i];
-                builder.AppendLine($"  NCCH Partition Header {i}");
-                if (partitionHeader == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
 
+                builder.AppendLine($"  NCCH Partition Header {i}");
                 if (partitionHeader.MagicID == string.Empty)
                 {
                     builder.AppendLine("    Empty partition, no data can be parsed");
@@ -428,6 +400,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(partitionHeader.ExeFSSuperblockHash, "     ExeFS superblock SHA-256 hash");
                 builder.AppendLine(partitionHeader.RomFSSuperblockHash, "     RomFS superblock SHA-256 hash");
             }
+
             builder.AppendLine();
         }
 
@@ -449,6 +422,5 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(metaData.IconData, "  Icon data");
             builder.AppendLine();
         }
-
     }
 }

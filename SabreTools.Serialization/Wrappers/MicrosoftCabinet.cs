@@ -127,12 +127,8 @@ namespace SabreTools.Serialization.Wrappers
             if (fileIndex < 0 || Model.Files == null || fileIndex >= Model.Files.Length)
                 return null;
 
-            // Get the file header
-            var file = Model.Files[fileIndex];
-            if (file == null)
-                return null;
-
             // If we have an invalid DateTime
+            var file = Model.Files[fileIndex];
             if (file.Date == 0 && file.Time == 0)
                 return null;
 

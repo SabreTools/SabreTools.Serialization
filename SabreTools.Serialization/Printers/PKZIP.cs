@@ -96,55 +96,46 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CentralDirectoryFileHeader[]? headers)
+        private static void Print(StringBuilder builder, CentralDirectoryFileHeader[]? entries)
         {
             builder.AppendLine("  Central Directory File Headers Information:");
             builder.AppendLine("  -------------------------");
-            if (headers == null || headers.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No central directory file headers");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < headers.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var record = headers[i];
-                Print(builder, record, i);
+                var entry = entries[i];
+
+                builder.AppendLine($"  Central Directory File Header Entry {i}");
+                builder.AppendLine(entry.Signature, "    Signature");
+                builder.AppendLine($"    Host system: {entry.HostSystem} (0x{entry.HostSystem:X})");
+                builder.AppendLine(entry.VersionMadeBy, "    Version made by");
+                builder.AppendLine(entry.VersionNeededToExtract, "    Version needed to extract");
+                builder.AppendLine($"    Flags: {entry.Flags} (0x{entry.Flags:X})");
+                builder.AppendLine($"    Compression method: {entry.CompressionMethod} (0x{entry.CompressionMethod:X})");
+                builder.AppendLine(entry.LastModifedFileTime, "    Last modified file time"); // TODO: Parse from MS-DOS
+                builder.AppendLine(entry.LastModifiedFileDate, "    Last modified file date"); // TODO: Parse from MS-DOS
+                builder.AppendLine(entry.CRC32, "    CRC-32");
+                builder.AppendLine(entry.CompressedSize, "    Compressed size");
+                builder.AppendLine(entry.UncompressedSize, "    Uncompressed size");
+                builder.AppendLine(entry.FileNameLength, "    File name length");
+                builder.AppendLine(entry.ExtraFieldLength, "    Extra field length");
+                builder.AppendLine(entry.FileCommentLength, "    File comment length");
+                builder.AppendLine(entry.DiskNumberStart, "    Disk number start");
+                builder.AppendLine($"    Internal file attributes: {entry.InternalFileAttributes} (0x{entry.InternalFileAttributes:X})");
+                builder.AppendLine(entry.ExternalFileAttributes, "    External file attributes");
+                builder.AppendLine(entry.RelativeOffsetOfLocalHeader, "    Relative offset of local header");
+                builder.AppendLine(entry.FileName, "    File name");
+                builder.AppendLine(entry.ExtraField, "    Extra field");
+                builder.AppendLine(entry.FileComment, "    File comment");
             }
+
             builder.AppendLine();
-        }
-
-        private static void Print(StringBuilder builder, CentralDirectoryFileHeader? header, int index)
-        {
-            builder.AppendLine($"  Central Directory File Header Entry {index}");
-            if (header == null)
-            {
-                builder.AppendLine("    [NULL]");
-                return;
-            }
-
-            builder.AppendLine(header.Signature, "    Signature");
-            builder.AppendLine($"    Host system: {header.HostSystem} (0x{header.HostSystem:X})");
-            builder.AppendLine(header.VersionMadeBy, "    Version made by");
-            builder.AppendLine(header.VersionNeededToExtract, "    Version needed to extract");
-            builder.AppendLine($"    Flags: {header.Flags} (0x{header.Flags:X})");
-            builder.AppendLine($"    Compression method: {header.CompressionMethod} (0x{header.CompressionMethod:X})");
-            builder.AppendLine(header.LastModifedFileTime, "    Last modified file time"); // TODO: Parse from MS-DOS
-            builder.AppendLine(header.LastModifiedFileDate, "    Last modified file date"); // TODO: Parse from MS-DOS
-            builder.AppendLine(header.CRC32, "    CRC-32");
-            builder.AppendLine(header.CompressedSize, "    Compressed size");
-            builder.AppendLine(header.UncompressedSize, "    Uncompressed size");
-            builder.AppendLine(header.FileNameLength, "    File name length");
-            builder.AppendLine(header.ExtraFieldLength, "    Extra field length");
-            builder.AppendLine(header.FileCommentLength, "    File comment length");
-            builder.AppendLine(header.DiskNumberStart, "    Disk number start");
-            builder.AppendLine($"    Internal file attributes: {header.InternalFileAttributes} (0x{header.InternalFileAttributes:X})");
-            builder.AppendLine(header.ExternalFileAttributes, "    External file attributes");
-            builder.AppendLine(header.RelativeOffsetOfLocalHeader, "    Relative offset of local header");
-            builder.AppendLine(header.FileName, "    File name");
-            builder.AppendLine(header.ExtraField, "    Extra field");
-            builder.AppendLine(header.FileComment, "    File comment");
         }
 
         private static void Print(StringBuilder builder, ArchiveExtraDataRecord? record)
@@ -199,6 +190,7 @@ namespace SabreTools.Serialization.Printers
 
                 Print(builder, localFileHeader, encryptionHeader, fileDatum, dataDescriptor, zip64DataDescriptor, i);
             }
+
             builder.AppendLine();
         }
 
@@ -211,12 +203,6 @@ namespace SabreTools.Serialization.Printers
             int index)
         {
             builder.AppendLine($"  Local File Entry {index}");
-            if (localFileHeader == null)
-            {
-                builder.AppendLine("    [NULL]");
-                return;
-            }
-
             builder.AppendLine(localFileHeader.Signature, "    [Local File Header] Signature");
             builder.AppendLine(localFileHeader.Version, "    [Local File Header] Version");
             builder.AppendLine($"    [Local File Header] Flags: {localFileHeader.Flags} (0x{localFileHeader.Flags:X})");

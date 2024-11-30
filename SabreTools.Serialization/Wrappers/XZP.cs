@@ -119,10 +119,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Model.DirectoryEntries.Length)
                 return false;
 
-            // Get the directory entry
-            var directoryEntry = Model.DirectoryEntries[index];
-
             // Get the associated directory item
+            var directoryEntry = Model.DirectoryEntries[index];
             var directoryItem = Array.Find(Model.DirectoryItems, di => di?.FileNameCRC == directoryEntry.FileNameCRC);
             if (directoryItem == null)
                 return false;

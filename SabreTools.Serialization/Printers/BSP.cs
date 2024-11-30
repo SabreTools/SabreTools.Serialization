@@ -52,14 +52,9 @@ namespace SabreTools.Serialization.Printers
                 string specialLumpName = GetLumpName(i);
 
                 builder.AppendLine($"  Lump {i}{specialLumpName}");
-                if (lump == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
-
                 builder.AppendLine(lump.Offset, "    Offset");
                 builder.AppendLine(lump.Length, "    Length");
+
                 switch ((LumpType)i)
                 {
                     case LumpType.LUMP_ENTITIES:
@@ -112,6 +107,7 @@ namespace SabreTools.Serialization.Printers
                         break;
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -146,12 +142,12 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Entities.Length; j++)
+            for (int i = 0; i < lump.Entities.Length; i++)
             {
                 // TODO: Implement entity printing
-                var entity = lump.Entities[j];
-                builder.AppendLine($"    Entity {j}");
-                builder.AppendLine("      Entity data is not parsed properly");
+                var entity = lump.Entities[i];
+
+                builder.AppendLine($"    Entity {i}: Not printed yet");
             }
         }
 
@@ -163,10 +159,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Planes.Length; j++)
+            for (int i = 0; i < lump.Planes.Length; i++)
             {
-                var plane = lump.Planes[j];
-                builder.AppendLine($"    Plane {j}");
+                var plane = lump.Planes[i];
+
+                builder.AppendLine($"    Plane {i}");
                 builder.AppendLine($"      Normal vector: ({plane.NormalVector?.X}, {plane.NormalVector?.Y}, {plane.NormalVector?.Z})");
                 builder.AppendLine(plane.Distance, "      Distance");
                 builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
@@ -192,22 +189,22 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(lump.Header.Offsets, "      Offsets");
             }
 
+            builder.AppendLine("    Textures:");
             if (lump?.Textures == null || lump.Textures.Length == 0)
             {
                 builder.AppendLine("    No texture data");
+                return;
             }
-            else
+
+            for (int i = 0; i < lump.Textures.Length; i++)
             {
-                builder.AppendLine("    Textures:");
-                for (int j = 0; j < lump.Textures.Length; j++)
-                {
-                    var texture = lump.Textures[j];
-                    builder.AppendLine($"      Texture {j}");
-                    builder.AppendLine(texture.Name, "        Name");
-                    builder.AppendLine(texture.Width, "        Width");
-                    builder.AppendLine(texture.Height, "        Height");
-                    builder.AppendLine(texture.Offsets, "        Offsets");
-                }
+                var texture = lump.Textures[i];
+
+                builder.AppendLine($"      Texture {i}");
+                builder.AppendLine(texture.Name, "        Name");
+                builder.AppendLine(texture.Width, "        Width");
+                builder.AppendLine(texture.Height, "        Height");
+                builder.AppendLine(texture.Offsets, "        Offsets");
             }
         }
 
@@ -219,10 +216,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Vertices.Length; j++)
+            for (int i = 0; i < lump.Vertices.Length; i++)
             {
-                var vertex = lump.Vertices[j];
-                builder.AppendLine($"    Vertex {j}: ({vertex.X}, {vertex.Y}, {vertex.Z})");
+                var vertex = lump.Vertices[i];
+                builder.AppendLine($"    Vertex {i}: ({vertex.X}, {vertex.Y}, {vertex.Z})");
             }
         }
 
@@ -246,10 +243,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Nodes.Length; j++)
+            for (int i = 0; i < lump.Nodes.Length; i++)
             {
-                var node = lump.Nodes[j];
-                builder.AppendLine($"    Node {j}");
+                var node = lump.Nodes[i];
+
+                builder.AppendLine($"    Node {i}");
                 builder.AppendLine(node.Children, "      Children");
                 builder.AppendLine(node.Mins, "      Mins");
                 builder.AppendLine(node.Maxs, "      Maxs");
@@ -266,10 +264,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Texinfos.Length; j++)
+            for (int i = 0; i < lump.Texinfos.Length; i++)
             {
-                var texinfo = lump.Texinfos[j];
-                builder.AppendLine($"    Texinfo {j}");
+                var texinfo = lump.Texinfos[i];
+
+                builder.AppendLine($"    Texinfo {i}");
                 builder.AppendLine($"      S-Vector: ({texinfo.SVector?.X}, {texinfo.SVector?.Y}, {texinfo.SVector?.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
                 builder.AppendLine($"      T-Vector: ({texinfo.TVector?.X}, {texinfo.TVector?.Y}, {texinfo.TVector?.Z})");
@@ -287,10 +286,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Faces.Length; j++)
+            for (int i = 0; i < lump.Faces.Length; i++)
             {
-                var face = lump.Faces[j];
-                builder.AppendLine($"    Face {j}");
+                var face = lump.Faces[i];
+
+                builder.AppendLine($"    Face {i}");
                 builder.AppendLine(face.PlaneIndex, "      Plane index");
                 builder.AppendLine(face.PlaneSideCount, "      Plane side count");
                 builder.AppendLine(face.FirstEdgeIndex, "      First surfedge index");
@@ -317,10 +317,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Clipnodes.Length; j++)
+            for (int i = 0; i < lump.Clipnodes.Length; i++)
             {
-                var clipnode = lump.Clipnodes[j];
-                builder.AppendLine($"    Clipnode {j}");
+                var clipnode = lump.Clipnodes[i];
+
+                builder.AppendLine($"    Clipnode {i}");
                 builder.AppendLine(clipnode.PlaneIndex, "      Plane index");
                 builder.AppendLine(clipnode.ChildrenIndices, "      Children indices");
             }
@@ -334,10 +335,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Leaves.Length; j++)
+            for (int i = 0; i < lump.Leaves.Length; i++)
             {
-                var leaf = lump.Leaves[j];
-                builder.AppendLine($"    Leaf {j}");
+                var leaf = lump.Leaves[i];
+
+                builder.AppendLine($"    Leaf {i}");
                 builder.AppendLine($"      Contents: {leaf.Contents} (0x{leaf.Contents:X})");
                 builder.AppendLine(leaf.VisOffset, "      Visibility offset");
                 builder.AppendLine(leaf.Mins, "      Mins");
@@ -356,10 +358,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Marksurfaces.Length; j++)
+            for (int i = 0; i < lump.Marksurfaces.Length; i++)
             {
-                var marksurface = lump.Marksurfaces[j];
-                builder.AppendLine(marksurface, $"    Marksurface {j}");
+                var marksurface = lump.Marksurfaces[i];
+                builder.AppendLine(marksurface, $"    Marksurface {i}");
             }
         }
 
@@ -371,10 +373,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Edges.Length; j++)
+            for (int i = 0; i < lump.Edges.Length; i++)
             {
-                var edge = lump.Edges[j];
-                builder.AppendLine($"    Edge {j}");
+                var edge = lump.Edges[i];
+                builder.AppendLine($"    Edge {i}");
                 builder.AppendLine(edge.VertexIndices, "      Vertex indices");
             }
         }
@@ -387,10 +389,10 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Surfedges.Length; j++)
+            for (int i = 0; i < lump.Surfedges.Length; i++)
             {
-                var surfedge = lump.Surfedges[j];
-                builder.AppendLine(surfedge, $"    Surfedge {j}");
+                var surfedge = lump.Surfedges[i];
+                builder.AppendLine(surfedge, $"    Surfedge {i}");
             }
         }
 
@@ -402,10 +404,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < lump.Models.Length; j++)
+            for (int i = 0; i < lump.Models.Length; i++)
             {
-                var bmodel = lump.Models[j];
-                builder.AppendLine($"    Model {j}");
+                var bmodel = lump.Models[i];
+
+                builder.AppendLine($"    Model {i}");
                 builder.AppendLine($"      Mins: {bmodel.Mins?.X}, {bmodel.Mins?.Y}, {bmodel.Mins?.Z}");
                 builder.AppendLine($"      Maxs: {bmodel.Maxs?.X}, {bmodel.Maxs?.Y}, {bmodel.Maxs?.Z}");
                 builder.AppendLine($"      Origin vector: {bmodel.OriginVector?.X}, {bmodel.OriginVector?.Y}, {bmodel.OriginVector?.Z}");

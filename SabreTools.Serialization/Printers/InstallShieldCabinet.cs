@@ -163,6 +163,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(descriptor.FileGroupOffsets[i], $"      File Group Offset {i}");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine("  Component offsets:");
@@ -178,6 +179,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(descriptor.ComponentOffsets[i], $"      Component Offset {i}");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine(descriptor.SetupTypesOffset, "  Setup types offset");
@@ -202,6 +204,7 @@ namespace SabreTools.Serialization.Printers
             {
                 builder.AppendLine(entries[i], $"    File Descriptor Offset {i}");
             }
+
             builder.AppendLine();
         }
 
@@ -220,6 +223,7 @@ namespace SabreTools.Serialization.Printers
             {
                 builder.AppendLine(entries[i], $"    Directory Name {i}");
             }
+
             builder.AppendLine();
         }
 
@@ -284,6 +288,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(value.DescriptorOffset, "    Descriptor offset");
                 builder.AppendLine(value.NextOffset, "    Next offset");
             }
+
             builder.AppendLine();
         }
 
@@ -300,31 +305,27 @@ namespace SabreTools.Serialization.Printers
 
             for (int i = 0; i < entries.Length; i++)
             {
-                var fileGroup = entries[i];
-                builder.AppendLine($"  File Group {i}:");
-                if (fileGroup == null)
-                {
-                    builder.AppendLine("    Unassigned file group");
-                    continue;
-                }
+                var entry = entries[i];
 
-                builder.AppendLine(fileGroup.NameOffset, "    Name offset");
-                builder.AppendLine(fileGroup.Name, "    Name");
-                builder.AppendLine(fileGroup.ExpandedSize, "    Expanded size");
-                builder.AppendLine(fileGroup.CompressedSize, "    Compressed size");
-                builder.AppendLine($"    Attributes: {fileGroup.Attributes} (0x{fileGroup.Attributes:X})");
-                builder.AppendLine(fileGroup.FirstFile, "    First file");
-                builder.AppendLine(fileGroup.LastFile, "    Last file");
-                builder.AppendLine(fileGroup.UnknownStringOffset, "    Unknown string offset");
-                builder.AppendLine(fileGroup.OperatingSystemOffset, "    Operating system offset");
-                builder.AppendLine(fileGroup.LanguageOffset, "    Language offset");
-                builder.AppendLine(fileGroup.HTTPLocationOffset, "    HTTP location offset");
-                builder.AppendLine(fileGroup.FTPLocationOffset, "    FTP location offset");
-                builder.AppendLine(fileGroup.MiscOffset, "    Misc. offset");
-                builder.AppendLine(fileGroup.TargetDirectoryOffset, "    Target directory offset");
-                builder.AppendLine($"    Overwrite flags: {fileGroup.OverwriteFlags} (0x{fileGroup.OverwriteFlags:X})");
-                builder.AppendLine(fileGroup.Reserved, "    Reserved");
+                builder.AppendLine($"  File Group {i}:");
+                builder.AppendLine(entry.NameOffset, "    Name offset");
+                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.ExpandedSize, "    Expanded size");
+                builder.AppendLine(entry.CompressedSize, "    Compressed size");
+                builder.AppendLine($"    Attributes: {entry.Attributes} (0x{entry.Attributes:X})");
+                builder.AppendLine(entry.FirstFile, "    First file");
+                builder.AppendLine(entry.LastFile, "    Last file");
+                builder.AppendLine(entry.UnknownStringOffset, "    Unknown string offset");
+                builder.AppendLine(entry.OperatingSystemOffset, "    Operating system offset");
+                builder.AppendLine(entry.LanguageOffset, "    Language offset");
+                builder.AppendLine(entry.HTTPLocationOffset, "    HTTP location offset");
+                builder.AppendLine(entry.FTPLocationOffset, "    FTP location offset");
+                builder.AppendLine(entry.MiscOffset, "    Misc. offset");
+                builder.AppendLine(entry.TargetDirectoryOffset, "    Target directory offset");
+                builder.AppendLine($"    Overwrite flags: {entry.OverwriteFlags} (0x{entry.OverwriteFlags:X})");
+                builder.AppendLine(entry.Reserved, "    Reserved");
             }
+
             builder.AppendLine();
         }
 
@@ -341,64 +342,61 @@ namespace SabreTools.Serialization.Printers
 
             for (int i = 0; i < entries.Length; i++)
             {
-                var component = entries[i];
-                builder.AppendLine($"  Component {i}:");
-                if (component == null)
-                {
-                    builder.AppendLine("    Unassigned component");
-                    continue;
-                }
+                var entry = entries[i];
 
-                builder.AppendLine(component.IdentifierOffset, "    Identifier offset");
-                builder.AppendLine(component.Identifier, "    Identifier");
-                builder.AppendLine(component.DescriptorOffset, "    Descriptor offset");
-                builder.AppendLine(component.DisplayNameOffset, "    Display name offset");
-                builder.AppendLine(component.DisplayName, "    Display name");
-                builder.AppendLine($"    Status: {component.Status} (0x{component.Status:X})");
-                builder.AppendLine(component.PasswordOffset, "    Password offset");
-                builder.AppendLine(component.MiscOffset, "    Misc. offset");
-                builder.AppendLine(component.ComponentIndex, "    Component index");
-                builder.AppendLine(component.NameOffset, "    Name offset");
-                builder.AppendLine(component.Name, "    Name");
-                builder.AppendLine(component.CDRomFolderOffset, "    CD-ROM folder offset");
-                builder.AppendLine(component.HTTPLocationOffset, "    HTTP location offset");
-                builder.AppendLine(component.FTPLocationOffset, "    FTP location offset");
-                builder.AppendLine(component.Guid, "    GUIDs");
-                builder.AppendLine(component.CLSIDOffset, "    CLSID offset");
-                builder.AppendLine(component.CLSID, "    CLSID");
-                builder.AppendLine(component.Reserved2, "    Reserved 2");
-                builder.AppendLine(component.Reserved3, "    Reserved 3");
-                builder.AppendLine(component.DependsCount, "    Depends count");
-                builder.AppendLine(component.DependsOffset, "    Depends offset");
-                builder.AppendLine(component.FileGroupCount, "    File group count");
-                builder.AppendLine(component.FileGroupNamesOffset, "    File group names offset");
+                builder.AppendLine($"  Component {i}:");
+                builder.AppendLine(entry.IdentifierOffset, "    Identifier offset");
+                builder.AppendLine(entry.Identifier, "    Identifier");
+                builder.AppendLine(entry.DescriptorOffset, "    Descriptor offset");
+                builder.AppendLine(entry.DisplayNameOffset, "    Display name offset");
+                builder.AppendLine(entry.DisplayName, "    Display name");
+                builder.AppendLine($"    Status: {entry.Status} (0x{entry.Status:X})");
+                builder.AppendLine(entry.PasswordOffset, "    Password offset");
+                builder.AppendLine(entry.MiscOffset, "    Misc. offset");
+                builder.AppendLine(entry.ComponentIndex, "    Component index");
+                builder.AppendLine(entry.NameOffset, "    Name offset");
+                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.CDRomFolderOffset, "    CD-ROM folder offset");
+                builder.AppendLine(entry.HTTPLocationOffset, "    HTTP location offset");
+                builder.AppendLine(entry.FTPLocationOffset, "    FTP location offset");
+                builder.AppendLine(entry.Guid, "    GUIDs");
+                builder.AppendLine(entry.CLSIDOffset, "    CLSID offset");
+                builder.AppendLine(entry.CLSID, "    CLSID");
+                builder.AppendLine(entry.Reserved2, "    Reserved 2");
+                builder.AppendLine(entry.Reserved3, "    Reserved 3");
+                builder.AppendLine(entry.DependsCount, "    Depends count");
+                builder.AppendLine(entry.DependsOffset, "    Depends offset");
+                builder.AppendLine(entry.FileGroupCount, "    File group count");
+                builder.AppendLine(entry.FileGroupNamesOffset, "    File group names offset");
                 builder.AppendLine();
 
                 builder.AppendLine("    File group names:");
                 builder.AppendLine("    -------------------------");
-                if (component.FileGroupNames == null || component.FileGroupNames.Length == 0)
+                if (entry.FileGroupNames == null || entry.FileGroupNames.Length == 0)
                 {
                     builder.AppendLine("    No file group names");
                 }
                 else
                 {
-                    for (int j = 0; j < component.FileGroupNames.Length; j++)
+                    for (int j = 0; j < entry.FileGroupNames.Length; j++)
                     {
-                        builder.AppendLine(component.FileGroupNames[j], $"      File Group Name {j}");
+                        builder.AppendLine(entry.FileGroupNames[j], $"      File Group Name {j}");
                     }
                 }
+
                 builder.AppendLine();
 
-                builder.AppendLine(component.X3Count, "    X3 count");
-                builder.AppendLine(component.X3Offset, "    X3 offset");
-                builder.AppendLine(component.SubComponentsCount, "    Sub-components count");
-                builder.AppendLine(component.SubComponentsOffset, "    Sub-components offset");
-                builder.AppendLine(component.NextComponentOffset, "    Next component offset");
-                builder.AppendLine(component.OnInstallingOffset, "    On installing offset");
-                builder.AppendLine(component.OnInstalledOffset, "    On installed offset");
-                builder.AppendLine(component.OnUninstallingOffset, "    On uninstalling offset");
-                builder.AppendLine(component.OnUninstalledOffset, "    On uninstalled offset");
+                builder.AppendLine(entry.X3Count, "    X3 count");
+                builder.AppendLine(entry.X3Offset, "    X3 offset");
+                builder.AppendLine(entry.SubComponentsCount, "    Sub-components count");
+                builder.AppendLine(entry.SubComponentsOffset, "    Sub-components offset");
+                builder.AppendLine(entry.NextComponentOffset, "    Next component offset");
+                builder.AppendLine(entry.OnInstallingOffset, "    On installing offset");
+                builder.AppendLine(entry.OnInstalledOffset, "    On installed offset");
+                builder.AppendLine(entry.OnUninstallingOffset, "    On uninstalling offset");
+                builder.AppendLine(entry.OnUninstalledOffset, "    On uninstalled offset");
             }
+
             builder.AppendLine();
         }
     }

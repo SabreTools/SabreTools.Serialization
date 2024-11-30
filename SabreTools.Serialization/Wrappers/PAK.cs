@@ -122,12 +122,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= DirectoryItems.Length)
                 return false;
 
-            // Get the directory item
-            var directoryItem = DirectoryItems[index];
-            if (directoryItem == null)
-                return false;
-
             // Read the item data
+            var directoryItem = DirectoryItems[index];
             var data = ReadFromDataSource((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength);
             if (data == null)
                 return false;

@@ -239,26 +239,26 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, EntryTableBundle[]? bundles)
+        private static void Print(StringBuilder builder, EntryTableBundle[]? entries)
         {
             builder.AppendLine("  Entry Table Information:");
             builder.AppendLine("  -------------------------");
-            if (bundles == null || bundles.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No entry table bundles");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < bundles.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var bundle = bundles[i];
+                var entry = entries[i];
 
                 builder.AppendLine($"  Entry Table Bundle {i}");
-                builder.AppendLine(bundle.Entries, "    Entries");
-                builder.AppendLine($"    Bundle type: {bundle.BundleType} (0x{bundle.BundleType:X})");
+                builder.AppendLine(entry.Entries, "    Entries");
+                builder.AppendLine($"    Bundle type: {entry.BundleType} (0x{entry.BundleType:X})");
                 builder.AppendLine();
-                Print(builder, bundle.TableEntries, bundle.BundleType);
+                Print(builder, entry.TableEntries, entry.BundleType);
             }
 
             builder.AppendLine();
@@ -275,11 +275,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            for (int j = 0; j < entries.Length; j++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var entry = entries[j];
+                var entry = entries[i];
 
-                builder.AppendLine($"    Entry Table Entry {j}");
+                builder.AppendLine($"    Entry Table Entry {i}");
                 switch (type & ~BundleType.ParameterTypingInformationPresent)
                 {
                     case BundleType.UnusedEntry:

@@ -114,12 +114,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Model.DirEntries.Length)
                 return false;
 
-            // Get the lump
-            var lump = Model.DirEntries[index];
-            if (lump == null)
-                return false;
-
             // Read the data -- TODO: Handle uncompressed lumps (see BSP.ExtractTexture)
+            var lump = Model.DirEntries[index];
             var data = ReadFromDataSource((int)lump.Offset, (int)lump.Length);
             if (data == null)
                 return false;

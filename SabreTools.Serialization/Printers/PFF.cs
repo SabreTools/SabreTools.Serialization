@@ -40,35 +40,31 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Segment[]? segments)
+        private static void Print(StringBuilder builder, Segment[]? entries)
         {
             builder.AppendLine("  Segments Information:");
             builder.AppendLine("  -------------------------");
-            if (segments == null || segments.Length == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No segments");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < segments.Length; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
-                var segment = segments[i];
-                builder.AppendLine($"  Segment {i}");
-                if (segment == null)
-                {
-                    builder.AppendLine("    [NULL]");
-                    continue;
-                }
+                var entry = entries[i];
 
-                builder.AppendLine(segment.Deleted, "    Deleted");
-                builder.AppendLine(segment.FileLocation, "    File location");
-                builder.AppendLine(segment.FileSize, "    File size");
-                builder.AppendLine(segment.PackedDate, "    Packed date");
-                builder.AppendLine(segment.FileName, "    File name");
-                builder.AppendLine(segment.ModifiedDate, "    Modified date");
-                builder.AppendLine(segment.CompressionLevel, "    Compression level");
+                builder.AppendLine($"  Segment {i}");
+                builder.AppendLine(entry.Deleted, "    Deleted");
+                builder.AppendLine(entry.FileLocation, "    File location");
+                builder.AppendLine(entry.FileSize, "    File size");
+                builder.AppendLine(entry.PackedDate, "    Packed date");
+                builder.AppendLine(entry.FileName, "    File name");
+                builder.AppendLine(entry.ModifiedDate, "    Modified date");
+                builder.AppendLine(entry.CompressionLevel, "    Compression level");
             }
+
             builder.AppendLine();
         }
 

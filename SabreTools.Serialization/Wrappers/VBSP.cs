@@ -115,12 +115,8 @@ namespace SabreTools.Serialization.Wrappers
             if (index < 0 || index >= Model.Header.Lumps.Length)
                 return false;
 
-            // Get the lump
-            var lump = Model.Header.Lumps[index];
-            if (lump == null)
-                return false;
-
             // Read the data
+            var lump = Model.Header.Lumps[index];
             var data = ReadFromDataSource(lump.Offset, lump.Length);
             if (data == null)
                 return false;

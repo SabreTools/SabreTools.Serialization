@@ -157,8 +157,8 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine();
                 return;
             }
-            builder.AppendLine();
 
+            builder.AppendLine();
             Print(builder, table.FolderAllocationTable);
             Print(builder, table.NameList);
         }

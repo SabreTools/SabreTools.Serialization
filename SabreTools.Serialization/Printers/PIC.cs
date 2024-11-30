@@ -45,6 +45,7 @@ namespace SabreTools.Serialization.Printers
                 else
                 {
                     var header = entry.Header;
+
                     builder.AppendLine(header.DiscInformationIdentifier, "    Disc information identifier");
                     builder.AppendLine(header.DiscInformationFormat, "    Disc information format");
                     builder.AppendLine(header.Reserved0, "    Reserved");
@@ -52,24 +53,28 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine(header.BytesInUse, "    Bytes in use");
                     builder.AppendLine(header.Reserved1, "    Reserved");
                 }
+
                 if (entry.Body == null)
                 {
                     builder.AppendLine("    No body");
                 }
                 else
                 {
-                    DiscInformationUnitBody body = entry.Body;
+                    var body = entry.Body;
+
                     builder.AppendLine(body.DiscTypeIdentifier, "    Disc type identifer");
                     builder.AppendLine(body.DiscSizeClassVersion, "    Disc size class version");
                     builder.AppendLine(body.FormatDependentContents, "    Format-dependent contents");
                 }
+
                 if (entry.Trailer == null)
                 {
                     builder.AppendLine("    No trailer");
                 }
                 else
                 {
-                    DiscInformationUnitTrailer trailer = entry.Trailer;
+                    var trailer = entry.Trailer;
+
                     builder.AppendLine(trailer.DiscManufacturerID, "    Disc manufacturer ID");
                     builder.AppendLine(trailer.MediaTypeID, "    Media type ID");
                     builder.AppendLine(trailer.TimeStamp, "    Timestamp");
