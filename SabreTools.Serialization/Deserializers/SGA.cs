@@ -7,10 +7,10 @@ using static SabreTools.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SGA : BaseBinaryDeserializer<Models.SGA.File>
+    public class SGA : BaseBinaryDeserializer<Archive>
     {
         /// <inheritdoc/>
-        public override Models.SGA.File? Deserialize(Stream? data)
+        public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Create a new SGA to fill
-                var file = new Models.SGA.File();
+                var archive = new Archive();
 
                 #region Header
 
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the SGA header
-                file.Header = header;
+                archive.Header = header;
 
                 #endregion
 
@@ -41,11 +41,11 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the SGA directory
-                file.Directory = directory;
+                archive.Directory = directory;
 
                 #endregion
 
-                return file;
+                return archive;
             }
             catch
             {

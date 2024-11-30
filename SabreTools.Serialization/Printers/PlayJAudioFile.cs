@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, uint count, DataFile?[]? entries)
+        private static void Print(StringBuilder builder, uint count, DataFile[]? entries)
         {
             builder.AppendLine("  Data Files Information:");
             builder.AppendLine("  -------------------------");

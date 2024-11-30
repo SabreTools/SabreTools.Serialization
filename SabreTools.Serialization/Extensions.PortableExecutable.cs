@@ -16,7 +16,7 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Physical address, 0 on error</returns>
-        public static uint ConvertVirtualAddress(this uint rva, SectionHeader?[]? sections)
+        public static uint ConvertVirtualAddress(this uint rva, SectionHeader[]? sections)
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -59,7 +59,7 @@ namespace SabreTools.Serialization
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Section index, null on error</returns>
-        public static int ContainingSectionIndex(this uint rva, SectionHeader?[]? sections)
+        public static int ContainingSectionIndex(this uint rva, SectionHeader[]? sections)
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)

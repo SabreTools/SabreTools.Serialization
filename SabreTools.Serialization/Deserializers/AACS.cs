@@ -41,15 +41,8 @@ namespace SabreTools.Serialization.Deserializers
                         break;
 
                     // Align to the 4-byte boundary if we're not at the end
-                    if (data.Position < data.Length)
-                    {
-                        while (data.Position < data.Length && (data.Position % 4) != 0)
-                            _ = data.ReadByteValue();
-                    }
-                    else
-                    {
+                    if (!data.AlignToBoundary(4))
                         break;
-                    }
                 }
 
                 #endregion

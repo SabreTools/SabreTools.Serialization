@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CentralDirectoryFileHeader?[]? headers)
+        private static void Print(StringBuilder builder, CentralDirectoryFileHeader[]? headers)
         {
             builder.AppendLine("  Central Directory File Headers Information:");
             builder.AppendLine("  -------------------------");
@@ -166,10 +166,10 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder,
             LocalFileHeader[]? localFileHeaders,
-            byte[]?[]? encryptionHeaders,
+            byte[][]? encryptionHeaders,
             byte[][]? fileData,
-            DataDescriptor?[]? dataDescriptors,
-            DataDescriptor64?[]? zip64DataDescriptors)
+            DataDescriptor[]? dataDescriptors,
+            DataDescriptor64[]? zip64DataDescriptors)
         {
             builder.AppendLine("  Local File Information:");
             builder.AppendLine("  -------------------------");

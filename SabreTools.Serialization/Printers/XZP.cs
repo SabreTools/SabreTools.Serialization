@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry?[]? entries, string prefix)
+        private static void Print(StringBuilder builder, DirectoryEntry[]? entries, string prefix)
         {
             builder.AppendLine($"  {prefix} Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryMapping?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryMapping[]? entries)
         {
             builder.AppendLine("  Preload Directory Mappings Information:");
             builder.AppendLine("  -------------------------");
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryItem?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryItem[]? entries)
         {
             builder.AppendLine("  Directory Items Information:");
             builder.AppendLine("  -------------------------");

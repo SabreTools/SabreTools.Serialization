@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Segment?[]? segments)
+        private static void Print(StringBuilder builder, Segment[]? segments)
         {
             builder.AppendLine("  Segments Information:");
             builder.AppendLine("  -------------------------");

@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryItem?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryItem[]? entries)
         {
             builder.AppendLine("  Directory Items Information:");
             builder.AppendLine("  -------------------------");

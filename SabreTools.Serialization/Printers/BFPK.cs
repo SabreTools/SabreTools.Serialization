@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry?[]? files)
+        private static void Print(StringBuilder builder, FileEntry[]? files)
         {
             builder.AppendLine("  File Table Information:");
             builder.AppendLine("  -------------------------");

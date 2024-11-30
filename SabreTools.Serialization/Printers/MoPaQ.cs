@@ -162,7 +162,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, HashEntry?[]? entries)
+        private static void Print(StringBuilder builder, HashEntry[]? entries)
         {
             builder.AppendLine("  Hash Table Information:");
             builder.AppendLine("  -------------------------");
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntry?[]? entries)
+        private static void Print(StringBuilder builder, BlockEntry[]? entries)
         {
             builder.AppendLine("  Block Table Information:");
             builder.AppendLine("  -------------------------");

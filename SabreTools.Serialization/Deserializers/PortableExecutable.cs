@@ -663,8 +663,7 @@ namespace SabreTools.Serialization.Deserializers
                 attributeCertificateTable.Add(entry);
 
                 // Align to the 8-byte boundary
-                while ((data.Position % 8) != 0 && data.Position < endOffset && data.Position < data.Length)
-                    _ = data.ReadByteValue();
+                data.AlignToBoundary(8);
             }
 
             return [.. attributeCertificateTable];
@@ -677,7 +676,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="endOffset">First address not part of the base relocation table</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader?[] sections)
+        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader[] sections)
         {
             var baseRelocationTable = new List<BaseRelocationBlock>();
 
@@ -745,7 +744,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled export table on success, null on error</returns>
-        public static ExportTable? ParseExportTable(Stream data, SectionHeader?[] sections)
+        public static ExportTable? ParseExportTable(Stream data, SectionHeader[] sections)
         {
             var exportTable = new ExportTable();
 
@@ -859,7 +858,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-        public static ImportTable? ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader?[] sections)
+        public static ImportTable? ParseImportTable(Stream data, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
         {
             var importTable = new ImportTable();
 
@@ -908,7 +907,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Lookup tables
-            var importLookupTables = new Dictionary<int, ImportLookupTableEntry?[]?>();
+            var importLookupTables = new Dictionary<int, ImportLookupTableEntry[]?>();
 
             for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
             {
@@ -962,7 +961,7 @@ namespace SabreTools.Serialization.Deserializers
             importTable.ImportLookupTables = importLookupTables;
 
             // Address tables
-            var importAddressTables = new Dictionary<int, ImportAddressTableEntry?[]?>();
+            var importAddressTables = new Dictionary<int, ImportAddressTableEntry[]?>();
 
             for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
             {
@@ -1116,7 +1115,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled resource directory table on success, null on error</returns>
-        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader?[] sections, bool topLevel = false)
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections, bool topLevel = false)
         {
             var resourceDirectoryTable = new ResourceDirectoryTable();
 

@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, di.Units);
         }
 
-        private static void Print(StringBuilder builder, DiscInformationUnit?[]? entries)
+        private static void Print(StringBuilder builder, DiscInformationUnit[]? entries)
         {
             builder.AppendLine("  Disc Information Units:");
             builder.AppendLine("  -------------------------");

@@ -167,10 +167,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Setup all of the collections
                 var localFileHeaders = new List<LocalFileHeader>();
-                var encryptionHeaders = new List<byte[]?>();
+                var encryptionHeaders = new List<byte[]>();
                 var fileData = new List<byte[]>(); // TODO: Should this data be read here?
-                var dataDescriptors = new List<DataDescriptor?>();
-                var zip64DataDescriptors = new List<DataDescriptor64?>();
+                var dataDescriptors = new List<DataDescriptor>();
+                var zip64DataDescriptors = new List<DataDescriptor64>();
 
                 // Read the local file headers
                 for (int i = 0; i < archive.CentralDirectoryHeaders.Length; i++)
@@ -199,10 +199,10 @@ namespace SabreTools.Serialization.Deserializers
                     {
                         // Add a placeholder null item
                         localFileHeaders.Add(new LocalFileHeader());
-                        encryptionHeaders.Add(null);
+                        encryptionHeaders.Add([]);
                         fileData.Add([]);
-                        dataDescriptors.Add(null);
-                        zip64DataDescriptors.Add(null);
+                        dataDescriptors.Add(new DataDescriptor());
+                        zip64DataDescriptors.Add(new DataDescriptor64());
                         continue;
                     }
 
@@ -226,8 +226,8 @@ namespace SabreTools.Serialization.Deserializers
                     }
                     else
                     {
-                        // Add the null encryption header
-                        encryptionHeaders.Add(null);
+                        // Add the empty encryption header
+                        encryptionHeaders.Add([]);
                     }
 
                     // Try to read the file data
@@ -254,7 +254,7 @@ namespace SabreTools.Serialization.Deserializers
                                 return null;
 
                             // Add the data descriptor
-                            dataDescriptors.Add(null);
+                            dataDescriptors.Add(new DataDescriptor());
                             zip64DataDescriptors.Add(dataDescriptor64);
                         }
                         else
@@ -266,14 +266,14 @@ namespace SabreTools.Serialization.Deserializers
 
                             // Add the data descriptor
                             dataDescriptors.Add(dataDescriptor);
-                            zip64DataDescriptors.Add(null);
+                            zip64DataDescriptors.Add(new DataDescriptor64());
                         }
                     }
                     else
                     {
                         // Add the null data descriptor
-                        dataDescriptors.Add(null);
-                        zip64DataDescriptors.Add(null);
+                        dataDescriptors.Add(new DataDescriptor());
+                        zip64DataDescriptors.Add(new DataDescriptor64());
                     }
                 }
 

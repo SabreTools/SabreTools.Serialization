@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Text;
 using SabreTools.Models.NewExecutable;
 using SabreTools.Serialization.Interfaces;
-using static SabreTools.Serialization.Extensions;
 
 namespace SabreTools.Serialization.Printers
 {
@@ -116,7 +115,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SegmentTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, SegmentTableEntry[]? entries)
         {
             builder.AppendLine("  Segment Table Information:");
             builder.AppendLine("  -------------------------");
@@ -227,7 +226,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResidentNameTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ResidentNameTableEntry[]? entries)
         {
             builder.AppendLine("  Resident-Name Table Information:");
             builder.AppendLine("  -------------------------");
@@ -255,7 +254,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ModuleReferenceTableEntry?[]? entries, Models.MSDOS.ExecutableHeader? stub, ExecutableHeader? header)
+        private static void Print(StringBuilder builder, ModuleReferenceTableEntry[]? entries, Models.MSDOS.ExecutableHeader? stub, ExecutableHeader? header)
         {
             builder.AppendLine("  Module-Reference Table Information:");
             builder.AppendLine("  -------------------------");
@@ -308,7 +307,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, EntryTableBundle?[]? entries)
+        private static void Print(StringBuilder builder, EntryTableBundle[]? entries)
         {
             builder.AppendLine("  Entry Table Information:");
             builder.AppendLine("  -------------------------");
@@ -348,7 +347,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NonResidentNameTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, NonResidentNameTableEntry[]? entries)
         {
             builder.AppendLine("  Nonresident-Name Table Information:");
             builder.AppendLine("  -------------------------");

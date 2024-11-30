@@ -1,9 +1,10 @@
 using System;
 using System.IO;
+using SabreTools.Models.SGA;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class SGA : WrapperBase<Models.SGA.File>
+    public class SGA : WrapperBase<Archive>
     {
         #region Descriptive Properties
 
@@ -28,10 +29,10 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return Directory switch
                 {
-                    Models.SGA.Directory4 d4 => d4.Files?.Length ?? 0,
-                    Models.SGA.Directory5 d5 => d5.Files?.Length ?? 0,
-                    Models.SGA.Directory6 d6 => d6.Files?.Length ?? 0,
-                    Models.SGA.Directory7 d7 => d7.Files?.Length ?? 0,
+                    Directory4 d4 => d4.Files?.Length ?? 0,
+                    Directory5 d5 => d5.Files?.Length ?? 0,
+                    Directory6 d6 => d6.Files?.Length ?? 0,
+                    Directory7 d7 => d7.Files?.Length ?? 0,
                     _ => 0,
                 };
             }
@@ -46,8 +47,8 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return Model.Header switch
                 {
-                    Models.SGA.Header4 h4 => h4.FileDataOffset,
-                    Models.SGA.Header6 h6 => h6.FileDataOffset,
+                    Header4 h4 => h4.FileDataOffset,
+                    Header6 h6 => h6.FileDataOffset,
                     _ => -1,
                 };
             }
@@ -58,14 +59,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public SGA(Models.SGA.File? model, byte[]? data, int offset)
+        public SGA(Archive? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public SGA(Models.SGA.File? model, Stream? data)
+        public SGA(Archive? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -152,7 +153,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get a file header from the archive
         /// </summary>
-        public Models.SGA.File4? GetFile(int index)
+        public Models.SGA.File? GetFile(int index)
         {
             // If the index is invalid
             if (index < 0 || index >= FileCount)
@@ -160,10 +161,10 @@ namespace SabreTools.Serialization.Wrappers
 
             return Directory switch
             {
-                Models.SGA.Directory4 d4 => d4.Files![index],
-                Models.SGA.Directory5 d5 => d5.Files![index],
-                Models.SGA.Directory6 d6 => d6.Files![index],
-                Models.SGA.Directory7 d7 => d7.Files![index],
+                Directory4 d4 => d4.Files![index],
+                Directory5 d5 => d5.Files![index],
+                Directory6 d6 => d6.Files![index],
+                Directory7 d7 => d7.Files![index],
                 _ => null,
             };
         }
@@ -206,20 +207,20 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Get the folder
-            object? folder = Directory switch
+            Folder? folder = Directory switch
             {
-                Models.SGA.Directory4 d4 => Array.Find(d4.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Models.SGA.Directory5 d5 => Array.Find(d5.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Models.SGA.Directory6 d6 => Array.Find(d6.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Models.SGA.Directory7 d7 => Array.Find(d7.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory4 d4 => Array.Find(d4.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory5 d5 => Array.Find(d5.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory6 d6 => Array.Find(d6.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory7 d7 => Array.Find(d7.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
                 _ => default,
             };
 
             // Get the folder name
             return folder switch
             {
-                Models.SGA.Folder4 f4 => f4.Name,
-                Models.SGA.Folder5 f5 => f5.Name,
+                Folder4 f4 => f4.Name,
+                Folder5 f5 => f5.Name,
                 _ => null,
             };
         }

@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ArchiveHash?[]? entries)
+        private static void Print(StringBuilder builder, ArchiveHash[]? entries)
         {
             builder.AppendLine("  Archive Hashes Information:");
             builder.AppendLine("  -------------------------");
@@ -86,7 +86,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryItem?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryItem[]? entries)
         {
             builder.AppendLine("  Directory Items Information:");
             builder.AppendLine("  -------------------------");

@@ -576,7 +576,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="flagStrings">Possible flags as strings</param>
         /// <returns>CueTrackFlag value representing the strings, if possible</returns>
-        private static CueTrackFlag GetFlags(string?[]? flagStrings)
+        private static CueTrackFlag GetFlags(string[]? flagStrings)
         {
             CueTrackFlag flag = 0;
             if (flagStrings == null)

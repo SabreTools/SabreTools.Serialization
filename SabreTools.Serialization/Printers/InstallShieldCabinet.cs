@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, string?[]? entries)
+        private static void Print(StringBuilder builder, string[]? entries)
         {
             builder.AppendLine("  Directory Names:");
             builder.AppendLine("  -------------------------");
@@ -223,7 +223,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileDescriptor?[]? entries)
+        private static void Print(StringBuilder builder, FileDescriptor[]? entries)
         {
             builder.AppendLine("  File Descriptors:");
             builder.AppendLine("  -------------------------");
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileGroup?[]? entries)
+        private static void Print(StringBuilder builder, FileGroup[]? entries)
         {
             builder.AppendLine("  File Groups:");
             builder.AppendLine("  -------------------------");
@@ -332,7 +332,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Component?[]? entries)
+        private static void Print(StringBuilder builder, Component[]? entries)
         {
             builder.AppendLine("  Components:");
             builder.AppendLine("  -------------------------");

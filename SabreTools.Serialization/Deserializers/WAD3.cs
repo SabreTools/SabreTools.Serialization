@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region File Entries
 
                 // Create the file entry array
-                file.FileEntries = new FileEntry?[header.NumDirs];
+                file.FileEntries = new FileEntry[header.NumDirs];
                 for (int i = 0; i < header.NumDirs; i++)
                 {
                     var dirEntry = file.DirEntries[i];

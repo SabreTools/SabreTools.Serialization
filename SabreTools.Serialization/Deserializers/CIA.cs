@@ -42,10 +42,8 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Align to 64-byte boundary, if needed
-                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-                {
-                    _ = data.ReadByteValue();
-                }
+                if (!data.AlignToBoundary(64))
+                    return null;
 
                 #region Certificate Chain
 
@@ -65,10 +63,8 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Align to 64-byte boundary, if needed
-                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-                {
-                    _ = data.ReadByteValue();
-                }
+                if (!data.AlignToBoundary(64))
+                    return null;
 
                 #region Ticket
 
@@ -83,10 +79,8 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Align to 64-byte boundary, if needed
-                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-                {
-                    _ = data.ReadByteValue();
-                }
+                if (!data.AlignToBoundary(64))
+                    return null;
 
                 #region Title Metadata
 
@@ -101,10 +95,8 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Align to 64-byte boundary, if needed
-                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-                {
-                    _ = data.ReadByteValue();
-                }
+                if (!data.AlignToBoundary(64))
+                    return null;
 
                 #region Content File Data
 
@@ -120,10 +112,8 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Align to 64-byte boundary, if needed
-                while (data.Position < data.Length - 1 && data.Position % 64 != 0)
-                {
-                    _ = data.ReadByteValue();
-                }
+                if (!data.AlignToBoundary(64))
+                    return null;
 
                 #region Meta Data
 

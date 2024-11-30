@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CFFOLDER?[]? entries)
+        private static void Print(StringBuilder builder, CFFOLDER[]? entries)
         {
             builder.AppendLine("  Folders:");
             builder.AppendLine("  -------------------------");
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CFFILE?[]? entries)
+        private static void Print(StringBuilder builder, CFFILE[]? entries)
         {
             builder.AppendLine("  Files:");
             builder.AppendLine("  -------------------------");

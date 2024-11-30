@@ -4,13 +4,13 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers
 {
-    public class SGA : IPrinter<File>
+    public class SGA : IPrinter<Archive>
     {
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder, File model)
+        public void PrintInformation(StringBuilder builder, Archive model)
             => Print(builder, model);
 
-        public static void Print(StringBuilder builder, File file)
+        public static void Print(StringBuilder builder, Archive file)
         {
             builder.AppendLine("SGA Information:");
             builder.AppendLine("-------------------------");
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Section4?[]? sections)
+        private static void Print(StringBuilder builder, Section4[]? sections)
         {
             builder.AppendLine("  Sections Information:");
             builder.AppendLine("  -------------------------");
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Section5?[]? sections)
+        private static void Print(StringBuilder builder, Section5[]? sections)
         {
             builder.AppendLine("  Sections Information:");
             builder.AppendLine("  -------------------------");
@@ -239,7 +239,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Folder4?[]? folders)
+        private static void Print(StringBuilder builder, Folder4[]? folders)
         {
             builder.AppendLine("  Folders Information:");
             builder.AppendLine("  -------------------------");
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Folder5?[]? folders)
+        private static void Print(StringBuilder builder, Folder5[]? folders)
         {
             builder.AppendLine("  Folders Information:");
             builder.AppendLine("  -------------------------");
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File4?[]? files)
+        private static void Print(StringBuilder builder, File4[]? files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");
@@ -334,7 +334,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File6?[]? files)
+        private static void Print(StringBuilder builder, File6[]? files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");
@@ -368,7 +368,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File7?[]? files)
+        private static void Print(StringBuilder builder, File7[]? files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");

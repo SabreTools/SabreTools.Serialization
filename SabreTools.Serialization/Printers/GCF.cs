@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntry?[]? entries)
+        private static void Print(StringBuilder builder, BlockEntry[]? entries)
         {
             builder.AppendLine("  Block Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FragmentationMap?[]? entries)
+        private static void Print(StringBuilder builder, FragmentationMap[]? entries)
         {
             builder.AppendLine("  Fragmentation Maps Information:");
             builder.AppendLine("  -------------------------");
@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntryMap?[]? entries)
+        private static void Print(StringBuilder builder, BlockEntryMap[]? entries)
         {
             builder.AppendLine("  Block Entry Maps Information:");
             builder.AppendLine("  -------------------------");
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry?[]? entries, Dictionary<long, string?>? entryNames)
+        private static void Print(StringBuilder builder, DirectoryEntry[]? entries, Dictionary<long, string?>? entryNames)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -283,7 +283,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryInfo1Entry?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryInfo1Entry[]? entries)
         {
             builder.AppendLine("  Directory Info 1 Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryInfo2Entry?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryInfo2Entry[]? entries)
         {
             builder.AppendLine("  Directory Info 2 Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -335,7 +335,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryCopyEntry?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryCopyEntry[]? entries)
         {
             builder.AppendLine("  Directory Copy Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -361,7 +361,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryLocalEntry?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryLocalEntry[]? entries)
         {
             builder.AppendLine("  Directory Local Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -403,7 +403,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryMapEntry?[]? entries)
+        private static void Print(StringBuilder builder, DirectoryMapEntry[]? entries)
         {
             builder.AppendLine("  Directory Map Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -463,7 +463,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumMapEntry?[]? entries)
+        private static void Print(StringBuilder builder, ChecksumMapEntry[]? entries)
         {
             builder.AppendLine("  Checksum Map Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -490,7 +490,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumEntry?[]? entries)
+        private static void Print(StringBuilder builder, ChecksumEntry[]? entries)
         {
             builder.AppendLine("  Checksum Entries Information:");
             builder.AppendLine("  -------------------------");

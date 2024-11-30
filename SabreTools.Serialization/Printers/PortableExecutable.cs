@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, OptionalHeader? header, SectionHeader?[]? table)
+        private static void Print(StringBuilder builder, OptionalHeader? header, SectionHeader[]? table)
         {
             builder.AppendLine("  Optional Header Information:");
             builder.AppendLine("  -------------------------");
@@ -274,7 +274,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SectionHeader?[]? table)
+        private static void Print(StringBuilder builder, SectionHeader[]? table)
         {
             builder.AppendLine("  Section Table Information:");
             builder.AppendLine("  -------------------------");
@@ -312,7 +312,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, COFFSymbolTableEntry?[]? symbolTable)
+        private static void Print(StringBuilder builder, COFFSymbolTableEntry[]? symbolTable)
         {
             builder.AppendLine("  COFF Symbol Table Information:");
             builder.AppendLine("  -------------------------");
@@ -469,7 +469,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, AttributeCertificateTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, AttributeCertificateTableEntry[]? entries)
         {
             builder.AppendLine("  Attribute Certificate Table Information:");
             builder.AppendLine("  -------------------------");
@@ -560,7 +560,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BaseRelocationBlock?[]? entries, SectionHeader?[]? table)
+        private static void Print(StringBuilder builder, BaseRelocationBlock[]? entries, SectionHeader[]? table)
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
@@ -753,7 +753,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ImportTable? table, SectionHeader?[]? sectionTable)
+        private static void Print(StringBuilder builder, ImportTable? table, SectionHeader[]? sectionTable)
         {
             builder.AppendLine("  Import Table Information:");
             builder.AppendLine("  -------------------------");

@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, RelocationEntry?[]? entries)
+        private static void Print(StringBuilder builder, RelocationEntry[]? entries)
         {
             builder.AppendLine("  Relocation Table Information:");
             builder.AppendLine("  -------------------------");

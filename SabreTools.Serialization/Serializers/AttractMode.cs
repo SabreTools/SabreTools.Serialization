@@ -165,7 +165,7 @@ namespace SabreTools.Serialization.Serializers
         /// <param name="rows">Array of Row objects representing the rows information</param>
         /// <param name="writer">SeparatedValueWriter representing the output</param>
         /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
-        private static void WriteRows(Row?[]? rows, SeparatedValueWriter writer, bool longHeader)
+        private static void WriteRows(Row[]? rows, SeparatedValueWriter writer, bool longHeader)
         {
             // If the games information is missing, we can't do anything
             if (rows == null || rows.Length == 0)

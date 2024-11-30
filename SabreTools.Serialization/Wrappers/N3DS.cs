@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// ExeFS headers
         /// </summary>
-        public ExeFSHeader?[] ExeFSHeaders => Model.ExeFSHeaders ?? [];
+        public ExeFSHeader[] ExeFSHeaders => Model.ExeFSHeaders ?? [];
 
         /// <summary>
         /// Media unit size in bytes
@@ -43,12 +43,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Partitions data table
         /// </summary>
-        public NCCHHeader?[] Partitions => Model.Partitions ?? [];
+        public NCCHHeader[] Partitions => Model.Partitions ?? [];
 
         /// <summary>
         /// Partitions header table
         /// </summary>
-        public PartitionTableEntry?[] PartitionsTable => Model.Header?.PartitionsTable ?? [];
+        public PartitionTableEntry[] PartitionsTable => Model.Header?.PartitionsTable ?? [];
 
         #region Named Partition Entries
 

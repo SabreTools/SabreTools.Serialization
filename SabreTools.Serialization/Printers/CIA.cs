@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Certificate?[]? certificateChain)
+        private static void Print(StringBuilder builder, Certificate[]? certificateChain)
         {
             builder.AppendLine("  Certificate Chain Information:");
             builder.AppendLine("  -------------------------");
@@ -351,7 +351,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHHeader?[]? partitions)
+        private static void Print(StringBuilder builder, NCCHHeader[]? partitions)
         {
             builder.AppendLine("  NCCH Partition Header Information:");
             builder.AppendLine("  -------------------------");

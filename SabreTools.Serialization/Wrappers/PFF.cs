@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Wrappers
         public long FileCount => Model.Header?.NumberOfFiles ?? 0;
 
         /// <inheritdoc cref="Archive.Segments"/>
-        public Segment?[] Segments => Model.Segments ?? [];
+        public Segment[] Segments => Model.Segments ?? [];
 
         #endregion
 

@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirEntry?[]? entries)
+        private static void Print(StringBuilder builder, DirEntry[]? entries)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry?[]? entries)
+        private static void Print(StringBuilder builder, FileEntry[]? entries)
         {
             builder.AppendLine("  File Entries Information:");
             builder.AppendLine("  -------------------------");

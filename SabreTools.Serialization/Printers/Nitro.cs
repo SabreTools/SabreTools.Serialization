@@ -163,7 +163,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, table.NameList);
         }
 
-        private static void Print(StringBuilder builder, FolderAllocationTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, FolderAllocationTableEntry[]? entries)
         {
             builder.AppendLine("  Folder Allocation Table:");
             builder.AppendLine("  -------------------------");
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NameListEntry?[]? entries)
+        private static void Print(StringBuilder builder, NameListEntry[]? entries)
         {
             builder.AppendLine("  Name List:");
             builder.AppendLine("  -------------------------");
@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileAllocationTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, FileAllocationTableEntry[]? entries)
         {
             builder.AppendLine("  File Allocation Table:");
             builder.AppendLine("  -------------------------");

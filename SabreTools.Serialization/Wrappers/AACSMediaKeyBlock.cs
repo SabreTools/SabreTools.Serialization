@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Media key block records
         /// </summary>
-        public Record?[] Records => Model.Records ?? [];
+        public Record[] Records => Model.Records ?? [];
 
         #endregion
 

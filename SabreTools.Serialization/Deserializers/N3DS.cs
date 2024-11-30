@@ -66,9 +66,9 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Create the tables
                 cart.Partitions = new NCCHHeader[8];
-                cart.ExtendedHeaders = new NCCHExtendedHeader?[8];
-                cart.ExeFSHeaders = new ExeFSHeader?[8];
-                cart.RomFSHeaders = new RomFSHeader?[8];
+                cart.ExtendedHeaders = new NCCHExtendedHeader[8];
+                cart.ExeFSHeaders = new ExeFSHeader[8];
+                cart.RomFSHeaders = new RomFSHeader[8];
 
                 // Iterate and build the partitions
                 for (int i = 0; i < 8; i++)

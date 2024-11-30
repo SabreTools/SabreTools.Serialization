@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHHeader?[]? entries)
+        private static void Print(StringBuilder builder, NCCHHeader[]? entries)
         {
             builder.AppendLine("  NCCH Partition Header Information:");
             builder.AppendLine("  -------------------------");
@@ -344,7 +344,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHExtendedHeader?[]? entries)
+        private static void Print(StringBuilder builder, NCCHExtendedHeader[]? entries)
         {
             builder.AppendLine("  NCCH Extended Header Information:");
             builder.AppendLine("  -------------------------");
@@ -580,7 +580,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExeFSHeader?[]? entries)
+        private static void Print(StringBuilder builder, ExeFSHeader[]? entries)
         {
             builder.AppendLine("  ExeFS Header Information:");
             builder.AppendLine("  -------------------------");
@@ -650,7 +650,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, RomFSHeader?[]? entries)
+        private static void Print(StringBuilder builder, RomFSHeader[]? entries)
         {
             builder.AppendLine("  RomFS Header Information:");
             builder.AppendLine("  -------------------------");

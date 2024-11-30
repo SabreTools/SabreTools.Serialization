@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, mediaKeyBlock.Records);
         }
 
-        private static void Print(StringBuilder builder, Record?[]? records)
+        private static void Print(StringBuilder builder, Record[]? records)
         {
             builder.AppendLine("  Records Information:");
             builder.AppendLine("  -------------------------");

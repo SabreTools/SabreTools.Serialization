@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="games">Array of GameBase objects representing the games information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteGames(GameBase?[]? games, ClrMameProWriter writer)
+        private static void WriteGames(GameBase[]? games, ClrMameProWriter writer)
         {
             // If the games information is missing, we can't do anything
             if (games == null || games.Length == 0)

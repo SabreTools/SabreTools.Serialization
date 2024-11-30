@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileDescriptor?[]? entries)
+        private static void Print(StringBuilder builder, FileDescriptor[]? entries)
         {
             builder.AppendLine("  File List Information:");
             builder.AppendLine("  -------------------------");

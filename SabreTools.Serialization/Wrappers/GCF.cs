@@ -365,7 +365,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Array of block entries
             /// </summary>
-            public Models.GCF.BlockEntry?[]? BlockEntries;
+            public Models.GCF.BlockEntry[]? BlockEntries;
         }
 
         #endregion

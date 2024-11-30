@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, AudioFile?[]? entries)
+        private static void Print(StringBuilder builder, AudioFile[]? entries)
         {
             builder.AppendLine("  Audio Files Information:");
             builder.AppendLine("  -------------------------");
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, uint count, DataFile?[]? entries)
+        private static void Print(StringBuilder builder, uint count, DataFile[]? entries)
         {
             builder.AppendLine("    Data Files Information:");
             builder.AppendLine("    -------------------------");

@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ObjectTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ObjectTableEntry[]? entries)
         {
             builder.AppendLine("  Object Table Information:");
             builder.AppendLine("  -------------------------");
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ObjectPageMapEntry?[]? entries)
+        private static void Print(StringBuilder builder, ObjectPageMapEntry[]? entries)
         {
             builder.AppendLine("  Object Page Map Information:");
             builder.AppendLine("  -------------------------");
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResourceTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ResourceTableEntry[]? entries)
         {
             builder.AppendLine("  Resource Table Information:");
             builder.AppendLine("  -------------------------");
@@ -227,7 +227,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResidentNamesTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ResidentNamesTableEntry[]? entries)
         {
             builder.AppendLine("  Resident Names Table Information:");
             builder.AppendLine("  -------------------------");
@@ -255,7 +255,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, EntryTableBundle?[]? bundles)
+        private static void Print(StringBuilder builder, EntryTableBundle[]? bundles)
         {
             builder.AppendLine("  Entry Table Information:");
             builder.AppendLine("  -------------------------");
@@ -341,7 +341,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ModuleFormatDirectivesTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ModuleFormatDirectivesTableEntry[]? entries)
         {
             builder.AppendLine("  Module Format Directives Table Information:");
             builder.AppendLine("  -------------------------");
@@ -369,7 +369,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VerifyRecordDirectiveTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, VerifyRecordDirectiveTableEntry[]? entries)
         {
             builder.AppendLine("  Verify Record Directive Table Information:");
             builder.AppendLine("  -------------------------");
@@ -401,7 +401,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FixupPageTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, FixupPageTableEntry[]? entries)
         {
             builder.AppendLine("  Fix-up Page Table Information:");
             builder.AppendLine("  -------------------------");
@@ -427,7 +427,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FixupRecordTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, FixupRecordTableEntry[]? entries)
         {
             builder.AppendLine("  Fix-up Record Table Information:");
             builder.AppendLine("  -------------------------");
@@ -655,7 +655,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, ImportModuleNameTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ImportModuleNameTableEntry[]? entries)
         {
             builder.AppendLine("  Import Module Name Table Information:");
             builder.AppendLine("  -------------------------");
@@ -682,7 +682,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ImportModuleProcedureNameTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, ImportModuleProcedureNameTableEntry[]? entries)
         {
             builder.AppendLine("  Import Module Procedure Name Table Information:");
             builder.AppendLine("  -------------------------");
@@ -709,7 +709,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, PerPageChecksumTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, PerPageChecksumTableEntry[]? entries)
         {
             builder.AppendLine("  Per-Page Checksum Table Information:");
             builder.AppendLine("  -------------------------");
@@ -735,7 +735,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NonResidentNamesTableEntry?[]? entries)
+        private static void Print(StringBuilder builder, NonResidentNamesTableEntry[]? entries)
         {
             builder.AppendLine("  Non-Resident Names Table Information:");
             builder.AppendLine("  -------------------------");
