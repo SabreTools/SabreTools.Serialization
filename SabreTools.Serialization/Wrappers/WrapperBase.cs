@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region JSON Export
 
-#if !NETFRAMEWORK
+#if NETCOREAPP
         /// <summary>
         /// Export the item information as JSON
         /// </summary>
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.Stream"/></remarks>
         protected Stream? _streamData = null;
 
-#if !NETFRAMEWORK
+#if NETCOREAPP
         /// <summary>
         /// JSON serializer options for output printing
         /// </summary>
@@ -364,7 +364,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region JSON Export
 
-#if !NETFRAMEWORK
+#if NETCOREAPP
         /// <summary>
         /// Export the item information as JSON
         /// </summary>

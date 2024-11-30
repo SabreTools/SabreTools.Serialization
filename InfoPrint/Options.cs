@@ -20,7 +20,7 @@ namespace InfoPrint
         /// </summary>
         public List<string> InputPaths { get; private set; } = [];
 
-#if NETCOREAPP3_1_OR_GREATER
+#if NETCOREAPP
         /// <summary>
         /// Enable JSON output
         /// </summary>
@@ -76,7 +76,7 @@ namespace InfoPrint
 
                     case "-j":
                     case "--json":
-#if NET6_0_OR_GREATER
+#if NETCOREAPP
                         options.Json = true;
 #else
                         Console.WriteLine("JSON output not available in .NET Framework");
@@ -111,7 +111,7 @@ namespace InfoPrint
             Console.WriteLine("Options:");
             Console.WriteLine("-?, -h, --help           Display this help text and quit");
             Console.WriteLine("-d, --debug              Enable debug mode");
-#if NET6_0_OR_GREATER
+#if NETCOREAPP
             Console.WriteLine("-j, --json               Print info as JSON");
 #endif
         }

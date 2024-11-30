@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Interfaces
         /// </summary>
         string Description();
 
-#if !NETFRAMEWORK
+#if NETCOREAPP
         /// <summary>
         /// Export the item information as JSON
         /// </summary>

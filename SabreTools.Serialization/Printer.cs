@@ -71,7 +71,7 @@ namespace SabreTools.Serialization
             };
         }
 
-#if NET6_0_OR_GREATER
+#if NETCOREAPP
         /// <summary>
         /// Export the item information as JSON
         /// </summary>

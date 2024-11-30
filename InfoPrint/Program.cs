@@ -95,7 +95,7 @@ namespace InfoPrint
                 // Get the base info output name
                 string filenameBase = $"info-{DateTime.Now:yyyy-MM-dd_HHmmss.ffff}";
 
-#if NET6_0_OR_GREATER
+#if NETCOREAPP
                 // If we have the JSON flag
                 if (json)
                 {
