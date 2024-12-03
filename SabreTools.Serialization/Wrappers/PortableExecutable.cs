@@ -1601,7 +1601,7 @@ namespace SabreTools.Serialization.Wrappers
                 _sectionData ??= new byte[SectionNames.Length][];
 
                 // If we already have cached data, just use that immediately
-                if (_sectionData[index].Length > 0)
+                if (_sectionData[index] != null && _sectionData[index].Length > 0)
                     return _sectionData[index];
 
                 // Populate the raw section data based on the source
@@ -1687,7 +1687,7 @@ namespace SabreTools.Serialization.Wrappers
                 _sectionStringData ??= new List<string>[SectionNames.Length];
 
                 // If we already have cached data, just use that immediately
-                if (_sectionStringData[index].Count > 0)
+                if (_sectionStringData[index] != null && _sectionStringData[index].Count > 0)
                     return _sectionStringData[index];
 
                 // Populate the section string data based on the source
@@ -1799,7 +1799,7 @@ namespace SabreTools.Serialization.Wrappers
                 _tableData ??= new byte[16][];
 
                 // If we already have cached data, just use that immediately
-                if (_tableData[index].Length > 0)
+                if (_tableData[index] != null && _tableData[index].Length > 0)
                     return _tableData[index];
 
                 // Populate the raw table data based on the source
@@ -1907,7 +1907,7 @@ namespace SabreTools.Serialization.Wrappers
                 _tableStringData ??= new List<string>[16];
 
                 // If we already have cached data, just use that immediately
-                if (_tableStringData[index].Count > 0)
+                if (_tableStringData[index] != null && _tableStringData[index].Count > 0)
                     return _tableStringData[index];
 
                 // Populate the table string data based on the source
