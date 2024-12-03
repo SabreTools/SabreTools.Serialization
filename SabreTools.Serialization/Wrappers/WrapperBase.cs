@@ -202,27 +202,36 @@ namespace SabreTools.Serialization.Wrappers
             if (!SegmentValid(position, length))
                 return null;
 
-            // Read and return the data
-            byte[]? sectionData = null;
-            switch (_dataSource)
+            try
             {
-                case DataSource.ByteArray:
-                    sectionData = new byte[length];
-                    Array.Copy(_byteArrayData!, _byteArrayOffset + position, sectionData, 0, length);
-                    break;
-
-                case DataSource.Stream:
-                    lock (_streamDataLock)
-                    {
-                        long currentLocation = _streamData!.Position;
-                        _streamData.Seek(position, SeekOrigin.Begin);
-                        sectionData = _streamData.ReadBytes(length);
-                        _streamData.Seek(currentLocation, SeekOrigin.Begin);
+                // Read and return the data
+                byte[]? sectionData = null;
+                switch (_dataSource)
+                {
+                    case DataSource.ByteArray:
+                        sectionData = new byte[length];
+                        Array.Copy(_byteArrayData!, _byteArrayOffset + position, sectionData, 0, length);
                         break;
-                    }
-            }
 
-            return sectionData;
+                    case DataSource.Stream:
+                        lock (_streamDataLock)
+                        {
+                            long currentLocation = _streamData!.Position;
+                            _streamData.Seek(position, SeekOrigin.Begin);
+                            sectionData = _streamData.ReadBytes(length);
+                            _streamData.Seek(currentLocation, SeekOrigin.Begin);
+                            break;
+                        }
+                }
+
+                return sectionData;
+
+            }
+            catch
+            {
+                // Absorb the error
+                return null;
+            }
         }
 
         /// <summary>
@@ -368,7 +377,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Export the item information as JSON
         /// </summary>
-        public override string ExportJSON() =>  System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+        public override string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
 #endif
 
         #endregion
