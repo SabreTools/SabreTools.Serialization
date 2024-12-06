@@ -10,12 +10,16 @@
 
 # Optional parameters
 USE_ALL=false
+INCLUDE_DEBUG=false
 NO_BUILD=false
 NO_ARCHIVE=false
-while getopts "uba" OPTION; do
+while getopts "udba" OPTION; do
     case $OPTION in
     u)
         USE_ALL=true
+        ;;
+    d)
+        INCLUDE_DEBUG=true
         ;;
     b)
         NO_BUILD=true
@@ -91,14 +95,14 @@ if [ $NO_BUILD = false ]; then
 
             # Only .NET 5 and above can publish to a single file
             if [[ $(echo ${SINGLE_FILE_CAPABLE[@]} | fgrep -w $FRAMEWORK) ]]; then
-                # Only include Debug if building all
-                if [ $USE_ALL = true ]; then
+                # Only include Debug if set
+                if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 fi
                 dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
             else
-                # Only include Debug if building all
-                if [ $USE_ALL = true ]; then
+                # Only include Debug if set
+                if [ $INCLUDE_DEBUG = true ]; then
                     dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 fi
                 dotnet publish InfoPrint/InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
@@ -131,8 +135,8 @@ if [ $NO_ARCHIVE = false ]; then
                 fi
             fi
 
-            # Only include Debug if building all
-            if [ $USE_ALL = true ]; then
+            # Only include Debug if set
+            if [ $INCLUDE_DEBUG = true ]; then
                 cd $BUILD_FOLDER/InfoPrint/bin/Debug/${FRAMEWORK}/${RUNTIME}/publish/
                 zip -r $BUILD_FOLDER/InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip .
             fi

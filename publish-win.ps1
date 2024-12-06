@@ -13,6 +13,10 @@ param(
     [switch]$USE_ALL,
 
     [Parameter(Mandatory = $false)]
+    [Alias("IncludeDebug")]
+    [switch]$INCLUDE_DEBUG,
+
+    [Parameter(Mandatory = $false)]
     [Alias("NoBuild")]
     [switch]$NO_BUILD,
 
@@ -78,15 +82,15 @@ if (!$NO_BUILD.IsPresent) {
 
             # Only .NET 5 and above can publish to a single file
             if ($SINGLE_FILE_CAPABLE -contains $FRAMEWORK) {
-                # Only include Debug if building all
-                if ($USE_ALL.IsPresent) {
+                # Only include Debug if set
+                if ($INCLUDE_DEBUG.IsPresent) {
                     dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
                 }
                 dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
             }
             else {
-                # Only include Debug if building all
-                if ($USE_ALL.IsPresent) {
+                # Only include Debug if set
+                if ($INCLUDE_DEBUG.IsPresent) {
                     dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
                 }
                 dotnet publish InfoPrint\InfoPrint.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
@@ -115,8 +119,8 @@ if (!$NO_ARCHIVE.IsPresent) {
                 continue
             }
 
-            # Only include Debug if building all
-            if ($USE_ALL.IsPresent) {
+            # Only include Debug if set
+            if ($INCLUDE_DEBUG.IsPresent) {
                 Set-Location -Path $BUILD_FOLDER\InfoPrint\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
                 7z a -tzip $BUILD_FOLDER\InfoPrint_${FRAMEWORK}_${RUNTIME}_debug.zip *
             }
