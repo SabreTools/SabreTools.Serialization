@@ -34,6 +34,7 @@ $COMMIT = git log --pretty=format:"%H" -1
 # Output the selected options
 Write-Host "Selected Options:"
 Write-Host "  Use all frameworks (-UseAll)          $USE_ALL"
+Write-Host "  Include debug builds (-IncludeDebug)  $INCLUDE_DEBUG"
 Write-Host "  No build (-NoBuild)                   $NO_BUILD"
 Write-Host "  No archive (-NoArchive)               $NO_ARCHIVE"
 Write-Host " "

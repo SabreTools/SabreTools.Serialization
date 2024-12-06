@@ -43,6 +43,7 @@ COMMIT=$(git log --pretty=%H -1)
 # Output the selected options
 echo "Selected Options:"
 echo "  Use all frameworks (-u)               $USE_ALL"
+echo "  Include debug builds (-d)             $INCLUDE_DEBUG"
 echo "  No build (-b)                         $NO_BUILD"
 echo "  No archive (-a)                       $NO_ARCHIVE"
 echo " "
