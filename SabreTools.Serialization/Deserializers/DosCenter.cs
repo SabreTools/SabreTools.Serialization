@@ -172,6 +172,9 @@ namespace SabreTools.Serialization.Deserializers
                     case "crc":
                         file.CRC = kvp.Value;
                         break;
+                    case "sha1":
+                        file.SHA1 = kvp.Value;
+                        break;
                     case "date":
                         file.Date = kvp.Value;
                         break;

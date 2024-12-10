@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.Deserializers
                         }
                     }
 
-                    // If we're in the doscenter block
+                    // If we're in the clrmamepro block
                     else if (reader.TopLevel == "clrmamepro"
                         && reader.RowType == CmpRowType.Standalone)
                     {

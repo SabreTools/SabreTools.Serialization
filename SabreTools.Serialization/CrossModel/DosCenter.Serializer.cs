@@ -73,6 +73,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Models.Metadata.Rom.NameKey] = item.Name,
                 [Models.Metadata.Rom.SizeKey] = item.Size,
                 [Models.Metadata.Rom.CRCKey] = item.CRC,
+                [Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 [Models.Metadata.Rom.DateKey] = item.Date,
             };
             return rom;

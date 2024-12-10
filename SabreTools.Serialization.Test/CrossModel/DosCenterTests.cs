@@ -49,6 +49,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Name = "XXXXXX",
                 Size = "XXXXXX",
                 CRC = "XXXXXX",
+                SHA1 = "XXXXXX",
                 Date = "XXXXXX",
             };
 
@@ -102,6 +103,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", rom.Name);
             Assert.Equal("XXXXXX", rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
+            Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.Date);
         }
     }

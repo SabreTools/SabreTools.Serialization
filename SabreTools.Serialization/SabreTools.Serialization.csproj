@@ -33,7 +33,7 @@
         <PackageReference Include="SabreTools.ASN1" Version="1.5.0" />
         <PackageReference Include="SabreTools.Hashing" Version="1.4.0" />
         <PackageReference Include="SabreTools.IO" Version="1.6.1" />
-        <PackageReference Include="SabreTools.Models" Version="1.5.5" />
+        <PackageReference Include="SabreTools.Models" Version="1.5.6" />
     </ItemGroup>
 
 </Project>
