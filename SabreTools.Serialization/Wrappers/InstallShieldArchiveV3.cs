@@ -77,6 +77,11 @@ namespace SabreTools.Serialization.Wrappers
         }
         private Dictionary<string, Models.InstallShieldArchiveV3.File>? _fileNameMap = null;
 
+        /// <summary>
+        /// Data offset for all archives
+        /// </summary>
+        private const uint DataStart = 255;
+
         #endregion
 
         #region Constructors
@@ -201,7 +206,7 @@ namespace SabreTools.Serialization.Wrappers
                 filename = Path.Combine(dirName, filename);
 
             // Get and adjust the file offset
-            long fileOffset = file.Offset + 255; // Static offset
+            long fileOffset = file.Offset + DataStart;
             if (fileOffset < 0 || fileOffset >= Length)
                 return false;
 
