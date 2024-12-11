@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Compression.Blast;
 using SabreTools.Models.InstallShieldArchiveV3;
 
 namespace SabreTools.Serialization.Wrappers
@@ -22,29 +23,59 @@ namespace SabreTools.Serialization.Wrappers
         public Models.InstallShieldArchiveV3.File[] Files => Model.Files ?? [];
 
         /// <summary>
-        /// Map of all directories found in the archive
+        /// Map of all files to their parent directories by index
         /// </summary>
-        public Dictionary<string, Models.InstallShieldArchiveV3.File> FileMap
+        public Dictionary<int, int> FileDirMap
         {
             get
             {
-                // Build the file map if not already
-                if (_fileMap == null)
-                {
-                    _fileMap = [];
-                    foreach (var file in Model.Files ?? [])
-                    {
-                        if (file?.Name == null)
-                            continue;
+                // Return the prebuilt map
+                if (_fileDirMap != null)
+                    return _fileDirMap;
 
-                        _fileMap[file.Name] = file;
+                // Build the file map
+                _fileDirMap = [];
+
+                int fileId = 0;
+                for (int i = 0; i < Directories.Length; i++)
+                {
+                    var dir = Directories[i];
+                    for (int j = 0; j < dir.FileCount; j++)
+                    {
+                        _fileDirMap[fileId++] = i;
                     }
                 }
 
-                return _fileMap;
+                return _fileDirMap;
             }
         }
-        private Dictionary<string, Models.InstallShieldArchiveV3.File>? _fileMap = null;
+        private Dictionary<int, int>? _fileDirMap = null;
+
+        /// <summary>
+        /// Map of all files found in the archive
+        /// </summary>
+        public Dictionary<string, Models.InstallShieldArchiveV3.File> FileNameMap
+        {
+            get
+            {
+                // Return the prebuilt map
+                if (_fileNameMap != null)
+                    return _fileNameMap;
+
+                // Build the file map
+                _fileNameMap = [];
+                foreach (var file in Files)
+                {
+                    if (file?.Name == null)
+                        continue;
+
+                    _fileNameMap[file.Name] = file;
+                }
+
+                return _fileNameMap;
+            }
+        }
+        private Dictionary<string, Models.InstallShieldArchiveV3.File>? _fileNameMap = null;
 
         #endregion
 
@@ -108,6 +139,121 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Extraction
+
+        /// <summary>
+        /// Extract all files from the ISAv3 to an output directory
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if all files extracted, false otherwise</returns>
+        public bool ExtractAll(string outputDirectory)
+        {
+            // Get the file count
+            int fileCount = Files.Length;
+            if (fileCount == 0)
+                return false;
+
+            // Loop through and extract all files to the output
+            bool allExtracted = true;
+            for (int i = 0; i < fileCount; i++)
+            {
+                allExtracted &= ExtractFile(i, outputDirectory);
+            }
+
+            return allExtracted;
+        }
+
+        /// <summary>
+        /// Extract a file from the ISAv3 to an output directory by index
+        /// </summary>
+        /// <param name="index">File index to extract</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if the file extracted, false otherwise</returns>
+        public bool ExtractFile(int index, string outputDirectory)
+        {
+            // Get the file count
+            int fileCount = Files.Length;
+            if (fileCount == 0)
+                return false;
+
+            // If the files index is invalid
+            if (index < 0 || index >= fileCount)
+                return false;
+
+            // Get the file
+            var file = Files[index];
+            if (file == null)
+                return false;
+
+            // Create the filename
+            var filename = file.Name;
+            if (filename == null)
+                return false;
+
+            // Get the directory name
+            int dirIndex = FileDirMap[index];
+            var dirName = Directories[dirIndex].Name;
+            if (dirName != null)
+                filename = Path.Combine(dirName, filename);
+
+            // Get and adjust the file offset
+            long fileOffset = file.Offset + 255; // Static offset
+            if (fileOffset < 0 || fileOffset >= Length)
+                return false;
+
+            // Get the file sizes
+            long fileSize = file.CompressedSize;
+            long outputFileSize = file.UncompressedSize;
+
+            // Read the compressed data directly
+            var compressedData = ReadFromDataSource((int)fileOffset, (int)fileSize);
+            if (compressedData == null)
+                return false;
+
+            // If the compressed and uncompressed sizes match
+            byte[] data;
+            if (fileSize == outputFileSize)
+            {
+                data = compressedData;
+            }
+            else
+            {
+                // Decompress the data
+                var decomp = Decompressor.Create();
+                var outData = new MemoryStream();
+                decomp.CopyTo(compressedData, outData);
+                data = outData.ToArray();
+            }
+
+            // If we have an invalid output directory
+            if (string.IsNullOrEmpty(outputDirectory))
+                return false;
+
+            // Create the full output path
+            filename = Path.Combine(outputDirectory, filename);
+
+            // Ensure the output directory is created
+            var directoryName = Path.GetDirectoryName(filename);
+            if (directoryName != null)
+                System.IO.Directory.CreateDirectory(directoryName);
+
+            // Try to write the data
+            try
+            {
+                // Open the output file for writing
+                using Stream fs = System.IO.File.OpenWrite(filename);
+                fs.Write(data, 0, data.Length);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
         }
 
         #endregion
