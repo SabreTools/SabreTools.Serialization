@@ -5,6 +5,9 @@ using SabreTools.Models.InstallShieldArchiveV3;
 
 namespace SabreTools.Serialization.Wrappers
 {
+    /// <remarks>
+    /// Reference (de)compressor: https://www.sac.sk/download/pack/icomp95.zip
+    /// </remarks>
     public partial class InstallShieldArchiveV3 : WrapperBase<Archive>
     {
         #region Descriptive Properties
