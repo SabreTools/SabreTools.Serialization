@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using SabreTools.Models.InstallShieldArchiveV3;
 
@@ -9,6 +10,41 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public override string DescriptionString => "InstallShield Archive V3";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Archive.Directories"/>
+        public Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories ?? [];
+
+        /// <inheritdoc cref="Archive.Files"/>
+        public Models.InstallShieldArchiveV3.File[] Files => Model.Files ?? [];
+
+        /// <summary>
+        /// Map of all directories found in the archive
+        /// </summary>
+        public Dictionary<string, Models.InstallShieldArchiveV3.File> FileMap
+        {
+            get
+            {
+                // Build the file map if not already
+                if (_fileMap == null)
+                {
+                    _fileMap = [];
+                    foreach (var file in Model.Files ?? [])
+                    {
+                        if (file?.Name == null)
+                            continue;
+
+                        _fileMap[file.Name] = file;
+                    }
+                }
+
+                return _fileMap;
+            }
+        }
+        private Dictionary<string, Models.InstallShieldArchiveV3.File>? _fileMap = null;
 
         #endregion
 
