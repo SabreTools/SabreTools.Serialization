@@ -186,13 +186,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>True if the file extracted, false otherwise</returns>
         public bool ExtractFile(int index, string outputDirectory)
         {
-            // Get the file count
-            int fileCount = Files.Length;
-            if (fileCount == 0)
-                return false;
-
             // If the files index is invalid
-            if (index < 0 || index >= fileCount)
+            if (index < 0 || index >= FileCount)
                 return false;
 
             // Get the file
@@ -205,8 +200,12 @@ namespace SabreTools.Serialization.Wrappers
             if (filename == null)
                 return false;
 
-            // Get the directory name
+            // Get the directory index
             int dirIndex = FileDirMap[index];
+            if (dirIndex < 0 || dirIndex > DirCount)
+                return false;
+
+            // Get the directory name
             var dirName = Directories[dirIndex].Name;
             if (dirName != null)
                 filename = Path.Combine(dirName, filename);
