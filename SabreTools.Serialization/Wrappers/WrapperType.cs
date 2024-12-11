@@ -92,15 +92,24 @@ namespace SabreTools.Serialization.Wrappers
         LDSCRYPT,
 
         /// <summary>
+        /// LZ-compressed file, KWAJ variant
+        /// </summary>
+        LZKWAJ,
+
+        /// <summary>
+        /// LZ-compressed file, QBasic variant
+        /// </summary>
+        LZQBasic,
+
+        /// <summary>
+        /// LZ-compressed file, SZDD variant
+        /// </summary>
+        LZSZDD,
+
+        /// <summary>
         /// Microsoft cabinet file
         /// </summary>
         MicrosoftCAB,
-
-        /// <summary>
-        /// Microsoft LZ-compressed file
-        /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
-        MicrosoftLZ,
 
         /// <summary>
         /// MPQ game data archive

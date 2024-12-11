@@ -45,6 +45,9 @@ namespace SabreTools.Serialization
                 Wrapper.InstallShieldCabinet item => item.PrettyPrint(),
                 Wrapper.IRD item => item.PrettyPrint(),
                 Wrapper.LinearExecutable item => item.PrettyPrint(),
+                Wrapper.LZKWAJ item => item.PrettyPrint(),
+                Wrapper.LZQBasic item => item.PrettyPrint(),
+                Wrapper.LZSZDD item => item.PrettyPrint(),
                 Wrapper.MicrosoftCabinet item => item.PrettyPrint(),
                 Wrapper.MoPaQ item => item.PrettyPrint(),
                 Wrapper.MSDOS item => item.PrettyPrint(),
@@ -90,6 +93,9 @@ namespace SabreTools.Serialization
                 Wrapper.InstallShieldCabinet item => item.ExportJSON(),
                 Wrapper.IRD item => item.ExportJSON(),
                 Wrapper.LinearExecutable item => item.ExportJSON(),
+                Wrapper.LZKWAJ item => item.ExportJSON(),
+                Wrapper.LZQBasic item => item.ExportJSON(),
+                Wrapper.LZSZDD item => item.ExportJSON(),
                 Wrapper.MicrosoftCabinet item => item.ExportJSON(),
                 Wrapper.MoPaQ item => item.ExportJSON(),
                 Wrapper.MSDOS item => item.ExportJSON(),
@@ -226,6 +232,36 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             LinearExecutable.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.LZKWAJ item)
+        {
+            var builder = new StringBuilder();
+            LZKWAJ.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.LZQBasic item)
+        {
+            var builder = new StringBuilder();
+            LZQBasic.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.LZSZDD item)
+        {
+            var builder = new StringBuilder();
+            LZSZDD.Print(builder, item.Model);
             return builder;
         }
 

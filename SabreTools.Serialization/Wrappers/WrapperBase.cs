@@ -45,6 +45,24 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public T Model { get; private set; }
 
+        /// <summary>
+        /// Length of the underlying data
+        /// </summary>
+        public long Length
+        {
+            get
+            {
+                return _dataSource switch
+                {
+                    DataSource.ByteArray => _byteArrayData!.Length - _byteArrayOffset,
+                    DataSource.Stream => _streamData!.Length,
+
+                    // Everything else is invalid
+                    _ => -1,
+                };
+            }
+        }
+
         #endregion
 
         #region Instance Variables

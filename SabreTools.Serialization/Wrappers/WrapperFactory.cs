@@ -31,8 +31,10 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.InstallShieldArchiveV3 => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
                 WrapperType.LDSCRYPT => null,// TODO: Implement wrapper
+                WrapperType.LZKWAJ => LZKWAJ.Create(data),
+                WrapperType.LZQBasic => LZQBasic.Create(data),
+                WrapperType.LZSZDD => LZSZDD.Create(data),
                 WrapperType.MicrosoftCAB => MicrosoftCabinet.Create(data),
-                WrapperType.MicrosoftLZ => null,// TODO: Implement wrapper
                 WrapperType.MoPaQ => MoPaQ.Create(data),
                 WrapperType.N3DS => N3DS.Create(data),
                 WrapperType.NCF => NCF.Create(data),
@@ -330,19 +332,25 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            #region LZ
+
+            if (magic.StartsWith([0x4B, 0x57, 0x41, 0x4A, 0x88, 0xF0, 0x27, 0xD1]))
+                return WrapperType.LZKWAJ;
+
+            if (magic.StartsWith([0x53, 0x5A, 0x20, 0x88, 0xF0, 0x27, 0x33, 0xD1]))
+                return WrapperType.LZQBasic;
+
+            if (magic.StartsWith([0x53, 0x5A, 0x44, 0x44, 0x88, 0xF0, 0x27, 0x33]))
+                return WrapperType.LZSZDD;
+
+            #endregion
+
             #region MicrosoftCAB
 
             if (magic.StartsWith([0x4d, 0x53, 0x43, 0x46]))
                 return WrapperType.MicrosoftCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
-
-            #endregion
-
-            #region MicrosoftLZ
-
-            if (magic.StartsWith([0x53, 0x5a, 0x44, 0x44, 0x88, 0xf0, 0x27, 0x33]))
-                return WrapperType.MicrosoftLZ;
 
             #endregion
 
