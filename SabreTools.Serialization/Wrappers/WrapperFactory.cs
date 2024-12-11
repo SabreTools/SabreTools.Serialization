@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.GCF => GCF.Create(data),
                 WrapperType.GZIP => null,// TODO: Implement wrapper
                 WrapperType.IniFile => null,// TODO: Implement wrapper
-                WrapperType.InstallShieldArchiveV3 => null,// TODO: Implement wrapper
+                WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
                 WrapperType.LDSCRYPT => null,// TODO: Implement wrapper
                 WrapperType.LZKWAJ => LZKWAJ.Create(data),

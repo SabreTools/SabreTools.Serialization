@@ -77,7 +77,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// InstallShield archive v3
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         InstallShieldArchiveV3,
 
         /// <summary>

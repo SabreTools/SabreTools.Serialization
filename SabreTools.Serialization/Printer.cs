@@ -42,6 +42,7 @@ namespace SabreTools.Serialization
                 Wrapper.CHD item => item.PrettyPrint(),
                 Wrapper.CIA item => item.PrettyPrint(),
                 Wrapper.GCF item => item.PrettyPrint(),
+                Wrapper.InstallShieldArchiveV3 item => item.PrettyPrint(),
                 Wrapper.InstallShieldCabinet item => item.PrettyPrint(),
                 Wrapper.IRD item => item.PrettyPrint(),
                 Wrapper.LinearExecutable item => item.PrettyPrint(),
@@ -90,6 +91,7 @@ namespace SabreTools.Serialization
                 Wrapper.CHD item => item.ExportJSON(),
                 Wrapper.CIA item => item.ExportJSON(),
                 Wrapper.GCF item => item.ExportJSON(),
+                Wrapper.InstallShieldArchiveV3 item => item.ExportJSON(),
                 Wrapper.InstallShieldCabinet item => item.ExportJSON(),
                 Wrapper.IRD item => item.ExportJSON(),
                 Wrapper.LinearExecutable item => item.ExportJSON(),
@@ -202,6 +204,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             GCF.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.InstallShieldArchiveV3 item)
+        {
+            var builder = new StringBuilder();
+            InstallShieldArchiveV3.Print(builder, item.Model);
             return builder;
         }
 
