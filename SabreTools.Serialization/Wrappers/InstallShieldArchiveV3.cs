@@ -16,6 +16,12 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Header.DirCount"/>
+        public ushort DirCount => Model.Header?.DirCount ?? 0;
+
+        /// <inheritdoc cref="Header.FileCount"/>
+        public ushort FileCount => Model.Header?.FileCount ?? 0;
+
         /// <inheritdoc cref="Archive.Directories"/>
         public Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories ?? [];
 
