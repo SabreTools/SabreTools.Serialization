@@ -74,12 +74,24 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Build the file map
                 _fileNameMap = [];
-                foreach (var file in Files)
+                for (int fileIndex = 0; fileIndex < Files.Length; fileIndex++)
                 {
-                    if (file?.Name == null)
+                    // Get the current file
+                    var file = Files[fileIndex];
+
+                    // Get the parent directory
+                    int dirIndex = FileDirMap[fileIndex];
+                    if (dirIndex < 0 || dirIndex >= DirCount)
                         continue;
 
-                    _fileNameMap[file.Name] = file;
+                    // Create the filename
+                    string filename = Path.Combine(
+                        Directories[dirIndex]?.Name ?? $"dir_{dirIndex}",
+                        file.Name ?? $"file_{fileIndex}"
+                    );
+
+                    // Add to the map
+                    _fileNameMap[filename] = file;
                 }
 
                 return _fileNameMap;
