@@ -1,6 +1,6 @@
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
+using static SabreTools.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -21,8 +21,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = ParseHeader(data);
-                if (header == null)
+                var header = data.ReadType<Models.PlayStation3.SFOHeader>();
+                if (header?.Magic != SFOMagic)
                     return null;
 
                 // Assign the header
@@ -58,24 +58,6 @@ namespace SabreTools.Serialization.Deserializers
                 // Ignore the actual error
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Parse a Stream into an SFO header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled SFO header on success, null on error</returns>
-        public static Models.PlayStation3.SFOHeader? ParseHeader(Stream data)
-        {
-            var sfoHeader = data.ReadType<Models.PlayStation3.SFOHeader>();
-            if (sfoHeader == null)
-                return null;
-
-            string magic = Encoding.ASCII.GetString(sfoHeader!.Magic!);
-            if (magic != "\0PSF")
-                return null;
-
-            return sfoHeader;
         }
 
         /// <summary>

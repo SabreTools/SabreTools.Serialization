@@ -1,6 +1,6 @@
 using System.IO;
-using System.Text;
 using SabreTools.IO.Extensions;
+using static SabreTools.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -17,11 +17,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Deserialize the SFB
                 var sfb = data.ReadType<Models.PlayStation3.SFB>();
-                if (sfb?.Magic == null)
-                    return null;
-
-                string magic = Encoding.ASCII.GetString(sfb.Magic);
-                if (magic != ".SFB")
+                if (sfb?.Magic == SFBMagic)
                     return null;
 
                 return sfb;
