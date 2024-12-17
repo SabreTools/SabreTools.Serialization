@@ -50,11 +50,11 @@ namespace SabreTools.Serialization.Deserializers
                 appPkgHeader.DigestTableSHA256 = data.ReadBytes(0x20);
                 appPkgHeader.MainTableSHA256 = data.ReadBytes(0x20);
                 appPkgHeader.Zeroes2 = data.ReadBytes(0x280);
-                appPkgHeader.PSFUnknown = data.ReadUInt32BigEndian();
-                appPkgHeader.PSFImageCount = data.ReadUInt32BigEndian();
-                appPkgHeader.PSFImageFlags = data.ReadUInt64BigEndian();
-                appPkgHeader.PSFImageOffset = data.ReadUInt64BigEndian();
-                appPkgHeader.PSFImageSize = data.ReadUInt64BigEndian();
+                appPkgHeader.PFSUnknown = data.ReadUInt32BigEndian();
+                appPkgHeader.PFSImageCount = data.ReadUInt32BigEndian();
+                appPkgHeader.PFSImageFlags = data.ReadUInt64BigEndian();
+                appPkgHeader.PFSImageOffset = data.ReadUInt64BigEndian();
+                appPkgHeader.PFSImageSize = data.ReadUInt64BigEndian();
                 appPkgHeader.MountImageOffset = data.ReadUInt64BigEndian();
                 appPkgHeader.MountImageSize = data.ReadUInt64BigEndian();
                 appPkgHeader.PKGSize = data.ReadUInt64BigEndian();
