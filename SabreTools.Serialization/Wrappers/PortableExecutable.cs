@@ -747,6 +747,11 @@ namespace SabreTools.Serialization.Wrappers
         private Models.PortableExecutable.VersionInfo? _versionInfo = null;
 
         /// <summary>
+        /// Cached version info strings data
+        /// </summary>
+        private readonly Dictionary<string, string?> _versionInfoStrings = [];
+
+        /// <summary>
         /// Cached assembly manifest data
         /// </summary>
         private Models.PortableExecutable.AssemblyManifest? _assemblyManifest = null;
@@ -842,6 +847,10 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(key))
                 return null;
 
+            // If we have the value cached
+            if (_versionInfoStrings.ContainsKey(key))
+                return _versionInfoStrings[key];
+
             // Ensure that we have the resource data cached
             if (ResourceData == null)
                 return null;
@@ -862,17 +871,22 @@ namespace SabreTools.Serialization.Wrappers
                 // Return the match if found
                 match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
-                    return match.Value?.TrimEnd('\0');
+                {
+                    _versionInfoStrings[key] = match.Value?.TrimEnd('\0');
+                    return _versionInfoStrings[key];
+                }
             }
 
-            return null;
+            _versionInfoStrings[key] = null;
+            return _versionInfoStrings[key];
 #else
             var match = stringTable
                 .SelectMany(st => st?.Children ?? [])
                 .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
 
             // Return either the match or null
-            return match?.Value?.TrimEnd('\0');
+            _versionInfoStrings[key] = match?.Value?.TrimEnd('\0');
+            return _versionInfoStrings[key];
 #endif
         }
 
