@@ -40,8 +40,8 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the executable header
                 data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-                var informationBlock = data.ReadType<InformationBlock>();
-                if (informationBlock?.Signature != LESignatureString && informationBlock?.Signature != LXSignatureString)
+                var informationBlock = ParseInformationBlock(data);
+                if (informationBlock.Signature != LESignatureString && informationBlock.Signature != LXSignatureString)
                     return null;
 
                 // Set the executable header
@@ -64,11 +64,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the object table
                     for (int i = 0; i < executable.ObjectTable.Length; i++)
                     {
-                        var entry = data.ReadType<ObjectTableEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.ObjectTable[i] = entry;
+                        executable.ObjectTable[i] = ParseObjectTableEntry(data);
                     }
                 }
 
@@ -89,11 +85,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the object page map
                     for (int i = 0; i < executable.ObjectPageMap.Length; i++)
                     {
-                        var entry = data.ReadType<ObjectPageMapEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.ObjectPageMap[i] = entry;
+                        executable.ObjectPageMap[i] = ParseObjectPageMapEntry(data);
                     }
                 }
 
@@ -129,11 +121,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the resource table
                     for (int i = 0; i < executable.ResourceTable.Length; i++)
                     {
-                        var entry = data.ReadType<ResourceTableEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.ResourceTable[i] = entry;
+                        executable.ResourceTable[i] = ParseResourceTableEntry(data);
                     }
                 }
 
@@ -213,11 +201,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the module format directives table
                     for (int i = 0; i < executable.ModuleFormatDirectivesTable.Length; i++)
                     {
-                        var entry = data.ReadType<ModuleFormatDirectivesTableEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.ModuleFormatDirectivesTable[i] = entry;
+                        executable.ModuleFormatDirectivesTable[i] = ParseModuleFormatDirectivesTableEntry(data);
                     }
                 }
 
@@ -246,11 +230,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the fix-up page table
                     for (int i = 0; i < executable.FixupPageTable.Length; i++)
                     {
-                        var entry = data.ReadType<FixupPageTableEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.FixupPageTable[i] = entry;
+                        executable.FixupPageTable[i] = ParseFixupPageTableEntry(data);
                     }
                 }
 
@@ -296,11 +276,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the imported module name table
                     for (int i = 0; i < executable.ImportModuleNameTable.Length; i++)
                     {
-                        var entry = ParseImportModuleNameTableEntry(data);
-                        if (entry == null)
-                            return null;
-
-                        executable.ImportModuleNameTable[i] = entry;
+                        executable.ImportModuleNameTable[i] = ParseImportModuleNameTableEntry(data);
                     }
                 }
 
@@ -327,9 +303,6 @@ namespace SabreTools.Serialization.Deserializers
                     while (data.Position < offset + tableSize)
                     {
                         var entry = ParseImportModuleProcedureNameTableEntry(data);
-                        if (entry == null)
-                            return null;
-
                         importModuleProcedureNameTable.Add(entry);
                     }
 
@@ -354,11 +327,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the per-page checksum name table
                     for (int i = 0; i < executable.PerPageChecksumTable.Length; i++)
                     {
-                        var entry = data.ReadType<PerPageChecksumTableEntry>();
-                        if (entry == null)
-                            return null;
-
-                        executable.PerPageChecksumTable[i] = entry;
+                        executable.PerPageChecksumTable[i] = ParsePerPageChecksumTableEntry(data);
                     }
                 }
 
@@ -404,7 +373,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Try to parse the debug information
                     var debugInformation = ParseDebugInformation(data, informationBlock.DebugInformationLength);
-                    if (debugInformation == null)
+                    if (debugInformation.Signature != DebugInformationSignatureString)
                         return null;
 
                     // Set the debug information
@@ -423,276 +392,288 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a resident names table entry
+        /// Parse a Stream into a DebugInformation
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled resident names table entry on success, null on error</returns>
-        public static ResidentNamesTableEntry ParseResidentNamesTableEntry(Stream data)
+        /// <param name="size">Total size of the debug information</param>
+        /// <returns>Filled DebugInformation on success, null on error</returns>
+        public static DebugInformation ParseDebugInformation(Stream data, long size)
         {
-            var entry = new ResidentNamesTableEntry();
+            var obj = new DebugInformation();
 
-            entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
-            {
-                byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
-            }
+            byte[] signature = data.ReadBytes(3);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.FormatType = (DebugFormatType)data.ReadByteValue();
+            obj.DebuggerData = data.ReadBytes((int)(size - 4));
 
-            entry.OrdinalNumber = data.ReadUInt16();
-            return entry;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an entry table bundle
+        /// Parse a Stream into an EntryTableBundle
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled entry table bundle on success, null on error</returns>
+        /// <returns>Filled EntryTableBundle on success, null on error</returns>
         public static EntryTableBundle? ParseEntryTableBundle(Stream data)
         {
-            var bundle = new EntryTableBundle();
+            var obj = new EntryTableBundle();
 
-            bundle.Entries = data.ReadByteValue();
-            if (bundle.Entries == 0)
-                return bundle;
+            obj.Entries = data.ReadByteValue();
+            if (obj.Entries == 0)
+                return obj;
 
-            bundle.BundleType = (BundleType)data.ReadByteValue();
-            bundle.TableEntries = new EntryTableEntry[bundle.Entries];
-            for (int i = 0; i < bundle.Entries; i++)
+            obj.BundleType = (BundleType)data.ReadByteValue();
+            obj.TableEntries = new EntryTableEntry[obj.Entries];
+            for (int i = 0; i < obj.Entries; i++)
             {
                 var entry = new EntryTableEntry();
 
-                switch (bundle.BundleType & ~BundleType.ParameterTypingInformationPresent)
+                switch (obj.BundleType & ~BundleType.ParameterTypingInformationPresent)
                 {
                     case BundleType.UnusedEntry:
                         // Empty entry with no information
                         break;
 
                     case BundleType.SixteenBitEntry:
-                        entry.SixteenBitObjectNumber = data.ReadUInt16();
+                        entry.SixteenBitObjectNumber = data.ReadUInt16LittleEndian();
                         entry.SixteenBitEntryFlags = (EntryFlags)data.ReadByteValue();
-                        entry.SixteenBitOffset = data.ReadUInt16();
+                        entry.SixteenBitOffset = data.ReadUInt16LittleEndian();
                         break;
 
                     case BundleType.TwoEightySixCallGateEntry:
-                        entry.TwoEightySixObjectNumber = data.ReadUInt16();
+                        entry.TwoEightySixObjectNumber = data.ReadUInt16LittleEndian();
                         entry.TwoEightySixEntryFlags = (EntryFlags)data.ReadByteValue();
-                        entry.TwoEightySixOffset = data.ReadUInt16();
-                        entry.TwoEightySixCallgate = data.ReadUInt16();
+                        entry.TwoEightySixOffset = data.ReadUInt16LittleEndian();
+                        entry.TwoEightySixCallgate = data.ReadUInt16LittleEndian();
                         break;
 
                     case BundleType.ThirtyTwoBitEntry:
-                        entry.ThirtyTwoBitObjectNumber = data.ReadUInt16();
+                        entry.ThirtyTwoBitObjectNumber = data.ReadUInt16LittleEndian();
                         entry.ThirtyTwoBitEntryFlags = (EntryFlags)data.ReadByteValue();
-                        entry.ThirtyTwoBitOffset = data.ReadUInt32();
+                        entry.ThirtyTwoBitOffset = data.ReadUInt32LittleEndian();
                         break;
 
                     case BundleType.ForwarderEntry:
-                        entry.ForwarderReserved = data.ReadUInt16();
+                        entry.ForwarderReserved = data.ReadUInt16LittleEndian();
                         entry.ForwarderFlags = (ForwarderFlags)data.ReadByteValue();
-                        entry.ForwarderModuleOrdinalNumber = data.ReadUInt16();
-                        entry.ProcedureNameOffset = data.ReadUInt32();
-                        entry.ImportOrdinalNumber = data.ReadUInt32();
+                        entry.ForwarderModuleOrdinalNumber = data.ReadUInt16LittleEndian();
+                        entry.ProcedureNameOffset = data.ReadUInt32LittleEndian();
+                        entry.ImportOrdinalNumber = data.ReadUInt32LittleEndian();
                         break;
 
                     default:
                         return null;
                 }
 
-                bundle.TableEntries[i] = entry;
+                obj.TableEntries[i] = entry;
             }
 
-            return bundle;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a fix-up record table entry
+        /// Parse a Stream into an FixupPageTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled fix-up record table entry on success, null on error</returns>
+        /// <returns>Filled FixupPageTableEntry on success, null on error</returns>
+        public static FixupPageTableEntry ParseFixupPageTableEntry(Stream data)
+        {
+            var obj = new FixupPageTableEntry();
+
+            obj.Offset = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a FixupRecordTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled FixupRecordTableEntry on success, null on error</returns>
         public static FixupRecordTableEntry? ParseFixupRecordTableEntry(Stream data)
         {
-            var entry = new FixupRecordTableEntry();
+            var obj = new FixupRecordTableEntry();
 
-            entry.SourceType = (FixupRecordSourceType)data.ReadByteValue();
-            entry.TargetFlags = (FixupRecordTargetFlags)data.ReadByteValue();
+            obj.SourceType = (FixupRecordSourceType)data.ReadByteValue();
+            obj.TargetFlags = (FixupRecordTargetFlags)data.ReadByteValue();
 
             // Source list flag
 #if NET20 || NET35
-            if ((entry.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
+            if ((obj.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
 #else
-            if (entry.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
+            if (obj.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
 #endif
-                entry.SourceOffsetListCount = data.ReadByteValue();
+                obj.SourceOffsetListCount = data.ReadByteValue();
             else
-                entry.SourceOffset = data.ReadUInt16();
+                obj.SourceOffset = data.ReadUInt16LittleEndian();
 
             // OBJECT / TRGOFF
 #if NET20 || NET35
-            if ((entry.TargetFlags & FixupRecordTargetFlags.InternalReference) != 0)
+            if ((obj.TargetFlags & FixupRecordTargetFlags.InternalReference) != 0)
 #else
-            if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReference))
+            if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReference))
 #endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
 #endif
-                    entry.TargetObjectNumberWORD = data.ReadUInt16();
+                    obj.TargetObjectNumberWORD = data.ReadUInt16LittleEndian();
                 else
-                    entry.TargetObjectNumberByte = data.ReadByteValue();
+                    obj.TargetObjectNumberByte = data.ReadByteValue();
 
                 // 16-bit Selector fixup
 #if NET20 || NET35
-                if ((entry.SourceType & FixupRecordSourceType.SixteenBitSelectorFixup) == 0)
+                if ((obj.SourceType & FixupRecordSourceType.SixteenBitSelectorFixup) == 0)
 #else
-                if (!entry.SourceType.HasFlag(FixupRecordSourceType.SixteenBitSelectorFixup))
+                if (!obj.SourceType.HasFlag(FixupRecordSourceType.SixteenBitSelectorFixup))
 #endif
                 {
                     // 32-bit Target Offset Flag
 #if NET20 || NET35
-                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+                    if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
 #else
-                    if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+                    if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
 #endif
-                        entry.TargetOffsetDWORD = data.ReadUInt32();
+                        obj.TargetOffsetDWORD = data.ReadUInt32LittleEndian();
                     else
-                        entry.TargetOffsetWORD = data.ReadUInt16();
+                        obj.TargetOffsetWORD = data.ReadUInt16LittleEndian();
                 }
             }
 
             // MOD ORD# / IMPORT ORD / ADDITIVE
 #if NET20 || NET35
-            else if ((entry.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByOrdinal) != 0)
+            else if ((obj.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByOrdinal) != 0)
 #else
-            else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByOrdinal))
+            else if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByOrdinal))
 #endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
 #endif
-                    entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
+                    obj.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16LittleEndian();
                 else
-                    entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
+                    obj.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // 8-bit Ordinal Flag & 32-bit Target Offset Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.EightBitOrdinalFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.EightBitOrdinalFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.EightBitOrdinalFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.EightBitOrdinalFlag))
 #endif
-                    entry.ImportedOrdinalNumberByte = data.ReadByteValue();
+                    obj.ImportedOrdinalNumberByte = data.ReadByteValue();
 #if NET20 || NET35
-                else if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+                else if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
 #else
-                else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+                else if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
 #endif
-                    entry.ImportedOrdinalNumberDWORD = data.ReadUInt32();
+                    obj.ImportedOrdinalNumberDWORD = data.ReadUInt32LittleEndian();
                 else
-                    entry.ImportedOrdinalNumberWORD = data.ReadUInt16();
+                    obj.ImportedOrdinalNumberWORD = data.ReadUInt16LittleEndian();
 
                 // Additive Fixup Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
 #endif
                 {
                     // 32-bit Additive Flag
 #if NET20 || NET35
-                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+                    if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
 #else
-                    if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+                    if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
 #endif
-                        entry.AdditiveFixupValueDWORD = data.ReadUInt32();
+                        obj.AdditiveFixupValueDWORD = data.ReadUInt32LittleEndian();
                     else
-                        entry.AdditiveFixupValueWORD = data.ReadUInt16();
+                        obj.AdditiveFixupValueWORD = data.ReadUInt16LittleEndian();
                 }
             }
 
             // MOD ORD# / PROCEDURE NAME OFFSET / ADDITIVE
 #if NET20 || NET35
-            else if ((entry.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByName) != 0)
+            else if ((obj.TargetFlags & FixupRecordTargetFlags.ImportedReferenceByName) != 0)
 #else
-            else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByName))
+            else if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ImportedReferenceByName))
 #endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
 #endif
-                    entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
+                    obj.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16LittleEndian();
                 else
-                    entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
+                    obj.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // 32-bit Target Offset Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitTargetOffsetFlag))
 #endif
-                    entry.OffsetImportProcedureNameTableDWORD = data.ReadUInt32();
+                    obj.OffsetImportProcedureNameTableDWORD = data.ReadUInt32LittleEndian();
                 else
-                    entry.OffsetImportProcedureNameTableWORD = data.ReadUInt16();
+                    obj.OffsetImportProcedureNameTableWORD = data.ReadUInt16LittleEndian();
 
                 // Additive Fixup Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
 #endif
                 {
                     // 32-bit Additive Flag
 #if NET20 || NET35
-                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+                    if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
 #else
-                    if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+                    if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
 #endif
-                        entry.AdditiveFixupValueDWORD = data.ReadUInt32();
+                        obj.AdditiveFixupValueDWORD = data.ReadUInt32LittleEndian();
                     else
-                        entry.AdditiveFixupValueWORD = data.ReadUInt16();
+                        obj.AdditiveFixupValueWORD = data.ReadUInt16LittleEndian();
                 }
             }
 
             // ORD # / ADDITIVE
 #if NET20 || NET35
-            else if ((entry.TargetFlags & FixupRecordTargetFlags.InternalReferenceViaEntryTable) != 0)
+            else if ((obj.TargetFlags & FixupRecordTargetFlags.InternalReferenceViaEntryTable) != 0)
 #else
-            else if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReferenceViaEntryTable))
+            else if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.InternalReferenceViaEntryTable))
 #endif
             {
                 // 16-bit Object Number/Module Ordinal Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.SixteenBitObjectNumberModuleOrdinalFlag))
 #endif
-                    entry.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16();
+                    obj.OrdinalIndexImportModuleNameTableWORD = data.ReadUInt16LittleEndian();
                 else
-                    entry.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
+                    obj.OrdinalIndexImportModuleNameTableByte = data.ReadByteValue();
 
                 // Additive Fixup Flag
 #if NET20 || NET35
-                if ((entry.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
+                if ((obj.TargetFlags & FixupRecordTargetFlags.AdditiveFixupFlag) != 0)
 #else
-                if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
+                if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.AdditiveFixupFlag))
 #endif
                 {
                     // 32-bit Additive Flag
 #if NET20 || NET35
-                    if ((entry.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
+                    if ((obj.TargetFlags & FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag) != 0)
 #else
-                    if (entry.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
+                    if (obj.TargetFlags.HasFlag(FixupRecordTargetFlags.ThirtyTwoBitAdditiveFixupFlag))
 #endif
-                        entry.AdditiveFixupValueDWORD = data.ReadUInt32();
+                        obj.AdditiveFixupValueDWORD = data.ReadUInt32LittleEndian();
                     else
-                        entry.AdditiveFixupValueWORD = data.ReadUInt16();
+                        obj.AdditiveFixupValueWORD = data.ReadUInt16LittleEndian();
                 }
             }
 
@@ -705,59 +686,135 @@ namespace SabreTools.Serialization.Deserializers
             #region SCROFFn
 
 #if NET20 || NET35
-            if ((entry.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
+            if ((obj.SourceType & FixupRecordSourceType.SourceListFlag) != 0)
 #else
-            if (entry.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
+            if (obj.SourceType.HasFlag(FixupRecordSourceType.SourceListFlag))
 #endif
             {
-                entry.SourceOffsetList = new ushort[entry.SourceOffsetListCount];
-                for (int i = 0; i < entry.SourceOffsetList.Length; i++)
+                obj.SourceOffsetList = new ushort[obj.SourceOffsetListCount];
+                for (int i = 0; i < obj.SourceOffsetList.Length; i++)
                 {
-                    entry.SourceOffsetList[i] = data.ReadUInt16();
+                    obj.SourceOffsetList[i] = data.ReadUInt16LittleEndian();
                 }
             }
 
             #endregion
 
-            return entry;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a import module name table entry
+        /// Parse a Stream into an ImportModuleNameTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled import module name table entry on success, null on error</returns>
+        /// <returns>Filled ImportModuleNameTableEntry on success, null on error</returns>
         public static ImportModuleNameTableEntry ParseImportModuleNameTableEntry(Stream data)
         {
-            var entry = new ImportModuleNameTableEntry();
+            var obj = new ImportModuleNameTableEntry();
 
-            entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            obj.Length = data.ReadByteValue();
+            if (obj.Length > 0)
             {
-                byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(obj.Length);
+                obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
-            return entry;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a import module name table entry
+        /// Parse a Stream into an ImportModuleProcedureNameTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled import module name table entry on success, null on error</returns>
+        /// <returns>Filled ImportModuleProcedureNameTableEntry on success, null on error</returns>
         public static ImportModuleProcedureNameTableEntry ParseImportModuleProcedureNameTableEntry(Stream data)
         {
-            var entry = new ImportModuleProcedureNameTableEntry();
+            var obj = new ImportModuleProcedureNameTableEntry();
 
-            entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            obj.Length = data.ReadByteValue();
+            if (obj.Length > 0)
             {
-                byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(obj.Length);
+                obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
-            return entry;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a InformationBlock
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled InformationBlock on success, null on error</returns>
+        public static InformationBlock ParseInformationBlock(Stream data)
+        {
+            var obj = new InformationBlock();
+
+            byte[] signature = data.ReadBytes(2);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.ByteOrder = (ByteOrder)data.ReadByteValue();
+            obj.WordOrder = (WordOrder)data.ReadByteValue();
+            obj.ExecutableFormatLevel = data.ReadUInt32LittleEndian();
+            obj.CPUType = (CPUType)data.ReadUInt16LittleEndian();
+            obj.ModuleOS = (OperatingSystem)data.ReadUInt16LittleEndian();
+            obj.ModuleVersion = data.ReadUInt32LittleEndian();
+            obj.ModuleTypeFlags = (ModuleFlags)data.ReadUInt32LittleEndian();
+            obj.ModuleNumberPages = data.ReadUInt32LittleEndian();
+            obj.InitialObjectCS = data.ReadUInt32LittleEndian();
+            obj.InitialEIP = data.ReadUInt32LittleEndian();
+            obj.InitialObjectSS = data.ReadUInt32LittleEndian();
+            obj.InitialESP = data.ReadUInt32LittleEndian();
+            obj.MemoryPageSize = data.ReadUInt32LittleEndian();
+            obj.BytesOnLastPage = data.ReadUInt32LittleEndian();
+            obj.FixupSectionSize = data.ReadUInt32LittleEndian();
+            obj.FixupSectionChecksum = data.ReadUInt32LittleEndian();
+            obj.LoaderSectionSize = data.ReadUInt32LittleEndian();
+            obj.LoaderSectionChecksum = data.ReadUInt32LittleEndian();
+            obj.ObjectTableOffset = data.ReadUInt32LittleEndian();
+            obj.ObjectTableCount = data.ReadUInt32LittleEndian();
+            obj.ObjectPageMapOffset = data.ReadUInt32LittleEndian();
+            obj.ObjectIterateDataMapOffset = data.ReadUInt32LittleEndian();
+            obj.ResourceTableOffset = data.ReadUInt32LittleEndian();
+            obj.ResourceTableCount = data.ReadUInt32LittleEndian();
+            obj.ResidentNamesTableOffset = data.ReadUInt32LittleEndian();
+            obj.EntryTableOffset = data.ReadUInt32LittleEndian();
+            obj.ModuleDirectivesTableOffset = data.ReadUInt32LittleEndian();
+            obj.ModuleDirectivesCount = data.ReadUInt32LittleEndian();
+            obj.FixupPageTableOffset = data.ReadUInt32LittleEndian();
+            obj.FixupRecordTableOffset = data.ReadUInt32LittleEndian();
+            obj.ImportedModulesNameTableOffset = data.ReadUInt32LittleEndian();
+            obj.ImportedModulesCount = data.ReadUInt32LittleEndian();
+            obj.ImportProcedureNameTableOffset = data.ReadUInt32LittleEndian();
+            obj.PerPageChecksumTableOffset = data.ReadUInt32LittleEndian();
+            obj.DataPagesOffset = data.ReadUInt32LittleEndian();
+            obj.PreloadPageCount = data.ReadUInt32LittleEndian();
+            obj.NonResidentNamesTableOffset = data.ReadUInt32LittleEndian();
+            obj.NonResidentNamesTableLength = data.ReadUInt32LittleEndian();
+            obj.NonResidentNamesTableChecksum = data.ReadUInt32LittleEndian();
+            obj.AutomaticDataObject = data.ReadUInt32LittleEndian();
+            obj.DebugInformationOffset = data.ReadUInt32LittleEndian();
+            obj.DebugInformationLength = data.ReadUInt32LittleEndian();
+            obj.PreloadInstancePagesNumber = data.ReadUInt32LittleEndian();
+            obj.DemandInstancePagesNumber = data.ReadUInt32LittleEndian();
+            obj.ExtraHeapAllocation = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ModuleFormatDirectivesTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ModuleFormatDirectivesTableEntry on success, null on error</returns>
+        public static ModuleFormatDirectivesTableEntry ParseModuleFormatDirectivesTableEntry(Stream data)
+        {
+            var obj = new ModuleFormatDirectivesTableEntry();
+
+            obj.DirectiveNumber = (DirectiveNumber)data.ReadUInt16LittleEndian();
+            obj.DirectiveDataLength = data.ReadUInt16LittleEndian();
+            obj.DirectiveDataOffset = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
 
         /// <summary>
@@ -767,38 +824,105 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled non-resident names table entry on success, null on error</returns>
         public static NonResidentNamesTableEntry ParseNonResidentNameTableEntry(Stream data)
         {
-            var entry = new NonResidentNamesTableEntry();
+            var obj = new NonResidentNamesTableEntry();
 
-            entry.Length = data.ReadByteValue();
-            if (entry.Length > 0)
+            obj.Length = data.ReadByteValue();
+            if (obj.Length > 0)
             {
-                byte[] name = data.ReadBytes(entry.Length);
-                entry.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+                byte[] name = data.ReadBytes(obj.Length);
+                obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
             }
 
-            entry.OrdinalNumber = data.ReadUInt16();
-            return entry;
+            obj.OrdinalNumber = data.ReadUInt16LittleEndian();
+
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a debug information
+        /// Parse a Stream into a ObjectPageMapEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="size">Total size of the debug information</param>
-        /// <returns>Filled debug information on success, null on error</returns>
-        public static DebugInformation? ParseDebugInformation(Stream data, long size)
+        /// <returns>Filled ObjectPageMapEntry on success, null on error</returns>
+        public static ObjectPageMapEntry ParseObjectPageMapEntry(Stream data)
         {
-            var debugInformation = new DebugInformation();
+            var obj = new ObjectPageMapEntry();
 
-            byte[] signature = data.ReadBytes(3);
-            debugInformation.Signature = Encoding.ASCII.GetString(signature);
-            if (debugInformation.Signature != DebugInformationSignatureString)
-                return null;
+            obj.PageDataOffset = data.ReadUInt32LittleEndian();
+            obj.DataSize = data.ReadUInt16LittleEndian();
+            obj.Flags = (ObjectPageFlags)data.ReadUInt16LittleEndian();
 
-            debugInformation.FormatType = (DebugFormatType)data.ReadByteValue();
-            debugInformation.DebuggerData = data.ReadBytes((int)(size - 4));
+            return obj;
+        }
 
-            return debugInformation;
+        /// <summary>
+        /// Parse a Stream into a ObjectTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ObjectTableEntry on success, null on error</returns>
+        public static ObjectTableEntry ParseObjectTableEntry(Stream data)
+        {
+            var obj = new ObjectTableEntry();
+
+            obj.RelocationBaseAddress = data.ReadUInt32LittleEndian();
+            obj.ObjectFlags = (ObjectFlags)data.ReadUInt16LittleEndian();
+            obj.PageTableIndex = data.ReadUInt32LittleEndian();
+            obj.PageTableEntries = data.ReadUInt32LittleEndian();
+            obj.Reserved = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PerPageChecksumTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PerPageChecksumTableEntry on success, null on error</returns>
+        public static PerPageChecksumTableEntry ParsePerPageChecksumTableEntry(Stream data)
+        {
+            var obj = new PerPageChecksumTableEntry();
+
+            obj.Checksum = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ResourceTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ResourceTableEntry on success, null on error</returns>
+        public static ResourceTableEntry ParseResourceTableEntry(Stream data)
+        {
+            var obj = new ResourceTableEntry();
+
+            obj.TypeID = (ResourceTableEntryType)data.ReadUInt32LittleEndian();
+            obj.NameID = data.ReadUInt16LittleEndian();
+            obj.ResourceSize = data.ReadUInt32LittleEndian();
+            obj.ObjectNumber = data.ReadUInt16LittleEndian();
+            obj.Offset = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ResidentNamesTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ResidentNamesTableEntry on success, null on error</returns>
+        public static ResidentNamesTableEntry ParseResidentNamesTableEntry(Stream data)
+        {
+            var obj = new ResidentNamesTableEntry();
+
+            obj.Length = data.ReadByteValue();
+            if (obj.Length > 0)
+            {
+                byte[] name = data.ReadBytes(obj.Length);
+                obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            }
+
+            obj.OrdinalNumber = data.ReadUInt16LittleEndian();
+
+            return obj;
         }
     }
 }

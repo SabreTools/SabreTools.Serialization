@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // The original version had no signature.
-                var header = data.ReadType<Header>();
-                if (header?.Signature != SignatureUInt32)
+                var header = ParseHeader(data);
+                if (header.Signature != SignatureUInt32)
                     return null;
                 if (header.Version > 2)
                     return null;
@@ -36,28 +36,16 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Extended Header
 
+                // Set the package extended header
                 if (header.Version == 2)
-                {
-                    // Try to parse the extended header
-                    var extendedHeader = data.ReadType<ExtendedHeader>();
-                    if (extendedHeader == null)
-                        return null;
-
-                    // Set the package extended header
-                    file.ExtendedHeader = extendedHeader;
-                }
+                    file.ExtendedHeader = ParseExtendedHeader(data);
 
                 #endregion
 
                 #region Directory Items
 
-                // Create the directory items tree
-                var directoryItems = ParseDirectoryItemTree(data);
-                if (directoryItems == null)
-                    return null;
-
                 // Set the directory items
-                file.DirectoryItems = directoryItems;
+                file.DirectoryItems = ParseDirectoryItemTree(data);
 
                 #endregion
 
@@ -77,10 +65,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the directory items
                     while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
                     {
-                        var archiveHash = data.ReadType<ArchiveHash>();
-                        if (archiveHash == null)
-                            return null;
-
+                        var archiveHash = ParseArchiveHash(data);
                         archiveHashes.Add(archiveHash);
                     }
 
@@ -99,11 +84,103 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a ArchiveHash
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ArchiveHash on success, null on error</returns>
+        public static ArchiveHash ParseArchiveHash(Stream data)
+        {
+            var obj = new ArchiveHash();
+
+            obj.ArchiveIndex = data.ReadUInt32LittleEndian();
+            obj.ArchiveOffset = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Hash = data.ReadBytes(0x10);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryEntry on success, null on error</returns>
+        public static DirectoryEntry ParseDirectoryEntry(Stream data)
+        {
+            var obj = new DirectoryEntry();
+
+            obj.CRC = data.ReadUInt32LittleEndian();
+            obj.PreloadBytes = data.ReadUInt16LittleEndian();
+            obj.ArchiveIndex = data.ReadUInt16LittleEndian();
+            obj.EntryOffset = data.ReadUInt32LittleEndian();
+            obj.EntryLength = data.ReadUInt32LittleEndian();
+            obj.Dummy0 = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Valve Package directory item
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Valve Package directory item on success, null on error</returns>
+        public static DirectoryItem ParseDirectoryItem(Stream data, string extension, string path, string name)
+        {
+            var obj = new DirectoryItem();
+
+            obj.Extension = extension;
+            obj.Path = path;
+            obj.Name = name;
+
+            // Set the directory entry
+            obj.DirectoryEntry = ParseDirectoryEntry(data);
+
+            // Get the preload data pointer
+            long preloadDataPointer = -1; int preloadDataLength = -1;
+            if (obj.DirectoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE
+                && obj.DirectoryEntry.EntryLength > 0
+                && data.Position + obj.DirectoryEntry.EntryLength <= data.Length)
+            {
+                preloadDataPointer = obj.DirectoryEntry.EntryOffset;
+                preloadDataLength = (int)obj.DirectoryEntry.EntryLength;
+            }
+            else if (obj.DirectoryEntry.PreloadBytes > 0)
+            {
+                preloadDataPointer = data.Position;
+                preloadDataLength = obj.DirectoryEntry.PreloadBytes;
+            }
+
+            // If we had a valid preload data pointer
+            byte[]? preloadData = null;
+            if (preloadDataPointer >= 0
+                && preloadDataLength > 0
+                && data.Position + preloadDataLength <= data.Length)
+            {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
+                // Seek to the preload data offset
+                data.Seek(preloadDataPointer, SeekOrigin.Begin);
+
+                // Read the preload data
+                preloadData = data.ReadBytes(preloadDataLength);
+
+                // Seek back to the original offset
+                data.Seek(initialOffset, SeekOrigin.Begin);
+            }
+
+            // Set the preload data
+            obj.PreloadData = preloadData;
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a Valve Package directory item tree
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Valve Package directory item tree on success, null on error</returns>
-        private static DirectoryItem[]? ParseDirectoryItemTree(Stream data)
+        public static DirectoryItem[] ParseDirectoryItemTree(Stream data)
         {
             // Create the directory items list
             var directoryItems = new List<DirectoryItem>();
@@ -149,8 +226,6 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Get the directory item
                         var directoryItem = ParseDirectoryItem(data, extensionString!, pathString!, nameString!);
-                        if (directoryItem == null)
-                            return null;
 
                         // Add the directory item
                         directoryItems.Add(directoryItem);
@@ -162,64 +237,36 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a Valve Package directory item
+        /// Parse a Stream into a ExtendedHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Valve Package directory item on success, null on error</returns>
-        private static DirectoryItem? ParseDirectoryItem(Stream data, string extension, string path, string name)
+        /// <returns>Filled ExtendedHeader on success, null on error</returns>
+        public static ExtendedHeader ParseExtendedHeader(Stream data)
         {
-            var directoryItem = new DirectoryItem();
+            var obj = new ExtendedHeader();
 
-            directoryItem.Extension = extension;
-            directoryItem.Path = path;
-            directoryItem.Name = name;
+            obj.FileDataSectionSize = data.ReadUInt32LittleEndian();
+            obj.ArchiveMD5SectionSize = data.ReadUInt32LittleEndian();
+            obj.OtherMD5SectionSize = data.ReadUInt32LittleEndian();
+            obj.SignatureSectionSize = data.ReadUInt32LittleEndian();
 
-            // Get the directory entry
-            var directoryEntry = data.ReadType<DirectoryEntry>();
-            if (directoryEntry == null)
-                return null;
+            return obj;
+        }
 
-            // Set the directory entry
-            directoryItem.DirectoryEntry = directoryEntry;
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
 
-            // Get the preload data pointer
-            long preloadDataPointer = -1; int preloadDataLength = -1;
-            if (directoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE
-                && directoryEntry.EntryLength > 0
-                && data.Position + directoryEntry.EntryLength <= data.Length)
-            {
-                preloadDataPointer = directoryEntry.EntryOffset;
-                preloadDataLength = (int)directoryEntry.EntryLength;
-            }
-            else if (directoryEntry.PreloadBytes > 0)
-            {
-                preloadDataPointer = data.Position;
-                preloadDataLength = directoryEntry.PreloadBytes;
-            }
+            obj.Signature = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.TreeSize = data.ReadUInt32LittleEndian();
 
-            // If we had a valid preload data pointer
-            byte[]? preloadData = null;
-            if (preloadDataPointer >= 0
-                && preloadDataLength > 0
-                && data.Position + preloadDataLength <= data.Length)
-            {
-                // Cache the current offset
-                long initialOffset = data.Position;
-
-                // Seek to the preload data offset
-                data.Seek(preloadDataPointer, SeekOrigin.Begin);
-
-                // Read the preload data
-                preloadData = data.ReadBytes(preloadDataLength);
-
-                // Seek back to the original offset
-                data.Seek(initialOffset, SeekOrigin.Begin);
-            }
-
-            // Set the preload data
-            directoryItem.PreloadData = preloadData;
-
-            return directoryItem;
+            return obj;
         }
     }
 }

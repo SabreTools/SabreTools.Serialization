@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.NewExecutable;
 using static SabreTools.Models.NewExecutable.Constants;
@@ -39,8 +40,8 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the executable header
                 data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
-                var header = data.ReadType<ExecutableHeader>();
-                if (header?.Magic != SignatureString)
+                var header = ParseExecutableHeader(data);
+                if (header.Magic != SignatureString)
                     return null;
 
                 // Set the executable header
@@ -57,14 +58,15 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the segment table
+                // Seek to the segment table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var segmentTable = ParseSegmentTable(data, header.FileSegmentCount);
-                if (segmentTable == null)
-                    return null;
 
                 // Set the segment table
-                executable.SegmentTable = segmentTable;
+                executable.SegmentTable = new SegmentTableEntry[header.FileSegmentCount];
+                for (int i = 0; i < header.FileSegmentCount; i++)
+                {
+                    executable.SegmentTable[i] = ParseSegmentTableEntry(data);
+                }
 
                 #endregion
 
@@ -77,14 +79,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the resource table
+                // Seek to the resource table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var resourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
-                if (resourceTable == null)
-                    return null;
 
                 // Set the resource table
-                executable.ResourceTable = resourceTable;
+                executable.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount); ;
 
                 #endregion
 
@@ -100,14 +99,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the resident-name table
+                // Seek to the resident-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var residentNameTable = ParseResidentNameTable(data, endOffset);
-                if (residentNameTable == null)
-                    return null;
 
                 // Set the resident-name table
-                executable.ResidentNameTable = residentNameTable;
+                executable.ResidentNameTable = ParseResidentNameTable(data, endOffset);
 
                 #endregion
 
@@ -120,14 +116,15 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the module-reference table
+                // Seek to the module-reference table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var moduleReferenceTable = ParseModuleReferenceTable(data, header.ModuleReferenceTableSize);
-                if (moduleReferenceTable == null)
-                    return null;
 
                 // Set the module-reference table
-                executable.ModuleReferenceTable = moduleReferenceTable;
+                executable.ModuleReferenceTable = new ModuleReferenceTableEntry[header.ModuleReferenceTableSize];
+                for (int i = 0; i < header.ModuleReferenceTableSize; i++)
+                {
+                    executable.ModuleReferenceTable[i] = ParseModuleReferenceTableEntry(data);
+                }
 
                 #endregion
 
@@ -143,14 +140,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the imported-name table
+                // Seek to the imported-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var importedNameTable = ParseImportedNameTable(data, endOffset);
-                if (importedNameTable == null)
-                    return null;
 
                 // Set the imported-name table
-                executable.ImportedNameTable = importedNameTable;
+                executable.ImportedNameTable = ParseImportedNameTable(data, endOffset);
 
                 #endregion
 
@@ -167,14 +161,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the imported-name table
+                // Seek to the imported-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var entryTable = ParseEntryTable(data, endOffset);
-                if (entryTable == null)
-                    return null;
 
                 // Set the entry table
-                executable.EntryTable = entryTable;
+                executable.EntryTable = ParseEntryTable(data, endOffset);
 
                 #endregion
 
@@ -189,14 +180,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (tableAddress >= data.Length)
                     return executable;
 
-                // Try to parse the nonresident-name table
+                // Seek to the nonresident-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var nonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
-                if (nonResidentNameTable == null)
-                    return null;
 
                 // Set the nonresident-name table
-                executable.NonResidentNameTable = nonResidentNameTable;
+                executable.NonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
 
                 #endregion
 
@@ -210,68 +198,229 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a segment table
+        /// Parse a Stream into an entry table
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="count">Number of segment table entries to read</param>
-        /// <returns>Filled segment table on success, null on error</returns>
-        public static SegmentTableEntry[]? ParseSegmentTable(Stream data, int count)
+        /// <param name="endOffset">First address not part of the entry table</param>
+        /// <returns>Filled entry table on success, null on error</returns>
+        public static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
         {
-            var segmentTable = new SegmentTableEntry[count];
+            var entryTable = new List<EntryTableBundle>();
 
-            for (int i = 0; i < count; i++)
+            while (data.Position < endOffset && data.Position < data.Length)
             {
-                var entry = data.ReadType<SegmentTableEntry>();
-                if (entry == null)
-                    return null;
+                var entry = new EntryTableBundle();
+                entry.EntryCount = data.ReadByteValue();
+                entry.SegmentIndicator = data.ReadByteValue();
+                switch (entry.GetEntryType())
+                {
+                    case SegmentEntryType.Unused:
+                        break;
 
-                segmentTable[i] = entry;
+                    case SegmentEntryType.FixedSegment:
+                        entry.FixedFlagWord = (FixedSegmentEntryFlag)data.ReadByteValue();
+                        entry.FixedOffset = data.ReadUInt16LittleEndian();
+                        break;
+
+                    case SegmentEntryType.MoveableSegment:
+                        entry.MoveableFlagWord = (MoveableSegmentEntryFlag)data.ReadByteValue();
+                        entry.MoveableReserved = data.ReadUInt16LittleEndian();
+                        entry.MoveableSegmentNumber = data.ReadByteValue();
+                        entry.MoveableOffset = data.ReadUInt16LittleEndian();
+                        break;
+                }
+                entryTable.Add(entry);
             }
 
-            return segmentTable;
+            return [.. entryTable];
         }
 
         /// <summary>
-        /// Parse a Stream into a resource table
+        /// Parse a Stream into an ExecutableHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ExecutableHeader on success, null on error</returns>
+        public static ExecutableHeader ParseExecutableHeader(Stream data)
+        {
+            var obj = new ExecutableHeader();
+
+            byte[] magic = data.ReadBytes(2);
+            obj.Magic = Encoding.ASCII.GetString(magic);
+            obj.LinkerVersion = data.ReadByteValue();
+            obj.LinkerRevision = data.ReadByteValue();
+            obj.EntryTableOffset = data.ReadUInt16LittleEndian();
+            obj.EntryTableSize = data.ReadUInt16LittleEndian();
+            obj.CrcChecksum = data.ReadUInt32LittleEndian();
+            obj.FlagWord = (HeaderFlag)data.ReadUInt16LittleEndian();
+            obj.AutomaticDataSegmentNumber = data.ReadUInt16LittleEndian();
+            obj.InitialHeapAlloc = data.ReadUInt16LittleEndian();
+            obj.InitialStackAlloc = data.ReadUInt16LittleEndian();
+            obj.InitialCSIPSetting = data.ReadUInt32LittleEndian();
+            obj.InitialSSSPSetting = data.ReadUInt32LittleEndian();
+            obj.FileSegmentCount = data.ReadUInt16LittleEndian();
+            obj.ModuleReferenceTableSize = data.ReadUInt16LittleEndian();
+            obj.NonResidentNameTableSize = data.ReadUInt16LittleEndian();
+            obj.SegmentTableOffset = data.ReadUInt16LittleEndian();
+            obj.ResourceTableOffset = data.ReadUInt16LittleEndian();
+            obj.ResidentNameTableOffset = data.ReadUInt16LittleEndian();
+            obj.ModuleReferenceTableOffset = data.ReadUInt16LittleEndian();
+            obj.ImportedNamesTableOffset = data.ReadUInt16LittleEndian();
+            obj.NonResidentNamesTableOffset = data.ReadUInt32LittleEndian();
+            obj.MovableEntriesCount = data.ReadUInt16LittleEndian();
+            obj.SegmentAlignmentShiftCount = data.ReadUInt16LittleEndian();
+            obj.ResourceEntriesCount = data.ReadUInt16LittleEndian();
+            obj.TargetOperatingSystem = (Models.NewExecutable.OperatingSystem)data.ReadByteValue();
+            obj.AdditionalFlags = (OS2Flag)data.ReadByteValue();
+            obj.ReturnThunkOffset = data.ReadUInt16LittleEndian();
+            obj.SegmentReferenceThunkOffset = data.ReadUInt16LittleEndian();
+            obj.MinCodeSwapAreaSize = data.ReadUInt16LittleEndian();
+            obj.WindowsSDKRevision = data.ReadByteValue();
+            obj.WindowsSDKVersion = data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an imported-name table
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="endOffset">First address not part of the imported-name table</param>
+        /// <returns>Filled imported-name table on success, null on error</returns>
+        public static Dictionary<ushort, ImportedNameTableEntry> ParseImportedNameTable(Stream data, int endOffset)
+        {
+            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
+
+            while (data.Position < endOffset && data.Position < data.Length)
+            {
+                ushort currentOffset = (ushort)data.Position;
+                importedNameTable[currentOffset] = ParseImportedNameTableEntry(data);
+            }
+
+            return importedNameTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ImportedNameTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ImportedNameTableEntry on success, null on error</returns>
+        public static ImportedNameTableEntry ParseImportedNameTableEntry(Stream data)
+        {
+            var obj = new ImportedNameTableEntry();
+
+            obj.Length = data.ReadByteValue();
+            obj.NameString = data.ReadBytes(obj.Length);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ModuleReferenceTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ModuleReferenceTableEntry on success, null on error</returns>
+        public static ModuleReferenceTableEntry ParseModuleReferenceTableEntry(Stream data)
+        {
+            var obj = new ModuleReferenceTableEntry();
+
+            obj.Offset = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a nonresident-name table
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="endOffset">First address not part of the nonresident-name table</param>
+        /// <returns>Filled nonresident-name table on success, null on error</returns>
+        public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, int endOffset)
+        {
+            var residentNameTable = new List<NonResidentNameTableEntry>();
+
+            while (data.Position < endOffset && data.Position < data.Length)
+            {
+                var entry = ParseNonResidentNameTableEntry(data);
+                residentNameTable.Add(entry);
+            }
+
+            return [.. residentNameTable];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a NonResidentNameTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled NonResidentNameTableEntry on success, null on error</returns>
+        public static NonResidentNameTableEntry ParseNonResidentNameTableEntry(Stream data)
+        {
+            var obj = new NonResidentNameTableEntry();
+
+            obj.Length = data.ReadByteValue();
+            obj.NameString = data.ReadBytes(obj.Length);
+            obj.OrdinalNumber = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a resident-name table
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="endOffset">First address not part of the resident-name table</param>
+        /// <returns>Filled resident-name table on success, null on error</returns>
+        public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, int endOffset)
+        {
+            var residentNameTable = new List<ResidentNameTableEntry>();
+
+            while (data.Position < endOffset && data.Position < data.Length)
+            {
+                var entry = ParseResidentNameTableEntry(data);
+                residentNameTable.Add(entry);
+            }
+
+            return [.. residentNameTable];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ResidentNameTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ResidentNameTableEntry on success, null on error</returns>
+        public static ResidentNameTableEntry ParseResidentNameTableEntry(Stream data)
+        {
+            var obj = new ResidentNameTableEntry();
+
+            obj.Length = data.ReadByteValue();
+            obj.NameString = data.ReadBytes(obj.Length);
+            obj.OrdinalNumber = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ResourceTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of resource table entries to read</param>
-        /// <returns>Filled resource table on success, null on error</returns>
-        public static ResourceTable? ParseResourceTable(Stream data, ushort count)
+        /// <returns>Filled ResourceTable on success, null on error</returns>
+        public static ResourceTable ParseResourceTable(Stream data, ushort count)
         {
             long initialOffset = data.Position;
 
             var resourceTable = new ResourceTable();
 
-            resourceTable.AlignmentShiftCount = data.ReadUInt16();
+            resourceTable.AlignmentShiftCount = data.ReadUInt16LittleEndian();
             var resourceTypes = new List<ResourceTypeInformationEntry>();
 
             for (int i = 0; i < count; i++)
             {
-                var entry = new ResourceTypeInformationEntry();
-
-                entry.TypeID = data.ReadUInt16();
-                entry.ResourceCount = data.ReadUInt16();
-                entry.Reserved = data.ReadUInt32();
+                var entry = ParseResourceTypeInformationEntry(data);
+                resourceTypes.Add(entry);
 
                 // A zero type ID marks the end of the resource type information blocks.
                 if (entry.TypeID == 0)
-                {
-                    resourceTypes.Add(entry);
                     break;
-                }
-
-                entry.Resources = new ResourceTypeResourceEntry[entry.ResourceCount];
-                for (int j = 0; j < entry.ResourceCount; j++)
-                {
-                    // TODO: Should we read and store the resource data?
-                    var resource = data.ReadType<ResourceTypeResourceEntry>();
-                    if (resource == null)
-                        return null;
-
-                    entry.Resources[j] = resource;
-                }
-                resourceTypes.Add(entry);
             }
 
             resourceTable.ResourceTypes = [.. resourceTypes];
@@ -314,9 +463,6 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(stringOffset, SeekOrigin.Begin);
 
                 var str = ParseResourceTypeAndNameString(data);
-                if (str == null)
-                    return null;
-
                 resourceTable.TypeAndNameStrings[stringOffsets[i]] = str;
             }
 
@@ -324,192 +470,80 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a resource type and name string
+        /// Parse a Stream into an ResourceTypeInformationEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled resource type and name string on success, null on error</returns>
-        public static ResourceTypeAndNameString? ParseResourceTypeAndNameString(Stream data)
+        /// <returns>Filled ResourceTypeInformationEntry on success, null on error</returns>
+        public static ResourceTypeInformationEntry ParseResourceTypeInformationEntry(Stream data)
         {
-            var str = new ResourceTypeAndNameString();
+            var obj = new ResourceTypeInformationEntry();
 
-            str.Length = data.ReadByteValue();
-            str.Text = data.ReadBytes(str.Length);
+            obj.TypeID = data.ReadUInt16LittleEndian();
+            obj.ResourceCount = data.ReadUInt16LittleEndian();
+            obj.Reserved = data.ReadUInt32LittleEndian();
 
-            return str;
-        }
+            // A zero type ID marks the end of the resource type information blocks.
+            if (obj.TypeID == 0)
+                return obj;
 
-        /// <summary>
-        /// Parse a Stream into a resident-name table
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="endOffset">First address not part of the resident-name table</param>
-        /// <returns>Filled resident-name table on success, null on error</returns>
-        public static ResidentNameTableEntry[]? ParseResidentNameTable(Stream data, int endOffset)
-        {
-            var residentNameTable = new List<ResidentNameTableEntry>();
-
-            while (data.Position < endOffset && data.Position < data.Length)
+            obj.Resources = new ResourceTypeResourceEntry[obj.ResourceCount];
+            for (int i = 0; i < obj.ResourceCount; i++)
             {
-                var entry = ParseResidentNameTableEntry(data);
-                if (entry == null)
-                    return null;
-
-                residentNameTable.Add(entry);
+                // TODO: Should we read and store the resource data?
+                obj.Resources[i] = ParseResourceTypeResourceEntry(data);
             }
 
-            return [.. residentNameTable];
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a resident-name table entry
+        /// Parse a Stream into a ResourceTypeAndNameString
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled resident-name table entry on success, null on error</returns>
-        public static ResidentNameTableEntry? ParseResidentNameTableEntry(Stream data)
+        /// <returns>Filled rResourceTypeAndNameString on success, null on error</returns>
+        public static ResourceTypeAndNameString ParseResourceTypeAndNameString(Stream data)
         {
-            var entry = new ResidentNameTableEntry();
+            var obj = new ResourceTypeAndNameString();
 
-            entry.Length = data.ReadByteValue();
-            entry.NameString = data.ReadBytes(entry.Length);
-            entry.OrdinalNumber = data.ReadUInt16();
+            obj.Length = data.ReadByteValue();
+            obj.Text = data.ReadBytes(obj.Length);
 
-            return entry;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a module-reference table
+        /// Parse a Stream into an ResourceTypeResourceEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="count">Number of module-reference table entries to read</param>
-        /// <returns>Filled module-reference table on success, null on error</returns>
-        public static ModuleReferenceTableEntry[]? ParseModuleReferenceTable(Stream data, int count)
+        /// <returns>Filled ResourceTypeResourceEntry on success, null on error</returns>
+        public static ResourceTypeResourceEntry ParseResourceTypeResourceEntry(Stream data)
         {
-            var moduleReferenceTable = new ModuleReferenceTableEntry[count];
+            var obj = new ResourceTypeResourceEntry();
 
-            for (int i = 0; i < count; i++)
-            {
-                var entry = data.ReadType<ModuleReferenceTableEntry>();
-                if (entry == null)
-                    return null;
+            obj.Offset = data.ReadUInt16LittleEndian();
+            obj.Length = data.ReadUInt16LittleEndian();
+            obj.FlagWord = (ResourceTypeResourceFlag)data.ReadUInt16LittleEndian();
+            obj.ResourceID = data.ReadUInt16LittleEndian();
+            obj.Reserved = data.ReadUInt32LittleEndian();
 
-                moduleReferenceTable[i] = entry;
-            }
-
-            return moduleReferenceTable;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an imported-name table
+        /// Parse a Stream into an SegmentTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="endOffset">First address not part of the imported-name table</param>
-        /// <returns>Filled imported-name table on success, null on error</returns>
-        public static Dictionary<ushort, ImportedNameTableEntry>? ParseImportedNameTable(Stream data, int endOffset)
+        /// <returns>Filled SegmentTableEntry on success, null on error</returns>
+        public static SegmentTableEntry ParseSegmentTableEntry(Stream data)
         {
-            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
+            var obj = new SegmentTableEntry();
 
-            while (data.Position < endOffset && data.Position < data.Length)
-            {
-                ushort currentOffset = (ushort)data.Position;
-                var entry = ParseImportedNameTableEntry(data);
-                if (entry == null)
-                    return null;
+            obj.Offset = data.ReadUInt16LittleEndian();
+            obj.Length = data.ReadUInt16LittleEndian();
+            obj.FlagWord = (SegmentTableEntryFlag)data.ReadUInt16LittleEndian();
+            obj.MinimumAllocationSize = data.ReadUInt16LittleEndian();
 
-                importedNameTable[currentOffset] = entry;
-            }
-
-            return importedNameTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an imported-name table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled imported-name table entry on success, null on error</returns>
-        public static ImportedNameTableEntry? ParseImportedNameTableEntry(Stream data)
-        {
-            var entry = new ImportedNameTableEntry();
-
-            entry.Length = data.ReadByteValue();
-            entry.NameString = data.ReadBytes(entry.Length);
-
-            return entry;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an entry table
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="endOffset">First address not part of the entry table</param>
-        /// <returns>Filled entry table on success, null on error</returns>
-        public static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
-        {
-            var entryTable = new List<EntryTableBundle>();
-
-            while (data.Position < endOffset && data.Position < data.Length)
-            {
-                var entry = new EntryTableBundle();
-                entry.EntryCount = data.ReadByteValue();
-                entry.SegmentIndicator = data.ReadByteValue();
-                switch (entry.GetEntryType())
-                {
-                    case SegmentEntryType.Unused:
-                        break;
-
-                    case SegmentEntryType.FixedSegment:
-                        entry.FixedFlagWord = (FixedSegmentEntryFlag)data.ReadByteValue();
-                        entry.FixedOffset = data.ReadUInt16();
-                        break;
-
-                    case SegmentEntryType.MoveableSegment:
-                        entry.MoveableFlagWord = (MoveableSegmentEntryFlag)data.ReadByteValue();
-                        entry.MoveableReserved = data.ReadUInt16();
-                        entry.MoveableSegmentNumber = data.ReadByteValue();
-                        entry.MoveableOffset = data.ReadUInt16();
-                        break;
-                }
-                entryTable.Add(entry);
-            }
-
-            return [.. entryTable];
-        }
-
-        /// <summary>
-        /// Parse a Stream into a nonresident-name table
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="endOffset">First address not part of the nonresident-name table</param>
-        /// <returns>Filled nonresident-name table on success, null on error</returns>
-        public static NonResidentNameTableEntry[]? ParseNonResidentNameTable(Stream data, int endOffset)
-        {
-            var residentNameTable = new List<NonResidentNameTableEntry>();
-
-            while (data.Position < endOffset && data.Position < data.Length)
-            {
-                var entry = ParseNonResidentNameTableEntry(data);
-                if (entry == null)
-                    return null;
-
-                residentNameTable.Add(entry);
-            }
-
-            return [.. residentNameTable];
-        }
-
-        /// <summary>
-        /// Parse a Stream into a nonresident-name table entry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled nonresident-name table entry on success, null on error</returns>
-        public static NonResidentNameTableEntry? ParseNonResidentNameTableEntry(Stream data)
-        {
-            var entry = new NonResidentNameTableEntry();
-
-            entry.Length = data.ReadByteValue();
-            entry.NameString = data.ReadBytes(entry.Length);
-            entry.OrdinalNumber = data.ReadUInt16();
-
-            return entry;
+            return obj;
         }
     }
 }

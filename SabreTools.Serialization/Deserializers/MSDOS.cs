@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the executable header
                 var executableHeader = ParseExecutableHeader(data);
-                if (executableHeader == null)
+                if (executableHeader.Magic != SignatureString)
                     return null;
 
                 // Set the executable header
@@ -44,12 +44,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the relocation table
                 data.Seek(tableAddress, SeekOrigin.Begin);
-                var relocationTable = ParseRelocationTable(data, executableHeader.RelocationItems);
-                if (relocationTable == null)
-                    return null;
 
                 // Set the relocation table
-                executable.RelocationTable = relocationTable;
+                executable.RelocationTable = new RelocationEntry[executableHeader.RelocationItems];
+                for (int i = 0; i < executableHeader.RelocationItems; i++)
+                {
+                    executable.RelocationTable[i] = ParseRelocationEntry(data);
+                }
 
                 #endregion
 
@@ -64,82 +65,72 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an MS-DOS executable header
+        /// Parse a Stream into an ExecutableHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled executable header on success, null on error</returns>
-        private static ExecutableHeader? ParseExecutableHeader(Stream data)
+        /// <returns>Filled ExecutableHeader on success, null on error</returns>
+        public static ExecutableHeader ParseExecutableHeader(Stream data)
         {
-            var header = new ExecutableHeader();
+            var obj = new ExecutableHeader();
 
             #region Standard Fields
 
             byte[] magic = data.ReadBytes(2);
-            header.Magic = Encoding.ASCII.GetString(magic);
-            if (header.Magic != SignatureString)
-                return null;
-
-            header.LastPageBytes = data.ReadUInt16();
-            header.Pages = data.ReadUInt16();
-            header.RelocationItems = data.ReadUInt16();
-            header.HeaderParagraphSize = data.ReadUInt16();
-            header.MinimumExtraParagraphs = data.ReadUInt16();
-            header.MaximumExtraParagraphs = data.ReadUInt16();
-            header.InitialSSValue = data.ReadUInt16();
-            header.InitialSPValue = data.ReadUInt16();
-            header.Checksum = data.ReadUInt16();
-            header.InitialIPValue = data.ReadUInt16();
-            header.InitialCSValue = data.ReadUInt16();
-            header.RelocationTableAddr = data.ReadUInt16();
-            header.OverlayNumber = data.ReadUInt16();
+            obj.Magic = Encoding.ASCII.GetString(magic);
+            obj.LastPageBytes = data.ReadUInt16LittleEndian();
+            obj.Pages = data.ReadUInt16LittleEndian();
+            obj.RelocationItems = data.ReadUInt16LittleEndian();
+            obj.HeaderParagraphSize = data.ReadUInt16LittleEndian();
+            obj.MinimumExtraParagraphs = data.ReadUInt16LittleEndian();
+            obj.MaximumExtraParagraphs = data.ReadUInt16LittleEndian();
+            obj.InitialSSValue = data.ReadUInt16LittleEndian();
+            obj.InitialSPValue = data.ReadUInt16LittleEndian();
+            obj.Checksum = data.ReadUInt16LittleEndian();
+            obj.InitialIPValue = data.ReadUInt16LittleEndian();
+            obj.InitialCSValue = data.ReadUInt16LittleEndian();
+            obj.RelocationTableAddr = data.ReadUInt16LittleEndian();
+            obj.OverlayNumber = data.ReadUInt16LittleEndian();
 
             #endregion
 
             // If we don't have enough data for PE extensions
             if (data.Position >= data.Length || data.Length - data.Position < 36)
-                return header;
+                return obj;
 
             #region PE Extensions
 
-            header.Reserved1 = new ushort[4];
-            for (int i = 0; i < header.Reserved1.Length; i++)
+            obj.Reserved1 = new ushort[4];
+            for (int i = 0; i < obj.Reserved1.Length; i++)
             {
-                header.Reserved1[i] = data.ReadUInt16();
+                obj.Reserved1[i] = data.ReadUInt16LittleEndian();
             }
-            header.OEMIdentifier = data.ReadUInt16();
-            header.OEMInformation = data.ReadUInt16();
-            header.Reserved2 = new ushort[10];
-            for (int i = 0; i < header.Reserved2.Length; i++)
+            obj.OEMIdentifier = data.ReadUInt16LittleEndian();
+            obj.OEMInformation = data.ReadUInt16LittleEndian();
+            obj.Reserved2 = new ushort[10];
+            for (int i = 0; i < obj.Reserved2.Length; i++)
             {
-                header.Reserved2[i] = data.ReadUInt16();
+                obj.Reserved2[i] = data.ReadUInt16LittleEndian();
             }
-            header.NewExeHeaderAddr = data.ReadUInt32();
+            obj.NewExeHeaderAddr = data.ReadUInt32LittleEndian();
 
             #endregion
 
-            return header;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a relocation table
+        /// Parse a Stream into an ExecutableHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="count">Number of relocation table entries to read</param>
-        /// <returns>Filled relocation table on success, null on error</returns>
-        private static RelocationEntry[]? ParseRelocationTable(Stream data, int count)
+        /// <returns>Filled ExecutableHeader on success, null on error</returns>
+        public static RelocationEntry ParseRelocationEntry(Stream data)
         {
-            var relocationTable = new RelocationEntry[count];
+            var obj = new RelocationEntry();
 
-            for (int i = 0; i < count; i++)
-            {
-                var entry = data.ReadType<RelocationEntry>();
-                if (entry == null)
-                    return null;
+            obj.Offset = data.ReadUInt16LittleEndian();
+            obj.Segment = data.ReadUInt16LittleEndian();
 
-                relocationTable[i] = entry;
-            }
-
-            return relocationTable;
+            return obj;
         }
     }
 }

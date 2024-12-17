@@ -22,15 +22,70 @@ namespace SabreTools.Serialization.Deserializers
                 uint version = GetVersion(data);
 
                 // Read and return the current CHD
-                return version switch
+                switch (version)
                 {
-                    1 => ParseHeaderV1(data),
-                    2 => ParseHeaderV2(data),
-                    3 => ParseHeaderV3(data),
-                    4 => ParseHeaderV4(data),
-                    5 => ParseHeaderV5(data),
-                    _ => null,
-                };
+                    case 1:
+                        var headerV1 = ParseHeaderV1(data);
+
+                        if (headerV1.Tag != Constants.SignatureString)
+                            return null;
+                        if (headerV1.Length != Constants.HeaderV1Size)
+                            return null;
+                        if (headerV1.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
+                            return null;
+
+                        return headerV1;
+
+                    case 2:
+                        var headerV2 = ParseHeaderV2(data);
+
+                        if (headerV2.Tag != Constants.SignatureString)
+                            return null;
+                        if (headerV2.Length != Constants.HeaderV2Size)
+                            return null;
+                        if (headerV2.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
+                            return null;
+
+                        return headerV2;
+
+                    case 3:
+                        var headerV3 = ParseHeaderV3(data);
+
+                        if (headerV3.Tag != Constants.SignatureString)
+                            return null;
+                        if (headerV3.Length != Constants.HeaderV3Size)
+                            return null;
+                        if (headerV3.Compression > CompressionType.CHDCOMPRESSION_ZLIB_PLUS)
+                            return null;
+
+                        return headerV3;
+
+                    case 4:
+                        var headerV4 = ParseHeaderV1(data);
+
+                        if (headerV4.Tag != Constants.SignatureString)
+                            return null;
+                        if (headerV4.Length != Constants.HeaderV4Size)
+                            return null;
+                        if (headerV4.Compression > CompressionType.CHDCOMPRESSION_AV)
+                            return null;
+
+                        return headerV4;
+
+                    case 5:
+                        var headerV5 = ParseHeaderV1(data);
+
+                        if (headerV5.Tag != Constants.SignatureString)
+                            return null;
+                        if (headerV5.Length != Constants.HeaderV5Size)
+                            return null;
+
+                        return headerV5;
+
+                    default:
+                        return null;
+
+                }
             }
             catch
             {
@@ -83,81 +138,129 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a V1 header
+        /// Parse a Stream into a HeaderV1
         /// </summary>
-        private static HeaderV1? ParseHeaderV1(Stream data)
+        public static HeaderV1 ParseHeaderV1(Stream data)
         {
-            var header = data.ReadType<HeaderV1>();
-            if (header?.Tag != Constants.SignatureString)
-                return null;
-            if (header.Length != Constants.HeaderV1Size)
-                return null;
-            if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
-                return null;
+            var obj = new HeaderV1();
 
-            return header;
+            byte[] tag = data.ReadBytes(8);
+            obj.Tag = Encoding.ASCII.GetString(tag);
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
+            obj.HunkSize = data.ReadUInt32LittleEndian();
+            obj.TotalHunks = data.ReadUInt32LittleEndian();
+            obj.Cylinders = data.ReadUInt32LittleEndian();
+            obj.Heads = data.ReadUInt32LittleEndian();
+            obj.Sectors = data.ReadUInt32LittleEndian();
+            obj.MD5 = data.ReadBytes(16);
+            obj.ParentMD5 = data.ReadBytes(16);
+
+            return obj;
         }
 
         /// <summary>
         /// Parse a Stream into a V2 header
         /// </summary>
-        private static HeaderV2? ParseHeaderV2(Stream data)
+        public static HeaderV2 ParseHeaderV2(Stream data)
         {
-            var header = data.ReadType<HeaderV2>();
-            if (header?.Tag != Constants.SignatureString)
-                return null;
-            if (header.Length != Constants.HeaderV2Size)
-                return null;
-            if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB)
-                return null;
+            var obj = new HeaderV2();
 
-            return header;
+            byte[] tag = data.ReadBytes(8);
+            obj.Tag = Encoding.ASCII.GetString(tag);
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
+            obj.HunkSize = data.ReadUInt32LittleEndian();
+            obj.TotalHunks = data.ReadUInt32LittleEndian();
+            obj.Cylinders = data.ReadUInt32LittleEndian();
+            obj.Heads = data.ReadUInt32LittleEndian();
+            obj.Sectors = data.ReadUInt32LittleEndian();
+            obj.MD5 = data.ReadBytes(16);
+            obj.ParentMD5 = data.ReadBytes(16);
+            obj.BytesPerSector = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
 
         /// <summary>
         /// Parse a Stream into a V3 header
         /// </summary>
-        private static HeaderV3? ParseHeaderV3(Stream data)
+        public static HeaderV3 ParseHeaderV3(Stream data)
         {
-            var header = data.ReadType<HeaderV3>();
-            if (header?.Tag != Constants.SignatureString)
-                return null;
-            if (header.Length != Constants.HeaderV3Size)
-                return null;
-            if (header.Compression > CompressionType.CHDCOMPRESSION_ZLIB_PLUS)
-                return null;
+            var obj = new HeaderV3();
 
-            return header;
+            byte[] tag = data.ReadBytes(8);
+            obj.Tag = Encoding.ASCII.GetString(tag);
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
+            obj.TotalHunks = data.ReadUInt32LittleEndian();
+            obj.LogicalBytes = data.ReadUInt64LittleEndian();
+            obj.MetaOffset = data.ReadUInt64LittleEndian();
+            obj.MD5 = data.ReadBytes(16);
+            obj.ParentMD5 = data.ReadBytes(16);
+            obj.HunkBytes = data.ReadUInt32LittleEndian();
+            obj.SHA1 = data.ReadBytes(20);
+            obj.ParentSHA1 = data.ReadBytes(20);
+
+            return obj;
         }
 
         /// <summary>
         /// Parse a Stream into a V4 header
         /// </summary>
-        private static HeaderV4? ParseHeaderV4(Stream data)
+        public static HeaderV4? ParseHeaderV4(Stream data)
         {
-            var header = data.ReadType<HeaderV4>();
-            if (header?.Tag != Constants.SignatureString)
-                return null;
-            if (header.Length != Constants.HeaderV4Size)
-                return null;
-            if (header.Compression > CompressionType.CHDCOMPRESSION_AV)
-                return null;
+            var obj = new HeaderV4();
 
-            return header;
+            byte[] tag = data.ReadBytes(8);
+            obj.Tag = Encoding.ASCII.GetString(tag);
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
+            obj.TotalHunks = data.ReadUInt32LittleEndian();
+            obj.LogicalBytes = data.ReadUInt64LittleEndian();
+            obj.MetaOffset = data.ReadUInt64LittleEndian();
+            obj.HunkBytes = data.ReadUInt32LittleEndian();
+            obj.SHA1 = data.ReadBytes(20);
+            obj.ParentSHA1 = data.ReadBytes(20);
+            obj.RawSHA1 = data.ReadBytes(20);
+
+            return obj;
         }
 
         /// <summary>
         /// Parse a Stream into a V5 header
         /// </summary>
-        private static HeaderV5? ParseHeaderV5(Stream data)
+        public static HeaderV5 ParseHeaderV5(Stream data)
         {
-            var header = data.ReadType<HeaderV5>();
-            if (header?.Tag != Constants.SignatureString)
-                return null;
-            if (header.Length != Constants.HeaderV5Size)
-                return null;
+            var obj = new HeaderV5();
 
-            return header;
+            byte[] tag = data.ReadBytes(8);
+            obj.Tag = Encoding.ASCII.GetString(tag);
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Compressors = new CodecType[4];
+            for (int i = 0; i < 4; i++)
+            {
+                obj.Compressors[i] = (CodecType)data.ReadUInt32LittleEndian();
+            }
+            obj.LogicalBytes = data.ReadUInt64LittleEndian();
+            obj.MapOffset = data.ReadUInt64LittleEndian();
+            obj.MetaOffset = data.ReadUInt64LittleEndian();
+            obj.HunkBytes = data.ReadUInt32LittleEndian();
+            obj.UnitBytes = data.ReadUInt32LittleEndian();
+            obj.RawSHA1 = data.ReadBytes(20);
+            obj.SHA1 = data.ReadBytes(20);
+            obj.ParentSHA1 = data.ReadBytes(20);
+
+            return obj;
         }
     }
 }

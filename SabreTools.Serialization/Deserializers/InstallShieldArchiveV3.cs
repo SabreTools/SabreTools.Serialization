@@ -22,8 +22,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Signature1 != Constants.HeaderSignature)
+                var header = ParseHeader(data);
+                if (header.Signature1 != Constants.HeaderSignature)
                     return null;
                 if (header.TocAddress >= data.Length)
                     return null;
@@ -48,11 +48,8 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < header.DirCount; i++)
                 {
                     var directory = ParseDirectory(data);
-                    if (directory?.Name == null)
-                        return null;
-
                     directories.Add(directory);
-                    data.Seek(directory.ChunkSize - directory.Name.Length - 6, SeekOrigin.Current);
+                    data.Seek(directory.ChunkSize - directory.Name!.Length - 6, SeekOrigin.Current);
                 }
 
                 // Set the directories
@@ -69,12 +66,9 @@ namespace SabreTools.Serialization.Deserializers
                     var directory = archive.Directories[i];
                     for (int j = 0; j < directory.FileCount; j++)
                     {
-                        var file = data.ReadType<Models.InstallShieldArchiveV3.File>();
-                        if (file?.Name == null)
-                            return null;
-
+                        var file = ParseFile(data);
                         files.Add(file);
-                        data.Seek(file.ChunkSize - file.Name.Length - 30, SeekOrigin.Current);
+                        data.Seek(file.ChunkSize - file.Name!.Length - 30, SeekOrigin.Current);
                     }
                 }
 
@@ -93,22 +87,80 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a directory
+        /// Parse a Stream into a Directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled directory on success, null on error</returns>
-        public static Models.InstallShieldArchiveV3.Directory? ParseDirectory(Stream data)
+        /// <returns>Filled Directory on success, null on error</returns>
+        public static Models.InstallShieldArchiveV3.Directory ParseDirectory(Stream data)
         {
-            var directory = new Models.InstallShieldArchiveV3.Directory();
+            var obj = new Models.InstallShieldArchiveV3.Directory();
 
-            directory.FileCount = data.ReadUInt16();
-            directory.ChunkSize = data.ReadUInt16();
+            obj.FileCount = data.ReadUInt16();
+            obj.ChunkSize = data.ReadUInt16();
 
             ushort nameLength = data.ReadUInt16();
             byte[] nameBytes = data.ReadBytes(nameLength);
-            directory.Name = Encoding.ASCII.GetString(nameBytes);
+            obj.Name = Encoding.ASCII.GetString(nameBytes);
 
-            return directory;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a File
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled File on success, null on error</returns>
+        public static Models.InstallShieldArchiveV3.File ParseFile(Stream data)
+        {
+            var obj = new Models.InstallShieldArchiveV3.File();
+
+            obj.VolumeEnd = data.ReadByteValue();
+            obj.Index = data.ReadUInt16LittleEndian();
+            obj.UncompressedSize = data.ReadUInt32LittleEndian();
+            obj.CompressedSize = data.ReadUInt32LittleEndian();
+            obj.Offset = data.ReadUInt32LittleEndian();
+            obj.DateTime = data.ReadUInt32LittleEndian();
+            obj.Reserved0 = data.ReadUInt32LittleEndian();
+            obj.ChunkSize = data.ReadUInt16LittleEndian();
+            obj.Attrib = (Attributes)data.ReadByteValue();
+            obj.IsSplit = data.ReadByteValue();
+            obj.Reserved1 = data.ReadByteValue();
+            obj.VolumeStart = data.ReadByteValue();
+            obj.Name = data.ReadPrefixedAnsiString();
+
+            return obj;
+        }
+    
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            obj.Signature1 = data.ReadUInt32LittleEndian();
+            obj.Signature2 = data.ReadUInt32LittleEndian();
+            obj.Reserved0 = data.ReadUInt16LittleEndian();
+            obj.IsMultivolume = data.ReadUInt16LittleEndian();
+            obj.FileCount = data.ReadUInt16LittleEndian();
+            obj.DateTime = data.ReadUInt32LittleEndian();
+            obj.CompressedSize = data.ReadUInt32LittleEndian();
+            obj.UncompressedSize = data.ReadUInt32LittleEndian();
+            obj.Reserved1 = data.ReadUInt32LittleEndian();
+            obj.VolumeTotal = data.ReadByteValue();
+            obj.VolumeNumber = data.ReadByteValue();
+            obj.Reserved2 = data.ReadByteValue();
+            obj.SplitBeginAddress = data.ReadUInt32LittleEndian();
+            obj.SplitEndAddress = data.ReadUInt32LittleEndian();
+            obj.TocAddress = data.ReadUInt32LittleEndian();
+            obj.Reserved3 = data.ReadUInt32LittleEndian();
+            obj.DirCount = data.ReadUInt16LittleEndian();
+            obj.Reserved4 = data.ReadUInt32LittleEndian();
+            obj.Reserved5 = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
     }
 }

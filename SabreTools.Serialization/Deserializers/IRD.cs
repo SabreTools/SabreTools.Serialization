@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
-                // Create a new IRD to fill
+                // Deserialize the IRD
                 var ird = new Models.IRD.File();
 
                 ird.Magic = data.ReadBytes(4);

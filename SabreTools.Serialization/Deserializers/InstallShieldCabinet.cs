@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.InstallShieldCabinet;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
@@ -25,8 +26,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Common Header
 
                 // Try to parse the cabinet header
-                var commonHeader = data.ReadType<CommonHeader>();
-                if (commonHeader?.Signature != SignatureString)
+                var commonHeader = ParseCommonHeader(data);
+                if (commonHeader.Signature != SignatureString)
                     return null;
 
                 // Set the cabinet header
@@ -34,15 +35,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 #endregion
 
+                // Get the major version
+                int majorVersion = GetMajorVersion(commonHeader);
+
                 #region Volume Header
 
-                // Try to parse the volume header
-                var volumeHeader = ParseVolumeHeader(data, GetMajorVersion(commonHeader));
-                if (volumeHeader == null)
-                    return null;
-
                 // Set the volume header
-                cabinet.VolumeHeader = volumeHeader;
+                cabinet.VolumeHeader = ParseVolumeHeader(data, majorVersion);
 
                 #endregion
 
@@ -56,20 +55,15 @@ namespace SabreTools.Serialization.Deserializers
                 // Seek to the descriptor
                 data.Seek(descriptorOffset, SeekOrigin.Begin);
 
-                // Try to parse the descriptor
-                var descriptor = data.ReadType<Descriptor>();
-                if (descriptor == null)
-                    return null;
-
                 // Set the descriptor
-                cabinet.Descriptor = descriptor;
+                cabinet.Descriptor = ParseDescriptor(data);
 
                 #endregion
 
                 #region File Descriptor Offsets
 
                 // Get the file table offset
-                uint fileTableOffset = commonHeader.DescriptorOffset + descriptor.FileTableOffset;
+                uint fileTableOffset = commonHeader.DescriptorOffset + cabinet.Descriptor.FileTableOffset;
                 if (fileTableOffset < 0 || fileTableOffset >= data.Length)
                     return null;
 
@@ -78,16 +72,16 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Get the number of file table items
                 uint fileTableItems;
-                if (GetMajorVersion(commonHeader) <= 5)
-                    fileTableItems = descriptor.DirectoryCount + descriptor.FileCount;
+                if (majorVersion <= 5)
+                    fileTableItems = cabinet.Descriptor.DirectoryCount + cabinet.Descriptor.FileCount;
                 else
-                    fileTableItems = descriptor.DirectoryCount;
+                    fileTableItems = cabinet.Descriptor.DirectoryCount;
 
                 // Create and fill the file table
                 cabinet.FileDescriptorOffsets = new uint[fileTableItems];
                 for (int i = 0; i < cabinet.FileDescriptorOffsets.Length; i++)
                 {
-                    cabinet.FileDescriptorOffsets[i] = data.ReadUInt32();
+                    cabinet.FileDescriptorOffsets[i] = data.ReadUInt32LittleEndian();
                 }
 
                 #endregion
@@ -95,12 +89,12 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directory Descriptors
 
                 // Create and fill the directory descriptors
-                cabinet.DirectoryNames = new string[descriptor.DirectoryCount];
-                for (int i = 0; i < descriptor.DirectoryCount; i++)
+                cabinet.DirectoryNames = new string[cabinet.Descriptor.DirectoryCount];
+                for (int i = 0; i < cabinet.Descriptor.DirectoryCount; i++)
                 {
                     // Get the directory descriptor offset
                     uint offset = descriptorOffset
-                        + descriptor.FileTableOffset
+                        + cabinet.Descriptor.FileTableOffset
                         + cabinet.FileDescriptorOffsets[i];
 
                     // If we have an invalid offset
@@ -111,7 +105,7 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the file descriptor
-                    string? directoryName = ParseDirectoryName(data, GetMajorVersion(commonHeader));
+                    string? directoryName = ParseDirectoryName(data, majorVersion);
                     if (directoryName != null)
                         cabinet.DirectoryNames[i] = directoryName;
                 }
@@ -121,22 +115,22 @@ namespace SabreTools.Serialization.Deserializers
                 #region File Descriptors
 
                 // Create and fill the file descriptors
-                cabinet.FileDescriptors = new FileDescriptor[descriptor.FileCount];
-                for (int i = 0; i < descriptor.FileCount; i++)
+                cabinet.FileDescriptors = new FileDescriptor[cabinet.Descriptor.FileCount];
+                for (int i = 0; i < cabinet.Descriptor.FileCount; i++)
                 {
                     // Get the file descriptor offset
                     uint offset;
-                    if (GetMajorVersion(commonHeader) <= 5)
+                    if (majorVersion <= 5)
                     {
                         offset = descriptorOffset
-                            + descriptor.FileTableOffset
-                            + cabinet.FileDescriptorOffsets[descriptor.DirectoryCount + i];
+                            + cabinet.Descriptor.FileTableOffset
+                            + cabinet.FileDescriptorOffsets[cabinet.Descriptor.DirectoryCount + i];
                     }
                     else
                     {
                         offset = descriptorOffset
-                            + descriptor.FileTableOffset
-                            + descriptor.FileTableOffset2
+                            + cabinet.Descriptor.FileTableOffset
+                            + cabinet.Descriptor.FileTableOffset2
                             + (uint)(i * 0x57);
                     }
 
@@ -148,8 +142,9 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the file descriptor
-                    FileDescriptor fileDescriptor = ParseFileDescriptor(data, GetMajorVersion(commonHeader), descriptorOffset + descriptor.FileTableOffset);
-                    cabinet.FileDescriptors[i] = fileDescriptor;
+                    cabinet.FileDescriptors[i] = ParseFileDescriptor(data,
+                        majorVersion,
+                        descriptorOffset + cabinet.Descriptor.FileTableOffset);
                 }
 
                 #endregion
@@ -158,10 +153,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Create and fill the file group offsets
                 cabinet.FileGroupOffsets = new Dictionary<long, OffsetList?>();
-                for (int i = 0; i < (descriptor.FileGroupOffsets?.Length ?? 0); i++)
+                for (int i = 0; i < (cabinet.Descriptor.FileGroupOffsets?.Length ?? 0); i++)
                 {
                     // Get the file group offset
-                    uint offset = descriptor.FileGroupOffsets![i];
+                    uint offset = cabinet.Descriptor.FileGroupOffsets![i];
                     if (offset == 0)
                         continue;
 
@@ -174,8 +169,8 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
-                    OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    cabinet.FileGroupOffsets[descriptor.FileGroupOffsets[i]] = offsetList;
+                    OffsetList offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
+                    cabinet.FileGroupOffsets[offset] = offsetList;
 
                     // If we have a nonzero next offset
                     uint nextOffset = offsetList.NextOffset;
@@ -188,7 +183,7 @@ namespace SabreTools.Serialization.Deserializers
                         data.Seek(internalOffset, SeekOrigin.Begin);
 
                         // Create and add the offset
-                        offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                        offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
                         cabinet.FileGroupOffsets[nextOffset] = offsetList;
 
                         // Set the next offset
@@ -225,13 +220,8 @@ namespace SabreTools.Serialization.Deserializers
                     /// Seek to the file group
                     data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
 
-                    // Try to parse the file group
-                    var fileGroup = ParseFileGroup(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    if (fileGroup == null)
-                        return null;
-
                     // Add the file group
-                    cabinet.FileGroups[fileGroupId++] = fileGroup;
+                    cabinet.FileGroups[fileGroupId++] = ParseFileGroup(data, majorVersion, descriptorOffset);
                 }
 
                 #endregion
@@ -240,10 +230,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Create and fill the component offsets
                 cabinet.ComponentOffsets = new Dictionary<long, OffsetList?>();
-                for (int i = 0; i < (descriptor.ComponentOffsets?.Length ?? 0); i++)
+                for (int i = 0; i < (cabinet.Descriptor.ComponentOffsets?.Length ?? 0); i++)
                 {
                     // Get the component offset
-                    uint offset = descriptor.ComponentOffsets![i];
+                    uint offset = cabinet.Descriptor.ComponentOffsets![i];
                     if (offset == 0)
                         continue;
 
@@ -256,8 +246,8 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
-                    OffsetList offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    cabinet.ComponentOffsets[descriptor.ComponentOffsets[i]] = offsetList;
+                    OffsetList offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
+                    cabinet.ComponentOffsets[cabinet.Descriptor.ComponentOffsets[i]] = offsetList;
 
                     // If we have a nonzero next offset
                     uint nextOffset = offsetList.NextOffset;
@@ -270,7 +260,7 @@ namespace SabreTools.Serialization.Deserializers
                         data.Seek(internalOffset, SeekOrigin.Begin);
 
                         // Create and add the offset
-                        offsetList = ParseOffsetList(data, GetMajorVersion(commonHeader), descriptorOffset);
+                        offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
                         cabinet.ComponentOffsets[nextOffset] = offsetList;
 
                         // Set the next offset
@@ -307,13 +297,8 @@ namespace SabreTools.Serialization.Deserializers
                     // Seek to the component
                     data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
 
-                    // Try to parse the component
-                    var component = ParseComponent(data, GetMajorVersion(commonHeader), descriptorOffset);
-                    if (component == null)
-                        return null;
-
                     // Add the component
-                    cabinet.Components[componentId++] = component;
+                    cabinet.Components[componentId++] = ParseComponent(data, majorVersion, descriptorOffset);
                 }
 
                 #endregion
@@ -330,251 +315,132 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a volume header
+        /// Parse a Stream into a CommonHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="majorVersion">Major version of the cabinet</param>
-        /// <returns>Filled volume header on success, null on error</returns>
-        public static VolumeHeader ParseVolumeHeader(Stream data, int majorVersion)
+        /// <returns>Filled CommonHeader on success, null on error</returns>
+        public static CommonHeader ParseCommonHeader(Stream data)
         {
-            var volumeHeader = new VolumeHeader();
+            var obj = new CommonHeader();
 
-            // Read the descriptor based on version
-            if (majorVersion <= 5)
-            {
-                volumeHeader.DataOffset = data.ReadUInt32();
-                _ = data.ReadBytes(0x04); // Skip 0x04 bytes, unknown data?
-                volumeHeader.FirstFileIndex = data.ReadUInt32();
-                volumeHeader.LastFileIndex = data.ReadUInt32();
-                volumeHeader.FirstFileOffset = data.ReadUInt32();
-                volumeHeader.FirstFileSizeExpanded = data.ReadUInt32();
-                volumeHeader.FirstFileSizeCompressed = data.ReadUInt32();
-                volumeHeader.LastFileOffset = data.ReadUInt32();
-                volumeHeader.LastFileSizeExpanded = data.ReadUInt32();
-                volumeHeader.LastFileSizeCompressed = data.ReadUInt32();
-            }
-            else
-            {
-                volumeHeader.DataOffset = data.ReadUInt32();
-                volumeHeader.DataOffsetHigh = data.ReadUInt32();
-                volumeHeader.FirstFileIndex = data.ReadUInt32();
-                volumeHeader.LastFileIndex = data.ReadUInt32();
-                volumeHeader.FirstFileOffset = data.ReadUInt32();
-                volumeHeader.FirstFileOffsetHigh = data.ReadUInt32();
-                volumeHeader.FirstFileSizeExpanded = data.ReadUInt32();
-                volumeHeader.FirstFileSizeExpandedHigh = data.ReadUInt32();
-                volumeHeader.FirstFileSizeCompressed = data.ReadUInt32();
-                volumeHeader.FirstFileSizeCompressedHigh = data.ReadUInt32();
-                volumeHeader.LastFileOffset = data.ReadUInt32();
-                volumeHeader.LastFileOffsetHigh = data.ReadUInt32();
-                volumeHeader.LastFileSizeExpanded = data.ReadUInt32();
-                volumeHeader.LastFileSizeExpandedHigh = data.ReadUInt32();
-                volumeHeader.LastFileSizeCompressed = data.ReadUInt32();
-                volumeHeader.LastFileSizeCompressedHigh = data.ReadUInt32();
-            }
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.VolumeInfo = data.ReadUInt32LittleEndian();
+            obj.DescriptorOffset = data.ReadUInt32LittleEndian();
+            obj.DescriptorSize = data.ReadUInt32LittleEndian();
 
-            return volumeHeader;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an offset list
+        /// Parse a Stream into a Component
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
-        /// <returns>Filled offset list on success, null on error</returns>
-        public static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
-        {
-            var offsetList = new OffsetList();
-
-            offsetList.NameOffset = data.ReadUInt32();
-            offsetList.DescriptorOffset = data.ReadUInt32();
-            offsetList.NextOffset = data.ReadUInt32();
-
-            // Cache the current offset
-            long currentOffset = data.Position;
-
-            // Seek to the name offset
-            data.Seek(offsetList.NameOffset + descriptorOffset, SeekOrigin.Begin);
-
-            // Read the string
-            if (majorVersion >= 17)
-                offsetList.Name = data.ReadNullTerminatedUnicodeString();
-            else
-                offsetList.Name = data.ReadNullTerminatedAnsiString();
-
-            // Seek back to the correct offset
-            data.Seek(currentOffset, SeekOrigin.Begin);
-
-            return offsetList;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a file group
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="majorVersion">Major version of the cabinet</param>
-        /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
-        /// <returns>Filled file group on success, null on error</returns>
-        public static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
-        {
-            var fileGroup = new FileGroup();
-
-            fileGroup.NameOffset = data.ReadUInt32();
-            fileGroup.ExpandedSize = data.ReadUInt32();
-            fileGroup.CompressedSize = data.ReadUInt32();
-            fileGroup.Attributes = (FileGroupAttributes)data.ReadUInt16();
-
-            // TODO: Figure out what data lives in this area for V5 and below
-            if (majorVersion <= 5)
-                data.Seek(0x36, SeekOrigin.Current);
-
-            fileGroup.FirstFile = data.ReadUInt32();
-            fileGroup.LastFile = data.ReadUInt32();
-            fileGroup.UnknownStringOffset = data.ReadUInt32();
-            fileGroup.OperatingSystemOffset = data.ReadUInt32();
-            fileGroup.LanguageOffset = data.ReadUInt32();
-            fileGroup.HTTPLocationOffset = data.ReadUInt32();
-            fileGroup.FTPLocationOffset = data.ReadUInt32();
-            fileGroup.MiscOffset = data.ReadUInt32();
-            fileGroup.TargetDirectoryOffset = data.ReadUInt32();
-            fileGroup.OverwriteFlags = (FileGroupFlags)data.ReadUInt32();
-            fileGroup.Reserved = new uint[4];
-            for (int i = 0; i < fileGroup.Reserved.Length; i++)
-            {
-                fileGroup.Reserved[i] = data.ReadUInt32();
-            }
-
-            // Cache the current position
-            long currentPosition = data.Position;
-
-            // Read the name, if possible
-            if (fileGroup.NameOffset != 0)
-            {
-                // Seek to the name
-                data.Seek(fileGroup.NameOffset + descriptorOffset, SeekOrigin.Begin);
-
-                // Read the string
-                if (majorVersion >= 17)
-                    fileGroup.Name = data.ReadNullTerminatedUnicodeString();
-                else
-                    fileGroup.Name = data.ReadNullTerminatedAnsiString();
-            }
-
-            // Seek back to the correct offset
-            data.Seek(currentPosition, SeekOrigin.Begin);
-
-            return fileGroup;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a component
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="majorVersion">Major version of the cabinet</param>
-        /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
-        /// <returns>Filled component on success, null on error</returns>
+        /// <returns>Filled Component on success, null on error</returns>
         public static Component ParseComponent(Stream data, int majorVersion, uint descriptorOffset)
         {
-            var component = new Component();
+            var obj = new Component();
 
-            component.IdentifierOffset = data.ReadUInt32();
-            component.DescriptorOffset = data.ReadUInt32();
-            component.DisplayNameOffset = data.ReadUInt32();
-            component.Status = (ComponentStatus)data.ReadUInt16();
-            component.PasswordOffset = data.ReadUInt32();
-            component.MiscOffset = data.ReadUInt32();
-            component.ComponentIndex = data.ReadUInt16();
-            component.NameOffset = data.ReadUInt32();
-            component.CDRomFolderOffset = data.ReadUInt32();
-            component.HTTPLocationOffset = data.ReadUInt32();
-            component.FTPLocationOffset = data.ReadUInt32();
-            component.Guid = new Guid[2];
-            for (int i = 0; i < component.Guid.Length; i++)
+            obj.IdentifierOffset = data.ReadUInt32LittleEndian();
+            obj.DescriptorOffset = data.ReadUInt32LittleEndian();
+            obj.DisplayNameOffset = data.ReadUInt32LittleEndian();
+            obj.Status = (ComponentStatus)data.ReadUInt16LittleEndian();
+            obj.PasswordOffset = data.ReadUInt32LittleEndian();
+            obj.MiscOffset = data.ReadUInt32LittleEndian();
+            obj.ComponentIndex = data.ReadUInt16LittleEndian();
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.CDRomFolderOffset = data.ReadUInt32LittleEndian();
+            obj.HTTPLocationOffset = data.ReadUInt32LittleEndian();
+            obj.FTPLocationOffset = data.ReadUInt32LittleEndian();
+            obj.Guid = new Guid[2];
+            for (int i = 0; i < obj.Guid.Length; i++)
             {
-                component.Guid[i] = data.ReadGuid();
+                obj.Guid[i] = data.ReadGuid();
             }
-            component.CLSIDOffset = data.ReadUInt32();
-            component.Reserved2 = data.ReadBytes(28);
-            component.Reserved3 = data.ReadBytes(majorVersion <= 5 ? 2 : 1);
-            component.DependsCount = data.ReadUInt16();
-            component.DependsOffset = data.ReadUInt32();
-            component.FileGroupCount = data.ReadUInt16();
-            component.FileGroupNamesOffset = data.ReadUInt32();
-            component.X3Count = data.ReadUInt16();
-            component.X3Offset = data.ReadUInt32();
-            component.SubComponentsCount = data.ReadUInt16();
-            component.SubComponentsOffset = data.ReadUInt32();
-            component.NextComponentOffset = data.ReadUInt32();
-            component.OnInstallingOffset = data.ReadUInt32();
-            component.OnInstalledOffset = data.ReadUInt32();
-            component.OnUninstallingOffset = data.ReadUInt32();
-            component.OnUninstalledOffset = data.ReadUInt32();
+            obj.CLSIDOffset = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadBytes(28);
+            obj.Reserved3 = data.ReadBytes(majorVersion <= 5 ? 2 : 1);
+            obj.DependsCount = data.ReadUInt16LittleEndian();
+            obj.DependsOffset = data.ReadUInt32LittleEndian();
+            obj.FileGroupCount = data.ReadUInt16LittleEndian();
+            obj.FileGroupNamesOffset = data.ReadUInt32LittleEndian();
+            obj.X3Count = data.ReadUInt16LittleEndian();
+            obj.X3Offset = data.ReadUInt32LittleEndian();
+            obj.SubComponentsCount = data.ReadUInt16LittleEndian();
+            obj.SubComponentsOffset = data.ReadUInt32LittleEndian();
+            obj.NextComponentOffset = data.ReadUInt32LittleEndian();
+            obj.OnInstallingOffset = data.ReadUInt32LittleEndian();
+            obj.OnInstalledOffset = data.ReadUInt32LittleEndian();
+            obj.OnUninstallingOffset = data.ReadUInt32LittleEndian();
+            obj.OnUninstalledOffset = data.ReadUInt32LittleEndian();
 
             // Cache the current position
             long currentPosition = data.Position;
 
             // Read the identifier, if possible
-            if (component.IdentifierOffset != 0)
+            if (obj.IdentifierOffset != 0)
             {
                 // Seek to the identifier
-                data.Seek(component.IdentifierOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.IdentifierOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.Identifier = data.ReadNullTerminatedUnicodeString();
+                    obj.Identifier = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.Identifier = data.ReadNullTerminatedAnsiString();
+                    obj.Identifier = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the display name, if possible
-            if (component.DisplayNameOffset != 0)
+            if (obj.DisplayNameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(component.DisplayNameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.DisplayNameOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.DisplayName = data.ReadNullTerminatedUnicodeString();
+                    obj.DisplayName = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.DisplayName = data.ReadNullTerminatedAnsiString();
+                    obj.DisplayName = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the name, if possible
-            if (component.NameOffset != 0)
+            if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(component.NameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    component.Name = data.ReadNullTerminatedUnicodeString();
+                    obj.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    component.Name = data.ReadNullTerminatedAnsiString();
+                    obj.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Read the CLSID, if possible
-            if (component.CLSIDOffset != 0)
+            if (obj.CLSIDOffset != 0)
             {
                 // Seek to the CLSID
-                data.Seek(component.CLSIDOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.CLSIDOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the GUID
-                component.CLSID = data.ReadGuid();
+                obj.CLSID = data.ReadGuid();
             }
 
             // Read the file group names, if possible
-            if (component.FileGroupCount != 0 && component.FileGroupNamesOffset != 0)
+            if (obj.FileGroupCount != 0 && obj.FileGroupNamesOffset != 0)
             {
                 // Seek to the file group table offset
-                data.Seek(component.FileGroupNamesOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.FileGroupNamesOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the file group names table
-                component.FileGroupNames = new string[component.FileGroupCount];
-                for (int j = 0; j < component.FileGroupCount; j++)
+                obj.FileGroupNames = new string[obj.FileGroupCount];
+                for (int j = 0; j < obj.FileGroupCount; j++)
                 {
                     // Get the name offset
-                    uint nameOffset = data.ReadUInt32();
+                    uint nameOffset = data.ReadUInt32LittleEndian();
 
                     // Cache the current offset
                     long preNameOffset = data.Position;
@@ -583,9 +449,9 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(nameOffset + descriptorOffset, SeekOrigin.Begin);
 
                     if (majorVersion >= 17)
-                        component.FileGroupNames[j] = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
+                        obj.FileGroupNames[j] = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                     else
-                        component.FileGroupNames[j] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+                        obj.FileGroupNames[j] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
                     // Seek back to the original position
                     data.Seek(preNameOffset, SeekOrigin.Begin);
@@ -595,7 +461,51 @@ namespace SabreTools.Serialization.Deserializers
             // Seek back to the correct offset
             data.Seek(currentPosition, SeekOrigin.Begin);
 
-            return component;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Descriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Descriptor on success, null on error</returns>
+        public static Descriptor ParseDescriptor(Stream data)
+        {
+            var obj = new Descriptor();
+
+            obj.StringsOffset = data.ReadUInt32LittleEndian();
+            obj.Reserved0 = data.ReadUInt32LittleEndian();
+            obj.ComponentListOffset = data.ReadUInt32LittleEndian();
+            obj.FileTableOffset = data.ReadUInt32LittleEndian();
+            obj.Reserved1 = data.ReadUInt32LittleEndian();
+            obj.FileTableSize = data.ReadUInt32LittleEndian();
+            obj.FileTableSize2 = data.ReadUInt32LittleEndian();
+            obj.DirectoryCount = data.ReadUInt16LittleEndian();
+            obj.Reserved2 = data.ReadUInt32LittleEndian();
+            obj.Reserved3 = data.ReadUInt16LittleEndian();
+            obj.Reserved4 = data.ReadUInt32LittleEndian();
+            obj.FileCount = data.ReadUInt32LittleEndian();
+            obj.FileTableOffset2 = data.ReadUInt32LittleEndian();
+            obj.ComponentTableInfoCount = data.ReadUInt16LittleEndian();
+            obj.ComponentTableOffset = data.ReadUInt32LittleEndian();
+            obj.Reserved5 = data.ReadUInt32LittleEndian();
+            obj.Reserved6 = data.ReadUInt32LittleEndian();
+            obj.FileGroupOffsets = new uint[71];
+            for (int i = 0; i < 71; i++)
+            {
+                obj.FileGroupOffsets[i] = data.ReadUInt32LittleEndian();
+            }
+            obj.ComponentOffsets = new uint[71];
+            for (int i = 0; i < 71; i++)
+            {
+                obj.ComponentOffsets[i] = data.ReadUInt32LittleEndian();
+            }
+            obj.SetupTypesOffset = data.ReadUInt32LittleEndian();
+            obj.SetupTableOffset = data.ReadUInt32LittleEndian();
+            obj.Reserved7 = data.ReadUInt32LittleEndian();
+            obj.Reserved8 = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
 
         /// <summary>
@@ -614,68 +524,206 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a file descriptor
+        /// Parse a Stream into a FileDescriptor
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
-        /// <returns>Filled file descriptor on success, null on error</returns>
+        /// <returns>Filled FileDescriptor on success, null on error</returns>
         public static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, uint descriptorOffset)
         {
-            var fileDescriptor = new FileDescriptor();
+            var obj = new FileDescriptor();
 
             // Read the descriptor based on version
             if (majorVersion <= 5)
             {
-                fileDescriptor.Volume = 0xFFFF; // Set by the header index
-                fileDescriptor.NameOffset = data.ReadUInt32();
-                fileDescriptor.DirectoryIndex = data.ReadUInt32();
-                fileDescriptor.Flags = (FileFlags)data.ReadUInt16();
-                fileDescriptor.ExpandedSize = data.ReadUInt32();
-                fileDescriptor.CompressedSize = data.ReadUInt32();
+                obj.Volume = 0xFFFF; // Set by the header index
+                obj.NameOffset = data.ReadUInt32LittleEndian();
+                obj.DirectoryIndex = data.ReadUInt32LittleEndian();
+                obj.Flags = (FileFlags)data.ReadUInt16LittleEndian();
+                obj.ExpandedSize = data.ReadUInt32LittleEndian();
+                obj.CompressedSize = data.ReadUInt32LittleEndian();
                 _ = data.ReadBytes(0x14); // Skip 0x14 bytes, unknown data?
-                fileDescriptor.DataOffset = data.ReadUInt32();
+                obj.DataOffset = data.ReadUInt32LittleEndian();
 
                 if (majorVersion == 5)
-                    fileDescriptor.MD5 = data.ReadBytes(0x10);
+                    obj.MD5 = data.ReadBytes(0x10);
             }
             else
             {
-                fileDescriptor.Flags = (FileFlags)data.ReadUInt16();
-                fileDescriptor.ExpandedSize = data.ReadUInt64();
-                fileDescriptor.CompressedSize = data.ReadUInt64();
-                fileDescriptor.DataOffset = data.ReadUInt64();
-                fileDescriptor.MD5 = data.ReadBytes(0x10);
+                obj.Flags = (FileFlags)data.ReadUInt16LittleEndian();
+                obj.ExpandedSize = data.ReadUInt64LittleEndian();
+                obj.CompressedSize = data.ReadUInt64LittleEndian();
+                obj.DataOffset = data.ReadUInt64LittleEndian();
+                obj.MD5 = data.ReadBytes(0x10);
                 _ = data.ReadBytes(0x10); // Skip 0x10 bytes, unknown data?
-                fileDescriptor.NameOffset = data.ReadUInt32();
-                fileDescriptor.DirectoryIndex = data.ReadUInt16();
+                obj.NameOffset = data.ReadUInt32LittleEndian();
+                obj.DirectoryIndex = data.ReadUInt16LittleEndian();
                 _ = data.ReadBytes(0x0C); // Skip 0x0C bytes, unknown data?
-                fileDescriptor.LinkPrevious = data.ReadUInt32();
-                fileDescriptor.LinkNext = data.ReadUInt32();
-                fileDescriptor.LinkFlags = (LinkFlags)data.ReadByteValue();
-                fileDescriptor.Volume = data.ReadUInt16();
+                obj.LinkPrevious = data.ReadUInt32LittleEndian();
+                obj.LinkNext = data.ReadUInt32LittleEndian();
+                obj.LinkFlags = (LinkFlags)data.ReadByteValue();
+                obj.Volume = data.ReadUInt16LittleEndian();
             }
 
             // Cache the current position
             long currentPosition = data.Position;
 
             // Read the name, if possible
-            if (fileDescriptor.NameOffset != 0)
+            if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(fileDescriptor.NameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
-                    fileDescriptor.Name = data.ReadNullTerminatedUnicodeString();
+                    obj.Name = data.ReadNullTerminatedUnicodeString();
                 else
-                    fileDescriptor.Name = data.ReadNullTerminatedAnsiString();
+                    obj.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Seek back to the correct offset
             data.Seek(currentPosition, SeekOrigin.Begin);
 
-            return fileDescriptor;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a FileGroup
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="majorVersion">Major version of the cabinet</param>
+        /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
+        /// <returns>Filled FileGroup on success, null on error</returns>
+        public static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
+        {
+            var obj = new FileGroup();
+
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.ExpandedSize = data.ReadUInt32LittleEndian();
+            obj.CompressedSize = data.ReadUInt32LittleEndian();
+            obj.Attributes = (FileGroupAttributes)data.ReadUInt16LittleEndian();
+
+            // TODO: Figure out what data lives in this area for V5 and below
+            if (majorVersion <= 5)
+                data.Seek(0x36, SeekOrigin.Current);
+
+            obj.FirstFile = data.ReadUInt32LittleEndian();
+            obj.LastFile = data.ReadUInt32LittleEndian();
+            obj.UnknownStringOffset = data.ReadUInt32LittleEndian();
+            obj.OperatingSystemOffset = data.ReadUInt32LittleEndian();
+            obj.LanguageOffset = data.ReadUInt32LittleEndian();
+            obj.HTTPLocationOffset = data.ReadUInt32LittleEndian();
+            obj.FTPLocationOffset = data.ReadUInt32LittleEndian();
+            obj.MiscOffset = data.ReadUInt32LittleEndian();
+            obj.TargetDirectoryOffset = data.ReadUInt32LittleEndian();
+            obj.OverwriteFlags = (FileGroupFlags)data.ReadUInt32LittleEndian();
+            obj.Reserved = new uint[4];
+            for (int i = 0; i < obj.Reserved.Length; i++)
+            {
+                obj.Reserved[i] = data.ReadUInt32LittleEndian();
+            }
+
+            // Cache the current position
+            long currentPosition = data.Position;
+
+            // Read the name, if possible
+            if (obj.NameOffset != 0)
+            {
+                // Seek to the name
+                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+
+                // Read the string
+                if (majorVersion >= 17)
+                    obj.Name = data.ReadNullTerminatedUnicodeString();
+                else
+                    obj.Name = data.ReadNullTerminatedAnsiString();
+            }
+
+            // Seek back to the correct offset
+            data.Seek(currentPosition, SeekOrigin.Begin);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an OffsetList
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="majorVersion">Major version of the cabinet</param>
+        /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
+        /// <returns>Filled OffsetList on success, null on error</returns>
+        public static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
+        {
+            var obj = new OffsetList();
+
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.DescriptorOffset = data.ReadUInt32LittleEndian();
+            obj.NextOffset = data.ReadUInt32LittleEndian();
+
+            // Cache the current offset
+            long currentOffset = data.Position;
+
+            // Seek to the name offset
+            data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+
+            // Read the string
+            if (majorVersion >= 17)
+                obj.Name = data.ReadNullTerminatedUnicodeString();
+            else
+                obj.Name = data.ReadNullTerminatedAnsiString();
+
+            // Seek back to the correct offset
+            data.Seek(currentOffset, SeekOrigin.Begin);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a VolumeHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="majorVersion">Major version of the cabinet</param>
+        /// <returns>Filled VolumeHeader on success, null on error</returns>
+        public static VolumeHeader ParseVolumeHeader(Stream data, int majorVersion)
+        {
+            var obj = new VolumeHeader();
+
+            // Read the descriptor based on version
+            if (majorVersion <= 5)
+            {
+                obj.DataOffset = data.ReadUInt32LittleEndian();
+                _ = data.ReadBytes(0x04); // Skip 0x04 bytes, unknown data?
+                obj.FirstFileIndex = data.ReadUInt32LittleEndian();
+                obj.LastFileIndex = data.ReadUInt32LittleEndian();
+                obj.FirstFileOffset = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeExpanded = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeCompressed = data.ReadUInt32LittleEndian();
+                obj.LastFileOffset = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeExpanded = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeCompressed = data.ReadUInt32LittleEndian();
+            }
+            else
+            {
+                obj.DataOffset = data.ReadUInt32LittleEndian();
+                obj.DataOffsetHigh = data.ReadUInt32LittleEndian();
+                obj.FirstFileIndex = data.ReadUInt32LittleEndian();
+                obj.LastFileIndex = data.ReadUInt32LittleEndian();
+                obj.FirstFileOffset = data.ReadUInt32LittleEndian();
+                obj.FirstFileOffsetHigh = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeExpanded = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeExpandedHigh = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeCompressed = data.ReadUInt32LittleEndian();
+                obj.FirstFileSizeCompressedHigh = data.ReadUInt32LittleEndian();
+                obj.LastFileOffset = data.ReadUInt32LittleEndian();
+                obj.LastFileOffsetHigh = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeExpanded = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeExpandedHigh = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeCompressed = data.ReadUInt32LittleEndian();
+                obj.LastFileSizeCompressedHigh = data.ReadUInt32LittleEndian();
+            }
+
+            return obj;
         }
 
         #region Helpers

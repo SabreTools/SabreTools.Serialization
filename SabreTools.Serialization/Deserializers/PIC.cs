@@ -9,8 +9,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class PIC : BaseBinaryDeserializer<DiscInformation>
     {
-        #region IStreamDeserializer
-
         /// <inheritdoc/>
         public override DiscInformation? Deserialize(Stream? data)
         {
@@ -37,9 +35,6 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < 32; i++)
                 {
                     var unit = ParseDiscInformationUnit(data);
-                    if (unit == null)
-                        continue;
-
                     diUnits.Add(unit);
                 }
 
@@ -55,54 +50,39 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a disc information unit
+        /// Parse a Stream into a DiscInformationUnit
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled disc information unit on success, null on error</returns>
-        private static DiscInformationUnit? ParseDiscInformationUnit(Stream data)
+        /// <returns>Filled DiscInformationUnit on success, null on error</returns>
+        public static DiscInformationUnit ParseDiscInformationUnit(Stream data)
         {
-            var unit = new DiscInformationUnit();
+            var obj = new DiscInformationUnit();
 
             #region Header
 
             // We only accept Disc Information units, not Emergency Brake or other
-            var header = data.ReadType<DiscInformationUnitHeader>();
-            if (header?.DiscInformationIdentifier != "DI")
-                return null;
-
-            // Set the information unit header
-            unit.Header = header;
+            obj.Header = ParseDiscInformationUnitHeader(data);
+            if (obj.Header.DiscInformationIdentifier != "DI")
+                return obj;
 
             #endregion
 
             #region Body
 
-            // Try to parse the body
-            var body = ParseDiscInformationUnitBody(data);
-            if (body == null)
-                return null;
-
             // Set the information unit body
-            unit.Body = body;
+            obj.Body = ParseDiscInformationUnitBody(data);
 
             #endregion
 
             #region Trailer
 
-            if (unit.Body.DiscTypeIdentifier == DiscTypeIdentifierReWritable || unit.Body.DiscTypeIdentifier == DiscTypeIdentifierRecordable)
-            {
-                // Try to parse the trailer
-                var trailer = data.ReadType<DiscInformationUnitTrailer>();
-                if (trailer == null)
-                    return null;
-
-                // Set the information unit trailer
-                unit.Trailer = trailer;
-            }
+            // Set the information unit trailer
+            if (obj.Body.DiscTypeIdentifier == DiscTypeIdentifierReWritable || obj.Body.DiscTypeIdentifier == DiscTypeIdentifierRecordable)
+                obj.Trailer = ParseDiscInformationUnitTrailer(data);
 
             #endregion
 
-            return unit;
+            return obj;
         }
 
         /// <summary>
@@ -110,29 +90,68 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled disc information unit body on success, null on error</returns>
-        private static DiscInformationUnitBody? ParseDiscInformationUnitBody(Stream data)
+        private static DiscInformationUnitBody ParseDiscInformationUnitBody(Stream data)
         {
-            var body = new DiscInformationUnitBody();
+            var obj = new DiscInformationUnitBody();
 
             byte[] dti = data.ReadBytes(3);
-            body.DiscTypeIdentifier = Encoding.ASCII.GetString(dti);
-            body.DiscSizeClassVersion = data.ReadByteValue();
-            switch (body.DiscTypeIdentifier)
+            obj.DiscTypeIdentifier = Encoding.ASCII.GetString(dti);
+            obj.DiscSizeClassVersion = data.ReadByteValue();
+            switch (obj.DiscTypeIdentifier)
             {
                 case DiscTypeIdentifierROM:
                 case DiscTypeIdentifierROMUltra:
                 case DiscTypeIdentifierXGD4:
-                    body.FormatDependentContents = data.ReadBytes(52);
+                    obj.FormatDependentContents = data.ReadBytes(52);
                     break;
                 case DiscTypeIdentifierReWritable:
                 case DiscTypeIdentifierRecordable:
-                    body.FormatDependentContents = data.ReadBytes(100);
+                    obj.FormatDependentContents = data.ReadBytes(100);
                     break;
             }
 
-            return body;
+            return obj;
         }
 
-        #endregion
+        /// <summary>
+        /// Parse a Stream into a DiscInformationUnitHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>DiscInformationUnitHeader on success, null on error</returns>
+        public static DiscInformationUnitHeader ParseDiscInformationUnitHeader(Stream data)
+        {
+            var obj = new DiscInformationUnitHeader();
+
+            byte[] discInformationIdentifier = data.ReadBytes(2);
+            obj.DiscInformationIdentifier = Encoding.ASCII.GetString(discInformationIdentifier);
+            if (obj.DiscInformationIdentifier != "DI")
+                return obj;
+            
+            obj.DiscInformationFormat = data.ReadByteValue();
+            obj.NumberOfUnitsInBlock = data.ReadByteValue();
+            obj.Reserved0 = data.ReadByteValue();
+            obj.SequenceNumber = data.ReadByteValue();
+            obj.BytesInUse = data.ReadByteValue();
+            obj.Reserved1 = data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DiscInformationUnitTrailer
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>DiscInformationUnitTrailer on success, null on error</returns>
+        public static DiscInformationUnitTrailer ParseDiscInformationUnitTrailer(Stream data)
+        {
+            var obj = new DiscInformationUnitTrailer();
+
+            obj.DiscManufacturerID = data.ReadBytes(6);
+            obj.MediaTypeID = data.ReadBytes(3);
+            obj.TimeStamp = data.ReadUInt16LittleEndian();
+            obj.ProductRevisionNumber = data.ReadByteValue();
+
+            return obj;
+        }
     }
 }

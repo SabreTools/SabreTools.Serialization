@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Signature != SignatureString)
+                var header = ParseHeader(data);
+                if (header.Signature != SignatureString)
                     return null;
 
                 // Set the package header
@@ -46,11 +46,7 @@ namespace SabreTools.Serialization.Deserializers
                 file.DirEntries = new DirEntry[header.NumDirs];
                 for (int i = 0; i < header.NumDirs; i++)
                 {
-                    var lump = data.ReadType<DirEntry>();
-                    if (lump == null)
-                        return null;
-
-                    file.DirEntries[i] = lump;
+                    file.DirEntries[i] = ParseDirEntry(data);
                 }
 
                 #endregion
@@ -95,12 +91,48 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package file entry
+        /// Parse a Stream into a CharInfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled CharInfo on success, null on error</returns>
+        public static CharInfo ParseCharInfo(Stream data)
+        {
+            var obj = new CharInfo();
+
+            obj.StartOffset = data.ReadUInt16LittleEndian();
+            obj.CharWidth = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirEntry on success, null on error</returns>
+        public static DirEntry ParseDirEntry(Stream data)
+        {
+            var obj = new DirEntry();
+
+            obj.Offset = data.ReadUInt32LittleEndian();
+            obj.DiskLength = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32LittleEndian();
+            obj.Type = (FileType)data.ReadByteValue();
+            obj.Compression = data.ReadByteValue();
+            obj.Padding = data.ReadUInt16LittleEndian();
+            byte[] name = data.ReadBytes(16);
+            obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a FileEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="type">File entry type</param>
-        /// <returns>Filled Half-Life Texture Package file entry on success, null on error</returns>
-        private static FileEntry? ParseFileEntry(Stream data, FileType type)
+        /// <returns>Filled FileEntry on success, null on error</returns>
+        public static FileEntry? ParseFileEntry(Stream data, FileType type)
         {
             return type switch
             {
@@ -113,115 +145,130 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package MipTex
+        /// Parse a Stream into a Font
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package MipTex on success, null on error</returns>
-        private static MipTex ParseMipTex(Stream data)
+        /// <returns>Filled Font on success, null on error</returns>
+        public static Font ParseFont(Stream data)
         {
-            var miptex = new MipTex();
+            var obj = new Font();
 
-            byte[] nameBytes = data.ReadBytes(16);
-            miptex.Name = Encoding.ASCII.GetString(nameBytes).TrimEnd('\0');
-            miptex.Width = data.ReadUInt32();
-            miptex.Height = data.ReadUInt32();
-            miptex.MipOffsets = new uint[4];
-            for (int i = 0; i < miptex.MipOffsets.Length; i++)
+            obj.Width = data.ReadUInt32LittleEndian();
+            obj.Height = data.ReadUInt32LittleEndian();
+            obj.RowCount = data.ReadUInt32LittleEndian();
+            obj.RowHeight = data.ReadUInt32LittleEndian();
+            obj.FontInfo = new CharInfo[256];
+            for (int i = 0; i < obj.FontInfo.Length; i++)
             {
-                miptex.MipOffsets[i] = data.ReadUInt32();
+                obj.FontInfo[i] = ParseCharInfo(data);
             }
-            miptex.MipImages = new MipMap[4];
-            for (int i = 0; i < miptex.MipImages.Length; i++)
+            obj.Data = new byte[obj.Height][];
+            for (int i = 0; i < obj.Height; i++)
             {
-                miptex.MipImages[i] = ParseMipMap(data, miptex.Width, miptex.Height);
+                obj.Data[i] = data.ReadBytes((int)obj.Width);
             }
-            miptex.ColorsUsed = data.ReadUInt16();
-            miptex.Palette = new byte[miptex.ColorsUsed][];
-            for (int i = 0; i < miptex.ColorsUsed; i++)
+            obj.ColorsUsed = data.ReadUInt16LittleEndian();
+            obj.Palette = new byte[obj.ColorsUsed][];
+            for (int i = 0; i < obj.ColorsUsed; i++)
             {
-                miptex.Palette[i] = data.ReadBytes(3);
+                obj.Palette[i] = data.ReadBytes(3);
             }
 
-            return miptex;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package MipMap
+        /// Parse a Stream into a Header
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package MipMap on success, null on error</returns>
-        private static MipMap ParseMipMap(Stream data, uint width, uint height)
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
         {
-            var mipmap = new MipMap();
+            var obj = new Header();
 
-            mipmap.Data = new byte[width][];
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.NumDirs = data.ReadUInt32LittleEndian();
+            obj.DirOffset = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a MipMap
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled MipMap on success, null on error</returns>
+        public static MipMap ParseMipMap(Stream data, uint width, uint height)
+        {
+            var obj = new MipMap();
+
+            obj.Data = new byte[width][];
             for (int i = 0; i < width; i++)
             {
-                mipmap.Data[i] = data.ReadBytes((int)height);
+                obj.Data[i] = data.ReadBytes((int)height);
             }
 
-            return mipmap;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package Qpic image
+        /// Parse a Stream into a MipTex
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package Qpic image on success, null on error</returns>
-        private static QpicImage ParseQpicImage(Stream data)
+        /// <returns>Filled MipTex on success, null on error</returns>
+        public static MipTex ParseMipTex(Stream data)
         {
-            var qpic = new QpicImage();
+            var obj = new MipTex();
 
-            qpic.Width = data.ReadUInt32();
-            qpic.Height = data.ReadUInt32();
-            qpic.Data = new byte[qpic.Height][];
-            for (int i = 0; i < qpic.Height; i++)
+            byte[] nameBytes = data.ReadBytes(16);
+            obj.Name = Encoding.ASCII.GetString(nameBytes).TrimEnd('\0');
+            obj.Width = data.ReadUInt32LittleEndian();
+            obj.Height = data.ReadUInt32LittleEndian();
+            obj.MipOffsets = new uint[4];
+            for (int i = 0; i < obj.MipOffsets.Length; i++)
             {
-                qpic.Data[i] = data.ReadBytes((int)qpic.Width);
+                obj.MipOffsets[i] = data.ReadUInt32LittleEndian();
             }
-            qpic.ColorsUsed = data.ReadUInt16();
-            qpic.Palette = new byte[qpic.ColorsUsed][];
-            for (int i = 0; i < qpic.ColorsUsed; i++)
+            obj.MipImages = new MipMap[4];
+            for (int i = 0; i < obj.MipImages.Length; i++)
             {
-                qpic.Palette[i] = data.ReadBytes(3);
+                obj.MipImages[i] = ParseMipMap(data, obj.Width, obj.Height);
+            }
+            obj.ColorsUsed = data.ReadUInt16LittleEndian();
+            obj.Palette = new byte[obj.ColorsUsed][];
+            for (int i = 0; i < obj.ColorsUsed; i++)
+            {
+                obj.Palette[i] = data.ReadBytes(3);
             }
 
-            return qpic;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a Half-Life Texture Package font
+        /// Parse a Stream into a QpicImage
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Texture Package font on success, null on error</returns>
-        private static Font ParseFont(Stream data)
+        /// <returns>Filled QpicImage on success, null on error</returns>
+        public static QpicImage ParseQpicImage(Stream data)
         {
-            var font = new Font();
+            var obj = new QpicImage();
 
-            font.Width = data.ReadUInt32();
-            font.Height = data.ReadUInt32();
-            font.RowCount = data.ReadUInt32();
-            font.RowHeight = data.ReadUInt32();
-            font.FontInfo = new CharInfo[256];
-            for (int i = 0; i < font.FontInfo.Length; i++)
+            obj.Width = data.ReadUInt32LittleEndian();
+            obj.Height = data.ReadUInt32LittleEndian();
+            obj.Data = new byte[obj.Height][];
+            for (int i = 0; i < obj.Height; i++)
             {
-                var fontInfo = data.ReadType<CharInfo>();
-                if (fontInfo != null)
-                    font.FontInfo[i] = fontInfo;
+                obj.Data[i] = data.ReadBytes((int)obj.Width);
             }
-            font.Data = new byte[font.Height][];
-            for (int i = 0; i < font.Height; i++)
+            obj.ColorsUsed = data.ReadUInt16LittleEndian();
+            obj.Palette = new byte[obj.ColorsUsed][];
+            for (int i = 0; i < obj.ColorsUsed; i++)
             {
-                font.Data[i] = data.ReadBytes((int)font.Width);
-            }
-            font.ColorsUsed = data.ReadUInt16();
-            font.Palette = new byte[font.ColorsUsed][];
-            for (int i = 0; i < font.ColorsUsed; i++)
-            {
-                font.Palette[i] = data.ReadBytes(3);
+                obj.Palette[i] = data.ReadBytes(3);
             }
 
-            return font;
+            return obj;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CFB;
 using static SabreTools.Models.CFB.Constants;
@@ -26,7 +27,17 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the file header
                 var fileHeader = ParseFileHeader(data);
-                if (fileHeader == null)
+                if (fileHeader?.Signature != SignatureUInt64)
+                    return null;
+                if (fileHeader.ByteOrder != 0xFFFE)
+                    return null;
+                if (fileHeader.MajorVersion == 3 && fileHeader.SectorShift != 0x0009)
+                    return null;
+                else if (fileHeader.MajorVersion == 4 && fileHeader.SectorShift != 0x000C)
+                    return null;
+                if (fileHeader.MajorVersion == 3 && fileHeader.NumberOfDirectorySectors != 0)
+                    return null;
+                if (fileHeader.MiniStreamCutoffSize != 0x00001000)
                     return null;
 
                 // Set the file header
@@ -228,32 +239,69 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a file header
+        /// Parse a Stream into a DirectoryEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled file header on success, null on error</returns>
-        private static FileHeader? ParseFileHeader(Stream data)
+        /// <returns>Filled DirectoryEntry on success, null on error</returns>
+        public static DirectoryEntry ParseDirectoryEntry(Stream data)
         {
-            var header = data.ReadType<FileHeader>();
+            var obj = new DirectoryEntry();
 
-            if (header?.Signature != SignatureUInt64)
-                return null;
-            if (header.ByteOrder != 0xFFFE)
-                return null;
-            if (header.MajorVersion == 3 && header.SectorShift != 0x0009)
-                return null;
-            else if (header.MajorVersion == 4 && header.SectorShift != 0x000C)
-                return null;
-            if (header.MajorVersion == 3 && header.NumberOfDirectorySectors != 0)
-                return null;
-            if (header.MiniStreamCutoffSize != 0x00001000)
-                return null;
+            byte[] name = data.ReadBytes(32);
+            obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            obj.NameLength = data.ReadUInt16LittleEndian();
+            obj.ObjectType = (ObjectType)data.ReadByteValue();
+            obj.ColorFlag = (ColorFlag)data.ReadByteValue();
+            obj.LeftSiblingID = (StreamID)data.ReadUInt32LittleEndian();
+            obj.RightSiblingID = (StreamID)data.ReadUInt32LittleEndian();
+            obj.ChildID = (StreamID)data.ReadUInt32LittleEndian();
+            obj.CLSID = data.ReadGuid();
+            obj.StateBits = data.ReadUInt32LittleEndian();
+            obj.CreationTime = data.ReadUInt64LittleEndian();
+            obj.ModifiedTime = data.ReadUInt64LittleEndian();
+            obj.StartingSectorLocation = data.ReadUInt32LittleEndian();
+            obj.StreamSize = data.ReadUInt64LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a FileHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled FileHeader on success, null on error</returns>
+        public static FileHeader ParseFileHeader(Stream data)
+        {
+            var obj = new FileHeader();
+
+            obj.Signature = data.ReadUInt64LittleEndian();
+            obj.CLSID = data.ReadGuid();
+            obj.MinorVersion = data.ReadUInt16LittleEndian();
+            obj.MajorVersion = data.ReadUInt16LittleEndian();
+            obj.ByteOrder = data.ReadUInt16LittleEndian();
+            obj.SectorShift = data.ReadUInt16LittleEndian();
+            obj.MiniSectorShift = data.ReadUInt16LittleEndian();
+            obj.Reserved = data.ReadBytes(6);
+            obj.NumberOfDirectorySectors = data.ReadUInt32LittleEndian();
+            obj.NumberOfFATSectors = data.ReadUInt32LittleEndian();
+            obj.FirstDirectorySectorLocation = data.ReadUInt32LittleEndian();
+            obj.TransactionSignatureNumber = data.ReadUInt32LittleEndian();
+            obj.MiniStreamCutoffSize = data.ReadUInt32LittleEndian();
+            obj.FirstMiniFATSectorLocation = data.ReadUInt32LittleEndian();
+            obj.NumberOfMiniFATSectors = data.ReadUInt32LittleEndian();
+            obj.FirstDIFATSectorLocation = data.ReadUInt32LittleEndian();
+            obj.NumberOfDIFATSectors = data.ReadUInt32LittleEndian();
+            obj.DIFAT = new SectorNumber[109];
+            for (int i = 0; i < 109; i++)
+            {
+                obj.DIFAT[i] = (SectorNumber)data.ReadUInt32LittleEndian();
+            }
 
             // Skip rest of sector for version 4
-            if (header.MajorVersion == 4)
+            if (obj.MajorVersion == 4)
                 _ = data.ReadBytes(3584);
 
-            return header;
+            return obj;
         }
 
         /// <summary>
@@ -294,9 +342,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < directoryEntries.Length; i++)
             {
-                var directoryEntry = data.ReadType<DirectoryEntry>();
-                if (directoryEntry == null)
-                    return null;
+                var directoryEntry = ParseDirectoryEntry(data);
 
                 // Handle version 3 entries
                 if (majorVersion == 3)

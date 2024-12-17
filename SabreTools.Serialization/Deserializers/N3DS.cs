@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the header
                 var header = ParseNCSDHeader(data);
-                if (header == null)
+                if (header.MagicNumber != NCSDMagicNumber)
                     return null;
 
                 // Set the cart image header
@@ -35,25 +35,15 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Card Info Header
 
-                // Try to parse the card info header
-                var cardInfoHeader = ParseCardInfoHeader(data);
-                if (cardInfoHeader == null)
-                    return null;
-
                 // Set the card info header
-                cart.CardInfoHeader = cardInfoHeader;
+                cart.CardInfoHeader = ParseCardInfoHeader(data);
 
                 #endregion
 
                 #region Development Card Info Header
 
-                // Try to parse the development card info header
-                var developmentCardInfoHeader = data.ReadType<DevelopmentCardInfoHeader>();
-                if (developmentCardInfoHeader == null)
-                    return null;
-
                 // Set the development card info header
-                cart.DevelopmentCardInfoHeader = developmentCardInfoHeader;
+                cart.DevelopmentCardInfoHeader = ParseDevelopmentCardInfoHeader(data);
 
                 #endregion
 
@@ -92,11 +82,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Handle the extended header, if it exists
                     if (partition.ExtendedHeaderSizeInBytes > 0)
-                    {
-                        var extendedHeader = data.ReadType<NCCHExtendedHeader>();
-                        if (extendedHeader != null)
-                            cart.ExtendedHeaders[i] = extendedHeader;
-                    }
+                        cart.ExtendedHeaders[i] = ParseNCCHExtendedHeader(data);
 
                     // Handle the ExeFS, if it exists
                     if (partition.ExeFSSizeInMediaUnits > 0)
@@ -117,10 +103,10 @@ namespace SabreTools.Serialization.Deserializers
                         long offset = partition.RomFSOffsetInMediaUnits * mediaUnitSize;
                         data.Seek(partitionOffset + offset, SeekOrigin.Begin);
 
-                        var romFsHeader = data.ReadType<RomFSHeader>();
-                        if (romFsHeader?.MagicString != RomFSMagicNumber)
+                        var romFsHeader = ParseRomFSHeader(data);
+                        if (romFsHeader.MagicString != RomFSMagicNumber)
                             continue;
-                        if (romFsHeader?.MagicNumber != RomFSSecondMagicNumber)
+                        if (romFsHeader.MagicNumber != RomFSSecondMagicNumber)
                             continue;
 
                         cart.RomFSHeaders[i] = romFsHeader;
@@ -139,85 +125,193 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an NCSD header
+        /// Parse a Stream into a AccessControlInfo
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled NCSD header on success, null on error</returns>
-        public static NCSDHeader? ParseNCSDHeader(Stream data)
+        /// <returns>Filled AccessControlInfo on success, null on error</returns>
+        public static AccessControlInfo ParseAccessControlInfo(Stream data)
         {
-            var header = new NCSDHeader();
+            var obj = new AccessControlInfo();
 
-            header.RSA2048Signature = data.ReadBytes(0x100);
-            byte[] magicNumber = data.ReadBytes(4);
-            header.MagicNumber = Encoding.ASCII.GetString(magicNumber).TrimEnd('\0'); ;
-            if (header.MagicNumber != NCSDMagicNumber)
-                return null;
+            obj.ARM11LocalSystemCapabilities = ParseARM11LocalSystemCapabilities(data);
+            obj.ARM11KernelCapabilities = ParseARM11KernelCapabilities(data);
+            obj.ARM9AccessControl = ParseARM9AccessControl(data);
 
-            header.ImageSizeInMediaUnits = data.ReadUInt32();
-            header.MediaId = data.ReadBytes(8);
-            header.PartitionsFSType = (FilesystemType)data.ReadUInt64();
-            header.PartitionsCryptType = data.ReadBytes(8);
-
-            header.PartitionsTable = new PartitionTableEntry[8];
-            for (int i = 0; i < 8; i++)
-            {
-                var partitionTableEntry = data.ReadType<PartitionTableEntry>();
-                if (partitionTableEntry == null)
-                    return null;
-
-                header.PartitionsTable[i] = partitionTableEntry;
-            }
-
-            if (header.PartitionsFSType == FilesystemType.Normal || header.PartitionsFSType == FilesystemType.None)
-            {
-                header.ExheaderHash = data.ReadBytes(0x20);
-                header.AdditionalHeaderSize = data.ReadUInt32();
-                header.SectorZeroOffset = data.ReadUInt32();
-                header.PartitionFlags = data.ReadBytes(8);
-
-                header.PartitionIdTable = new ulong[8];
-                for (int i = 0; i < 8; i++)
-                {
-                    header.PartitionIdTable[i] = data.ReadUInt64();
-                }
-
-                header.Reserved1 = data.ReadBytes(0x20);
-                header.Reserved2 = data.ReadBytes(0x0E);
-                header.FirmUpdateByte1 = data.ReadByteValue();
-                header.FirmUpdateByte2 = data.ReadByteValue();
-            }
-            else if (header.PartitionsFSType == FilesystemType.FIRM)
-            {
-                header.Unknown = data.ReadBytes(0x5E);
-                header.EncryptedMBR = data.ReadBytes(0x42);
-            }
-
-            return header;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a card info header
+        /// Parse a Stream into a ARM9AccessControl
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled card info header on success, null on error</returns>
-        public static CardInfoHeader? ParseCardInfoHeader(Stream data)
+        /// <returns>Filled ARM9AccessControl on success, null on error</returns>
+        public static ARM9AccessControl ParseARM9AccessControl(Stream data)
         {
-            var header = new CardInfoHeader();
+            var obj = new ARM9AccessControl();
 
-            header.WritableAddressMediaUnits = data.ReadUInt32();
-            header.CardInfoBitmask = data.ReadUInt32();
-            header.Reserved1 = data.ReadBytes(0xF8);
-            header.FilledSize = data.ReadUInt32();
-            header.Reserved2 = data.ReadBytes(0x0C);
-            header.TitleVersion = data.ReadUInt16();
-            header.CardRevision = data.ReadUInt16();
-            header.Reserved3 = data.ReadBytes(0x0C);
-            header.CVerTitleID = data.ReadBytes(0x08);
-            header.CVerVersionNumber = data.ReadUInt16();
-            header.Reserved4 = data.ReadBytes(0xCD6);
-            header.InitialData = ParseInitialData(data);
+            obj.Descriptors = new ARM9AccessControlDescriptors[15];
+            for (int i = 0; i < 15; i++)
+            {
+                obj.Descriptors[i] = (ARM9AccessControlDescriptors)data.ReadByteValue();
+            }
+            obj.DescriptorVersion = data.ReadByteValue();
 
-            return header;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ARM11KernelCapabilities
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ARM11KernelCapabilities on success, null on error</returns>
+        public static ARM11KernelCapabilities ParseARM11KernelCapabilities(Stream data)
+        {
+            var obj = new ARM11KernelCapabilities();
+
+            obj.Descriptors = new uint[28];
+            for (int i = 0; i < 28; i++)
+            {
+                obj.Descriptors[i] = data.ReadUInt32LittleEndian();
+            }
+            obj.Reserved = data.ReadBytes(0x10);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ARM11LocalSystemCapabilities
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ARM11LocalSystemCapabilities on success, null on error</returns>
+        public static ARM11LocalSystemCapabilities ParseARM11LocalSystemCapabilities(Stream data)
+        {
+            var obj = new ARM11LocalSystemCapabilities();
+
+            obj.ProgramID = data.ReadUInt64LittleEndian();
+            obj.CoreVersion = data.ReadUInt32LittleEndian();
+            obj.Flag1 = (ARM11LSCFlag1)data.ReadByteValue();
+            obj.Flag2 = (ARM11LSCFlag2)data.ReadByteValue();
+            obj.Flag0 = (ARM11LSCFlag0)data.ReadByteValue();
+            obj.Priority = data.ReadByteValue();
+            obj.ResourceLimitDescriptors = new ushort[16];
+            for (int i = 0; i < 16; i++)
+            {
+                obj.ResourceLimitDescriptors[i] = data.ReadUInt16LittleEndian();
+            }
+            obj.StorageInfo = ParseStorageInfo(data);
+            obj.ServiceAccessControl = new ulong[32];
+            for (int i = 0; i < 32; i++)
+            {
+                obj.ServiceAccessControl[i] = data.ReadUInt64LittleEndian();
+            }
+            obj.ExtendedServiceAccessControl = new ulong[2];
+            for (int i = 0; i < 2; i++)
+            {
+                obj.ExtendedServiceAccessControl[i] = data.ReadUInt64LittleEndian();
+            }
+            obj.Reserved = data.ReadBytes(0x0F);
+            obj.ResourceLimitCategory = (ResourceLimitCategory)data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a CardInfoHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled CardInfoHeader on success, null on error</returns>
+        public static CardInfoHeader ParseCardInfoHeader(Stream data)
+        {
+            var obj = new CardInfoHeader();
+
+            obj.WritableAddressMediaUnits = data.ReadUInt32LittleEndian();
+            obj.CardInfoBitmask = data.ReadUInt32LittleEndian();
+            obj.Reserved1 = data.ReadBytes(0xF8);
+            obj.FilledSize = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadBytes(0x0C);
+            obj.TitleVersion = data.ReadUInt16LittleEndian();
+            obj.CardRevision = data.ReadUInt16LittleEndian();
+            obj.Reserved3 = data.ReadBytes(0x0C);
+            obj.CVerTitleID = data.ReadBytes(0x08);
+            obj.CVerVersionNumber = data.ReadUInt16LittleEndian();
+            obj.Reserved4 = data.ReadBytes(0xCD6);
+            obj.InitialData = ParseInitialData(data);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a CodeSetInfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled CodeSetInfo on success, null on error</returns>
+        public static CodeSetInfo ParseCodeSetInfo(Stream data)
+        {
+            var obj = new CodeSetInfo();
+
+            obj.Address = data.ReadUInt32LittleEndian();
+            obj.PhysicalRegionSizeInPages = data.ReadUInt32LittleEndian();
+            obj.SizeInBytes = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DevelopmentCardInfoHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DevelopmentCardInfoHeader on success, null on error</returns>
+        public static DevelopmentCardInfoHeader ParseDevelopmentCardInfoHeader(Stream data)
+        {
+            var obj = new DevelopmentCardInfoHeader();
+
+            obj.CardDeviceReserved1 = data.ReadBytes(0x200);
+            obj.TitleKey = data.ReadBytes(0x10);
+            obj.CardDeviceReserved2 = data.ReadBytes(0x1BF0);
+            obj.TestData = ParseTestData(data);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExeFSFileHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ExeFSFileHeader on success, null on error</returns>
+        public static ExeFSFileHeader ParseExeFSFileHeader(Stream data)
+        {
+            var obj = new ExeFSFileHeader();
+
+            byte[] fileName = data.ReadBytes(8);
+            obj.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
+            obj.FileOffset = data.ReadUInt32LittleEndian();
+            obj.FileSize = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ExeFSHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ExeFSHeader on success, null on error</returns>
+        public static ExeFSHeader ParseExeFSHeader(Stream data)
+        {
+            var obj = new ExeFSHeader();
+
+            obj.FileHeaders = new ExeFSFileHeader[10];
+            for (int i = 0; i < 10; i++)
+            {
+                obj.FileHeaders[i] = ParseExeFSFileHeader(data);
+            }
+            obj.Reserved = data.ReadBytes(0x20);
+            obj.FileHashes = new byte[10][];
+            for (int i = 0; i < 10; i++)
+            {
+                obj.FileHashes[i] = data.ReadBytes(0x20);
+            }
+
+            return obj;
         }
 
         /// <summary>
@@ -227,92 +321,285 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled initial data on success, null on error</returns>
         public static InitialData? ParseInitialData(Stream data)
         {
-            var id = new InitialData();
+            var obj = new InitialData();
 
-            id.CardSeedKeyY = data.ReadBytes(0x10);
-            id.EncryptedCardSeed = data.ReadBytes(0x10);
-            id.CardSeedAESMAC = data.ReadBytes(0x10);
-            id.CardSeedNonce = data.ReadBytes(0x0C);
-            id.Reserved = data.ReadBytes(0xC4);
-            id.BackupHeader = ParseNCCHHeader(data, skipSignature: true);
+            obj.CardSeedKeyY = data.ReadBytes(0x10);
+            obj.EncryptedCardSeed = data.ReadBytes(0x10);
+            obj.CardSeedAESMAC = data.ReadBytes(0x10);
+            obj.CardSeedNonce = data.ReadBytes(0x0C);
+            obj.Reserved = data.ReadBytes(0xC4);
+            obj.BackupHeader = ParseNCCHHeader(data, skipSignature: true);
 
-            return id;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an NCCH header
+        /// Parse a Stream into a NCCHExtendedHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled NCCHExtendedHeader on success, null on error</returns>
+        public static NCCHExtendedHeader ParseNCCHExtendedHeader(Stream data)
+        {
+            var obj = new NCCHExtendedHeader();
+
+            obj.SCI = ParseSystemControlInfo(data);
+            obj.ACI = ParseAccessControlInfo(data);
+            obj.AccessDescSignature = data.ReadBytes(0x100);
+            obj.NCCHHDRPublicKey = data.ReadBytes(0x100);
+            obj.ACIForLimitations = ParseAccessControlInfo(data);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an NCCHHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="skipSignature">Indicates if the signature should be skipped</param>
-        /// <returns>Filled NCCH header on success, null on error</returns>
+        /// <returns>Filled NCCHHeader on success, null on error</returns>
         public static NCCHHeader ParseNCCHHeader(Stream data, bool skipSignature = false)
         {
-            var header = new NCCHHeader();
+            var obj = new NCCHHeader();
 
             if (!skipSignature)
-                header.RSA2048Signature = data.ReadBytes(0x100);
+                obj.RSA2048Signature = data.ReadBytes(0x100);
 
             byte[] magicId = data.ReadBytes(4);
-            header.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
-            header.ContentSizeInMediaUnits = data.ReadUInt32();
-            header.PartitionId = data.ReadUInt64();
-            header.MakerCode = data.ReadUInt16();
-            header.Version = data.ReadUInt16();
-            header.VerificationHash = data.ReadUInt32();
-            header.ProgramId = data.ReadBytes(8);
-            header.Reserved1 = data.ReadBytes(0x10);
-            header.LogoRegionHash = data.ReadBytes(0x20);
+            obj.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
+            obj.ContentSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.PartitionId = data.ReadUInt64();
+            obj.MakerCode = data.ReadUInt16LittleEndian();
+            obj.Version = data.ReadUInt16LittleEndian();
+            obj.VerificationHash = data.ReadUInt32LittleEndian();
+            obj.ProgramId = data.ReadBytes(8);
+            obj.Reserved1 = data.ReadBytes(0x10);
+            obj.LogoRegionHash = data.ReadBytes(0x20);
             byte[] productCode = data.ReadBytes(0x10);
-            header.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
-            header.ExtendedHeaderHash = data.ReadBytes(0x20);
-            header.ExtendedHeaderSizeInBytes = data.ReadUInt32();
-            header.Reserved2 = data.ReadUInt32();
-            header.Flags = data.ReadType<NCCHHeaderFlags>();
-            header.PlainRegionOffsetInMediaUnits = data.ReadUInt32();
-            header.PlainRegionSizeInMediaUnits = data.ReadUInt32();
-            header.LogoRegionOffsetInMediaUnits = data.ReadUInt32();
-            header.LogoRegionSizeInMediaUnits = data.ReadUInt32();
-            header.ExeFSOffsetInMediaUnits = data.ReadUInt32();
-            header.ExeFSSizeInMediaUnits = data.ReadUInt32();
-            header.ExeFSHashRegionSizeInMediaUnits = data.ReadUInt32();
-            header.Reserved3 = data.ReadUInt32();
-            header.RomFSOffsetInMediaUnits = data.ReadUInt32();
-            header.RomFSSizeInMediaUnits = data.ReadUInt32();
-            header.RomFSHashRegionSizeInMediaUnits = data.ReadUInt32();
-            header.Reserved4 = data.ReadUInt32();
-            header.ExeFSSuperblockHash = data.ReadBytes(0x20);
-            header.RomFSSuperblockHash = data.ReadBytes(0x20);
+            obj.ProductCode = Encoding.ASCII.GetString(productCode).TrimEnd('\0');
+            obj.ExtendedHeaderHash = data.ReadBytes(0x20);
+            obj.ExtendedHeaderSizeInBytes = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadUInt32LittleEndian();
+            obj.Flags = ParseNCCHHeaderFlags(data);
+            obj.PlainRegionOffsetInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.PlainRegionSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.LogoRegionOffsetInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.LogoRegionSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.ExeFSOffsetInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.ExeFSSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.ExeFSHashRegionSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.Reserved3 = data.ReadUInt32LittleEndian();
+            obj.RomFSOffsetInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.RomFSSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.RomFSHashRegionSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.Reserved4 = data.ReadUInt32LittleEndian();
+            obj.ExeFSSuperblockHash = data.ReadBytes(0x20);
+            obj.RomFSSuperblockHash = data.ReadBytes(0x20);
 
-            return header;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an ExeFS header
+        /// Parse a Stream into an NCCHHeaderFlags
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled ExeFS header on success, null on error</returns>
-        public static ExeFSHeader? ParseExeFSHeader(Stream data)
+        /// <returns>Filled NCCHHeaderFlags on success, null on error</returns>
+        public static NCCHHeaderFlags ParseNCCHHeaderFlags(Stream data)
         {
-            var exeFSHeader = new ExeFSHeader();
+            var obj = new NCCHHeaderFlags();
 
-            exeFSHeader.FileHeaders = new ExeFSFileHeader[10];
-            for (int i = 0; i < 10; i++)
+            obj.Reserved0 = data.ReadByteValue();
+            obj.Reserved1 = data.ReadByteValue();
+            obj.Reserved2 = data.ReadByteValue();
+            obj.CryptoMethod = (CryptoMethod)data.ReadByteValue();
+            obj.ContentPlatform = (ContentPlatform)data.ReadByteValue();
+            obj.MediaPlatformIndex = (ContentType)data.ReadByteValue();
+            obj.ContentUnitSize = data.ReadByteValue();
+            obj.BitMasks = (BitMasks)data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an NCSDHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled NCSDHeader on success, null on error</returns>
+        public static NCSDHeader ParseNCSDHeader(Stream data)
+        {
+            var obj = new NCSDHeader();
+
+            obj.RSA2048Signature = data.ReadBytes(0x100);
+            byte[] magicNumber = data.ReadBytes(4);
+            obj.MagicNumber = Encoding.ASCII.GetString(magicNumber).TrimEnd('\0');
+            obj.ImageSizeInMediaUnits = data.ReadUInt32LittleEndian();
+            obj.MediaId = data.ReadBytes(8);
+            obj.PartitionsFSType = (FilesystemType)data.ReadUInt64();
+            obj.PartitionsCryptType = data.ReadBytes(8);
+
+            obj.PartitionsTable = new PartitionTableEntry[8];
+            for (int i = 0; i < 8; i++)
             {
-                var exeFsFileHeader = data.ReadType<ExeFSFileHeader>();
-                if (exeFsFileHeader == null)
-                    return null;
-
-                exeFsFileHeader.FileName = exeFsFileHeader.FileName?.TrimEnd('\0');
-                exeFSHeader.FileHeaders[i] = exeFsFileHeader;
+                obj.PartitionsTable[i] = ParsePartitionTableEntry(data);
             }
-            exeFSHeader.Reserved = data.ReadBytes(0x20);
-            exeFSHeader.FileHashes = new byte[10][];
-            for (int i = 0; i < 10; i++)
+
+            if (obj.PartitionsFSType == FilesystemType.Normal || obj.PartitionsFSType == FilesystemType.None)
             {
-                exeFSHeader.FileHashes[i] = data.ReadBytes(0x20) ?? [];
+                obj.ExheaderHash = data.ReadBytes(0x20);
+                obj.AdditionalHeaderSize = data.ReadUInt32LittleEndian();
+                obj.SectorZeroOffset = data.ReadUInt32LittleEndian();
+                obj.PartitionFlags = data.ReadBytes(8);
+
+                obj.PartitionIdTable = new ulong[8];
+                for (int i = 0; i < 8; i++)
+                {
+                    obj.PartitionIdTable[i] = data.ReadUInt64();
+                }
+
+                obj.Reserved1 = data.ReadBytes(0x20);
+                obj.Reserved2 = data.ReadBytes(0x0E);
+                obj.FirmUpdateByte1 = data.ReadByteValue();
+                obj.FirmUpdateByte2 = data.ReadByteValue();
+            }
+            else if (obj.PartitionsFSType == FilesystemType.FIRM)
+            {
+                obj.Unknown = data.ReadBytes(0x5E);
+                obj.EncryptedMBR = data.ReadBytes(0x42);
             }
 
-            return exeFSHeader;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an PartitionTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PartitionTableEntry on success, null on error</returns>
+        public static PartitionTableEntry ParsePartitionTableEntry(Stream data)
+        {
+            var obj = new PartitionTableEntry();
+
+            obj.Offset = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an RomFSHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled RomFSHeader on success, null on error</returns>
+        public static RomFSHeader ParseRomFSHeader(Stream data)
+        {
+            var obj = new RomFSHeader();
+
+            byte[] magicString = data.ReadBytes(4);
+            obj.MagicString = Encoding.ASCII.GetString(magicString);
+            obj.MagicNumber = data.ReadUInt32LittleEndian();
+            obj.MasterHashSize = data.ReadUInt32LittleEndian();
+            obj.Level1LogicalOffset = data.ReadUInt64LittleEndian();
+            obj.Level1HashdataSize = data.ReadUInt64LittleEndian();
+            obj.Level1BlockSizeLog2 = data.ReadUInt32LittleEndian();
+            obj.Reserved1 = data.ReadUInt32LittleEndian();
+            obj.Level2LogicalOffset = data.ReadUInt64LittleEndian();
+            obj.Level2HashdataSize = data.ReadUInt64LittleEndian();
+            obj.Level2BlockSizeLog2 = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadUInt32LittleEndian();
+            obj.Level3LogicalOffset = data.ReadUInt64LittleEndian();
+            obj.Level3HashdataSize = data.ReadUInt64LittleEndian();
+            obj.Level3BlockSizeLog2 = data.ReadUInt32LittleEndian();
+            obj.Reserved3 = data.ReadUInt32LittleEndian();
+            obj.Reserved4 = data.ReadUInt32LittleEndian();
+            obj.OptionalInfoSize = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an StorageInfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled StorageInfo on success, null on error</returns>
+        public static StorageInfo ParseStorageInfo(Stream data)
+        {
+            var obj = new StorageInfo();
+
+            obj.ExtdataID = data.ReadUInt64LittleEndian();
+            obj.SystemSavedataIDs = data.ReadBytes(8);
+            obj.StorageAccessibleUniqueIDs = data.ReadBytes(8);
+            obj.FileSystemAccessInfo = data.ReadBytes(7);
+            obj.OtherAttributes = (StorageInfoOtherAttributes)data.ReadByteValue();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an SystemControlInfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SystemControlInfo on success, null on error</returns>
+        public static SystemControlInfo ParseSystemControlInfo(Stream data)
+        {
+            var obj = new SystemControlInfo();
+
+            byte[] applicationTitle = data.ReadBytes(8);
+            obj.ApplicationTitle = Encoding.ASCII.GetString(applicationTitle).TrimEnd('\0');
+            obj.Reserved1 = data.ReadBytes(5);
+            obj.Flag = data.ReadByteValue();
+            obj.RemasterVersion = data.ReadUInt16LittleEndian();
+            obj.TextCodeSetInfo = ParseCodeSetInfo(data);
+            obj.StackSize = data.ReadUInt32LittleEndian();
+            obj.ReadOnlyCodeSetInfo = ParseCodeSetInfo(data);
+            obj.Reserved2 = data.ReadUInt32LittleEndian();
+            obj.DataCodeSetInfo = ParseCodeSetInfo(data);
+            obj.BSSSize = data.ReadUInt32LittleEndian();
+            obj.DependencyModuleList = new ulong[48];
+            for (int i = 0; i < 48; i++)
+            {
+                obj.DependencyModuleList[i] = data.ReadUInt64LittleEndian();
+            }
+            obj.SystemInfo = ParseSystemInfo(data);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an SystemInfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SystemInfo on success, null on error</returns>
+        public static SystemInfo ParseSystemInfo(Stream data)
+        {
+            var obj = new SystemInfo();
+
+            obj.SaveDataSize = data.ReadUInt64LittleEndian();
+            obj.JumpID = data.ReadUInt64LittleEndian();
+            obj.Reserved = data.ReadBytes(0x30);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an TestData
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled TestData on success, null on error</returns>
+        public static TestData ParseTestData(Stream data)
+        {
+            var obj = new TestData();
+
+            obj.Signature = data.ReadBytes(8);
+            obj.AscendingByteSequence = data.ReadBytes(0x1F8);
+            obj.DescendingByteSequence = data.ReadBytes(0x200);
+            obj.Filled00 = data.ReadBytes(0x200);
+            obj.FilledFF = data.ReadBytes(0x200);
+            obj.Filled0F = data.ReadBytes(0x200);
+            obj.FilledF0 = data.ReadBytes(0x200);
+            obj.Filled55 = data.ReadBytes(0x200);
+            obj.FilledAA = data.ReadBytes(0x1FF);
+            obj.FinalByte = data.ReadByteValue();
+
+            return obj;
         }
     }
 }

@@ -17,9 +17,6 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
-                // Create a new media key block to fill
-                var mediaKeyBlock = new MediaKeyBlock();
-
                 #region Records
 
                 // Create the records list
@@ -49,7 +46,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Set the records
                 if (records.Count > 0)
-                    return new MediaKeyBlock { Records = [.. records ]};
+                    return new MediaKeyBlock { Records = [.. records] };
 
                 return null;
             }
@@ -61,29 +58,29 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a record
+        /// Parse a Stream into a Record
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled record on success, null on error</returns>
+        /// <returns>Filled Record on success, null on error</returns>
         private static Record? ParseRecord(Stream data)
         {
-            // The first 4 bytes make up the type and length
+            // The first byte is the type
             RecordType type = (RecordType)data.ReadByteValue();
-            uint length = data.ReadUInt24();
+            data.Seek(-1, SeekOrigin.Current);
 
             // Create a record based on the type
             return type switch
             {
                 // Known record types
-                RecordType.EndOfMediaKeyBlock => ParseEndOfMediaKeyBlockRecord(data, type, length),
-                RecordType.ExplicitSubsetDifference => ParseExplicitSubsetDifferenceRecord(data, type, length),
-                RecordType.MediaKeyData => ParseMediaKeyDataRecord(data, type, length),
-                RecordType.SubsetDifferenceIndex => ParseSubsetDifferenceIndexRecord(data, type, length),
-                RecordType.TypeAndVersion => ParseTypeAndVersionRecord(data, type, length),
-                RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data, type, length),
-                RecordType.HostRevocationList => ParseHostRevocationListRecord(data, type, length),
-                RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data, type, length),
-                RecordType.Copyright => ParseCopyrightRecord(data, type, length),
+                RecordType.EndOfMediaKeyBlock => ParseEndOfMediaKeyBlockRecord(data),
+                RecordType.ExplicitSubsetDifference => ParseExplicitSubsetDifferenceRecord(data),
+                RecordType.MediaKeyData => ParseMediaKeyDataRecord(data),
+                RecordType.SubsetDifferenceIndex => ParseSubsetDifferenceIndexRecord(data),
+                RecordType.TypeAndVersion => ParseTypeAndVersionRecord(data),
+                RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data),
+                RecordType.HostRevocationList => ParseHostRevocationListRecord(data),
+                RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data),
+                RecordType.Copyright => ParseCopyrightRecord(data),
 
                 // Unknown record type
                 _ => null,
@@ -91,324 +88,327 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an end of media key block record
+        /// Parse a Stream into a CopyrightRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled end of media key block record on success, null on error</returns>
-        private static EndOfMediaKeyBlockRecord? ParseEndOfMediaKeyBlockRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled CopyrightRecord on success, null on error</returns>
+        public static CopyrightRecord ParseCopyrightRecord(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.EndOfMediaKeyBlock)
-                return null;
+            var obj = new CopyrightRecord();
 
-            var record = new EndOfMediaKeyBlockRecord();
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            if (obj.RecordLength > 4)
+            {
+                byte[] copyright = data.ReadBytes((int)(obj.RecordLength - 4));
+                obj.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
+            }
 
-            record.RecordType = type;
-            record.RecordLength = length;
-            if (length > 4)
-                record.SignatureData = data.ReadBytes((int)(length - 4));
+            return obj;
+        }
+        
+        /// <summary>
+        /// Parse a Stream into a DriveRevocationListEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DriveRevocationListEntry on success, null on error</returns>
+        public static DriveRevocationListEntry ParseDriveRevocationListEntry(Stream data)
+        {
+            var obj = new DriveRevocationListEntry();
 
-            return record;
+            obj.Range = data.ReadUInt16BigEndian();
+            obj.DriveID = data.ReadBytes(6);
+
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an explicit subset-difference record
+        /// Parse a Stream into a DriveRevocationListRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled explicit subset-difference record on success, null on error</returns>
-        private static ExplicitSubsetDifferenceRecord? ParseExplicitSubsetDifferenceRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled DriveRevocationListRecord on success, null on error</returns>
+        public static DriveRevocationListRecord ParseDriveRevocationListRecord(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.ExplicitSubsetDifference)
-                return null;
-
-            var record = new ExplicitSubsetDifferenceRecord();
-
-            record.RecordType = type;
-            record.RecordLength = length;
-
             // Cache the current offset
-            long initialOffset = data.Position - 4;
+            long initialOffset = data.Position;
 
-            // Create the subset difference list
-            var subsetDifferences = new List<SubsetDifference>();
+            var obj = new DriveRevocationListRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            obj.TotalNumberOfEntries = data.ReadUInt32BigEndian();
+
+            // Try to parse the signature blocks
+            var blocks = new List<DriveRevocationSignatureBlock>();
+            uint entryCount = 0;
+            while (entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + obj.RecordLength)
+            {
+                var block = ParseDriveRevocationSignatureBlock(data);
+                entryCount += block.NumberOfEntries;
+                blocks.Add(block);
+
+                // If we have an empty block
+                if (block.NumberOfEntries == 0)
+                    break;
+            }
+
+            // Set the signature blocks
+            obj.SignatureBlocks = [.. blocks];
+
+            // If there's any data left, discard it
+            if (data.Position < initialOffset + obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DriveRevocationSignatureBlock
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DriveRevocationSignatureBlock on success, null on error</returns>
+        public static DriveRevocationSignatureBlock ParseDriveRevocationSignatureBlock(Stream data)
+        {
+            var obj = new DriveRevocationSignatureBlock();
+
+            obj.NumberOfEntries = data.ReadUInt32BigEndian();
+            obj.EntryFields = new DriveRevocationListEntry[obj.NumberOfEntries];
+            for (int i = 0; i < obj.EntryFields.Length; i++)
+            {
+                obj.EntryFields[i] = ParseDriveRevocationListEntry(data);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a EndOfMediaKeyBlockRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled EndOfMediaKeyBlockRecord on success, null on error</returns>
+        public static EndOfMediaKeyBlockRecord ParseEndOfMediaKeyBlockRecord(Stream data)
+        {
+            var obj = new EndOfMediaKeyBlockRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            if (obj.RecordLength > 4)
+                obj.SignatureData = data.ReadBytes((int)(obj.RecordLength - 4));
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExplicitSubsetDifferenceRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ExplicitSubsetDifferenceRecord on success, null on error</returns>
+        public static ExplicitSubsetDifferenceRecord ParseExplicitSubsetDifferenceRecord(Stream data)
+        {
+            // Cache the current offset
+            long initialOffset = data.Position;
+
+            var obj = new ExplicitSubsetDifferenceRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
 
             // Try to parse the subset differences
-            while (data.Position < initialOffset + length - 5)
+            var subsetDifferences = new List<SubsetDifference>();
+            while (data.Position < initialOffset + obj.RecordLength - 5)
             {
-                var subsetDifference = new SubsetDifference();
-
-                subsetDifference.Mask = data.ReadByteValue();
-                subsetDifference.Number = data.ReadUInt32BigEndian();
-
+                var subsetDifference = ParseSubsetDifference(data);
                 subsetDifferences.Add(subsetDifference);
             }
 
             // Set the subset differences
-            record.SubsetDifferences = [.. subsetDifferences];
+            obj.SubsetDifferences = [.. subsetDifferences];
 
             // If there's any data left, discard it
-            if (data.Position < initialOffset + length)
-                _ = data.ReadBytes((int)(initialOffset + length - data.Position));
+            if (data.Position < initialOffset + obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
 
-            return record;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a media key data record
+        /// Parse a Stream into a HostRevocationListEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled media key data record on success, null on error</returns>
-        private static MediaKeyDataRecord? ParseMediaKeyDataRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled HostRevocationListEntry on success, null on error</returns>
+        public static HostRevocationListEntry ParseHostRevocationListEntry(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.MediaKeyData)
-                return null;
+            var obj = new HostRevocationListEntry();
 
-            var record = new MediaKeyDataRecord();
+            obj.Range = data.ReadUInt16BigEndian();
+            obj.HostID = data.ReadBytes(6);
 
-            record.RecordType = type;
-            record.RecordLength = length;
+            return obj;
+        }
 
+        /// <summary>
+        /// Parse a Stream into a HostRevocationListRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled HostRevocationListRecord on success, null on error</returns>
+        public static HostRevocationListRecord ParseHostRevocationListRecord(Stream data)
+        {
             // Cache the current offset
-            long initialOffset = data.Position - 4;
+            long initialOffset = data.Position;
 
-            // Create the media key list
-            var mediaKeys = new List<byte[]>();
+            var obj = new HostRevocationListRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            obj.TotalNumberOfEntries = data.ReadUInt32BigEndian();
+
+            // Try to parse the signature blocks
+            var blocks = new List<HostRevocationSignatureBlock>();
+            for (uint entryCount = 0; entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + obj.RecordLength;)
+            {
+                var block = ParseHostRevocationSignatureBlock(data);
+                entryCount += block.NumberOfEntries;
+                blocks.Add(block);
+
+                // If we have an empty block
+                if (block.NumberOfEntries == 0)
+                    break;
+            }
+
+            // Set the signature blocks
+            obj.SignatureBlocks = [.. blocks];
+
+            // If there's any data left, discard it
+            if (data.Position < initialOffset + obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a HostRevocationSignatureBlock
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled HostRevocationSignatureBlock on success, null on error</returns>
+        public static HostRevocationSignatureBlock ParseHostRevocationSignatureBlock(Stream data)
+        {
+            var obj = new HostRevocationSignatureBlock();
+
+            obj.NumberOfEntries = data.ReadUInt32BigEndian();
+            obj.EntryFields = new HostRevocationListEntry[obj.NumberOfEntries];
+            for (int i = 0; i < obj.EntryFields.Length; i++)
+            {
+                obj.EntryFields[i] = ParseHostRevocationListEntry(data);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a MediaKeyDataRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled MediaKeyDataRecord on success, null on error</returns>
+        public static MediaKeyDataRecord ParseMediaKeyDataRecord(Stream data)
+        {
+            // Cache the current offset
+            long initialOffset = data.Position;
+
+            var obj = new MediaKeyDataRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
 
             // Try to parse the media keys
-            while (data.Position < initialOffset + length)
+            var mediaKeys = new List<byte[]>();
+            while (data.Position < initialOffset + obj.RecordLength)
             {
                 byte[] mediaKey = data.ReadBytes(0x10);
                 mediaKeys.Add(mediaKey);
             }
 
             // Set the media keys
-            record.MediaKeyData = [.. mediaKeys];
+            obj.MediaKeyData = [.. mediaKeys];
 
-            return record;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a subset-difference index record
+        /// Parse a Stream into a SubsetDifference
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled subset-difference index record on success, null on error</returns>
-        private static SubsetDifferenceIndexRecord? ParseSubsetDifferenceIndexRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled SubsetDifference on success, null on error</returns>
+        public static SubsetDifference ParseSubsetDifference(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.SubsetDifferenceIndex)
-                return null;
+            var obj = new SubsetDifference();
 
-            var record = new SubsetDifferenceIndexRecord();
+            obj.Mask = data.ReadByteValue();
+            obj.Number = data.ReadUInt32BigEndian();
 
-            record.RecordType = type;
-            record.RecordLength = length;
+            return obj;
+        }
 
+        /// <summary>
+        /// Parse a Stream into a SubsetDifferenceIndexRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SubsetDifferenceIndexRecord on success, null on error</returns>
+        public static SubsetDifferenceIndexRecord ParseSubsetDifferenceIndexRecord(Stream data)
+        {
             // Cache the current offset
-            long initialOffset = data.Position - 4;
+            long initialOffset = data.Position;
 
-            record.Span = data.ReadUInt32BigEndian();
+            var obj = new SubsetDifferenceIndexRecord();
 
-            // Create the offset list
-            var offsets = new List<uint>();
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            obj.Span = data.ReadUInt32BigEndian();
 
             // Try to parse the offsets
-            while (data.Position < initialOffset + length)
+            var offsets = new List<uint>();
+            while (data.Position < initialOffset + obj.RecordLength)
             {
                 uint offset = data.ReadUInt32BigEndian();
                 offsets.Add(offset);
             }
 
             // Set the offsets
-            record.Offsets = [.. offsets];
+            obj.Offsets = [.. offsets];
 
-            return record;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a type and version record
+        /// Parse a Stream into a TypeAndVersionRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled type and version record on success, null on error</returns>
-        private static TypeAndVersionRecord? ParseTypeAndVersionRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled TypeAndVersionRecord on success, null on error</returns>
+        public static TypeAndVersionRecord ParseTypeAndVersionRecord(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.TypeAndVersion)
-                return null;
+            var obj = new TypeAndVersionRecord();
 
-            var record = new TypeAndVersionRecord();
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            obj.MediaKeyBlockType = (MediaKeyBlockType)data.ReadUInt32BigEndian();
+            obj.VersionNumber = data.ReadUInt32BigEndian();
 
-            record.RecordType = type;
-            record.RecordLength = length;
-            record.MediaKeyBlockType = (MediaKeyBlockType)data.ReadUInt32BigEndian();
-            record.VersionNumber = data.ReadUInt32BigEndian();
-
-            return record;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a drive revocation list record
+        /// Parse a Stream into a VerifyMediaKeyRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled drive revocation list record on success, null on error</returns>
-        private static DriveRevocationListRecord? ParseDriveRevocationListRecord(Stream data, RecordType type, uint length)
+        /// <returns>Filled VerifyMediaKeyRecord on success, null on error</returns>
+        public static VerifyMediaKeyRecord ParseVerifyMediaKeyRecord(Stream data)
         {
-            // Verify we're calling the right parser
-            if (type != RecordType.DriveRevocationList)
-                return null;
+            var obj = new VerifyMediaKeyRecord();
 
-            var record = new DriveRevocationListRecord();
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24();
+            obj.CiphertextValue = data.ReadBytes(0x10);
 
-            record.RecordType = type;
-            record.RecordLength = length;
-
-            // Cache the current offset
-            long initialOffset = data.Position - 4;
-
-            record.TotalNumberOfEntries = data.ReadUInt32BigEndian();
-
-            // Create the signature blocks list
-            var blocks = new List<DriveRevocationSignatureBlock>();
-
-            // Try to parse the signature blocks
-            int entryCount = 0;
-            while (entryCount < record.TotalNumberOfEntries && data.Position < initialOffset + length)
-            {
-                var block = new DriveRevocationSignatureBlock();
-
-                block.NumberOfEntries = data.ReadUInt32BigEndian();
-                block.EntryFields = new DriveRevocationListEntry[block.NumberOfEntries];
-                for (int i = 0; i < block.EntryFields.Length; i++)
-                {
-                    var entry = new DriveRevocationListEntry();
-
-                    entry.Range = data.ReadUInt16BigEndian();
-                    entry.DriveID = data.ReadBytes(6);
-
-                    block.EntryFields[i] = entry;
-                    entryCount++;
-                }
-
-                blocks.Add(block);
-
-                // If we have an empty block
-                if (block.NumberOfEntries == 0)
-                    break;
-            }
-
-            // Set the signature blocks
-            record.SignatureBlocks = [.. blocks];
-
-            // If there's any data left, discard it
-            if (data.Position < initialOffset + length)
-                _ = data.ReadBytes((int)(initialOffset + length - data.Position));
-
-            return record;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a host revocation list record
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled host revocation list record on success, null on error</returns>
-        private static HostRevocationListRecord? ParseHostRevocationListRecord(Stream data, RecordType type, uint length)
-        {
-            // Verify we're calling the right parser
-            if (type != RecordType.HostRevocationList)
-                return null;
-
-            var record = new HostRevocationListRecord();
-
-            record.RecordType = type;
-            record.RecordLength = length;
-
-            // Cache the current offset
-            long initialOffset = data.Position - 4;
-
-            record.TotalNumberOfEntries = data.ReadUInt32BigEndian();
-
-            // Create the signature blocks list
-            var blocks = new List<HostRevocationSignatureBlock>();
-
-            // Try to parse the signature blocks
-            int entryCount = 0;
-            while (entryCount < record.TotalNumberOfEntries && data.Position < initialOffset + length)
-            {
-                var block = new HostRevocationSignatureBlock();
-
-                block.NumberOfEntries = data.ReadUInt32BigEndian();
-                block.EntryFields = new HostRevocationListEntry[block.NumberOfEntries];
-                for (int i = 0; i < block.EntryFields.Length; i++)
-                {
-                    var entry = new HostRevocationListEntry();
-
-                    entry.Range = data.ReadUInt16BigEndian();
-                    entry.HostID = data.ReadBytes(6);
-
-                    block.EntryFields[i] = entry;
-                    entryCount++;
-                }
-
-                blocks.Add(block);
-
-                // If we have an empty block
-                if (block.NumberOfEntries == 0)
-                    break;
-            }
-
-            // Set the signature blocks
-            record.SignatureBlocks = [.. blocks];
-
-            // If there's any data left, discard it
-            if (data.Position < initialOffset + length)
-                _ = data.ReadBytes((int)(initialOffset + length - data.Position));
-
-            return record;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a verify media key record
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled verify media key record on success, null on error</returns>
-        private static VerifyMediaKeyRecord? ParseVerifyMediaKeyRecord(Stream data, RecordType type, uint length)
-        {
-            // Verify we're calling the right parser
-            if (type != RecordType.VerifyMediaKey)
-                return null;
-
-            var record = new VerifyMediaKeyRecord();
-
-            record.RecordType = type;
-            record.RecordLength = length;
-            record.CiphertextValue = data.ReadBytes(0x10);
-
-            return record;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a copyright record
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled copyright record on success, null on error</returns>
-        private static CopyrightRecord? ParseCopyrightRecord(Stream data, RecordType type, uint length)
-        {
-            // Verify we're calling the right parser
-            if (type != RecordType.Copyright)
-                return null;
-
-            var record = new CopyrightRecord();
-
-            record.RecordType = type;
-            record.RecordLength = length;
-            if (length > 4)
-            {
-                byte[] copyright = data.ReadBytes((int)(length - 4));
-                record.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
-            }
-
-            return record;
+            return obj;
         }
     }
 }

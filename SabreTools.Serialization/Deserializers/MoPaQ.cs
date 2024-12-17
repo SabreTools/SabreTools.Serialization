@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region User Data
 
                 // Check for User Data
-                uint possibleSignature = data.ReadUInt32();
+                uint possibleSignature = data.ReadUInt32LittleEndian();
                 data.Seek(-4, SeekOrigin.Current);
                 if (possibleSignature == UserDataSignatureUInt32)
                 {
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Deserializers
                     long basePtr = data.Position;
 
                     // Deserialize the user data, returning null if invalid
-                    var userData = data.ReadType<UserData>();
+                    var userData = ParseUserData(data);
                     if (userData?.Signature != UserDataSignatureString)
                         return null;
 
@@ -49,13 +49,13 @@ namespace SabreTools.Serialization.Deserializers
                 #region Archive Header
 
                 // Check for the Header
-                possibleSignature = data.ReadUInt32();
+                possibleSignature = data.ReadUInt32LittleEndian();
                 data.Seek(-4, SeekOrigin.Current);
                 if (possibleSignature == ArchiveHeaderSignatureUInt32)
                 {
                     // Try to parse the archive header
                     var archiveHeader = ParseArchiveHeader(data);
-                    if (archiveHeader == null)
+                    if (archiveHeader.Signature != ArchiveHeaderSignatureString)
                         return null;
 
                     // Set the archive header
@@ -90,10 +90,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < hashTableEnd)
                         {
-                            var hashEntry = data.ReadType<HashEntry>();
-                            if (hashEntry == null)
-                                return null;
-
+                            var hashEntry = ParseHashEntry(data);
                             hashTable.Add(hashEntry);
                         }
 
@@ -120,10 +117,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < hashTableEnd)
                         {
-                            var hashEntry = data.ReadType<HashEntry>();
-                            if (hashEntry == null)
-                                return null;
-
+                            var hashEntry = ParseHashEntry(data);
                             hashTable.Add(hashEntry);
                         }
 
@@ -149,10 +143,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < hashTableEnd)
                         {
-                            var hashEntry = data.ReadType<HashEntry>();
-                            if (hashEntry == null)
-                                return null;
-
+                            var hashEntry = ParseHashEntry(data);
                             hashTable.Add(hashEntry);
                         }
 
@@ -182,10 +173,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < blockTableEnd)
                         {
-                            var blockEntry = data.ReadType<BlockEntry>();
-                            if (blockEntry == null)
-                                return null;
-
+                            var blockEntry = ParseBlockEntry(data);
                             blockTable.Add(blockEntry);
                         }
 
@@ -212,10 +200,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < blockTableEnd)
                         {
-                            var blockEntry = data.ReadType<BlockEntry>();
-                            if (blockEntry == null)
-                                return null;
-
+                            var blockEntry = ParseBlockEntry(data);
                             blockTable.Add(blockEntry);
                         }
 
@@ -241,10 +226,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         while (data.Position < blockTableEnd)
                         {
-                            var blockEntry = data.ReadType<BlockEntry>();
-                            if (blockEntry == null)
-                                return null;
-
+                            var blockEntry = ParseBlockEntry(data);
                             blockTable.Add(blockEntry);
                         }
 
@@ -271,7 +253,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         for (int i = 0; i < (archive.BlockTable?.Length ?? 0); i++)
                         {
-                            short hiBlockEntry = data.ReadInt16();
+                            short hiBlockEntry = data.ReadInt16LittleEndian();
                             hiBlockTable.Add(hiBlockEntry);
                         }
 
@@ -295,7 +277,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read in the BET table
                         var betTable = ParseBetTable(data);
-                        if (betTable != null)
+                        if (betTable.Signature != BetTableSignatureString)
                             return null;
 
                         archive.BetTable = betTable;
@@ -318,7 +300,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read in the HET table
                         var hetTable = ParseHetTable(data);
-                        if (hetTable != null)
+                        if (hetTable.Signature != HetTableSignatureString)
                             return null;
 
                         archive.HetTable = hetTable;
@@ -337,150 +319,195 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a archive header
+        /// Parse a Stream into an ArchiveHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled archive header on success, null on error</returns>
-        private static ArchiveHeader? ParseArchiveHeader(Stream data)
+        /// <returns>Filled ArchiveHeader on success, null on error</returns>
+        public static ArchiveHeader ParseArchiveHeader(Stream data)
         {
-            ArchiveHeader archiveHeader = new ArchiveHeader();
+            var obj = new ArchiveHeader();
 
             // V1 - Common
             byte[] signature = data.ReadBytes(4);
-            archiveHeader.Signature = Encoding.ASCII.GetString(signature);
-            if (archiveHeader.Signature != ArchiveHeaderSignatureString)
-                return null;
+            obj.Signature = Encoding.ASCII.GetString(signature);
 
-            archiveHeader.HeaderSize = data.ReadUInt32();
-            archiveHeader.ArchiveSize = data.ReadUInt32();
-            archiveHeader.FormatVersion = (FormatVersion)data.ReadUInt16();
-            archiveHeader.BlockSize = data.ReadUInt16();
-            archiveHeader.HashTablePosition = data.ReadUInt32();
-            archiveHeader.BlockTablePosition = data.ReadUInt32();
-            archiveHeader.HashTableSize = data.ReadUInt32();
-            archiveHeader.BlockTableSize = data.ReadUInt32();
+            obj.HeaderSize = data.ReadUInt32LittleEndian();
+            obj.ArchiveSize = data.ReadUInt32LittleEndian();
+            obj.FormatVersion = (FormatVersion)data.ReadUInt16LittleEndian();
+            obj.BlockSize = data.ReadUInt16LittleEndian();
+            obj.HashTablePosition = data.ReadUInt32LittleEndian();
+            obj.BlockTablePosition = data.ReadUInt32LittleEndian();
+            obj.HashTableSize = data.ReadUInt32LittleEndian();
+            obj.BlockTableSize = data.ReadUInt32LittleEndian();
 
             // V2
-            if (archiveHeader.FormatVersion >= FormatVersion.Format2)
+            if (obj.FormatVersion >= FormatVersion.Format2)
             {
-                archiveHeader.HiBlockTablePosition = data.ReadUInt64();
-                archiveHeader.HashTablePositionHi = data.ReadUInt16();
-                archiveHeader.BlockTablePositionHi = data.ReadUInt16();
+                obj.HiBlockTablePosition = data.ReadUInt64LittleEndian();
+                obj.HashTablePositionHi = data.ReadUInt16LittleEndian();
+                obj.BlockTablePositionHi = data.ReadUInt16LittleEndian();
             }
 
             // V3
-            if (archiveHeader.FormatVersion >= FormatVersion.Format3)
+            if (obj.FormatVersion >= FormatVersion.Format3)
             {
-                archiveHeader.ArchiveSizeLong = data.ReadUInt64();
-                archiveHeader.BetTablePosition = data.ReadUInt64();
-                archiveHeader.HetTablePosition = data.ReadUInt64();
+                obj.ArchiveSizeLong = data.ReadUInt64LittleEndian();
+                obj.BetTablePosition = data.ReadUInt64LittleEndian();
+                obj.HetTablePosition = data.ReadUInt64LittleEndian();
             }
 
             // V4
-            if (archiveHeader.FormatVersion >= FormatVersion.Format4)
+            if (obj.FormatVersion >= FormatVersion.Format4)
             {
-                archiveHeader.HashTableSizeLong = data.ReadUInt64();
-                archiveHeader.BlockTableSizeLong = data.ReadUInt64();
-                archiveHeader.HiBlockTableSize = data.ReadUInt64();
-                archiveHeader.HetTableSize = data.ReadUInt64();
-                archiveHeader.BetTablesize = data.ReadUInt64();
-                archiveHeader.RawChunkSize = data.ReadUInt32();
+                obj.HashTableSizeLong = data.ReadUInt64LittleEndian();
+                obj.BlockTableSizeLong = data.ReadUInt64LittleEndian();
+                obj.HiBlockTableSize = data.ReadUInt64LittleEndian();
+                obj.HetTableSize = data.ReadUInt64LittleEndian();
+                obj.BetTablesize = data.ReadUInt64LittleEndian();
+                obj.RawChunkSize = data.ReadUInt32LittleEndian();
 
-                archiveHeader.BlockTableMD5 = data.ReadBytes(0x10);
-                archiveHeader.HashTableMD5 = data.ReadBytes(0x10);
-                archiveHeader.HiBlockTableMD5 = data.ReadBytes(0x10);
-                archiveHeader.BetTableMD5 = data.ReadBytes(0x10);
-                archiveHeader.HetTableMD5 = data.ReadBytes(0x10);
-                archiveHeader.HetTableMD5 = data.ReadBytes(0x10);
+                obj.BlockTableMD5 = data.ReadBytes(0x10);
+                obj.HashTableMD5 = data.ReadBytes(0x10);
+                obj.HiBlockTableMD5 = data.ReadBytes(0x10);
+                obj.BetTableMD5 = data.ReadBytes(0x10);
+                obj.HetTableMD5 = data.ReadBytes(0x10);
+                obj.HetTableMD5 = data.ReadBytes(0x10);
             }
 
-            return archiveHeader;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a HET table
+        /// Parse a Stream into a BetTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled HET table on success, null on error</returns>
-        private static HetTable? ParseHetTable(Stream data)
+        /// <returns>Filled BetTable on success, null on error</returns>
+        public static BetTable ParseBetTable(Stream data)
         {
-            var hetTable = new HetTable();
+            var obj = new BetTable();
 
             // Common Headers
             byte[] signature = data.ReadBytes(4);
-            hetTable.Signature = Encoding.ASCII.GetString(signature);
-            if (hetTable.Signature != HetTableSignatureString)
-                return null;
-
-            hetTable.Version = data.ReadUInt32();
-            hetTable.DataSize = data.ReadUInt32();
-
-            // HET-Specific
-            hetTable.TableSize = data.ReadUInt32();
-            hetTable.MaxFileCount = data.ReadUInt32();
-            hetTable.HashTableSize = data.ReadUInt32();
-            hetTable.TotalIndexSize = data.ReadUInt32();
-            hetTable.IndexSizeExtra = data.ReadUInt32();
-            hetTable.IndexSize = data.ReadUInt32();
-            hetTable.BlockTableSize = data.ReadUInt32();
-            hetTable.HashTable = data.ReadBytes((int)hetTable.HashTableSize);
-
-            // TODO: Populate the file indexes array
-            hetTable.FileIndexes = new byte[(int)hetTable.HashTableSize][];
-
-            return hetTable;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a BET table
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled BET table on success, null on error</returns>
-        private static BetTable? ParseBetTable(Stream data)
-        {
-            var betTable = new BetTable();
-
-            // Common Headers
-            byte[] signature = data.ReadBytes(4);
-            betTable.Signature = Encoding.ASCII.GetString(signature);
-            if (betTable.Signature != BetTableSignatureString)
-                return null;
-
-            betTable.Version = data.ReadUInt32();
-            betTable.DataSize = data.ReadUInt32();
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.DataSize = data.ReadUInt32LittleEndian();
 
             // BET-Specific
-            betTable.TableSize = data.ReadUInt32();
-            betTable.FileCount = data.ReadUInt32();
-            betTable.Unknown = data.ReadUInt32();
-            betTable.TableEntrySize = data.ReadUInt32();
+            obj.TableSize = data.ReadUInt32LittleEndian();
+            obj.FileCount = data.ReadUInt32LittleEndian();
+            obj.Unknown = data.ReadUInt32LittleEndian();
+            obj.TableEntrySize = data.ReadUInt32LittleEndian();
 
-            betTable.FilePositionBitIndex = data.ReadUInt32();
-            betTable.FileSizeBitIndex = data.ReadUInt32();
-            betTable.CompressedSizeBitIndex = data.ReadUInt32();
-            betTable.FlagIndexBitIndex = data.ReadUInt32();
-            betTable.UnknownBitIndex = data.ReadUInt32();
+            obj.FilePositionBitIndex = data.ReadUInt32LittleEndian();
+            obj.FileSizeBitIndex = data.ReadUInt32LittleEndian();
+            obj.CompressedSizeBitIndex = data.ReadUInt32LittleEndian();
+            obj.FlagIndexBitIndex = data.ReadUInt32LittleEndian();
+            obj.UnknownBitIndex = data.ReadUInt32LittleEndian();
 
-            betTable.FilePositionBitCount = data.ReadUInt32();
-            betTable.FileSizeBitCount = data.ReadUInt32();
-            betTable.CompressedSizeBitCount = data.ReadUInt32();
-            betTable.FlagIndexBitCount = data.ReadUInt32();
-            betTable.UnknownBitCount = data.ReadUInt32();
+            obj.FilePositionBitCount = data.ReadUInt32LittleEndian();
+            obj.FileSizeBitCount = data.ReadUInt32LittleEndian();
+            obj.CompressedSizeBitCount = data.ReadUInt32LittleEndian();
+            obj.FlagIndexBitCount = data.ReadUInt32LittleEndian();
+            obj.UnknownBitCount = data.ReadUInt32LittleEndian();
 
-            betTable.TotalBetHashSize = data.ReadUInt32();
-            betTable.BetHashSizeExtra = data.ReadUInt32();
-            betTable.BetHashSize = data.ReadUInt32();
-            betTable.BetHashArraySize = data.ReadUInt32();
-            betTable.FlagCount = data.ReadUInt32();
+            obj.TotalBetHashSize = data.ReadUInt32LittleEndian();
+            obj.BetHashSizeExtra = data.ReadUInt32LittleEndian();
+            obj.BetHashSize = data.ReadUInt32LittleEndian();
+            obj.BetHashArraySize = data.ReadUInt32LittleEndian();
+            obj.FlagCount = data.ReadUInt32LittleEndian();
 
-            betTable.FlagsArray = new uint[betTable.FlagCount];
-            byte[] flagsArray = data.ReadBytes((int)betTable.FlagCount * 4);
-            Buffer.BlockCopy(flagsArray, 0, betTable.FlagsArray, 0, (int)betTable.FlagCount * 4);
+            obj.FlagsArray = new uint[obj.FlagCount];
+            byte[] flagsArray = data.ReadBytes((int)obj.FlagCount * 4);
+            Buffer.BlockCopy(flagsArray, 0, obj.FlagsArray, 0, (int)obj.FlagCount * 4);
 
             // TODO: Populate the file table
             // TODO: Populate the hash table
 
-            return betTable;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an BlockEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BlockEntry on success, null on error</returns>
+        public static BlockEntry ParseBlockEntry(Stream data)
+        {
+            var obj = new BlockEntry();
+
+            obj.FilePosition = data.ReadUInt32LittleEndian();
+            obj.CompressedSize = data.ReadUInt32LittleEndian();
+            obj.UncompressedSize = data.ReadUInt32LittleEndian();
+            obj.Flags = (FileFlags)data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an HashEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled HashEntry on success, null on error</returns>
+        public static HashEntry ParseHashEntry(Stream data)
+        {
+            var obj = new HashEntry();
+
+            obj.NameHashPartA = data.ReadUInt32LittleEndian();
+            obj.NameHashPartB = data.ReadUInt32LittleEndian();
+            obj.Locale = (Locale)data.ReadInt16LittleEndian();
+            obj.Platform = data.ReadUInt16LittleEndian();
+            obj.BlockIndex = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a HetTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled HetTable on success, null on error</returns>
+        public static HetTable ParseHetTable(Stream data)
+        {
+            var obj = new HetTable();
+
+            // Common Headers
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.DataSize = data.ReadUInt32LittleEndian();
+
+            // HET-Specific
+            obj.TableSize = data.ReadUInt32LittleEndian();
+            obj.MaxFileCount = data.ReadUInt32LittleEndian();
+            obj.HashTableSize = data.ReadUInt32LittleEndian();
+            obj.TotalIndexSize = data.ReadUInt32LittleEndian();
+            obj.IndexSizeExtra = data.ReadUInt32LittleEndian();
+            obj.IndexSize = data.ReadUInt32LittleEndian();
+            obj.BlockTableSize = data.ReadUInt32LittleEndian();
+            obj.HashTable = data.ReadBytes((int)obj.HashTableSize);
+
+            // TODO: Populate the file indexes array
+            obj.FileIndexes = new byte[(int)obj.HashTableSize][];
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a UserData
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled UserData on success, null on error</returns>
+        public static UserData ParseUserData(Stream data)
+        {
+            var obj = new UserData();
+
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.UserDataSize = data.ReadUInt32LittleEndian();
+            obj.HeaderOffset = data.ReadUInt32LittleEndian();
+            obj.UserDataHeaderSize = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
 
         #region Helpers
@@ -488,7 +515,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Buffer for encryption and decryption
         /// </summary>
-        private uint[] _stormBuffer = new uint[STORM_BUFFER_SIZE];
+        private readonly uint[] _stormBuffer = new uint[STORM_BUFFER_SIZE];
 
         /// <summary>
         /// Prepare the encryption table

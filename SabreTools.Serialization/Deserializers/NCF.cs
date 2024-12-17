@@ -23,12 +23,12 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Dummy0 != 0x00000001)
+                var header = ParseHeader(data);
+                if (header.Dummy0 != 0x00000001)
                     return null;
-                if (header?.MajorVersion != 0x00000002)
+                if (header.MajorVersion != 0x00000002)
                     return null;
-                if (header?.MinorVersion != 1)
+                if (header.MinorVersion != 1)
                     return null;
 
                 // Set the no cache header
@@ -42,8 +42,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directory Header
 
                 // Try to parse the directory header
-                var directoryHeader = data.ReadType<DirectoryHeader>();
-                if (directoryHeader?.Dummy0 != 0x00000004)
+                var directoryHeader = ParseDirectoryHeader(data);
+                if (directoryHeader.Dummy0 != 0x00000004)
                     return null;
 
                 // Set the game cache directory header
@@ -59,11 +59,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory entries
                 for (int i = 0; i < directoryHeader.ItemCount; i++)
                 {
-                    var directoryEntry = data.ReadType<DirectoryEntry>();
-                    if (directoryEntry == null)
-                        return null;
-
-                    file.DirectoryEntries[i] = directoryEntry;
+                    file.DirectoryEntries[i] = ParseDirectoryEntry(data);
                 }
 
                 #endregion
@@ -107,11 +103,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory info 1 entries
                 for (int i = 0; i < directoryHeader.Info1Count; i++)
                 {
-                    var directoryInfo1Entry = data.ReadType<DirectoryInfo1Entry>();
-                    if (directoryInfo1Entry == null)
-                        return null;
-
-                    file.DirectoryInfo1Entries[i] = directoryInfo1Entry;
+                    file.DirectoryInfo1Entries[i] = ParseDirectoryInfo1Entry(data);
                 }
 
                 #endregion
@@ -124,11 +116,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory info 2 entries
                 for (int i = 0; i < directoryHeader.ItemCount; i++)
                 {
-                    var directoryInfo2Entry = data.ReadType<DirectoryInfo2Entry>();
-                    if (directoryInfo2Entry == null)
-                        return null;
-
-                    file.DirectoryInfo2Entries[i] = directoryInfo2Entry;
+                    file.DirectoryInfo2Entries[i] = ParseDirectoryInfo2Entry(data);
                 }
 
                 #endregion
@@ -141,11 +129,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory copy entries
                 for (int i = 0; i < directoryHeader.CopyCount; i++)
                 {
-                    var directoryCopyEntry = data.ReadType<DirectoryCopyEntry>();
-                    if (directoryCopyEntry == null)
-                        return null;
-
-                    file.DirectoryCopyEntries[i] = directoryCopyEntry;
+                    file.DirectoryCopyEntries[i] = ParseDirectoryCopyEntry(data);
                 }
 
                 #endregion
@@ -158,11 +142,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory local entries
                 for (int i = 0; i < directoryHeader.LocalCount; i++)
                 {
-                    var directoryLocalEntry = data.ReadType<DirectoryLocalEntry>();
-                    if (directoryLocalEntry == null)
-                        return null;
-
-                    file.DirectoryLocalEntries[i] = directoryLocalEntry;
+                    file.DirectoryLocalEntries[i] = ParseDirectoryLocalEntry(data);
                 }
 
                 #endregion
@@ -173,10 +153,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Unknown Header
 
                 // Try to parse the unknown header
-                var unknownHeader = data.ReadType<UnknownHeader>();
-                if (unknownHeader?.Dummy0 != 0x00000001)
+                var unknownHeader = ParseUnknownHeader(data);
+                if (unknownHeader.Dummy0 != 0x00000001)
                     return null;
-                if (unknownHeader?.Dummy1 != 0x00000000)
+                if (unknownHeader.Dummy1 != 0x00000000)
                     return null;
 
                 // Set the game cache unknown header
@@ -192,11 +172,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the unknown entries
                 for (int i = 0; i < directoryHeader.ItemCount; i++)
                 {
-                    var unknownEntry = data.ReadType<UnknownEntry>();
-                    if (unknownEntry == null)
-                        return null;
-
-                    file.UnknownEntries[i] = unknownEntry;
+                    file.UnknownEntries[i] = ParseUnknownEntry(data);
                 }
 
                 #endregion
@@ -204,8 +180,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Checksum Header
 
                 // Try to parse the checksum header
-                var checksumHeader = data.ReadType<ChecksumHeader>();
-                if (checksumHeader?.Dummy0 != 0x00000001)
+                var checksumHeader = ParseChecksumHeader(data);
+                if (checksumHeader.Dummy0 != 0x00000001)
                     return null;
 
                 // Set the game cache checksum header
@@ -219,10 +195,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Checksum Map Header
 
                 // Try to parse the checksum map header
-                var checksumMapHeader = data.ReadType<ChecksumMapHeader>();
-                if (checksumMapHeader?.Dummy0 != 0x14893721)
+                var checksumMapHeader = ParseChecksumMapHeader(data);
+                if (checksumMapHeader.Dummy0 != 0x14893721)
                     return null;
-                if (checksumMapHeader?.Dummy1 != 0x00000001)
+                if (checksumMapHeader.Dummy1 != 0x00000001)
                     return null;
 
                 // Set the game cache checksum map header
@@ -238,11 +214,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the checksum map entries
                 for (int i = 0; i < checksumMapHeader.ItemCount; i++)
                 {
-                    var checksumMapEntry = data.ReadType<ChecksumMapEntry>();
-                    if (checksumMapEntry == null)
-                        return null;
-
-                    file.ChecksumMapEntries[i] = checksumMapEntry;
+                    file.ChecksumMapEntries[i] = ParseChecksumMapEntry(data);
                 }
 
                 #endregion
@@ -255,11 +227,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the checksum entries
                 for (int i = 0; i < checksumMapHeader.ChecksumCount; i++)
                 {
-                    var checksumEntry = data.ReadType<ChecksumEntry>();
-                    if (checksumEntry == null)
-                        return null;
-
-                    file.ChecksumEntries[i] = checksumEntry;
+                    file.ChecksumEntries[i] = ParseChecksumEntry(data);
                 }
 
                 #endregion
@@ -274,6 +242,223 @@ namespace SabreTools.Serialization.Deserializers
                 // Ignore the actual error
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ChecksumEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ChecksumEntry on success, null on error</returns>
+        public static ChecksumEntry ParseChecksumEntry(Stream data)
+        {
+            var obj = new ChecksumEntry();
+
+            obj.Checksum = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ChecksumHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ChecksumHeader on success, null on error</returns>
+        public static ChecksumHeader ParseChecksumHeader(Stream data)
+        {
+            var obj = new ChecksumHeader();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+            obj.ChecksumSize = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ChecksumMapEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ChecksumMapEntry on success, null on error</returns>
+        public static ChecksumMapEntry ParseChecksumMapEntry(Stream data)
+        {
+            var obj = new ChecksumMapEntry();
+
+            obj.ChecksumCount = data.ReadUInt32LittleEndian();
+            obj.FirstChecksumIndex = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ChecksumMapHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ChecksumMapHeader on success, null on error</returns>
+        public static ChecksumMapHeader ParseChecksumMapHeader(Stream data)
+        {
+            var obj = new ChecksumMapHeader();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+            obj.Dummy1 = data.ReadUInt32LittleEndian();
+            obj.ItemCount = data.ReadUInt32LittleEndian();
+            obj.ChecksumCount = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryCopyEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryCopyEntry on success, null on error</returns>
+        public static DirectoryCopyEntry ParseDirectoryCopyEntry(Stream data)
+        {
+            var obj = new DirectoryCopyEntry();
+
+            obj.DirectoryIndex = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryEntry on success, null on error</returns>
+        public static DirectoryEntry ParseDirectoryEntry(Stream data)
+        {
+            var obj = new DirectoryEntry();
+
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.ItemSize = data.ReadUInt32LittleEndian();
+            obj.ChecksumIndex = data.ReadUInt32LittleEndian();
+            obj.DirectoryFlags = (HL_NCF_FLAG)data.ReadUInt32LittleEndian();
+            obj.ParentIndex = data.ReadUInt32LittleEndian();
+            obj.NextIndex = data.ReadUInt32LittleEndian();
+            obj.FirstIndex = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryHeader on success, null on error</returns>
+        public static DirectoryHeader ParseDirectoryHeader(Stream data)
+        {
+            var obj = new DirectoryHeader();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+            obj.CacheID = data.ReadUInt32LittleEndian();
+            obj.LastVersionPlayed = data.ReadUInt32LittleEndian();
+            obj.ItemCount = data.ReadUInt32LittleEndian();
+            obj.FileCount = data.ReadUInt32LittleEndian();
+            obj.ChecksumDataLength = data.ReadUInt32LittleEndian();
+            obj.DirectorySize = data.ReadUInt32LittleEndian();
+            obj.NameSize = data.ReadUInt32LittleEndian();
+            obj.Info1Count = data.ReadUInt32LittleEndian();
+            obj.CopyCount = data.ReadUInt32LittleEndian();
+            obj.LocalCount = data.ReadUInt32LittleEndian();
+            obj.Dummy1 = data.ReadUInt32LittleEndian();
+            obj.Dummy2 = data.ReadUInt32LittleEndian();
+            obj.Checksum = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryInfo1Entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryInfo1Entry on success, null on error</returns>
+        public static DirectoryInfo1Entry ParseDirectoryInfo1Entry(Stream data)
+        {
+            var obj = new DirectoryInfo1Entry();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryInfo2Entry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryInfo2Entry on success, null on error</returns>
+        public static DirectoryInfo2Entry ParseDirectoryInfo2Entry(Stream data)
+        {
+            var obj = new DirectoryInfo2Entry();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryLocalEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryLocalEntry on success, null on error</returns>
+        public static DirectoryLocalEntry ParseDirectoryLocalEntry(Stream data)
+        {
+            var obj = new DirectoryLocalEntry();
+
+            obj.DirectoryIndex = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+            obj.MajorVersion = data.ReadUInt32LittleEndian();
+            obj.MinorVersion = data.ReadUInt32LittleEndian();
+            obj.CacheID = data.ReadUInt32LittleEndian();
+            obj.LastVersionPlayed = data.ReadUInt32LittleEndian();
+            obj.Dummy1 = data.ReadUInt32LittleEndian();
+            obj.Dummy2 = data.ReadUInt32LittleEndian();
+            obj.FileSize = data.ReadUInt32LittleEndian();
+            obj.BlockSize = data.ReadUInt32LittleEndian();
+            obj.BlockCount = data.ReadUInt32LittleEndian();
+            obj.Dummy3 = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a UnknownEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled UnknownEntry on success, null on error</returns>
+        public static UnknownEntry ParseUnknownEntry(Stream data)
+        {
+            var obj = new UnknownEntry();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a UnknownHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled UnknownHeader on success, null on error</returns>
+        public static UnknownHeader ParseUnknownHeader(Stream data)
+        {
+            var obj = new UnknownHeader();
+
+            obj.Dummy0 = data.ReadUInt32LittleEndian();
+            obj.Dummy1 = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
     }
 }

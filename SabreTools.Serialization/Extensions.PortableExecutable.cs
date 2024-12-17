@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
 
+// TODO: Finish replacing ReadType
 namespace SabreTools.Serialization
 {
     public static partial class Extensions

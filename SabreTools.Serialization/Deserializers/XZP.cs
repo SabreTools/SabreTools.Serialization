@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.XZP;
 using static SabreTools.Models.XZP.Constants;
@@ -22,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Signature != HeaderSignatureString)
+                var header = ParseHeader(data);
+                if (header.Signature != HeaderSignatureString)
                     return null;
                 if (header.Version != 6)
                     return null;
@@ -41,11 +42,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory entries
                 for (int i = 0; i < file.DirectoryEntries.Length; i++)
                 {
-                    var directoryEntry = data.ReadType<DirectoryEntry>();
-                    if (directoryEntry == null)
-                        continue;
-
-                    file.DirectoryEntries[i] = directoryEntry;
+                    file.DirectoryEntries[i] = ParseDirectoryEntry(data);
                 }
 
                 #endregion
@@ -60,11 +57,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the preload directory entries
                     for (int i = 0; i < file.PreloadDirectoryEntries.Length; i++)
                     {
-                        var directoryEntry = data.ReadType<DirectoryEntry>();
-                        if (directoryEntry == null)
-                            continue;
-
-                        file.PreloadDirectoryEntries[i] = directoryEntry;
+                        file.PreloadDirectoryEntries[i] = ParseDirectoryEntry(data);
                     }
                 }
 
@@ -80,11 +73,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the preload directory mappings
                     for (int i = 0; i < file.PreloadDirectoryMappings.Length; i++)
                     {
-                        var directoryMapping = data.ReadType<DirectoryMapping>();
-                        if (directoryMapping == null)
-                            continue;
-
-                        file.PreloadDirectoryMappings[i] = directoryMapping;
+                        file.PreloadDirectoryMappings[i] = ParseDirectoryMapping(data);
                     }
                 }
 
@@ -108,8 +97,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the directory items
                     for (int i = 0; i < file.DirectoryItems.Length; i++)
                     {
-                        var directoryItem = ParseDirectoryItem(data);
-                        file.DirectoryItems[i] = directoryItem;
+                        file.DirectoryItems[i] = ParseDirectoryItem(data);
                     }
                 }
 
@@ -121,8 +109,8 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(-8, SeekOrigin.End);
 
                 // Try to parse the footer
-                var footer = data.ReadType<Footer>();
-                if (footer?.Signature != FooterSignatureString)
+                var footer = ParseFooter(data);
+                if (footer.Signature != FooterSignatureString)
                     return null;
 
                 // Set the package footer
@@ -140,31 +128,100 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a XBox Package File directory item
+        /// Parse a Stream into a DirectoryEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled XBox Package File directory item on success, null on error</returns>
-        private static DirectoryItem ParseDirectoryItem(Stream data)
+        /// <returns>Filled DirectoryEntry on success, null on error</returns>
+        public static DirectoryEntry ParseDirectoryEntry(Stream data)
         {
-            var directoryItem = new DirectoryItem();
+            var obj = new DirectoryEntry();
 
-            directoryItem.FileNameCRC = data.ReadUInt32();
-            directoryItem.NameOffset = data.ReadUInt32();
-            directoryItem.TimeCreated = data.ReadUInt32();
+            obj.FileNameCRC = data.ReadUInt32LittleEndian();
+            obj.EntryLength = data.ReadUInt32LittleEndian();
+            obj.EntryOffset = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryItem
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryItem on success, null on error</returns>
+        public static DirectoryItem ParseDirectoryItem(Stream data)
+        {
+            var obj = new DirectoryItem();
+
+            obj.FileNameCRC = data.ReadUInt32();
+            obj.NameOffset = data.ReadUInt32();
+            obj.TimeCreated = data.ReadUInt32();
 
             // Cache the current offset
             long currentPosition = data.Position;
 
             // Seek to the name offset
-            data.Seek(directoryItem.NameOffset, SeekOrigin.Begin);
+            data.Seek(obj.NameOffset, SeekOrigin.Begin);
 
             // Read the name
-            directoryItem.Name = data.ReadNullTerminatedAnsiString();
+            obj.Name = data.ReadNullTerminatedAnsiString();
 
             // Seek back to the right position
             data.Seek(currentPosition, SeekOrigin.Begin);
 
-            return directoryItem;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryMapping
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryMapping on success, null on error</returns>
+        public static DirectoryMapping ParseDirectoryMapping(Stream data)
+        {
+            var obj = new DirectoryMapping();
+
+            obj.PreloadDirectoryEntryIndex = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Footer
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Footer on success, null on error</returns>
+        public static Footer ParseFooter(Stream data)
+        {
+            var obj = new Footer();
+
+            obj.FileLength = data.ReadUInt32LittleEndian();
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.PreloadDirectoryEntryCount = data.ReadUInt32LittleEndian();
+            obj.DirectoryEntryCount = data.ReadUInt32LittleEndian();
+            obj.PreloadBytes = data.ReadUInt32LittleEndian();
+            obj.HeaderLength = data.ReadUInt32LittleEndian();
+            obj.DirectoryItemCount = data.ReadUInt32LittleEndian();
+            obj.DirectoryItemOffset = data.ReadUInt32LittleEndian();
+            obj.DirectoryItemLength = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
     }
 }

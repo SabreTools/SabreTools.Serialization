@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Signature != SignatureString)
+                var header = ParseHeader(data);
+                if (header.Signature != SignatureString)
                     return null;
 
                 // Set the archive header
@@ -40,11 +40,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read all entries in turn
                 for (int i = 0; i < header.FileCount; i++)
                 {
-                    var file = ParseFileDescriptor(data, header.MinorVersion);
-                    if (file == null)
-                        return null;
-
-                    fileDescriptors[i] = file;
+                    fileDescriptors[i] = ParseFileDescriptor(data, header.MinorVersion);;
                 }
 
                 // Set the file list
@@ -65,38 +61,58 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a file descriptor
+        /// Parse a Stream into a FileDescriptor
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="minorVersion">Minor version of the archive</param>
-        /// <returns>Filled file descriptor on success, null on error</returns>
-        private static FileDescriptor ParseFileDescriptor(Stream data, byte minorVersion)
+        /// <returns>Filled FileDescriptor on success, null on error</returns>
+        public static FileDescriptor ParseFileDescriptor(Stream data, byte minorVersion)
         {
-            var fileDescriptor = new FileDescriptor();
+            var obj = new FileDescriptor();
 
-            fileDescriptor.FileNameSize = ReadVariableLength(data);
-            if (fileDescriptor.FileNameSize > 0)
+            obj.FileNameSize = ReadVariableLength(data);
+            if (obj.FileNameSize > 0)
             {
-                byte[] fileName = data.ReadBytes(fileDescriptor.FileNameSize);
-                fileDescriptor.FileName = Encoding.ASCII.GetString(fileName);
+                byte[] fileName = data.ReadBytes(obj.FileNameSize);
+                obj.FileName = Encoding.ASCII.GetString(fileName);
             }
 
-            fileDescriptor.CommentFieldSize = ReadVariableLength(data);
-            if (fileDescriptor.CommentFieldSize > 0)
+            obj.CommentFieldSize = ReadVariableLength(data);
+            if (obj.CommentFieldSize > 0)
             {
-                byte[] commentField = data.ReadBytes(fileDescriptor.CommentFieldSize);
-                fileDescriptor.CommentField = Encoding.ASCII.GetString(commentField);
+                byte[] commentField = data.ReadBytes(obj.CommentFieldSize);
+                obj.CommentField = Encoding.ASCII.GetString(commentField);
             }
 
-            fileDescriptor.ExpandedFileSize = data.ReadUInt32();
-            fileDescriptor.FileTime = data.ReadUInt16();
-            fileDescriptor.FileDate = data.ReadUInt16();
+            obj.ExpandedFileSize = data.ReadUInt32LittleEndian();
+            obj.FileTime = data.ReadUInt16LittleEndian();
+            obj.FileDate = data.ReadUInt16LittleEndian();
 
             // Hack for unknown format data
             if (minorVersion == 22)
-                fileDescriptor.Unknown = data.ReadUInt16();
+                obj.Unknown = data.ReadUInt16LittleEndian();
 
-            return fileDescriptor;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            byte[] signature = data.ReadBytes(2);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.MajorVersion = data.ReadByteValue();
+            obj.MinorVersion = data.ReadByteValue();
+            obj.FileCount = data.ReadUInt16LittleEndian();
+            obj.TableSize = data.ReadByteValue();
+            obj.CompressionFlags = data.ReadByteValue();
+
+            return obj;
         }
 
         /// <summary>

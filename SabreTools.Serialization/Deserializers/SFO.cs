@@ -1,5 +1,6 @@
 using System.IO;
 using SabreTools.IO.Extensions;
+using SabreTools.Models.PlayStation3;
 using static SabreTools.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
@@ -21,8 +22,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Models.PlayStation3.SFOHeader>();
-                if (header?.Magic != SFOMagic)
+                var header = ParseSFOHeader(data);
+                if (header.Magic != SFOMagic)
                     return null;
 
                 // Assign the header
@@ -61,13 +62,39 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an SFO index table entry
+        /// Parse a Stream into an SFOHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled SFO index table entry on success, null on error</returns>
-        public static Models.PlayStation3.SFOIndexTableEntry? ParseIndexTableEntry(Stream data)
+        /// <returns>Filled SFOHeader on success, null on error</returns>
+        public static SFOHeader ParseSFOHeader(Stream data)
         {
-            return data.ReadType<Models.PlayStation3.SFOIndexTableEntry>();
+            var obj = new SFOHeader();
+
+            obj.Magic = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.KeyTableStart = data.ReadUInt32BigEndian();
+            obj.DataTableStart = data.ReadUInt32BigEndian();
+            obj.TablesEntries = data.ReadUInt32BigEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an SFOIndexTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled SFOIndexTableEntry on success, null on error</returns>
+        public static SFOIndexTableEntry ParseIndexTableEntry(Stream data)
+        {
+            var obj = new SFOIndexTableEntry();
+
+            obj.KeyOffset = data.ReadUInt16LittleEndian();
+            obj.DataFormat = (DataFormat)data.ReadUInt16LittleEndian();
+            obj.DataLength = data.ReadUInt32LittleEndian();
+            obj.DataMaxLength = data.ReadUInt32LittleEndian();
+            obj.DataOffset = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
     }
 }

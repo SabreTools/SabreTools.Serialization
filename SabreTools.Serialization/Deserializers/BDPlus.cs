@@ -35,8 +35,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (svm.Day < 1 || svm.Day > 31)
                     return null;
 
-                svm.Unknown2 = data.ReadUInt32();
-                svm.Length = data.ReadUInt32();
+                svm.Unknown2 = data.ReadUInt32LittleEndian();
+                svm.Length = data.ReadUInt32LittleEndian();
                 if (svm.Length > 0)
                     svm.Data = data.ReadBytes((int)svm.Length);
 

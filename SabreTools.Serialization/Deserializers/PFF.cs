@@ -24,8 +24,33 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Try to parse the header
                 var header = ParseHeader(data);
-                if (header == null)
+                if (header.Signature == Version0SignatureString)
+                {
+                    if (header.FileSegmentSize != Version0HSegmentSize)
+                        return null;
+                }
+                else if (header.Signature == Version2SignatureString)
+                {
+                    if (header.FileSegmentSize != Version2SegmentSize)
+                        return null;
+                }
+                else if (header.Signature == Version3SignatureString)
+                {
+                    if (header.FileSegmentSize != Version2SegmentSize
+                        && header.FileSegmentSize != Version3SegmentSize)
+                    {
+                        return null;
+                    }
+                }
+                else if (header.Signature == Version4SignatureString)
+                {
+                    if (header.FileSegmentSize != Version4SegmentSize)
+                        return null;
+                }
+                else
+                {
                     return null;
+                }
 
                 // Set the archive header
                 archive.Header = header;
@@ -48,11 +73,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read all segments in turn
                 for (int i = 0; i < header.NumberOfFiles; i++)
                 {
-                    var file = ParseSegment(data, header.FileSegmentSize);
-                    if (file == null)
-                        continue;
-
-                    archive.Segments[i] = file;
+                    archive.Segments[i] = ParseSegment(data, header.FileSegmentSize); ;
                 }
 
                 #endregion
@@ -67,13 +88,8 @@ namespace SabreTools.Serialization.Deserializers
                 // Seek to the footer
                 data.Seek(offset, SeekOrigin.Begin);
 
-                // Try to parse the footer
-                var footer = data.ReadType<Footer>();
-                if (footer == null)
-                    return null;
-
                 // Set the archive footer
-                archive.Footer = footer;
+                archive.Footer = ParseFooter(data);
 
                 #endregion
 
@@ -87,54 +103,63 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a header
+        /// Parse a Stream into a Footer
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled header on success, null on error</returns>
-        private static Header? ParseHeader(Stream data)
+        /// <returns>Filled Footer on success, null on error</returns>
+        public static Footer ParseFooter(Stream data)
         {
-            var header = data.ReadType<Header>();
-            return header?.Signature switch
-            {
-                Version0SignatureString when header.FileSegmentSize != Version0HSegmentSize => null,
-                Version0SignatureString => header,
+            var obj = new Footer();
 
-                Version2SignatureString when header.FileSegmentSize != Version2SegmentSize => null,
-                Version2SignatureString => header,
+            obj.SystemIP = data.ReadUInt32LittleEndian();
+            obj.Reserved = data.ReadUInt32LittleEndian();
+            byte[] kingTag = data.ReadBytes(4);
+            obj.KingTag = Encoding.ASCII.GetString(kingTag);
 
-                Version3SignatureString when header.FileSegmentSize != Version2SegmentSize
-                                    && header.FileSegmentSize != Version3SegmentSize => null,
-                Version3SignatureString => header,
-
-                Version4SignatureString when header.FileSegmentSize != Version4SegmentSize => null,
-                Version4SignatureString => header,
-
-                _ => null,
-            };
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a file entry
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            obj.HeaderSize = data.ReadUInt32LittleEndian();
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.NumberOfFiles = data.ReadUInt32LittleEndian();
+            obj.FileSegmentSize = data.ReadUInt32LittleEndian();
+            obj.FileListOffset = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Segment
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="segmentSize">PFF segment size</param>
-        /// <returns>Filled file entry on success, null on error</returns>
-        private static Segment ParseSegment(Stream data, uint segmentSize)
+        /// <returns>Filled Segment on success, null on error</returns>
+        public static Segment ParseSegment(Stream data, uint segmentSize)
         {
-            var segment = new Segment();
+            var obj = new Segment();
 
-            segment.Deleted = data.ReadUInt32();
-            segment.FileLocation = data.ReadUInt32();
-            segment.FileSize = data.ReadUInt32();
-            segment.PackedDate = data.ReadUInt32();
+            obj.Deleted = data.ReadUInt32LittleEndian();
+            obj.FileLocation = data.ReadUInt32LittleEndian();
+            obj.FileSize = data.ReadUInt32LittleEndian();
+            obj.PackedDate = data.ReadUInt32LittleEndian();
             byte[] fileName = data.ReadBytes(0x10);
-            segment.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
+            obj.FileName = Encoding.ASCII.GetString(fileName).TrimEnd('\0');
             if (segmentSize > Version2SegmentSize)
-                segment.ModifiedDate = data.ReadUInt32();
+                obj.ModifiedDate = data.ReadUInt32LittleEndian();
             if (segmentSize > Version3SegmentSize)
-                segment.CompressionLevel = data.ReadUInt32();
+                obj.CompressionLevel = data.ReadUInt32LittleEndian();
 
-            return segment;
+            return obj;
         }
     }
 }

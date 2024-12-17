@@ -6,6 +6,7 @@ using SabreTools.IO.Extensions;
 using SabreTools.Models.PKZIP;
 using static SabreTools.Models.PKZIP.Constants;
 
+// TODO: Finish replacing ReadType
 namespace SabreTools.Serialization.Deserializers
 {
     public class PKZIP : BaseBinaryDeserializer<Archive>

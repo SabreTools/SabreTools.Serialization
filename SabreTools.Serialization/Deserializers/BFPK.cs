@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Magic != SignatureString)
+                var header = ParseHeader(data);
+                if (header.Magic != SignatureString)
                     return null;
 
                 // Set the archive header
@@ -58,32 +58,49 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a file entry
+        /// Parse a Stream into a FileEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled file entry on success, null on error</returns>
-        private static FileEntry ParseFileEntry(Stream data)
+        /// <returns>Filled FileEntry on success, null on error</returns>
+        public static FileEntry ParseFileEntry(Stream data)
         {
             var fileEntry = new FileEntry();
 
-            fileEntry.NameSize = data.ReadInt32();
+            fileEntry.NameSize = data.ReadInt32LittleEndian();
             if (fileEntry.NameSize > 0)
             {
                 byte[] name = data.ReadBytes(fileEntry.NameSize);
                 fileEntry.Name = Encoding.ASCII.GetString(name);
             }
 
-            fileEntry.UncompressedSize = data.ReadInt32();
-            fileEntry.Offset = data.ReadInt32();
+            fileEntry.UncompressedSize = data.ReadInt32LittleEndian();
+            fileEntry.Offset = data.ReadInt32LittleEndian();
             if (fileEntry.Offset > 0)
             {
                 long currentOffset = data.Position;
                 data.Seek(fileEntry.Offset, SeekOrigin.Begin);
-                fileEntry.CompressedSize = data.ReadInt32();
+                fileEntry.CompressedSize = data.ReadInt32LittleEndian();
                 data.Seek(currentOffset, SeekOrigin.Begin);
             }
 
             return fileEntry;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            byte[] magic = data.ReadBytes(4);
+            obj.Magic = Encoding.ASCII.GetString(magic);
+            obj.Version = data.ReadInt32LittleEndian();
+            obj.Files = data.ReadInt32LittleEndian();
+
+            return obj;
         }
     }
 }

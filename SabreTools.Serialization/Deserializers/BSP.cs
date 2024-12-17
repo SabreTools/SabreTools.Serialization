@@ -25,9 +25,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<BspHeader>();
-                if (header?.Lumps == null || header.Lumps.Length != BSP_HEADER_LUMPS)
-                    return null;
+                var header = ParseBspHeader(data);
                 if (header.Version < 29 || header.Version > 30)
                     return null;
 
@@ -41,7 +39,7 @@ namespace SabreTools.Serialization.Deserializers
                 for (int l = 0; l < BSP_HEADER_LUMPS; l++)
                 {
                     // Get the next lump entry
-                    var lumpEntry = header.Lumps[l];
+                    var lumpEntry = header.Lumps![l];
                     if (lumpEntry == null)
                         continue;
                     if (lumpEntry.Offset == 0 || lumpEntry.Length == 0)
@@ -116,6 +114,272 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into BspFace
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspFace on success, null on error</returns>
+        public static BspFace ParseBspFace(Stream data)
+        {
+            var obj = new BspFace();
+
+            obj.PlaneIndex = data.ReadUInt16LittleEndian();
+            obj.PlaneSideCount = data.ReadUInt16LittleEndian();
+            obj.FirstEdgeIndex = data.ReadUInt32LittleEndian();
+            obj.NumberOfEdges = data.ReadUInt16LittleEndian();
+            obj.TextureInfoIndex = data.ReadUInt16LittleEndian();
+            obj.LightingStyles = data.ReadBytes(4);
+            obj.LightmapOffset = data.ReadInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspHeader on success, null on error</returns>
+        public static BspHeader ParseBspHeader(Stream data)
+        {
+            var obj = new BspHeader();
+
+            obj.Version = data.ReadInt32LittleEndian();
+            obj.Lumps = new BspLumpEntry[BSP_HEADER_LUMPS];
+            for (int i = 0; i < BSP_HEADER_LUMPS; i++)
+            {
+                obj.Lumps[i] = ParseBspLumpEntry(data);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspLeaf
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspLeaf on success, null on error</returns>
+        public static BspLeaf ParseBspLeaf(Stream data)
+        {
+            var obj = new BspLeaf();
+
+            obj.Contents = (BspContents)data.ReadInt32LittleEndian();
+            obj.VisOffset = data.ReadInt32LittleEndian();
+            obj.Mins = new short[3];
+            for (int i = 0; i < 3; i++)
+            {
+                obj.Mins[i] = data.ReadInt16LittleEndian();
+            }
+            obj.Maxs = new short[3];
+            for (int i = 0; i < 3; i++)
+            {
+                obj.Maxs[i] = data.ReadInt16LittleEndian();
+            }
+            obj.FirstMarkSurfaceIndex = data.ReadUInt16LittleEndian();
+            obj.MarkSurfacesCount = data.ReadUInt16LittleEndian();
+            obj.AmbientLevels = data.ReadBytes(4);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspLumpEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspLumpEntry on success, null on error</returns>
+        public static BspLumpEntry ParseBspLumpEntry(Stream data)
+        {
+            var obj = new BspLumpEntry();
+
+            obj.Offset = data.ReadInt32LittleEndian();
+            obj.Length = data.ReadInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspModel
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspModel on success, null on error</returns>
+        public static BspModel ParseBspModel(Stream data)
+        {
+            var obj = new BspModel();
+
+            obj.Mins = ParseVector3D(data);
+            obj.Maxs = ParseVector3D(data);
+            obj.OriginVector = ParseVector3D(data);
+            obj.HeadnodesIndex = new int[MAX_MAP_HULLS];
+            for (int i = 0; i < MAX_MAP_HULLS; i++)
+            {
+                obj.HeadnodesIndex[i] = data.ReadInt32LittleEndian();
+            }
+            obj.VisLeafsCount = data.ReadInt32LittleEndian();
+            obj.FirstFaceIndex = data.ReadInt32LittleEndian();
+            obj.FacesCount = data.ReadInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspNode
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspNode on success, null on error</returns>
+        public static BspNode ParseBspNode(Stream data)
+        {
+            var obj = new BspNode();
+
+            obj.PlaneIndex = data.ReadUInt32LittleEndian();
+            obj.Children = new ushort[2];
+            for (int i = 0; i < 2; i++)
+            {
+                obj.Children[i] = data.ReadUInt16LittleEndian();
+            }
+            obj.Mins = new ushort[3];
+            for (int i = 0; i < 3; i++)
+            {
+                obj.Mins[i] = data.ReadUInt16LittleEndian();
+            }
+            obj.Maxs = new ushort[3];
+            for (int i = 0; i < 3; i++)
+            {
+                obj.Maxs[i] = data.ReadUInt16LittleEndian();
+            }
+            obj.FirstFace = data.ReadUInt16LittleEndian();
+            obj.FaceCount = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into BspTexinfo
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BspTexinfo on success, null on error</returns>
+        public static BspTexinfo ParseBspTexinfo(Stream data)
+        {
+            var obj = new BspTexinfo();
+
+            obj.SVector = ParseVector3D(data);
+            obj.TextureSShift = data.ReadSingle();
+            obj.TVector = ParseVector3D(data);
+            obj.TextureTShift = data.ReadSingle();
+            obj.MiptexIndex = data.ReadUInt32LittleEndian();
+            obj.Flags = (TextureFlag)data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into Clipnode
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Clipnode on success, null on error</returns>
+        public static Clipnode ParseClipnode(Stream data)
+        {
+            var obj = new Clipnode();
+
+            obj.PlaneIndex = data.ReadInt32LittleEndian();
+            obj.ChildrenIndices = new short[2];
+            for (int i = 0; i < 2; i++)
+            {
+                obj.ChildrenIndices[i] = data.ReadInt16LittleEndian();
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into Edge
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Edge on success, null on error</returns>
+        public static Edge ParseEdge(Stream data)
+        {
+            var obj = new Edge();
+
+            obj.VertexIndices = new ushort[2];
+            for (int i = 0; i < 2; i++)
+            {
+                obj.VertexIndices[i] = data.ReadUInt16LittleEndian();
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into MipTexture
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled MipTexture on success, null on error</returns>
+        public static MipTexture ParseMipTexture(Stream data)
+        {
+            var obj = new MipTexture();
+
+            byte[] name = data.ReadBytes(MAXTEXTURENAME);
+            obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            obj.Width = data.ReadUInt32LittleEndian();
+            obj.Height = data.ReadUInt32LittleEndian();
+            obj.Offsets = new uint[MIPLEVELS];
+            for (int i = 0; i < MIPLEVELS; i++)
+            {
+                obj.Offsets[i] = data.ReadUInt32LittleEndian();
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into Plane
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Plane on success, null on error</returns>
+        public static Plane ParsePlane(Stream data)
+        {
+            var obj = new Plane();
+
+            obj.NormalVector = ParseVector3D(data);
+            obj.Distance = data.ReadSingle();
+            obj.PlaneType = (PlaneType)data.ReadInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a TextureHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled TextureHeader on success, null on error</returns>
+        public static TextureHeader ParseTextureHeader(Stream data)
+        {
+            var obj = new TextureHeader();
+
+            obj.MipTextureCount = data.ReadUInt32LittleEndian();
+            obj.Offsets = new int[obj.MipTextureCount];
+            for (int i = 0; i < obj.Offsets.Length; i++)
+            {
+                obj.Offsets[i] = data.ReadInt16LittleEndian();
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into Vector3D
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Vector3D on success, null on error</returns>
+        public static Vector3D ParseVector3D(Stream data)
+        {
+            var obj = new Vector3D();
+
+            obj.X = data.ReadSingle();
+            obj.Y = data.ReadSingle();
+            obj.Z = data.ReadSingle();
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into LUMP_ENTITIES
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -167,9 +431,8 @@ namespace SabreTools.Serialization.Deserializers
             var planes = new List<Plane>();
             while (data.Position < offset + length)
             {
-                var plane = data.ReadType<Plane>();
-                if (plane != null)
-                    planes.Add(plane);
+                var plane = ParsePlane(data);
+                planes.Add(plane);
             }
 
             return new PlanesLump { Planes = [.. planes] };
@@ -188,32 +451,12 @@ namespace SabreTools.Serialization.Deserializers
             var textures = new List<MipTexture>();
             while (data.Position < offset + length)
             {
-                var texture = data.ReadType<MipTexture>();
-                if (texture != null)
-                    textures.Add(texture);
+                var texture = ParseMipTexture(data);
+                textures.Add(texture);
             }
 
             lump.Textures = [.. textures];
             return lump;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a Half-Life Level texture header
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Half-Life Level texture header on success, null on error</returns>
-        private static TextureHeader ParseTextureHeader(Stream data)
-        {
-            var textureHeader = new TextureHeader();
-
-            textureHeader.MipTextureCount = data.ReadUInt32();
-            textureHeader.Offsets = new int[textureHeader.MipTextureCount];
-            for (int i = 0; i < textureHeader.Offsets.Length; i++)
-            {
-                textureHeader.Offsets[i] = data.ReadInt32();
-            }
-
-            return textureHeader;
         }
 
         /// <summary>
@@ -226,10 +469,7 @@ namespace SabreTools.Serialization.Deserializers
             var vertices = new List<Vector3D>();
             while (data.Position < offset + length)
             {
-                var vertex = data.ReadType<Vector3D>();
-                if (vertex == null)
-                    break;
-
+                var vertex = ParseVector3D(data);
                 vertices.Add(vertex);
             }
 
@@ -258,7 +498,7 @@ namespace SabreTools.Serialization.Deserializers
                 lump.ByteOffsets[i] = new int[2];
                 for (int j = 0; j < 2; j++)
                 {
-                    lump.ByteOffsets[i][j] = data.ReadInt32();
+                    lump.ByteOffsets[i][j] = data.ReadInt32LittleEndian();
                 }
             }
 
@@ -275,9 +515,8 @@ namespace SabreTools.Serialization.Deserializers
             var nodes = new List<BspNode>();
             while (data.Position < offset + length)
             {
-                var node = data.ReadType<BspNode>();
-                if (node != null)
-                    nodes.Add(node);
+                var node = ParseBspNode(data);
+                nodes.Add(node);
             }
 
             return new BspNodesLump { Nodes = [.. nodes] };
@@ -293,9 +532,8 @@ namespace SabreTools.Serialization.Deserializers
             var texinfos = new List<BspTexinfo>();
             while (data.Position < offset + length)
             {
-                var texinfo = data.ReadType<BspTexinfo>();
-                if (texinfo != null)
-                    texinfos.Add(texinfo);
+                var texinfo = ParseBspTexinfo(data);
+                texinfos.Add(texinfo);
             }
 
             return new BspTexinfoLump { Texinfos = [.. texinfos] };
@@ -311,9 +549,8 @@ namespace SabreTools.Serialization.Deserializers
             var faces = new List<BspFace>();
             while (data.Position < offset + length)
             {
-                var face = data.ReadType<BspFace>();
-                if (face != null)
-                    faces.Add(face);
+                var face = ParseBspFace(data);
+                faces.Add(face);
             }
 
             return new BspFacesLump { Faces = [.. faces] };
@@ -347,9 +584,8 @@ namespace SabreTools.Serialization.Deserializers
             var clipnodes = new List<Clipnode>();
             while (data.Position < offset + length)
             {
-                var clipnode = data.ReadType<Clipnode>();
-                if (clipnode != null)
-                    clipnodes.Add(clipnode);
+                var clipnode = ParseClipnode(data);
+                clipnodes.Add(clipnode);
             }
 
             return new ClipnodesLump { Clipnodes = [.. clipnodes] };
@@ -365,9 +601,8 @@ namespace SabreTools.Serialization.Deserializers
             var leaves = new List<BspLeaf>();
             while (data.Position < offset + length)
             {
-                var leaf = data.ReadType<BspLeaf>();
-                if (leaf != null)
-                    leaves.Add(leaf);
+                var leaf = ParseBspLeaf(data);
+                leaves.Add(leaf);
             }
 
             return new BspLeavesLump { Leaves = [.. leaves] };
@@ -383,7 +618,7 @@ namespace SabreTools.Serialization.Deserializers
             var marksurfaces = new List<ushort>();
             while (data.Position < offset + length)
             {
-                marksurfaces.Add(data.ReadUInt16());
+                marksurfaces.Add(data.ReadUInt16LittleEndian());
             }
 
             return new MarksurfacesLump { Marksurfaces = [.. marksurfaces] };
@@ -399,9 +634,8 @@ namespace SabreTools.Serialization.Deserializers
             var edges = new List<Edge>();
             while (data.Position < offset + length)
             {
-                var edge = data.ReadType<Edge>();
-                if (edge != null)
-                    edges.Add(edge);
+                var edge = ParseEdge(data);
+                edges.Add(edge);
             }
 
             return new EdgesLump { Edges = [.. edges] };
@@ -417,7 +651,7 @@ namespace SabreTools.Serialization.Deserializers
             var surfedges = new List<int>();
             while (data.Position < offset + length)
             {
-                surfedges.Add(data.ReadInt32());
+                surfedges.Add(data.ReadInt32LittleEndian());
             }
 
             return new SurfedgesLump { Surfedges = [.. surfedges] };
@@ -433,9 +667,8 @@ namespace SabreTools.Serialization.Deserializers
             var models = new List<BspModel>();
             while (data.Position < offset + length)
             {
-                var model = data.ReadType<BspModel>();
-                if (model != null)
-                    models.Add(model);
+                var model = ParseBspModel(data);
+                models.Add(model);
             }
 
             return new BspModelsLump { Models = [.. models] };

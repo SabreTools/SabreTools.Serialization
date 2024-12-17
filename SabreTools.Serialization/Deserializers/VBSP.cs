@@ -6,6 +6,7 @@ using SabreTools.IO.Extensions;
 using SabreTools.Models.BSP;
 using static SabreTools.Models.BSP.Constants;
 
+// TODO: Finish replacing ReadType
 namespace SabreTools.Serialization.Deserializers
 {
     public class VBSP : BaseBinaryDeserializer<VbspFile>
@@ -25,8 +26,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<VbspHeader>();
-                if (header?.Signature != SignatureString)
+                var header = ParseVbspHeader(data);
+                if (header.Signature != SignatureString)
                     return null;
                 if (Array.IndexOf([17, 18, 19, 20, 21, 22, 23, 25, 27, 29, 0x00040014], header.Version) > -1)
                     return null;
@@ -263,6 +264,43 @@ namespace SabreTools.Serialization.Deserializers
                 // Ignore the actual error
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Parse a Stream into VbspHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled VbspHeader on success, null on error</returns>
+        public static VbspHeader ParseVbspHeader(Stream data)
+        {
+            var obj = new VbspHeader();
+
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadInt32LittleEndian();
+            obj.Lumps = new VbspLumpEntry[VBSP_HEADER_LUMPS];
+            for (int i = 0; i < VBSP_HEADER_LUMPS; i++)
+            {
+                obj.Lumps[i] = ParseVbspLumpEntry(data);
+            }
+            obj.MapRevision = data.ReadInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into VbspLumpEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled VbspLumpEntry on success, null on error</returns>
+        public static VbspLumpEntry ParseVbspLumpEntry(Stream data)
+        {
+            var obj = new VbspLumpEntry();
+
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.FourCC = data.ReadBytes(4);
+
+            return obj;
         }
 
         /// <summary>

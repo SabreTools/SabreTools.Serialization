@@ -22,9 +22,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region CIA Header
 
                 // Try to parse the header
-                var header = data.ReadType<CIAHeader>();
-                if (header == null)
-                    return null;
+                var header = ParseCIAHeader(data);
                 if (header.CertificateChainSize > data.Length)
                     return null;
                 if (header.TicketSize > data.Length)
@@ -119,15 +117,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // If we have a meta data
                 if (header.MetaSize > 0)
-                {
-                    // Try to parse the meta
-                    var meta = data.ReadType<MetaData>();
-                    if (meta == null)
-                        return null;
-
-                    // Set the meta
-                    cia.MetaData = meta;
-                }
+                    cia.MetaData = ParseMetaData(data);
 
                 #endregion
 
@@ -141,161 +131,235 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a certificate
+        /// Parse a Stream into a Certificate
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled certificate on success, null on error</returns>
+        /// <returns>Filled Certificate on success, null on error</returns>
         public static Certificate? ParseCertificate(Stream data)
         {
-            var certificate = new Certificate();
+            var obj = new Certificate();
 
-            certificate.SignatureType = (SignatureType)data.ReadUInt32();
-            switch (certificate.SignatureType)
+            obj.SignatureType = (SignatureType)data.ReadUInt32LittleEndian();
+            switch (obj.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
                 case SignatureType.RSA_4096_SHA256:
-                    certificate.SignatureSize = 0x200;
-                    certificate.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x200;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
-                    certificate.SignatureSize = 0x100;
-                    certificate.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x100;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
-                    certificate.SignatureSize = 0x3C;
-                    certificate.PaddingSize = 0x40;
+                    obj.SignatureSize = 0x3C;
+                    obj.PaddingSize = 0x40;
                     break;
 
                 default:
                     return null;
             }
 
-            certificate.Signature = data.ReadBytes(certificate.SignatureSize);
-            certificate.Padding = data.ReadBytes(certificate.PaddingSize);
+            obj.Signature = data.ReadBytes(obj.SignatureSize);
+            obj.Padding = data.ReadBytes(obj.PaddingSize);
             byte[] issuer = data.ReadBytes(0x40);
-            certificate.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
-            certificate.KeyType = (PublicKeyType)data.ReadUInt32();
+            obj.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            obj.KeyType = (PublicKeyType)data.ReadUInt32LittleEndian();
             byte[] name = data.ReadBytes(0x40);
-            certificate.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
-            certificate.ExpirationTime = data.ReadUInt32();
+            obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            obj.ExpirationTime = data.ReadUInt32LittleEndian();
 
-            switch (certificate.KeyType)
+            switch (obj.KeyType)
             {
                 case PublicKeyType.RSA_4096:
-                    certificate.RSAModulus = data.ReadBytes(0x200);
-                    certificate.RSAPublicExponent = data.ReadUInt32();
-                    certificate.RSAPadding = data.ReadBytes(0x34);
+                    obj.RSAModulus = data.ReadBytes(0x200);
+                    obj.RSAPublicExponent = data.ReadUInt32LittleEndian();
+                    obj.RSAPadding = data.ReadBytes(0x34);
                     break;
                 case PublicKeyType.RSA_2048:
-                    certificate.RSAModulus = data.ReadBytes(0x100);
-                    certificate.RSAPublicExponent = data.ReadUInt32();
-                    certificate.RSAPadding = data.ReadBytes(0x34);
+                    obj.RSAModulus = data.ReadBytes(0x100);
+                    obj.RSAPublicExponent = data.ReadUInt32LittleEndian();
+                    obj.RSAPadding = data.ReadBytes(0x34);
                     break;
                 case PublicKeyType.EllipticCurve:
-                    certificate.ECCPublicKey = data.ReadBytes(0x3C);
-                    certificate.ECCPadding = data.ReadBytes(0x3C);
+                    obj.ECCPublicKey = data.ReadBytes(0x3C);
+                    obj.ECCPadding = data.ReadBytes(0x3C);
                     break;
                 default:
                     return null;
             }
 
-            return certificate;
+            return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a ticket
+        /// Parse a Stream into a CIAHeader
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled CIAHeader on success, null on error</returns>
+        public static CIAHeader ParseCIAHeader(Stream data)
+        {
+            var obj = new CIAHeader();
+
+            obj.HeaderSize = data.ReadUInt32LittleEndian();
+            obj.Type = data.ReadUInt16LittleEndian();
+            obj.Version = data.ReadUInt16LittleEndian();
+            obj.CertificateChainSize = data.ReadUInt32LittleEndian();
+            obj.TicketSize = data.ReadUInt32LittleEndian();
+            obj.TMDFileSize = data.ReadUInt32LittleEndian();
+            obj.MetaSize = data.ReadUInt32LittleEndian();
+            obj.ContentSize = data.ReadUInt64LittleEndian();
+            obj.ContentIndex = data.ReadBytes(0x2000);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ContentChunkRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ContentChunkRecord on success, null on error</returns>
+        public static ContentChunkRecord ParseContentChunkRecord(Stream data)
+        {
+            var obj = new ContentChunkRecord();
+
+            obj.ContentId = data.ReadUInt32LittleEndian();
+            obj.ContentIndex = (ContentIndex)data.ReadUInt16LittleEndian();
+            obj.ContentType = (TMDContentType)data.ReadUInt16LittleEndian();
+            obj.ContentSize = data.ReadUInt64LittleEndian();
+            obj.SHA256Hash = data.ReadBytes(0x20);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ContentInfoRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ContentInfoRecord on success, null on error</returns>
+        public static ContentInfoRecord ParseContentInfoRecord(Stream data)
+        {
+            var obj = new ContentInfoRecord();
+
+            obj.ContentIndexOffset = data.ReadUInt16LittleEndian();
+            obj.ContentCommandCount = data.ReadUInt16LittleEndian();
+            obj.UnhashedContentRecordsSHA256Hash = data.ReadBytes(0x20);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a MetaData
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled MetaData on success, null on error</returns>
+        public static MetaData ParseMetaData(Stream data)
+        {
+            var obj = new MetaData();
+
+            obj.TitleIDDependencyList = data.ReadBytes(0x180);
+            obj.Reserved1 = data.ReadBytes(0x180);
+            obj.CoreVersion = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadBytes(0xFC);
+            obj.IconData = data.ReadBytes(0x36C0);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Ticket
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="fromCdn">Indicates if the ticket is from CDN</param>
-        /// <returns>Filled ticket on success, null on error</returns>
+        /// <returns>Filled Ticket on success, null on error</returns>
         public static Ticket? ParseTicket(Stream data, bool fromCdn = false)
         {
-            var ticket = new Ticket();
+            var obj = new Ticket();
 
-            ticket.SignatureType = (SignatureType)data.ReadUInt32();
-            switch (ticket.SignatureType)
+            obj.SignatureType = (SignatureType)data.ReadUInt32LittleEndian();
+            switch (obj.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
                 case SignatureType.RSA_4096_SHA256:
-                    ticket.SignatureSize = 0x200;
-                    ticket.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x200;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
-                    ticket.SignatureSize = 0x100;
-                    ticket.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x100;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
-                    ticket.SignatureSize = 0x3C;
-                    ticket.PaddingSize = 0x40;
+                    obj.SignatureSize = 0x3C;
+                    obj.PaddingSize = 0x40;
                     break;
 
                 default:
                     return null;
             }
 
-            ticket.Signature = data.ReadBytes(ticket.SignatureSize);
-            ticket.Padding = data.ReadBytes(ticket.PaddingSize);
+            obj.Signature = data.ReadBytes(obj.SignatureSize);
+            obj.Padding = data.ReadBytes(obj.PaddingSize);
             byte[] issuer = data.ReadBytes(0x40);
-            ticket.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
-            ticket.ECCPublicKey = data.ReadBytes(0x3C);
-            ticket.Version = data.ReadByteValue();
-            ticket.CaCrlVersion = data.ReadByteValue();
-            ticket.SignerCrlVersion = data.ReadByteValue();
-            ticket.TitleKey = data.ReadBytes(0x10);
-            ticket.Reserved1 = data.ReadByteValue();
-            ticket.TicketID = data.ReadUInt64();
-            ticket.ConsoleID = data.ReadUInt32();
-            ticket.TitleID = data.ReadUInt64();
-            ticket.Reserved2 = data.ReadBytes(2);
-            ticket.TicketTitleVersion = data.ReadUInt16();
-            ticket.Reserved3 = data.ReadBytes(8);
-            ticket.LicenseType = data.ReadByteValue();
-            ticket.CommonKeyYIndex = data.ReadByteValue();
-            ticket.Reserved4 = data.ReadBytes(0x2A);
-            ticket.eShopAccountID = data.ReadUInt32();
-            ticket.Reserved5 = data.ReadByteValue();
-            ticket.Audit = data.ReadByteValue();
-            ticket.Reserved6 = data.ReadBytes(0x42);
-            ticket.Limits = new uint[0x10];
-            for (int i = 0; i < ticket.Limits.Length; i++)
+            obj.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            obj.ECCPublicKey = data.ReadBytes(0x3C);
+            obj.Version = data.ReadByteValue();
+            obj.CaCrlVersion = data.ReadByteValue();
+            obj.SignerCrlVersion = data.ReadByteValue();
+            obj.TitleKey = data.ReadBytes(0x10);
+            obj.Reserved1 = data.ReadByteValue();
+            obj.TicketID = data.ReadUInt64LittleEndian();
+            obj.ConsoleID = data.ReadUInt32LittleEndian();
+            obj.TitleID = data.ReadUInt64LittleEndian();
+            obj.Reserved2 = data.ReadBytes(2);
+            obj.TicketTitleVersion = data.ReadUInt16LittleEndian();
+            obj.Reserved3 = data.ReadBytes(8);
+            obj.LicenseType = data.ReadByteValue();
+            obj.CommonKeyYIndex = data.ReadByteValue();
+            obj.Reserved4 = data.ReadBytes(0x2A);
+            obj.eShopAccountID = data.ReadUInt32LittleEndian();
+            obj.Reserved5 = data.ReadByteValue();
+            obj.Audit = data.ReadByteValue();
+            obj.Reserved6 = data.ReadBytes(0x42);
+            obj.Limits = new uint[0x10];
+            for (int i = 0; i < obj.Limits.Length; i++)
             {
-                ticket.Limits[i] = data.ReadUInt32();
+                obj.Limits[i] = data.ReadUInt32LittleEndian();
             }
 
             // Seek to the content index size
             data.Seek(4, SeekOrigin.Current);
 
             // Read the size (big-endian)
-            ticket.ContentIndexSize = data.ReadUInt32BigEndian();
+            obj.ContentIndexSize = data.ReadUInt32BigEndian();
 
             // Seek back to the start of the content index
             data.Seek(-8, SeekOrigin.Current);
 
-            ticket.ContentIndex = data.ReadBytes((int)ticket.ContentIndexSize);
+            obj.ContentIndex = data.ReadBytes((int)obj.ContentIndexSize);
 
             // Certificates only exist in standalone CETK files
             if (fromCdn)
             {
-                ticket.CertificateChain = new Certificate[2];
+                obj.CertificateChain = new Certificate[2];
                 for (int i = 0; i < 2; i++)
                 {
                     var certificate = ParseCertificate(data);
                     if (certificate == null)
                         return null;
 
-                    ticket.CertificateChain[i] = certificate;
+                    obj.CertificateChain[i] = certificate;
                 }
             }
 
-            return ticket;
+            return obj;
         }
 
         /// <summary>
@@ -306,90 +370,84 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled title metadata on success, null on error</returns>
         public static TitleMetadata? ParseTitleMetadata(Stream data, bool fromCdn = false)
         {
-            var titleMetadata = new TitleMetadata();
+            var obj = new TitleMetadata();
 
-            titleMetadata.SignatureType = (SignatureType)data.ReadUInt32();
-            switch (titleMetadata.SignatureType)
+            obj.SignatureType = (SignatureType)data.ReadUInt32LittleEndian();
+            switch (obj.SignatureType)
             {
                 case SignatureType.RSA_4096_SHA1:
                 case SignatureType.RSA_4096_SHA256:
-                    titleMetadata.SignatureSize = 0x200;
-                    titleMetadata.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x200;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.RSA_2048_SHA1:
                 case SignatureType.RSA_2048_SHA256:
-                    titleMetadata.SignatureSize = 0x100;
-                    titleMetadata.PaddingSize = 0x3C;
+                    obj.SignatureSize = 0x100;
+                    obj.PaddingSize = 0x3C;
                     break;
 
                 case SignatureType.ECDSA_SHA1:
                 case SignatureType.ECDSA_SHA256:
-                    titleMetadata.SignatureSize = 0x3C;
-                    titleMetadata.PaddingSize = 0x40;
+                    obj.SignatureSize = 0x3C;
+                    obj.PaddingSize = 0x40;
                     break;
 
                 default:
                     return null;
             }
 
-            titleMetadata.Signature = data.ReadBytes(titleMetadata.SignatureSize);
-            titleMetadata.Padding1 = data.ReadBytes(titleMetadata.PaddingSize);
+            obj.Signature = data.ReadBytes(obj.SignatureSize);
+            obj.Padding1 = data.ReadBytes(obj.PaddingSize);
             byte[] issuer = data.ReadBytes(0x40);
-            titleMetadata.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
-            titleMetadata.Version = data.ReadByteValue();
-            titleMetadata.CaCrlVersion = data.ReadByteValue();
-            titleMetadata.SignerCrlVersion = data.ReadByteValue();
-            titleMetadata.Reserved1 = data.ReadByteValue();
-            titleMetadata.SystemVersion = data.ReadUInt64();
-            titleMetadata.TitleID = data.ReadUInt64();
-            titleMetadata.TitleType = data.ReadUInt32();
-            titleMetadata.GroupID = data.ReadUInt16();
-            titleMetadata.SaveDataSize = data.ReadUInt32();
-            titleMetadata.SRLPrivateSaveDataSize = data.ReadUInt32();
-            titleMetadata.Reserved2 = data.ReadBytes(4);
-            titleMetadata.SRLFlag = data.ReadByteValue();
-            titleMetadata.Reserved3 = data.ReadBytes(0x31);
-            titleMetadata.AccessRights = data.ReadUInt32();
-            titleMetadata.TitleVersion = data.ReadUInt16();
-            titleMetadata.ContentCount = data.ReadUInt16BigEndian();
-            titleMetadata.BootContent = data.ReadUInt16();
-            titleMetadata.Padding2 = data.ReadBytes(2);
-            titleMetadata.SHA256HashContentInfoRecords = data.ReadBytes(0x20);
-            titleMetadata.ContentInfoRecords = new ContentInfoRecord[64];
+            obj.Issuer = Encoding.ASCII.GetString(issuer).TrimEnd('\0');
+            obj.Version = data.ReadByteValue();
+            obj.CaCrlVersion = data.ReadByteValue();
+            obj.SignerCrlVersion = data.ReadByteValue();
+            obj.Reserved1 = data.ReadByteValue();
+            obj.SystemVersion = data.ReadUInt64LittleEndian();
+            obj.TitleID = data.ReadUInt64LittleEndian();
+            obj.TitleType = data.ReadUInt32LittleEndian();
+            obj.GroupID = data.ReadUInt16LittleEndian();
+            obj.SaveDataSize = data.ReadUInt32LittleEndian();
+            obj.SRLPrivateSaveDataSize = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadBytes(4);
+            obj.SRLFlag = data.ReadByteValue();
+            obj.Reserved3 = data.ReadBytes(0x31);
+            obj.AccessRights = data.ReadUInt32LittleEndian();
+            obj.TitleVersion = data.ReadUInt16LittleEndian();
+            obj.ContentCount = data.ReadUInt16BigEndian();
+            obj.BootContent = data.ReadUInt16LittleEndian();
+            obj.Padding2 = data.ReadBytes(2);
+            obj.SHA256HashContentInfoRecords = data.ReadBytes(0x20);
+            obj.ContentInfoRecords = new ContentInfoRecord[64];
             for (int i = 0; i < 64; i++)
             {
-                var contentInfoRecord = data.ReadType<ContentInfoRecord>();
-                if (contentInfoRecord == null)
-                    return null;
-
-                titleMetadata.ContentInfoRecords[i] = contentInfoRecord;
+                var contentInfoRecord = ParseContentInfoRecord(data);
+                obj.ContentInfoRecords[i] = contentInfoRecord;
             }
-            titleMetadata.ContentChunkRecords = new ContentChunkRecord[titleMetadata.ContentCount];
-            for (int i = 0; i < titleMetadata.ContentCount; i++)
+            obj.ContentChunkRecords = new ContentChunkRecord[obj.ContentCount];
+            for (int i = 0; i < obj.ContentCount; i++)
             {
-                var contentChunkRecord = data.ReadType<ContentChunkRecord>();
-                if (contentChunkRecord == null)
-                    return null;
-
-                titleMetadata.ContentChunkRecords[i] = contentChunkRecord;
+                var contentChunkRecord = ParseContentChunkRecord(data);
+                obj.ContentChunkRecords[i] = contentChunkRecord;
             }
 
             // Certificates only exist in standalone TMD files
             if (fromCdn)
             {
-                titleMetadata.CertificateChain = new Certificate[2];
+                obj.CertificateChain = new Certificate[2];
                 for (int i = 0; i < 2; i++)
                 {
                     var certificate = ParseCertificate(data);
                     if (certificate == null)
                         return null;
 
-                    titleMetadata.CertificateChain[i] = certificate;
+                    obj.CertificateChain[i] = certificate;
                 }
             }
 
-            return titleMetadata;
+            return obj;
         }
     }
 }

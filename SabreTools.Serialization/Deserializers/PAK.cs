@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PAK;
 using static SabreTools.Models.PAK.Constants;
@@ -22,8 +23,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Header
 
                 // Try to parse the header
-                var header = data.ReadType<Header>();
-                if (header?.Signature != SignatureString)
+                var header = ParseHeader(data);
+                if (header.Signature != SignatureString)
                     return null;
 
                 // Set the package header
@@ -47,11 +48,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the directory items
                 for (int i = 0; i < file.DirectoryItems.Length; i++)
                 {
-                    var directoryItem = data.ReadType<DirectoryItem>();
-                    if (directoryItem == null)
-                        return null;
-
-                    file.DirectoryItems[i] = directoryItem;
+                    file.DirectoryItems[i] = ParseDirectoryItem(data);
                 }
 
                 #endregion
@@ -63,6 +60,40 @@ namespace SabreTools.Serialization.Deserializers
                 // Ignore the actual error
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryItem
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryItem on success, null on error</returns>
+        public static DirectoryItem ParseDirectoryItem(Stream data)
+        {
+            var obj = new DirectoryItem();
+
+            byte[] itemName = data.ReadBytes(56);
+            obj.ItemName = Encoding.ASCII.GetString(itemName).TrimEnd('\0');
+            obj.ItemOffset = data.ReadUInt32LittleEndian();
+            obj.ItemLength = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Header on success, null on error</returns>
+        public static Header ParseHeader(Stream data)
+        {
+            var obj = new Header();
+
+            byte[] signature = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.DirectoryOffset = data.ReadUInt32LittleEndian();
+            obj.DirectoryLength = data.ReadUInt32LittleEndian();
+
+            return obj;
         }
     }
 }
