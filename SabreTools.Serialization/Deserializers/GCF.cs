@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the block entry maps
                     for (int i = 0; i < file.BlockEntryMapHeader.BlockCount; i++)
                     {
-                        file.BlockEntryMaps[i] = ParseBlockEntryMap(data); ;
+                        file.BlockEntryMaps[i] = ParseBlockEntryMap(data);
                     }
                 }
 

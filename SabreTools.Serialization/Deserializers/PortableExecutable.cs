@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Deserializers
                     int endOffset = (int)(baseRelocationTableAddress + executable.OptionalHeader.BaseRelocationTable.Size);
 
                     // Set the base relocation table
-                    executable.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset, executable.SectionTable); ;
+                    executable.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset, executable.SectionTable);
                 }
 
                 #endregion
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Deserializers
                     int endOffset = (int)(debugTableAddress + executable.OptionalHeader.Debug.Size);
 
                     // Set the debug table
-                    executable.DebugTable = ParseDebugTable(data, endOffset); ;
+                    executable.DebugTable = ParseDebugTable(data, endOffset);
                 }
 
                 #endregion
@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(exportTableAddress, SeekOrigin.Begin);
 
                     // Set the export table
-                    executable.ExportTable = ParseExportTable(data, executable.SectionTable); ;
+                    executable.ExportTable = ParseExportTable(data, executable.SectionTable);
                 }
 
                 #endregion
@@ -214,7 +214,7 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(importTableAddress, SeekOrigin.Begin);
 
                     // Set the import table
-                    executable.ImportTable = ParseImportTable(data, executable.OptionalHeader.Magic, executable.SectionTable);;
+                    executable.ImportTable = ParseImportTable(data, executable.OptionalHeader.Magic, executable.SectionTable);
                 }
 
                 #endregion
@@ -234,7 +234,7 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(resourceTableAddress, SeekOrigin.Begin);
 
                     // Set the resource directory table
-                    executable.ResourceDirectoryTable = ParseResourceDirectoryTable(data, data.Position, executable.SectionTable, true);;
+                    executable.ResourceDirectoryTable = ParseResourceDirectoryTable(data, data.Position, executable.SectionTable, true);
                 }
 
                 #endregion

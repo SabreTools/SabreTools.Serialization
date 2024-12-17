@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the resource table
-                executable.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount); ;
+                executable.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
 
                 #endregion
 

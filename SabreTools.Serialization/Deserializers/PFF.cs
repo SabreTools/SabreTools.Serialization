@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read all segments in turn
                 for (int i = 0; i < header.NumberOfFiles; i++)
                 {
-                    archive.Segments[i] = ParseSegment(data, header.FileSegmentSize); ;
+                    archive.Segments[i] = ParseSegment(data, header.FileSegmentSize);
                 }
 
                 #endregion

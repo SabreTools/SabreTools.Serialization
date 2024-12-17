@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read all entries in turn
                 for (int i = 0; i < header.FileCount; i++)
                 {
-                    fileDescriptors[i] = ParseFileDescriptor(data, header.MinorVersion);;
+                    fileDescriptors[i] = ParseFileDescriptor(data, header.MinorVersion);
                 }
 
                 // Set the file list

@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.CrossModel
                 var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Models.Metadata.Rom.SizeKey) ?? -1);
                 game.RomSize = Array.Find(romSizes, s => s > -1).ToString();
 
-                var romCRCs = Array.ConvertAll(roms, ConvertFromInternalModel);;
+                var romCRCs = Array.ConvertAll(roms, ConvertFromInternalModel);
                 game.Files = new Files { RomCRC = romCRCs };
             }
 
