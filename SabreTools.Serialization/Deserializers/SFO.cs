@@ -71,10 +71,10 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new SFOHeader();
 
             obj.Magic = data.ReadUInt32BigEndian();
-            obj.Version = data.ReadUInt32BigEndian();
-            obj.KeyTableStart = data.ReadUInt32BigEndian();
-            obj.DataTableStart = data.ReadUInt32BigEndian();
-            obj.TablesEntries = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32LittleEndian();
+            obj.KeyTableStart = data.ReadUInt32LittleEndian();
+            obj.DataTableStart = data.ReadUInt32LittleEndian();
+            obj.TablesEntries = data.ReadUInt32LittleEndian();
 
             return obj;
         }
