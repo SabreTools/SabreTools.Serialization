@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
 
-// TODO: Finish replacing ReadType
 namespace SabreTools.Serialization
 {
     public static partial class Extensions
@@ -95,42 +94,46 @@ namespace SabreTools.Serialization
         #region Debug
 
         /// <summary>
-        /// Read debug data as an NB10 Program Database
+        /// Parse a byte array into a NB10ProgramDatabase
         /// </summary>
-        /// <param name="data">Data to parse into a database</param>
+        /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled NB10 Program Database on success, null on error</returns>
-        public static NB10ProgramDatabase? AsNB10ProgramDatabase(this byte[] data, ref int offset)
+        /// <returns>A filled NB10ProgramDatabase on success, null on error</returns>
+        public static NB10ProgramDatabase? ParseNB10ProgramDatabase(this byte[] data, ref int offset)
         {
-            var nb10ProgramDatabase = data.ReadType<NB10ProgramDatabase>(ref offset);
-            if (nb10ProgramDatabase?.Signature != 0x3031424E)
+            var obj = new NB10ProgramDatabase();
+
+            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
+            if (obj.Signature != 0x3031424E)
                 return null;
 
-            return nb10ProgramDatabase;
+            obj.Offset = data.ReadUInt32LittleEndian(ref offset);
+            obj.Timestamp = data.ReadUInt32LittleEndian(ref offset);
+            obj.Age = data.ReadUInt32LittleEndian(ref offset);
+            obj.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset);
+
+            return obj;
         }
 
         /// <summary>
-        /// Read debug data as an RSDS Program Database
+        /// Parse a byte array into a RSDSProgramDatabase
         /// </summary>
-        /// <param name="data">Data to parse into a database</param>
+        /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled RSDS Program Database on success, null on error</returns>
-        public static RSDSProgramDatabase? AsRSDSProgramDatabase(this byte[] data, ref int offset)
+        /// <returns>A filled RSDSProgramDatabase on success, null on error</returns>
+        public static RSDSProgramDatabase? ParseRSDSProgramDatabase(this byte[] data, ref int offset)
         {
-            var rsdsProgramDatabase = data.ReadType<RSDSProgramDatabase>(ref offset);
-            if (rsdsProgramDatabase?.Signature != 0x53445352)
+            var obj = new RSDSProgramDatabase();
+
+            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
+            if (obj.Signature != 0x53445352)
                 return null;
 
-#if NET20 || NET35 || NET40 || NET452 || NET462
-            // Convert ASCII string to UTF-8
-            if (rsdsProgramDatabase.PathAndFileName != null)
-            {
-                byte[] bytes = Encoding.ASCII.GetBytes(rsdsProgramDatabase.PathAndFileName);
-                rsdsProgramDatabase.PathAndFileName = Encoding.UTF8.GetString(bytes);
-            }
-#endif
+            obj.GUID = data.ReadGuid(ref offset);
+            obj.Age = data.ReadUInt32LittleEndian(ref offset);
+            obj.PathAndFileName = data.ReadNullTerminatedUTF8String(ref offset);
 
-            return rsdsProgramDatabase;
+            return obj;
         }
 
         #endregion
@@ -138,87 +141,79 @@ namespace SabreTools.Serialization
         #region Overlay
 
         /// <summary>
-        /// Read overlay data as a SecuROM AddD overlay data
+        /// Parse a byte array into a SecuROMAddD
         /// </summary>
         /// <param name="data">Data to parse into overlay data</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled SecuROM AddD overlay data on success, null on error</returns>
-        public static SecuROMAddD? AsSecuROMAddD(this byte[] data, ref int offset)
+        /// <returns>A filled SecuROMAddD on success, null on error</returns>
+        public static SecuROMAddD? ParseSecuROMAddD(this byte[] data, ref int offset)
         {
             // Read in the table
-            var addD = new SecuROMAddD();
+            var obj = new SecuROMAddD();
 
-            addD.Signature = data.ReadUInt32(ref offset);
-            if (addD.Signature != 0x44646441)
+            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
+            if (obj.Signature != 0x44646441)
                 return null;
 
             int originalOffset = offset;
 
-            addD.EntryCount = data.ReadUInt32(ref offset);
-            addD.Version = data.ReadNullTerminatedAnsiString(ref offset);
-            if (string.IsNullOrEmpty(addD.Version))
+            obj.EntryCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.Version = data.ReadNullTerminatedAnsiString(ref offset);
+            if (string.IsNullOrEmpty(obj.Version))
                 offset = originalOffset + 0x10;
 
             var buildBytes = data.ReadBytes(ref offset, 4);
             var buildChars = Array.ConvertAll(buildBytes, b => (char)b);
-            addD.Build = buildChars;
+            obj.Build = buildChars;
 
             // Distinguish between v1 and v2
             int bytesToRead = 112; // v2
-            if (string.IsNullOrEmpty(addD.Version)
-                || addD.Version!.StartsWith("3")
-                || addD.Version.StartsWith("4.47"))
+            if (string.IsNullOrEmpty(obj.Version)
+                || obj.Version!.StartsWith("3")
+                || obj.Version.StartsWith("4.47"))
             {
                 bytesToRead = 44;
             }
 
-            addD.Unknown14h = data.ReadBytes(ref offset, bytesToRead);
+            obj.Unknown14h = data.ReadBytes(ref offset, bytesToRead);
 
-            addD.Entries = new SecuROMAddDEntry[addD.EntryCount];
-            for (int i = 0; i < addD.EntryCount; i++)
+            obj.Entries = new SecuROMAddDEntry[obj.EntryCount];
+            for (int i = 0; i < obj.EntryCount; i++)
             {
-                var addDEntry = data.ReadType<SecuROMAddDEntry>(ref offset);
-                if (addDEntry == null)
-                    return null;
-
-                addD.Entries[i] = addDEntry;
+                obj.Entries[i] = ParseSecuROMAddDEntry(data, ref offset);
             }
 
-            return addD;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a SecuROMAddDEntry
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled SecuROMAddDEntry on success, null on error</returns>
+        public static SecuROMAddDEntry ParseSecuROMAddDEntry(this byte[] data, ref int offset)
+        {
+            var obj = new SecuROMAddDEntry();
+
+            obj.PhysicalOffset = data.ReadUInt32LittleEndian(ref offset);
+            obj.Length = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown08h = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown0Ch = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown10h = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown14h = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown18h = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown1Ch = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileName = data.ReadNullTerminatedAnsiString(ref offset);
+            obj.Unknown2Ch = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
         }
 
         #endregion
 
         // TODO: Implement other resource types from https://learn.microsoft.com/en-us/windows/win32/menurc/resource-file-formats
         #region Resources
-
-        /// <summary>
-        /// Read resource data as a resource header
-        /// </summary>
-        /// <param name="data">Data to parse into a resource header</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled resource header on success, null on error</returns>
-        public static ResourceHeader? AsResourceHeader(this byte[] data, ref int offset)
-        {
-            // If we have data that's invalid, we can't do anything
-            if (data == null)
-                return null;
-
-            // Read in the table
-            var header = new ResourceHeader();
-
-            header.DataSize = data.ReadUInt32(ref offset);
-            header.HeaderSize = data.ReadUInt32(ref offset);
-            header.ResourceType = (ResourceType)data.ReadUInt32(ref offset); // TODO: Could be a string too
-            header.Name = data.ReadUInt32(ref offset); // TODO: Could be a string too
-            header.DataVersion = data.ReadUInt32(ref offset);
-            header.MemoryFlags = (MemoryFlags)data.ReadUInt16(ref offset);
-            header.LanguageId = data.ReadUInt16(ref offset);
-            header.Version = data.ReadUInt32(ref offset);
-            header.Characteristics = data.ReadUInt32(ref offset);
-
-            return header;
-        }
 
         /// <summary>
         /// Read resource data as an accelerator table resource
@@ -243,11 +238,7 @@ namespace SabreTools.Serialization
             // Read in the table
             for (int i = 0; i < count; i++)
             {
-                var acceleratorTableEntry = entry.Data.ReadType<AcceleratorTableEntry>(ref offset);
-                if (acceleratorTableEntry == null)
-                    return null;
-
-                table[i] = acceleratorTableEntry;
+                table[i] = ParseAcceleratorTableEntry(entry.Data, ref offset);
             }
 
             return table;
@@ -294,19 +285,19 @@ namespace SabreTools.Serialization
 
             // Try to read the signature for an extended dialog box template
             int signatureOffset = sizeof(ushort);
-            int possibleSignature = entry.Data.ReadUInt16(ref signatureOffset);
+            int possibleSignature = entry.Data.ReadUInt16LittleEndian(ref signatureOffset);
             if (possibleSignature == 0xFFFF)
             {
                 #region Extended dialog template
 
                 var dialogTemplateExtended = new DialogTemplateExtended();
 
-                dialogTemplateExtended.Version = entry.Data.ReadUInt16(ref offset);
-                dialogTemplateExtended.Signature = entry.Data.ReadUInt16(ref offset);
-                dialogTemplateExtended.HelpID = entry.Data.ReadUInt32(ref offset);
-                dialogTemplateExtended.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplateExtended.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplateExtended.DialogItems = entry.Data.ReadUInt16(ref offset);
+                dialogTemplateExtended.Version = entry.Data.ReadUInt16LittleEndian(ref offset);
+                dialogTemplateExtended.Signature = entry.Data.ReadUInt16LittleEndian(ref offset);
+                dialogTemplateExtended.HelpID = entry.Data.ReadUInt32LittleEndian(ref offset);
+                dialogTemplateExtended.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                dialogTemplateExtended.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                dialogTemplateExtended.DialogItems = entry.Data.ReadUInt16LittleEndian(ref offset);
                 dialogTemplateExtended.PositionX = entry.Data.ReadInt16(ref offset);
                 dialogTemplateExtended.PositionY = entry.Data.ReadInt16(ref offset);
                 dialogTemplateExtended.WidthX = entry.Data.ReadInt16(ref offset);
@@ -315,7 +306,7 @@ namespace SabreTools.Serialization
                 #region Menu resource
 
                 int currentOffset = offset;
-                ushort menuResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort menuResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -343,7 +334,7 @@ namespace SabreTools.Serialization
 
                     // Read the ordinal if we have the flag set
                     if (menuResourceHasOrdinal)
-                        dialogTemplateExtended.MenuResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogTemplateExtended.MenuResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                 }
 
                 #endregion
@@ -351,7 +342,7 @@ namespace SabreTools.Serialization
                 #region Class resource
 
                 currentOffset = offset;
-                ushort classResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort classResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -379,7 +370,7 @@ namespace SabreTools.Serialization
 
                     // Read the ordinal if we have the flag set
                     if (classResourcehasOrdinal)
-                        dialogTemplateExtended.ClassResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogTemplateExtended.ClassResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                 }
 
                 #endregion
@@ -387,7 +378,7 @@ namespace SabreTools.Serialization
                 #region Title resource
 
                 currentOffset = offset;
-                ushort titleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort titleResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -420,8 +411,8 @@ namespace SabreTools.Serialization
                 if (dialogTemplateExtended.Style.HasFlag(WindowStyles.DS_SETFONT))
 #endif
                 {
-                    dialogTemplateExtended.PointSize = entry.Data.ReadUInt16(ref offset);
-                    dialogTemplateExtended.Weight = entry.Data.ReadUInt16(ref offset);
+                    dialogTemplateExtended.PointSize = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dialogTemplateExtended.Weight = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dialogTemplateExtended.Italic = entry.Data.ReadByte(ref offset);
                     dialogTemplateExtended.CharSet = entry.Data.ReadByte(ref offset);
                     dialogTemplateExtended.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
@@ -448,29 +439,29 @@ namespace SabreTools.Serialization
                 {
                     var dialogItemTemplate = new DialogItemTemplateExtended();
 
-                    dialogItemTemplate.HelpID = entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.HelpID = entry.Data.ReadUInt32LittleEndian(ref offset);
+                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                     dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.HeightY = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.ID = entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.ID = entry.Data.ReadUInt32LittleEndian(ref offset);
 
                     #region Class resource
 
                     currentOffset = offset;
-                    ushort itemClassResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    ushort itemClassResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                     offset = currentOffset;
 
                     // 0xFFFF means ordinal only
                     if (itemClassResourceIdentifier == 0xFFFF)
                     {
                         // Increment the pointer
-                        _ = entry.Data.ReadUInt16(ref offset);
+                        _ = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16LittleEndian(ref offset);
                     }
                     else
                     {
@@ -495,17 +486,17 @@ namespace SabreTools.Serialization
                     #region Title resource
 
                     currentOffset = offset;
-                    ushort itemTitleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    ushort itemTitleResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                     offset = currentOffset;
 
                     // 0xFFFF means ordinal only
                     if (itemTitleResourceIdentifier == 0xFFFF)
                     {
                         // Increment the pointer
-                        _ = entry.Data.ReadUInt16(ref offset);
+                        _ = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.TitleResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.TitleResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                     }
                     else
                     {
@@ -524,7 +515,7 @@ namespace SabreTools.Serialization
 
                     #region Creation data
 
-                    dialogItemTemplate.CreationDataSize = entry.Data.ReadUInt16(ref offset);
+                    dialogItemTemplate.CreationDataSize = entry.Data.ReadUInt16LittleEndian(ref offset);
                     if (dialogItemTemplate.CreationDataSize != 0)
                         dialogItemTemplate.CreationData = entry.Data.ReadBytes(ref offset, dialogItemTemplate.CreationDataSize);
 
@@ -554,9 +545,9 @@ namespace SabreTools.Serialization
 
                 var dialogTemplate = new DialogTemplate();
 
-                dialogTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
-                dialogTemplate.ItemCount = entry.Data.ReadUInt16(ref offset);
+                dialogTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                dialogTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                dialogTemplate.ItemCount = entry.Data.ReadUInt16LittleEndian(ref offset);
                 dialogTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                 dialogTemplate.PositionY = entry.Data.ReadInt16(ref offset);
                 dialogTemplate.WidthX = entry.Data.ReadInt16(ref offset);
@@ -565,7 +556,7 @@ namespace SabreTools.Serialization
                 #region Menu resource
 
                 int currentOffset = offset;
-                ushort menuResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                ushort menuResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -593,7 +584,7 @@ namespace SabreTools.Serialization
 
                     // Read the ordinal if we have the flag set
                     if (menuResourceHasOrdinal)
-                        dialogTemplate.MenuResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogTemplate.MenuResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                 }
 
                 #endregion
@@ -605,7 +596,7 @@ namespace SabreTools.Serialization
                 if (offset >= entry.Data.Length)
                     classResourceIdentifier = 0x0000;
                 else
-                    classResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    classResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -633,7 +624,7 @@ namespace SabreTools.Serialization
 
                     // Read the ordinal if we have the flag set
                     if (classResourcehasOrdinal)
-                        dialogTemplate.ClassResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogTemplate.ClassResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                 }
 
                 #endregion
@@ -645,7 +636,7 @@ namespace SabreTools.Serialization
                 if (offset >= entry.Data.Length)
                     titleResourceIdentifier = 0x0000;
                 else
-                    titleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    titleResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                 offset = currentOffset;
 
                 // 0x0000 means no elements
@@ -678,7 +669,7 @@ namespace SabreTools.Serialization
                 if (dialogTemplate.Style.HasFlag(WindowStyles.DS_SETFONT))
 #endif
                 {
-                    dialogTemplate.PointSizeValue = entry.Data.ReadUInt16(ref offset);
+                    dialogTemplate.PointSizeValue = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                     // Read the font name as a string
                     dialogTemplate.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
@@ -705,28 +696,28 @@ namespace SabreTools.Serialization
                 {
                     var dialogItemTemplate = new DialogItemTemplate();
 
-                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32(ref offset);
-                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32(ref offset);
+                    dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
+                    dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                     dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
                     dialogItemTemplate.HeightY = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.ID = entry.Data.ReadUInt16(ref offset);
+                    dialogItemTemplate.ID = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                     #region Class resource
 
                     currentOffset = offset;
-                    ushort itemClassResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    ushort itemClassResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                     offset = currentOffset;
 
                     // 0xFFFF means ordinal only
                     if (itemClassResourceIdentifier == 0xFFFF)
                     {
                         // Increment the pointer
-                        _ = entry.Data.ReadUInt16(ref offset);
+                        _ = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.ClassResourceOrdinal = (DialogItemTemplateOrdinal)entry.Data.ReadUInt16LittleEndian(ref offset);
                     }
                     else
                     {
@@ -751,17 +742,17 @@ namespace SabreTools.Serialization
                     #region Title resource
 
                     currentOffset = offset;
-                    ushort itemTitleResourceIdentifier = entry.Data.ReadUInt16(ref offset);
+                    ushort itemTitleResourceIdentifier = entry.Data.ReadUInt16LittleEndian(ref offset);
                     offset = currentOffset;
 
                     // 0xFFFF means ordinal only
                     if (itemTitleResourceIdentifier == 0xFFFF)
                     {
                         // Increment the pointer
-                        _ = entry.Data.ReadUInt16(ref offset);
+                        _ = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         // Read the ordinal
-                        dialogItemTemplate.TitleResourceOrdinal = entry.Data.ReadUInt16(ref offset);
+                        dialogItemTemplate.TitleResourceOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
                     }
                     else
                     {
@@ -780,7 +771,7 @@ namespace SabreTools.Serialization
 
                     #region Creation data
 
-                    dialogItemTemplate.CreationDataSize = entry.Data.ReadUInt16(ref offset);
+                    dialogItemTemplate.CreationDataSize = entry.Data.ReadUInt16LittleEndian(ref offset);
                     if (dialogItemTemplate.CreationDataSize != 0)
                         dialogItemTemplate.CreationData = entry.Data.ReadBytes(ref offset, dialogItemTemplate.CreationDataSize);
 
@@ -825,7 +816,7 @@ namespace SabreTools.Serialization
             // Create the output object
             var fontGroupHeader = new FontGroupHeader();
 
-            fontGroupHeader.NumberOfFonts = entry.Data.ReadUInt16(ref offset);
+            fontGroupHeader.NumberOfFonts = entry.Data.ReadUInt16LittleEndian(ref offset);
             if (fontGroupHeader.NumberOfFonts > 0)
             {
                 fontGroupHeader.DE = new DirEntry[fontGroupHeader.NumberOfFonts];
@@ -833,37 +824,37 @@ namespace SabreTools.Serialization
                 {
                     var dirEntry = new DirEntry();
 
-                    dirEntry.FontOrdinal = entry.Data.ReadUInt16(ref offset);
+                    dirEntry.FontOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                     dirEntry.Entry = new FontDirEntry();
-                    dirEntry.Entry.Version = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.Size = entry.Data.ReadUInt32(ref offset);
+                    dirEntry.Entry.Version = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.Size = entry.Data.ReadUInt32LittleEndian(ref offset);
                     dirEntry.Entry.Copyright = entry.Data.ReadBytes(ref offset, 60);
-                    dirEntry.Entry.Type = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.Points = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.VertRes = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.HorizRes = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.Ascent = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.InternalLeading = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.ExternalLeading = entry.Data.ReadUInt16(ref offset);
+                    dirEntry.Entry.Type = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.Points = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.VertRes = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.HorizRes = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.Ascent = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.InternalLeading = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.ExternalLeading = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dirEntry.Entry.Italic = entry.Data.ReadByte(ref offset);
                     dirEntry.Entry.Underline = entry.Data.ReadByte(ref offset);
                     dirEntry.Entry.StrikeOut = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.Weight = entry.Data.ReadUInt16(ref offset);
+                    dirEntry.Entry.Weight = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dirEntry.Entry.CharSet = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.PixWidth = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.PixHeight = entry.Data.ReadUInt16(ref offset);
+                    dirEntry.Entry.PixWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.PixHeight = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dirEntry.Entry.PitchAndFamily = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.AvgWidth = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.MaxWidth = entry.Data.ReadUInt16(ref offset);
+                    dirEntry.Entry.AvgWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.MaxWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dirEntry.Entry.FirstChar = entry.Data.ReadByte(ref offset);
                     dirEntry.Entry.LastChar = entry.Data.ReadByte(ref offset);
                     dirEntry.Entry.DefaultChar = entry.Data.ReadByte(ref offset);
                     dirEntry.Entry.BreakChar = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.WidthBytes = entry.Data.ReadUInt16(ref offset);
-                    dirEntry.Entry.Device = entry.Data.ReadUInt32(ref offset);
-                    dirEntry.Entry.Face = entry.Data.ReadUInt32(ref offset);
-                    dirEntry.Entry.Reserved = entry.Data.ReadUInt32(ref offset);
+                    dirEntry.Entry.WidthBytes = entry.Data.ReadUInt16LittleEndian(ref offset);
+                    dirEntry.Entry.Device = entry.Data.ReadUInt32LittleEndian(ref offset);
+                    dirEntry.Entry.Face = entry.Data.ReadUInt32LittleEndian(ref offset);
+                    dirEntry.Entry.Reserved = entry.Data.ReadUInt32LittleEndian(ref offset);
 
                     // TODO: Determine how to read these two? Immediately after?
                     dirEntry.Entry.DeviceName = entry.Data.ReadNullTerminatedAnsiString(ref offset);
@@ -896,15 +887,12 @@ namespace SabreTools.Serialization
 
             // Try to read the version for an extended header
             int versionOffset = 0;
-            int possibleVersion = entry.Data.ReadUInt16(ref versionOffset);
+            int possibleVersion = entry.Data.ReadUInt16LittleEndian(ref versionOffset);
             if (possibleVersion == 0x0001)
             {
                 #region Extended menu header
 
-                var menuHeaderExtended = entry.Data.ReadType<MenuHeaderExtended>(ref offset);
-                if (menuHeaderExtended == null)
-                    return null;
-
+                var menuHeaderExtended = ParseMenuHeaderExtended(entry.Data, ref offset);
                 menuResource.MenuHeader = menuHeaderExtended;
 
                 #endregion
@@ -919,9 +907,8 @@ namespace SabreTools.Serialization
 
                     while (offset < entry.Data.Length)
                     {
-                        var extendedMenuItem = entry.Data.ReadType<MenuItemExtended>(ref offset);
-                        if (extendedMenuItem == null)
-                            return null;
+                        var extendedMenuItem = ParseMenuItemExtended(entry.Data, ref offset);
+                        extendedMenuItems.Add(extendedMenuItem);
 
                         // Align to the DWORD boundary if we're not at the end
                         if (offset < entry.Data.Length)
@@ -929,8 +916,6 @@ namespace SabreTools.Serialization
                             while (offset < entry.Data.Length && (offset % 4) != 0)
                                 _ = entry.Data.ReadByte(ref offset);
                         }
-
-                        extendedMenuItems.Add(extendedMenuItem);
                     }
                 }
 
@@ -942,11 +927,7 @@ namespace SabreTools.Serialization
             {
                 #region Menu header
 
-                var menuHeader = entry.Data.ReadType<NormalMenuHeader>(ref offset);
-                if (menuHeader == null)
-                    return null;
-
-                menuResource.MenuHeader = menuHeader;
+                menuResource.MenuHeader = ParseNormalMenuHeader(entry.Data, ref offset);
 
                 #endregion
 
@@ -958,7 +939,7 @@ namespace SabreTools.Serialization
                 {
                     // Determine if this is a popup
                     int flagsOffset = offset;
-                    var initialFlags = (MenuFlags)entry.Data.ReadUInt16(ref flagsOffset);
+                    var initialFlags = (MenuFlags)entry.Data.ReadUInt16LittleEndian(ref flagsOffset);
 
                     MenuItem? menuItem;
 #if NET20 || NET35
@@ -966,9 +947,9 @@ namespace SabreTools.Serialization
 #else
                     if (initialFlags.HasFlag(MenuFlags.MF_POPUP))
 #endif
-                        menuItem = entry.Data.ReadType<PopupMenuItem>(ref offset);
+                        menuItem = ParsePopupMenuItem(entry.Data, ref offset);
                     else
-                        menuItem = entry.Data.ReadType<NormalMenuItem>(ref offset);
+                        menuItem = ParseNormalMenuItem(entry.Data, ref offset);
 
                     // Align to the DWORD boundary if we're not at the end
                     if (offset < entry.Data.Length)
@@ -1009,17 +990,14 @@ namespace SabreTools.Serialization
             var messageResourceData = new MessageResourceData();
 
             // Message resource blocks
-            messageResourceData.NumberOfBlocks = entry.Data.ReadUInt32(ref offset);
+            messageResourceData.NumberOfBlocks = entry.Data.ReadUInt32LittleEndian(ref offset);
             if (messageResourceData.NumberOfBlocks > 0)
             {
                 var messageResourceBlocks = new List<MessageResourceBlock>();
 
                 for (int i = 0; i < messageResourceData.NumberOfBlocks; i++)
                 {
-                    var messageResourceBlock = entry.Data.ReadType<MessageResourceBlock>(ref offset);
-                    if (messageResourceBlock == null)
-                        return null;
-
+                    var messageResourceBlock = ParseMessageResourceBlock(entry.Data, ref offset);
                     messageResourceBlocks.Add(messageResourceBlock);
                 }
 
@@ -1043,8 +1021,8 @@ namespace SabreTools.Serialization
                     {
                         var messageResourceEntry = new MessageResourceEntry();
 
-                        messageResourceEntry.Length = entry.Data.ReadUInt16(ref offset);
-                        messageResourceEntry.Flags = entry.Data.ReadUInt16(ref offset);
+                        messageResourceEntry.Length = entry.Data.ReadUInt16LittleEndian(ref offset);
+                        messageResourceEntry.Flags = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         Encoding textEncoding = messageResourceEntry.Flags == 0x0001 ? Encoding.Unicode : Encoding.ASCII;
                         byte[]? textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
@@ -1059,6 +1037,100 @@ namespace SabreTools.Serialization
             }
 
             return messageResourceData;
+        }
+
+        /// <summary>
+        ///  Read byte data as a string file info resource
+        /// </summary>
+        /// <param name="data">Data to parse into a string file info</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled string file info resource on success, null on error</returns>
+        public static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
+        {
+            var stringFileInfo = new StringFileInfo();
+
+            // Cache the initial offset
+            int currentOffset = offset;
+
+            stringFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
+            stringFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
+            stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
+            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+            if (stringFileInfo.Key != "StringFileInfo")
+            {
+                offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
+                return null;
+            }
+
+            // Align to the DWORD boundary if we're not at the end
+            if (offset < data.Length)
+            {
+                while (offset < data.Length && (offset % 4) != 0)
+                    stringFileInfo.Padding = data.ReadByte(ref offset);
+            }
+
+            var stringFileInfoChildren = new List<StringTable>();
+            while ((offset - currentOffset) < stringFileInfo.Length)
+            {
+                var stringTable = new StringTable();
+
+                stringTable.Length = data.ReadUInt16LittleEndian(ref offset);
+                stringTable.ValueLength = data.ReadUInt16LittleEndian(ref offset);
+                stringTable.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
+                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+
+                // Align to the DWORD boundary if we're not at the end
+                if (offset < data.Length)
+                {
+                    while (offset < data.Length && (offset % 4) != 0)
+                        stringTable.Padding = data.ReadByte(ref offset);
+                }
+
+                var stringTableChildren = new List<StringData>();
+                while ((offset - currentOffset) < stringTable.Length)
+                {
+                    var stringData = new StringData();
+
+                    int dataStartOffset = offset;
+                    stringData.Length = data.ReadUInt16LittleEndian(ref offset);
+                    stringData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
+                    stringData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
+                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+
+                    // Align to the DWORD boundary if we're not at the end
+                    if (offset < data.Length)
+                    {
+                        while (offset < data.Length && (offset % 4) != 0)
+                            stringData.Padding = data.ReadByte(ref offset);
+                    }
+
+                    if (stringData.ValueLength > 0)
+                    {
+                        int bytesReadable = Math.Min(stringData.ValueLength * sizeof(ushort), stringData.Length - (offset - dataStartOffset));
+                        byte[] valueBytes = data.ReadBytes(ref offset, bytesReadable);
+                        stringData.Value = Encoding.Unicode.GetString(valueBytes);
+                    }
+
+                    // Align to the DWORD boundary if we're not at the end
+                    if (offset < data.Length)
+                    {
+                        while (offset < data.Length && (offset % 4) != 0)
+                            _ = data.ReadByte(ref offset);
+                    }
+
+                    stringTableChildren.Add(stringData);
+                    if (stringData.Length == 0 && stringData.ValueLength == 0)
+                        break;
+                }
+
+                stringTable.Children = [.. stringTableChildren];
+
+                stringFileInfoChildren.Add(stringTable);
+            }
+
+            stringFileInfo.Children = [.. stringFileInfoChildren];
+
+            return stringFileInfo;
         }
 
         /// <summary>
@@ -1093,6 +1165,75 @@ namespace SabreTools.Serialization
         }
 
         /// <summary>
+        ///  Read byte data as a var file info resource
+        /// </summary>
+        /// <param name="data">Data to parse into a var file info</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled var file info resource on success, null on error</returns>
+        public static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
+        {
+            var varFileInfo = new VarFileInfo();
+
+            // Cache the initial offset
+            int initialOffset = offset;
+
+            varFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
+            varFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
+            varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
+            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+            if (varFileInfo.Key != "VarFileInfo")
+                return null;
+
+            // Align to the DWORD boundary if we're not at the end
+            if (offset < data.Length)
+            {
+                while (offset < data.Length && (offset % 4) != 0)
+                    varFileInfo.Padding = data.ReadByte(ref offset);
+            }
+
+            var varFileInfoChildren = new List<VarData>();
+            while ((offset - initialOffset) < varFileInfo.Length)
+            {
+                var varData = new VarData();
+
+                varData.Length = data.ReadUInt16LittleEndian(ref offset);
+                varData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
+                varData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
+                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+                if (varData.Key != "Translation")
+                {
+                    offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);
+                    return null;
+                }
+
+                // Align to the DWORD boundary if we're not at the end
+                if (offset < data.Length)
+                {
+                    while (offset < data.Length && (offset % 4) != 0)
+                        varData.Padding = data.ReadByte(ref offset);
+                }
+
+                // Cache the current offset
+                int currentOffset = offset;
+
+                var varDataValue = new List<uint>();
+                while ((offset - currentOffset) < varData.ValueLength)
+                {
+                    uint languageAndCodeIdentifierPair = data.ReadUInt32LittleEndian(ref offset);
+                    varDataValue.Add(languageAndCodeIdentifierPair);
+                }
+
+                varData.Value = [.. varDataValue];
+
+                varFileInfoChildren.Add(varData);
+            }
+
+            varFileInfo.Children = [.. varFileInfoChildren];
+
+            return varFileInfo;
+        }
+
+        /// <summary>
         /// Read resource data as a version info resource
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
@@ -1109,20 +1250,20 @@ namespace SabreTools.Serialization
             // Create the output object
             var versionInfo = new VersionInfo();
 
-            versionInfo.Length = entry.Data.ReadUInt16(ref offset);
-            versionInfo.ValueLength = entry.Data.ReadUInt16(ref offset);
-            versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16(ref offset);
+            versionInfo.Length = entry.Data.ReadUInt16LittleEndian(ref offset);
+            versionInfo.ValueLength = entry.Data.ReadUInt16LittleEndian(ref offset);
+            versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16LittleEndian(ref offset);
             versionInfo.Key = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
             if (versionInfo.Key != "VS_VERSION_INFO")
                 return null;
 
             while (offset < entry.Data.Length && (offset % 4) != 0)
-                versionInfo.Padding1 = entry.Data.ReadUInt16(ref offset);
+                versionInfo.Padding1 = entry.Data.ReadUInt16LittleEndian(ref offset);
 
             // Read fixed file info
             if (versionInfo.ValueLength > 0 && offset + versionInfo.ValueLength <= entry.Data.Length)
             {
-                var fixedFileInfo = entry.Data.ReadType<FixedFileInfo>(ref offset);
+                var fixedFileInfo = ParseFixedFileInfo(entry.Data, ref offset);
                 if (fixedFileInfo?.Signature != 0xFEEF04BD)
                     return null;
 
@@ -1130,7 +1271,7 @@ namespace SabreTools.Serialization
             }
 
             while (offset < entry.Data.Length && (offset % 4) != 0)
-                versionInfo.Padding2 = entry.Data.ReadUInt16(ref offset);
+                versionInfo.Padding2 = entry.Data.ReadUInt16LittleEndian(ref offset);
 
             // TODO: Make the following block a private helper method
 
@@ -1182,166 +1323,176 @@ namespace SabreTools.Serialization
         }
 
         /// <summary>
-        ///  Read byte data as a string file info resource
+        /// Parse a byte array into a AcceleratorTableEntry
         /// </summary>
-        /// <param name="data">Data to parse into a string file info</param>
+        /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled string file info resource on success, null on error</returns>
-        public static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
+        /// <returns>A filled AcceleratorTableEntry on success, null on error</returns>
+        public static AcceleratorTableEntry ParseAcceleratorTableEntry(this byte[] data, ref int offset)
         {
-            var stringFileInfo = new StringFileInfo();
+            var obj = new AcceleratorTableEntry();
 
-            // Cache the initial offset
-            int currentOffset = offset;
+            obj.Flags = (AcceleratorTableFlags)data.ReadUInt16LittleEndian(ref offset);
+            obj.Ansi = data.ReadUInt16LittleEndian(ref offset);
+            obj.Id = data.ReadUInt16LittleEndian(ref offset);
+            obj.Padding = data.ReadUInt16LittleEndian(ref offset);
 
-            stringFileInfo.Length = data.ReadUInt16(ref offset);
-            stringFileInfo.ValueLength = data.ReadUInt16(ref offset);
-            stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
-            if (stringFileInfo.Key != "StringFileInfo")
-            {
-                offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
-                return null;
-            }
-
-            // Align to the DWORD boundary if we're not at the end
-            if (offset < data.Length)
-            {
-                while (offset < data.Length && (offset % 4) != 0)
-                    stringFileInfo.Padding = data.ReadByte(ref offset);
-            }
-
-            var stringFileInfoChildren = new List<StringTable>();
-            while ((offset - currentOffset) < stringFileInfo.Length)
-            {
-                var stringTable = new StringTable();
-
-                stringTable.Length = data.ReadUInt16(ref offset);
-                stringTable.ValueLength = data.ReadUInt16(ref offset);
-                stringTable.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset);
-
-                // Align to the DWORD boundary if we're not at the end
-                if (offset < data.Length)
-                {
-                    while (offset < data.Length && (offset % 4) != 0)
-                        stringTable.Padding = data.ReadByte(ref offset);
-                }
-
-                var stringTableChildren = new List<StringData>();
-                while ((offset - currentOffset) < stringTable.Length)
-                {
-                    var stringData = new StringData();
-
-                    int dataStartOffset = offset;
-                    stringData.Length = data.ReadUInt16(ref offset);
-                    stringData.ValueLength = data.ReadUInt16(ref offset);
-                    stringData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
-
-                    // Align to the DWORD boundary if we're not at the end
-                    if (offset < data.Length)
-                    {
-                        while (offset < data.Length && (offset % 4) != 0)
-                            stringData.Padding = data.ReadByte(ref offset);
-                    }
-
-                    if (stringData.ValueLength > 0)
-                    {
-                        int bytesReadable = Math.Min(stringData.ValueLength * sizeof(ushort), stringData.Length - (offset - dataStartOffset));
-                        byte[] valueBytes = data.ReadBytes(ref offset, bytesReadable);
-                        stringData.Value = Encoding.Unicode.GetString(valueBytes);
-                    }
-
-                    // Align to the DWORD boundary if we're not at the end
-                    if (offset < data.Length)
-                    {
-                        while (offset < data.Length && (offset % 4) != 0)
-                            _ = data.ReadByte(ref offset);
-                    }
-
-                    stringTableChildren.Add(stringData);
-                    if (stringData.Length == 0 && stringData.ValueLength == 0)
-                        break;
-                }
-
-                stringTable.Children = [.. stringTableChildren];
-
-                stringFileInfoChildren.Add(stringTable);
-            }
-
-            stringFileInfo.Children = [.. stringFileInfoChildren];
-
-            return stringFileInfo;
+            return obj;
         }
 
         /// <summary>
-        ///  Read byte data as a var file info resource
+        /// Parse a byte array into a FixedFileInfo
         /// </summary>
-        /// <param name="data">Data to parse into a var file info</param>
+        /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled var file info resource on success, null on error</returns>
-        public static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
+        /// <returns>A filled FixedFileInfo on success, null on error</returns>
+        public static FixedFileInfo ParseFixedFileInfo(this byte[] data, ref int offset)
         {
-            var varFileInfo = new VarFileInfo();
+            var obj = new FixedFileInfo();
 
-            // Cache the initial offset
-            int initialOffset = offset;
+            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
+            obj.StrucVersion = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileVersionMS = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileVersionLS = data.ReadUInt32LittleEndian(ref offset);
+            obj.ProductVersionMS = data.ReadUInt32LittleEndian(ref offset);
+            obj.ProductVersionLS = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileFlagsMask = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileFlags = (FixedFileInfoFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.FileOS = (FixedFileInfoOS)data.ReadUInt32LittleEndian(ref offset);
+            obj.FileType = (FixedFileInfoFileType)data.ReadUInt32LittleEndian(ref offset);
+            obj.FileSubtype = (FixedFileInfoFileSubtype)data.ReadUInt32LittleEndian(ref offset);
+            obj.FileDateMS = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileDateLS = data.ReadUInt32LittleEndian(ref offset);
 
-            varFileInfo.Length = data.ReadUInt16(ref offset);
-            varFileInfo.ValueLength = data.ReadUInt16(ref offset);
-            varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
-            if (varFileInfo.Key != "VarFileInfo")
-                return null;
+            return obj;
+        }
 
-            // Align to the DWORD boundary if we're not at the end
-            if (offset < data.Length)
-            {
-                while (offset < data.Length && (offset % 4) != 0)
-                    varFileInfo.Padding = data.ReadByte(ref offset);
-            }
+        /// <summary>
+        /// Parse a byte array into a MenuHeaderExtended
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MenuHeaderExtended on success, null on error</returns>
+        public static MenuHeaderExtended ParseMenuHeaderExtended(this byte[] data, ref int offset)
+        {
+            var obj = new MenuHeaderExtended();
 
-            var varFileInfoChildren = new List<VarData>();
-            while ((offset - initialOffset) < varFileInfo.Length)
-            {
-                var varData = new VarData();
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.Offset = data.ReadUInt16LittleEndian(ref offset);
+            obj.HelpID = data.ReadUInt32LittleEndian(ref offset);
 
-                varData.Length = data.ReadUInt16(ref offset);
-                varData.ValueLength = data.ReadUInt16(ref offset);
-                varData.ResourceType = (VersionResourceType)data.ReadUInt16(ref offset);
-                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
-                if (varData.Key != "Translation")
-                {
-                    offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);
-                    return null;
-                }
+            return obj;
+        }
 
-                // Align to the DWORD boundary if we're not at the end
-                if (offset < data.Length)
-                {
-                    while (offset < data.Length && (offset % 4) != 0)
-                        varData.Padding = data.ReadByte(ref offset);
-                }
+        /// <summary>
+        /// Parse a byte array into a MenuItemExtended
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MenuItemExtended on success, null on error</returns>
+        public static MenuItemExtended ParseMenuItemExtended(this byte[] data, ref int offset)
+        {
+            var obj = new MenuItemExtended();
 
-                // Cache the current offset
-                int currentOffset = offset;
+            obj.ItemType = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.State = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.ID = data.ReadUInt32LittleEndian(ref offset);
+            obj.Flags = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.MenuText = data.ReadNullTerminatedUnicodeString(ref offset);
 
-                var varDataValue = new List<uint>();
-                while ((offset - currentOffset) < varData.ValueLength)
-                {
-                    uint languageAndCodeIdentifierPair = data.ReadUInt32(ref offset);
-                    varDataValue.Add(languageAndCodeIdentifierPair);
-                }
+            return obj;
+        }
 
-                varData.Value = [.. varDataValue];
+        /// <summary>
+        /// Parse a byte array into a MessageResourceBlock
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MessageResourceBlock on success, null on error</returns>
+        public static MessageResourceBlock ParseMessageResourceBlock(this byte[] data, ref int offset)
+        {
+            var obj = new MessageResourceBlock();
 
-                varFileInfoChildren.Add(varData);
-            }
+            obj.LowId = data.ReadUInt32LittleEndian(ref offset);
+            obj.HighId = data.ReadUInt32LittleEndian(ref offset);
+            obj.OffsetToEntries = data.ReadUInt32LittleEndian(ref offset);
 
-            varFileInfo.Children = [.. varFileInfoChildren];
+            return obj;
+        }
 
-            return varFileInfo;
+        /// <summary>
+        /// Parse a byte array into a NormalMenuHeader
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled NormalMenuHeader on success, null on error</returns>
+        public static NormalMenuHeader ParseNormalMenuHeader(this byte[] data, ref int offset)
+        {
+            var obj = new NormalMenuHeader();
+
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.HeaderSize = data.ReadUInt16LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a NormalMenuItem
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled NormalMenuItem on success, null on error</returns>
+        public static NormalMenuItem ParseNormalMenuItem(this byte[] data, ref int offset)
+        {
+            var obj = new NormalMenuItem();
+
+            obj.NormalResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.NormalMenuText = data.ReadNullTerminatedUnicodeString(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a PopupMenuItem
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled PopupMenuItem on success, null on error</returns>
+        public static PopupMenuItem ParsePopupMenuItem(this byte[] data, ref int offset)
+        {
+            var obj = new PopupMenuItem();
+
+            obj.PopupItemType = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupState = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupID = data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupMenuText = data.ReadNullTerminatedUnicodeString(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a ResourceHeader
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled ResourceHeader on success, null on error</returns>
+        public static ResourceHeader ParseResourceHeader(this byte[] data, ref int offset)
+        {
+            // Read in the table
+            var obj = new ResourceHeader();
+
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.HeaderSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.ResourceType = (ResourceType)data.ReadUInt32LittleEndian(ref offset); // TODO: Could be a string too
+            obj.Name = data.ReadUInt32LittleEndian(ref offset); // TODO: Could be a string too
+            obj.DataVersion = data.ReadUInt32LittleEndian(ref offset);
+            obj.MemoryFlags = (MemoryFlags)data.ReadUInt16LittleEndian(ref offset);
+            obj.LanguageId = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
         }
 
         #endregion
