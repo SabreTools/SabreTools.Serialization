@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using static SabreTools.Models.PlayStation4.Constants;
 
