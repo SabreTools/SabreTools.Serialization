@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Deserializers
                 appPkgHeader.Zeroes3 = data.ReadBytes(0xB50);
                 appPkgHeader.PKGSHA256 = data.ReadBytes(0x20);
 
-                return header;
+                return appPkgHeader;
             }
             catch
             {
