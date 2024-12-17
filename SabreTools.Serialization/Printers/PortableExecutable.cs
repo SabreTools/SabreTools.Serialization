@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using SabreTools.ASN1;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 using SabreTools.Models.PortableExecutable;
 using SabreTools.Serialization.Interfaces;
 
@@ -1346,31 +1347,35 @@ namespace SabreTools.Serialization.Printers
             else
             {
                 int offset = 0;
-                byte[]? magic = entry.Data.ReadBytes(ref offset, Math.Min(entry.Data.Length, 16));
+                byte[] magic = entry.Data.ReadBytes(ref offset, Math.Min(entry.Data.Length, 16));
 
-                if (magic == null)
-                {
-                    // No-op
-                }
-                else if (magic[0] == 0x4D && magic[1] == 0x5A)
+                if (magic.StartsWith([0x4D, 0x5A]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded Executable File]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x4D && magic[1] == 0x53 && magic[2] == 0x46 && magic[3] == 0x54)
+                else if (magic.StartsWith([0x4D, 0x53, 0x46, 0x54]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded OLE Library File]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x03 && magic[3] == 0x04)
+                else if (magic.StartsWith([0x50, 0x4B, 0x03, 0x04]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x05 && magic[3] == 0x06)
+                else if (magic.StartsWith([0x50, 0x4B, 0x05, 0x06]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded empty PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x07 && magic[3] == 0x08)
+                else if (magic.StartsWith([0x50, 0x4B, 0x07, 0x08]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded RAR file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded RAR5 file]"); // TODO: Parse this out and print separately
                 }
                 else
                 {
@@ -1830,25 +1835,33 @@ namespace SabreTools.Serialization.Printers
                 int offset = 0;
 
                 byte[] magic = entry.Data.ReadBytes(ref offset, Math.Min(entry.Data.Length, 16));
-                if (magic[0] == 0x4D && magic[1] == 0x5A)
+                if (magic.StartsWith([0x4D, 0x5A]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded Executable File]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x4D && magic[1] == 0x53 && magic[2] == 0x46 && magic[3] == 0x54)
+                else if (magic.StartsWith([0x4D, 0x53, 0x46, 0x54]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded OLE Library File]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x03 && magic[3] == 0x04)
+                else if (magic.StartsWith([0x50, 0x4B, 0x03, 0x04]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x05 && magic[3] == 0x06)
+                else if (magic.StartsWith([0x50, 0x4B, 0x05, 0x06]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded empty PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic[0] == 0x50 && magic[1] == 0x4B && magic[2] == 0x07 && magic[3] == 0x08)
+                else if (magic.StartsWith([0x50, 0x4B, 0x07, 0x08]))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded RAR file]"); // TODO: Parse this out and print separately
+                }
+                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                {
+                    builder.AppendLine($"{padding}Data: [Embedded RAR5 file]"); // TODO: Parse this out and print separately
                 }
                 else
                 {
