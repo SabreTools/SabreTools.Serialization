@@ -376,8 +376,11 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayStrings;
                     }
 
+                    // TODO: Revisit the 16 MiB limit
+                    // Cap the check for overlay strings to 16 MiB (arbitrary)
+                    int overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+
                     // Otherwise, cache and return the strings
-                    int overlayLength = endOfFile - endOfSectionData;
                     _overlayStrings = ReadStringsFromDataSource(endOfSectionData, overlayLength, charLimit: 3);
                     return _overlayStrings;
                 }
