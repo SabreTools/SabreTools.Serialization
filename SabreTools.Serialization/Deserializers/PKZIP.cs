@@ -321,7 +321,7 @@ namespace SabreTools.Serialization.Deserializers
             while (data.Position > 0)
             {
                 // Read the potential signature
-                uint possibleSignature = data.ReadUInt32();
+                uint possibleSignature = data.ReadUInt32LittleEndian();
                 if (possibleSignature == EndOfCentralDirectoryRecordSignature)
                 {
                     long signaturePosition = data.Position - 4;
@@ -361,17 +361,17 @@ namespace SabreTools.Serialization.Deserializers
         {
             var record = new EndOfCentralDirectoryRecord();
 
-            record.Signature = data.ReadUInt32();
+            record.Signature = data.ReadUInt32LittleEndian();
             if (record.Signature != EndOfCentralDirectoryRecordSignature)
                 return null;
 
-            record.DiskNumber = data.ReadUInt16();
-            record.StartDiskNumber = data.ReadUInt16();
-            record.TotalEntriesOnDisk = data.ReadUInt16();
-            record.TotalEntries = data.ReadUInt16();
-            record.CentralDirectorySize = data.ReadUInt32();
-            record.CentralDirectoryOffset = data.ReadUInt32();
-            record.FileCommentLength = data.ReadUInt16();
+            record.DiskNumber = data.ReadUInt16LittleEndian();
+            record.StartDiskNumber = data.ReadUInt16LittleEndian();
+            record.TotalEntriesOnDisk = data.ReadUInt16LittleEndian();
+            record.TotalEntries = data.ReadUInt16LittleEndian();
+            record.CentralDirectorySize = data.ReadUInt32LittleEndian();
+            record.CentralDirectoryOffset = data.ReadUInt32LittleEndian();
+            record.FileCommentLength = data.ReadUInt16LittleEndian();
             if (record.FileCommentLength > 0 && data.Position + record.FileCommentLength <= data.Length)
             {
                 byte[] commentBytes = data.ReadBytes(record.FileCommentLength);
@@ -402,7 +402,7 @@ namespace SabreTools.Serialization.Deserializers
             while (data.Position > 0)
             {
                 // Read the potential signature
-                uint possibleSignature = data.ReadUInt32();
+                uint possibleSignature = data.ReadUInt32LittleEndian();
                 if (possibleSignature == EndOfCentralDirectoryLocator64Signature)
                 {
                     long signaturePosition = data.Position - 4;
@@ -442,20 +442,20 @@ namespace SabreTools.Serialization.Deserializers
         {
             var record = new EndOfCentralDirectoryRecord64();
 
-            record.Signature = data.ReadUInt32();
+            record.Signature = data.ReadUInt32LittleEndian();
             if (record.Signature != EndOfCentralDirectoryRecord64Signature)
                 return null;
 
-            record.DirectoryRecordSize = data.ReadUInt64();
+            record.DirectoryRecordSize = data.ReadUInt64LittleEndian();
             record.HostSystem = (HostSystem)data.ReadByteValue();
             record.VersionMadeBy = data.ReadByteValue();
-            record.VersionNeededToExtract = data.ReadUInt16();
-            record.DiskNumber = data.ReadUInt32();
-            record.StartDiskNumber = data.ReadUInt32();
-            record.TotalEntriesOnDisk = data.ReadUInt64();
-            record.TotalEntries = data.ReadUInt64();
-            record.CentralDirectorySize = data.ReadUInt64();
-            record.CentralDirectoryOffset = data.ReadUInt64();
+            record.VersionNeededToExtract = data.ReadUInt16LittleEndian();
+            record.DiskNumber = data.ReadUInt32LittleEndian();
+            record.StartDiskNumber = data.ReadUInt32LittleEndian();
+            record.TotalEntriesOnDisk = data.ReadUInt64LittleEndian();
+            record.TotalEntries = data.ReadUInt64LittleEndian();
+            record.CentralDirectorySize = data.ReadUInt64LittleEndian();
+            record.CentralDirectoryOffset = data.ReadUInt64LittleEndian();
 
             // TODO: Handle the ExtensibleDataSector -- How to detect if exists?
 
@@ -471,27 +471,27 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = new CentralDirectoryFileHeader();
 
-            header.Signature = data.ReadUInt32();
+            header.Signature = data.ReadUInt32LittleEndian();
             if (header.Signature != CentralDirectoryFileHeaderSignature)
                 return null;
 
             header.HostSystem = (HostSystem)data.ReadByteValue();
             header.VersionMadeBy = data.ReadByteValue();
-            header.VersionNeededToExtract = data.ReadUInt16();
-            header.Flags = (GeneralPurposeBitFlags)data.ReadUInt16();
-            header.CompressionMethod = (CompressionMethod)data.ReadUInt16();
-            header.LastModifedFileTime = data.ReadUInt16();
-            header.LastModifiedFileDate = data.ReadUInt16();
-            header.CRC32 = data.ReadUInt32();
-            header.CompressedSize = data.ReadUInt32();
-            header.UncompressedSize = data.ReadUInt32();
-            header.FileNameLength = data.ReadUInt16();
-            header.ExtraFieldLength = data.ReadUInt16();
-            header.FileCommentLength = data.ReadUInt16();
-            header.DiskNumberStart = data.ReadUInt16();
-            header.InternalFileAttributes = (InternalFileAttributes)data.ReadUInt16();
-            header.ExternalFileAttributes = data.ReadUInt32();
-            header.RelativeOffsetOfLocalHeader = data.ReadUInt32();
+            header.VersionNeededToExtract = data.ReadUInt16LittleEndian();
+            header.Flags = (GeneralPurposeBitFlags)data.ReadUInt16LittleEndian();
+            header.CompressionMethod = (CompressionMethod)data.ReadUInt16LittleEndian();
+            header.LastModifedFileTime = data.ReadUInt16LittleEndian();
+            header.LastModifiedFileDate = data.ReadUInt16LittleEndian();
+            header.CRC32 = data.ReadUInt32LittleEndian();
+            header.CompressedSize = data.ReadUInt32LittleEndian();
+            header.UncompressedSize = data.ReadUInt32LittleEndian();
+            header.FileNameLength = data.ReadUInt16LittleEndian();
+            header.ExtraFieldLength = data.ReadUInt16LittleEndian();
+            header.FileCommentLength = data.ReadUInt16LittleEndian();
+            header.DiskNumberStart = data.ReadUInt16LittleEndian();
+            header.InternalFileAttributes = (InternalFileAttributes)data.ReadUInt16LittleEndian();
+            header.ExternalFileAttributes = data.ReadUInt32LittleEndian();
+            header.RelativeOffsetOfLocalHeader = data.ReadUInt32LittleEndian();
 
             if (header.FileNameLength > 0 && data.Position + header.FileNameLength <= data.Length)
             {
@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.Deserializers
             while (data.Position > 0)
             {
                 // Read the potential signature
-                uint possibleSignature = data.ReadUInt32();
+                uint possibleSignature = data.ReadUInt32LittleEndian();
                 if (possibleSignature == ArchiveExtraDataRecordSignature)
                 {
                     long signaturePosition = data.Position - 4;
@@ -579,11 +579,11 @@ namespace SabreTools.Serialization.Deserializers
         {
             var record = new ArchiveExtraDataRecord();
 
-            record.Signature = data.ReadUInt32();
+            record.Signature = data.ReadUInt32LittleEndian();
             if (record.Signature != ArchiveExtraDataRecordSignature)
                 return null;
 
-            record.ExtraFieldLength = data.ReadUInt32();
+            record.ExtraFieldLength = data.ReadUInt32LittleEndian();
             if (record.ExtraFieldLength > 0 && data.Position + record.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes((int)record.ExtraFieldLength);
@@ -605,20 +605,20 @@ namespace SabreTools.Serialization.Deserializers
         {
             var header = new LocalFileHeader();
 
-            header.Signature = data.ReadUInt32();
+            header.Signature = data.ReadUInt32LittleEndian();
             if (header.Signature != LocalFileHeaderSignature)
                 return null;
 
-            header.Version = data.ReadUInt16();
-            header.Flags = (GeneralPurposeBitFlags)data.ReadUInt16();
-            header.CompressionMethod = (CompressionMethod)data.ReadUInt16();
-            header.LastModifedFileTime = data.ReadUInt16();
-            header.LastModifiedFileDate = data.ReadUInt16();
-            header.CRC32 = data.ReadUInt32();
-            header.CompressedSize = data.ReadUInt32();
-            header.UncompressedSize = data.ReadUInt32();
-            header.FileNameLength = data.ReadUInt16();
-            header.ExtraFieldLength = data.ReadUInt16();
+            header.Version = data.ReadUInt16LittleEndian();
+            header.Flags = (GeneralPurposeBitFlags)data.ReadUInt16LittleEndian();
+            header.CompressionMethod = (CompressionMethod)data.ReadUInt16LittleEndian();
+            header.LastModifedFileTime = data.ReadUInt16LittleEndian();
+            header.LastModifiedFileDate = data.ReadUInt16LittleEndian();
+            header.CRC32 = data.ReadUInt32LittleEndian();
+            header.CompressedSize = data.ReadUInt32LittleEndian();
+            header.UncompressedSize = data.ReadUInt32LittleEndian();
+            header.FileNameLength = data.ReadUInt16LittleEndian();
+            header.ExtraFieldLength = data.ReadUInt16LittleEndian();
 
             if (header.FileNameLength > 0 && data.Position + header.FileNameLength <= data.Length)
             {
@@ -650,13 +650,13 @@ namespace SabreTools.Serialization.Deserializers
             var dataDescriptor = new DataDescriptor();
 
             // Signatures are expected but not required
-            dataDescriptor.Signature = data.ReadUInt32();
+            dataDescriptor.Signature = data.ReadUInt32LittleEndian();
             if (dataDescriptor.Signature != DataDescriptorSignature)
                 data.Seek(-4, SeekOrigin.Current);
 
-            dataDescriptor.CRC32 = data.ReadUInt32();
-            dataDescriptor.CompressedSize = data.ReadUInt32();
-            dataDescriptor.UncompressedSize = data.ReadUInt32();
+            dataDescriptor.CRC32 = data.ReadUInt32LittleEndian();
+            dataDescriptor.CompressedSize = data.ReadUInt32LittleEndian();
+            dataDescriptor.UncompressedSize = data.ReadUInt32LittleEndian();
 
             return dataDescriptor;
         }
@@ -671,13 +671,13 @@ namespace SabreTools.Serialization.Deserializers
             var zip64DataDescriptor = new DataDescriptor64();
 
             // Signatures are expected but not required
-            zip64DataDescriptor.Signature = data.ReadUInt32();
+            zip64DataDescriptor.Signature = data.ReadUInt32LittleEndian();
             if (zip64DataDescriptor.Signature != DataDescriptorSignature)
                 data.Seek(-4, SeekOrigin.Current);
 
-            zip64DataDescriptor.CRC32 = data.ReadUInt32();
-            zip64DataDescriptor.CompressedSize = data.ReadUInt64();
-            zip64DataDescriptor.UncompressedSize = data.ReadUInt64();
+            zip64DataDescriptor.CRC32 = data.ReadUInt32LittleEndian();
+            zip64DataDescriptor.CompressedSize = data.ReadUInt64LittleEndian();
+            zip64DataDescriptor.UncompressedSize = data.ReadUInt64LittleEndian();
 
             return zip64DataDescriptor;
         }

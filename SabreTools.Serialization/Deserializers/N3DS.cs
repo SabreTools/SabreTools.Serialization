@@ -367,7 +367,7 @@ namespace SabreTools.Serialization.Deserializers
             byte[] magicId = data.ReadBytes(4);
             obj.MagicID = Encoding.ASCII.GetString(magicId).TrimEnd('\0');
             obj.ContentSizeInMediaUnits = data.ReadUInt32LittleEndian();
-            obj.PartitionId = data.ReadUInt64();
+            obj.PartitionId = data.ReadUInt64LittleEndian();
             obj.MakerCode = data.ReadUInt16LittleEndian();
             obj.Version = data.ReadUInt16LittleEndian();
             obj.VerificationHash = data.ReadUInt32LittleEndian();
@@ -433,7 +433,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.MagicNumber = Encoding.ASCII.GetString(magicNumber).TrimEnd('\0');
             obj.ImageSizeInMediaUnits = data.ReadUInt32LittleEndian();
             obj.MediaId = data.ReadBytes(8);
-            obj.PartitionsFSType = (FilesystemType)data.ReadUInt64();
+            obj.PartitionsFSType = (FilesystemType)data.ReadUInt64LittleEndian();
             obj.PartitionsCryptType = data.ReadBytes(8);
 
             obj.PartitionsTable = new PartitionTableEntry[8];
@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.Deserializers
                 obj.PartitionIdTable = new ulong[8];
                 for (int i = 0; i < 8; i++)
                 {
-                    obj.PartitionIdTable[i] = data.ReadUInt64();
+                    obj.PartitionIdTable[i] = data.ReadUInt64LittleEndian();
                 }
 
                 obj.Reserved1 = data.ReadBytes(0x20);

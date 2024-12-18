@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             if (entry.Folder)
-                entry.Index = data.ReadUInt16();
+                entry.Index = data.ReadUInt16LittleEndian();
 
             return entry;
         }

@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             header.LastChar = (char)data.ReadByteValue();
-            header.RealLength = data.ReadUInt32();
+            header.RealLength = data.ReadUInt32LittleEndian();
 
             return header;
         }

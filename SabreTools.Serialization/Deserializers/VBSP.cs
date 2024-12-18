@@ -410,14 +410,14 @@ namespace SabreTools.Serialization.Deserializers
         {
             var lump = new VisibilityLump();
 
-            lump.NumClusters = data.ReadInt32();
+            lump.NumClusters = data.ReadInt32LittleEndian();
             lump.ByteOffsets = new int[lump.NumClusters][];
             for (int i = 0; i < lump.NumClusters; i++)
             {
                 lump.ByteOffsets[i] = new int[2];
                 for (int j = 0; j < 2; j++)
                 {
-                    lump.ByteOffsets[i][j] = data.ReadInt32();
+                    lump.ByteOffsets[i][j] = data.ReadInt32LittleEndian();
                 }
             }
 
@@ -505,10 +505,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var model = new PhysModel();
 
-            model.ModelIndex = data.ReadInt32();
-            model.DataSize = data.ReadInt32();
-            model.KeydataSize = data.ReadInt32();
-            model.SolidCount = data.ReadInt32();
+            model.ModelIndex = data.ReadInt32LittleEndian();
+            model.DataSize = data.ReadInt32LittleEndian();
+            model.KeydataSize = data.ReadInt32LittleEndian();
+            model.SolidCount = data.ReadInt32LittleEndian();
             model.Solids = new PhysSolid[model.SolidCount];
             for (int i = 0; i < model.Solids.Length; i++)
             {
@@ -529,7 +529,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var solid = new PhysSolid();
 
-            solid.Size = data.ReadInt32();
+            solid.Size = data.ReadInt32LittleEndian();
             if (solid.Size > 0)
                 solid.CollisionData = data.ReadBytes(solid.Size);
 
@@ -563,7 +563,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var lump = new OcclusionLump();
 
-            lump.Count = data.ReadInt32();
+            lump.Count = data.ReadInt32LittleEndian();
             lump.Data = new OccluderData[lump.Count];
             for (int i = 0; i < lump.Count; i++)
             {
@@ -571,7 +571,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (occluderData != null)
                     lump.Data[i] = occluderData;
             }
-            lump.PolyDataCount = data.ReadInt32();
+            lump.PolyDataCount = data.ReadInt32LittleEndian();
             lump.PolyData = new OccluderPolyData[lump.Count];
             for (int i = 0; i < lump.Count; i++)
             {
@@ -579,11 +579,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (polyData != null)
                     lump.PolyData[i] = polyData;
             }
-            lump.VertexIndexCount = data.ReadInt32();
+            lump.VertexIndexCount = data.ReadInt32LittleEndian();
             lump.VertexIndicies = new int[lump.VertexIndexCount];
             for (int i = 0; i < lump.VertexIndexCount; i++)
             {
-                lump.VertexIndicies[i] = data.ReadInt32();
+                lump.VertexIndicies[i] = data.ReadInt32LittleEndian();
             }
 
             return lump;
@@ -616,29 +616,29 @@ namespace SabreTools.Serialization.Deserializers
         {
             var leaf = new VbspLeaf();
 
-            leaf.Contents = (VbspContents)data.ReadUInt32();
-            leaf.Cluster = data.ReadInt16();
-            leaf.AreaFlags = data.ReadInt16();
+            leaf.Contents = (VbspContents)data.ReadUInt32LittleEndian();
+            leaf.Cluster = data.ReadInt16LittleEndian();
+            leaf.AreaFlags = data.ReadInt16LittleEndian();
             leaf.Mins = new short[3];
             for (int i = 0; i < leaf.Mins.Length; i++)
             {
-                leaf.Mins[i] = data.ReadInt16();
+                leaf.Mins[i] = data.ReadInt16LittleEndian();
             }
             leaf.Maxs = new short[3];
             for (int i = 0; i < leaf.Maxs.Length; i++)
             {
-                leaf.Maxs[i] = data.ReadInt16();
+                leaf.Maxs[i] = data.ReadInt16LittleEndian();
             }
-            leaf.FirstLeafFace = data.ReadUInt16();
-            leaf.NumLeafFaces = data.ReadUInt16();
-            leaf.FirstLeafBrush = data.ReadUInt16();
-            leaf.NumLeafBrushes = data.ReadUInt16();
-            leaf.LeafWaterDataID = data.ReadInt16();
+            leaf.FirstLeafFace = data.ReadUInt16LittleEndian();
+            leaf.NumLeafFaces = data.ReadUInt16LittleEndian();
+            leaf.FirstLeafBrush = data.ReadUInt16LittleEndian();
+            leaf.NumLeafBrushes = data.ReadUInt16LittleEndian();
+            leaf.LeafWaterDataID = data.ReadInt16LittleEndian();
 
             if (version == 1)
                 leaf.AmbientLighting = data.ReadType<CompressedLightCube>();
             else
-                leaf.Padding = data.ReadInt16();
+                leaf.Padding = data.ReadInt16LittleEndian();
 
             return leaf;
         }
@@ -653,7 +653,7 @@ namespace SabreTools.Serialization.Deserializers
             var marksurfaces = new List<ushort>();
             while (data.Position < offset + length)
             {
-                marksurfaces.Add(data.ReadUInt16());
+                marksurfaces.Add(data.ReadUInt16LittleEndian());
             }
 
             return new MarksurfacesLump { Marksurfaces = [.. marksurfaces] };
@@ -687,7 +687,7 @@ namespace SabreTools.Serialization.Deserializers
             var surfedges = new List<int>();
             while (data.Position < offset + length)
             {
-                surfedges.Add(data.ReadInt32());
+                surfedges.Add(data.ReadInt32LittleEndian());
             }
 
             return new SurfedgesLump { Surfedges = [.. surfedges] };
@@ -739,7 +739,7 @@ namespace SabreTools.Serialization.Deserializers
             var map = new List<ushort>();
             while (data.Position < offset + length)
             {
-                map.Add(data.ReadUInt16());
+                map.Add(data.ReadUInt16LittleEndian());
             }
 
             return new LeafFacesLump { Map = [.. map] };
@@ -755,7 +755,7 @@ namespace SabreTools.Serialization.Deserializers
             var map = new List<ushort>();
             while (data.Position < offset + length)
             {
-                map.Add(data.ReadUInt16());
+                map.Add(data.ReadUInt16LittleEndian());
             }
 
             return new LeafBrushesLump { Map = [.. map] };
@@ -842,7 +842,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var lump = new GameLump();
 
-            lump.LumpCount = data.ReadInt32();
+            lump.LumpCount = data.ReadInt32LittleEndian();
             lump.Directories = new GameLumpDirectory[lump.LumpCount];
             for (int i = 0; i < lump.LumpCount; i++)
             {
@@ -914,7 +914,7 @@ namespace SabreTools.Serialization.Deserializers
             var offsets = new List<int>();
             while (data.Position < offset + length)
             {
-                offsets.Add(data.ReadInt32());
+                offsets.Add(data.ReadInt32LittleEndian());
             }
 
             return new TexdataStringTable { Offsets = [.. offsets] };

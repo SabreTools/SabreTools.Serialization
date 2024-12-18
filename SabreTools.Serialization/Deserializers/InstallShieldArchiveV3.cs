@@ -95,10 +95,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new Models.InstallShieldArchiveV3.Directory();
 
-            obj.FileCount = data.ReadUInt16();
-            obj.ChunkSize = data.ReadUInt16();
+            obj.FileCount = data.ReadUInt16LittleEndian();
+            obj.ChunkSize = data.ReadUInt16LittleEndian();
 
-            ushort nameLength = data.ReadUInt16();
+            ushort nameLength = data.ReadUInt16LittleEndian();
             byte[] nameBytes = data.ReadBytes(nameLength);
             obj.Name = Encoding.ASCII.GetString(nameBytes);
 

@@ -298,10 +298,10 @@ namespace SabreTools.Serialization
                 dialogTemplateExtended.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                 dialogTemplateExtended.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                 dialogTemplateExtended.DialogItems = entry.Data.ReadUInt16LittleEndian(ref offset);
-                dialogTemplateExtended.PositionX = entry.Data.ReadInt16(ref offset);
-                dialogTemplateExtended.PositionY = entry.Data.ReadInt16(ref offset);
-                dialogTemplateExtended.WidthX = entry.Data.ReadInt16(ref offset);
-                dialogTemplateExtended.HeightY = entry.Data.ReadInt16(ref offset);
+                dialogTemplateExtended.PositionX = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplateExtended.PositionY = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplateExtended.WidthX = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplateExtended.HeightY = entry.Data.ReadInt16LittleEndian(ref offset);
 
                 #region Menu resource
 
@@ -442,10 +442,10 @@ namespace SabreTools.Serialization
                     dialogItemTemplate.HelpID = entry.Data.ReadUInt32LittleEndian(ref offset);
                     dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                     dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
-                    dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.HeightY = entry.Data.ReadInt16(ref offset);
+                    dialogItemTemplate.PositionX = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.PositionY = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.WidthX = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.HeightY = entry.Data.ReadInt16LittleEndian(ref offset);
                     dialogItemTemplate.ID = entry.Data.ReadUInt32LittleEndian(ref offset);
 
                     #region Class resource
@@ -548,10 +548,10 @@ namespace SabreTools.Serialization
                 dialogTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                 dialogTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                 dialogTemplate.ItemCount = entry.Data.ReadUInt16LittleEndian(ref offset);
-                dialogTemplate.PositionX = entry.Data.ReadInt16(ref offset);
-                dialogTemplate.PositionY = entry.Data.ReadInt16(ref offset);
-                dialogTemplate.WidthX = entry.Data.ReadInt16(ref offset);
-                dialogTemplate.HeightY = entry.Data.ReadInt16(ref offset);
+                dialogTemplate.PositionX = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplate.PositionY = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplate.WidthX = entry.Data.ReadInt16LittleEndian(ref offset);
+                dialogTemplate.HeightY = entry.Data.ReadInt16LittleEndian(ref offset);
 
                 #region Menu resource
 
@@ -698,10 +698,10 @@ namespace SabreTools.Serialization
 
                     dialogItemTemplate.Style = (WindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
                     dialogItemTemplate.ExtendedStyle = (ExtendedWindowStyles)entry.Data.ReadUInt32LittleEndian(ref offset);
-                    dialogItemTemplate.PositionX = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.PositionY = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.WidthX = entry.Data.ReadInt16(ref offset);
-                    dialogItemTemplate.HeightY = entry.Data.ReadInt16(ref offset);
+                    dialogItemTemplate.PositionX = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.PositionY = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.WidthX = entry.Data.ReadInt16LittleEndian(ref offset);
+                    dialogItemTemplate.HeightY = entry.Data.ReadInt16LittleEndian(ref offset);
                     dialogItemTemplate.ID = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                     #region Class resource

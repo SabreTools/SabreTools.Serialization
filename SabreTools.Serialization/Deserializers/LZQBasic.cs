@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Deserializers
             if (Encoding.ASCII.GetString(header.Magic) != Encoding.ASCII.GetString(QBasicSignatureBytes))
                 return null;
 
-            header.RealLength = data.ReadUInt32();
+            header.RealLength = data.ReadUInt32LittleEndian();
 
             return header;
         }

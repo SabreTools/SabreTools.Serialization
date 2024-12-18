@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var playlistHeader = new PlaylistHeader();
 
-            playlistHeader.TrackCount = data.ReadUInt32();
+            playlistHeader.TrackCount = data.ReadUInt32LittleEndian();
             if (playlistHeader.TrackCount > int.MaxValue)
                 return null;
 

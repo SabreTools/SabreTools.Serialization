@@ -66,8 +66,8 @@ namespace SabreTools.Serialization.Deserializers
             if (signature != SignatureString)
                 return null;
 
-            ushort majorVersion = data.ReadUInt16();
-            ushort minorVersion = data.ReadUInt16();
+            ushort majorVersion = data.ReadUInt16LittleEndian();
+            ushort minorVersion = data.ReadUInt16LittleEndian();
             if (minorVersion != 0)
                 return null;
 
@@ -85,9 +85,9 @@ namespace SabreTools.Serialization.Deserializers
                     byte[] header4Name = data.ReadBytes(count: 128);
                     header4.Name = Encoding.Unicode.GetString(header4Name).TrimEnd('\0');
                     header4.HeaderMD5 = data.ReadBytes(0x10);
-                    header4.HeaderLength = data.ReadUInt32();
-                    header4.FileDataOffset = data.ReadUInt32();
-                    header4.Dummy0 = data.ReadUInt32();
+                    header4.HeaderLength = data.ReadUInt32LittleEndian();
+                    header4.FileDataOffset = data.ReadUInt32LittleEndian();
+                    header4.Dummy0 = data.ReadUInt32LittleEndian();
 
                     return header4;
 
@@ -101,9 +101,9 @@ namespace SabreTools.Serialization.Deserializers
                     header6.MinorVersion = minorVersion;
                     byte[] header6Name = data.ReadBytes(count: 128);
                     header6.Name = Encoding.Unicode.GetString(header6Name).TrimEnd('\0');
-                    header6.HeaderLength = data.ReadUInt32();
-                    header6.FileDataOffset = data.ReadUInt32();
-                    header6.Dummy0 = data.ReadUInt32();
+                    header6.HeaderLength = data.ReadUInt32LittleEndian();
+                    header6.FileDataOffset = data.ReadUInt32LittleEndian();
+                    header6.Dummy0 = data.ReadUInt32LittleEndian();
 
                     return header6;
 
@@ -743,14 +743,14 @@ namespace SabreTools.Serialization.Deserializers
         {
             var directoryHeader4 = new DirectoryHeader4();
 
-            directoryHeader4.SectionOffset = data.ReadUInt32();
-            directoryHeader4.SectionCount = data.ReadUInt16();
-            directoryHeader4.FolderOffset = data.ReadUInt32();
-            directoryHeader4.FolderCount = data.ReadUInt16();
-            directoryHeader4.FileOffset = data.ReadUInt32();
-            directoryHeader4.FileCount = data.ReadUInt16();
-            directoryHeader4.StringTableOffset = data.ReadUInt32();
-            directoryHeader4.StringTableCount = data.ReadUInt16();
+            directoryHeader4.SectionOffset = data.ReadUInt32LittleEndian();
+            directoryHeader4.SectionCount = data.ReadUInt16LittleEndian();
+            directoryHeader4.FolderOffset = data.ReadUInt32LittleEndian();
+            directoryHeader4.FolderCount = data.ReadUInt16LittleEndian();
+            directoryHeader4.FileOffset = data.ReadUInt32LittleEndian();
+            directoryHeader4.FileCount = data.ReadUInt16LittleEndian();
+            directoryHeader4.StringTableOffset = data.ReadUInt32LittleEndian();
+            directoryHeader4.StringTableCount = data.ReadUInt16LittleEndian();
 
             return directoryHeader4;
         }
@@ -764,14 +764,14 @@ namespace SabreTools.Serialization.Deserializers
         {
             var directoryHeader5 = new DirectoryHeader5();
 
-            directoryHeader5.SectionOffset = data.ReadUInt32();
-            directoryHeader5.SectionCount = data.ReadUInt32();
-            directoryHeader5.FolderOffset = data.ReadUInt32();
-            directoryHeader5.FolderCount = data.ReadUInt32();
-            directoryHeader5.FileOffset = data.ReadUInt32();
-            directoryHeader5.FileCount = data.ReadUInt32();
-            directoryHeader5.StringTableOffset = data.ReadUInt32();
-            directoryHeader5.StringTableCount = data.ReadUInt32();
+            directoryHeader5.SectionOffset = data.ReadUInt32LittleEndian();
+            directoryHeader5.SectionCount = data.ReadUInt32LittleEndian();
+            directoryHeader5.FolderOffset = data.ReadUInt32LittleEndian();
+            directoryHeader5.FolderCount = data.ReadUInt32LittleEndian();
+            directoryHeader5.FileOffset = data.ReadUInt32LittleEndian();
+            directoryHeader5.FileCount = data.ReadUInt32LittleEndian();
+            directoryHeader5.StringTableOffset = data.ReadUInt32LittleEndian();
+            directoryHeader5.StringTableCount = data.ReadUInt32LittleEndian();
 
             return directoryHeader5;
         }
@@ -785,16 +785,16 @@ namespace SabreTools.Serialization.Deserializers
         {
             var directoryHeader7 = new DirectoryHeader7();
 
-            directoryHeader7.SectionOffset = data.ReadUInt32();
-            directoryHeader7.SectionCount = data.ReadUInt32();
-            directoryHeader7.FolderOffset = data.ReadUInt32();
-            directoryHeader7.FolderCount = data.ReadUInt32();
-            directoryHeader7.FileOffset = data.ReadUInt32();
-            directoryHeader7.FileCount = data.ReadUInt32();
-            directoryHeader7.StringTableOffset = data.ReadUInt32();
-            directoryHeader7.StringTableCount = data.ReadUInt32();
-            directoryHeader7.HashTableOffset = data.ReadUInt32();
-            directoryHeader7.BlockSize = data.ReadUInt32();
+            directoryHeader7.SectionOffset = data.ReadUInt32LittleEndian();
+            directoryHeader7.SectionCount = data.ReadUInt32LittleEndian();
+            directoryHeader7.FolderOffset = data.ReadUInt32LittleEndian();
+            directoryHeader7.FolderCount = data.ReadUInt32LittleEndian();
+            directoryHeader7.FileOffset = data.ReadUInt32LittleEndian();
+            directoryHeader7.FileCount = data.ReadUInt32LittleEndian();
+            directoryHeader7.StringTableOffset = data.ReadUInt32LittleEndian();
+            directoryHeader7.StringTableCount = data.ReadUInt32LittleEndian();
+            directoryHeader7.HashTableOffset = data.ReadUInt32LittleEndian();
+            directoryHeader7.BlockSize = data.ReadUInt32LittleEndian();
 
             return directoryHeader7;
         }
@@ -813,11 +813,11 @@ namespace SabreTools.Serialization.Deserializers
             section4.Alias = Encoding.ASCII.GetString(section4Alias).TrimEnd('\0');
             byte[] section4Name = data.ReadBytes(64);
             section4.Name = Encoding.ASCII.GetString(section4Name).TrimEnd('\0');
-            section4.FolderStartIndex = data.ReadUInt16();
-            section4.FolderEndIndex = data.ReadUInt16();
-            section4.FileStartIndex = data.ReadUInt16();
-            section4.FileEndIndex = data.ReadUInt16();
-            section4.FolderRootIndex = data.ReadUInt16();
+            section4.FolderStartIndex = data.ReadUInt16LittleEndian();
+            section4.FolderEndIndex = data.ReadUInt16LittleEndian();
+            section4.FileStartIndex = data.ReadUInt16LittleEndian();
+            section4.FileEndIndex = data.ReadUInt16LittleEndian();
+            section4.FolderRootIndex = data.ReadUInt16LittleEndian();
 
             return section4;
         }
@@ -836,11 +836,11 @@ namespace SabreTools.Serialization.Deserializers
             section5.Alias = Encoding.ASCII.GetString(section5Alias).TrimEnd('\0');
             byte[] section5Name = data.ReadBytes(64);
             section5.Name = Encoding.ASCII.GetString(section5Name).TrimEnd('\0');
-            section5.FolderStartIndex = data.ReadUInt32();
-            section5.FolderEndIndex = data.ReadUInt32();
-            section5.FileStartIndex = data.ReadUInt32();
-            section5.FileEndIndex = data.ReadUInt32();
-            section5.FolderRootIndex = data.ReadUInt32();
+            section5.FolderStartIndex = data.ReadUInt32LittleEndian();
+            section5.FolderEndIndex = data.ReadUInt32LittleEndian();
+            section5.FileStartIndex = data.ReadUInt32LittleEndian();
+            section5.FileEndIndex = data.ReadUInt32LittleEndian();
+            section5.FolderRootIndex = data.ReadUInt32LittleEndian();
 
             return section5;
         }
@@ -855,12 +855,12 @@ namespace SabreTools.Serialization.Deserializers
         {
             var folder4 = new Folder4();
 
-            folder4.NameOffset = data.ReadUInt32();
+            folder4.NameOffset = data.ReadUInt32LittleEndian();
             folder4.Name = null; // Read from string table
-            folder4.FolderStartIndex = data.ReadUInt16();
-            folder4.FolderEndIndex = data.ReadUInt16();
-            folder4.FileStartIndex = data.ReadUInt16();
-            folder4.FileEndIndex = data.ReadUInt16();
+            folder4.FolderStartIndex = data.ReadUInt16LittleEndian();
+            folder4.FolderEndIndex = data.ReadUInt16LittleEndian();
+            folder4.FileStartIndex = data.ReadUInt16LittleEndian();
+            folder4.FileEndIndex = data.ReadUInt16LittleEndian();
 
             return folder4;
         }
@@ -875,12 +875,12 @@ namespace SabreTools.Serialization.Deserializers
         {
             var folder5 = new Folder5();
 
-            folder5.NameOffset = data.ReadUInt32();
+            folder5.NameOffset = data.ReadUInt32LittleEndian();
             folder5.Name = null; // Read from string table
-            folder5.FolderStartIndex = data.ReadUInt32();
-            folder5.FolderEndIndex = data.ReadUInt32();
-            folder5.FileStartIndex = data.ReadUInt32();
-            folder5.FileEndIndex = data.ReadUInt32();
+            folder5.FolderStartIndex = data.ReadUInt32LittleEndian();
+            folder5.FolderEndIndex = data.ReadUInt32LittleEndian();
+            folder5.FileStartIndex = data.ReadUInt32LittleEndian();
+            folder5.FileEndIndex = data.ReadUInt32LittleEndian();
 
             return folder5;
         }
@@ -895,12 +895,12 @@ namespace SabreTools.Serialization.Deserializers
         {
             var file4 = new File4();
 
-            file4.NameOffset = data.ReadUInt32();
+            file4.NameOffset = data.ReadUInt32LittleEndian();
             file4.Name = null; // Read from string table
-            file4.Offset = data.ReadUInt32();
-            file4.SizeOnDisk = data.ReadUInt32();
-            file4.Size = data.ReadUInt32();
-            file4.TimeModified = data.ReadUInt32();
+            file4.Offset = data.ReadUInt32LittleEndian();
+            file4.SizeOnDisk = data.ReadUInt32LittleEndian();
+            file4.Size = data.ReadUInt32LittleEndian();
+            file4.TimeModified = data.ReadUInt32LittleEndian();
             file4.Dummy0 = data.ReadByteValue();
             file4.Type = data.ReadByteValue();
 
@@ -917,15 +917,15 @@ namespace SabreTools.Serialization.Deserializers
         {
             var file6 = new File6();
 
-            file6.NameOffset = data.ReadUInt32();
+            file6.NameOffset = data.ReadUInt32LittleEndian();
             file6.Name = null; // Read from string table
-            file6.Offset = data.ReadUInt32();
-            file6.SizeOnDisk = data.ReadUInt32();
-            file6.Size = data.ReadUInt32();
-            file6.TimeModified = data.ReadUInt32();
+            file6.Offset = data.ReadUInt32LittleEndian();
+            file6.SizeOnDisk = data.ReadUInt32LittleEndian();
+            file6.Size = data.ReadUInt32LittleEndian();
+            file6.TimeModified = data.ReadUInt32LittleEndian();
             file6.Dummy0 = data.ReadByteValue();
             file6.Type = data.ReadByteValue();
-            file6.CRC32 = data.ReadUInt32();
+            file6.CRC32 = data.ReadUInt32LittleEndian();
 
             return file6;
         }
@@ -940,16 +940,16 @@ namespace SabreTools.Serialization.Deserializers
         {
             var file7 = new File7();
 
-            file7.NameOffset = data.ReadUInt32();
+            file7.NameOffset = data.ReadUInt32LittleEndian();
             file7.Name = null; // Read from string table
-            file7.Offset = data.ReadUInt32();
-            file7.SizeOnDisk = data.ReadUInt32();
-            file7.Size = data.ReadUInt32();
-            file7.TimeModified = data.ReadUInt32();
+            file7.Offset = data.ReadUInt32LittleEndian();
+            file7.SizeOnDisk = data.ReadUInt32LittleEndian();
+            file7.Size = data.ReadUInt32LittleEndian();
+            file7.TimeModified = data.ReadUInt32LittleEndian();
             file7.Dummy0 = data.ReadByteValue();
             file7.Type = data.ReadByteValue();
-            file7.CRC32 = data.ReadUInt32();
-            file7.HashOffset = data.ReadUInt32();
+            file7.CRC32 = data.ReadUInt32LittleEndian();
+            file7.HashOffset = data.ReadUInt32LittleEndian();
 
             return file7;
         }

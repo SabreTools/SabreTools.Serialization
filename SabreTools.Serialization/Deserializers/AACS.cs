@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new CopyrightRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             if (obj.RecordLength > 4)
             {
                 byte[] copyright = data.ReadBytes((int)(obj.RecordLength - 4));
@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new DriveRevocationListRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             obj.TotalNumberOfEntries = data.ReadUInt32BigEndian();
 
             // Try to parse the signature blocks
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new EndOfMediaKeyBlockRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             if (obj.RecordLength > 4)
                 obj.SignatureData = data.ReadBytes((int)(obj.RecordLength - 4));
 
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new ExplicitSubsetDifferenceRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
 
             // Try to parse the subset differences
             var subsetDifferences = new List<SubsetDifference>();
@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new HostRevocationListRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             obj.TotalNumberOfEntries = data.ReadUInt32BigEndian();
 
             // Try to parse the signature blocks
@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new MediaKeyDataRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
 
             // Try to parse the media keys
             var mediaKeys = new List<byte[]>();
@@ -361,7 +361,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new SubsetDifferenceIndexRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             obj.Span = data.ReadUInt32BigEndian();
 
             // Try to parse the offsets
@@ -388,7 +388,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new TypeAndVersionRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             obj.MediaKeyBlockType = (MediaKeyBlockType)data.ReadUInt32BigEndian();
             obj.VersionNumber = data.ReadUInt32BigEndian();
 
@@ -405,7 +405,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new VerifyMediaKeyRecord();
 
             obj.RecordType = (RecordType)data.ReadByteValue();
-            obj.RecordLength = data.ReadUInt24();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
             obj.CiphertextValue = data.ReadBytes(0x10);
 
             return obj;

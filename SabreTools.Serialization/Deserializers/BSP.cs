@@ -485,7 +485,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var lump = new VisibilityLump();
 
-            lump.NumClusters = data.ReadInt32();
+            lump.NumClusters = data.ReadInt32LittleEndian();
 
             // BSP29 has an incompatible value here
             int bytesNeeded = lump.NumClusters * 8;

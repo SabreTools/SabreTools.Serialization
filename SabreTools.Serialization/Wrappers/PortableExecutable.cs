@@ -1045,7 +1045,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     // Read the signature
                     int offset = 0;
-                    uint signature = entryData.ReadUInt32(ref offset);
+                    uint signature = entryData.ReadUInt32LittleEndian(ref offset);
 
                     // Reset the offset
                     offset = 0;

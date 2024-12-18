@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Deserializers
                 ird.AppVersion = Encoding.ASCII.GetString(appVersion);
 
                 if (ird.Version == 7)
-                    ird.UID = data.ReadUInt32();
+                    ird.UID = data.ReadUInt32LittleEndian();
 
                 ird.HeaderLength = data.ReadByteValue();
                 ird.Header = data.ReadBytes((int)ird.HeaderLength);
@@ -63,12 +63,12 @@ namespace SabreTools.Serialization.Deserializers
                 ird.FileHashes = new byte[ird.FileCount][];
                 for (int i = 0; i < ird.FileCount; i++)
                 {
-                    ird.FileKeys[i] = data.ReadUInt64();
+                    ird.FileKeys[i] = data.ReadUInt64LittleEndian();
                     ird.FileHashes[i] = data.ReadBytes(16) ?? [];
                 }
 
-                ird.ExtraConfig = data.ReadUInt16();
-                ird.Attachments = data.ReadUInt16();
+                ird.ExtraConfig = data.ReadUInt16LittleEndian();
+                ird.Attachments = data.ReadUInt16LittleEndian();
 
                 if (ird.Version >= 9)
                     ird.PIC = data.ReadBytes(115);
@@ -80,9 +80,9 @@ namespace SabreTools.Serialization.Deserializers
                     ird.PIC = data.ReadBytes(115);
 
                 if (ird.Version > 7)
-                    ird.UID = data.ReadUInt32();
+                    ird.UID = data.ReadUInt32LittleEndian();
 
-                ird.CRC = data.ReadUInt32();
+                ird.CRC = data.ReadUInt32LittleEndian();
 
                 return ird;
             }

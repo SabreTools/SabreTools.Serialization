@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Deserializers
 
             for (int i = 0; i < sectorNumbers.Length; i++)
             {
-                sectorNumbers[i] = (SectorNumber)data.ReadUInt32();
+                sectorNumbers[i] = (SectorNumber)data.ReadUInt32LittleEndian();
             }
 
             return sectorNumbers;

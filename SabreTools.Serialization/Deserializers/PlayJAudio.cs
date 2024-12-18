@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     // Set the unknown value 2
-                    audioFile.UnknownValue2 = data.ReadUInt32();
+                    audioFile.UnknownValue2 = data.ReadUInt32LittleEndian();
 
                     #endregion
 
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.Deserializers
                     #region Data Files Count
 
                     // Set the data files count
-                    audioFile.DataFilesCount = data.ReadUInt32();
+                    audioFile.DataFilesCount = data.ReadUInt32LittleEndian();
 
                     #endregion
 
@@ -183,11 +183,11 @@ namespace SabreTools.Serialization.Deserializers
             AudioHeader audioHeader;
 
             // Get the common header pieces
-            uint signature = data.ReadUInt32();
+            uint signature = data.ReadUInt32LittleEndian();
             if (signature != SignatureUInt32)
                 return null;
 
-            uint version = data.ReadUInt32();
+            uint version = data.ReadUInt32LittleEndian();
 
             // Build the header according to version
             uint unknownOffset1;
@@ -199,16 +199,16 @@ namespace SabreTools.Serialization.Deserializers
 
                     v1.Signature = signature;
                     v1.Version = version;
-                    v1.TrackID = data.ReadUInt32();
-                    v1.UnknownOffset1 = data.ReadUInt32();
-                    v1.UnknownOffset2 = data.ReadUInt32();
-                    v1.UnknownOffset3 = data.ReadUInt32();
-                    v1.Unknown1 = data.ReadUInt32();
-                    v1.Unknown2 = data.ReadUInt32();
-                    v1.Year = data.ReadUInt32();
+                    v1.TrackID = data.ReadUInt32LittleEndian();
+                    v1.UnknownOffset1 = data.ReadUInt32LittleEndian();
+                    v1.UnknownOffset2 = data.ReadUInt32LittleEndian();
+                    v1.UnknownOffset3 = data.ReadUInt32LittleEndian();
+                    v1.Unknown1 = data.ReadUInt32LittleEndian();
+                    v1.Unknown2 = data.ReadUInt32LittleEndian();
+                    v1.Year = data.ReadUInt32LittleEndian();
                     v1.TrackNumber = data.ReadByteValue();
                     v1.Subgenre = (Subgenre)data.ReadByteValue();
-                    v1.Duration = data.ReadUInt32();
+                    v1.Duration = data.ReadUInt32LittleEndian();
 
                     audioHeader = v1;
                     unknownOffset1 = v1.UnknownOffset1;
@@ -220,29 +220,29 @@ namespace SabreTools.Serialization.Deserializers
 
                     v2.Signature = signature;
                     v2.Version = version;
-                    v2.Unknown1 = data.ReadUInt32();
-                    v2.Unknown2 = data.ReadUInt32();
-                    v2.Unknown3 = data.ReadUInt32();
-                    v2.Unknown4 = data.ReadUInt32();
-                    v2.Unknown5 = data.ReadUInt32();
-                    v2.Unknown6 = data.ReadUInt32();
-                    v2.UnknownOffset1 = data.ReadUInt32();
-                    v2.Unknown7 = data.ReadUInt32();
-                    v2.Unknown8 = data.ReadUInt32();
-                    v2.Unknown9 = data.ReadUInt32();
-                    v2.UnknownOffset2 = data.ReadUInt32();
-                    v2.Unknown10 = data.ReadUInt32();
-                    v2.Unknown11 = data.ReadUInt32();
-                    v2.Unknown12 = data.ReadUInt32();
-                    v2.Unknown13 = data.ReadUInt32();
-                    v2.Unknown14 = data.ReadUInt32();
-                    v2.Unknown15 = data.ReadUInt32();
-                    v2.Unknown16 = data.ReadUInt32();
-                    v2.Unknown17 = data.ReadUInt32();
-                    v2.TrackID = data.ReadUInt32();
-                    v2.Year = data.ReadUInt32();
-                    v2.TrackNumber = data.ReadUInt32();
-                    v2.Unknown18 = data.ReadUInt32();
+                    v2.Unknown1 = data.ReadUInt32LittleEndian();
+                    v2.Unknown2 = data.ReadUInt32LittleEndian();
+                    v2.Unknown3 = data.ReadUInt32LittleEndian();
+                    v2.Unknown4 = data.ReadUInt32LittleEndian();
+                    v2.Unknown5 = data.ReadUInt32LittleEndian();
+                    v2.Unknown6 = data.ReadUInt32LittleEndian();
+                    v2.UnknownOffset1 = data.ReadUInt32LittleEndian();
+                    v2.Unknown7 = data.ReadUInt32LittleEndian();
+                    v2.Unknown8 = data.ReadUInt32LittleEndian();
+                    v2.Unknown9 = data.ReadUInt32LittleEndian();
+                    v2.UnknownOffset2 = data.ReadUInt32LittleEndian();
+                    v2.Unknown10 = data.ReadUInt32LittleEndian();
+                    v2.Unknown11 = data.ReadUInt32LittleEndian();
+                    v2.Unknown12 = data.ReadUInt32LittleEndian();
+                    v2.Unknown13 = data.ReadUInt32LittleEndian();
+                    v2.Unknown14 = data.ReadUInt32LittleEndian();
+                    v2.Unknown15 = data.ReadUInt32LittleEndian();
+                    v2.Unknown16 = data.ReadUInt32LittleEndian();
+                    v2.Unknown17 = data.ReadUInt32LittleEndian();
+                    v2.TrackID = data.ReadUInt32LittleEndian();
+                    v2.Year = data.ReadUInt32LittleEndian();
+                    v2.TrackNumber = data.ReadUInt32LittleEndian();
+                    v2.Unknown18 = data.ReadUInt32LittleEndian();
 
                     audioHeader = v2;
                     unknownOffset1 = v2.UnknownOffset1 + 0x54;
@@ -253,33 +253,33 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
             }
 
-            audioHeader.TrackLength = data.ReadUInt16();
+            audioHeader.TrackLength = data.ReadUInt16LittleEndian();
             byte[] track = data.ReadBytes(audioHeader.TrackLength);
             audioHeader.Track = Encoding.ASCII.GetString(track);
 
-            audioHeader.ArtistLength = data.ReadUInt16();
+            audioHeader.ArtistLength = data.ReadUInt16LittleEndian();
             byte[] artist = data.ReadBytes(audioHeader.ArtistLength);
             audioHeader.Artist = Encoding.ASCII.GetString(artist);
 
-            audioHeader.AlbumLength = data.ReadUInt16();
+            audioHeader.AlbumLength = data.ReadUInt16LittleEndian();
             byte[] album = data.ReadBytes(audioHeader.AlbumLength);
             audioHeader.Album = Encoding.ASCII.GetString(album);
 
-            audioHeader.WriterLength = data.ReadUInt16();
+            audioHeader.WriterLength = data.ReadUInt16LittleEndian();
             byte[] writer = data.ReadBytes(audioHeader.WriterLength);
             audioHeader.Writer = Encoding.ASCII.GetString(writer);
 
-            audioHeader.PublisherLength = data.ReadUInt16();
+            audioHeader.PublisherLength = data.ReadUInt16LittleEndian();
             byte[] publisher = data.ReadBytes(audioHeader.PublisherLength);
             audioHeader.Publisher = Encoding.ASCII.GetString(publisher);
 
-            audioHeader.LabelLength = data.ReadUInt16();
+            audioHeader.LabelLength = data.ReadUInt16LittleEndian();
             byte[] label = data.ReadBytes(audioHeader.LabelLength);
             audioHeader.Label = Encoding.ASCII.GetString(label);
 
             if (data.Position - initialOffset < unknownOffset1)
             {
-                audioHeader.CommentsLength = data.ReadUInt16();
+                audioHeader.CommentsLength = data.ReadUInt16LittleEndian();
                 byte[] comments = data.ReadBytes(audioHeader.CommentsLength);
                 audioHeader.Comments = Encoding.ASCII.GetString(comments);
             }
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var unknownBlock1 = new UnknownBlock1();
 
-            unknownBlock1.Length = data.ReadUInt32();
+            unknownBlock1.Length = data.ReadUInt32LittleEndian();
             unknownBlock1.Data = data.ReadBytes((int)unknownBlock1.Length);
 
             return unknownBlock1;
@@ -325,10 +325,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var dataFile = new DataFile();
 
-            dataFile.FileNameLength = data.ReadUInt16();
+            dataFile.FileNameLength = data.ReadUInt16LittleEndian();
             byte[] fileName = data.ReadBytes(dataFile.FileNameLength);
             dataFile.FileName = Encoding.ASCII.GetString(fileName);
-            dataFile.DataLength = data.ReadUInt32();
+            dataFile.DataLength = data.ReadUInt32LittleEndian();
             dataFile.Data = data.ReadBytes((int)dataFile.DataLength);
 
             return dataFile;

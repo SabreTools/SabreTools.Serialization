@@ -152,9 +152,9 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new DirectoryItem();
 
-            obj.FileNameCRC = data.ReadUInt32();
-            obj.NameOffset = data.ReadUInt32();
-            obj.TimeCreated = data.ReadUInt32();
+            obj.FileNameCRC = data.ReadUInt32LittleEndian();
+            obj.NameOffset = data.ReadUInt32LittleEndian();
+            obj.TimeCreated = data.ReadUInt32LittleEndian();
 
             // Cache the current offset
             long currentPosition = data.Position;

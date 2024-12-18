@@ -103,18 +103,18 @@ namespace SabreTools.Serialization.Deserializers
             if (header.Signature != SignatureString)
                 return null;
 
-            header.Reserved1 = data.ReadUInt32();
-            header.CabinetSize = data.ReadUInt32();
-            header.Reserved2 = data.ReadUInt32();
-            header.FilesOffset = data.ReadUInt32();
-            header.Reserved3 = data.ReadUInt32();
+            header.Reserved1 = data.ReadUInt32LittleEndian();
+            header.CabinetSize = data.ReadUInt32LittleEndian();
+            header.Reserved2 = data.ReadUInt32LittleEndian();
+            header.FilesOffset = data.ReadUInt32LittleEndian();
+            header.Reserved3 = data.ReadUInt32LittleEndian();
             header.VersionMinor = data.ReadByteValue();
             header.VersionMajor = data.ReadByteValue();
-            header.FolderCount = data.ReadUInt16();
-            header.FileCount = data.ReadUInt16();
-            header.Flags = (HeaderFlags)data.ReadUInt16();
-            header.SetID = data.ReadUInt16();
-            header.CabinetIndex = data.ReadUInt16();
+            header.FolderCount = data.ReadUInt16LittleEndian();
+            header.FileCount = data.ReadUInt16LittleEndian();
+            header.Flags = (HeaderFlags)data.ReadUInt16LittleEndian();
+            header.SetID = data.ReadUInt16LittleEndian();
+            header.CabinetIndex = data.ReadUInt16LittleEndian();
 
 #if NET20 || NET35
             if ((header.Flags & HeaderFlags.RESERVE_PRESENT) != 0)
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Deserializers
             if (header.Flags.HasFlag(HeaderFlags.RESERVE_PRESENT))
 #endif
             {
-                header.HeaderReservedSize = data.ReadUInt16();
+                header.HeaderReservedSize = data.ReadUInt16LittleEndian();
                 if (header.HeaderReservedSize > 60_000)
                     return null;
 
@@ -166,9 +166,9 @@ namespace SabreTools.Serialization.Deserializers
         {
             var folder = new CFFOLDER();
 
-            folder.CabStartOffset = data.ReadUInt32();
-            folder.DataCount = data.ReadUInt16();
-            folder.CompressionType = (CompressionType)data.ReadUInt16();
+            folder.CabStartOffset = data.ReadUInt32LittleEndian();
+            folder.DataCount = data.ReadUInt16LittleEndian();
+            folder.CompressionType = (CompressionType)data.ReadUInt16LittleEndian();
 
             if (header.FolderReservedSize > 0)
                 folder.ReservedData = data.ReadBytes(header.FolderReservedSize);
@@ -201,9 +201,9 @@ namespace SabreTools.Serialization.Deserializers
         {
             var dataBlock = new CFDATA();
 
-            dataBlock.Checksum = data.ReadUInt32();
-            dataBlock.CompressedSize = data.ReadUInt16();
-            dataBlock.UncompressedSize = data.ReadUInt16();
+            dataBlock.Checksum = data.ReadUInt32LittleEndian();
+            dataBlock.CompressedSize = data.ReadUInt16LittleEndian();
+            dataBlock.UncompressedSize = data.ReadUInt16LittleEndian();
 
             if (dataReservedSize > 0)
                 dataBlock.ReservedData = data.ReadBytes(dataReservedSize);
@@ -223,12 +223,12 @@ namespace SabreTools.Serialization.Deserializers
         {
             var file = new CFFILE();
 
-            file.FileSize = data.ReadUInt32();
-            file.FolderStartOffset = data.ReadUInt32();
-            file.FolderIndex = (FolderIndex)data.ReadUInt16();
-            file.Date = data.ReadUInt16();
-            file.Time = data.ReadUInt16();
-            file.Attributes = (Models.MicrosoftCabinet.FileAttributes)data.ReadUInt16();
+            file.FileSize = data.ReadUInt32LittleEndian();
+            file.FolderStartOffset = data.ReadUInt32LittleEndian();
+            file.FolderIndex = (FolderIndex)data.ReadUInt16LittleEndian();
+            file.Date = data.ReadUInt16LittleEndian();
+            file.Time = data.ReadUInt16LittleEndian();
+            file.Attributes = (Models.MicrosoftCabinet.FileAttributes)data.ReadUInt16LittleEndian();
 
 #if NET20 || NET35
             if ((file.Attributes & Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF) != 0)
