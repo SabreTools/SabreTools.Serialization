@@ -1386,7 +1386,7 @@ namespace SabreTools.Serialization.Wrappers
                             break;
                         case Models.PortableExecutable.ResourceType.RT_MANIFEST:
                             _assemblyManifest = entry.AsAssemblyManifest();
-                            value = _versionInfo;
+                            value = _assemblyManifest;
                             break;
                         default:
                             value = entry.Data;
