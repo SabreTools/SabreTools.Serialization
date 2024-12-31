@@ -750,11 +750,6 @@ namespace SabreTools.Serialization.Wrappers
         private Models.PortableExecutable.VersionInfo? _versionInfo = null;
 
         /// <summary>
-        /// Cached version info strings data
-        /// </summary>
-        private readonly Dictionary<string, string?> _versionInfoStrings = [];
-
-        /// <summary>
         /// Cached assembly manifest data
         /// </summary>
         private Models.PortableExecutable.AssemblyManifest? _assemblyManifest = null;
@@ -850,50 +845,38 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(key))
                 return null;
 
-            lock (_sourceDataLock)
-            {
-                // If we have the value cached
-                if (_versionInfoStrings.ContainsKey(key))
-                    return _versionInfoStrings[key];
+            // Ensure that we have the resource data cached
+            if (ResourceData == null)
+                return null;
 
-                // Ensure that we have the resource data cached
-                if (ResourceData == null)
-                    return null;
+            // If we don't have string version info in this executable
+            var stringTable = _versionInfo?.StringFileInfo?.Children;
+            if (stringTable == null || stringTable.Length == 0)
+                return null;
 
-                // If we don't have string version info in this executable
-                var stringTable = _versionInfo?.StringFileInfo?.Children;
-                if (stringTable == null || stringTable.Length == 0)
-                    return null;
-
-                // Try to find a key that matches
+            // Try to find a key that matches
 #if NET20
-                Models.PortableExecutable.StringData? match = null;
-                foreach (var st in stringTable)
-                {
-                    if (st?.Children == null)
-                        continue;
+            Models.PortableExecutable.StringData? match = null;
+            foreach (var st in stringTable)
+            {
+                if (st?.Children == null)
+                    continue;
 
-                    // Return the match if found
-                    match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
-                    if (match != null)
-                    {
-                        _versionInfoStrings[key] = match.Value?.TrimEnd('\0');
-                        return _versionInfoStrings[key];
-                    }
-                }
-
-                _versionInfoStrings[key] = null;
-                return _versionInfoStrings[key];
-#else
-                var match = stringTable
-                    .SelectMany(st => st?.Children ?? [])
-                    .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
-
-                // Return either the match or null
-                _versionInfoStrings[key] = match?.Value?.TrimEnd('\0');
-                return _versionInfoStrings[key];
-#endif
+                // Return the match if found
+                match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+                if (match != null)
+                    return match.Value?.TrimEnd('\0');
             }
+
+            return null;
+#else
+            var match = stringTable
+                .SelectMany(st => st?.Children ?? [])
+                .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+
+            // Return either the match or null
+            return match?.Value?.TrimEnd('\0');
+#endif
         }
 
         /// <summary>
