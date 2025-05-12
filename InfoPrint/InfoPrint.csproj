@@ -31,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="SabreTools.IO" Version="1.6.2" />
+        <PackageReference Include="SabreTools.IO" Version="1.6.3" />
     </ItemGroup>
 
 </Project>

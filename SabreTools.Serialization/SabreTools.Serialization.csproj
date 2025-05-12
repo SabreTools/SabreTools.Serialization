@@ -35,7 +35,7 @@
         <PackageReference Include="SabreTools.ASN1" Version="1.5.1" />
         <PackageReference Include="SabreTools.Compression" Version="0.6.3" />
         <PackageReference Include="SabreTools.Hashing" Version="1.4.2" />
-        <PackageReference Include="SabreTools.IO" Version="1.6.2" />
+        <PackageReference Include="SabreTools.IO" Version="1.6.3" />
         <PackageReference Include="SabreTools.Models" Version="1.5.8" />
     </ItemGroup>
 
