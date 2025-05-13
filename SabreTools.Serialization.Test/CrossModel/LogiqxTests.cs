@@ -66,36 +66,6 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Null(newDf.Dir);
         }
 
-        [Fact]
-        public void RomWithOffsetTest()
-        {
-            // Build a minimal Rom with an offset
-            var rom = new Models.Metadata.Rom
-            {
-                [Models.Metadata.Rom.SizeKey] = "1",
-                [Models.Metadata.Rom.OffsetKey] = "1",
-            };
-
-            // Get the real size
-            string? actual = Serialization.CrossModel.Logiqx.DeriveSizeString(rom);
-            Assert.Equal("2", actual);
-        }
-
-        [Fact]
-        public void RomWithHexOffsetTest()
-        {
-            // Build a minimal Rom with an offset
-            var rom = new Models.Metadata.Rom
-            {
-                [Models.Metadata.Rom.SizeKey] = "1",
-                [Models.Metadata.Rom.OffsetKey] = "0x01",
-            };
-
-            // Get the real size
-            string? actual = Serialization.CrossModel.Logiqx.DeriveSizeString(rom);
-            Assert.Equal("2", actual);
-        }
-
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>

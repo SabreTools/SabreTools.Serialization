@@ -36,48 +36,6 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Derive an offset size for <see cref="Models.Metadata.Rom"/>
-        /// </summary>
-        internal static string? DeriveSizeString(Models.Metadata.Rom item)
-        {
-            // Get the required strings
-            string? sizeString = item.ReadString(Models.Metadata.Rom.SizeKey);
-            string? offsetString = item.ReadString(Models.Metadata.Rom.OffsetKey);
-
-            // If either are null, use the size
-            if (string.IsNullOrEmpty(sizeString) || string.IsNullOrEmpty(offsetString))
-                return sizeString;
-
-            try
-            {
-                // Get the size from the string
-                if (!long.TryParse(sizeString, out long size))
-                {
-                    if (!sizeString!.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-                        return sizeString;
-
-                    size = long.Parse(sizeString.Substring(2), NumberStyles.HexNumber);
-                }
-
-                // Get the offset from the string
-                if (!long.TryParse(offsetString, out long offset))
-                {
-                    if (!offsetString!.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-                        return sizeString;
-
-                    offset = long.Parse(offsetString.Substring(2), NumberStyles.HexNumber);
-                }
-
-                // Add the values and return
-                return (size + offset).ToString();
-            }
-            catch
-            {
-                return sizeString;
-            }
-        }
-
-        /// <summary>
         /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.Logiqx.Header"/>
         /// </summary>
         private static Header ConvertHeaderFromInternalModel(Models.Metadata.Header item)
@@ -344,7 +302,7 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Rom
             {
                 Name = item.ReadString(Models.Metadata.Rom.NameKey),
-                Size = DeriveSizeString(item),
+                Size = item.ReadString(Models.Metadata.Rom.SizeKey),
                 CRC = item.ReadString(Models.Metadata.Rom.CRCKey),
                 MD5 = item.ReadString(Models.Metadata.Rom.MD5Key),
                 SHA1 = item.ReadString(Models.Metadata.Rom.SHA1Key),
