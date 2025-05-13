@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Header"/> to <cref="Models.SoftwareList.SoftwareList"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.SoftwareList.SoftwareList"/>
         /// </summary>
         private static Models.SoftwareList.SoftwareList ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.SoftwareList.Software"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.SoftwareList.Software"/>
         /// </summary>
         private static Software ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DataArea"/> to <cref="Models.SoftwareList.DataArea"/>
+        /// Convert from <see cref="Models.Metadata.DataArea"/> to <see cref="Models.SoftwareList.DataArea"/>
         /// </summary>
         private static DataArea ConvertFromInternalModel(Models.Metadata.DataArea item)
         {
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DipSwitch"/> to <cref="Models.SoftwareList.DipSwitch"/>
+        /// Convert from <see cref="Models.Metadata.DipSwitch"/> to <see cref="Models.SoftwareList.DipSwitch"/>
         /// </summary>
         private static DipSwitch ConvertFromInternalModel(Models.Metadata.DipSwitch item)
         {
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DipValue"/> to <cref="Models.SoftwareList.DipValue"/>
+        /// Convert from <see cref="Models.Metadata.DipValue"/> to <see cref="Models.SoftwareList.DipValue"/>
         /// </summary>
         private static DipValue ConvertFromInternalModel(Models.Metadata.DipValue item)
         {
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Disk"/> to <cref="Models.SoftwareList.Disk"/>
+        /// Convert from <see cref="Models.Metadata.Disk"/> to <see cref="Models.SoftwareList.Disk"/>
         /// </summary>
         private static Disk ConvertFromInternalModel(Models.Metadata.Disk item)
         {
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DiskArea"/> to <cref="Models.SoftwareList.DiskArea"/>
+        /// Convert from <see cref="Models.Metadata.DiskArea"/> to <see cref="Models.SoftwareList.DiskArea"/>
         /// </summary>
         private static DiskArea ConvertFromInternalModel(Models.Metadata.DiskArea item)
         {
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Feature"/> to <cref="Models.SoftwareList.Feature"/>
+        /// Convert from <see cref="Models.Metadata.Feature"/> to <see cref="Models.SoftwareList.Feature"/>
         /// </summary>
         private static Feature ConvertFromInternalModel(Models.Metadata.Feature item)
         {
@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Info"/> to <cref="Models.SoftwareList.Info"/>
+        /// Convert from <see cref="Models.Metadata.Info"/> to <see cref="Models.SoftwareList.Info"/>
         /// </summary>
         private static Info ConvertFromInternalModel(Models.Metadata.Info item)
         {
@@ -180,7 +180,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Part"/> to <cref="Models.SoftwareList.Part"/>
+        /// Convert from <see cref="Models.Metadata.Part"/> to <see cref="Models.SoftwareList.Part"/>
         /// </summary>
         private static Part ConvertFromInternalModel(Models.Metadata.Part item)
         {
@@ -210,7 +210,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.SoftwareList.Rom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.SoftwareList.Rom"/>
         /// </summary>
         private static Rom ConvertFromInternalModel(Models.Metadata.Rom item)
         {
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.SharedFeat"/> to <cref="Models.SoftwareList.SharedFeat"/>
+        /// Convert from <see cref="Models.Metadata.SharedFeat"/> to <see cref="Models.SoftwareList.SharedFeat"/>
         /// </summary>
         private static SharedFeat ConvertFromInternalModel(Models.Metadata.SharedFeat item)
         {

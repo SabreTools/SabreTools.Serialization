@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.RomCenter.MetadataFile"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.RomCenter.MetadataFile"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(MetadataFile item)
         {
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.RomCenter.Game"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.RomCenter.Game"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Rom item)
         {
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.RomCenter.Rom"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.RomCenter.Rom"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         private static Models.Metadata.Rom ConvertToInternalModel(Rom item)
         {

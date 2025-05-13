@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Header"/> to <cref="Models.SeparatedValue.MetadataFile"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.SeparatedValue.MetadataFile"/>
         /// </summary>
         private static MetadataFile ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to an array of <cref="Models.SeparatedValue.Row"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to an array of <see cref="Models.SeparatedValue.Row"/>
         /// </summary>
         private static Row[] ConvertMachineFromInternalModel(Models.Metadata.Machine item, Models.Metadata.Header? header)
         {
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Disk"/> to <cref="Models.SeparatedValue.Row"/>
+        /// Convert from <see cref="Models.Metadata.Disk"/> to <see cref="Models.SeparatedValue.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Disk item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Media"/> to <cref="Models.SeparatedValue.Row"/>
+        /// Convert from <see cref="Models.Metadata.Media"/> to <see cref="Models.SeparatedValue.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Media item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {
@@ -126,7 +126,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.SeparatedValue.Row"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.SeparatedValue.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Rom item, Models.Metadata.Machine parent, Models.Metadata.Header? header)
         {

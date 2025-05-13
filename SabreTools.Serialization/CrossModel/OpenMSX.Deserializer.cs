@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Header"/> to <cref="Models.OpenMSX.SoftwareDb"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.OpenMSX.SoftwareDb"/>
         /// </summary>
         private static SoftwareDb ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.OpenMSX.Software"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.OpenMSX.Software"/>
         /// </summary>
         private static Software ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Dump"/> to <cref="Models.OpenMSX.Dump"/>
+        /// Convert from <see cref="Models.Metadata.Dump"/> to <see cref="Models.OpenMSX.Dump"/>
         /// </summary>
         private static Dump ConvertFromInternalModel(Models.Metadata.Dump item)
         {
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.OpenMSX.MegaRom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.OpenMSX.MegaRom"/>
         /// </summary>
         private static MegaRom ConvertMegaRomFromInternalModel(Models.Metadata.Rom item)
         {
@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Original"/> to <cref="Models.OpenMSX.Original"/>
+        /// Convert from <see cref="Models.Metadata.Original"/> to <see cref="Models.OpenMSX.Original"/>
         /// </summary>
         private static Original ConvertFromInternalModel(Models.Metadata.Original item)
         {
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.OpenMSX.Rom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.OpenMSX.Rom"/>
         /// </summary>
         private static Rom ConvertRomFromInternalModel(Models.Metadata.Rom item)
         {
@@ -126,7 +126,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.OpenMSX.SCCPlusCart"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.OpenMSX.SCCPlusCart"/>
         /// </summary>
         private static SCCPlusCart ConvertSCCPlusCartFromInternalModel(Models.Metadata.Rom item)
         {

@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.ClrMamePro"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.ClrMamePro.ClrMamePro"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(Models.ClrMamePro.ClrMamePro item)
         {
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.GameBase"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.ClrMamePro.GameBase"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
         {
@@ -145,7 +145,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Archive"/> to <cref="Models.Metadata.Archive"/>
+        /// Convert from <see cref="Models.ClrMamePro.Archive"/> to <see cref="Models.Metadata.Archive"/>
         /// </summary>
         private static Models.Metadata.Archive ConvertToInternalModel(Archive item)
         {
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.BiosSet"/> to <cref="Models.Metadata.BiosSet"/>
+        /// Convert from <see cref="Models.ClrMamePro.BiosSet"/> to <see cref="Models.Metadata.BiosSet"/>
         /// </summary>
         private static Models.Metadata.BiosSet ConvertToInternalModel(BiosSet item)
         {
@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Chip"/> to <cref="Models.Metadata.Chip"/>
+        /// Convert from <see cref="Models.ClrMamePro.Chip"/> to <see cref="Models.Metadata.Chip"/>
         /// </summary>
         private static Models.Metadata.Chip ConvertToInternalModel(Chip item)
         {
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.DipSwitch"/> to <cref="Models.Metadata.DipSwitch"/>
+        /// Convert from <see cref="Models.ClrMamePro.DipSwitch"/> to <see cref="Models.Metadata.DipSwitch"/>
         /// </summary>
         private static Models.Metadata.DipSwitch ConvertToInternalModel(DipSwitch item)
         {
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Disk"/> to <cref="Models.Metadata.Disk"/>
+        /// Convert from <see cref="Models.ClrMamePro.Disk"/> to <see cref="Models.Metadata.Disk"/>
         /// </summary>
         private static Models.Metadata.Disk ConvertToInternalModel(Disk item)
         {
@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Driver"/> to <cref="Models.Metadata.Driver"/>
+        /// Convert from <see cref="Models.ClrMamePro.Driver"/> to <see cref="Models.Metadata.Driver"/>
         /// </summary>
         private static Models.Metadata.Driver ConvertToInternalModel(Driver item)
         {
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Input"/> to <cref="Models.Metadata.Input"/>
+        /// Convert from <see cref="Models.ClrMamePro.Input"/> to <see cref="Models.Metadata.Input"/>
         /// </summary>
         private static Models.Metadata.Input ConvertToInternalModel(Input item)
         {
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Media"/> to <cref="Models.Metadata.Media"/>
+        /// Convert from <see cref="Models.ClrMamePro.Media"/> to <see cref="Models.Metadata.Media"/>
         /// </summary>
         private static Models.Metadata.Media ConvertToInternalModel(Media item)
         {
@@ -266,7 +266,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Release"/> to <cref="Models.Metadata.Release"/>
+        /// Convert from <see cref="Models.ClrMamePro.Release"/> to <see cref="Models.Metadata.Release"/>
         /// </summary>
         private static Models.Metadata.Release ConvertToInternalModel(Release item)
         {
@@ -282,7 +282,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Rom"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.ClrMamePro.Rom"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         private static Models.Metadata.Rom ConvertToInternalModel(Rom item)
         {
@@ -314,7 +314,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Sample"/> to <cref="Models.Metadata.Sample"/>
+        /// Convert from <see cref="Models.ClrMamePro.Sample"/> to <see cref="Models.Metadata.Sample"/>
         /// </summary>
         private static Models.Metadata.Sample ConvertToInternalModel(Sample item)
         {
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Sound"/> to <cref="Models.Metadata.Sound"/>
+        /// Convert from <see cref="Models.ClrMamePro.Sound"/> to <see cref="Models.Metadata.Sound"/>
         /// </summary>
         private static Models.Metadata.Sound ConvertToInternalModel(Sound item)
         {
@@ -338,7 +338,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.ClrMamePro.Video"/> to <cref="Models.Metadata.Video"/>
+        /// Convert from <see cref="Models.ClrMamePro.Video"/> to <see cref="Models.Metadata.Video"/>
         /// </summary>
         private static Models.Metadata.Video ConvertToInternalModel(Video item)
         {

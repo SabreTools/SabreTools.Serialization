@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Listxml.M1"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.Listxml.M1"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(Models.Listxml.M1 item)
         {

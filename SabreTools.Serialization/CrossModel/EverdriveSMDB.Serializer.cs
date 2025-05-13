@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.EverdriveSMDB.MetadataFile"/> to <cref=Models.Metadata."Header"/>
+        /// Convert from <see cref="Models.EverdriveSMDB.MetadataFile"/> to <see cref=Models.Metadata."Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel()
         {
@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.EverdriveSMDB.Row"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.EverdriveSMDB.Row"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Row item)
         {
@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.EverdriveSMDB.Row"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.EverdriveSMDB.Row"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         private static Models.Metadata.Rom ConvertToInternalModel(Row item)
         {

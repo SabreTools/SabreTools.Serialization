@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Header"/> to <cref="Models.AttractMode.MetadataFile"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.AttractMode.MetadataFile"/>
         /// </summary>
         private static MetadataFile ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to an array of <cref="Models.AttractMode.Row"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to an array of <see cref="Models.AttractMode.Row"/>
         /// </summary>
         private static Row[] ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.AttractMode.Row"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.AttractMode.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Rom item, Models.Metadata.Machine parent)
         {

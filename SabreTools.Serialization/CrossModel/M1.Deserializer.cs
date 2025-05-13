@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Header"/> to <cref="Models.Listxml.M1"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Header"/> to <see cref="Models.Listxml.M1"/>
         /// </summary>
         private static Models.Listxml.M1 ConvertM1FromInternalModel(Models.Metadata.Header item)
         {

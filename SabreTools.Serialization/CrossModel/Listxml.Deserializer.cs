@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Header"/> to <cref="Models.Listxml.Mame"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Header"/> to <see cref="Models.Listxml.Mame"/>
         /// </summary>
         private static Mame ConvertMameFromInternalModel(Models.Metadata.Header item)
         {
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Machine"/> to <cref="Models.Listxml.GameBase"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Machine"/> to <see cref="Models.Listxml.GameBase"/>
         /// </summary>
         internal static GameBase ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -143,7 +143,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Adjuster"/> to <cref="Models.Listxml.Adjuster"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Adjuster"/> to <see cref="Models.Listxml.Adjuster"/>
         /// </summary>
         private static Adjuster ConvertFromInternalModel(Models.Metadata.Adjuster item)
         {
@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Analog"/> to <cref="Models.Listxml.Analog"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Analog"/> to <see cref="Models.Listxml.Analog"/>
         /// </summary>
         private static Analog ConvertFromInternalModel(Models.Metadata.Analog item)
         {
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.BiosSet"/> to <cref="Models.Listxml.BiosSet"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.BiosSet"/> to <see cref="Models.Listxml.BiosSet"/>
         /// </summary>
         private static BiosSet ConvertFromInternalModel(Models.Metadata.BiosSet item)
         {
@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Chip"/> to <cref="Models.Listxml.Chip"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Chip"/> to <see cref="Models.Listxml.Chip"/>
         /// </summary>
         private static Chip ConvertFromInternalModel(Models.Metadata.Chip item)
         {
@@ -203,7 +203,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Condition"/> to <cref="Models.Listxml.Condition"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Condition"/> to <see cref="Models.Listxml.Condition"/>
         /// </summary>
         private static Condition ConvertFromInternalModel(Models.Metadata.Condition item)
         {
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Configuration"/> to <cref="Models.Listxml.Configuration"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Configuration"/> to <see cref="Models.Listxml.Configuration"/>
         /// </summary>
         private static Configuration ConvertFromInternalModel(Models.Metadata.Configuration item)
         {
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.ConfLocation"/> to <cref="Models.Listxml.ConfLocation"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.ConfLocation"/> to <see cref="Models.Listxml.ConfLocation"/>
         /// </summary>
         private static ConfLocation ConvertFromInternalModel(Models.Metadata.ConfLocation item)
         {
@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.ConfSetting"/> to <cref="Models.Listxml.ConfSetting"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.ConfSetting"/> to <see cref="Models.Listxml.ConfSetting"/>
         /// </summary>
         private static ConfSetting ConvertFromInternalModel(Models.Metadata.ConfSetting item)
         {
@@ -278,7 +278,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Control"/> to <cref="Models.Listxml.Control"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Control"/> to <see cref="Models.Listxml.Control"/>
         /// </summary>
         private static Control ConvertFromInternalModel(Models.Metadata.Control item)
         {
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Models.Metadata.Device"/> to <cref="Models.Listxml.Device"/>
+        /// Convert from <see cref="Models.Metadata.Models.Metadata.Device"/> to <see cref="Models.Listxml.Device"/>
         /// </summary>
         private static Device ConvertFromInternalModel(Models.Metadata.Device item)
         {
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DeviceRef"/> to <cref="Models.Listxml.DeviceRef"/>
+        /// Convert from <see cref="Models.Metadata.DeviceRef"/> to <see cref="Models.Listxml.DeviceRef"/>
         /// </summary>
         private static DeviceRef ConvertFromInternalModel(Models.Metadata.DeviceRef item)
         {
@@ -338,7 +338,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DipLocation"/> to <cref="Models.Listxml.DipLocation"/>
+        /// Convert from <see cref="Models.Metadata.DipLocation"/> to <see cref="Models.Listxml.DipLocation"/>
         /// </summary>
         private static DipLocation ConvertFromInternalModel(Models.Metadata.DipLocation item)
         {
@@ -352,7 +352,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DipSwitch"/> to <cref="Models.Listxml.DipSwitch"/>
+        /// Convert from <see cref="Models.Metadata.DipSwitch"/> to <see cref="Models.Listxml.DipSwitch"/>
         /// </summary>
         private static DipSwitch ConvertFromInternalModel(Models.Metadata.DipSwitch item)
         {
@@ -379,7 +379,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.DipValue"/> to <cref="Models.Listxml.DipValue"/>
+        /// Convert from <see cref="Models.Metadata.DipValue"/> to <see cref="Models.Listxml.DipValue"/>
         /// </summary>
         private static DipValue ConvertFromInternalModel(Models.Metadata.DipValue item)
         {
@@ -398,7 +398,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Disk"/> to <cref="Models.Listxml.Disk"/>
+        /// Convert from <see cref="Models.Metadata.Disk"/> to <see cref="Models.Listxml.Disk"/>
         /// </summary>
         private static Disk ConvertFromInternalModel(Models.Metadata.Disk item)
         {
@@ -418,7 +418,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Display"/> to <cref="Models.Listxml.Display"/>
+        /// Convert from <see cref="Models.Metadata.Display"/> to <see cref="Models.Listxml.Display"/>
         /// </summary>
         private static Display ConvertFromInternalModel(Models.Metadata.Display item)
         {
@@ -443,7 +443,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Driver"/> to <cref="Models.Listxml.Driver"/>
+        /// Convert from <see cref="Models.Metadata.Driver"/> to <see cref="Models.Listxml.Driver"/>
         /// </summary>
         private static Driver ConvertFromInternalModel(Models.Metadata.Driver item)
         {
@@ -465,7 +465,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Extension"/> to <cref="Models.Listxml.Extension"/>
+        /// Convert from <see cref="Models.Metadata.Extension"/> to <see cref="Models.Listxml.Extension"/>
         /// </summary>
         private static Extension ConvertFromInternalModel(Models.Metadata.Extension item)
         {
@@ -477,7 +477,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Feature"/> to <cref="Models.Listxml.Feature"/>
+        /// Convert from <see cref="Models.Metadata.Feature"/> to <see cref="Models.Listxml.Feature"/>
         /// </summary>
         private static Feature ConvertFromInternalModel(Models.Metadata.Feature item)
         {
@@ -491,7 +491,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Input"/> to <cref="Models.Listxml.Input"/>
+        /// Convert from <see cref="Models.Metadata.Input"/> to <see cref="Models.Listxml.Input"/>
         /// </summary>
         private static Input ConvertFromInternalModel(Models.Metadata.Input item)
         {
@@ -516,7 +516,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Instance"/> to <cref="Models.Listxml.Instance"/>
+        /// Convert from <see cref="Models.Metadata.Instance"/> to <see cref="Models.Listxml.Instance"/>
         /// </summary>
         private static Instance ConvertFromInternalModel(Models.Metadata.Instance item)
         {
@@ -529,7 +529,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Port"/> to <cref="Models.Listxml.Port"/>
+        /// Convert from <see cref="Models.Metadata.Port"/> to <see cref="Models.Listxml.Port"/>
         /// </summary>
         private static Port ConvertFromInternalModel(Models.Metadata.Port item)
         {
@@ -546,7 +546,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.RamOption"/> to <cref="Models.Listxml.RamOption"/>
+        /// Convert from <see cref="Models.Metadata.RamOption"/> to <see cref="Models.Listxml.RamOption"/>
         /// </summary>
         private static RamOption ConvertFromInternalModel(Models.Metadata.RamOption item)
         {
@@ -560,7 +560,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Listxml.Rom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Listxml.Rom"/>
         /// </summary>
         private static Rom ConvertFromInternalModel(Models.Metadata.Rom item)
         {
@@ -583,7 +583,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Sample"/> to <cref="Models.Listxml.Sample"/>
+        /// Convert from <see cref="Models.Metadata.Sample"/> to <see cref="Models.Listxml.Sample"/>
         /// </summary>
         private static Sample ConvertFromInternalModel(Models.Metadata.Sample item)
         {
@@ -595,7 +595,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Slot"/> to <cref="Models.Listxml.Slot"/>
+        /// Convert from <see cref="Models.Metadata.Slot"/> to <see cref="Models.Listxml.Slot"/>
         /// </summary>
         private static Slot ConvertFromInternalModel(Models.Metadata.Slot item)
         {
@@ -612,7 +612,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.SlotOption"/> to <cref="Models.Listxml.SlotOption"/>
+        /// Convert from <see cref="Models.Metadata.SlotOption"/> to <see cref="Models.Listxml.SlotOption"/>
         /// </summary>
         private static SlotOption ConvertFromInternalModel(Models.Metadata.SlotOption item)
         {
@@ -626,7 +626,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.SoftwareList"/> to <cref="Models.Listxml.SoftwareList"/>
+        /// Convert from <see cref="Models.Metadata.SoftwareList"/> to <see cref="Models.Listxml.SoftwareList"/>
         /// </summary>
         private static Models.Listxml.SoftwareList ConvertFromInternalModel(Models.Metadata.SoftwareList item)
         {
@@ -641,7 +641,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Sound"/> to <cref="Models.Listxml.Sound"/>
+        /// Convert from <see cref="Models.Metadata.Sound"/> to <see cref="Models.Listxml.Sound"/>
         /// </summary>
         private static Sound ConvertFromInternalModel(Models.Metadata.Sound item)
         {
@@ -653,7 +653,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Video"/> to <cref="Models.Listxml.Video"/>
+        /// Convert from <see cref="Models.Metadata.Video"/> to <see cref="Models.Listxml.Video"/>
         /// </summary>
         private static Video ConvertFromInternalModel(Models.Metadata.Video item)
         {

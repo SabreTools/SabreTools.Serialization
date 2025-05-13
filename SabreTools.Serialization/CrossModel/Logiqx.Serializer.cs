@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Datafile"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.Logiqx.Datafile"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(Datafile item)
         {
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Header"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.Logiqx.Header"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(Header item)
         {
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Dir"/> to an array of <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.Logiqx.Dir"/> to an array of <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine[] ConvertDirToInternalModel(Dir item)
         {
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.GameBase"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.Logiqx.GameBase"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
         {
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Archive"/> to <cref="Models.Metadata.Archive"/>
+        /// Convert from <see cref="Models.Logiqx.Archive"/> to <see cref="Models.Metadata.Archive"/>
         /// </summary>
         private static Models.Metadata.Archive ConvertToInternalModel(Archive item)
         {
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.BiosSet"/> to <cref="Models.Metadata.BiosSet"/>
+        /// Convert from <see cref="Models.Logiqx.BiosSet"/> to <see cref="Models.Metadata.BiosSet"/>
         /// </summary>
         private static Models.Metadata.BiosSet ConvertToInternalModel(BiosSet item)
         {
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.DeviceRef"/> to <cref="Models.Metadata.DeviceRef"/>
+        /// Convert from <see cref="Models.Logiqx.DeviceRef"/> to <see cref="Models.Metadata.DeviceRef"/>
         /// </summary>
         private static Models.Metadata.DeviceRef ConvertToInternalModel(DeviceRef item)
         {
@@ -208,7 +208,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Disk"/> to <cref="Models.Metadata.Disk"/>
+        /// Convert from <see cref="Models.Logiqx.Disk"/> to <see cref="Models.Metadata.Disk"/>
         /// </summary>
         private static Models.Metadata.Disk ConvertToInternalModel(Disk item)
         {
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Driver"/> to <cref="Models.Metadata.Driver"/>
+        /// Convert from <see cref="Models.Logiqx.Driver"/> to <see cref="Models.Metadata.Driver"/>
         /// </summary>
         private static Models.Metadata.Driver ConvertToInternalModel(Driver item)
         {
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Media"/> to <cref="Models.Metadata.Media"/>
+        /// Convert from <see cref="Models.Logiqx.Media"/> to <see cref="Models.Metadata.Media"/>
         /// </summary>
         private static Models.Metadata.Media ConvertToInternalModel(Media item)
         {
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Release"/> to <cref="Models.Metadata.Release"/>
+        /// Convert from <see cref="Models.Logiqx.Release"/> to <see cref="Models.Metadata.Release"/>
         /// </summary>
         private static Models.Metadata.Release ConvertToInternalModel(Release item)
         {
@@ -276,7 +276,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Rom"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.Logiqx.Rom"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         private static Models.Metadata.Rom ConvertToInternalModel(Rom item)
         {
@@ -305,7 +305,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.Sample"/> to <cref="Models.Metadata.Sample"/>
+        /// Convert from <see cref="Models.Logiqx.Sample"/> to <see cref="Models.Metadata.Sample"/>
         /// </summary>
         private static Models.Metadata.Sample ConvertToInternalModel(Sample item)
         {
@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Logiqx.SoftwareList"/> to <cref="Models.Metadata.SoftwareList"/>
+        /// Convert from <see cref="Models.Logiqx.SoftwareList"/> to <see cref="Models.Metadata.SoftwareList"/>
         /// </summary>
         private static Models.Metadata.SoftwareList ConvertToInternalModel(Models.Logiqx.SoftwareList item)
         {

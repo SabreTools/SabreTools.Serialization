@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.Listrom.Set"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.Listrom.Set"/>
         /// </summary>
         private static Set ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Disk"/> to <cref="Models.Listrom.Row"/>
+        /// Convert from <see cref="Models.Metadata.Disk"/> to <see cref="Models.Listrom.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Disk item)
         {
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Listrom.Row"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Listrom.Row"/>
         /// </summary>
         private static Row ConvertFromInternalModel(Models.Metadata.Rom item)
         {

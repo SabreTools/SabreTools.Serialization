@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OpenMSX.SoftwareDb"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.OpenMSX.SoftwareDb"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         public static Models.Metadata.Header ConvertHeaderToInternalModel(SoftwareDb item)
         {
@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OpenMSX.Software"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.OpenMSX.Software"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         public static Models.Metadata.Machine ConvertMachineToInternalModel(Software item)
         {
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OpenMSX.Dump"/> to <cref="Models.Metadata.Dump"/>
+        /// Convert from <see cref="Models.OpenMSX.Dump"/> to <see cref="Models.Metadata.Dump"/>
         /// </summary>
         public static Models.Metadata.Dump ConvertToInternalModel(Dump item)
         {
@@ -94,7 +94,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OpenMSX.Original"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.OpenMSX.Original"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         public static Models.Metadata.Original ConvertToInternalModel(Original item)
         {
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OpenMSX.RomBase"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.OpenMSX.RomBase"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         public static Models.Metadata.Rom ConvertToInternalModel(RomBase item)
         {

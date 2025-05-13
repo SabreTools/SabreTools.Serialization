@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.Hashfile.Hashfile"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.Hashfile.Hashfile"/>
         /// </summary>
         private static Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Models.Metadata.Machine item, HashType hash)
         {
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.MD2"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.MD2"/>
         /// </summary>
         private static MD2 ConvertToMD2(Models.Metadata.Rom item)
         {
@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.MD4"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.MD4"/>
         /// </summary>
         private static MD4 ConvertToMD4(Models.Metadata.Rom item)
         {
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.MD5"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.MD5"/>
         /// </summary>
         private static MD5 ConvertToMD5(Models.Metadata.Rom item)
         {
@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SFV"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SFV"/>
         /// </summary>
         private static SFV ConvertToSFV(Models.Metadata.Rom item)
         {
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SHA1"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SHA1"/>
         /// </summary>
         private static SHA1 ConvertToSHA1(Models.Metadata.Rom item)
         {
@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SHA256"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SHA256"/>
         /// </summary>
         private static SHA256 ConvertToSHA256(Models.Metadata.Rom item)
         {
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SHA384"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SHA384"/>
         /// </summary>
         private static SHA384 ConvertToSHA384(Models.Metadata.Rom item)
         {
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SHA512"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SHA512"/>
         /// </summary>
         private static SHA512 ConvertToSHA512(Models.Metadata.Rom item)
         {
@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.Hashfile.SpamSum"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.SpamSum"/>
         /// </summary>
         private static SpamSum ConvertToSpamSum(Models.Metadata.Rom item)
         {

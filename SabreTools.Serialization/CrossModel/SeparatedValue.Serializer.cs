@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.SeparatedValue.MetadataFile"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.SeparatedValue.MetadataFile"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(MetadataFile item)
         {
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.SeparatedValue.Row"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.SeparatedValue.Row"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Row item)
         {
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.SeparatedValue.Row"/> to <cref="Models.Metadata.DatItem"/>
+        /// Convert from <see cref="Models.SeparatedValue.Row"/> to <see cref="Models.Metadata.DatItem"/>
         /// </summary>
         private static Models.Metadata.DatItem? ConvertToInternalModel(Row item)
         {

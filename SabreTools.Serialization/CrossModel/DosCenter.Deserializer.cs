@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Header"/> to <cref="Models.DosCenter.DosCenter"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.DosCenter.DosCenter"/>
         /// </summary>
         private static Models.DosCenter.DosCenter ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to <cref="Models.DosCenter.Game"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.DosCenter.Game"/>
         /// </summary>
         private static Game ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.DosCenter.File"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.DosCenter.File"/>
         /// </summary>
         private static File ConvertFromInternalModel(Models.Metadata.Rom item)
         {

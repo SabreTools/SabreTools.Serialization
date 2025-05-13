@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Machine"/> to an array of <cref="Models.ArchiveDotOrg.File"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to an array of <see cref="Models.ArchiveDotOrg.File"/>
         /// </summary>
         private static Models.ArchiveDotOrg.File[] ConvertFromInternalModel(Models.Metadata.Machine item)
         {
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Metadata.Rom"/> to <cref="Models.ArchiveDotOrg.File"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.ArchiveDotOrg.File"/>
         /// </summary>
         private static Models.ArchiveDotOrg.File ConvertFromInternalModel(Models.Metadata.Rom item)
         {

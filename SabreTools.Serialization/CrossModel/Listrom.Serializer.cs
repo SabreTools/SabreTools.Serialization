@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Listrom.MetadataFile"/> to <cref="Header"/>
+        /// Convert from <see cref="Models.Listrom.MetadataFile"/> to <see cref="Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel()
         {
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Listrom.Set"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.Listrom.Set"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Set item)
         {
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.Listrom.Row"/> to <cref="Models.Metadata.DatItem"/>
+        /// Convert from <see cref="Models.Listrom.Row"/> to <see cref="Models.Metadata.DatItem"/>
         /// </summary>
         private static Models.Metadata.DatItem ConvertToInternalModel(Row item)
         {

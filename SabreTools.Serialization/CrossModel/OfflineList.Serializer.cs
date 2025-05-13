@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OfflineList.Dat"/> to <cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="Models.OfflineList.Dat"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
         private static Models.Metadata.Header ConvertHeaderToInternalModel(Dat item)
         {
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OfflineList.Game"/> to <cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Models.OfflineList.Game"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
         private static Models.Metadata.Machine ConvertMachineToInternalModel(Game item)
         {
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <cref="Models.OfflineList.FileRomCRC"/> to <cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Models.OfflineList.FileRomCRC"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
         private static Models.Metadata.Rom ConvertToInternalModel(FileRomCRC item)
         {
