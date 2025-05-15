@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Setup the reader and output
-                var reader = new StreamReader(data);
+                var reader = new StreamReader(data, Encoding.UTF8);
                 var cueSheet = new Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
 
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Deserializers
                 string? lastLine = null;
                 while (!reader.EndOfStream)
                 {
-                    string? line = lastLine ?? reader.ReadLine();
+                    string? line = lastLine ?? ReadQuotedString(reader);
                     lastLine = null;
 
                     // If we have a null line, break from the loop
@@ -39,14 +39,7 @@ namespace SabreTools.Serialization.Deserializers
                         continue;
 
                     // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                    var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
-                    var splitLine = new List<string>();
-                    foreach (Match? match in matchCol)
-                    {
-                        if (match != null)
-                            splitLine.Add(match.Groups[0].Value);
-                    }
-
+                    var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                     switch (splitLine[0])
                     {
                         // Read comments
@@ -56,7 +49,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read MCN
                         case "CATALOG":
-                            if (splitLine.Count < 2)
+                            if (splitLine.Length < 2)
                                 throw new FormatException($"CATALOG line malformed: {line}");
 
                             cueSheet.Catalog = splitLine[1].Trim('"');
@@ -64,7 +57,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read external CD-Text file path
                         case "CDTEXTFILE":
-                            if (splitLine.Count < 2)
+                            if (splitLine.Length < 2)
                                 throw new FormatException($"CDTEXTFILE line malformed: {line}");
 
                             cueSheet.CdTextFile = splitLine[1].Trim('"');
@@ -72,7 +65,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read CD-Text enhanced performer
                         case "PERFORMER":
-                            if (splitLine.Count < 2)
+                            if (splitLine.Length < 2)
                                 throw new FormatException($"PERFORMER line malformed: {line}");
 
                             cueSheet.Performer = splitLine[1].Trim('"');
@@ -80,7 +73,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read CD-Text enhanced songwriter
                         case "SONGWRITER":
-                            if (splitLine.Count < 2)
+                            if (splitLine.Length < 2)
                                 throw new FormatException($"SONGWRITER line malformed: {line}");
 
                             cueSheet.Songwriter = splitLine[1].Trim('"');
@@ -88,7 +81,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read CD-Text enhanced title
                         case "TITLE":
-                            if (splitLine.Count < 2)
+                            if (splitLine.Length < 2)
                                 throw new FormatException($"TITLE line malformed: {line}");
 
                             cueSheet.Title = splitLine[1].Trim('"');
@@ -96,7 +89,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read file information
                         case "FILE":
-                            if (splitLine.Count < 3)
+                            if (splitLine.Length < 3)
                                 throw new FormatException($"FILE line malformed: {line}");
 
                             var file = CreateCueFile(splitLine[1], splitLine[2], reader, out lastLine);
@@ -153,14 +146,7 @@ namespace SabreTools.Serialization.Deserializers
                     continue;
 
                 // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
-                var splitLine = new List<string>();
-                foreach (Match? match in matchCol)
-                {
-                    if (match != null)
-                        splitLine.Add(match.Groups[0].Value);
-                }
-
+                var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                 switch (splitLine[0])
                 {
                     // Read comments
@@ -170,7 +156,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read track information
                     case "TRACK":
-                        if (splitLine.Count < 3)
+                        if (splitLine.Length < 3)
                             throw new FormatException($"TRACK line malformed: {line}");
 
                         var track = CreateCueTrack(splitLine[1], splitLine[2], reader, out lastLine);
@@ -261,13 +247,7 @@ namespace SabreTools.Serialization.Deserializers
                     continue;
 
                 // http://stackoverflow.com/questions/554013/regular-expression-to-split-on-spaces-unless-in-quotes
-                var matchCol = Regex.Matches(line, @"[^\s""]+|""[^""]*""");
-                var splitLine = new List<string>();
-                foreach (Match? match in matchCol)
-                {
-                    if (match != null)
-                        splitLine.Add(match.Groups[0].Value);
-                }
+                var splitLine = Regex.Split(line, @"[^\s""]+|""[^""]*""");
                 switch (splitLine[0])
                 {
                     // Read comments
@@ -277,7 +257,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read flag information
                     case "FLAGS":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"FLAGS line malformed: {line}");
 
                         cueTrack.Flags = GetFlags([.. splitLine]);
@@ -285,7 +265,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read International Standard Recording Code
                     case "ISRC":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"ISRC line malformed: {line}");
 
                         cueTrack.ISRC = splitLine[1].Trim('"');
@@ -293,7 +273,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read CD-Text enhanced performer
                     case "PERFORMER":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"PERFORMER line malformed: {line}");
 
                         cueTrack.Performer = splitLine[1].Trim('"');
@@ -301,7 +281,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read CD-Text enhanced songwriter
                     case "SONGWRITER":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"SONGWRITER line malformed: {line}");
 
                         cueTrack.Songwriter = splitLine[1].Trim('"');
@@ -309,7 +289,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read CD-Text enhanced title
                     case "TITLE":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"TITLE line malformed: {line}");
 
                         cueTrack.Title = splitLine[1].Trim('"');
@@ -317,7 +297,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read pregap information
                     case "PREGAP":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"PREGAP line malformed: {line}");
 
                         var pregap = CreatePreGap(splitLine[1]);
@@ -329,7 +309,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read index information
                     case "INDEX":
-                        if (splitLine.Count < 3)
+                        if (splitLine.Length < 3)
                             throw new FormatException($"INDEX line malformed: {line}");
 
                         var index = CreateCueIndex(splitLine[1], splitLine[2]);
@@ -341,7 +321,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Read postgap information
                     case "POSTGAP":
-                        if (splitLine.Count < 2)
+                        if (splitLine.Length < 2)
                             throw new FormatException($"POSTGAP line malformed: {line}");
 
                         var postgap = CreatePostGap(splitLine[1]);
@@ -533,6 +513,38 @@ namespace SabreTools.Serialization.Deserializers
         #region Helpers
 
         /// <summary>
+        /// Read a potentially multi-line value using quotes as an indicator
+        /// </summary>
+        internal static string? ReadQuotedString(StreamReader reader)
+        {
+            // Check the required parameters
+            if (reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+                throw new ArgumentNullException(nameof(reader));
+            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
+                return null;
+
+            // Use a string builder for the line
+            var lineBuilder = new StringBuilder();
+
+            // Loop until we have completed quotes
+            int quoteCount = 0;
+            do
+            {
+                // Read the next line
+                string? line = reader.ReadLine();
+                if (line == null)
+                    break;
+
+                // Count the number of quotes and append
+                quoteCount += Array.FindAll(line.ToCharArray(), c => c == '"').Length;
+                lineBuilder.AppendLine(line);
+            }
+            while (quoteCount % 2 != 0);
+
+            return lineBuilder.ToString().TrimEnd();
+        }
+
+        /// <summary>
         /// Get the file type from a given string
         /// </summary>
         /// <param name="fileType">String to get value from</param>
@@ -613,38 +625,6 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return flag;
-        }
-
-        /// <summary>
-        /// Read a potentially multi-line value using quotes as an indicator
-        /// </summary>
-        private static string? ReadQuotedString(StreamReader reader)
-        {
-            // Check the required parameters
-            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
-                throw new ArgumentNullException(nameof(reader));
-            if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
-                throw new IndexOutOfRangeException();
-
-            // Use a string builder for the line
-            var lineBuilder = new StringBuilder();
-
-            // Loop until we have completed quotes
-            int quoteCount = 0;
-            do
-            {
-                // Read the next line
-                string? line = reader.ReadLine();
-                if (line == null)
-                    break;
-
-                // Count the number of quotes and append
-                quoteCount += Array.FindAll(line.ToCharArray(), c => c == '"').Length;
-                lineBuilder.Append(line);
-            }
-            while (quoteCount % 2 != 0);
-
-            return lineBuilder.ToString();
         }
 
         #endregion

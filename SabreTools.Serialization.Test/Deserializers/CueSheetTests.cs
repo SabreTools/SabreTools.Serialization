@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SabreTools.Serialization.Deserializers;
 using Xunit;
 
@@ -69,5 +71,48 @@ namespace SabreTools.Serialization.Test.Deserializers
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
         }
+
+        #region ReadQuotedString
+
+        [Fact]
+        public void ReadQuotedString_EmptyReader_Throws()
+        {
+            byte[] data = Encoding.UTF8.GetBytes(string.Empty);
+            var stream = new MemoryStream(data);
+            var reader = new StreamReader(stream, Encoding.UTF8);
+            Assert.Throws<ArgumentNullException>(() => CueSheet.ReadQuotedString(reader));
+        }
+
+        [Fact]
+        public void ReadQuotedString_NoQuotes_Correct()
+        {
+            byte[] data = Encoding.UTF8.GetBytes("Test1 Test2");
+            var stream = new MemoryStream(data);
+            var reader = new StreamReader(stream, Encoding.UTF8);
+            string? actual = CueSheet.ReadQuotedString(reader);
+            Assert.Equal("Test1 Test2", actual);
+        }
+
+        [Fact]
+        public void ReadQuotedString_SingleLineQuotes_Correct()
+        {
+            byte[] data = Encoding.UTF8.GetBytes("\"Test1 Test2\"");
+            var stream = new MemoryStream(data);
+            var reader = new StreamReader(stream, Encoding.UTF8);
+            string? actual = CueSheet.ReadQuotedString(reader);
+            Assert.Equal("\"Test1 Test2\"", actual);
+        }
+
+        [Fact]
+        public void ReadQuotedString_MultiLineQuotes_Correct()
+        {
+            byte[] data = Encoding.UTF8.GetBytes("\"Test1\nTest2\"");
+            var stream = new MemoryStream(data);
+            var reader = new StreamReader(stream, Encoding.UTF8);
+            string? actual = CueSheet.ReadQuotedString(reader);
+            Assert.Equal("\"Test1\nTest2\"", actual);
+        }
+
+        #endregion
     }
 }
