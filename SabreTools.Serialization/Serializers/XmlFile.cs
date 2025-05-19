@@ -104,7 +104,9 @@ namespace SabreTools.Serialization.Serializers
                 Encoding = Encoding.UTF8,
                 Indent = true,
                 IndentChars = "\t",
+#if NET40_OR_GREATER || NETCOREAPP
                 NamespaceHandling = NamespaceHandling.OmitDuplicates,
+#endif
                 NewLineChars = "\n",
             };
             var stream = new MemoryStream();
