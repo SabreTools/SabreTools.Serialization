@@ -95,12 +95,16 @@ namespace SabreTools.Serialization.Serializers
 
             // Setup the serializer and the writer
             var serializer = new XmlSerializer(typeof(T));
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
             var settings = new XmlWriterSettings
             {
                 CheckCharacters = false,
                 Encoding = Encoding.UTF8,
                 Indent = true,
                 IndentChars = "\t",
+                NamespaceHandling = NamespaceHandling.OmitDuplicates,
                 NewLineChars = "\n",
             };
             var stream = new MemoryStream();
@@ -112,7 +116,7 @@ namespace SabreTools.Serialization.Serializers
                 xmlWriter.WriteDocType(name, pubid, sysid, subset);
 
             // Perform the deserialization and return
-            serializer.Serialize(xmlWriter, obj);
+            serializer.Serialize(xmlWriter, obj, namespaces);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
