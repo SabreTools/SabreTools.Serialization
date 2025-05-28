@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -97,6 +96,31 @@ namespace SabreTools.Serialization.Test.Deserializers
         }
 
         [Fact]
+        public void RoundTripGameWithoutQuotesTest()
+        {
+            // Get the serializer and deserializer
+            var deserializer = new Serialization.Deserializers.ClrMamePro();
+            var serializer = new Serialization.Serializers.ClrMamePro();
+
+            // Build the data
+            Models.ClrMamePro.MetadataFile mf = Build(game: true);
+
+            // Serialize to stream
+            Stream? actual = serializer.Serialize(mf, quotes: false);
+            Assert.NotNull(actual);
+
+            // Serialize back to original model
+            Models.ClrMamePro.MetadataFile? newMf = deserializer.Deserialize(actual);
+
+            // Validate the data
+            Assert.NotNull(newMf);
+            Validate(newMf.ClrMamePro);
+            Assert.NotNull(newMf.Game);
+            var newGame = Assert.Single(newMf.Game);
+            Validate(newGame);
+        }
+
+        [Fact]
         public void RoundTripMachineTest()
         {
             // Get the serializer and deserializer
@@ -108,6 +132,31 @@ namespace SabreTools.Serialization.Test.Deserializers
 
             // Serialize to stream
             Stream? actual = serializer.Serialize(mf);
+            Assert.NotNull(actual);
+
+            // Serialize back to original model
+            Models.ClrMamePro.MetadataFile? newMf = deserializer.Deserialize(actual);
+
+            // Validate the data
+            Assert.NotNull(newMf);
+            Validate(newMf.ClrMamePro);
+            Assert.NotNull(newMf.Game);
+            var newGame = Assert.Single(newMf.Game);
+            Validate(newGame);
+        }
+
+        [Fact]
+        public void RoundTripMachineWithoutQuotesTest()
+        {
+            // Get the serializer and deserializer
+            var deserializer = new Serialization.Deserializers.ClrMamePro();
+            var serializer = new Serialization.Serializers.ClrMamePro();
+
+            // Build the data
+            Models.ClrMamePro.MetadataFile mf = Build(game: false);
+
+            // Serialize to stream
+            Stream? actual = serializer.Serialize(mf, quotes: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
