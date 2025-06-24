@@ -724,16 +724,16 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Name table
-            if (exportDirectoryTable.NumberOfNamePointers != 0 && exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections) != 0)
+            if (exportDirectoryTable.NumberOfNamePointers != 0 && exportTable.NamePointerTable?.Pointers != null)
             {
-                uint nameTableAddress = exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections);
-                data.Seek(nameTableAddress, SeekOrigin.Begin);
-
                 var exportNameTable = new ExportNameTable();
 
                 exportNameTable.Strings = new string[exportDirectoryTable.NumberOfNamePointers];
                 for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
                 {
+                    uint nameAddress = exportTable.NamePointerTable.Pointers[i].ConvertVirtualAddress(sections); ;
+                    data.Seek(nameAddress, SeekOrigin.Begin);
+
                     string? str = data.ReadNullTerminatedAnsiString();
                     exportNameTable.Strings[i] = str ?? string.Empty;
                 }
