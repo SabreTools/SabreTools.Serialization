@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Deserializers
                     int endOffset = (int)(baseRelocationTableAddress + executable.OptionalHeader.BaseRelocationTable.Size);
 
                     // Set the base relocation table
-                    executable.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset, executable.SectionTable);
+                    executable.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset);
                 }
 
                 #endregion
@@ -296,9 +296,8 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the base relocation table</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset, SectionHeader[] sections)
+        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, int endOffset)
         {
             var baseRelocationTable = new List<BaseRelocationBlock>();
 
@@ -308,6 +307,8 @@ namespace SabreTools.Serialization.Deserializers
 
                 baseRelocationBlock.PageRVA = data.ReadUInt32LittleEndian();
                 baseRelocationBlock.BlockSize = data.ReadUInt32LittleEndian();
+                if (baseRelocationBlock.BlockSize == 0)
+                    break;
 
                 var typeOffsetFieldEntries = new List<BaseRelocationTypeOffsetFieldEntry>();
                 int totalSize = 8;
@@ -326,6 +327,13 @@ namespace SabreTools.Serialization.Deserializers
                 baseRelocationBlock.TypeOffsetFieldEntries = [.. typeOffsetFieldEntries];
 
                 baseRelocationTable.Add(baseRelocationBlock);
+
+                // Align to the DWORD boundary if we're not at the end
+                if (data.Position < data.Length)
+                {
+                    while (data.Position < data.Length && (data.Position % 4) != 0)
+                        _ = data.ReadByte();
+                }
             }
 
             return [.. baseRelocationTable];
