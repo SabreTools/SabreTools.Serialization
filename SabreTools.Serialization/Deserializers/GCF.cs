@@ -104,8 +104,15 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Directory Header
 
+                // Try to parse game cache directory header
+                var directoryHeader = ParseDirectoryHeader(data);
+                if (directoryHeader.Dummy0 != 0x00000004)
+                    return null;
+                if (directoryHeader.Dummy1 != 0x00008000)
+                    return null;
+                
                 // Set the game cache directory header
-                file.DirectoryHeader = ParseDirectoryHeader(data);
+                file.DirectoryHeader = directoryHeader;
 
                 #endregion
 
