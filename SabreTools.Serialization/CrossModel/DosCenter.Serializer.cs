@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             if (obj == null)
                 return null;
-            
+
             var metadataFile = new Models.Metadata.MetadataFile();
 
             if (obj?.DosCenter != null)

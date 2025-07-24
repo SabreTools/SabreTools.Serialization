@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Serializers
             var serializer = new ClrMamePro();
             return serializer.Serialize(obj, path, quotes);
         }
-        
+
         /// <inheritdoc/>
         public override bool Serialize(MetadataFile? obj, string? path)
             => Serialize(obj, path, true);
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Serializers
             var serializer = new ClrMamePro();
             return serializer.Serialize(obj, quotes);
         }
-        
+
         /// <inheritdoc/>
         public override Stream? Serialize(MetadataFile? obj)
             => Serialize(obj, true);

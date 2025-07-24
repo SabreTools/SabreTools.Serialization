@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.Deserializers
 
             return xemid;
         }
-    
+
         #endregion
     }
 }

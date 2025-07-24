@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Deserializers
 
             return obj;
         }
-        
+
         /// <summary>
         /// Parse a Stream into a DriveRevocationListEntry
         /// </summary>

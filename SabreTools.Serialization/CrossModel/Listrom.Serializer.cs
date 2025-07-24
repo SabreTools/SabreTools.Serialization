@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             if (obj == null)
                 return null;
-            
+
             var metadataFile = new Models.Metadata.MetadataFile
             {
                 [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),

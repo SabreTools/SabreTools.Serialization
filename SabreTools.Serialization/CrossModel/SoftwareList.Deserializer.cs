@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.DataArea.RomKey);
             if (roms != null && roms.Length > 0)
-                dataArea.Rom = Array.ConvertAll(roms,ConvertFromInternalModel);
+                dataArea.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             return dataArea;
         }

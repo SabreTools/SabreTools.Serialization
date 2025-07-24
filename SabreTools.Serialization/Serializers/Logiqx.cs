@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Serializers
             => SerializeArray(obj, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
 
         #endregion
-        
+
         #region IFileSerializer
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?, string?)" />
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Serializers
             => Serialize(obj, path, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
 
         #endregion
-        
+
         #region IStreamSerializer
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />

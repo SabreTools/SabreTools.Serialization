@@ -126,7 +126,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.DiscInformationIdentifier = Encoding.ASCII.GetString(discInformationIdentifier);
             if (obj.DiscInformationIdentifier != "DI")
                 return obj;
-            
+
             obj.DiscInformationFormat = data.ReadByteValue();
             obj.NumberOfUnitsInBlock = data.ReadByteValue();
             obj.Reserved0 = data.ReadByteValue();

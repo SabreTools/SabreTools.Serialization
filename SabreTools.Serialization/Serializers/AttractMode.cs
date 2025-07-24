@@ -129,7 +129,7 @@ namespace SabreTools.Serialization.Serializers
         }
 
         /// <inheritdoc/>
-        public override  Stream? Serialize(MetadataFile? obj)
+        public override Stream? Serialize(MetadataFile? obj)
             => Serialize(obj, false);
 
         /// <inheritdoc/>

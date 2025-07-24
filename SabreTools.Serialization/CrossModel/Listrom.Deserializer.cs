@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
                 metadataFile.Set = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
-            
+
             return metadataFile;
         }
 

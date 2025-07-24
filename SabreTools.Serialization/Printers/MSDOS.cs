@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.Offset, "    Offset");
                 builder.AppendLine(entry.Segment, "    Segment");
             }
-            
+
             builder.AppendLine();
         }
     }

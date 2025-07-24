@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Serializers
             var serializer = new Hashfile();
             return serializer.Serialize(obj, path, hash);
         }
-        
+
         /// <inheritdoc/>
         public override bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
             => Serialize(obj, path, HashType.CRC32);
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Serializers
             var serializer = new Hashfile();
             return serializer.Serialize(obj, hash);
         }
-        
+
         /// <inheritdoc/>
         public override Stream? Serialize(Models.Hashfile.Hashfile? obj)
             => Serialize(obj, HashType.CRC32);
