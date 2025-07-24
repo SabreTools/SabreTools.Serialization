@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using SabreTools.Compression.Deflate;
+using SabreTools.IO.Compression.Deflate;
 using SabreTools.Models.BFPK;
 
 namespace SabreTools.Serialization.Wrappers

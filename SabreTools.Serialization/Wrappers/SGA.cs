@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Compression.zlib;
+using SabreTools.IO.Compression.zlib;
 using SabreTools.Models.SGA;
 
 namespace SabreTools.Serialization.Wrappers

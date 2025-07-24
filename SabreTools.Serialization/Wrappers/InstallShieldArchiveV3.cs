@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Compression.Blast;
+using SabreTools.IO.Compression.Blast;
 using SabreTools.Models.InstallShieldArchiveV3;
 
 namespace SabreTools.Serialization.Wrappers

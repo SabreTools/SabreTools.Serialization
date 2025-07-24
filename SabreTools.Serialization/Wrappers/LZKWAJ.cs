@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Compression.SZDD;
+using SabreTools.IO.Compression.SZDD;
 using SabreTools.Models.LZ;
 
 namespace SabreTools.Serialization.Wrappers
