@@ -186,6 +186,11 @@ namespace SabreTools.Serialization.Wrappers
         RealArcadeMezzanine,
 
         /// <summary>
+        /// SecuROM DFA File
+        /// </summary>
+        SecuROMDFA,
+
+        /// <summary>
         /// 7-zip archive
         /// </summary>
         /// <remarks>Currently has no IWrapper implementation</remarks>

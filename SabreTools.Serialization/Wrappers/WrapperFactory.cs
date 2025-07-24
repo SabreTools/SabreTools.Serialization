@@ -49,6 +49,7 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.RAR => null,// TODO: Implement wrapper
                 WrapperType.RealArcadeInstaller => null,// TODO: Implement wrapper
                 WrapperType.RealArcadeMezzanine => null,// TODO: Implement wrapper
+                WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => null,// TODO: Implement wrapper
                 WrapperType.SFFS => null,// TODO: Implement wrapper
                 WrapperType.SGA => SGA.Create(data),
@@ -613,6 +614,13 @@ namespace SabreTools.Serialization.Wrappers
             // Found in the ".mez" files in IA item "Nova_RealArcadeCD_USA".
             if (magic.StartsWith([0x58, 0x5A, 0x69, 0x70, 0x32, 0x2E, 0x30]))
                 return WrapperType.RealArcadeMezzanine;
+
+            #endregion
+
+            #region SecuROM DFA
+
+            if (magic.StartsWith(Models.SecuROM.Constants.DFAMagicBytes))
+                return WrapperType.SecuROMDFA;
 
             #endregion
 

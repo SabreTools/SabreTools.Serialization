@@ -64,6 +64,7 @@ namespace SabreTools.Serialization
                 Wrapper.PlayJPlaylist item => item.PrettyPrint(),
                 Wrapper.PortableExecutable item => item.PrettyPrint(),
                 Wrapper.Quantum item => item.PrettyPrint(),
+                Wrapper.SecuROMDFA item => item.PrettyPrint(),
                 Wrapper.SGA item => item.PrettyPrint(),
                 Wrapper.VBSP item => item.PrettyPrint(),
                 Wrapper.VPK item => item.PrettyPrint(),
@@ -113,6 +114,7 @@ namespace SabreTools.Serialization
                 Wrapper.PlayJPlaylist item => item.ExportJSON(),
                 Wrapper.PortableExecutable item => item.ExportJSON(),
                 Wrapper.Quantum item => item.ExportJSON(),
+                Wrapper.SecuROMDFA item => item.ExportJSON(),
                 Wrapper.SGA item => item.ExportJSON(),
                 Wrapper.VBSP item => item.ExportJSON(),
                 Wrapper.VPK item => item.ExportJSON(),
@@ -424,6 +426,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             Quantum.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.SecuROMDFA item)
+        {
+            var builder = new StringBuilder();
+            SecuROMDFA.Print(builder, item.Model);
             return builder;
         }
 
