@@ -1417,8 +1417,8 @@ namespace SabreTools.Serialization
         /// <param name="input">Input array to try aligning</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <param name="alignment">Number of bytes to align on</param>
-        /// <returns>True if the stream could be aligned, false otherwise</returns>
-        public static bool AlignToBoundary(this byte[]? input, ref int offset, byte alignment)
+        /// <returns>True if the array could be aligned, false otherwise</returns>
+        private static bool AlignToBoundary(this byte[]? input, ref int offset, byte alignment)
         {
             // If the array is invalid
             if (input == null || input.Length == 0)
