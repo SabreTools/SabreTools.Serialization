@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Deserializers
                 var settings = new XmlReaderSettings
                 {
                     CheckCharacters = false,
-#if NET40_OR_GREATER || NETCOREAPP
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                     DtdProcessing = DtdProcessing.Ignore,
 #endif
                     ValidationFlags = XmlSchemaValidationFlags.None,

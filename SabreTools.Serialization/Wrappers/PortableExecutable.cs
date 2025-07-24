@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-#if NET35_OR_GREATER || NETCOREAPP
+#if NET35_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Linq;
 #endif
 using System.Text;

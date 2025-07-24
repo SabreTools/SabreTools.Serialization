@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Serializers
                 Encoding = Encoding.UTF8,
                 Indent = true,
                 IndentChars = "\t",
-#if NET40_OR_GREATER || NETCOREAPP
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
                 NamespaceHandling = NamespaceHandling.OmitDuplicates,
 #endif
                 NewLineChars = "\n",

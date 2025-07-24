@@ -23,7 +23,7 @@ namespace InfoPrint
             // Loop through the input paths
             foreach (string inputPath in options.InputPaths)
             {
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD2_0_OR_GREATER
                 PrintPathInfo(inputPath, false, options.Debug);
 #else
                 PrintPathInfo(inputPath, options.Json, options.Debug);

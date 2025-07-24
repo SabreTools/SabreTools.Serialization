@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     // Split the line for the name iteratively
-#if NETFRAMEWORK || NETCOREAPP3_1
+#if NETFRAMEWORK || NETCOREAPP3_1 || NETSTANDARD2_0_OR_GREATER
                 string[] lineParts = line.Split(new string[] { "     " }, StringSplitOptions.RemoveEmptyEntries);
                 if (lineParts.Length == 1)
                     lineParts = line.Split(new string[] { "    " }, StringSplitOptions.RemoveEmptyEntries);
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.Deserializers
                     if (trimmedLine == null)
                         continue;
 
-#if NETFRAMEWORK || NETCOREAPP3_1
+#if NETFRAMEWORK || NETCOREAPP3_1 || NETSTANDARD2_0_OR_GREATER
                 lineParts = trimmedLine.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 #else
                     lineParts = trimmedLine.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
