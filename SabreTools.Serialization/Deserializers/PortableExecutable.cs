@@ -329,11 +329,7 @@ namespace SabreTools.Serialization.Deserializers
                 baseRelocationTable.Add(baseRelocationBlock);
 
                 // Align to the DWORD boundary if we're not at the end
-                if (data.Position < data.Length)
-                {
-                    while (data.Position < data.Length && (data.Position % 4) != 0)
-                        _ = data.ReadByte();
-                }
+                data.AlignToBoundary(4);
             }
 
             return [.. baseRelocationTable];
