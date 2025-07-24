@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Wrappers
             // Normalize the extension
             extension = extension.TrimStart('.').Trim();
 
-            // TODO: For all modelled types, use the constants instead of hardcoded values here
+            // TODO: Use constants from Models here
             #region AACSMediaKeyBlock
 
             // Block starting with verify media key record
@@ -154,6 +154,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region BDPlusSVM
 
             if (magic.StartsWith([0x42, 0x44, 0x53, 0x56, 0x4D, 0x5F, 0x43, 0x43]))
@@ -166,11 +167,12 @@ namespace SabreTools.Serialization.Wrappers
 
             #region BFPK
 
-            if (magic.StartsWith([0x42, 0x46, 0x50, 0x4b]))
+            if (magic.StartsWith(Models.BFPK.Constants.SignatureBytes))
                 return WrapperType.BFPK;
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region BSP
 
             // Shares a first 4 bytes with some .mc files
@@ -185,6 +187,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region BZip2
 
             if (magic.StartsWith([0x42, 0x52, 0x68]))
@@ -197,7 +200,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region CFB
 
-            if (magic.StartsWith([0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]))
+            if (magic.StartsWith(Models.CFB.Constants.SignatureBytes))
                 return WrapperType.CFB;
 
             // Installer package
@@ -222,6 +225,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region CHD
 
             if (magic.StartsWith([0x4D, 0x43, 0x6F, 0x6D, 0x70, 0x72, 0x48, 0x44]))
@@ -239,7 +243,7 @@ namespace SabreTools.Serialization.Wrappers
             #region Executable
 
             // DOS MZ executable file format (and descendants)
-            if (magic.StartsWith([0x4d, 0x5a]))
+            if (magic.StartsWith(Models.MSDOS.Constants.SignatureBytes))
                 return WrapperType.Executable;
 
             // None of the following are supported yet
@@ -279,6 +283,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region GCF
 
             if (magic.StartsWith([0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]))
@@ -289,9 +294,10 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region GZIP
 
-            if (magic.StartsWith([0x1f, 0x8b]))
+            if (magic.StartsWith([Models.GZIP.Constants.ID1, Models.GZIP.Constants.ID2]))
                 return WrapperType.GZIP;
 
             if (extension.Equals("gz", StringComparison.OrdinalIgnoreCase))
@@ -306,6 +312,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region InstallShieldArchiveV3
 
             if (magic.StartsWith([0x13, 0x5D, 0x65, 0x8C]))
@@ -318,13 +325,14 @@ namespace SabreTools.Serialization.Wrappers
 
             #region InstallShieldCAB
 
-            if (magic.StartsWith([0x49, 0x53, 0x63]))
+            if (magic.StartsWith(Models.InstallShieldCabinet.Constants.SignatureBytes))
                 return WrapperType.InstallShieldCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region LDSCRYPT
 
             if (magic.StartsWith([0x4C, 0x44, 0x53, 0x43, 0x52, 0x59, 0x50, 0x54]))
@@ -334,20 +342,20 @@ namespace SabreTools.Serialization.Wrappers
 
             #region LZ
 
-            if (magic.StartsWith([0x4B, 0x57, 0x41, 0x4A, 0x88, 0xF0, 0x27, 0xD1]))
+            if (magic.StartsWith(Models.LZ.Constants.KWAJSignatureBytes))
                 return WrapperType.LZKWAJ;
 
-            if (magic.StartsWith([0x53, 0x5A, 0x20, 0x88, 0xF0, 0x27, 0x33, 0xD1]))
+            if (magic.StartsWith(Models.LZ.Constants.QBasicSignatureBytes))
                 return WrapperType.LZQBasic;
 
-            if (magic.StartsWith([0x53, 0x5A, 0x44, 0x44, 0x88, 0xF0, 0x27, 0x33]))
+            if (magic.StartsWith(Models.LZ.Constants.SZDDSignatureBytes))
                 return WrapperType.LZSZDD;
 
             #endregion
 
             #region MicrosoftCAB
 
-            if (magic.StartsWith([0x4d, 0x53, 0x43, 0x46]))
+            if (magic.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                 return WrapperType.MicrosoftCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
@@ -356,10 +364,10 @@ namespace SabreTools.Serialization.Wrappers
 
             #region MoPaQ
 
-            if (magic.StartsWith([0x4d, 0x50, 0x51, 0x1a]))
+            if (magic.StartsWith(Models.MoPaQ.Constants.ArchiveHeaderSignatureBytes))
                 return WrapperType.MoPaQ;
 
-            if (magic.StartsWith([0x4d, 0x50, 0x51, 0x1b]))
+            if (magic.StartsWith(Models.MoPaQ.Constants.UserDataSignatureBytes))
                 return WrapperType.MoPaQ;
 
             if (extension.Equals("mpq", StringComparison.OrdinalIgnoreCase))
@@ -373,12 +381,16 @@ namespace SabreTools.Serialization.Wrappers
             if (extension.Equals("3ds", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.N3DS;
 
+            else if (extension.Equals("cci", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.N3DS;
+
             // CIA package -- Not currently supported
             // else if (extension.Equals("cia", StringComparison.OrdinalIgnoreCase))
             //     return WrapperType.N3DS;
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region NCF
 
             if (magic.StartsWith([0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00]))
@@ -411,7 +423,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region PAK
 
-            if (magic.StartsWith([0x50, 0x41, 0x43, 0x4B]))
+            if (magic.StartsWith(Models.PAK.Constants.SignatureBytes))
                 return WrapperType.PAK;
 
             // Both PAK and Quantum share one extension
@@ -420,6 +432,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region PFF
 
             // Version 2
@@ -439,6 +452,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region PKZIP
 
             // PKZIP (Unknown)
@@ -446,15 +460,17 @@ namespace SabreTools.Serialization.Wrappers
                 return WrapperType.PKZIP;
 
             // PKZIP
-            if (magic.StartsWith([0x50, 0x4b, 0x03, 0x04]))
+            if (magic.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP (Empty Archive)
-            if (magic.StartsWith([0x50, 0x4b, 0x05, 0x06]))
+            if (magic.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                return WrapperType.PKZIP;
+            else if (magic.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP (Spanned Archive)
-            if (magic.StartsWith([0x50, 0x4b, 0x07, 0x08]))
+            if (magic.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP
@@ -546,7 +562,7 @@ namespace SabreTools.Serialization.Wrappers
             #region PLJ
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
-            if (magic.StartsWith([0xFF, 0x9D, 0x53, 0x4B]))
+            if (magic.StartsWith(Models.PlayJ.Constants.SignatureBytes))
                 return WrapperType.PlayJAudioFile;
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
@@ -557,7 +573,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region Quantum
 
-            if (magic.StartsWith([0x44, 0x53]))
+            if (magic.StartsWith(Models.Quantum.Constants.SignatureBytes))
                 return WrapperType.Quantum;
 
             if (extension.Equals("q", StringComparison.OrdinalIgnoreCase))
@@ -569,6 +585,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region RAR
 
             // RAR archive version 1.50 onwards
@@ -584,6 +601,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region RealArcade
 
             // RASGI2.0
@@ -598,6 +616,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region SevenZip
 
             if (magic.StartsWith([0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c]))
@@ -611,14 +630,14 @@ namespace SabreTools.Serialization.Wrappers
             #region SFFS
 
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
-            if (magic.StartsWith([0x53, 0x46, 0x46, 0x53]))
+            if (magic.StartsWith(Models.SFFS.Constants.SignatureBytes))
                 return WrapperType.SFFS;
 
             #endregion 
 
             #region SGA
 
-            if (magic.StartsWith([0x5F, 0x41, 0x52, 0x43, 0x48, 0x49, 0x56, 0x45]))
+            if (magic.StartsWith(Models.SGA.Constants.SignatureBytes))
                 return WrapperType.SGA;
 
             if (extension.Equals("sga", StringComparison.OrdinalIgnoreCase))
@@ -626,6 +645,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region TapeArchive
 
             if (magic.StartsWith([0x75, 0x73, 0x74, 0x61, 0x72, 0x00, 0x30, 0x30]))
@@ -639,6 +659,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region Textfile
 
             // Not all textfiles can be determined through magic number
@@ -722,7 +743,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region VBSP
 
-            if (magic.StartsWith([0x56, 0x42, 0x53, 0x50]))
+            if (magic.StartsWith(Models.BSP.Constants.SignatureBytes))
                 return WrapperType.VBSP;
 
             // Shares an extension with BSP
@@ -733,7 +754,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region VPK
 
-            if (magic.StartsWith([0x34, 0x12, 0xaa, 0x55]))
+            if (magic.StartsWith(Models.VPK.Constants.SignatureBytes))
                 return WrapperType.VPK;
 
             // Common extension so this cannot be used accurately
@@ -744,7 +765,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region WAD
 
-            if (magic.StartsWith([0x57, 0x41, 0x44, 0x33]))
+            if (magic.StartsWith(Models.WAD3.Constants.SignatureBytes))
                 return WrapperType.WAD;
 
             // Common extension so this cannot be used accurately
@@ -753,6 +774,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
+            // TODO: Use constants from Models here
             #region XZ
 
             if (magic.StartsWith([0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00]))
@@ -765,7 +787,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region XZP
 
-            if (magic.StartsWith([0x70, 0x69, 0x5A, 0x78]))
+            if (magic.StartsWith(Models.XZP.Constants.HeaderSignatureBytes))
                 return WrapperType.XZP;
 
             if (extension.Equals("xzp", StringComparison.OrdinalIgnoreCase))
