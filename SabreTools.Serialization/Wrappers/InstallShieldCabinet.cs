@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using SabreTools.Models.InstallShieldCabinet;
 
 namespace SabreTools.Serialization.Wrappers
@@ -131,6 +132,29 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Cabinet Set
+
+        /// <summary>
+        /// Create the generic filename pattern to look for from the input filename
+        /// </summary>
+        /// <returns>String representing the filename pattern for a cabinet set, null on error</returns>
+        public static string? CreateFilenamePattern(string filename)
+        {
+            string? pattern = null;
+            if (string.IsNullOrEmpty(filename))
+                return pattern;
+
+            string? directory = Path.GetDirectoryName(Path.GetFullPath(filename));
+            if (directory != null)
+                pattern = Path.Combine(directory, Path.GetFileNameWithoutExtension(filename));
+            else
+                pattern = Path.GetFileNameWithoutExtension(filename);
+
+            return new Regex(@"\d+$").Replace(pattern, string.Empty);
         }
 
         #endregion
