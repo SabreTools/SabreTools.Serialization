@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using SabreTools.IO.Compression.zlib;
 using SabreTools.Models.InstallShieldCabinet;
+using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -69,6 +71,15 @@ namespace SabreTools.Serialization.Wrappers
                 return (int)majorVersion;
             }
         }
+
+        #endregion
+
+        #region Constants
+
+        /// <summary>
+        /// Maximum size of the window in bits
+        /// </summary>
+        private const int MAX_WBITS = 15;
 
         #endregion
 
@@ -155,6 +166,73 @@ namespace SabreTools.Serialization.Wrappers
                 pattern = Path.GetFileNameWithoutExtension(filename);
 
             return new Regex(@"\d+$").Replace(pattern, string.Empty);
+        }
+
+        /// <summary>
+        /// Open a cabinet set for reading, if possible
+        /// </summary>
+        /// <param name="pattern">Filename pattern for matching cabinet files</param>
+        /// <returns></returns>
+        public static InstallShieldCabinet? OpenSet(string? pattern)
+        {
+            // An invalid pattern means no cabinet files
+            if (string.IsNullOrEmpty(pattern))
+                return null;
+
+            // Create a placeholder wrapper for output
+            InstallShieldCabinet? set = null;
+
+            // Loop until there are no parts left
+            bool iterate = true;
+            InstallShieldCabinet? previous = null;
+            for (int i = 1; iterate; i++)
+            {
+                var file = OpenFileForReading(pattern, i, HEADER_SUFFIX);
+                if (file != null)
+                    iterate = false;
+                else
+                    file = OpenFileForReading(pattern, i, CABINET_SUFFIX);
+
+                if (file == null)
+                    break;
+
+                var header = Create(file);
+                if (header == null)
+                    break;
+
+                if (previous != null)
+                    previous.Next = header;
+                else
+                    previous = set = header;
+            }
+
+            return set;
+        }
+
+        /// <summary>
+        /// Open a cabinet file for reading
+        /// </summary>
+        /// <param name="pattern">Filename pattern for matching cabinet files</param>
+        /// <param name="index">Cabinet part index to be opened</param>
+        /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
+        /// <returns>A Stream representing the cabinet part, null on error</returns>
+        private static Stream? OpenFileForReading(string? pattern, int index, string suffix)
+        {
+            // An invalid pattern means no cabinet files
+            if (string.IsNullOrEmpty(pattern))
+                return null;
+
+            // Attempt lower-case extension
+            string filename = $"{pattern}{index}.{suffix}";
+            if (File.Exists(filename))
+                return File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            // Attempt upper-case extension
+            filename = $"{pattern}{index}.{suffix.ToUpperInvariant()}";
+            if (File.Exists(filename))
+                return File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            return null;
         }
 
         #endregion
@@ -272,6 +350,33 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the file descriptor at a given index, if possible
+        /// </summary>
+        /// <remarks>Verifies the file descriptor flags before returning</remarks>
+        public FileDescriptor? GetFileDescriptorWithVerification(int index, out string? error)
+        {
+            var fileDescriptor = GetFileDescriptor(index);
+            if (fileDescriptor == null)
+            {
+                error = $"Failed to get file descriptor for file {index}";
+                return null;
+            }
+
+#if NET20 || NET35
+            if ((fileDescriptor.Flags & FileFlags.FILE_INVALID) != 0 || fileDescriptor.DataOffset == 0)
+#else
+            if (fileDescriptor.Flags.HasFlag(FileFlags.FILE_INVALID) || fileDescriptor.DataOffset == 0)
+#endif
+            {
+                error = $"File at {index} is marked as invalid";
+                return null;
+            }
+
+            error = null;
+            return fileDescriptor;
+        }
+
+        /// <summary>
         /// Get the file name at a given index, if possible
         /// </summary>
         public string? GetFileName(int index)
@@ -285,6 +390,24 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             return descriptor.Name;
+        }
+
+        /// <summary>
+        /// Get the packed size of a file, if possible
+        /// </summary>
+        public static ulong GetReadableBytes(FileDescriptor? descriptor)
+        {
+            if (descriptor == null)
+                return 0;
+
+#if NET20 || NET35
+            if ((descriptor.Flags & FileFlags.FILE_COMPRESSED) != 0)
+#else
+            if (descriptor.Flags.HasFlag(FileFlags.FILE_COMPRESSED))
+#endif
+                return descriptor.CompressedSize;
+            else
+                return descriptor.ExpandedSize;
         }
 
         #endregion
@@ -353,6 +476,84 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public string? GetFileGroupNameFromFile(int index)
             => GetFileGroupFromFile(index)?.Name;
+
+        #endregion
+
+        #region Extraction
+
+        /// <summary>
+        /// Uncompress a source byte array to a destination
+        /// </summary>
+        public unsafe static int Uncompress(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        {
+            fixed (byte* sourcePtr = source)
+            fixed (byte* destPtr = dest)
+            {
+                var stream = new ZLib.z_stream_s
+                {
+                    next_in = sourcePtr,
+                    avail_in = (uint)sourceLen,
+                    next_out = destPtr,
+                    avail_out = (uint)destLen,
+                };
+
+                // make second parameter negative to disable checksum verification
+                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
+                if (err != zlibConst.Z_OK)
+                    return err;
+
+                err = ZLib.inflate(stream, 1);
+                if (err != zlibConst.Z_STREAM_END)
+                {
+                    ZLib.inflateEnd(stream);
+                    return err;
+                }
+
+                destLen = stream.total_out;
+                sourceLen = stream.total_in;
+                return ZLib.inflateEnd(stream);
+            }
+        }
+
+        /// <summary>
+        /// Uncompress a source byte array to a destination (old version)
+        /// </summary>
+        public unsafe static int UncompressOld(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        {
+            fixed (byte* sourcePtr = source)
+            fixed (byte* destPtr = dest)
+            {
+                var stream = new ZLib.z_stream_s
+                {
+                    next_in = sourcePtr,
+                    avail_in = (uint)sourceLen,
+                    next_out = destPtr,
+                    avail_out = (uint)destLen,
+                };
+
+                destLen = 0;
+                sourceLen = 0;
+
+                // make second parameter negative to disable checksum verification
+                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
+                if (err != zlibConst.Z_OK)
+                    return err;
+
+                while (stream.avail_in > 1)
+                {
+                    err = ZLib.inflate(stream, 1);
+                    if (err != zlibConst.Z_OK)
+                    {
+                        ZLib.inflateEnd(stream);
+                        return err;
+                    }
+                }
+
+                destLen = stream.total_out;
+                sourceLen = stream.total_in;
+                return ZLib.inflateEnd(stream);
+            }
+        }
 
         #endregion
     }
