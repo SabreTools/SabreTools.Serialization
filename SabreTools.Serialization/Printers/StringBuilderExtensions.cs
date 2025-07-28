@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Printers
 {
     // TODO: Add extension for printing enums, if possible
     internal static class StringBuilderExtensions
