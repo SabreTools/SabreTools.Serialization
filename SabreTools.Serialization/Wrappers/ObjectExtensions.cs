@@ -2,7 +2,7 @@
 
 using System;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
     /// Extensions for generic object types

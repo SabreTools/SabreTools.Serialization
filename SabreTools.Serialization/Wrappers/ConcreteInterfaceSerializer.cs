@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
     /// Serializer class for interfaces
