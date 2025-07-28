@@ -124,7 +124,6 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the full file path and directory
             filename = Path.GetFullPath(filename);
-            string? directory = Path.GetDirectoryName(filename);
 
             // Read in the current file and try to parse
             var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -135,21 +134,8 @@ namespace SabreTools.Serialization.Wrappers
             // Seek to the first part of the cabinet set
             while (current.Header.CabinetPrev != null)
             {
-                // Get the path defined in the current header
-                string prevPath = current.Header.CabinetPrev;
-                if (directory != null)
-                    prevPath = Path.Combine(directory, prevPath);
-
-                // If the file doesn't exist
-                if (!File.Exists(prevPath))
-                    break;
-
-                // Close the previous cabinet part to avoid locking issues
-                stream.Close();
-
-                // Open the previous cabinet and try to parse
-                stream = File.Open(prevPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var prev = Create(stream);
+                // Attempt to open the previous cabinet
+                var prev = current.OpenPrevious(filename);
                 if (prev?.Header == null)
                     break;
 
@@ -163,18 +149,8 @@ namespace SabreTools.Serialization.Wrappers
             // Read in the cabinet parts sequentially
             while (current.Header.CabinetNext != null)
             {
-                // Get the path defined in the current header
-                string nextPath = current.Header.CabinetNext;
-                if (directory != null)
-                    nextPath = Path.Combine(directory, nextPath);
-
-                // If the file doesn't exist
-                if (!File.Exists(nextPath))
-                    break;
-
                 // Open the next cabinet and try to parse
-                stream = File.Open(nextPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var next = Create(stream);
+                var next = current.OpenNext(filename);
                 if (next?.Header == null)
                     break;
 
@@ -186,6 +162,62 @@ namespace SabreTools.Serialization.Wrappers
 
             // Return the start of the set
             return start;
+        }
+
+        /// <summary>
+        /// Open the next archive, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        public MicrosoftCabinet? OpenNext(string file)
+        {
+            // Ignore invalid archives
+            if (Header == null)
+                return null;
+
+            // Normalize the filename
+            file = Path.GetFullPath(file);
+
+            // Get if the cabinet has a next part
+            string? next = Header.CabinetNext;
+            if (string.IsNullOrEmpty(next))
+                return null;
+
+            // Get the full next path
+            string? folder = Path.GetDirectoryName(file);
+            if (folder != null)
+                next = Path.Combine(folder, next);
+
+            // Open and return the next cabinet
+            var fs = File.Open(next, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return Create(fs);
+        }
+
+        /// <summary>
+        /// Open the previous archive, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        public MicrosoftCabinet? OpenPrevious(string file)
+        {
+            // Ignore invalid archives
+            if (Header == null)
+                return null;
+
+            // Normalize the filename
+            file = Path.GetFullPath(file);
+
+            // Get if the cabinet has a previous part
+            string? prev = Header.CabinetPrev;
+            if (string.IsNullOrEmpty(prev))
+                return null;
+
+            // Get the full next path
+            string? folder = Path.GetDirectoryName(file);
+            if (folder != null)
+                prev = Path.Combine(folder, prev);
+
+            // Open and return the previous cabinet
+            var fs = File.Open(prev, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return Create(fs);
         }
 
         #endregion
