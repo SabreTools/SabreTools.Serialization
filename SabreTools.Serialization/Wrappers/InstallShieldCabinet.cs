@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using SabreTools.Hashing;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.Models.InstallShieldCabinet;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
@@ -75,6 +76,11 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Constants
+
+        /// <summary>
+        /// Default buffer size
+        /// </summary>
+        private const int BUFFER_SIZE = 64 * 1024;
 
         /// <summary>
         /// Maximum size of the window in bits
@@ -554,6 +560,64 @@ namespace SabreTools.Serialization.Wrappers
                 return ZLib.inflateEnd(stream);
             }
         }
+
+        #endregion
+
+        #region Obfuscation
+
+        /// <summary>
+        /// Deobfuscate a buffer
+        /// </summary>
+        private void Deobfuscate(byte[] buffer, long size, ref uint offset)
+        {
+            offset = Deobfuscate(buffer, size, offset);
+        }
+
+        /// <summary>
+        /// Deobfuscate a buffer with a seed value
+        /// </summary>
+        /// <remarks>Seed is 0 at file start</remarks>
+        private static uint Deobfuscate(byte[] buffer, long size, uint seed)
+        {
+            for (int i = 0; size > 0; size--, i++, seed++)
+            {
+                buffer[i] = (byte)(ROR8(buffer[i] ^ 0xd5, 2) - (seed % 0x47));
+            }
+
+            return seed;
+        }
+
+        /// <summary>
+        /// Obfuscate a buffer
+        /// </summary>
+        private void Obfuscate(byte[] buffer, long size, ref uint offset)
+        {
+            offset = Obfuscate(buffer, size, offset);
+        }
+
+        /// <summary>
+        /// Obfuscate a buffer with a seed value
+        /// </summary>
+        /// <remarks>Seed is 0 at file start</remarks>
+        private static uint Obfuscate(byte[] buffer, long size, uint seed)
+        {
+            for (int i = 0; size > 0; size--, i++, seed++)
+            {
+                buffer[i] = (byte)(ROL8(buffer[i] ^ 0xd5, 2) + (seed % 0x47));
+            }
+
+            return seed;
+        }
+
+        /// <summary>
+        /// Rotate Right 8
+        /// </summary>
+        private static int ROR8(int x, byte n) => (x >> n) | (x << (8 - n));
+
+        /// <summary>
+        /// Rotate Left 8
+        /// </summary>
+        private static int ROL8(int x, byte n) => (x << n) | (x >> (8 - n));
 
         #endregion
     }
