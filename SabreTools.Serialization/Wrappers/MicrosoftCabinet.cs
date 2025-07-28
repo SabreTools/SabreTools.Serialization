@@ -12,6 +12,16 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Files"/>
+        public Models.MicrosoftCabinet.CFFILE[]? Files => Model.Files;
+
+        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Folders"/>
+        public Models.MicrosoftCabinet.CFFOLDER[]? Folders => Model.Folders;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
