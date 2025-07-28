@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Open a cabinet set for reading, if possible
         /// </summary>
         /// <param name="pattern">Filename pattern for matching cabinet files</param>
-        /// <returns></returns>
+        /// <returns>Wrapper representing the set, null on error</returns>
         public static InstallShieldCabinet? OpenSet(string? pattern)
         {
             // An invalid pattern means no cabinet files

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SabreTools.Models.ArchiveDotOrg;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -17,8 +18,23 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Files"/>
         public Models.MicrosoftCabinet.CFFILE[]? Files => Model.Files;
 
+        /// <inheritdoc cref="Models.MicrosoftCabinet.CFHEADER.FileCount"/>
+        public int FileCount => Model.Header?.FileCount ?? 0;
+
         /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Folders"/>
         public Models.MicrosoftCabinet.CFFOLDER[]? Folders => Model.Folders;
+
+        /// <inheritdoc cref="Models.MicrosoftCabinet.CFHEADER.FolderCount"/>
+        public int FolderCount => Model.Header?.FolderCount ?? 0;
+
+        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Header"/>
+        public Models.MicrosoftCabinet.CFHEADER? Header => Model.Header;
+
+        /// <summary>
+        /// Reference to the next cabinet header
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public MicrosoftCabinet? Next { get; set; }
 
         #endregion
 
@@ -82,6 +98,88 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Cabinet Set
+
+        /// <summary>
+        /// Open a cabinet set for reading, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <returns>Wrapper representing the set, null on error</returns>
+        public static MicrosoftCabinet? OpenSet(string? filename)
+        {
+            // If the file is invalid
+            if (string.IsNullOrEmpty(filename))
+                return null;
+            else if (!File.Exists(filename!))
+                return null;
+
+            // Get the full file path and directory
+            filename = Path.GetFullPath(filename);
+            string? directory = Path.GetDirectoryName(filename);
+
+            // Read in the current file and try to parse
+            var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var current = Create(stream);
+            if (current?.Header == null)
+                return null;
+
+            // Seek to the first part of the cabinet set
+            while (current.Header.CabinetPrev != null)
+            {
+                // Get the path defined in the current header
+                string prevPath = current.Header.CabinetPrev;
+                if (directory != null)
+                    prevPath = Path.Combine(directory, prevPath);
+
+                // If the file doesn't exist
+                if (!File.Exists(prevPath))
+                    break;
+
+                // Close the previous cabinet part to avoid locking issues
+                stream.Close();
+
+                // Open the previous cabinet and try to parse
+                stream = File.Open(prevPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var prev = Create(stream);
+                if (prev?.Header == null)
+                    break;
+
+                // Assign previous as new current
+                current = prev;
+            }
+
+            // Cache the current start of the cabinet set
+            var start = current;
+
+            // Read in the cabinet parts sequentially
+            while (current.Header.CabinetNext != null)
+            {
+                // Get the path defined in the current header
+                string nextPath = current.Header.CabinetNext;
+                if (directory != null)
+                    nextPath = Path.Combine(directory, nextPath);
+
+                // If the file doesn't exist
+                if (!File.Exists(nextPath))
+                    break;
+
+                // Open the next cabinet and try to parse
+                stream = File.Open(nextPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var next = Create(stream);
+                if (next?.Header == null)
+                    break;
+
+                // Add next to the current and reset current
+                current.Next = next;
+                current = next;
+            }
+
+            // Return the start of the set
+            return start;
         }
 
         #endregion
