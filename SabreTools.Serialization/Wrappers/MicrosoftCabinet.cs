@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using SabreTools.Models.ArchiveDotOrg;
 
 namespace SabreTools.Serialization.Wrappers
 {
