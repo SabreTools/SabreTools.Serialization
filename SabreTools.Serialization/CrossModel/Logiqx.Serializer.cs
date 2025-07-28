@@ -94,27 +94,40 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Logiqx.Dir"/> to an array of <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Models.Metadata.Machine[] ConvertDirToInternalModel(Dir item)
+        private static Models.Metadata.Machine[] ConvertDirToInternalModel(Dir item, string? parent = null)
         {
-            if (item.Game == null || item.Game.Length == 0)
-                return [];
+            // Get the directory name
+            string? dirName = item.Name;
+            if (parent != null)
+                dirName = $"{parent}\\{item.Name}";
 
-            return Array.ConvertAll(item.Game, g =>
-                {
-                    var machine = ConvertMachineToInternalModel(g);
-                    machine[Models.Metadata.Machine.DirNameKey] = item.Name;
-                    return machine;
-                });
+            // Handle machine items
+            Models.Metadata.Machine[] machines = [];
+            if (item.Game != null && item.Game.Length > 0)
+                machines = Array.ConvertAll(item.Game, g => ConvertMachineToInternalModel(g, dirName));
+
+            // Handle dir items
+            List<Models.Metadata.Machine> dirs = [];
+            foreach (var subdir in item.Subdir ?? [])
+            {
+                dirs.AddRange(ConvertDirToInternalModel(subdir, dirName));
+            }
+
+            return [.. machines, .. dirs];
         }
 
         /// <summary>
         /// Convert from <see cref="Models.Logiqx.GameBase"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item)
+        private static Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item, string? dir = null)
         {
+            string? machineName = item.Name;
+            if (machineName != null && dir != null)
+                machineName = $"{dir}\\{machineName}";
+
             var machine = new Models.Metadata.Machine
             {
-                [Models.Metadata.Machine.NameKey] = item.Name,
+                [Models.Metadata.Machine.NameKey] = machineName,
                 [Models.Metadata.Machine.SourceFileKey] = item.SourceFile,
                 [Models.Metadata.Machine.IsBiosKey] = item.IsBios,
                 [Models.Metadata.Machine.IsDeviceKey] = item.IsDevice,

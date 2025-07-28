@@ -28,10 +28,11 @@ namespace SabreTools.Serialization.Test.CrossModel
             Validate(newDf.Header);
 
             Assert.NotNull(newDf.Game);
-            var newGame = Assert.Single(newDf.Game);
-            Validate(newGame);
+            Assert.Equal(2, newDf.Game.Length);
+            Validate(newDf.Game[0], nested: false);
+            Validate(newDf.Game[1], nested: true);
 
-            // TODO: Unsupported
+            // TODO: Unsupported for round-trip
             Assert.Null(newDf.Dir);
         }
 
@@ -59,10 +60,11 @@ namespace SabreTools.Serialization.Test.CrossModel
             Validate(newDf.Header);
 
             Assert.NotNull(newDf.Game);
-            var newGame = Assert.Single(newDf.Game);
-            Validate(newGame);
+            Assert.Equal(2, newDf.Game.Length);
+            Validate(newDf.Game[0], nested: false);
+            Validate(newDf.Game[1], nested: true);
 
-            // TODO: Unsupported
+            // TODO: Unsupported for round-trip
             Assert.Null(newDf.Dir);
         }
 
@@ -253,6 +255,18 @@ namespace SabreTools.Serialization.Test.CrossModel
             gameBase.Driver = driver;
             gameBase.SoftwareList = [softwarelist];
 
+            var subdir = new Models.Logiqx.Dir
+            {
+                Name = "XXXXXX",
+                Game = [gameBase],
+            };
+
+            var dir = new Models.Logiqx.Dir
+            {
+                Name = "XXXXXX",
+                Subdir = [subdir],
+            };
+
             return new Models.Logiqx.Datafile
             {
                 Build = "XXXXXX",
@@ -260,7 +274,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 SchemaLocation = "XXXXXX",
                 Header = header,
                 Game = [gameBase],
-                // Dir = [dir], // TODO: Unsupported
+                Dir = [dir],
             };
         }
 
@@ -317,10 +331,13 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a GameBase
         /// </summary>
-        private static void Validate(Models.Logiqx.GameBase? gb)
+        private static void Validate(Models.Logiqx.GameBase? gb, bool nested)
         {
             Assert.NotNull(gb);
-            Assert.Equal("XXXXXX", gb.Name);
+            if (nested)
+                Assert.Equal("XXXXXX\\XXXXXX\\XXXXXX", gb.Name);
+            else
+                Assert.Equal("XXXXXX", gb.Name);
             Assert.Equal("XXXXXX", gb.SourceFile);
             Assert.Equal("XXXXXX", gb.IsBios);
             Assert.Equal("XXXXXX", gb.IsDevice);
