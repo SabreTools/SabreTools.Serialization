@@ -35,6 +35,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>Only used in multi-file</remarks>
         public MicrosoftCabinet? Next { get; set; }
 
+        /// <summary>
+        /// Reference to the next previous header
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public MicrosoftCabinet? Prev { get; set; }
+
         #endregion
 
         #region Constructors
@@ -172,7 +178,8 @@ namespace SabreTools.Serialization.Wrappers
                 if (next?.Header == null)
                     break;
 
-                // Add next to the current and reset current
+                // Add the next and previous links, resetting current
+                next.Prev = current;
                 current.Next = next;
                 current = next;
             }
