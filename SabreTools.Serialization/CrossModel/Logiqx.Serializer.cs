@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.CrossModel
             var machines = new List<Models.Metadata.Machine>();
 
             if (item.Game != null && item.Game.Length > 0)
-                machines.AddRange(Array.ConvertAll(item.Game, ConvertMachineToInternalModel));
+                machines.AddRange(Array.ConvertAll(item.Game, g => ConvertMachineToInternalModel(g)));
 
             foreach (var dir in item.Dir ?? [])
             {
