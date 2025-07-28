@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
+using SabreTools.Models.MicrosoftCabinet;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class MicrosoftCabinet : WrapperBase<Models.MicrosoftCabinet.Cabinet>
+    public partial class MicrosoftCabinet : WrapperBase<Cabinet>
     {
         #region Descriptive Properties
 
@@ -14,20 +15,20 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Files"/>
-        public Models.MicrosoftCabinet.CFFILE[]? Files => Model.Files;
+        /// <inheritdoc cref="Cabinet.Files"/>
+        public CFFILE[]? Files => Model.Files;
 
-        /// <inheritdoc cref="Models.MicrosoftCabinet.CFHEADER.FileCount"/>
+        /// <inheritdoc cref="CFHEADER.FileCount"/>
         public int FileCount => Model.Header?.FileCount ?? 0;
 
-        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Folders"/>
-        public Models.MicrosoftCabinet.CFFOLDER[]? Folders => Model.Folders;
+        /// <inheritdoc cref="Cabinet.Folders"/>
+        public CFFOLDER[]? Folders => Model.Folders;
 
-        /// <inheritdoc cref="Models.MicrosoftCabinet.CFHEADER.FolderCount"/>
+        /// <inheritdoc cref="CFHEADER.FolderCount"/>
         public int FolderCount => Model.Header?.FolderCount ?? 0;
 
-        /// <inheritdoc cref="Models.MicrosoftCabinet.Cabinet.Header"/>
-        public Models.MicrosoftCabinet.CFHEADER? Header => Model.Header;
+        /// <inheritdoc cref="Cabinet.Header"/>
+        public CFHEADER? Header => Model.Header;
 
         /// <summary>
         /// Reference to the next cabinet header
@@ -46,14 +47,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Models.MicrosoftCabinet.Cabinet? model, byte[]? data, int offset)
+        public MicrosoftCabinet(Cabinet? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Models.MicrosoftCabinet.Cabinet? model, Stream? data)
+        public MicrosoftCabinet(Cabinet? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -296,6 +297,87 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return DateTime.MinValue;
             }
+        }
+
+        /// <summary>
+        /// Get the corrected folder index
+        /// </summary>
+        public int GetFolderIndex(CFFILE file)
+        {
+            return file.FolderIndex switch
+            {
+                FolderIndex.CONTINUED_FROM_PREV => 0,
+                FolderIndex.CONTINUED_TO_NEXT => (Header?.FolderCount ?? 1) - 1,
+                FolderIndex.CONTINUED_PREV_AND_NEXT => 0,
+                _ => (int)file.FolderIndex,
+            };
+        }
+
+        #endregion
+
+        #region Folders
+
+        /// <summary>
+        /// Get the set of data blocks for a folder
+        /// </summary>
+        public CFDATA[]? GetDataBlocks(string file, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        {
+            // Skip invalid folders
+            if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
+                return null;
+
+            // Get all files for the folder
+            var files = GetFiles(folderIndex);
+            if (files.Length == 0)
+                return folder.DataBlocks;
+
+            // Check if the folder spans backward
+            CFDATA[] prevBlocks = [];
+            if (!skipPrev && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
+            {
+                var prev = OpenPrevious(file);
+                if (prev?.Model?.Header != null && prev.Model.Folders != null)
+                {
+                    int prevFolderIndex = prev.Model.Header.FolderCount;
+                    var prevFolder = prev.Model.Folders[prevFolderIndex - 1];
+                    prevBlocks = prev.GetDataBlocks(file, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                }
+            }
+
+            // Check if the folder spans forward
+            CFDATA[] nextBlocks = [];
+            if (!skipNext && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
+            {
+                var next = OpenNext(file);
+                if (next?.Model?.Header != null && next.Model.Folders != null)
+                {
+                    var nextFolder = next.Model.Folders[0];
+                    nextBlocks = next.GetDataBlocks(file, nextFolder, 0, skipPrev: true) ?? [];
+                }
+            }
+
+            // Return all found blocks in order
+            return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
+        }
+
+        /// <summary>
+        /// Get all files for the current folder index
+        /// </summary>
+        public CFFILE[] GetFiles(int folderIndex)
+        {
+            // Ignore invalid archives
+            if (Files == null)
+                return [];
+
+            // Get all files with a name and matching index
+            return Array.FindAll(Files, f =>
+            {
+                if (string.IsNullOrEmpty(f.Name))
+                    return false;
+
+                int fileFolder = GetFolderIndex(f);
+                return fileFolder == folderIndex;
+            });
         }
 
         #endregion
