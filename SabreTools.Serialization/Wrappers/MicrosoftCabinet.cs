@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Cabinet Set
+        #region Extraction
 
         /// <summary>
         /// Extract a cabinet set to an output directory, if possible
@@ -118,10 +118,42 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Indicates if all files were able to be extracted</returns>
-        public bool ExtractAll(string filename, string outDir, bool includeDebug)
+        public static bool ExtractAll(string filename, string outDir, bool includeDebug)
         {
-            // TODO: Seek to the first archive and make sure all parts are extracted
+            // Get a wrapper for the set
+            var current = OpenSet(filename);
+            if (current?.Header == null)
+                return false;
 
+            try
+            {
+                // Loop through the cabinets
+                do
+                {
+                    current.ExtractCabinet(filename, outDir, forwardOnly: true, includeDebug);
+                    current = current.Next;
+                }
+                while (current?.Header != null);
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.WriteLine(ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Extract a cabinet file to an output directory, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="forwardOnly">Indicates if the cabinet set should only be read forward</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Indicates if all files were able to be extracted</returns>
+        private bool ExtractCabinet(string filename, string outDir, bool forwardOnly, bool includeDebug)
+        {
             // If the archive is invalid
             if (Folders == null || Folders.Length == 0)
                 return false;
@@ -131,49 +163,8 @@ namespace SabreTools.Serialization.Wrappers
                 // Loop through the folders
                 for (int f = 0; f < Folders.Length; f++)
                 {
-                    // Get the current folder for processing
                     var folder = Folders[f];
-
-                    // Decompress the blocks, if possible
-                    using var blockStream = DecompressBlocks(filename, folder, f);
-                    if (blockStream == null || blockStream.Length == 0)
-                        continue;
-
-                    // Ensure files
-                    var files = GetFiles(f);
-                    if (files.Length == 0)
-                        continue;
-
-                    // Loop through the files
-                    for (int i = 0; i < files.Length; i++)
-                    {
-                        try
-                        {
-                            var compressedFile = files[i];
-                            blockStream.Seek(compressedFile.FolderStartOffset, SeekOrigin.Begin);
-                            byte[] fileData = blockStream.ReadBytes((int)compressedFile.FileSize);
-
-                            // Ensure directory separators are consistent
-                            string fileName = compressedFile.Name!;
-                            if (Path.DirectorySeparatorChar == '\\')
-                                fileName = fileName.Replace('/', '\\');
-                            else if (Path.DirectorySeparatorChar == '/')
-                                fileName = fileName.Replace('\\', '/');
-
-                            string tempFile = Path.Combine(outDir, fileName);
-                            var directoryName = Path.GetDirectoryName(tempFile);
-                            if (directoryName != null && !Directory.Exists(directoryName))
-                                Directory.CreateDirectory(directoryName);
-
-                            using var of = File.OpenWrite(tempFile);
-                            of.Write(fileData, 0, fileData.Length);
-                            of.Flush();
-                        }
-                        catch (Exception ex)
-                        {
-                            if (includeDebug) Console.WriteLine(ex);
-                        }
-                    }
+                    ExtractFolder(filename, outDir, folder, f, forwardOnly, includeDebug);
                 }
 
                 return true;
@@ -183,6 +174,118 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Extract the contents of a single folder
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="folder">Folder containing the blocks to decompress</param>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="forwardOnly">Indicates if the cabinet set should only be read forward</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        private void ExtractFolder(string filename, string outDir, CFFOLDER? folder, int folderIndex, bool forwardOnly, bool includeDebug)
+        {
+            // Decompress the blocks, if possible
+            using var blockStream = DecompressBlocks(filename, folder, folderIndex, forwardOnly);
+            if (blockStream == null || blockStream.Length == 0)
+                return;
+
+            // Ensure files
+            var files = GetFiles(folderIndex);
+            if (files.Length == 0)
+                return;
+
+            // Loop through the files
+            for (int i = 0; i < files.Length; i++)
+            {
+                try
+                {
+                    var compressedFile = files[i];
+                    blockStream.Seek(compressedFile.FolderStartOffset, SeekOrigin.Begin);
+                    byte[] fileData = blockStream.ReadBytes((int)compressedFile.FileSize);
+
+                    // Ensure directory separators are consistent
+                    string fileName = compressedFile.Name!;
+                    if (Path.DirectorySeparatorChar == '\\')
+                        fileName = fileName.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        fileName = fileName.Replace('\\', '/');
+
+                    string tempFile = Path.Combine(outDir, fileName);
+                    var directoryName = Path.GetDirectoryName(tempFile);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    using var of = File.OpenWrite(tempFile);
+                    of.Write(fileData, 0, fileData.Length);
+                    of.Flush();
+                }
+                catch (Exception ex)
+                {
+                    if (includeDebug) Console.WriteLine(ex);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Cabinet Set
+
+        /// <summary>
+        /// Open a cabinet set for reading, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <returns>Wrapper representing the set, null on error</returns>
+        private static MicrosoftCabinet? OpenSet(string? filename)
+        {
+            // If the file is invalid
+            if (string.IsNullOrEmpty(filename))
+                return null;
+            else if (!File.Exists(filename!))
+                return null;
+
+            // Get the full file path and directory
+            filename = Path.GetFullPath(filename);
+
+            // Read in the current file and try to parse
+            var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var current = Create(stream);
+            if (current?.Header == null)
+                return null;
+
+            // Seek to the first part of the cabinet set
+            while (current.Header.CabinetPrev != null)
+            {
+                // Attempt to open the previous cabinet
+                var prev = current.OpenPrevious(filename);
+                if (prev?.Header == null)
+                    break;
+
+                // Assign previous as new current
+                current = prev;
+            }
+
+            // Cache the current start of the cabinet set
+            var start = current;
+
+            // Read in the cabinet parts sequentially
+            while (current.Header.CabinetNext != null)
+            {
+                // Open the next cabinet and try to parse
+                var next = current.OpenNext(filename);
+                if (next?.Header == null)
+                    break;
+
+                // Add the next and previous links, resetting current
+                next.Prev = current;
+                current.Next = next;
+                current = next;
+            }
+
+            // Return the start of the set
+            return start;
         }
 
         /// <summary>
@@ -291,11 +394,11 @@ namespace SabreTools.Serialization.Wrappers
         public DateTime? GetDateTime(int fileIndex)
         {
             // If we have an invalid file index
-            if (fileIndex < 0 || Model.Files == null || fileIndex >= Model.Files.Length)
+            if (fileIndex < 0 || Files == null || fileIndex >= Files.Length)
                 return null;
 
             // If we have an invalid DateTime
-            var file = Model.Files[fileIndex];
+            var file = Files[fileIndex];
             if (file.Date == 0 && file.Time == 0)
                 return null;
 
@@ -345,11 +448,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Filename for one cabinet in the set</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="forwardOnly">Indicates if the cabinet set should only be read forward</param>
         /// <returns>Stream representing the decompressed data on success, null otherwise</returns>
-        public Stream? DecompressBlocks(string filename, CFFOLDER? folder, int folderIndex)
+        public Stream? DecompressBlocks(string filename, CFFOLDER? folder, int folderIndex, bool forwardOnly)
         {
             // Ensure data blocks
-            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
+            var dataBlocks = GetDataBlocks(filename, folder, folderIndex, skipPrev: forwardOnly, skipNext: false);
             if (dataBlocks == null || dataBlocks.Length == 0)
                 return null;
 
@@ -445,27 +549,31 @@ namespace SabreTools.Serialization.Wrappers
             if (files.Length == 0)
                 return folder.DataBlocks;
 
+            // Check if the folder spans in either direction
+            bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+            bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+
             // Check if the folder spans backward
             CFDATA[] prevBlocks = [];
-            if (!skipPrev && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
+            if (!skipPrev && spanPrev)
             {
                 var prev = OpenPrevious(filename);
-                if (prev?.Model?.Header != null && prev.Model.Folders != null)
+                if (prev?.Header != null && prev.Folders != null)
                 {
-                    int prevFolderIndex = prev.Model.Header.FolderCount;
-                    var prevFolder = prev.Model.Folders[prevFolderIndex - 1];
+                    int prevFolderIndex = prev.FolderCount;
+                    var prevFolder = prev.Folders[prevFolderIndex - 1];
                     prevBlocks = prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
             // Check if the folder spans forward
             CFDATA[] nextBlocks = [];
-            if (!skipNext && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
+            if (!skipNext && spanNext)
             {
                 var next = OpenNext(filename);
-                if (next?.Model?.Header != null && next.Model.Folders != null)
+                if (next?.Model?.Header != null && next.Folders != null)
                 {
-                    var nextFolder = next.Model.Folders[0];
+                    var nextFolder = next.Folders[0];
                     nextBlocks = next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
