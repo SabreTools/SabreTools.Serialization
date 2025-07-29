@@ -478,6 +478,9 @@ namespace SabreTools.Serialization.Wrappers
             if (dataBlocks == null || dataBlocks.Length == 0)
                 return null;
 
+            // Get the compression type
+            var compressionType = GetCompressionType(folder!);
+
             // Setup decompressors
             var mszip = IO.Compression.MSZIP.Decompressor.Create();
             //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
@@ -490,8 +493,6 @@ namespace SabreTools.Serialization.Wrappers
                 if (db?.CompressedData == null)
                     continue;
 
-                // Get the compression type
-                var compressionType = GetCompressionType(folder!);
                 switch (compressionType)
                 {
                     // Uncompressed data
