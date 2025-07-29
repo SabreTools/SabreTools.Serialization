@@ -572,7 +572,7 @@ namespace SabreTools.Serialization.Wrappers
             bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
             bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
 
-            // Check if the folder spans backward
+            // If the folder spans backward and Prev is not being skipped
             CFDATA[] prevBlocks = [];
             if (!skipPrev && spanPrev)
             {
@@ -589,7 +589,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            // Check if the folder spans forward
+            // If the folder spans forward and Next is not being skipped
             CFDATA[] nextBlocks = [];
             if (!skipNext && spanNext)
             {
