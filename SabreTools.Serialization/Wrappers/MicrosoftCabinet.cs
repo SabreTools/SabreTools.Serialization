@@ -206,12 +206,8 @@ namespace SabreTools.Serialization.Wrappers
             if (blockStream == null || blockStream.Length == 0)
                 return;
 
-            // Ensure files
-            var files = GetFiles(folderIndex);
-            if (files.Length == 0)
-                return;
-
             // Loop through the files
+            var files = GetFiles(folderIndex);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
