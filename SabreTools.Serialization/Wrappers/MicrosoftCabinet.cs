@@ -115,16 +115,23 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract a cabinet set to an output directory, if possible
         /// </summary>
+        /// <param name="stream">Stream representing one cabinet in the set</param>
         /// <param name="filename">Filename for one cabinet in the set</param>
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Indicates if all files were able to be extracted</returns>
         /// <remarks>Will extract all items found in the set</remarks>
-        public static bool ExtractSet(string filename, string outDir, bool includeDebug)
+        public static bool ExtractSet(Stream? stream, string filename, string outDir, bool includeDebug)
         {
-            // Get a wrapper for the set
-            var current = OpenSet(filename);
-            if (current?.Header == null)
+            // Get a wrapper for the set, if possible
+            MicrosoftCabinet? current;
+            if (File.Exists(filename))
+                current = OpenSet(filename);
+            else
+                current = Create(stream);
+
+            // Validate the header exists
+            if (current?.Model?.Header == null)
                 return false;
 
             try
@@ -145,6 +152,17 @@ namespace SabreTools.Serialization.Wrappers
 
             return true;
         }
+
+        /// <summary>
+        /// Extract a cabinet set to an output directory, if possible
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Indicates if all files were able to be extracted</returns>
+        /// <remarks>Will extract all items found in the set</remarks>
+        public static bool ExtractSet(string filename, string outDir, bool includeDebug)
+            => ExtractSet(stream: null, filename, outDir, includeDebug);
 
         /// <summary>
         /// Extract a cabinet to an output directory, if possible
