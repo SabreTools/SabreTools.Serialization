@@ -557,12 +557,11 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] prevBlocks = [];
             if (!skipPrev && spanPrev)
             {
-                var prev = OpenPrevious(filename);
-                if (prev?.Header != null && prev.Folders != null)
+                if (Prev?.Header != null && Prev.Folders != null)
                 {
-                    int prevFolderIndex = prev.FolderCount;
-                    var prevFolder = prev.Folders[prevFolderIndex - 1];
-                    prevBlocks = prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    int prevFolderIndex = Prev.FolderCount;
+                    var prevFolder = Prev.Folders[prevFolderIndex - 1];
+                    prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
@@ -570,11 +569,10 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] nextBlocks = [];
             if (!skipNext && spanNext)
             {
-                var next = OpenNext(filename);
-                if (next?.Model?.Header != null && next.Folders != null)
+                if (Next?.Header != null && Next.Folders != null)
                 {
-                    var nextFolder = next.Folders[0];
-                    nextBlocks = next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
+                    var nextFolder = Next.Folders[0];
+                    nextBlocks = Next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
 
