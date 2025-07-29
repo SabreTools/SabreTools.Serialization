@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.Wrappers
                 do
                 {
                     current.Extract(filename, outDir, includeDebug);
-                    current = current.Next;
+                    current = current.Next ?? current.OpenNext(filename);
                 }
                 while (current?.Header != null);
             }
