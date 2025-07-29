@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SabreTools.IO.Compression.MSZIP;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.MicrosoftCabinet;
 
@@ -482,7 +483,7 @@ namespace SabreTools.Serialization.Wrappers
             var compressionType = GetCompressionType(folder!);
 
             // Setup decompressors
-            var mszip = IO.Compression.MSZIP.Decompressor.Create();
+            var mszip = Decompressor.Create();
             //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
 
             // Loop through the data blocks
@@ -493,43 +494,56 @@ namespace SabreTools.Serialization.Wrappers
                 if (db?.CompressedData == null)
                     continue;
 
-                switch (compressionType)
+                // Get the uncompressed data block
+                byte[] data = compressionType switch
                 {
-                    // Uncompressed data
-                    case CompressionType.TYPE_NONE:
-                        ms.Write(db.CompressedData, 0, db.CompressedData.Length);
-                        ms.Flush();
-                        break;
+                    CompressionType.TYPE_NONE => db.CompressedData,
+                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(folderIndex, mszip, i, db),
 
-                    // MS-ZIP
-                    case CompressionType.TYPE_MSZIP:
-                        long preMsZipPosition = ms.Position;
-                        mszip.CopyTo(db.CompressedData, ms);
-                        long msZipDecompressedSize = ms.Position - preMsZipPosition;
+                    // TODO: Unsupported
+                    CompressionType.TYPE_QUANTUM => [],
+                    CompressionType.TYPE_LZX => [],
 
-                        // Pad to the correct size but throw a warning about this
-                        if (msZipDecompressedSize < db.UncompressedSize)
-                        {
-                            Console.Error.WriteLine($"Data block {i} in folder {folderIndex} had mismatching sizes. Expected: {db.UncompressedSize}, Got: {msZipDecompressedSize}");
-                            byte[] padding = new byte[db.UncompressedSize - msZipDecompressedSize];
-                            ms.Write(padding, 0, padding.Length);
-                        }
+                    // Should be impossible
+                    _ => [],
+                };
 
-                        break;
-
-                    // Quantum
-                    case CompressionType.TYPE_QUANTUM:
-                        // TODO: Unsupported
-                        break;
-
-                    // LZX
-                    case CompressionType.TYPE_LZX:
-                        // TODO: Unsupported
-                        break;
-                }
+                // Write the uncompressed data block
+                ms.Write(data, 0, data.Length);
+                ms.Flush();
             }
 
             return ms;
+        }
+
+        /// <summary>
+        /// Decompress an MS-ZIP block using an existing decompressor
+        /// </summary>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="mszip">MS-ZIP decompressor with persistent state</param>
+        /// <param name="blockIndex">Index of the block within the folder</param>
+        /// <param name="block">Block data to be used for decompression</param>
+        /// <returns>Byte array representing the decompressed data, empty on error</returns>
+        private static byte[] DecompressMSZIPBlock(int folderIndex, Decompressor mszip, int blockIndex, CFDATA block)
+        {
+            // Ignore invalid blocks
+            if (block.CompressedData == null)
+                return [];
+
+            // Decompress to a temporary stream
+            using var stream = new MemoryStream();
+            mszip.CopyTo(block.CompressedData, stream);
+
+            // Pad to the correct size but throw a warning about this
+            if (stream.Length < block.UncompressedSize)
+            {
+                Console.Error.WriteLine($"Data block {blockIndex} in folder {folderIndex} had mismatching sizes. Expected: {block.UncompressedSize}, Got: {stream.Length}");
+                byte[] padding = new byte[block.UncompressedSize - stream.Length];
+                stream.Write(padding, 0, padding.Length);
+            }
+
+            // Return the byte array data
+            return stream.ToArray();
         }
 
         /// <summary>
