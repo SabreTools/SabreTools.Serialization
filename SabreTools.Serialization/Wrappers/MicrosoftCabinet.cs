@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Loop through the cabinets
                 do
                 {
-                    current.ExtractCabinet(filename, outDir, includeDebug);
+                    current.Extract(filename, outDir, includeDebug);
                     current = current.Next;
                 }
                 while (current?.Header != null);
@@ -165,24 +165,13 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Extract a cabinet to an output directory, if possible
+        /// Extract a cabinet file from a set to an output directory, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Indicates if all files were able to be extracted</returns>
-        /// <remarks>Will read spanned folders but won't attempt to extract unrelated folders</remarks>
-        public bool ExtractAll(string? filename, string outDir, bool includeDebug)
-            => ExtractCabinet(filename, outDir, includeDebug);
-
-        /// <summary>
-        /// Extract a cabinet file to an output directory, if possible
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="outDir">Path to the output directory</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Indicates if all files were able to be extracted</returns>
-        private bool ExtractCabinet(string? filename, string outDir, bool includeDebug)
+        public bool Extract(string? filename, string outDir, bool includeDebug)
         {
             // If the archive is invalid
             if (Folders == null || Folders.Length == 0)
