@@ -148,23 +148,23 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract a cabinet to an output directory, if possible
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Indicates if all files were able to be extracted</returns>
         /// <remarks>Will read spanned folders but won't attempt to extract unrelated folders</remarks>
-        public bool ExtractAll(string filename, string outDir, bool includeDebug)
+        public bool ExtractAll(string? filename, string outDir, bool includeDebug)
             => ExtractCabinet(filename, outDir, forwardOnly: false, includeDebug);
 
         /// <summary>
         /// Extract a cabinet file to an output directory, if possible
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <param name="forwardOnly">Indicates if decompression should be done forward-only</param>
         /// <returns>Indicates if all files were able to be extracted</returns>
-        private bool ExtractCabinet(string filename, string outDir, bool forwardOnly, bool includeDebug)
+        private bool ExtractCabinet(string? filename, string outDir, bool forwardOnly, bool includeDebug)
         {
             // If the archive is invalid
             if (Folders == null || Folders.Length == 0)
@@ -191,13 +191,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract the contents of a single folder
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="outDir">Path to the output directory</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="forwardOnly">Indicates if decompression should be done forward-only</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        private void ExtractFolder(string filename,
+        private void ExtractFolder(string? filename,
             string outDir,
             CFFOLDER? folder,
             int folderIndex,
@@ -309,10 +309,10 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the next archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        private MicrosoftCabinet? OpenNext(string filename)
+        private MicrosoftCabinet? OpenNext(string? filename)
         {
             // Ignore invalid archives
-            if (Header == null)
+            if (Header == null || string.IsNullOrEmpty(filename))
                 return null;
 
             // Normalize the filename
@@ -337,10 +337,10 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the previous archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        private MicrosoftCabinet? OpenPrevious(string filename)
+        private MicrosoftCabinet? OpenPrevious(string? filename)
         {
             // Ignore invalid archives
-            if (Header == null)
+            if (Header == null || string.IsNullOrEmpty(filename))
                 return null;
 
             // Normalize the filename
@@ -462,12 +462,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Decompress all blocks for a folder
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="forwardOnly">Indicates if decompression should be done forward-only</param>
         /// <returns>Stream representing the decompressed data on success, null otherwise</returns>
-        public Stream? DecompressBlocks(string filename, CFFOLDER? folder, int folderIndex, bool forwardOnly)
+        public Stream? DecompressBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool forwardOnly)
         {
             // Ensure data blocks
             var dataBlocks = forwardOnly
@@ -551,13 +551,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the set of data blocks for a folder
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
         /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
         /// <returns>Array of data blocks on success, null otherwise</returns>
-        private CFDATA[]? GetDataBlocks(string filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        private CFDATA[]? GetDataBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
         {
             // Skip invalid folders
             if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
@@ -576,6 +576,11 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] prevBlocks = [];
             if (!skipPrev && spanPrev)
             {
+                // Try to get Prev if it doesn't exist
+                if (Prev?.Header == null)
+                    Prev = OpenPrevious(filename);
+
+                // Get all blocks from Prev
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
                     int prevFolderIndex = Prev.FolderCount;
@@ -588,6 +593,11 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] nextBlocks = [];
             if (!skipNext && spanNext)
             {
+                // Try to get Next if it doesn't exist
+                if (Next?.Header == null)
+                    Next = OpenNext(filename);
+
+                // Get all blocks from Prev
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
@@ -602,11 +612,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the set of data blocks for a folder using forward reading only
         /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <returns>Array of data blocks on success, null otherwise</returns>
-        private CFDATA[]? GetDataBlocksForward(string filename, CFFOLDER? folder, int folderIndex)
+        private CFDATA[]? GetDataBlocksForward(string? filename, CFFOLDER? folder, int folderIndex)
             => GetDataBlocks(filename, folder, folderIndex, skipPrev: true, skipNext: false);
 
         /// <summary>
