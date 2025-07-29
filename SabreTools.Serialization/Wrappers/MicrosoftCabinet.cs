@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.MicrosoftCabinet;
 
 namespace SabreTools.Serialization.Wrappers
@@ -111,72 +112,91 @@ namespace SabreTools.Serialization.Wrappers
         #region Cabinet Set
 
         /// <summary>
-        /// Open a cabinet set for reading, if possible
+        /// Extract a cabinet set to an output directory, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <returns>Wrapper representing the set, null on error</returns>
-        public static MicrosoftCabinet? OpenSet(string? filename)
+        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Indicates if all files were able to be extracted</returns>
+        public bool ExtractAll(string filename, string outDir, bool includeDebug)
         {
-            // If the file is invalid
-            if (string.IsNullOrEmpty(filename))
-                return null;
-            else if (!File.Exists(filename!))
-                return null;
+            // TODO: Seek to the first archive and make sure all parts are extracted
 
-            // Get the full file path and directory
-            filename = Path.GetFullPath(filename);
+            // If the archive is invalid
+            if (Folders == null || Folders.Length == 0)
+                return false;
 
-            // Read in the current file and try to parse
-            var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var current = Create(stream);
-            if (current?.Header == null)
-                return null;
-
-            // Seek to the first part of the cabinet set
-            while (current.Header.CabinetPrev != null)
+            try
             {
-                // Attempt to open the previous cabinet
-                var prev = current.OpenPrevious(filename);
-                if (prev?.Header == null)
-                    break;
+                // Loop through the folders
+                for (int f = 0; f < Folders.Length; f++)
+                {
+                    // Get the current folder for processing
+                    var folder = Folders[f];
 
-                // Assign previous as new current
-                current = prev;
+                    // Decompress the blocks, if possible
+                    using var blockStream = DecompressBlocks(filename, folder, f);
+                    if (blockStream == null || blockStream.Length == 0)
+                        continue;
+
+                    // Ensure files
+                    var files = GetFiles(f);
+                    if (files.Length == 0)
+                        continue;
+
+                    // Loop through the files
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        try
+                        {
+                            var compressedFile = files[i];
+                            blockStream.Seek(compressedFile.FolderStartOffset, SeekOrigin.Begin);
+                            byte[] fileData = blockStream.ReadBytes((int)compressedFile.FileSize);
+
+                            // Ensure directory separators are consistent
+                            string fileName = compressedFile.Name!;
+                            if (Path.DirectorySeparatorChar == '\\')
+                                fileName = fileName.Replace('/', '\\');
+                            else if (Path.DirectorySeparatorChar == '/')
+                                fileName = fileName.Replace('\\', '/');
+
+                            string tempFile = Path.Combine(outDir, fileName);
+                            var directoryName = Path.GetDirectoryName(tempFile);
+                            if (directoryName != null && !Directory.Exists(directoryName))
+                                Directory.CreateDirectory(directoryName);
+
+                            using var of = File.OpenWrite(tempFile);
+                            of.Write(fileData, 0, fileData.Length);
+                            of.Flush();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (includeDebug) Console.WriteLine(ex);
+                        }
+                    }
+                }
+
+                return true;
             }
-
-            // Cache the current start of the cabinet set
-            var start = current;
-
-            // Read in the cabinet parts sequentially
-            while (current.Header.CabinetNext != null)
+            catch (Exception ex)
             {
-                // Open the next cabinet and try to parse
-                var next = current.OpenNext(filename);
-                if (next?.Header == null)
-                    break;
-
-                // Add the next and previous links, resetting current
-                next.Prev = current;
-                current.Next = next;
-                current = next;
+                if (includeDebug) Console.WriteLine(ex);
+                return false;
             }
-
-            // Return the start of the set
-            return start;
         }
 
         /// <summary>
         /// Open the next archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        public MicrosoftCabinet? OpenNext(string file)
+        private MicrosoftCabinet? OpenNext(string filename)
         {
             // Ignore invalid archives
             if (Header == null)
                 return null;
 
             // Normalize the filename
-            file = Path.GetFullPath(file);
+            filename = Path.GetFullPath(filename);
 
             // Get if the cabinet has a next part
             string? next = Header.CabinetNext;
@@ -184,7 +204,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Get the full next path
-            string? folder = Path.GetDirectoryName(file);
+            string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 next = Path.Combine(folder, next);
 
@@ -197,14 +217,14 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the previous archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        public MicrosoftCabinet? OpenPrevious(string file)
+        private MicrosoftCabinet? OpenPrevious(string filename)
         {
             // Ignore invalid archives
             if (Header == null)
                 return null;
 
             // Normalize the filename
-            file = Path.GetFullPath(file);
+            filename = Path.GetFullPath(filename);
 
             // Get if the cabinet has a previous part
             string? prev = Header.CabinetPrev;
@@ -212,7 +232,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Get the full next path
-            string? folder = Path.GetDirectoryName(file);
+            string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 prev = Path.Combine(folder, prev);
 
@@ -302,7 +322,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the corrected folder index
         /// </summary>
-        public int GetFolderIndex(CFFILE file)
+        /// <param name="file">File to get the corrected index for</param>
+        /// <returns>Corrected folder index for the current archive</returns>
+        private int GetFolderIndex(CFFILE file)
         {
             return file.FolderIndex switch
             {
@@ -318,9 +340,101 @@ namespace SabreTools.Serialization.Wrappers
         #region Folders
 
         /// <summary>
+        /// Decompress all blocks for a folder
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="folder">Folder containing the blocks to decompress</param>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <returns>Stream representing the decompressed data on success, null otherwise</returns>
+        public Stream? DecompressBlocks(string filename, CFFOLDER? folder, int folderIndex)
+        {
+            // Ensure data blocks
+            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
+            if (dataBlocks == null || dataBlocks.Length == 0)
+                return null;
+
+            // Setup decompressors
+            var mszip = IO.Compression.MSZIP.Decompressor.Create();
+            //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
+
+            // Loop through the data blocks
+            var ms = new MemoryStream();
+            for (int i = 0; i < dataBlocks.Length; i++)
+            {
+                var db = dataBlocks[i];
+                if (db?.CompressedData == null)
+                    continue;
+
+                // Get the compression type
+                var compressionType = GetCompressionType(folder!);
+                switch (compressionType)
+                {
+                    // Uncompressed data
+                    case CompressionType.TYPE_NONE:
+                        ms.Write(db.CompressedData, 0, db.CompressedData.Length);
+                        ms.Flush();
+                        break;
+
+                    // MS-ZIP
+                    case CompressionType.TYPE_MSZIP:
+                        long position = ms.Position;
+                        mszip.CopyTo(db.CompressedData, ms);
+                        long decompressedSize = ms.Position - position;
+
+                        // Pad to the correct size but throw a warning about this
+                        if (decompressedSize < db.UncompressedSize)
+                        {
+                            Console.Error.WriteLine($"Data block {i} in folder {folderIndex} had mismatching sizes. Expected: {db.UncompressedSize}, Got: {decompressedSize}");
+                            byte[] padding = new byte[db.UncompressedSize - decompressedSize];
+                            ms.Write(padding, 0, padding.Length);
+                        }
+
+                        break;
+
+                    // Quantum
+                    case CompressionType.TYPE_QUANTUM:
+                        // TODO: Unsupported
+                        break;
+
+                    // LZX
+                    case CompressionType.TYPE_LZX:
+                        // TODO: Unsupported
+                        break;
+                }
+            }
+
+            return ms;
+        }
+
+        /// <summary>
+        /// Get the unmasked compression type for a folder
+        /// </summary>
+        /// <param name="folder">Folder to get the compression type for</param>
+        /// <returns>Compression type on success, <see cref="ushort.MaxValue"/> on error</returns>
+        private static CompressionType GetCompressionType(CFFOLDER folder)
+        {
+            if ((folder!.CompressionType & CompressionType.MASK_TYPE) == CompressionType.TYPE_NONE)
+                return CompressionType.TYPE_NONE;
+            else if ((folder.CompressionType & CompressionType.MASK_TYPE) == CompressionType.TYPE_MSZIP)
+                return CompressionType.TYPE_MSZIP;
+            else if ((folder.CompressionType & CompressionType.MASK_TYPE) == CompressionType.TYPE_QUANTUM)
+                return CompressionType.TYPE_QUANTUM;
+            else if ((folder.CompressionType & CompressionType.MASK_TYPE) == CompressionType.TYPE_LZX)
+                return CompressionType.TYPE_LZX;
+            else
+                return (CompressionType)ushort.MaxValue;
+        }
+
+        /// <summary>
         /// Get the set of data blocks for a folder
         /// </summary>
-        public CFDATA[]? GetDataBlocks(string file, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="folder">Folder containing the blocks to decompress</param>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
+        /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
+        /// <returns>Array of data blocks on success, null otherwise</returns>
+        private CFDATA[]? GetDataBlocks(string filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
         {
             // Skip invalid folders
             if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
@@ -335,12 +449,12 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] prevBlocks = [];
             if (!skipPrev && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
             {
-                var prev = OpenPrevious(file);
+                var prev = OpenPrevious(filename);
                 if (prev?.Model?.Header != null && prev.Model.Folders != null)
                 {
                     int prevFolderIndex = prev.Model.Header.FolderCount;
                     var prevFolder = prev.Model.Folders[prevFolderIndex - 1];
-                    prevBlocks = prev.GetDataBlocks(file, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    prevBlocks = prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
@@ -348,11 +462,11 @@ namespace SabreTools.Serialization.Wrappers
             CFDATA[] nextBlocks = [];
             if (!skipNext && Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT))
             {
-                var next = OpenNext(file);
+                var next = OpenNext(filename);
                 if (next?.Model?.Header != null && next.Model.Folders != null)
                 {
                     var nextFolder = next.Model.Folders[0];
-                    nextBlocks = next.GetDataBlocks(file, nextFolder, 0, skipPrev: true) ?? [];
+                    nextBlocks = next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
 
@@ -363,7 +477,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get all files for the current folder index
         /// </summary>
-        public CFFILE[] GetFiles(int folderIndex)
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <returns>Array of all files for the folder</returns>
+        private CFFILE[] GetFiles(int folderIndex)
         {
             // Ignore invalid archives
             if (Files == null)
