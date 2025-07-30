@@ -247,8 +247,8 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new DirectoryEntry();
 
-            byte[] name = data.ReadBytes(32);
-            obj.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
+            byte[] name = data.ReadBytes(64);
+            obj.Name = Encoding.Unicode.GetString(name);
             obj.NameLength = data.ReadUInt16LittleEndian();
             obj.ObjectType = (ObjectType)data.ReadByteValue();
             obj.ColorFlag = (ColorFlag)data.ReadByteValue();
@@ -332,11 +332,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled sector full of directory entries on success, null on error</returns>
         private static DirectoryEntry[]? ParseDirectoryEntries(Stream data, ushort sectorShift, ushort majorVersion)
         {
-#if NET20 || NET35 || NET40
-            int directoryEntrySize = Marshal.SizeOf(new DirectoryEntry());
-#else
-            int directoryEntrySize = Marshal.SizeOf<DirectoryEntry>();
-#endif
+            // <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-CFB/%5bMS-CFB%5d.pdf"/>
+            int directoryEntrySize = 128;
+
             int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
             var directoryEntries = new DirectoryEntry[sectorCount];
 
