@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CFB;
@@ -196,32 +195,29 @@ namespace SabreTools.Serialization.Deserializers
                     if (currentSector == SectorNumber.ENDOFCHAIN)
                         break;
 
-                    // If we have a free sector for a version 3 filie
-                    if (directorySectorCount == int.MaxValue && currentSector == SectorNumber.FREESECT)
+                    // If we have an unusable sector for a version 3 file
+                    if (directorySectorCount == int.MaxValue && currentSector > SectorNumber.MAXREGSECT)
                         break;
 
-                    // If we have a readable sector
-                    if (currentSector <= SectorNumber.MAXREGSECT)
-                    {
-                        // Get the new next sector information
-                        long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
-                        if (sectorOffset < 0 || sectorOffset >= data.Length)
-                            return null;
+                    // Get the new next sector information
+                    long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
+                    if (sectorOffset < 0 || sectorOffset >= data.Length)
+                        return null;
 
-                        // Seek to the next sector
-                        data.Seek(sectorOffset, SeekOrigin.Begin);
+                    // Seek to the next sector
+                    data.Seek(sectorOffset, SeekOrigin.Begin);
 
-                        // Try to parse the sectors
-                        var directoryEntries = ParseDirectoryEntries(data, fileHeader.SectorShift, fileHeader.MajorVersion);
-                        if (directoryEntries == null)
-                            return null;
+                    // Try to parse the sectors
+                    var directoryEntries = ParseDirectoryEntries(data, fileHeader.SectorShift, fileHeader.MajorVersion);
+                    if (directoryEntries == null)
+                        return null;
 
-                        // Add the sector shifts
-                        directorySectors.AddRange(directoryEntries);
-                    }
+                    // Add the sector shifts
+                    directorySectors.AddRange(directoryEntries);
 
                     // Get the next sector from the DIFAT
-                    currentSector = binary.DIFATSectorNumbers[i];
+                    var fat = binary.DIFATSectorNumbers[(int)currentSector];
+                    currentSector = binary.FATSectorNumbers[(int)fat];
                 }
 
                 // Assign the Directory sectors table
@@ -335,8 +331,8 @@ namespace SabreTools.Serialization.Deserializers
             // <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-CFB/%5bMS-CFB%5d.pdf"/>
             int directoryEntrySize = 128;
 
-            int sectorCount = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
-            var directoryEntries = new DirectoryEntry[sectorCount];
+            int dirsPerSector = (int)(Math.Pow(2, sectorShift) / directoryEntrySize);
+            var directoryEntries = new DirectoryEntry[dirsPerSector];
 
             for (int i = 0; i < directoryEntries.Length; i++)
             {
