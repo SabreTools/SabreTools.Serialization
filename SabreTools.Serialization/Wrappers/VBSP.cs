@@ -121,6 +121,10 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null)
                 return false;
 
+            // If we have an invalid output directory
+            if (string.IsNullOrEmpty(outputDirectory))
+                return false;
+
             // Create the filename
             string filename = $"lump_{index}.bin";
             switch ((LumpType)index)
@@ -133,16 +137,16 @@ namespace SabreTools.Serialization.Wrappers
                     break;
             }
 
-            // If we have an invalid output directory
-            if (string.IsNullOrEmpty(outputDirectory))
-                return false;
+            // Ensure directory separators are consistent
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
 
-            // Create the full output path
+            // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
-
-            // Ensure the output directory is created
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null)
+            if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data
@@ -151,6 +155,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the output file for writing
                 using Stream fs = File.OpenWrite(filename);
                 fs.Write(data, 0, data.Length);
+                fs.Flush();
             }
             catch
             {

@@ -249,21 +249,23 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null)
                 return false;
 
-            // Create the filename
-            string filename = $"{directoryItem.Name}.{directoryItem.Extension}";
-            if (!string.IsNullOrEmpty(directoryItem.Path))
-                filename = Path.Combine(directoryItem.Path, filename);
-
             // If we have an invalid output directory
             if (string.IsNullOrEmpty(outputDirectory))
                 return false;
 
-            // Create the full output path
-            filename = Path.Combine(outputDirectory, filename);
+            // Ensure directory separators are consistent
+            string filename = $"{directoryItem.Name}.{directoryItem.Extension}";
+            if (!string.IsNullOrEmpty(directoryItem.Path))
+                filename = Path.Combine(directoryItem.Path, filename);
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
 
-            // Ensure the output directory is created
+            // Ensure the full output directory exists
+            filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null)
+            if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data
@@ -272,6 +274,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the output file for writing
                 using Stream fs = File.OpenWrite(filename);
                 fs.Write(data, 0, data.Length);
+                fs.Flush();
             }
             catch
             {

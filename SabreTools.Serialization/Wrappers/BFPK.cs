@@ -139,14 +139,28 @@ namespace SabreTools.Serialization.Wrappers
                 compressedSize = file.UncompressedSize;
             }
 
+            // If we have an invalid output directory
+            if (string.IsNullOrEmpty(outputDirectory))
+                return false;
+
+            // Ensure directory separators are consistent
+            string filename = file.Name ?? $"file{index}";
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
+
+            // Ensure the full output directory exists
+            filename = Path.Combine(outputDirectory, filename);
+            var directoryName = Path.GetDirectoryName(filename);
+            if (directoryName != null && !Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
+
+            // Try to write the data
             try
             {
-                // Ensure the output directory exists
-                Directory.CreateDirectory(outputDirectory);
-
-                // Create the output path
-                string filePath = Path.Combine(outputDirectory, file.Name ?? $"file{index}");
-                using FileStream fs = File.OpenWrite(filePath);
+                // Open the output file for writing
+                using FileStream fs = File.OpenWrite(filename);
 
                 // Read the data block
                 var data = ReadFromDataSource(offset, compressedSize);
@@ -157,20 +171,22 @@ namespace SabreTools.Serialization.Wrappers
                 if (compressedSize == file.UncompressedSize)
                 {
                     fs.Write(data, 0, compressedSize);
+                    fs.Flush();
                 }
                 else
                 {
-                    MemoryStream ms = new MemoryStream(data);
-                    ZlibStream zs = new ZlibStream(ms, CompressionMode.Decompress);
+                    using MemoryStream ms = new MemoryStream(data);
+                    using ZlibStream zs = new ZlibStream(ms, CompressionMode.Decompress);
                     zs.CopyTo(fs);
+                    fs.Flush();
                 }
-
-                return true;
             }
             catch
             {
                 return false;
             }
+
+            return true;
         }
 
         #endregion

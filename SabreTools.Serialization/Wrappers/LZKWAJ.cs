@@ -112,11 +112,16 @@ namespace SabreTools.Serialization.Wrappers
             if (Model.HeaderExtensions?.FileExtension != null)
                 filename += $".{Model.HeaderExtensions.FileExtension}";
 
-            filename = Path.Combine(outputDirectory, filename);
+            // Ensure directory separators are consistent
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
 
-            // Ensure the output directory is created
+            // Ensure the full output directory exists
+            filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null)
+            if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data
@@ -125,6 +130,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the output file for writing
                 using Stream fs = File.OpenWrite(filename);
                 decompressor.CopyTo(fs);
+                fs.Flush();
             }
             catch
             {

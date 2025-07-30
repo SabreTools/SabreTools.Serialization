@@ -138,12 +138,21 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                // Ensure the output directory exists
-                Directory.CreateDirectory(outputDirectory);
+                // Ensure directory separators are consistent
+                string filename = segment.FileName ?? $"file{index}";
+                if (Path.DirectorySeparatorChar == '\\')
+                    filename = filename.Replace('/', '\\');
+                else if (Path.DirectorySeparatorChar == '/')
+                    filename = filename.Replace('\\', '/');
 
-                // Create the output path
-                string filePath = Path.Combine(outputDirectory, segment.FileName ?? $"file{index}");
-                using FileStream fs = File.OpenWrite(filePath);
+                // Ensure the full output directory exists
+                filename = Path.Combine(outputDirectory, filename);
+                var directoryName = Path.GetDirectoryName(filename);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Create the output file
+                using FileStream fs = File.OpenWrite(filename);
 
                 // Read the data block
                 var data = ReadFromDataSource(offset, size);
@@ -152,6 +161,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Write the data -- TODO: Compressed data?
                 fs.Write(data, 0, size);
+                fs.Flush();
 
                 return true;
             }

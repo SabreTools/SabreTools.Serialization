@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Decompress the data
                 var decomp = Decompressor.Create();
-                var outData = new MemoryStream();
+                using var outData = new MemoryStream();
                 decomp.CopyTo(compressedData, outData);
                 data = outData.ToArray();
             }
@@ -259,12 +259,16 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(outputDirectory))
                 return false;
 
-            // Create the full output path
-            filename = Path.Combine(outputDirectory, filename);
+            // Ensure directory separators are consistent
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
 
-            // Ensure the output directory is created
+            // Ensure the full output directory exists
+            filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null)
+            if (directoryName != null && !System.IO.Directory.Exists(directoryName))
                 System.IO.Directory.CreateDirectory(directoryName);
 
             // Try to write the data
@@ -273,6 +277,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the output file for writing
                 using Stream fs = System.IO.File.OpenWrite(filename);
                 fs.Write(data, 0, data.Length);
+                fs.Flush();
             }
             catch
             {

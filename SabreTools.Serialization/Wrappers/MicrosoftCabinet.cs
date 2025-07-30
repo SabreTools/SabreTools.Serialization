@@ -148,20 +148,21 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Loop through the cabinets
+                bool allExtracted = true;
                 do
                 {
-                    current.Extract(filename, outDir, includeDebug);
+                    allExtracted &= current.Extract(filename, outDir, includeDebug);
                     current = current.Next ?? current.OpenNext(filename);
                 }
                 while (current?.Header != null);
+
+                return allExtracted;
             }
             catch (Exception ex)
             {
                 if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
-
-            return true;
         }
 
         /// <summary>
@@ -180,13 +181,14 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Loop through the folders
+                bool allExtracted = true;
                 for (int f = 0; f < Folders.Length; f++)
                 {
                     var folder = Folders[f];
-                    ExtractFolder(filename, outDir, folder, f, includeDebug);
+                    allExtracted &= ExtractFolder(filename, outDir, folder, f, includeDebug);
                 }
 
-                return true;
+                return allExtracted;
             }
             catch (Exception ex)
             {
@@ -203,7 +205,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        private void ExtractFolder(string? filename,
+        /// <returns>True if all files extracted, false otherwise</returns>
+        private bool ExtractFolder(string? filename,
             string outDir,
             CFFOLDER? folder,
             int folderIndex,
@@ -212,15 +215,18 @@ namespace SabreTools.Serialization.Wrappers
             // Decompress the blocks, if possible
             using var blockStream = DecompressBlocks(filename, folder, folderIndex);
             if (blockStream == null || blockStream.Length == 0)
-                return;
+                return false;
 
             // Loop through the files
+            bool allExtracted = true;
             var files = GetFiles(folderIndex);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                ExtractFile(outDir, blockStream, file, includeDebug);
+                allExtracted &= ExtractFile(outDir, blockStream, file, includeDebug);
             }
+
+            return allExtracted;
         }
 
         /// <summary>
@@ -230,7 +236,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="blockStream">Stream representing the uncompressed block data</param>
         /// <param name="file">File information</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        private static void ExtractFile(string outDir, Stream blockStream, CFFILE file, bool includeDebug)
+        /// <returns>True if the file extracted, false otherwise</returns>
+        private static bool ExtractFile(string outDir, Stream blockStream, CFFILE file, bool includeDebug)
         {
             try
             {
@@ -238,25 +245,30 @@ namespace SabreTools.Serialization.Wrappers
                 byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
 
                 // Ensure directory separators are consistent
-                string fileName = file.Name!;
+                string filename = file.Name!;
                 if (Path.DirectorySeparatorChar == '\\')
-                    fileName = fileName.Replace('/', '\\');
+                    filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')
-                    fileName = fileName.Replace('\\', '/');
+                    filename = filename.Replace('\\', '/');
 
-                string tempFile = Path.Combine(outDir, fileName);
-                var directoryName = Path.GetDirectoryName(tempFile);
+                // Ensure the full output directory exists
+                filename = Path.Combine(outDir, filename);
+                var directoryName = Path.GetDirectoryName(filename);
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
-                using var of = File.OpenWrite(tempFile);
-                of.Write(fileData, 0, fileData.Length);
-                of.Flush();
+                // Open the output file for writing
+                using var fs = File.OpenWrite(filename);
+                fs.Write(fileData, 0, fileData.Length);
+                fs.Flush();
             }
             catch (Exception ex)
             {
                 if (includeDebug) Console.WriteLine(ex);
+                return false;
             }
+
+            return true;
         }
 
         #endregion
