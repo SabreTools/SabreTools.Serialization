@@ -92,9 +92,11 @@ namespace SabreTools.Serialization.Deserializers
                 var fatSectors = new List<SectorNumber>();
 
                 // Loop through and add the FAT sectors
-                currentSector = binary.DIFATSectorNumbers[0];
                 for (int i = 0; i < fileHeader.NumberOfFATSectors; i++)
                 {
+                    // Get the next sector from the DIFAT
+                    currentSector = binary.DIFATSectorNumbers[i];
+
                     // If we have a readable sector
                     if (currentSector <= SectorNumber.MAXREGSECT)
                     {
@@ -114,9 +116,6 @@ namespace SabreTools.Serialization.Deserializers
                         // Add the sector shifts
                         fatSectors.AddRange(sectorNumbers);
                     }
-
-                    // Get the next sector from the DIFAT
-                    currentSector = binary.DIFATSectorNumbers[i];
                 }
 
                 // Assign the FAT sectors table
@@ -153,8 +152,8 @@ namespace SabreTools.Serialization.Deserializers
                         miniFatSectors.AddRange(sectorNumbers);
                     }
 
-                    // Get the next sector from the DIFAT
-                    currentSector = binary.DIFATSectorNumbers[i];
+                    // Get the next sector from the FAT
+                    currentSector = binary.FATSectorNumbers[(int)currentSector];
                 }
 
                 // Assign the mini FAT sectors table
