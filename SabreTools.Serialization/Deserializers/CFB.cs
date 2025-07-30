@@ -166,14 +166,6 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Directory Entries
 
-                // Get the offset of the first directory sector
-                long firstDirectoryOffset = (long)(fileHeader.FirstDirectorySectorLocation * Math.Pow(2, fileHeader.SectorShift));
-                if (firstDirectoryOffset < 0 || firstDirectoryOffset >= data.Length)
-                    return null;
-
-                // Seek to the first directory sector
-                data.Seek(firstDirectoryOffset, SeekOrigin.Begin);
-
                 // Create a directory sector table
                 var directorySectors = new List<DirectoryEntry>();
 
@@ -217,9 +209,8 @@ namespace SabreTools.Serialization.Deserializers
                     // Add the sector shifts
                     directorySectors.AddRange(directoryEntries);
 
-                    // Get the next sector from the DIFAT
-                    var fat = binary.DIFATSectorNumbers[(int)currentSector];
-                    currentSector = binary.FATSectorNumbers[(int)fat];
+                    // Get the next sector from the FAT
+                    currentSector = binary.FATSectorNumbers[(int)currentSector];
                 }
 
                 // Assign the Directory sectors table
