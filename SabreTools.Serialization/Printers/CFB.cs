@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Printers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Directory Entry {i}");
-                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.Name?.TrimEnd('\0'), "    Name");
                 builder.AppendLine(entry.NameLength, "    Name length");
                 builder.AppendLine($"    Object type: {entry.ObjectType} (0x{entry.ObjectType:X})");
                 builder.AppendLine($"    Color flag: {entry.ColorFlag} (0x{entry.ColorFlag:X})");
