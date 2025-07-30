@@ -57,7 +57,7 @@ namespace SabreTools.Serialization
             }
 
             output[q] = 0;
-            return Encoding.ASCII.GetString(output);
+            return Encoding.UTF8.GetString(output);
         }
 
         /// <summary>
