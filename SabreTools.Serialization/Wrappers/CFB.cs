@@ -15,6 +15,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Models.CFB.Binary.DirectoryEntries"/>
+        public Models.CFB.DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
+
         /// <summary>
         /// Normal sector size in bytes
         /// </summary>
@@ -87,6 +90,87 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Extraction
+
+         /// <summary>
+        /// Extract all files from the CFB to an output directory
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if all files extracted, false otherwise</returns>
+        public bool ExtractAll(string outputDirectory)
+        {
+            // If we have no files
+            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+                return false;
+
+            // Loop through and extract all directory entries to the output
+            bool allExtracted = true;
+            for (int i = 0; i < DirectoryEntries.Length; i++)
+            {
+                allExtracted &= ExtractEntry(i, outputDirectory);
+            }
+
+            return allExtracted;
+        }
+
+        /// <summary>
+        /// Extract a file from the CFB to an output directory by index
+        /// </summary>
+        /// <param name="index">Entry index to extract</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <returns>True if the file extracted, false otherwise</returns>
+        public bool ExtractEntry(int index, string outputDirectory)
+        {
+            // If we have no files
+            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+                return false;
+
+            // If we have an invalid index
+            if (index < 0 || index >= DirectoryEntries.Length)
+                return false;
+
+            // Get the file information
+            var entry = DirectoryEntries[index];
+            if (entry == null)
+                return false;
+
+            // TODO: Determine how to read the data for a single directory entry
+
+            // If we have an invalid output directory
+            if (string.IsNullOrEmpty(outputDirectory))
+                return false;
+
+            // Ensure directory separators are consistent
+            string filename = entry.Name ?? $"file{index}";
+            if (Path.DirectorySeparatorChar == '\\')
+                filename = filename.Replace('/', '\\');
+            else if (Path.DirectorySeparatorChar == '/')
+                filename = filename.Replace('\\', '/');
+
+            // Ensure the full output directory exists
+            filename = Path.Combine(outputDirectory, filename);
+            var directoryName = Path.GetDirectoryName(filename);
+            if (directoryName != null && !Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
+
+            // Try to write the data
+            try
+            {
+                // Open the output file for writing
+                using FileStream fs = File.OpenWrite(filename);
+                // TODO: Write out the data
+                fs.Flush();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
