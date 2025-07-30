@@ -248,7 +248,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new DirectoryEntry();
 
             byte[] name = data.ReadBytes(32);
-            obj.Name = Encoding.ASCII.GetString(name).TrimEnd('\0');
+            obj.Name = Encoding.Unicode.GetString(name).TrimEnd('\0');
             obj.NameLength = data.ReadUInt16LittleEndian();
             obj.ObjectType = (ObjectType)data.ReadByteValue();
             obj.ColorFlag = (ColorFlag)data.ReadByteValue();
