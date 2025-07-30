@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CFB;
 
@@ -184,8 +185,18 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(outputDirectory))
                 return false;
 
-            // Ensure directory separators are consistent
+            // Ensure the output filename is trimmed
             string filename = entry.Name ?? $"entry{index}";
+            byte[] nameBytes = Encoding.UTF8.GetBytes(filename);
+            if (nameBytes[0] == 0xe4 && nameBytes[1] == 0xa1 && nameBytes[2] == 0x80)
+                filename = Encoding.UTF8.GetString(nameBytes, 3, nameBytes.Length - 3);
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                filename = filename.Replace(c, '_');
+            }
+
+            // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
             else if (Path.DirectorySeparatorChar == '/')
@@ -220,8 +231,28 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Byte array representing the entry data on success, null otherwise</returns>
         private byte[]? GetDirectoryEntryData(DirectoryEntry entry)
         {
-            // TODO: Determine how to read the data for a single directory entry
-            return null;
+            // If the CFB is invalid
+            if (Model.Header == null)
+                return null;
+
+            // Only try to extract stream objects
+            if (entry.ObjectType != ObjectType.StreamObject)
+                return null;
+
+            // Determine which FAT is being used
+            bool miniFat = entry.StreamSize < Model.Header.MiniStreamCutoffSize;
+
+            // Get the chain data
+            var chain = miniFat
+                ? GetMiniFATSectorChainData((SectorNumber)entry.StartingSectorLocation)
+                : GetFATSectorChainData((SectorNumber)entry.StartingSectorLocation);
+            if (chain == null)
+                return null;
+
+            // Return only the proper amount of data
+            byte[] data = new byte[entry.StreamSize];
+            Array.Copy(chain, 0, data, 0, (int)Math.Min(chain.Length, (long)entry.StreamSize));
+            return data;
         }
 
         #endregion
