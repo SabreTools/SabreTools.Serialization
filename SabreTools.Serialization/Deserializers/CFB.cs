@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Handle version 3 entries
                 if (majorVersion == 3)
-                    directoryEntry.StreamSize &= 0x0000FFFF;
+                    directoryEntry.StreamSize &= 0x00000000FFFFFFFF;
 
                 directoryEntries[i] = directoryEntry;
             }
