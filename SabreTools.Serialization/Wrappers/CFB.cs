@@ -29,13 +29,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Byte array representing the mini stream
         /// </summary>
-        public byte[] MiniStream
+        public byte[] MiniStreamData
         {
             get
             {
                 // Use the cached value, if it exists
-                if (_miniStream != null)
-                    return _miniStream;
+                if (_miniStreamData != null)
+                    return _miniStreamData;
 
                 // If there are no directory entries
                 if (DirectoryEntries == null || DirectoryEntries.Length == 0)
@@ -45,11 +45,11 @@ namespace SabreTools.Serialization.Wrappers
                 var startingSector = (SectorNumber)DirectoryEntries[0].StartingSectorLocation;
 
                 // Get the mini stream data
-                _miniStream = GetFATSectorChainData(startingSector);
-                return _miniStream ?? [];
+                _miniStreamData = GetFATSectorChainData(startingSector);
+                return _miniStreamData ?? [];
             }
         }
-        private byte[]? _miniStream;
+        private byte[]? _miniStreamData;
 
         /// <summary>
         /// Normal sector size in bytes
@@ -251,8 +251,8 @@ namespace SabreTools.Serialization.Wrappers
                 // Get the next sector from the lookup table
                 var nextSector = FATSectorNumbers[(uint)lastSector!.Value];
 
-                // If we have an end of chain or free sector
-                if (nextSector == SectorNumber.ENDOFCHAIN || nextSector == SectorNumber.FREESECT)
+                // If we have an invalid sector
+                if (nextSector >= SectorNumber.MAXREGSECT)
                     break;
 
                 // Add the next sector to the list and replace the last sector
@@ -338,8 +338,8 @@ namespace SabreTools.Serialization.Wrappers
                 // Get the next sector from the lookup table
                 var nextSector = MiniFATSectorNumbers[(uint)lastSector!.Value];
 
-                // If we have an end of chain or free sector
-                if (nextSector == SectorNumber.ENDOFCHAIN || nextSector == SectorNumber.FREESECT)
+                // If we have an invalid sector
+                if (nextSector >= SectorNumber.MAXREGSECT)
                     break;
 
                 // Add the next sector to the list and replace the last sector
@@ -357,7 +357,15 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Ordered list of sector numbers, null on error</returns>
         public byte[]? GetMiniFATSectorChainData(SectorNumber startingSector)
         {
-            // Get the sector chain first
+            // Ignore invalid data
+            if (Model?.Header == null)
+                return null;
+
+            // Validate the mini stream data
+            if (MiniStreamData == null)
+                return null;
+
+            // Get the sector chain
             var sectorChain = GetMiniFATSectorChain(startingSector);
             if (sectorChain == null)
                 return null;
@@ -366,13 +374,13 @@ namespace SabreTools.Serialization.Wrappers
             var data = new List<byte>();
             for (int i = 0; i < sectorChain.Count; i++)
             {
-                // Try to get the sector data offset
-                int sectorDataOffset = (int)MiniFATSectorToMiniStreamOffset(sectorChain[i]);
-                if (sectorDataOffset < 0 || sectorDataOffset >= GetEndOfFile())
+                // Try to get the mini stream data offset
+                int streamDataOffset = (int)MiniFATSectorToMiniStreamOffset(sectorChain[i]);
+                if (streamDataOffset < 0 || streamDataOffset > MiniStreamData.Length)
                     return null;
 
                 // Try to read the sector data
-                var sectorData = ReadFromDataSource(sectorDataOffset, (int)MiniSectorSize);
+                var sectorData = MiniStreamData.ReadBytes(ref streamDataOffset, (int)MiniSectorSize);
                 if (sectorData == null)
                     return null;
 
@@ -395,7 +403,7 @@ namespace SabreTools.Serialization.Wrappers
             if (sector == null || sector > SectorNumber.MAXREGSECT)
                 return -1;
 
-            // Convert based on the sector shift value
+            // Get the mini stream location
             return (long)sector * MiniSectorSize;
         }
 
