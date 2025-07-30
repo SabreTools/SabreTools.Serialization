@@ -18,6 +18,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Binary.Header"/>
+        public FileHeader? Header => Model.Header;
+
         /// <inheritdoc cref="Binary.DirectoryEntries"/>
         public DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
 
@@ -55,12 +58,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Normal sector size in bytes
         /// </summary>
-        public long SectorSize => (long)Math.Pow(2, Model.Header?.SectorShift ?? 0);
+        public long SectorSize => (long)Math.Pow(2, Header?.SectorShift ?? 0);
 
         /// <summary>
         /// Mini sector size in bytes
         /// </summary>
-        public long MiniSectorSize => (long)Math.Pow(2, Model.Header?.MiniSectorShift ?? 0);
+        public long MiniSectorSize => (long)Math.Pow(2, Header?.MiniSectorShift ?? 0);
 
         #endregion
 
@@ -232,7 +235,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? GetDirectoryEntryData(DirectoryEntry entry)
         {
             // If the CFB is invalid
-            if (Model.Header == null)
+            if (Header == null)
                 return null;
 
             // Only try to extract stream objects
@@ -240,7 +243,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Determine which FAT is being used
-            bool miniFat = entry.StreamSize < Model.Header.MiniStreamCutoffSize;
+            bool miniFat = entry.StreamSize < Header.MiniStreamCutoffSize;
 
             // Get the chain data
             var chain = miniFat
