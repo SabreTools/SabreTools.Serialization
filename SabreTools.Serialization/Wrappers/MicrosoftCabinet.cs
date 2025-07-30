@@ -518,14 +518,17 @@ namespace SabreTools.Serialization.Wrappers
                 byte[] blockData = db.CompressedData;
 
                 // If the block is continued, append
+                bool continuedBlock = false;
                 if (db.UncompressedSize == 0)
                 {
-                    var nextBlock = dataBlocks[i++];
+                    var nextBlock = dataBlocks[i + 1];
                     byte[]? nextData = nextBlock.CompressedData;
                     if (nextData == null)
                         continue;
 
+                    continuedBlock = true;
                     blockData = [.. blockData, .. nextData];
+                    db.CompressedSize += nextBlock.CompressedSize;
                     db.UncompressedSize = nextBlock.UncompressedSize;
                 }
 
@@ -546,6 +549,9 @@ namespace SabreTools.Serialization.Wrappers
                 // Write the uncompressed data block
                 ms.Write(data, 0, data.Length);
                 ms.Flush();
+
+                // Increment additionally if we had a continued block
+                if (continuedBlock) i++;
             }
 
             return ms;
