@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
         }
@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
 
@@ -590,7 +590,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch (Exception ex)
             {
-                if (includeDebug) Console.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return [];
             }
         }
