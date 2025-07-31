@@ -21,22 +21,28 @@ namespace SabreTools.Serialization.Wrappers
         public CFFILE[]? Files => Model.Files;
 
         /// <inheritdoc cref="CFHEADER.FileCount"/>
-        public int FileCount => Model.Header?.FileCount ?? 0;
+        public int FileCount => Header?.FileCount ?? 0;
 
         /// <inheritdoc cref="Cabinet.Folders"/>
         public CFFOLDER[]? Folders => Model.Folders;
 
         /// <inheritdoc cref="CFHEADER.FolderCount"/>
-        public int FolderCount => Model.Header?.FolderCount ?? 0;
+        public int FolderCount => Header?.FolderCount ?? 0;
 
         /// <inheritdoc cref="Cabinet.Header"/>
         public CFHEADER? Header => Model.Header;
+
+        /// <inheritdoc cref="CFHEADER.CabinetNext"/>
+        public string? CabinetNext => Header?.CabinetNext;
 
         /// <summary>
         /// Reference to the next cabinet header
         /// </summary>
         /// <remarks>Only used in multi-file</remarks>
         public MicrosoftCabinet? Next { get; set; }
+
+        /// <inheritdoc cref="CFHEADER.CabinetPrev"/>
+        public string? CabinetPrev => Header?.CabinetPrev;
 
         /// <summary>
         /// Reference to the next previous header
@@ -298,7 +304,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Seek to the first part of the cabinet set
-            while (current.Header.CabinetPrev != null)
+            while (current.CabinetPrev != null)
             {
                 // Attempt to open the previous cabinet
                 var prev = current.OpenPrevious(filename);
@@ -313,7 +319,7 @@ namespace SabreTools.Serialization.Wrappers
             var start = current;
 
             // Read in the cabinet parts sequentially
-            while (current.Header.CabinetNext != null)
+            while (current.CabinetNext != null)
             {
                 // Open the next cabinet and try to parse
                 var next = current.OpenNext(filename);
@@ -344,7 +350,7 @@ namespace SabreTools.Serialization.Wrappers
             filename = Path.GetFullPath(filename);
 
             // Get if the cabinet has a next part
-            string? next = Header.CabinetNext;
+            string? next = CabinetNext;
             if (string.IsNullOrEmpty(next))
                 return null;
 
@@ -372,7 +378,7 @@ namespace SabreTools.Serialization.Wrappers
             filename = Path.GetFullPath(filename);
 
             // Get if the cabinet has a previous part
-            string? prev = Header.CabinetPrev;
+            string? prev = CabinetPrev;
             if (string.IsNullOrEmpty(prev))
                 return null;
 

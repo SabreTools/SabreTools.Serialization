@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.COFFFileHeader"/>
+        public Models.PortableExecutable.COFFFileHeader? COFFFileHeader => Model.COFFFileHeader;
+
         /// <summary>
         /// Dictionary of debug data
         /// </summary>
@@ -84,6 +87,9 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         }
+
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.ExportTable"/>
+        public Models.PortableExecutable.ExportTable? ExportTable => Model.ExportTable;
 
         /// <summary>
         /// Header padding data, if it exists
@@ -180,6 +186,9 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         }
+
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.ImportTable"/>
+        public Models.PortableExecutable.ImportTable? ImportTable => Model.ImportTable;
 
         /// <inheritdoc cref="Models.PortableExecutable.Executable.OptionalHeader"/>
         public Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;

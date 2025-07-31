@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
@@ -9,6 +10,25 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public override string DescriptionString => "New Executable (NE)";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.Header"/>
+        public Models.NewExecutable.ExecutableHeader? Header => Model.Header;
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.ImportedNameTable"/>
+        public Dictionary<ushort, Models.NewExecutable.ImportedNameTableEntry>? ImportedNameTable => Model.ImportedNameTable;
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.NonResidentNameTable"/>
+        public Models.NewExecutable.NonResidentNameTableEntry[]? NonResidentNameTable => Model.NonResidentNameTable;
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.ResidentNameTable"/>
+        public Models.NewExecutable.ResidentNameTableEntry[]? ResidentNameTable => Model.ResidentNameTable;
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.Stub"/>
+        public Models.MSDOS.Executable? Stub => Model.Stub;
 
         #endregion
 

@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
         public long CompressedDataOffset => Model.CompressedDataOffset;
 
         /// <inheritdoc cref="Header.FileCount"/>
-        public ushort FileCount => Model.Header?.FileCount ?? 0;
+        public ushort FileCount => Header?.FileCount ?? 0;
 
         /// <inheritdoc cref="Archive.FileList"/>
         public FileDescriptor[] FileList => Model.FileList ?? [];
