@@ -18,6 +18,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Cabinet.CommonHeader"/>
+        public CommonHeader? CommonHeader => Model.CommonHeader;
+
         /// <inheritdoc cref="Cabinet.Components"/>
         public Component[]? Components => Model.Components;
 
@@ -59,6 +62,9 @@ namespace SabreTools.Serialization.Wrappers
         /// The major version of the cabinet
         /// </summary>
         public int MajorVersion => Model.GetMajorVersion();
+
+        /// <inheritdoc cref="Cabinet.VolumeHeader"/>
+        public VolumeHeader? VolumeHeader => Model.VolumeHeader;
 
         /// <summary>
         /// Reference to the next cabinet header
