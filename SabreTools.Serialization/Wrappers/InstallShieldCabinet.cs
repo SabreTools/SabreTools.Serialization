@@ -361,13 +361,13 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the file descriptor at a given index, if possible
         /// </summary>
         /// <remarks>Verifies the file descriptor flags before returning</remarks>
-        public FileDescriptor? GetFileDescriptorWithVerification(int index, out string? error)
+        public bool TryGetFileDescriptor(int index, out FileDescriptor? fileDescriptor)
         {
-            var fileDescriptor = GetFileDescriptor(index);
+            fileDescriptor = GetFileDescriptor(index);
             if (fileDescriptor == null)
             {
-                error = $"Failed to get file descriptor for file {index}";
-                return null;
+                Console.Error.WriteLine($"Failed to get file descriptor for file {index}");
+                return false;
             }
 
 #if NET20 || NET35
@@ -376,12 +376,11 @@ namespace SabreTools.Serialization.Wrappers
             if (fileDescriptor.Flags.HasFlag(FileFlags.FILE_INVALID) || fileDescriptor.DataOffset == 0)
 #endif
             {
-                error = $"File at {index} is marked as invalid";
-                return null;
+                Console.Error.WriteLine($"File at {index} is marked as invalid");
+                return false;
             }
 
-            error = null;
-            return fileDescriptor;
+            return true;
         }
 
         /// <summary>
