@@ -73,10 +73,24 @@ namespace InfoPrint
         {
             Console.WriteLine($"Attempting to print info for {file}");
 
-            // Retrieve hashes before anything else, if required
-            StringBuilder? hashBuilder = null;
+            // Get the base info output name
+            string filenameBase = $"info-{DateTime.Now:yyyy-MM-dd_HHmmss.ffff}";
+
+            // If we have the hash flag
             if (hash)
-                hashBuilder = PrintHashInfo(file, debug);
+            {
+                var hashBuilder = PrintHashInfo(file, debug);
+                if (hashBuilder != null)
+                {
+                    // Create the output data
+                    string hashData = hashBuilder.ToString();
+
+                    // Write the output data
+                    using var hsw = new StreamWriter(File.OpenWrite($"{filenameBase}.hashes"));
+                    hsw.WriteLine(hashData);
+                    hsw.Flush();
+                }
+            }
 
             try
             {
@@ -104,9 +118,6 @@ namespace InfoPrint
                     return;
                 }
 
-                // Get the base info output name
-                string filenameBase = $"info-{DateTime.Now:yyyy-MM-dd_HHmmss.ffff}";
-
 #if NETCOREAPP
                 // If we have the JSON flag
                 if (json)
@@ -117,6 +128,7 @@ namespace InfoPrint
                     // Write the output data
                     using var jsw = new StreamWriter(File.OpenWrite($"{filenameBase}.json"));
                     jsw.WriteLine(serializedData);
+                    jsw.Flush();
                 }
 #endif
 
@@ -128,18 +140,9 @@ namespace InfoPrint
                     return;
                 }
 
-                // Write the output data
-                if (hashBuilder != null)
-                {
-                    Console.WriteLine(hashBuilder);
-                    Console.WriteLine();
-                }
-
+                
                 Console.WriteLine(builder);
                 using var sw = new StreamWriter(File.OpenWrite($"{filenameBase}.txt"));
-                if (hashBuilder != null)
-                    sw.WriteLine(hashBuilder.ToString());
-
                 sw.WriteLine(builder.ToString());
                 sw.Flush();
             }
