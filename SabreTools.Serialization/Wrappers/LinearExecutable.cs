@@ -12,6 +12,13 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.LinearExecutable.Executable.Stub"/>
+        public Models.MSDOS.Executable? Stub => Model.Stub;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
