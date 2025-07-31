@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Get the major version
-                int majorVersion = GetMajorVersion(commonHeader);
+                int majorVersion = commonHeader.GetMajorVersion();
 
                 #region Volume Header
 
@@ -725,30 +725,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return obj;
         }
-
-        #region Helpers
-
-        /// <summary>
-        /// Get the major version of the cabinet
-        /// </summary>
-        /// <remarks>This should live in the wrapper but is needed during parsing</remarks>
-        public static int GetMajorVersion(CommonHeader commonHeader)
-        {
-            uint majorVersion = commonHeader.Version;
-            if (majorVersion >> 24 == 1)
-            {
-                majorVersion = (majorVersion >> 12) & 0x0F;
-            }
-            else if (majorVersion >> 24 == 2 || majorVersion >> 24 == 4)
-            {
-                majorVersion = majorVersion & 0xFFFF;
-                if (majorVersion != 0)
-                    majorVersion /= 100;
-            }
-
-            return (int)majorVersion;
-        }
-
-        #endregion
     }
 }

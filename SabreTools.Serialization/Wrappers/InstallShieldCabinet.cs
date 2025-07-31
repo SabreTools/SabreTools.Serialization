@@ -64,25 +64,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// The major version of the cabinet
         /// </summary>
-        public int MajorVersion
-        {
-            get
-            {
-                uint majorVersion = Model.CommonHeader?.Version ?? 0;
-                if (majorVersion >> 24 == 1)
-                {
-                    majorVersion = (majorVersion >> 12) & 0x0F;
-                }
-                else if (majorVersion >> 24 == 2 || majorVersion >> 24 == 4)
-                {
-                    majorVersion = majorVersion & 0xFFFF;
-                    if (majorVersion != 0)
-                        majorVersion /= 100;
-                }
-
-                return (int)majorVersion;
-            }
-        }
+        public int MajorVersion => Model.CommonHeader.GetMajorVersion();
 
         #endregion
 
