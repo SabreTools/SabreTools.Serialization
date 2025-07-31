@@ -18,12 +18,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <summary>
-        /// Reference to the next cabinet header
-        /// </summary>
-        /// <remarks>Only used in multi-file</remarks>
-        public InstallShieldCabinet? Next { get; set; }
-
         /// <inheritdoc cref="Cabinet.Components"/>
         public Component[]? Components => Model.Components;
 
@@ -65,6 +59,18 @@ namespace SabreTools.Serialization.Wrappers
         /// The major version of the cabinet
         /// </summary>
         public int MajorVersion => Model.GetMajorVersion();
+
+        /// <summary>
+        /// Reference to the next cabinet header
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public InstallShieldCabinet? Next { get; set; }
+
+        /// <summary>
+        /// Reference to the next previous header
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public InstallShieldCabinet? Prev { get; set; }
 
         #endregion
 
