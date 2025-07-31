@@ -116,7 +116,7 @@ namespace InfoPrint
         {
             Console.WriteLine("Information Printing Program");
             Console.WriteLine();
-            Console.WriteLine("infoprint.exe <options> file|directory ...");
+            Console.WriteLine("InfoPrint <options> file|directory ...");
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("-?, -h, --help           Display this help text and quit");

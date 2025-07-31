@@ -12,6 +12,20 @@ For the most recent stable build, download the latest release here: [Releases Pa
 
 For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/SabreTools.Serialization/releases/tag/rolling)
 
+## InfoPrint
+
+**InfoPrint** is a reference implementation for the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file (.NET Core 3.1 and above only).
+
+```
+InfoPrint <options> file|directory ...
+
+Options:
+-?, -h, --help           Display this help text and quit
+-d, --debug              Enable debug mode
+-c, --hash               Output file hashes
+-j, --json               Print info as JSON
+```
+
 ## Interfaces
 
 Below is a table representing the various conversion interfaces that are implemented within this library.
