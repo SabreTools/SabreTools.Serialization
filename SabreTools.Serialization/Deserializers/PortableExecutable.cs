@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-#if NET35_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-using System.Linq;
-#endif
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
@@ -949,76 +946,58 @@ namespace SabreTools.Serialization.Deserializers
                 // If we have import lookup tables
                 if (importTable.ImportLookupTables != null && importLookupTables.Count > 0)
                 {
-#if NET20
                     var addresses = new List<int>();
                     foreach (var kvp in importTable.ImportLookupTables)
                     {
-                        if (kvp.Value == null)
+                        if (kvp.Value == null || kvp.Value.Length == 0)
                             continue;
 
-                        var vaddrs = Array.ConvertAll(kvp.Value, ilte => ilte == null
-                            ? 0
-                            : (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                             ilte => (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
                         addresses.AddRange(vaddrs);
                     }
-#else
-                    var addresses = importTable.ImportLookupTables
-                        .SelectMany(kvp => kvp.Value ?? [])
-                        .Where(ilte => ilte != null)
-                        .Select(ilte => (int)ilte!.HintNameTableRVA.ConvertVirtualAddress(sections));
-#endif
+
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
                 // If we have import address tables
                 if (importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
                 {
-#if NET20
                     var addresses = new List<int>();
                     foreach (var kvp in importTable.ImportAddressTables)
                     {
-                        if (kvp.Value == null)
+                        if (kvp.Value == null || kvp.Value.Length == 0)
                             continue;
 
-                        var vaddrs = Array.ConvertAll(kvp.Value, iate => iate == null
-                            ? 0
-                            : (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                            iate => (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
                         addresses.AddRange(vaddrs);
                     }
-#else
-                    var addresses = importTable.ImportAddressTables
-                        .SelectMany(kvp => kvp.Value ?? [])
-                        .Where(iate => iate != null)
-                        .Select(iate => (int)iate!.HintNameTableRVA.ConvertVirtualAddress(sections));
-#endif
+
                     hintNameTableEntryAddresses.AddRange(addresses);
                 }
 
                 // Sanitize the addresses
-                hintNameTableEntryAddresses = hintNameTableEntryAddresses.FindAll(addr => addr != 0);
-#if NET20
                 var temp = new List<int>();
-                foreach (int value in hintNameTableEntryAddresses)
+                foreach (int addr in hintNameTableEntryAddresses)
                 {
-                    if (!temp.Contains(value))
-                        temp.Add(value);
+                    if (addr == 0)
+                        continue;
+                    if (temp.Contains(addr))
+                        continue;
+
+                    temp.Add(addr);
                 }
-#else
-                hintNameTableEntryAddresses = hintNameTableEntryAddresses.Distinct().ToList();
-#endif
+
+                // If we have any addresses, add them to the table in order
                 hintNameTableEntryAddresses.Sort();
-
-                // If we have any addresses, add them to the table
-                if (hintNameTableEntryAddresses.Count > 0)
+                for (int i = 0; i < hintNameTableEntryAddresses.Count; i++)
                 {
-                    for (int i = 0; i < hintNameTableEntryAddresses.Count; i++)
-                    {
-                        int hintNameTableEntryAddress = hintNameTableEntryAddresses[i];
-                        data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
+                    int hintNameTableEntryAddress = hintNameTableEntryAddresses[i];
+                    data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
 
-                        var hintNameTableEntry = ParseHintNameTableEntry(data);
-                        importHintNameTable.Add(hintNameTableEntry);
-                    }
+                    var hintNameTableEntry = ParseHintNameTableEntry(data);
+                    importHintNameTable.Add(hintNameTableEntry);
                 }
             }
 
