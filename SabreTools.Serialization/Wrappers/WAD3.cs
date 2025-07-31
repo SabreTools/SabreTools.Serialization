@@ -11,6 +11,13 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.WAD3.File.DirEntries"/>
+        public Models.WAD3.DirEntry[]? DirEntries => Model.DirEntries;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -85,12 +92,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAllLumps(string outputDirectory)
         {
             // If we have no lumps
-            if (Model.DirEntries == null || Model.DirEntries.Length == 0)
+            if (DirEntries == null || DirEntries.Length == 0)
                 return false;
 
             // Loop through and extract all lumps to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.DirEntries.Length; i++)
+            for (int i = 0; i < DirEntries.Length; i++)
             {
                 allExtracted &= ExtractLump(i, outputDirectory);
             }
@@ -107,15 +114,15 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractLump(int index, string outputDirectory)
         {
             // If we have no lumps
-            if (Model.DirEntries == null || Model.DirEntries.Length == 0)
+            if (DirEntries == null || DirEntries.Length == 0)
                 return false;
 
             // If the lumps index is invalid
-            if (index < 0 || index >= Model.DirEntries.Length)
+            if (index < 0 || index >= DirEntries.Length)
                 return false;
 
             // Read the data -- TODO: Handle uncompressed lumps (see BSP.ExtractTexture)
-            var lump = Model.DirEntries[index];
+            var lump = DirEntries[index];
             var data = ReadFromDataSource((int)lump.Offset, (int)lump.Length);
             if (data == null)
                 return false;

@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Get the archive count
                 ushort archiveCount = 0;
-                foreach (var di in Model.DirectoryItems ?? [])
+                foreach (var di in DirectoryItems ?? [])
                 {
                     if (di.DirectoryEntry == null)
                         continue;
@@ -70,6 +70,9 @@ namespace SabreTools.Serialization.Wrappers
                 return _archiveFilenames;
             }
         }
+
+        /// <inheritdoc cref="Models.VPK.File.DirectoryItems"/>
+        public Models.VPK.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
 
         #endregion
 
@@ -156,12 +159,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAll(string outputDirectory)
         {
             // If we have no directory items
-            if (Model.DirectoryItems == null || Model.DirectoryItems.Length == 0)
+            if (DirectoryItems == null || DirectoryItems.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.DirectoryItems.Length; i++)
+            for (int i = 0; i < DirectoryItems.Length; i++)
             {
                 allExtracted &= ExtractFile(i, outputDirectory);
             }
@@ -178,15 +181,15 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory)
         {
             // If we have no directory items
-            if (Model.DirectoryItems == null || Model.DirectoryItems.Length == 0)
+            if (DirectoryItems == null || DirectoryItems.Length == 0)
                 return false;
 
             // If the directory item index is invalid
-            if (index < 0 || index >= Model.DirectoryItems.Length)
+            if (index < 0 || index >= DirectoryItems.Length)
                 return false;
 
             // Get the directory item
-            var directoryItem = Model.DirectoryItems[index];
+            var directoryItem = DirectoryItems[index];
             if (directoryItem.DirectoryEntry == null)
                 return false;
 

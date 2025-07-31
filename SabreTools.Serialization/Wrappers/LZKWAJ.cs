@@ -13,6 +13,22 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="KWAJHeader.CompressionType"/>
+        public KWAJCompressionType CompressionType => Model.Header?.CompressionType ?? KWAJCompressionType.NoCompression;
+
+        /// <inheritdoc cref="KWAJHeader.DataOffset"/>
+        public ushort DataOffset => Model.Header?.DataOffset ?? 0;
+
+        /// <inheritdoc cref="KWAJHeaderExtensions.FileName"/>
+        public string? FileName => Model.HeaderExtensions?.FileName;
+
+        /// <inheritdoc cref="KWAJHeaderExtensions.FileExtension"/>
+        public string? FileExtension => Model.HeaderExtensions?.FileExtension;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -87,17 +103,17 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory)
         {
             // Get the length of the compressed data
-            long compressedSize = Length - Model.Header!.DataOffset;
-            if (compressedSize < Model.Header.DataOffset)
+            long compressedSize = Length - DataOffset;
+            if (compressedSize < DataOffset)
                 return false;
 
             // Read in the data as an array
-            byte[]? contents = ReadFromDataSource(Model.Header.DataOffset, (int)compressedSize);
+            byte[]? contents = ReadFromDataSource(DataOffset, (int)compressedSize);
             if (contents == null)
                 return false;
 
             // Get the decompressor
-            var decompressor = Decompressor.CreateKWAJ(contents, Model.Header!.CompressionType);
+            var decompressor = Decompressor.CreateKWAJ(contents, CompressionType);
             if (decompressor == null)
                 return false;
 
@@ -106,11 +122,9 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Create the full output path
-            string filename = "tempfile";
-            if (Model.HeaderExtensions?.FileName != null)
-                filename = Model.HeaderExtensions.FileName;
-            if (Model.HeaderExtensions?.FileExtension != null)
-                filename += $".{Model.HeaderExtensions.FileExtension}";
+            string filename = FileName ?? "tempfile";
+            if (FileExtension != null)
+                filename += $".{FileExtension}";
 
             // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')

@@ -52,24 +52,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <summary>
-        /// CHD version
-        /// </summary>
-        public int Version
-        {
-            get
-            {
-                return Model switch
-                {
-                    HeaderV1 => 1,
-                    HeaderV2 => 2,
-                    HeaderV3 => 3,
-                    HeaderV4 => 4,
-                    HeaderV5 => 5,
-                    _ => 0,
-                };
-            }
-        }
+        /// <inheritdoc cref="Header.Version"/>
+        public uint Version => Model.Version;
 
         #endregion
 

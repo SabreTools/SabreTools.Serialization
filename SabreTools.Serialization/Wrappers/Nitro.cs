@@ -19,6 +19,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Cart.CommonHeader"/>
         public CommonHeader? CommonHeader => Model.CommonHeader;
 
+        /// <inheritdoc cref="CommonHeader.GameCode"/>
+        public uint GameCode => Model.CommonHeader?.GameCode ?? 0;
+
+        /// <inheritdoc cref="Cart.SecureArea"/>
+        public byte[]? SecureArea => Model.SecureArea;
+
         #endregion
 
         #region Encryption process variables
@@ -138,15 +144,15 @@ namespace SabreTools.Serialization.Wrappers
         private void EncryptARM9(byte[] tableData)
         {
             // If the secure area is invalid, nothing can be done
-            if (Model.SecureArea == null)
+            if (SecureArea == null)
                 return;
 
             // Point to the beginning of the secure area
             int readOffset = 0;
 
             // Grab the first two blocks
-            uint p0 = Model.SecureArea.ReadUInt32(ref readOffset);
-            uint p1 = Model.SecureArea.ReadUInt32(ref readOffset);
+            uint p0 = SecureArea.ReadUInt32(ref readOffset);
+            uint p1 = SecureArea.ReadUInt32(ref readOffset);
 
             // Perform the initialization steps
             Init1(tableData);
@@ -162,13 +168,13 @@ namespace SabreTools.Serialization.Wrappers
             uint size = 0x800 - 8;
             while (size > 0)
             {
-                p0 = Model.SecureArea.ReadUInt32(ref readOffset);
-                p1 = Model.SecureArea.ReadUInt32(ref readOffset);
+                p0 = SecureArea.ReadUInt32(ref readOffset);
+                p1 = SecureArea.ReadUInt32(ref readOffset);
 
                 Encrypt(ref p1, ref p0);
 
-                Model.SecureArea.Write(ref writeOffset, p0);
-                Model.SecureArea.Write(ref writeOffset, p1);
+                SecureArea.Write(ref writeOffset, p0);
+                SecureArea.Write(ref writeOffset, p1);
 
                 size -= 8;
             }
@@ -177,8 +183,8 @@ namespace SabreTools.Serialization.Wrappers
             readOffset = 0;
             writeOffset = 0;
 
-            p0 = Model.SecureArea.ReadUInt32(ref readOffset);
-            p1 = Model.SecureArea.ReadUInt32(ref readOffset);
+            p0 = SecureArea.ReadUInt32(ref readOffset);
+            p1 = SecureArea.ReadUInt32(ref readOffset);
 
             if (p0 == 0xE7FFDEFF && p1 == 0xE7FFDEFF)
             {
@@ -190,8 +196,8 @@ namespace SabreTools.Serialization.Wrappers
             Init1(tableData);
             Encrypt(ref p1, ref p0);
 
-            Model.SecureArea.Write(ref writeOffset, p0);
-            Model.SecureArea.Write(ref writeOffset, p1);
+            SecureArea.Write(ref writeOffset, p0);
+            SecureArea.Write(ref writeOffset, p1);
         }
 
         /// <summary>
@@ -260,7 +266,7 @@ namespace SabreTools.Serialization.Wrappers
         private void DecryptARM9(byte[] tableData)
         {
             // If the secure area is invalid, nothing can be done
-            if (Model.SecureArea == null)
+            if (SecureArea == null)
                 return;
 
             // Point to the beginning of the secure area
@@ -268,8 +274,8 @@ namespace SabreTools.Serialization.Wrappers
             int writeOffset = 0;
 
             // Grab the first two blocks
-            uint p0 = Model.SecureArea.ReadUInt32(ref readOffset);
-            uint p1 = Model.SecureArea.ReadUInt32(ref readOffset);
+            uint p0 = SecureArea.ReadUInt32(ref readOffset);
+            uint p1 = SecureArea.ReadUInt32(ref readOffset);
 
             // Perform the initialization steps
             Init1(tableData);
@@ -286,8 +292,8 @@ namespace SabreTools.Serialization.Wrappers
                 p1 = 0xE7FFDEFF;
             }
 
-            Model.SecureArea.Write(ref writeOffset, p0);
-            Model.SecureArea.Write(ref writeOffset, p1);
+            SecureArea.Write(ref writeOffset, p0);
+            SecureArea.Write(ref writeOffset, p1);
 
             // Ensure alignment
             readOffset = 0x08;
@@ -297,13 +303,13 @@ namespace SabreTools.Serialization.Wrappers
             uint size = 0x800 - 8;
             while (size > 0)
             {
-                p0 = Model.SecureArea.ReadUInt32(ref readOffset);
-                p1 = Model.SecureArea.ReadUInt32(ref readOffset);
+                p0 = SecureArea.ReadUInt32(ref readOffset);
+                p1 = SecureArea.ReadUInt32(ref readOffset);
 
                 Decrypt(ref p1, ref p0);
 
-                Model.SecureArea.Write(ref writeOffset, p0);
-                Model.SecureArea.Write(ref writeOffset, p1);
+                SecureArea.Write(ref writeOffset, p0);
+                SecureArea.Write(ref writeOffset, p1);
 
                 size -= 8;
             }
@@ -341,15 +347,15 @@ namespace SabreTools.Serialization.Wrappers
         public bool? CheckIfDecrypted(out string? message)
         {
             // Return empty if the secure area is undefined
-            if (Model.SecureArea == null)
+            if (SecureArea == null)
             {
                 message = "Secure area is undefined. Cannot be encrypted or decrypted.";
                 return null;
             }
 
             int offset = 0;
-            uint firstValue = Model.SecureArea.ReadUInt32(ref offset);
-            uint secondValue = Model.SecureArea.ReadUInt32(ref offset);
+            uint firstValue = SecureArea.ReadUInt32(ref offset);
+            uint secondValue = SecureArea.ReadUInt32(ref offset);
 
             // Empty secure area standard
             if (firstValue == 0x00000000 && secondValue == 0x00000000)
@@ -439,7 +445,7 @@ namespace SabreTools.Serialization.Wrappers
         private void Init1(byte[] tableData)
         {
             Buffer.BlockCopy(tableData, 0, _cardHash, 0, 4 * (1024 + 18));
-            _arg2 = [Model.CommonHeader!.GameCode, Model.CommonHeader.GameCode >> 1, Model.CommonHeader.GameCode << 1];
+            _arg2 = [GameCode, GameCode >> 1, GameCode << 1];
             Init2();
             Init2();
         }

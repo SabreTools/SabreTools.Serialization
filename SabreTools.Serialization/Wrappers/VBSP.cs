@@ -12,6 +12,13 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="VbspHeader.Lumps"/>
+        public VbspLumpEntry[]? Lumps => Model.Header?.Lumps;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -86,12 +93,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAllLumps(string outputDirectory)
         {
             // If we have no lumps
-            if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
+            if (Lumps == null || Lumps.Length == 0)
                 return false;
 
             // Loop through and extract all lumps to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.Header.Lumps.Length; i++)
+            for (int i = 0; i < Lumps.Length; i++)
             {
                 allExtracted &= ExtractLump(i, outputDirectory);
             }
@@ -108,15 +115,15 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractLump(int index, string outputDirectory)
         {
             // If we have no lumps
-            if (Model.Header?.Lumps == null || Model.Header.Lumps.Length == 0)
+            if (Lumps == null || Lumps.Length == 0)
                 return false;
 
             // If the lumps index is invalid
-            if (index < 0 || index >= Model.Header.Lumps.Length)
+            if (index < 0 || index >= Lumps.Length)
                 return false;
 
             // Read the data
-            var lump = Model.Header.Lumps[index];
+            var lump = Lumps[index];
             var data = ReadFromDataSource(lump.Offset, lump.Length);
             if (data == null)
                 return false;

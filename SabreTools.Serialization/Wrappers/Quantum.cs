@@ -12,6 +12,22 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Archive.CompressedDataOffset"/>
+        public long CompressedDataOffset => Model.CompressedDataOffset;
+
+        /// <inheritdoc cref="Header.FileCount"/>
+        public ushort FileCount => Model.Header?.FileCount ?? 0;
+
+        /// <inheritdoc cref="Archive.FileList"/>
+        public FileDescriptor[] FileList => Model.FileList ?? [];
+
+        /// <inheritdoc cref="Archive.Header"/>
+        public Header? Header => Model.Header;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -76,19 +92,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Extension Properties
-
-        /// <inheritdoc cref="Archive.CompressedDataOffset"/>
-        public long CompressedDataOffset => Model.CompressedDataOffset;
-
-        /// <inheritdoc cref="Header.FileCount"/>
-        public ushort FileCount => Model.Header?.FileCount ?? 0;
-
-        /// <inheritdoc cref="Archive.FileList"/>
-        public FileDescriptor[] FileList => Model.FileList ?? [];
-
-        #endregion
-
         #region Extraction
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory)
         {
             // If we have no files
-            if (Model.Header == null || FileCount == 0 || FileList == null || FileList.Length == 0)
+            if (Header == null || FileCount == 0 || FileList == null || FileList.Length == 0)
                 return false;
 
             // If we have an invalid index

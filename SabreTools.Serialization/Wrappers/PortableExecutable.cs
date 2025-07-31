@@ -21,100 +21,32 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <summary>
-        /// Header padding data, if it exists
+        /// Dictionary of debug data
         /// </summary>
-        public byte[]? HeaderPaddingData
+        public Dictionary<int, object>? DebugData
         {
             get
             {
                 lock (_sourceDataLock)
                 {
-                    // If we already have cached data, just use that immediately
-                    if (_headerPaddingData != null)
-                        return _headerPaddingData;
+                    // Use the cached data if possible
+                    if (_debugData != null && _debugData.Count != 0)
+                        return _debugData;
 
-                    // TODO: Don't scan the known header data as well
+                    // If we have no resource table, just return
+                    if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
+                        return null;
 
-                    // If any required pieces are missing
-                    if (Model.Stub?.Header == null)
-                        return [];
-                    if (Model.SectionTable == null)
-                        return [];
-
-                    // Populate the raw header padding data based on the source
-                    uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = uint.MaxValue;
-                    foreach (var s in Model.SectionTable)
-                    {
-                        if (s == null || s.PointerToRawData == 0)
-                            continue;
-                        if (s.PointerToRawData < headerStartAddress)
-                            continue;
-
-                        if (s.PointerToRawData < firstSectionAddress)
-                            firstSectionAddress = s.PointerToRawData;
-                    }
-
-                    // Check if the header length is more than 0 before reading data
-                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
-                    if (headerLength <= 0)
-                        _headerPaddingData = [];
-                    else
-                        _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
-
-                    // Cache and return the header padding data, even if null
-                    return _headerPaddingData;
+                    // Otherwise, build and return the cached dictionary
+                    ParseDebugTable();
+                    return _debugData;
                 }
             }
         }
 
-        /// <summary>
-        /// Header padding strings, if they exist
-        /// </summary>
-        public List<string>? HeaderPaddingStrings
-        {
-            get
-            {
-                lock (_sourceDataLock)
-                {
-                    // If we already have cached data, just use that immediately
-                    if (_headerPaddingStrings != null)
-                        return _headerPaddingStrings;
-
-                    // TODO: Don't scan the known header data as well
-
-                    // If any required pieces are missing
-                    if (Model.Stub?.Header == null)
-                        return [];
-                    if (Model.SectionTable == null)
-                        return [];
-
-                    // Populate the header padding strings based on the source
-                    uint headerStartAddress = Model.Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = uint.MaxValue;
-                    foreach (var s in Model.SectionTable)
-                    {
-                        if (s == null || s.PointerToRawData == 0)
-                            continue;
-                        if (s.PointerToRawData < headerStartAddress)
-                            continue;
-
-                        if (s.PointerToRawData < firstSectionAddress)
-                            firstSectionAddress = s.PointerToRawData;
-                    }
-
-                    // Check if the header length is more than 0 before reading strings
-                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
-                    if (headerLength <= 0)
-                        _headerPaddingStrings = [];
-                    else
-                        _headerPaddingStrings = ReadStringsFromDataSource((int)headerStartAddress, headerLength, charLimit: 3);
-
-                    // Cache and return the header padding data, even if null
-                    return _headerPaddingStrings;
-                }
-            }
-        }
+        /// <inheritdoc cref="Models.PortableExecutable.DebugTable.DebugDirectoryTable"/>
+        public Models.PortableExecutable.DebugDirectoryEntry[]? DebugDirectoryTable
+            => Model.DebugTable?.DebugDirectoryTable;
 
         /// <summary>
         /// Entry point data, if it exists
@@ -155,6 +87,105 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         }
+
+        /// <summary>
+        /// Header padding data, if it exists
+        /// </summary>
+        public byte[]? HeaderPaddingData
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_headerPaddingData != null)
+                        return _headerPaddingData;
+
+                    // TODO: Don't scan the known header data as well
+
+                    // If any required pieces are missing
+                    if (Stub?.Header == null)
+                        return [];
+                    if (SectionTable == null)
+                        return [];
+
+                    // Populate the raw header padding data based on the source
+                    uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
+                    uint firstSectionAddress = uint.MaxValue;
+                    foreach (var s in SectionTable)
+                    {
+                        if (s == null || s.PointerToRawData == 0)
+                            continue;
+                        if (s.PointerToRawData < headerStartAddress)
+                            continue;
+
+                        if (s.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = s.PointerToRawData;
+                    }
+
+                    // Check if the header length is more than 0 before reading data
+                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
+                    if (headerLength <= 0)
+                        _headerPaddingData = [];
+                    else
+                        _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
+
+                    // Cache and return the header padding data, even if null
+                    return _headerPaddingData;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Header padding strings, if they exist
+        /// </summary>
+        public List<string>? HeaderPaddingStrings
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_headerPaddingStrings != null)
+                        return _headerPaddingStrings;
+
+                    // TODO: Don't scan the known header data as well
+
+                    // If any required pieces are missing
+                    if (Stub?.Header == null)
+                        return [];
+                    if (SectionTable == null)
+                        return [];
+
+                    // Populate the header padding strings based on the source
+                    uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
+                    uint firstSectionAddress = uint.MaxValue;
+                    foreach (var s in SectionTable)
+                    {
+                        if (s == null || s.PointerToRawData == 0)
+                            continue;
+                        if (s.PointerToRawData < headerStartAddress)
+                            continue;
+
+                        if (s.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = s.PointerToRawData;
+                    }
+
+                    // Check if the header length is more than 0 before reading strings
+                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
+                    if (headerLength <= 0)
+                        _headerPaddingStrings = [];
+                    else
+                        _headerPaddingStrings = ReadStringsFromDataSource((int)headerStartAddress, headerLength, charLimit: 3);
+
+                    // Cache and return the header padding data, even if null
+                    return _headerPaddingStrings;
+                }
+            }
+        }
+
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.OptionalHeader"/>
+        public Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -426,6 +457,12 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.SectionTable"/>
+        public Models.PortableExecutable.SectionHeader[]? SectionTable => Model.SectionTable;
+
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.Stub"/>
+        public Models.MSDOS.Executable? Stub => Model.Stub;
+
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
@@ -439,41 +476,16 @@ namespace SabreTools.Serialization.Wrappers
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
 
-                    if (Model.Stub?.Header?.NewExeHeaderAddr == null)
+                    if (Stub?.Header?.NewExeHeaderAddr == null)
                         return null;
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
-                    int lengthOfStubExecutableData = (int)Model.Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
                     _stubExecutableData = ReadFromDataSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
                     return _stubExecutableData;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Dictionary of debug data
-        /// </summary>
-        public Dictionary<int, object>? DebugData
-        {
-            get
-            {
-                lock (_sourceDataLock)
-                {
-                    // Use the cached data if possible
-                    if (_debugData != null && _debugData.Count != 0)
-                        return _debugData;
-
-                    // If we have no resource table, just return
-                    if (Model.DebugTable?.DebugDirectoryTable == null
-                        || Model.DebugTable.DebugDirectoryTable.Length == 0)
-                        return null;
-
-                    // Otherwise, build and return the cached dictionary
-                    ParseDebugTable();
-                    return _debugData;
                 }
             }
         }
@@ -1003,13 +1015,13 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseDebugTable()
         {
             // If there is no debug table
-            if (Model.DebugTable?.DebugDirectoryTable == null)
+            if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
                 return;
 
             // Loop through all debug table entries
-            for (int i = 0; i < Model.DebugTable.DebugDirectoryTable.Length; i++)
+            for (int i = 0; i < DebugDirectoryTable.Length; i++)
             {
-                var entry = Model.DebugTable.DebugDirectoryTable[i];
+                var entry = DebugDirectoryTable[i];
                 uint address = entry.PointerToRawData;
                 uint size = entry.SizeOfData;
 
@@ -1446,19 +1458,19 @@ namespace SabreTools.Serialization.Wrappers
         public int FindEntryPointSectionIndex()
         {
             // If the section table is missing
-            if (Model.SectionTable == null)
+            if (SectionTable == null)
                 return -1;
 
             // If the address is missing
-            if (Model.OptionalHeader?.AddressOfEntryPoint == null)
+            if (OptionalHeader?.AddressOfEntryPoint == null)
                 return -1;
 
             // If we don't have an entry point
-            if (Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(Model.SectionTable) == 0)
+            if (OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable) == 0)
                 return -1;
 
             // Otherwise, find the section it exists within
-            return Model.OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(Model.SectionTable);
+            return OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(SectionTable);
         }
 
         /// <summary>
@@ -1470,7 +1482,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1483,7 +1495,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Return the section
-            return Model.SectionTable[index];
+            return SectionTable[index];
         }
 
         /// <summary>
@@ -1495,7 +1507,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1508,7 +1520,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Return the section
-            return Model.SectionTable[index];
+            return SectionTable[index];
         }
 
         /// <summary>
@@ -1519,15 +1531,15 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetSection(int index)
         {
             // If we have no sections
-            if (Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= Model.SectionTable.Length)
+            if (index < 0 || index >= SectionTable.Length)
                 return null;
 
             // Return the section
-            return Model.SectionTable[index];
+            return SectionTable[index];
         }
 
         /// <summary>
@@ -1539,7 +1551,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1560,7 +1572,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetLastSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1580,19 +1592,19 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetSectionData(int index)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= Model.SectionTable.Length)
+            if (index < 0 || index >= SectionTable.Length)
                 return null;
 
             // Get the section data from the table
-            var section = Model.SectionTable[index];
+            var section = SectionTable[index];
             if (section == null)
                 return null;
 
-            uint address = section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+            uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
             if (address == 0)
                 return null;
 
@@ -1625,7 +1637,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1646,7 +1658,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1666,19 +1678,19 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetSectionStrings(int index)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || Model.SectionTable == null || Model.SectionTable.Length == 0)
+            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
-            if (index < 0 || index >= Model.SectionTable.Length)
+            if (index < 0 || index >= SectionTable.Length)
                 return null;
 
             // Get the section data from the table
-            var section = Model.SectionTable[index];
+            var section = SectionTable[index];
             if (section == null)
                 return null;
 
-            uint address = section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+            uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
             if (address == 0)
                 return null;
 
@@ -1707,6 +1719,41 @@ namespace SabreTools.Serialization.Wrappers
         #region Tables
 
         /// <summary>
+        /// Get the table based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the table to check for</param>
+        /// <returns>Table on success, null on error</returns>
+        public Models.PortableExecutable.DataDirectory? GetTable(int index)
+        {
+            // If the table doesn't exist
+            if (OptionalHeader == null || index < 0 || index > 16)
+                return null;
+
+            return index switch
+            {
+                1 => OptionalHeader.ExportTable,
+                2 => OptionalHeader.ImportTable,
+                3 => OptionalHeader.ResourceTable,
+                4 => OptionalHeader.ExceptionTable,
+                5 => OptionalHeader.CertificateTable,
+                6 => OptionalHeader.BaseRelocationTable,
+                7 => OptionalHeader.Debug,
+                8 => null, // Architecture Table
+                9 => OptionalHeader.GlobalPtr,
+                10 => OptionalHeader.ThreadLocalStorageTable,
+                11 => OptionalHeader.LoadConfigTable,
+                12 => OptionalHeader.BoundImport,
+                13 => OptionalHeader.ImportAddressTable,
+                14 => OptionalHeader.DelayImportDescriptor,
+                15 => OptionalHeader.CLRRuntimeHeader,
+                16 => null, // Reserved
+
+                // Should never be possible
+                _ => null,
+            };
+        }
+
+        /// <summary>
         /// Get the table data based on index, if possible
         /// </summary>
         /// <param name="index">Index of the table to check for</param>
@@ -1714,85 +1761,22 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetTableData(int index)
         {
             // If the table doesn't exist
-            if (Model.OptionalHeader == null || index < 0 || index > 16)
+            if (OptionalHeader == null || index < 0 || index > 16)
                 return null;
 
+            // Get the table from the optional header
+            var table = GetTable(index);
+
             // Get the virtual address and size from the entries
-            uint virtualAddress = 0, size = 0;
-            switch (index)
-            {
-                case 1:
-                    virtualAddress = Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ExportTable?.Size ?? 0;
-                    break;
-                case 2:
-                    virtualAddress = Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ImportTable?.Size ?? 0;
-                    break;
-                case 3:
-                    virtualAddress = Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ResourceTable?.Size ?? 0;
-                    break;
-                case 4:
-                    virtualAddress = Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ExceptionTable?.Size ?? 0;
-                    break;
-                case 5:
-                    virtualAddress = Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.CertificateTable?.Size ?? 0;
-                    break;
-                case 6:
-                    virtualAddress = Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
-                    break;
-                case 7:
-                    virtualAddress = Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.Debug?.Size ?? 0;
-                    break;
-                case 8: // Architecture Table
-                    virtualAddress = 0;
-                    size = 0;
-                    break;
-                case 9:
-                    virtualAddress = Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.GlobalPtr?.Size ?? 0;
-                    break;
-                case 10:
-                    virtualAddress = Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
-                    break;
-                case 11:
-                    virtualAddress = Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
-                    break;
-                case 12:
-                    virtualAddress = Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.BoundImport?.Size ?? 0;
-                    break;
-                case 13:
-                    virtualAddress = Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
-                    break;
-                case 14:
-                    virtualAddress = Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
-                    break;
-                case 15:
-                    virtualAddress = Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
-                    break;
-                case 16: // Reserved
-                    virtualAddress = 0;
-                    size = 0;
-                    break;
-            }
+            uint virtualAddress = table?.VirtualAddress ?? 0;
+            uint size = table?.Size ?? 0;
 
             // If there is  no section table
-            if (Model.SectionTable == null)
+            if (SectionTable == null)
                 return null;
 
             // Get the physical address from the virtual one
-            uint address = virtualAddress.ConvertVirtualAddress(Model.SectionTable);
+            uint address = virtualAddress.ConvertVirtualAddress(SectionTable);
             if (address == 0 || size == 0)
                 return null;
 
@@ -1822,85 +1806,22 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetTableStrings(int index)
         {
             // If the table doesn't exist
-            if (Model.OptionalHeader == null || index < 0 || index > 16)
+            if (OptionalHeader == null || index < 0 || index > 16)
                 return null;
 
+            // Get the table from the optional header
+            var table = GetTable(index);
+
             // Get the virtual address and size from the entries
-            uint virtualAddress = 0, size = 0;
-            switch (index)
-            {
-                case 1:
-                    virtualAddress = Model.OptionalHeader.ExportTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ExportTable?.Size ?? 0;
-                    break;
-                case 2:
-                    virtualAddress = Model.OptionalHeader.ImportTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ImportTable?.Size ?? 0;
-                    break;
-                case 3:
-                    virtualAddress = Model.OptionalHeader.ResourceTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ResourceTable?.Size ?? 0;
-                    break;
-                case 4:
-                    virtualAddress = Model.OptionalHeader.ExceptionTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ExceptionTable?.Size ?? 0;
-                    break;
-                case 5:
-                    virtualAddress = Model.OptionalHeader.CertificateTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.CertificateTable?.Size ?? 0;
-                    break;
-                case 6:
-                    virtualAddress = Model.OptionalHeader.BaseRelocationTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.BaseRelocationTable?.Size ?? 0;
-                    break;
-                case 7:
-                    virtualAddress = Model.OptionalHeader.Debug?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.Debug?.Size ?? 0;
-                    break;
-                case 8: // Architecture Table
-                    virtualAddress = 0;
-                    size = 0;
-                    break;
-                case 9:
-                    virtualAddress = Model.OptionalHeader.GlobalPtr?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.GlobalPtr?.Size ?? 0;
-                    break;
-                case 10:
-                    virtualAddress = Model.OptionalHeader.ThreadLocalStorageTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ThreadLocalStorageTable?.Size ?? 0;
-                    break;
-                case 11:
-                    virtualAddress = Model.OptionalHeader.LoadConfigTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.LoadConfigTable?.Size ?? 0;
-                    break;
-                case 12:
-                    virtualAddress = Model.OptionalHeader.BoundImport?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.BoundImport?.Size ?? 0;
-                    break;
-                case 13:
-                    virtualAddress = Model.OptionalHeader.ImportAddressTable?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.ImportAddressTable?.Size ?? 0;
-                    break;
-                case 14:
-                    virtualAddress = Model.OptionalHeader.DelayImportDescriptor?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.DelayImportDescriptor?.Size ?? 0;
-                    break;
-                case 15:
-                    virtualAddress = Model.OptionalHeader.CLRRuntimeHeader?.VirtualAddress ?? 0;
-                    size = Model.OptionalHeader.CLRRuntimeHeader?.Size ?? 0;
-                    break;
-                case 16: // Reserved
-                    virtualAddress = 0;
-                    size = 0;
-                    break;
-            }
+            uint virtualAddress = table?.VirtualAddress ?? 0;
+            uint size = table?.Size ?? 0;
 
             // If there is  no section table
-            if (Model.SectionTable == null)
+            if (SectionTable == null)
                 return null;
 
             // Get the physical address from the virtual one
-            uint address = virtualAddress.ConvertVirtualAddress(Model.SectionTable);
+            uint address = virtualAddress.ConvertVirtualAddress(SectionTable);
             if (address == 0 || size == 0)
                 return null;
 

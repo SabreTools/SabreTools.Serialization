@@ -391,10 +391,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Ordered list of sector numbers, null on error</returns>
         public byte[]? GetMiniFATSectorChainData(SectorNumber startingSector)
         {
-            // Ignore invalid data
-            if (Model?.Header == null)
-                return null;
-
             // Validate the mini stream data
             if (MiniStreamData == null)
                 return null;

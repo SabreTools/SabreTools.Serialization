@@ -24,20 +24,32 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>Only used in multi-file</remarks>
         public InstallShieldCabinet? Next { get; set; }
 
+        /// <inheritdoc cref="Cabinet.Components"/>
+        public Component[]? Components => Model.Components;
+
         /// <summary>
         /// Number of components in the cabinet set
         /// </summary>
-        public int ComponentCount => Model.Components?.Length ?? 0;
+        public int ComponentCount => Components?.Length ?? 0;
 
         /// <summary>
         /// Number of directories in the cabinet set
         /// </summary>
         public ushort DirectoryCount => Model.Descriptor?.DirectoryCount ?? 0;
 
+        /// <inheritdoc cref="Cabinet.DirectoryNames"/>
+        public string[]? DirectoryNames => Model.DirectoryNames;
+
         /// <summary>
         /// Number of files in the cabinet set
         /// </summary>
         public uint FileCount => Model.Descriptor?.FileCount ?? 0;
+
+        /// <inheritdoc cref="Cabinet.FileDescriptors"/>
+        public FileDescriptor[]? FileDescriptors => Model.FileDescriptors;
+
+        /// <inheritdoc cref="Cabinet.FileGroups"/>
+        public FileGroup[]? FileGroups => Model.FileGroups;
 
         /// <summary>
         /// Number of file groups in the cabinet set
@@ -249,13 +261,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public string? GetComponentName(int index)
         {
-            if (Model.Components == null)
+            if (Components == null)
                 return null;
 
-            if (index < 0 || index >= Model.Components.Length)
+            if (index < 0 || index >= ComponentCount)
                 return null;
 
-            var component = Model.Components[index];
+            var component = Components[index];
             if (component?.Identifier == null)
                 return null;
 
@@ -271,13 +283,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public string? GetDirectoryName(int index)
         {
-            if (Model.DirectoryNames == null)
+            if (DirectoryNames == null)
                 return null;
 
-            if (index < 0 || index >= Model.DirectoryNames.Length)
+            if (index < 0 || index >= DirectoryNames.Length)
                 return null;
 
-            return Model.DirectoryNames[index];
+            return DirectoryNames[index];
         }
 
         /// <summary>
@@ -302,10 +314,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public bool FileIsValid(int index)
         {
-            if (Model.Descriptor == null)
-                return false;
-
-            if (index < 0 || index > Model.Descriptor.FileCount)
+            if (index < 0 || index > FileCount)
                 return false;
 
             FileDescriptor? descriptor = GetFileDescriptor(index);
@@ -345,13 +354,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileDescriptor? GetFileDescriptor(int index)
         {
-            if (Model.FileDescriptors == null)
+            if (FileDescriptors == null)
                 return null;
 
-            if (index < 0 || index >= Model.FileDescriptors.Length)
+            if (index < 0 || index >= FileDescriptors.Length)
                 return null;
 
-            return Model.FileDescriptors[index];
+            return FileDescriptors[index];
         }
 
         /// <summary>
@@ -424,13 +433,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileGroup? GetFileGroup(int index)
         {
-            if (Model.FileGroups == null)
+            if (FileGroups == null)
                 return null;
 
-            if (index < 0 || index >= Model.FileGroups.Length)
+            if (index < 0 || index >= FileGroups.Length)
                 return null;
 
-            return Model.FileGroups[index];
+            return FileGroups[index];
         }
 
         /// <summary>
@@ -438,10 +447,10 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileGroup? GetFileGroup(string name)
         {
-            if (Model.FileGroups == null)
+            if (FileGroups == null)
                 return null;
 
-            return Array.Find(Model.FileGroups, fg => fg != null && string.Equals(fg.Name, name));
+            return Array.Find(FileGroups, fg => fg != null && string.Equals(fg.Name, name));
         }
 
         /// <summary>
@@ -449,7 +458,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileGroup? GetFileGroupFromFile(int index)
         {
-            if (Model.FileGroups == null)
+            if (FileGroups == null)
                 return null;
 
             if (index < 0 || index >= FileCount)

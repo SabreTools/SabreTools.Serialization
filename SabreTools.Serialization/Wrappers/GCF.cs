@@ -143,6 +143,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        /// <inheritdoc cref="Models.GCF.DataBlockHeader.BlockSize"/>
+        public uint BlockSize => Model.DataBlockHeader?.BlockSize ?? 0;
+
         #endregion
 
         #region Instance Variables
@@ -283,7 +286,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     long dataBlockOffset = DataBlockOffsets[dataBlockIndex++];
                     dataBlockOffsets.Add(dataBlockOffset);
-                    blockEntrySize -= Model.DataBlockHeader?.BlockSize ?? 0;
+                    blockEntrySize -= BlockSize;
                 }
             }
 
@@ -314,7 +317,7 @@ namespace SabreTools.Serialization.Wrappers
                 long fileSize = file.Size;
                 for (int i = 0; i < dataBlockOffsets.Count; i++)
                 {
-                    int readSize = (int)Math.Min(Model.DataBlockHeader?.BlockSize ?? 0, fileSize);
+                    int readSize = (int)Math.Min(BlockSize, fileSize);
                     var data = ReadFromDataSource((int)dataBlockOffsets[i], readSize);
                     if (data == null)
                         return false;

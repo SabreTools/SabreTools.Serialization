@@ -13,6 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="SZDDHeader.LastChar"/>
+        public char LastChar => Model.Header?.LastChar ?? '\0';
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -151,7 +158,7 @@ namespace SabreTools.Serialization.Wrappers
             if (extension.Length == 1)
             {
                 if (extension == "_" || extension == "$")
-                    return $"{Path.GetFileNameWithoutExtension(input)}.{char.ToLower(Model.Header!.LastChar)}";
+                    return $"{Path.GetFileNameWithoutExtension(input)}.{char.ToLower(LastChar)}";
 
                 return Path.GetFileNameWithoutExtension(input);
             }
@@ -161,7 +168,7 @@ namespace SabreTools.Serialization.Wrappers
                 return Path.GetFileNameWithoutExtension(input);
 
             // Handle replacing characters
-            char c = (char.IsUpper(input[0]) ? char.ToLower(Model.Header!.LastChar) : char.ToUpper(Model.Header!.LastChar));
+            char c = (char.IsUpper(input[0]) ? char.ToLower(LastChar) : char.ToUpper(LastChar));
             string text2 = extension.Substring(0, extension.Length - 1) + c;
             return Path.GetFileNameWithoutExtension(input) + "." + text2;
         }

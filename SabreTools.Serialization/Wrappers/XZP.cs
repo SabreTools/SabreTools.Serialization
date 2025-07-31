@@ -12,6 +12,16 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Models.XZP.File.DirectoryEntries"/>
+        public Models.XZP.DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
+
+        /// <inheritdoc cref="Models.XZP.File.DirectoryItems"/>
+        public Models.XZP.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
@@ -86,12 +96,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractAll(string outputDirectory)
         {
             // If we have no directory entries
-            if (Model.DirectoryEntries == null || Model.DirectoryEntries.Length == 0)
+            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
             bool allExtracted = true;
-            for (int i = 0; i < Model.DirectoryEntries.Length; i++)
+            for (int i = 0; i < DirectoryEntries.Length; i++)
             {
                 allExtracted &= ExtractFile(i, outputDirectory);
             }
@@ -108,20 +118,20 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory)
         {
             // If we have no directory entries
-            if (Model.DirectoryEntries == null || Model.DirectoryEntries.Length == 0)
+            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
                 return false;
 
             // If we have no directory items
-            if (Model.DirectoryItems == null || Model.DirectoryItems.Length == 0)
+            if (DirectoryItems == null || DirectoryItems.Length == 0)
                 return false;
 
             // If the directory entry index is invalid
-            if (index < 0 || index >= Model.DirectoryEntries.Length)
+            if (index < 0 || index >= DirectoryEntries.Length)
                 return false;
 
             // Get the associated directory item
-            var directoryEntry = Model.DirectoryEntries[index];
-            var directoryItem = Array.Find(Model.DirectoryItems, di => di?.FileNameCRC == directoryEntry.FileNameCRC);
+            var directoryEntry = DirectoryEntries[index];
+            var directoryItem = Array.Find(DirectoryItems, di => di?.FileNameCRC == directoryEntry.FileNameCRC);
             if (directoryItem == null)
                 return false;
 
