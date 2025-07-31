@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
 using SabreTools.Serialization.Wrappers;
@@ -24,9 +26,9 @@ namespace InfoPrint
             foreach (string inputPath in options.InputPaths)
             {
 #if NETFRAMEWORK || NETSTANDARD2_0_OR_GREATER
-                PrintPathInfo(inputPath, false, options.Debug);
+                PrintPathInfo(inputPath, false, options.Debug, options.Hash);
 #else
-                PrintPathInfo(inputPath, options.Json, options.Debug);
+                PrintPathInfo(inputPath, options.Json, options.Debug, options.Hash);
 #endif
             }
         }
@@ -37,20 +39,21 @@ namespace InfoPrint
         /// <param name="path">File or directory path</param>
         /// <param name="json">Enable JSON output, if supported</param>
         /// <param name="debug">Enable debug output</param>
-        private static void PrintPathInfo(string path, bool json, bool debug)
+        /// <param name="hash">Enable hash output</param>
+        private static void PrintPathInfo(string path, bool json, bool debug, bool hash)
         {
             Console.WriteLine($"Checking possible path: {path}");
 
             // Check if the file or directory exists
             if (File.Exists(path))
             {
-                PrintFileInfo(path, json, debug);
+                PrintFileInfo(path, json, debug, hash);
             }
             else if (Directory.Exists(path))
             {
                 foreach (string file in IOExtensions.SafeEnumerateFiles(path, "*", SearchOption.AllDirectories))
                 {
-                    PrintFileInfo(file, json, debug);
+                    PrintFileInfo(file, json, debug, hash);
                 }
             }
             else
@@ -62,9 +65,18 @@ namespace InfoPrint
         /// <summary>
         /// Print information for a single file, if possible
         /// </summary>
-        private static void PrintFileInfo(string file, bool json, bool debug)
+        /// <param name="file">File path</param>
+        /// <param name="json">Enable JSON output, if supported</param>
+        /// <param name="debug">Enable debug output</param>
+        /// <param name="hash">Enable hash output</param>
+        private static void PrintFileInfo(string file, bool json, bool debug, bool hash)
         {
             Console.WriteLine($"Attempting to print info for {file}");
+
+            // Retrieve hashes before anything else, if required
+            StringBuilder? hashBuilder = null;
+            if (hash)
+                hashBuilder = PrintHashInfo(file, debug);
 
             try
             {
@@ -101,7 +113,6 @@ namespace InfoPrint
                 {
                     // Create the output data
                     string serializedData = wrapper.ExportJSON();
-                    Console.WriteLine(serializedData);
 
                     // Write the output data
                     using var jsw = new StreamWriter(File.OpenWrite($"{filenameBase}.json"));
@@ -118,14 +129,82 @@ namespace InfoPrint
                 }
 
                 // Write the output data
+                if (hashBuilder != null)
+                {
+                    Console.WriteLine(hashBuilder);
+                    Console.WriteLine();
+                }
+
                 Console.WriteLine(builder);
                 using var sw = new StreamWriter(File.OpenWrite($"{filenameBase}.txt"));
+                if (hashBuilder != null)
+                    sw.WriteLine(hashBuilder.ToString());
+
                 sw.WriteLine(builder.ToString());
+                sw.Flush();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(debug ? ex : "[Exception opening file, please try again]");
                 Console.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// Print hash information for a single file, if possible
+        /// </summary>
+        /// <param name="file">File path</param>
+        /// <param name="debug">Enable debug output</param>
+        /// <returns>StringBuilder representing the hash information, if possible</returns>
+        private static StringBuilder? PrintHashInfo(string file, bool debug)
+        {
+            // Ignore missing files
+            if (!File.Exists(file))
+                return null;
+
+            Console.WriteLine($"Attempting to hash {file}, this may take a while...");
+
+            try
+            {
+                // Get all file hashes for flexibility
+                var hashes = HashTool.GetFileHashes(file);
+                if (hashes == null)
+                {
+                    if (debug) Console.WriteLine($"Hashes for {file} could not be retrieved");
+                    return null;
+                }
+
+                // Output subset of available hashes
+                var builder = new StringBuilder();
+                if (hashes.TryGetValue(HashType.CRC16, out string? crc16) && crc16 != null)
+                    builder.AppendLine($"CRC-16 checksum: {crc16}");
+                if (hashes.TryGetValue(HashType.CRC32, out string? crc32) && crc32 != null)
+                    builder.AppendLine($"CRC-32 checksum: {crc32}");
+                if (hashes.TryGetValue(HashType.MD2, out string? md2) && md2 != null)
+                    builder.AppendLine($"MD2 hash: {md2}");
+                if (hashes.TryGetValue(HashType.MD4, out string? md4) && md4 != null)
+                    builder.AppendLine($"MD4 hash: {md4}");
+                if (hashes.TryGetValue(HashType.MD5, out string? md5) && md5 != null)
+                    builder.AppendLine($"MD5 hash: {md5}");
+                if (hashes.TryGetValue(HashType.RIPEMD128, out string? ripemd128) && ripemd128 != null)
+                    builder.AppendLine($"RIPEMD-128 hash: {ripemd128}");
+                if (hashes.TryGetValue(HashType.RIPEMD160, out string? ripemd160) && ripemd160 != null)
+                    builder.AppendLine($"RIPEMD-160 hash: {ripemd160}");
+                if (hashes.TryGetValue(HashType.SHA1, out string? sha1) && sha1 != null)
+                    builder.AppendLine($"SHA-1 hash: {sha1}");
+                if (hashes.TryGetValue(HashType.SHA256, out string? sha256) && sha256 != null)
+                    builder.AppendLine($"SHA-256 hash: {sha256}");
+                if (hashes.TryGetValue(HashType.SHA384, out string? sha384) && sha384 != null)
+                    builder.AppendLine($"SHA-384 hash: {sha384}");
+                if (hashes.TryGetValue(HashType.SHA512, out string? sha512) && sha512 != null)
+                    builder.AppendLine($"SHA-512 hash: {sha512}");
+
+                return builder;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(debug ? ex : "[Exception opening file, please try again]");
+                return null;
             }
         }
     }

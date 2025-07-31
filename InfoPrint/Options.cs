@@ -16,6 +16,11 @@ namespace InfoPrint
         public bool Debug { get; private set; } = false;
 
         /// <summary>
+        /// Print external file hashes
+        /// </summary>
+        public bool Hash { get; private set; } = false;
+
+        /// <summary>
         /// Set of input paths to use for operations
         /// </summary>
         public List<string> InputPaths { get; private set; } = [];
@@ -74,6 +79,11 @@ namespace InfoPrint
                         options.Debug = true;
                         break;
 
+                    case "-c":
+                    case "--hash":
+                        options.Hash = true;
+                        break;
+
                     case "-j":
                     case "--json":
 #if NETCOREAPP
@@ -111,6 +121,7 @@ namespace InfoPrint
             Console.WriteLine("Options:");
             Console.WriteLine("-?, -h, --help           Display this help text and quit");
             Console.WriteLine("-d, --debug              Enable debug mode");
+            Console.WriteLine("-c, --hash               Output file hashes");
 #if NETCOREAPP
             Console.WriteLine("-j, --json               Print info as JSON");
 #endif
