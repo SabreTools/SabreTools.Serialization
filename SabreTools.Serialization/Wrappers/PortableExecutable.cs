@@ -1154,9 +1154,13 @@ namespace SabreTools.Serialization.Wrappers
 
                 foreach (string? s in st.Values)
                 {
+#if NETFRAMEWORK || NETSTANDARD
+                    if (s == null || !s.Contains(entry))
+#else
                     if (s == null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
-                        continue;
-                    
+#endif
+                    continue;
+
                     stringTables.Add(st);
                     break;
                 }
