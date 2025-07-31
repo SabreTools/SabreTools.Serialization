@@ -78,6 +78,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>Only used in multi-file</remarks>
         public InstallShieldCabinet? Prev { get; set; }
 
+        /// <summary>
+        /// Volume index ID, 0 for headers
+        /// </summary>
+        /// <remarks>Only used in multi-file</remarks>
+        public ushort VolumeID { get; set; }
+
         #endregion
 
         #region Constants
@@ -196,7 +202,7 @@ namespace SabreTools.Serialization.Wrappers
             // Loop until there are no parts left
             bool iterate = true;
             InstallShieldCabinet? previous = null;
-            for (int i = 1; iterate; i++)
+            for (ushort i = 1; iterate; i++)
             {
                 var file = OpenFileForReading(pattern, i, HEADER_SUFFIX);
                 if (file != null)
@@ -207,14 +213,21 @@ namespace SabreTools.Serialization.Wrappers
                 if (file == null)
                     break;
 
-                var header = Create(file);
-                if (header == null)
+                var current = Create(file);
+                if (current == null)
                     break;
 
+                current.VolumeID = i;
                 if (previous != null)
-                    previous.Next = header;
+                {
+                    previous.Next = current;
+                    current.Prev = previous;
+                }
                 else
-                    previous = set = header;
+                {
+                    set = current;
+                    previous = current;
+                }
             }
 
             return set;
