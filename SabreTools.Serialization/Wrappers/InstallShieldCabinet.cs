@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// The major version of the cabinet
         /// </summary>
-        public int MajorVersion => Model.CommonHeader.GetMajorVersion();
+        public int MajorVersion => Model.GetMajorVersion();
 
         #endregion
 
