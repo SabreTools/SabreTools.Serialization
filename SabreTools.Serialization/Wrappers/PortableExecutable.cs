@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-#if NET35_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-using System.Linq;
-#endif
 using System.Text;
 using SabreTools.IO.Extensions;
 
@@ -867,28 +864,19 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Try to find a key that matches
-#if NET20
             Models.PortableExecutable.StringData? match = null;
             foreach (var st in stringTable)
             {
-                if (st?.Children == null)
+                if (st.Children == null || st.Length == 0)
                     continue;
 
                 // Return the match if found
-                match = Array.Find(st.Children, sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+                match = Array.Find(st.Children, sd => key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
                     return match.Value?.TrimEnd('\0');
             }
 
             return null;
-#else
-            var match = stringTable
-                .SelectMany(st => st?.Children ?? [])
-                .FirstOrDefault(sd => sd != null && key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
-
-            // Return either the match or null
-            return match?.Value?.TrimEnd('\0');
-#endif
         }
 
         /// <summary>
@@ -1156,7 +1144,6 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-#if NET20
             var stringTables = new List<Dictionary<int, string?>?>();
             foreach (var resource in ResourceData.Values)
             {
@@ -1165,9 +1152,9 @@ namespace SabreTools.Serialization.Wrappers
                 if (resource is not Dictionary<int, string?> st || st == null)
                     continue;
 
-                foreach (var s in st.Values)
+                foreach (string? s in st.Values)
                 {
-                    if (s == null || !s.Contains(entry))
+                    if (s == null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
                         continue;
                     
                     stringTables.Add(st);
@@ -1176,14 +1163,6 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             return stringTables;
-#else
-            return ResourceData.Values
-                .Select(r => r as Dictionary<int, string?>)
-                .Where(st => st != null)
-                .Where(st => st?.Select(kvp => kvp.Value)?
-                    .Any(s => s != null && s.Contains(entry)) == true)
-                .ToList();
-#endif
         }
 
         /// <summary>
@@ -1197,7 +1176,6 @@ namespace SabreTools.Serialization.Wrappers
             if (ResourceData == null)
                 return [];
 
-#if NET20
             var resources = new List<byte[]?>();
             foreach (var kvp in ResourceData)
             {
@@ -1210,12 +1188,6 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             return resources;
-#else
-            return ResourceData.Where(kvp => kvp.Key.Contains(typeName))
-                .Select(kvp => kvp.Value as byte[])
-                .Where(b => b != null)
-                .ToList();
-#endif
         }
 
         /// <summary>
