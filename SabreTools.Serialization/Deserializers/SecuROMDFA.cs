@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (!dfa.Signature.EqualsExactly(DFAMagicBytes))
                     return null;
 
-                dfa.BlockOrHeaderSize = data.ReadUInt32();
+                dfa.BlockOrHeaderSize = data.ReadUInt32LittleEndian();
 
                 #endregion
 
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] name = data.ReadBytes(4);
             obj.Name = Encoding.ASCII.GetString(name);
-            obj.Length = data.ReadUInt32();
+            obj.Length = data.ReadUInt32LittleEndian();
             if (obj.Length > 0)
                 obj.Value = data.ReadBytes((int)obj.Length);
 

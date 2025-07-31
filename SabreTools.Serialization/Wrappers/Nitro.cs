@@ -151,8 +151,8 @@ namespace SabreTools.Serialization.Wrappers
             int readOffset = 0;
 
             // Grab the first two blocks
-            uint p0 = SecureArea.ReadUInt32(ref readOffset);
-            uint p1 = SecureArea.ReadUInt32(ref readOffset);
+            uint p0 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
+            uint p1 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
 
             // Perform the initialization steps
             Init1(tableData);
@@ -168,8 +168,8 @@ namespace SabreTools.Serialization.Wrappers
             uint size = 0x800 - 8;
             while (size > 0)
             {
-                p0 = SecureArea.ReadUInt32(ref readOffset);
-                p1 = SecureArea.ReadUInt32(ref readOffset);
+                p0 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
+                p1 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
 
                 Encrypt(ref p1, ref p0);
 
@@ -183,8 +183,8 @@ namespace SabreTools.Serialization.Wrappers
             readOffset = 0;
             writeOffset = 0;
 
-            p0 = SecureArea.ReadUInt32(ref readOffset);
-            p1 = SecureArea.ReadUInt32(ref readOffset);
+            p0 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
+            p1 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
 
             if (p0 == 0xE7FFDEFF && p1 == 0xE7FFDEFF)
             {
@@ -274,8 +274,8 @@ namespace SabreTools.Serialization.Wrappers
             int writeOffset = 0;
 
             // Grab the first two blocks
-            uint p0 = SecureArea.ReadUInt32(ref readOffset);
-            uint p1 = SecureArea.ReadUInt32(ref readOffset);
+            uint p0 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
+            uint p1 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
 
             // Perform the initialization steps
             Init1(tableData);
@@ -303,8 +303,8 @@ namespace SabreTools.Serialization.Wrappers
             uint size = 0x800 - 8;
             while (size > 0)
             {
-                p0 = SecureArea.ReadUInt32(ref readOffset);
-                p1 = SecureArea.ReadUInt32(ref readOffset);
+                p0 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
+                p1 = SecureArea.ReadUInt32LittleEndian(ref readOffset);
 
                 Decrypt(ref p1, ref p0);
 
@@ -354,8 +354,8 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             int offset = 0;
-            uint firstValue = SecureArea.ReadUInt32(ref offset);
-            uint secondValue = SecureArea.ReadUInt32(ref offset);
+            uint firstValue = SecureArea.ReadUInt32LittleEndian(ref offset);
+            uint secondValue = SecureArea.ReadUInt32LittleEndian(ref offset);
 
             // Empty secure area standard
             if (firstValue == 0x00000000 && secondValue == 0x00000000)
