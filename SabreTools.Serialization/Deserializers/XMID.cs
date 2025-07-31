@@ -4,8 +4,6 @@ namespace SabreTools.Serialization.Deserializers
 {
     public partial class XMID : IStringDeserializer<Models.Xbox.XMID>
     {
-        #region IStringDeserializer
-
         /// <inheritdoc cref="IStringDeserializer.Deserialize(string?)"/>
         public static Models.Xbox.XMID? DeserializeString(string? str)
         {
@@ -45,7 +43,5 @@ namespace SabreTools.Serialization.Deserializers
 
             return xmid;
         }
-
-        #endregion
     }
 }

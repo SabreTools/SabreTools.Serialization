@@ -5,8 +5,6 @@ namespace SabreTools.Serialization.Serializers
 {
     public partial class XMID : IStringSerializer<Models.Xbox.XMID>
     {
-        #region IStringSerializer
-
         /// <inheritdoc cref="IStringSerializer.Serialize(T?)"/>
         public static string? SerializeString(Models.Xbox.XMID? obj)
         {
@@ -29,7 +27,5 @@ namespace SabreTools.Serialization.Serializers
 
             return sb.ToString();
         }
-
-        #endregion
     }
 }
