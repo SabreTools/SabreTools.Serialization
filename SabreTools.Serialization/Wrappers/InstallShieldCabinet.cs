@@ -361,11 +361,7 @@ namespace SabreTools.Serialization.Wrappers
             if (descriptor == null)
                 return false;
 
-#if NET20 || NET35
-            if ((descriptor.Flags & FileFlags.FILE_INVALID) != 0)
-#else
-            if (descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
-#endif
+            if (descriptor.IsInvalid())
                 return false;
 
             if (descriptor.NameOffset == default)
@@ -416,11 +412,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
 
-#if NET20 || NET35
-            if ((fileDescriptor.Flags & FileFlags.FILE_INVALID) != 0 || fileDescriptor.DataOffset == 0)
-#else
-            if (fileDescriptor.Flags.HasFlag(FileFlags.FILE_INVALID) || fileDescriptor.DataOffset == 0)
-#endif
+            if (fileDescriptor.IsInvalid() || fileDescriptor.DataOffset == 0)
             {
                 Console.Error.WriteLine($"File at {index} is marked as invalid");
                 return false;
@@ -435,11 +427,7 @@ namespace SabreTools.Serialization.Wrappers
         public string? GetFileName(int index)
         {
             var descriptor = GetFileDescriptor(index);
-#if NET20 || NET35
-            if (descriptor == null || (descriptor.Flags & FileFlags.FILE_INVALID) != 0)
-#else
-            if (descriptor == null || descriptor.Flags.HasFlag(FileFlags.FILE_INVALID))
-#endif
+            if (descriptor == null || descriptor.IsInvalid())
                 return null;
 
             return descriptor.Name;
@@ -453,14 +441,9 @@ namespace SabreTools.Serialization.Wrappers
             if (descriptor == null)
                 return 0;
 
-#if NET20 || NET35
-            if ((descriptor.Flags & FileFlags.FILE_COMPRESSED) != 0)
-#else
-            if (descriptor.Flags.HasFlag(FileFlags.FILE_COMPRESSED))
-#endif
-                return descriptor.CompressedSize;
-            else
-                return descriptor.ExpandedSize;
+            return descriptor.IsCompressed()
+                ? descriptor.CompressedSize
+                : descriptor.ExpandedSize;
         }
 
         #endregion
