@@ -137,8 +137,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Extract all files from the CFB to an output directory
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all files extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory)
+        public bool ExtractAll(string outputDirectory, bool includeDebug)
         {
             // If we have no files
             if (DirectoryEntries == null || DirectoryEntries.Length == 0)
@@ -148,7 +149,7 @@ namespace SabreTools.Serialization.Wrappers
             bool allExtracted = true;
             for (int i = 0; i < DirectoryEntries.Length; i++)
             {
-                allExtracted &= ExtractEntry(i, outputDirectory);
+                allExtracted &= ExtractEntry(i, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -159,8 +160,9 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Entry index to extract</param>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted, false otherwise</returns>
-        public bool ExtractEntry(int index, string outputDirectory)
+        public bool ExtractEntry(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no entries
             if (DirectoryEntries == null || DirectoryEntries.Length == 0)
@@ -219,8 +221,9 @@ namespace SabreTools.Serialization.Wrappers
                 fs.Write(data);
                 fs.Flush();
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
 

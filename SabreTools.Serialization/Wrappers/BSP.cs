@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.Models.BSP;
 
@@ -89,8 +90,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Extract all lumps from the BSP to an output directory
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all lumps extracted, false otherwise</returns>
-        public bool ExtractAllLumps(string outputDirectory)
+        public bool ExtractAllLumps(string outputDirectory, bool includeDebug)
         {
             // If we have no lumps
             if (Lumps == null || Lumps.Length == 0)
@@ -100,7 +102,7 @@ namespace SabreTools.Serialization.Wrappers
             bool allExtracted = true;
             for (int i = 0; i < Lumps.Length; i++)
             {
-                allExtracted &= ExtractLump(i, outputDirectory);
+                allExtracted &= ExtractLump(i, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -111,8 +113,9 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Lump index to extract</param>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the lump extracted, false otherwise</returns>
-        public bool ExtractLump(int index, string outputDirectory)
+        public bool ExtractLump(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no lumps
             if (Lumps == null || Lumps.Length == 0)
@@ -164,8 +167,9 @@ namespace SabreTools.Serialization.Wrappers
                 fs.Write(data, 0, data.Length);
                 fs.Flush();
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
 

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.Models.PFF;
 
@@ -94,8 +95,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Extract all segments from the PFF to an output directory
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all segments extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory)
+        public bool ExtractAll(string outputDirectory, bool includeDebug)
         {
             // If we have no segments
             if (Segments == null || Segments.Length == 0)
@@ -105,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
             bool allExtracted = true;
             for (int i = 0; i < Segments.Length; i++)
             {
-                allExtracted &= ExtractSegment(i, outputDirectory);
+                allExtracted &= ExtractSegment(i, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -116,8 +118,9 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Segment index to extract</param>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the segment extracted, false otherwise</returns>
-        public bool ExtractSegment(int index, string outputDirectory)
+        public bool ExtractSegment(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no files
             if (FileCount == 0)
@@ -165,8 +168,9 @@ namespace SabreTools.Serialization.Wrappers
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
         }

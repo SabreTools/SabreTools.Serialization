@@ -232,8 +232,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Extract all files from the GCF to an output directory
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all files extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory)
+        public bool ExtractAll(string outputDirectory, bool includeDebug)
         {
             // If we have no files
             if (Files == null || Files.Length == 0)
@@ -243,7 +244,7 @@ namespace SabreTools.Serialization.Wrappers
             bool allExtracted = true;
             for (int i = 0; i < Files.Length; i++)
             {
-                allExtracted &= ExtractFile(i, outputDirectory);
+                allExtracted &= ExtractFile(i, outputDirectory, includeDebug);
             }
 
             return allExtracted;
@@ -254,8 +255,9 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">File index to extract</param>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted, false otherwise</returns>
-        public bool ExtractFile(int index, string outputDirectory)
+        public bool ExtractFile(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no files
             if (Files == null || Files.Length == 0 || DataBlockOffsets == null)
@@ -326,8 +328,9 @@ namespace SabreTools.Serialization.Wrappers
                     fs.Flush();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
 

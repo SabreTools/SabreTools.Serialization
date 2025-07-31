@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.IO.Compression.SZDD;
 using SabreTools.Models.LZ;
@@ -82,10 +83,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract the contents to an output directory
         /// </summary>
-        /// <param name="filename">Original filename to use as a base</param>
         /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the contents extracted, false otherwise</returns>
-        public bool Extract(string outputDirectory)
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Get the length of the compressed data
             long compressedSize = Length - 12;
@@ -127,8 +128,9 @@ namespace SabreTools.Serialization.Wrappers
                 decompressor.CopyTo(fs);
                 fs.Flush();
             }
-            catch
+            catch (Exception ex)
             {
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
 
