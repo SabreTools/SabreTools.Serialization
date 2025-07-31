@@ -234,6 +234,39 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Open the numbered cabinet set volume
+        /// </summary>
+        /// <param name="pattern">Filename pattern for matching cabinet files</param>
+        /// <param name="volumeId">Volume ID, 1-indexed</param>
+        /// <returns>Wrapper representing the volume on success, null otherwise</returns>
+        public static InstallShieldCabinet? OpenVolume(string? pattern, ushort volumeId)
+        {
+            // Normalize the volume ID for odd cases
+            if (volumeId == ushort.MinValue || volumeId == ushort.MaxValue)
+                volumeId = 1;
+
+            // Try to open the file as a stream
+            var volumeStream = OpenFileForReading(pattern, volumeId, CABINET_SUFFIX);
+            if (volumeStream == null)
+            {
+                Console.Error.WriteLine($"Failed to open input cabinet file {volumeId}");
+                return null;
+            }
+
+            // Try to parse the stream into a cabinet
+            var volume = Create(volumeStream);
+            if (volume == null)
+            {
+                Console.Error.WriteLine($"Failed to open input cabinet file {volumeId}");
+                return null;
+            }
+
+            // Set the volume ID and return
+            volume.VolumeID = volumeId;
+            return volume;
+        }
+
+        /// <summary>
         /// Open a cabinet file for reading
         /// </summary>
         /// <param name="pattern">Filename pattern for matching cabinet files</param>
