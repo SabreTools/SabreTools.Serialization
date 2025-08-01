@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Models.NewExecutable;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class NewExecutable : WrapperBase<Models.NewExecutable.Executable>
+    public class NewExecutable : WrapperBase<Executable>
     {
         #region Descriptive Properties
 
@@ -15,14 +16,14 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.Header"/>
-        public Models.NewExecutable.ExecutableHeader? Header => Model.Header;
+        /// <inheritdoc cref="Executable.Header"/>
+        public ExecutableHeader? Header => Model.Header;
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.ImportedNameTable"/>
-        public Dictionary<ushort, Models.NewExecutable.ImportedNameTableEntry>? ImportedNameTable => Model.ImportedNameTable;
+        /// <inheritdoc cref="Executable.ImportedNameTable"/>
+        public Dictionary<ushort, ImportedNameTableEntry>? ImportedNameTable => Model.ImportedNameTable;
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.NonResidentNameTable"/>
-        public Models.NewExecutable.NonResidentNameTableEntry[]? NonResidentNameTable => Model.NonResidentNameTable;
+        /// <inheritdoc cref="Executable.NonResidentNameTable"/>
+        public NonResidentNameTableEntry[]? NonResidentNameTable => Model.NonResidentNameTable;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -228,16 +229,16 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.ResidentNameTable"/>
-        public Models.NewExecutable.ResidentNameTableEntry[]? ResidentNameTable => Model.ResidentNameTable;
+        /// <inheritdoc cref="Executable.ResidentNameTable"/>
+        public ResidentNameTableEntry[]? ResidentNameTable => Model.ResidentNameTable;
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.ResourceTable"/>
-        public Models.NewExecutable.ResourceTable? ResourceTable => Model.ResourceTable;
+        /// <inheritdoc cref="Executable.ResourceTable"/>
+        public ResourceTable? ResourceTable => Model.ResourceTable;
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.SegmentTable"/>
-        public Models.NewExecutable.SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
+        /// <inheritdoc cref="Executable.SegmentTable"/>
+        public SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
 
-        /// <inheritdoc cref="Models.NewExecutable.Executable.Stub"/>
+        /// <inheritdoc cref="Executable.Stub"/>
         public Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
@@ -301,14 +302,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public NewExecutable(Models.NewExecutable.Executable? model, byte[]? data, int offset)
+        public NewExecutable(Executable? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public NewExecutable(Models.NewExecutable.Executable? model, Stream? data)
+        public NewExecutable(Executable? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -369,7 +370,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="id">Resource ID to retrieve</param>
         /// <returns>Resource on success, null otherwise</returns>
-        public Models.NewExecutable.ResourceTypeResourceEntry? GetResource(int id)
+        public ResourceTypeResourceEntry? GetResource(int id)
         {
             // If the header is invalid
             if (Header == null)
@@ -496,7 +497,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Segment index to retrieve</param>
         /// <returns>Segment on success, null otherwise</returns>
-        public Models.NewExecutable.SegmentTableEntry? GetSegment(int index)
+        public SegmentTableEntry? GetSegment(int index)
         {
             // If the segment table is invalid
             if (SegmentTable == null || SegmentTable.Length == 0)
