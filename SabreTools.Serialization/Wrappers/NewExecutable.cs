@@ -365,11 +365,11 @@ namespace SabreTools.Serialization.Wrappers
         #region Resources
 
         /// <summary>
-        /// Get the data for a single resource entry
+        /// Get a single resource entry
         /// </summary>
         /// <param name="id">Resource ID to retrieve</param>
-        /// <returns>Resource data on success, null otherwise</returns>
-        public byte[]? GetResourceData(int id)
+        /// <returns>Resource on success, null otherwise</returns>
+        public Models.NewExecutable.ResourceTypeResourceEntry? GetResource(int id)
         {
             // If the header is invalid
             if (Header == null)
@@ -398,17 +398,8 @@ namespace SabreTools.Serialization.Wrappers
                     if (resource.ResourceID != id)
                         continue;
 
-                    // Skip empty entries
-                    if (resource.Length == 0)
-                        return [];
-
-                    // Verify the resource offset
-                    int offset = resource.Offset << ResourceTable.AlignmentShiftCount;
-                    if (offset < 0 || offset + resource.Length >= endOfFile)
-                        return null;
-
-                    // Read the segment data and return
-                    return ReadFromDataSource(offset, resource.Length);
+                    // Return the resource
+                    return resource;
                 }
             }
 
@@ -416,9 +407,108 @@ namespace SabreTools.Serialization.Wrappers
             return null;
         }
 
+        /// <summary>
+        /// Get the data for a single resource entry
+        /// </summary>
+        /// <param name="id">Resource ID to retrieve</param>
+        /// <returns>Resource data on success, null otherwise</returns>
+        public byte[]? GetResourceData(int id)
+        {
+            // Get the end of the file, if possible
+            int endOfFile = GetEndOfFile();
+            if (endOfFile == -1)
+                return null;
+
+            // If the resource table is invalid
+            if (ResourceTable == null)
+                return null;
+
+            // Get the matching resource
+            var resource = GetSegment(id);
+            if (resource == null)
+                return null;
+
+            // Skip empty entries
+            if (resource.Length == 0)
+                return [];
+
+            // Verify the resource offset
+            int offset = resource.Offset << ResourceTable.AlignmentShiftCount;
+            if (offset < 0 || offset + resource.Length >= endOfFile)
+                return null;
+
+            // Read the segment data and return
+            return ReadFromDataSource(offset, resource.Length);
+        }
+
+        /// <summary>
+        /// Get the data length for a single resource entry
+        /// </summary>
+        /// <param name="id">Resource ID to retrieve</param>
+        /// <returns>Resource length on success, -1 otherwise</returns>
+        public int GetResourceLength(int id)
+        {
+            // Get the matching resource
+            var resource = GetSegment(id);
+            if (resource == null)
+                return -1;
+
+            // Return the reported length
+            return resource.Length;
+        }
+
+        /// <summary>
+        /// Get the data offset for a single resource entry
+        /// </summary>
+        /// <param name="id">Resource ID to retrieve</param>
+        /// <returns>Resource offset on success, -1 otherwise</returns>
+        public int GetResourceOffset(int id)
+        {
+            // Get the end of the file, if possible
+            int endOfFile = GetEndOfFile();
+            if (endOfFile == -1)
+                return -1;
+
+            // If the resource table is invalid
+            if (ResourceTable == null)
+                return -1;
+
+            // Get the matching resource
+            var resource = GetSegment(id);
+            if (resource == null)
+                return -1;
+
+            // Verify the resource offset
+            int offset = resource.Offset << ResourceTable.AlignmentShiftCount;
+            if (offset < 0 || offset + resource.Length >= endOfFile)
+                return -1;
+
+            // Return the verified offset
+            return offset;
+        }
+
         #endregion
 
         #region Segments
+
+        /// <summary>
+        /// Get a single segment
+        /// </summary>
+        /// <param name="index">Segment index to retrieve</param>
+        /// <returns>Segment on success, null otherwise</returns>
+        public Models.NewExecutable.SegmentTableEntry? GetSegment(int index)
+        {
+            // If the segment table is invalid
+            if (SegmentTable == null || SegmentTable.Length == 0)
+                return null;
+
+            // If the index is invalid
+            if (index < 0 || index >= SegmentTable.Length)
+                return null;
+
+            // Return the segment
+            return SegmentTable[index];
+        }
 
         /// <summary>
         /// Get the data for a single segment
@@ -436,16 +526,12 @@ namespace SabreTools.Serialization.Wrappers
             if (endOfFile == -1)
                 return null;
 
-            // If the segment table is invalid
-            if (SegmentTable == null || SegmentTable.Length == 0)
+            // Get the matching segment
+            var segment = GetSegment(index);
+            if (segment == null)
                 return null;
 
-            // If the index is invalid
-            if (index < 0 || index >= Header.FileSegmentCount || index >= SegmentTable.Length)
-                return null;
-
-            // Get the segment from the table
-            var segment = SegmentTable[index];
+            // Verify the segment length
             if (segment.Length == 0)
                 return [];
 
@@ -456,6 +542,52 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the segment data and return
             return ReadFromDataSource(offset, segment.Length);
+        }
+
+        /// <summary>
+        /// Get the data length for a single segment
+        /// </summary>
+        /// <param name="index">Segment index to retrieve</param>
+        /// <returns>Segment length on success, -1 otherwise</returns>
+        public int GetSegmentLength(int index)
+        {
+            // Get the matching segment
+            var segment = GetSegment(index);
+            if (segment == null)
+                return -1;
+
+            // Return the reported length
+            return segment.Length;
+        }
+
+        /// <summary>
+        /// Get the data offset for a single segment
+        /// </summary>
+        /// <param name="index">Segment index to retrieve</param>
+        /// <returns>Segment offset on success, -1 otherwise</returns>
+        public int GetSegmentOffset(int index)
+        {
+            // If the header is invalid
+            if (Header == null)
+                return -1;
+
+            // Get the end of the file, if possible
+            int endOfFile = GetEndOfFile();
+            if (endOfFile == -1)
+                return -1;
+
+            // Get the matching segment
+            var segment = GetSegment(index);
+            if (segment == null)
+                return -1;
+
+            // Verify the segment offset
+            int offset = segment.Offset << Header.SegmentAlignmentShiftCount;
+            if (offset < 0 || offset + segment.Length >= endOfFile)
+                return -1;
+
+            // Return the verified offset
+            return offset;
         }
 
         #endregion
