@@ -58,21 +58,21 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sourceDataLock)
                 {
                     // If the section table is missing
-                    if (Model.SectionTable == null)
+                    if (SectionTable == null)
                         return null;
 
                     // If the address is missing
-                    if (Model.OptionalHeader?.AddressOfEntryPoint == null)
+                    if (OptionalHeader?.AddressOfEntryPoint == null)
                         return null;
 
                     // If we have no entry point
-                    int entryPointAddress = (int)Model.OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(Model.SectionTable);
+                    int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
                     if (entryPointAddress == 0)
                         return null;
 
                     // If the entry point matches with the start of a section, use that
                     int entryPointSection = FindEntryPointSectionIndex();
-                    if (entryPointSection >= 0 && Model.OptionalHeader.AddressOfEntryPoint == Model.SectionTable[entryPointSection]?.VirtualAddress)
+                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection]?.VirtualAddress)
                         return GetSectionData(entryPointSection);
 
                     // If we already have cached data, just use that immediately
@@ -213,27 +213,27 @@ namespace SabreTools.Serialization.Wrappers
                         return -1;
 
                     // If the section table is missing
-                    if (Model.SectionTable == null)
+                    if (SectionTable == null)
                         return -1;
 
                     // If we have certificate data, use that as the end
-                    if (Model.OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in Model.SectionTable)
+                    foreach (var section in SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -284,27 +284,27 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If the section table is missing
-                    if (Model.SectionTable == null)
+                    if (SectionTable == null)
                         return null;
 
                     // If we have certificate data, use that as the end
-                    if (Model.OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in Model.SectionTable)
+                    foreach (var section in SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -362,27 +362,27 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If the section table is missing
-                    if (Model.SectionTable == null)
+                    if (SectionTable == null)
                         return null;
 
                     // If we have certificate data, use that as the end
-                    if (Model.OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)Model.OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
                             endOfFile = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
                     int endOfSectionData = -1;
-                    foreach (var section in Model.SectionTable)
+                    foreach (var section in SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
                         // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(Model.SectionTable);
+                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
                         if (sectionAddress == 0)
                             continue;
 
@@ -424,6 +424,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        /// <inheritdoc cref="Models.PortableExecutable.Executable.ResourceDirectoryTable"/>
+        public Models.PortableExecutable.ResourceDirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
+
         /// <summary>
         /// Sanitized section names
         /// </summary>
@@ -438,14 +441,14 @@ namespace SabreTools.Serialization.Wrappers
                         return _sectionNames;
 
                     // If there are no sections
-                    if (Model.SectionTable == null)
+                    if (SectionTable == null)
                         return null;
 
                     // Otherwise, build and return the cached array
-                    _sectionNames = new string[Model.SectionTable.Length];
+                    _sectionNames = new string[SectionTable.Length];
                     for (int i = 0; i < _sectionNames.Length; i++)
                     {
-                        var section = Model.SectionTable[i];
+                        var section = SectionTable[i];
                         if (section == null)
                             continue;
 
@@ -510,13 +513,13 @@ namespace SabreTools.Serialization.Wrappers
                         return _resourceData;
 
                     // If we have no resource table, just return
-                    if (Model.OptionalHeader?.ResourceTable == null
-                        || Model.OptionalHeader.ResourceTable.VirtualAddress == 0
-                        || Model.ResourceDirectoryTable == null)
+                    if (OptionalHeader?.ResourceTable == null
+                        || OptionalHeader.ResourceTable.VirtualAddress == 0
+                        || ResourceDirectoryTable == null)
                         return null;
 
                     // Otherwise, build and return the cached dictionary
-                    ParseResourceDirectoryTable(Model.ResourceDirectoryTable, types: []);
+                    ParseResourceDirectoryTable(ResourceDirectoryTable, types: []);
                     return _resourceData;
                 }
             }

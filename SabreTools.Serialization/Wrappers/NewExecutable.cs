@@ -24,11 +24,277 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Models.NewExecutable.Executable.NonResidentNameTable"/>
         public Models.NewExecutable.NonResidentNameTableEntry[]? NonResidentNameTable => Model.NonResidentNameTable;
 
+        /// <summary>
+        /// Address of the overlay, if it exists
+        /// </summary>
+        /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
+        public int OverlayAddress
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // Use the cached data if possible
+                    if (_overlayAddress != null)
+                        return _overlayAddress.Value;
+
+                    // Get the end of the file, if possible
+                    int endOfFile = GetEndOfFile();
+                    if (endOfFile == -1)
+                        return -1;
+
+                    // If a required property is missing
+                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
+                        return -1;
+
+                    // Search through the segments table to find the furthest
+                    int endOfSectionData = -1;
+                    foreach (var entry in SegmentTable)
+                    {
+                        int offset = (entry.Offset << Header.SegmentAlignmentShiftCount) + entry.Length;
+                        if (offset > endOfSectionData)
+                            endOfSectionData = offset;
+                    }
+
+                    // Search through the resources table to find the furthest
+                    foreach (var entry in ResourceTable.ResourceTypes)
+                    {
+                        // Skip invalid entries
+                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                            continue;
+
+                        foreach (var resource in entry.Resources)
+                        {
+                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
+                            if (offset > endOfSectionData)
+                                endOfSectionData = offset;
+                        }
+                    }
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                        endOfSectionData = -1;
+
+                    // Adjust the position of the data by 705 bytes
+                    // TODO: Investigate what the byte data is
+                    endOfSectionData += 705;
+
+                    // Cache and return the position
+                    _overlayAddress = endOfSectionData;
+                    return _overlayAddress.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overlay data, if it exists
+        /// </summary>
+        /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
+        public byte[]? OverlayData
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // Use the cached data if possible
+                    if (_overlayData != null)
+                        return _overlayData;
+
+                    // Get the end of the file, if possible
+                    int endOfFile = GetEndOfFile();
+                    if (endOfFile == -1)
+                        return null;
+
+                    // If a required property is missing
+                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
+                        return null;
+
+                    // Search through the segments table to find the furthest
+                    int endOfSectionData = -1;
+                    foreach (var entry in SegmentTable)
+                    {
+                        int offset = (entry.Offset << Header.SegmentAlignmentShiftCount) + entry.Length;
+                        if (offset > endOfSectionData)
+                            endOfSectionData = offset;
+                    }
+
+                    // Search through the resources table to find the furthest
+                    foreach (var entry in ResourceTable.ResourceTypes)
+                    {
+                        // Skip invalid entries
+                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                            continue;
+
+                        foreach (var resource in entry.Resources)
+                        {
+                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
+                            if (offset > endOfSectionData)
+                                endOfSectionData = offset;
+                        }
+                    }
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                        return null;
+
+                    // Adjust the position of the data by 705 bytes
+                    // TODO: Investigate what the byte data is
+                    endOfSectionData += 705;
+
+                    // If we're at the end of the file, cache an empty byte array
+                    if (endOfSectionData >= endOfFile)
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
+
+                    // Otherwise, cache and return the data
+                    int overlayLength = endOfFile - endOfSectionData;
+                    _overlayData = ReadFromDataSource(endOfSectionData, overlayLength);
+                    return _overlayData;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overlay strings, if they exist
+        /// </summary>
+        public List<string>? OverlayStrings
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // Use the cached data if possible
+                    if (_overlayStrings != null)
+                        return _overlayStrings;
+
+                    // Get the end of the file, if possible
+                    int endOfFile = GetEndOfFile();
+                    if (endOfFile == -1)
+                        return null;
+
+                    // If a required property is missing
+                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
+                        return null;
+
+                    // Search through the segments table to find the furthest
+                    int endOfSectionData = -1;
+                    foreach (var entry in SegmentTable)
+                    {
+                        int offset = (entry.Offset << Header.SegmentAlignmentShiftCount) + entry.Length;
+                        if (offset > endOfSectionData)
+                            endOfSectionData = offset;
+                    }
+
+                    // Search through the resources table to find the furthest
+                    foreach (var entry in ResourceTable.ResourceTypes)
+                    {
+                        // Skip invalid entries
+                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                            continue;
+
+                        foreach (var resource in entry.Resources)
+                        {
+                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
+                            if (offset > endOfSectionData)
+                                endOfSectionData = offset;
+                        }
+                    }
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                        return null;
+
+                    // Adjust the position of the data by 705 bytes
+                    // TODO: Investigate what the byte data is
+                    endOfSectionData += 705;
+
+                    // If we're at the end of the file, cache an empty list
+                    if (endOfSectionData >= endOfFile)
+                    {
+                        _overlayStrings = [];
+                        return _overlayStrings;
+                    }
+
+                    // TODO: Revisit the 16 MiB limit
+                    // Cap the check for overlay strings to 16 MiB (arbitrary)
+                    int overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+
+                    // Otherwise, cache and return the strings
+                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, overlayLength, charLimit: 3);
+                    return _overlayStrings;
+                }
+            }
+        }
+
         /// <inheritdoc cref="Models.NewExecutable.Executable.ResidentNameTable"/>
         public Models.NewExecutable.ResidentNameTableEntry[]? ResidentNameTable => Model.ResidentNameTable;
 
+        /// <inheritdoc cref="Models.NewExecutable.Executable.ResourceTable"/>
+        public Models.NewExecutable.ResourceTable? ResourceTable => Model.ResourceTable;
+
+        /// <inheritdoc cref="Models.NewExecutable.Executable.SegmentTable"/>
+        public Models.NewExecutable.SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
+
         /// <inheritdoc cref="Models.NewExecutable.Executable.Stub"/>
         public Models.MSDOS.Executable? Stub => Model.Stub;
+
+        /// <summary>
+        /// Stub executable data, if it exists
+        /// </summary>
+        public byte[]? StubExecutableData
+        {
+            get
+            {
+                lock (_sourceDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_stubExecutableData != null)
+                        return _stubExecutableData;
+
+                    if (Stub?.Header?.NewExeHeaderAddr == null)
+                        return null;
+
+                    // Populate the raw stub executable data based on the source
+                    int endOfStubHeader = 0x40;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    _stubExecutableData = ReadFromDataSource(endOfStubHeader, lengthOfStubExecutableData);
+
+                    // Cache and return the stub executable data, even if null
+                    return _stubExecutableData;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Instance Variables
+
+        /// <summary>
+        /// Address of the overlay, if it exists
+        /// </summary>
+        private int? _overlayAddress = null;
+
+        /// <summary>
+        /// Overlay data, if it exists
+        /// </summary>
+        private byte[]? _overlayData = null;
+
+        /// <summary>
+        /// Overlay strings, if they exist
+        /// </summary>
+        private List<string>? _overlayStrings = null;
+
+        /// <summary>
+        /// Stub executable data, if it exists
+        /// </summary>
+        private byte[]? _stubExecutableData = null;
+
+        /// <summary>
+        /// Lock object for reading from the source
+        /// </summary>
+        private readonly object _sourceDataLock = new();
 
         #endregion
 
