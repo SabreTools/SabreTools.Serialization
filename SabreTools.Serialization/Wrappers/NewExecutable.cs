@@ -362,6 +362,104 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Resources
+
+        /// <summary>
+        /// Get the data for a single resource entry
+        /// </summary>
+        /// <param name="id">Resource ID to retrieve</param>
+        /// <returns>Resource data on success, null otherwise</returns>
+        public byte[]? GetResourceData(int id)
+        {
+            // If the header is invalid
+            if (Header == null)
+                return null;
+
+            // Get the end of the file, if possible
+            int endOfFile = GetEndOfFile();
+            if (endOfFile == -1)
+                return null;
+
+            // If the resource table is invalid
+            if (ResourceTable?.ResourceTypes == null || ResourceTable.ResourceTypes.Length == 0)
+                return null;
+
+            // Loop through the resources to find a matching ID
+            foreach (var resourceType in ResourceTable.ResourceTypes)
+            {
+                // Skip invalid resource types
+                if (resourceType.ResourceCount == 0 || resourceType.Resources == null || resourceType.Resources.Length == 0)
+                    continue;
+
+                // Loop through the entries to find a matching ID
+                foreach (var resource in resourceType.Resources)
+                {
+                    // Skip non-matching entries
+                    if (resource.ResourceID != id)
+                        continue;
+
+                    // Skip empty entries
+                    if (resource.Length == 0)
+                        return [];
+
+                    // Verify the resource offset
+                    int offset = resource.Offset << ResourceTable.AlignmentShiftCount;
+                    if (offset < 0 || offset + resource.Length >= endOfFile)
+                        return null;
+
+                    // Read the segment data and return
+                    return ReadFromDataSource(offset, resource.Length);
+                }
+            }
+
+            // No entry could be found
+            return null;
+        }
+
+        #endregion
+
+        #region Segments
+
+        /// <summary>
+        /// Get the data for a single segment
+        /// </summary>
+        /// <param name="index">Segment index to retrieve</param>
+        /// <returns>Segment data on success, null otherwise</returns>
+        public byte[]? GetSegmentData(int index)
+        {
+            // If the header is invalid
+            if (Header == null)
+                return null;
+
+            // Get the end of the file, if possible
+            int endOfFile = GetEndOfFile();
+            if (endOfFile == -1)
+                return null;
+
+            // If the segment table is invalid
+            if (SegmentTable == null || SegmentTable.Length == 0)
+                return null;
+
+            // If the index is invalid
+            if (index < 0 || index >= Header.FileSegmentCount || index >= SegmentTable.Length)
+                return null;
+
+            // Get the segment from the table
+            var segment = SegmentTable[index];
+            if (segment.Length == 0)
+                return [];
+
+            // Verify the segment offset
+            int offset = segment.Offset << Header.SegmentAlignmentShiftCount;
+            if (offset < 0 || offset + segment.Length >= endOfFile)
+                return null;
+
+            // Read the segment data and return
+            return ReadFromDataSource(offset, segment.Length);
+        }
+
+        #endregion
+
         #region REMOVE -- DO NOT USE
 
         /// <summary>
