@@ -4,10 +4,11 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.CFB;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class CFB : WrapperBase<Binary>
+    public class CFB : WrapperBase<Binary>, IExtractable
     {
         #region Descriptive Properties
 
@@ -133,13 +134,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract all files from the CFB to an output directory
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all files extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory, bool includeDebug)
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no files
             if (DirectoryEntries == null || DirectoryEntries.Length == 0)

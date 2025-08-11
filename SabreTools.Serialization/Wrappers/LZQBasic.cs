@@ -2,10 +2,11 @@ using System;
 using System.IO;
 using SabreTools.IO.Compression.SZDD;
 using SabreTools.Models.LZ;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class LZQBasic : WrapperBase<QBasicFile>
+    public class LZQBasic : WrapperBase<QBasicFile>, IExtractable
     {
         #region Descriptive Properties
 
@@ -80,12 +81,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract the contents to an output directory
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if the contents extracted, false otherwise</returns>
+        /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Get the length of the compressed data

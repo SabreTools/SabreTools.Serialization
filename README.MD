@@ -46,6 +46,7 @@ Below is a table representing the various non-conversion interfaces that are imp
 
 | Interface Name | Purpose |
 | --- | --- |
+| `IExtractable` | Marks a wrapper as able to be extracted |
 | `IPrinter` | Provides a formatted output for a model |
 | `IWrapper` / `IWrapper<T>` | Wraps a model or set of models to provide additional functionality |
 

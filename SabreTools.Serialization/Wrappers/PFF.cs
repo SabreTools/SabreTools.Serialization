@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using SabreTools.Models.PFF;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PFF : WrapperBase<Archive>
+    public class PFF : WrapperBase<Archive>, IExtractable
     {
         #region Descriptive Properties
 
@@ -91,13 +92,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract all segments from the PFF to an output directory
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all segments extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory, bool includeDebug)
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no segments
             if (Segments == null || Segments.Length == 0)

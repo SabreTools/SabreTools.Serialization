@@ -1,9 +1,10 @@
 using System;
 using System.IO;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class WAD3 : WrapperBase<Models.WAD3.File>
+    public class WAD3 : WrapperBase<Models.WAD3.File>, IExtractable
     {
         #region Descriptive Properties
 
@@ -85,13 +86,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract all lumps from the WAD3 to an output directory
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all lumps extracted, false otherwise</returns>
-        public bool ExtractAllLumps(string outputDirectory, bool includeDebug)
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no lumps
             if (DirEntries == null || DirEntries.Length == 0)

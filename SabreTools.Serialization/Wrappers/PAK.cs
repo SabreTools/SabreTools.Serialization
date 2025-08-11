@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using SabreTools.Models.PAK;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PAK : WrapperBase<Models.PAK.File>
+    public class PAK : WrapperBase<Models.PAK.File>, IExtractable
     {
         #region Descriptive Properties
 
@@ -86,13 +87,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract all files from the PAK to an output directory
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all files extracted, false otherwise</returns>
-        public bool ExtractAll(string outputDirectory, bool includeDebug)
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no directory items
             if (DirectoryItems == null || DirectoryItems.Length == 0)

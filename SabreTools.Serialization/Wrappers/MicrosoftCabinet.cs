@@ -3,10 +3,11 @@ using System.IO;
 using SabreTools.IO.Compression.MSZIP;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.MicrosoftCabinet;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class MicrosoftCabinet : WrapperBase<Cabinet>
+    public partial class MicrosoftCabinet : WrapperBase<Cabinet>, IExtractable
     {
         #region Descriptive Properties
 
@@ -171,13 +172,12 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <summary>
-        /// Extract a cabinet file from a set to an output directory, if possible
-        /// </summary>
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
+            => Extract(null, outputDirectory, includeDebug);
+
+        /// <inheritdoc cref="Extract(string, bool)"/>
         /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="outDir">Path to the output directory</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Indicates if all files were able to be extracted</returns>
         public bool Extract(string? filename, string outDir, bool includeDebug)
         {
             // If the archive is invalid
