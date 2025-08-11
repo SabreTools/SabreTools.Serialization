@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Address of the overlay, if it exists
         /// </summary>
         /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
-        public int OverlayAddress
+        public long OverlayAddress
         {
             get
             {
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayAddress.Value;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return -1;
 
@@ -49,10 +49,29 @@ namespace SabreTools.Serialization.Wrappers
                         return -1;
 
                     // Search through the segments table to find the furthest
-                    int endOfSectionData = -1;
+                    long endOfSectionData = -1;
                     foreach (var entry in SegmentTable)
                     {
-                        int offset = (entry.Offset << Header.SegmentAlignmentShiftCount) + entry.Length;
+                        // Get end of segment data
+                        long offset = entry.Offset * (1 << Header.SegmentAlignmentShiftCount) + entry.Length;
+
+                        // Read and find the end of the relocation data
+                        if ((entry.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
+                        {
+                            Stream? dataStream = null;
+                            if (_byteArrayData != null)
+                                dataStream = new MemoryStream(_byteArrayData);
+                            else if (_streamData != null)
+                                dataStream = _streamData;
+                            else
+                                break;
+
+                            dataStream.Seek(offset, SeekOrigin.Begin);
+                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(dataStream);
+
+                            offset = dataStream.Position;
+                        }
+
                         if (offset > endOfSectionData)
                             endOfSectionData = offset;
                     }
@@ -275,7 +294,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Address of the overlay, if it exists
         /// </summary>
-        private int? _overlayAddress = null;
+        private long? _overlayAddress = null;
 
         /// <summary>
         /// Overlay data, if it exists
