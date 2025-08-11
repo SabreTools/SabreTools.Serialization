@@ -10,6 +10,7 @@ namespace SabreTools.Serialization.Deserializers
     public class NewExecutable : BaseBinaryDeserializer<Executable>
     {
         /// <inheritdoc/>
+        /// TODO: Relocation data needs to be hooked up when Models updated
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
@@ -315,6 +316,37 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into an ImportOrdinalRelocationRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ImportOrdinalRelocationRecord on success, null on error</returns>
+        public static ImportOrdinalRelocationRecord ParseImportOrdinalRelocationRecord(Stream data)
+        {
+            var obj = new ImportOrdinalRelocationRecord();
+
+            obj.Index = data.ReadUInt16LittleEndian();
+            obj.Ordinal = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an InternalRefRelocationRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled InternalRefRelocationRecord on success, null on error</returns>
+        public static InternalRefRelocationRecord ParseInternalRefRelocationRecord(Stream data)
+        {
+            var obj = new InternalRefRelocationRecord();
+
+            obj.SegmentNumber = data.ReadByteValue();
+            obj.Reserved = data.ReadByteValue();
+            obj.Offset = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into an ModuleReferenceTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -323,6 +355,21 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ModuleReferenceTableEntry();
 
+            obj.Offset = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ImportNameRelocationRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ImportNameRelocationRecord on success, null on error</returns>
+        public static ImportNameRelocationRecord ParseImportNameRelocationRecord(Stream data)
+        {
+            var obj = new ImportNameRelocationRecord();
+
+            obj.Index = data.ReadUInt16LittleEndian();
             obj.Offset = data.ReadUInt16LittleEndian();
 
             return obj;
@@ -359,6 +406,72 @@ namespace SabreTools.Serialization.Deserializers
             obj.Length = data.ReadByteValue();
             obj.NameString = data.ReadBytes(obj.Length);
             obj.OrdinalNumber = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an OSFixupRelocationRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled OSFixupRelocationRecord on success, null on error</returns>
+        public static OSFixupRelocationRecord ParseOSFixupRelocationRecord(Stream data)
+        {
+            var obj = new OSFixupRelocationRecord();
+
+            obj.FixupType = (OSFixupType)data.ReadUInt16LittleEndian();
+            obj.Reserved = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an PerSegmentData
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled PerSegmentData on success, null on error</returns>
+        public static PerSegmentData ParsePerSegmentData(Stream data)
+        {
+            var obj = new PerSegmentData();
+
+            obj.RelocationRecordCount = data.ReadUInt16LittleEndian();
+            obj.RelocationRecords = new RelocationRecord[obj.RelocationRecordCount];
+            for (int i = 0; i < obj.RelocationRecords.Length; i++)
+            {
+                obj.RelocationRecords[i] = ParseRelocationRecord(data);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an RelocationRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled RelocationRecord on success, null on error</returns>
+        public static RelocationRecord ParseRelocationRecord(Stream data)
+        {
+            var obj = new RelocationRecord();
+
+            obj.SourceType = (RelocationRecordSourceType)data.ReadByteValue();
+            obj.Flags = (RelocationRecordFlag)data.ReadByteValue();
+            obj.Offset = data.ReadUInt16LittleEndian();
+
+            switch (obj.Flags & RelocationRecordFlag.TARGET_MASK)
+            {
+                case RelocationRecordFlag.INTERNALREF:
+                    obj.InternalRefRelocationRecord = ParseInternalRefRelocationRecord(data);
+                    break;
+                case RelocationRecordFlag.IMPORTORDINAL:
+                    obj.ImportOrdinalRelocationRecord = ParseImportOrdinalRelocationRecord(data);
+                    break;
+                case RelocationRecordFlag.IMPORTNAME:
+                    obj.ImportNameRelocationRecord = ParseImportNameRelocationRecord(data);
+                    break;
+                case RelocationRecordFlag.OSFIXUP:
+                    obj.OSFixupRelocationRecord = ParseOSFixupRelocationRecord(data);
+                    break;
+            }
 
             return obj;
         }
