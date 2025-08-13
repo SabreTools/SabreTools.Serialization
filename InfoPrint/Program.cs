@@ -25,11 +25,7 @@ namespace InfoPrint
             // Loop through the input paths
             foreach (string inputPath in options.InputPaths)
             {
-#if NETFRAMEWORK || NETSTANDARD2_0_OR_GREATER
-                PrintPathInfo(inputPath, false, options.Debug, options.Hash);
-#else
-                PrintPathInfo(inputPath, options.Json, options.Debug, options.Hash);
-#endif
+                PrintPathInfo(inputPath, options);
             }
         }
 
@@ -37,23 +33,21 @@ namespace InfoPrint
         /// Wrapper to print information for a single path
         /// </summary>
         /// <param name="path">File or directory path</param>
-        /// <param name="json">Enable JSON output, if supported</param>
-        /// <param name="debug">Enable debug output</param>
-        /// <param name="hash">Enable hash output</param>
-        private static void PrintPathInfo(string path, bool json, bool debug, bool hash)
+        /// <param name="options">User-defined options</param>
+        private static void PrintPathInfo(string path, Options options)
         {
             Console.WriteLine($"Checking possible path: {path}");
 
             // Check if the file or directory exists
             if (File.Exists(path))
             {
-                PrintFileInfo(path, json, debug, hash);
+                PrintFileInfo(path, options);
             }
             else if (Directory.Exists(path))
             {
                 foreach (string file in IOExtensions.SafeEnumerateFiles(path, "*", SearchOption.AllDirectories))
                 {
-                    PrintFileInfo(file, json, debug, hash);
+                    PrintFileInfo(file, options);
                 }
             }
             else
@@ -66,10 +60,8 @@ namespace InfoPrint
         /// Print information for a single file, if possible
         /// </summary>
         /// <param name="file">File path</param>
-        /// <param name="json">Enable JSON output, if supported</param>
-        /// <param name="debug">Enable debug output</param>
-        /// <param name="hash">Enable hash output</param>
-        private static void PrintFileInfo(string file, bool json, bool debug, bool hash)
+        /// <param name="options">User-defined options</param>
+        private static void PrintFileInfo(string file, Options options)
         {
             Console.WriteLine($"Attempting to print info for {file}");
 
@@ -77,9 +69,9 @@ namespace InfoPrint
             string filenameBase = $"info-{DateTime.Now:yyyy-MM-dd_HHmmss.ffff}";
 
             // If we have the hash flag
-            if (hash)
+            if (options.Hash)
             {
-                var hashBuilder = PrintHashInfo(file, debug);
+                var hashBuilder = PrintHashInfo(file, options.Debug);
                 if (hashBuilder != null)
                 {
                     // Create the output data
@@ -120,7 +112,7 @@ namespace InfoPrint
 
 #if NETCOREAPP
                 // If we have the JSON flag
-                if (json)
+                if (options.Json)
                 {
                     // Create the output data
                     string serializedData = wrapper.ExportJSON();
@@ -140,15 +132,17 @@ namespace InfoPrint
                     return;
                 }
 
-                
-                Console.WriteLine(builder);
+                // Only print to console if enabled
+                if (!options.FileOnly)
+                    Console.WriteLine(builder);
+
                 using var sw = new StreamWriter(File.OpenWrite($"{filenameBase}.txt"));
                 sw.WriteLine(builder.ToString());
                 sw.Flush();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(debug ? ex : "[Exception opening file, please try again]");
+                Console.WriteLine(options.Debug ? ex : "[Exception opening file, please try again]");
                 Console.WriteLine();
             }
         }

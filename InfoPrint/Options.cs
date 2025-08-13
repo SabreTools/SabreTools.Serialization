@@ -16,6 +16,11 @@ namespace InfoPrint
         public bool Debug { get; private set; } = false;
 
         /// <summary>
+        /// Output information to file only, skip printing to console
+        /// </summary>
+        public bool FileOnly { get; private set; } = false;
+
+        /// <summary>
         /// Print external file hashes
         /// </summary>
         public bool Hash { get; private set; } = false;
@@ -84,6 +89,11 @@ namespace InfoPrint
                         options.Hash = true;
                         break;
 
+                    case "-f":
+                    case "--file":
+                        options.FileOnly = true;
+                        break;
+
                     case "-j":
                     case "--json":
 #if NETCOREAPP
@@ -122,6 +132,7 @@ namespace InfoPrint
             Console.WriteLine("-?, -h, --help           Display this help text and quit");
             Console.WriteLine("-d, --debug              Enable debug mode");
             Console.WriteLine("-c, --hash               Output file hashes");
+            Console.WriteLine("-f, --file               Print to file only");
 #if NETCOREAPP
             Console.WriteLine("-j, --json               Print info as JSON");
 #endif
