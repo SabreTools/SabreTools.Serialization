@@ -99,7 +99,8 @@ namespace SabreTools.Serialization.Deserializers
                     executable.COFFSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
 
                     // Set the COFF string table
-                    executable.COFFStringTable = ParseCOFFStringTable(data);
+                    if (executable.COFFSymbolTable != null)
+                        executable.COFFStringTable = ParseCOFFStringTable(data);
                 }
 
                 #endregion
@@ -400,7 +401,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of COFF symbol table entries to read</param>
         /// <returns>Filled COFF symbol table on success, null on error</returns>
-        public static COFFSymbolTableEntry[] ParseCOFFSymbolTable(Stream data, uint count)
+        public static COFFSymbolTableEntry[]? ParseCOFFSymbolTable(Stream data, uint count)
         {
             var coffSymbolTable = new COFFSymbolTableEntry[count];
 
@@ -467,6 +468,10 @@ namespace SabreTools.Serialization.Deserializers
                     else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
                     {
                         currentSymbolType = 6;
+                    }
+                    else
+                    {
+                        return null;
                     }
                 }
 
@@ -541,6 +546,12 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat6Reserved2 = data.ReadBytes(12);
                     coffSymbolTable[i] = entry;
                     auxSymbolsRemaining--;
+                }
+
+                // Invalid case, should never happen
+                else
+                {
+                    return null;
                 }
 
                 // If we hit the last aux symbol, go back to normal format
