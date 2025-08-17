@@ -89,8 +89,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region COFF Symbol Table and COFF String Table
 
                 // TODO: Validate that this is correct with an "old" PE
-                long symbolTableAddress = initialOffset
-                    + coffFileHeader.PointerToSymbolTable.ConvertVirtualAddress(executable.SectionTable);
+                long symbolTableAddress = initialOffset + coffFileHeader.PointerToSymbolTable;
                 if (symbolTableAddress != 0 && symbolTableAddress < data.Length)
                 {
                     // Seek to the COFF symbol table
