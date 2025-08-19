@@ -309,18 +309,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we have an unset length, read the whole source
             if (length == -1)
-            {
-                switch (_dataSource)
-                {
-                    case DataSource.ByteArray:
-                        length = _byteArrayData!.Length - _initialPosition;
-                        break;
-
-                    case DataSource.Stream:
-                        length = _streamData!.Length - _initialPosition;
-                        break;
-                }
-            }
+                length = GetEndOfFile();
 
             return ReadFromDataSource(rangeStart, (int)length);
         }
