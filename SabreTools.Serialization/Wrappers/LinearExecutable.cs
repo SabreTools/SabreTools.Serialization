@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Get the end of the file, if possible
-            int endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOfFile();
             if (endOfFile == -1)
                 return -1;
 
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Get the end of the file, if possible
-            int endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOfFile();
             if (endOfFile == -1)
                 return -1;
 
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">How many bytes to read, -1 means read until end</param>
         /// <returns>Byte array representing the range, null on error</returns>
         [Obsolete]
-        public byte[]? ReadArbitraryRange(int rangeStart = -1, int length = -1)
+        public byte[]? ReadArbitraryRange(int rangeStart = -1, long length = -1)
         {
             // If we have an unset range start, read from the start of the source
             if (rangeStart == -1)
@@ -313,16 +313,16 @@ namespace SabreTools.Serialization.Wrappers
                 switch (_dataSource)
                 {
                     case DataSource.ByteArray:
-                        length = _byteArrayData!.Length - _byteArrayOffset;
+                        length = _byteArrayData!.Length - _initialPosition;
                         break;
 
                     case DataSource.Stream:
-                        length = (int)_streamData!.Length;
+                        length = _streamData!.Length - _initialPosition;
                         break;
                 }
             }
 
-            return ReadFromDataSource(rangeStart, length);
+            return ReadFromDataSource(rangeStart, (int)length);
         }
 
         #endregion

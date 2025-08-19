@@ -208,7 +208,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayAddress.Value;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return -1;
 
@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayData;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return null;
 
@@ -336,8 +336,8 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    int overlayLength = endOfFile - endOfSectionData;
-                    _overlayData = ReadFromDataSource(endOfSectionData, overlayLength);
+                    long overlayLength = endOfFile - endOfSectionData;
+                    _overlayData = ReadFromDataSource(endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }
             }
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayStrings;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return null;
 
@@ -415,10 +415,10 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Revisit the 16 MiB limit
                     // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    int overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+                    long overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, overlayLength, charLimit: 3);
+                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, (int)overlayLength, charLimit: 3);
                     return _overlayStrings;
                 }
             }

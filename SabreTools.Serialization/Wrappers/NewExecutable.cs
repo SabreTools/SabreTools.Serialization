@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayData;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return null;
 
@@ -169,8 +169,8 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    int overlayLength = endOfFile - endOfSectionData;
-                    _overlayData = ReadFromDataSource(endOfSectionData, overlayLength);
+                    long overlayLength = endOfFile - endOfSectionData;
+                    _overlayData = ReadFromDataSource(endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }
             }
@@ -190,7 +190,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayStrings;
 
                     // Get the end of the file, if possible
-                    int endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOfFile();
                     if (endOfFile == -1)
                         return null;
 
@@ -239,10 +239,10 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Revisit the 16 MiB limit
                     // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    int overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+                    long overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, overlayLength, charLimit: 3);
+                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, (int)overlayLength, charLimit: 3);
                     return _overlayStrings;
                 }
             }
@@ -396,7 +396,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Get the end of the file, if possible
-            int endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOfFile();
             if (endOfFile == -1)
                 return null;
 
@@ -474,7 +474,7 @@ namespace SabreTools.Serialization.Wrappers
         public int GetResourceOffset(int id)
         {
             // Get the end of the file, if possible
-            int endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOfFile();
             if (endOfFile == -1)
                 return -1;
 
@@ -570,7 +570,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Get the end of the file, if possible
-            int endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOfFile();
             if (endOfFile == -1)
                 return -1;
 
@@ -599,7 +599,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">How many bytes to read, -1 means read until end</param>
         /// <returns>Byte array representing the range, null on error</returns>
         [Obsolete]
-        public byte[]? ReadArbitraryRange(int rangeStart = -1, int length = -1)
+        public byte[]? ReadArbitraryRange(int rangeStart = -1, long length = -1)
         {
             // If we have an unset range start, read from the start of the source
             if (rangeStart == -1)
@@ -611,16 +611,16 @@ namespace SabreTools.Serialization.Wrappers
                 switch (_dataSource)
                 {
                     case DataSource.ByteArray:
-                        length = _byteArrayData!.Length - _byteArrayOffset;
+                        length = _byteArrayData!.Length - _initialPosition;
                         break;
 
                     case DataSource.Stream:
-                        length = (int)_streamData!.Length;
+                        length = _streamData!.Length - _initialPosition;
                         break;
                 }
             }
 
-            return ReadFromDataSource(rangeStart, length);
+            return ReadFromDataSource(rangeStart, (int)length);
         }
 
         #endregion
