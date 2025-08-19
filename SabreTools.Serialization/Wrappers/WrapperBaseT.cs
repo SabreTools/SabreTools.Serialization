@@ -52,6 +52,12 @@ namespace SabreTools.Serialization.Wrappers
         private readonly object _streamDataLock = new();
 
         /// <summary>
+        /// Initial position of the data source
+        /// </summary>
+        /// <remarks>Populated for both <see cref="DataSource.ByteArray"/> and <see cref="DataSource.Stream"/></remarks>
+        protected long _initialPosition = 0;
+
+        /// <summary>
         /// Source byte array data
         /// </summary>
         /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.ByteArray"/></remarks>
@@ -108,6 +114,7 @@ namespace SabreTools.Serialization.Wrappers
 
             Model = model;
             _dataSource = DataSource.ByteArray;
+            _initialPosition = offset;
             _byteArrayData = data;
             _byteArrayOffset = offset;
         }
@@ -126,6 +133,7 @@ namespace SabreTools.Serialization.Wrappers
 
             Model = model;
             _dataSource = DataSource.Stream;
+            _initialPosition = data.Position;
             _streamData = data;
         }
 
