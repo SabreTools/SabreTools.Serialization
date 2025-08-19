@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Wrappers
                     foreach (var entry in SegmentTable)
                     {
                         // Get end of segment data
-                        long offset = entry.Offset * (1 << Header.SegmentAlignmentShiftCount) + entry.Length;
+                        long offset = _initialPosition + (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
 
                         // Read and find the end of the relocation data
                         if ((entry.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
