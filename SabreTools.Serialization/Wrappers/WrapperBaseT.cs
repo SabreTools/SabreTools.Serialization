@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // If we have an invalid position
-            if (position < 0 || _initialPosition + position >= GetEndOfFile())
+            if (position < 0 || position >= GetEndOfFile())
                 return false;
 
             return _dataSource switch
