@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Cache the current offset
-                int initialOffset = (int)data.Position;
+                long initialOffset = data.Position;
 
                 // Create a new cabinet to fill
                 var cabinet = new Cabinet();
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Files
 
                 // Get the files offset
-                int filesOffset = (int)cabinetHeader.FilesOffset + initialOffset;
+                long filesOffset = initialOffset + cabinetHeader.FilesOffset;
                 if (filesOffset > data.Length)
                     return null;
 

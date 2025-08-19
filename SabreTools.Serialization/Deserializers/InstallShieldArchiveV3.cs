@@ -16,6 +16,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new archive to fill
                 var archive = new Archive();
 
@@ -25,7 +28,7 @@ namespace SabreTools.Serialization.Deserializers
                 var header = ParseHeader(data);
                 if (header.Signature1 != Constants.HeaderSignature)
                     return null;
-                if (header.TocAddress >= data.Length)
+                if (initialOffset + header.TocAddress >= data.Length)
                     return null;
 
                 // Set the archive header
@@ -36,8 +39,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directories
 
                 // Get the directories offset
-                uint directoriesOffset = header.TocAddress;
-                if (directoriesOffset < 0 || directoriesOffset >= data.Length)
+                long directoriesOffset = initialOffset + header.TocAddress;
+                if (directoriesOffset < initialOffset || directoriesOffset >= data.Length)
                     return null;
 
                 // Seek to the directories

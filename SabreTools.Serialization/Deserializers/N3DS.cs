@@ -18,6 +18,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new cart image to fill
                 var cart = new Cart();
 
@@ -64,9 +67,9 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < 8; i++)
                 {
                     // Find the offset to the partition
-                    long partitionOffset = cart.Header.PartitionsTable?[i]?.Offset ?? 0;
+                    long partitionOffset = initialOffset + cart.Header.PartitionsTable?[i]?.Offset ?? 0;
                     partitionOffset *= mediaUnitSize;
-                    if (partitionOffset == 0)
+                    if (partitionOffset <= initialOffset)
                         continue;
 
                     // Seek to the start of the partition

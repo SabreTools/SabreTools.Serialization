@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new archive to fill
                 var archive = new Archive();
 
@@ -60,8 +63,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Segments
 
                 // Get the segments
-                long offset = header.FileListOffset;
-                if (offset < 0 || offset >= data.Length)
+                long offset = initialOffset + header.FileListOffset;
+                if (offset < initialOffset || offset >= data.Length)
                     return null;
 
                 // Seek to the segments
@@ -81,8 +84,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Footer
 
                 // Get the footer offset
-                offset = header.FileListOffset + (header.FileSegmentSize * header.NumberOfFiles);
-                if (offset < 0 || offset >= data.Length)
+                offset = initialOffset + header.FileListOffset + (header.FileSegmentSize * header.NumberOfFiles);
+                if (offset < initialOffset || offset >= data.Length)
                     return null;
 
                 // Seek to the footer

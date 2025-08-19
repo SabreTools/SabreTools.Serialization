@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new XBox Package File to fill
                 var file = new Models.XZP.File();
 
@@ -84,8 +87,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (header.DirectoryItemCount > 0)
                 {
                     // Get the directory item offset
-                    uint directoryItemOffset = header.DirectoryItemOffset;
-                    if (directoryItemOffset < 0 || directoryItemOffset >= data.Length)
+                    long directoryItemOffset = initialOffset + header.DirectoryItemOffset;
+                    if (directoryItemOffset < initialOffset || directoryItemOffset >= data.Length)
                         return null;
 
                     // Seek to the directory items
@@ -97,7 +100,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the directory items
                     for (int i = 0; i < file.DirectoryItems.Length; i++)
                     {
-                        file.DirectoryItems[i] = ParseDirectoryItem(data);
+                        file.DirectoryItems[i] = ParseDirectoryItem(data, initialOffset);
                     }
                 }
 
@@ -147,8 +150,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into a DirectoryItem
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Filled DirectoryItem on success, null on error</returns>
-        public static DirectoryItem ParseDirectoryItem(Stream data)
+        public static DirectoryItem ParseDirectoryItem(Stream data, long initialOffset)
         {
             var obj = new DirectoryItem();
 
@@ -160,7 +164,7 @@ namespace SabreTools.Serialization.Deserializers
             long currentPosition = data.Position;
 
             // Seek to the name offset
-            data.Seek(obj.NameOffset, SeekOrigin.Begin);
+            data.Seek(initialOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the name
             obj.Name = data.ReadNullTerminatedAnsiString();

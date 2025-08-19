@@ -23,13 +23,16 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 var archive = new Archive();
 
                 #region End of Central Directory Record
 
                 // Find the end of central directory record
                 long eocdrOffset = SearchForEndOfCentralDirectoryRecord(data);
-                if (eocdrOffset < 0 || eocdrOffset >= data.Length)
+                if (eocdrOffset < initialOffset || eocdrOffset >= data.Length)
                     return null;
 
                 // Seek to the end of central directory record
@@ -63,7 +66,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Find the ZIP64 end of central directory locator
                     long eocdlOffset = SearchForZIP64EndOfCentralDirectoryLocator(data);
-                    if (eocdlOffset < 0 || eocdlOffset >= data.Length)
+                    if (eocdlOffset < initialOffset || eocdlOffset >= data.Length)
                         return null;
 
                     // Seek to the ZIP64 end of central directory locator
@@ -78,11 +81,11 @@ namespace SabreTools.Serialization.Deserializers
                     archive.ZIP64EndOfCentralDirectoryLocator = eocdl64;
 
                     // Try to get the ZIP64 end of central directory record offset
-                    if ((long)eocdl64.CentralDirectoryOffset < 0 || (long)eocdl64.CentralDirectoryOffset >= data.Length)
+                    if ((long)eocdl64.CentralDirectoryOffset < 0 || initialOffset + (long)eocdl64.CentralDirectoryOffset >= data.Length)
                         return null;
 
                     // Seek to the ZIP64 end of central directory record
-                    data.Seek((long)eocdl64.CentralDirectoryOffset, SeekOrigin.Begin);
+                    data.Seek(initialOffset + (long)eocdl64.CentralDirectoryOffset, SeekOrigin.Begin);
 
                     // Read the ZIP64 end of central directory record
                     var eocdr64 = ParseEndOfCentralDirectoryRecord64(data);
@@ -101,12 +104,12 @@ namespace SabreTools.Serialization.Deserializers
                 long cdrOffset, cdrSize;
                 if (zip64 && archive.ZIP64EndOfCentralDirectoryRecord != null)
                 {
-                    cdrOffset = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectoryOffset;
+                    cdrOffset = initialOffset + (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectoryOffset;
                     cdrSize = (long)archive.ZIP64EndOfCentralDirectoryRecord.CentralDirectorySize;
                 }
                 else if (archive.EndOfCentralDirectoryRecord != null)
                 {
-                    cdrOffset = archive.EndOfCentralDirectoryRecord.CentralDirectoryOffset;
+                    cdrOffset = initialOffset + archive.EndOfCentralDirectoryRecord.CentralDirectoryOffset;
                     cdrSize = archive.EndOfCentralDirectoryRecord.CentralDirectorySize;
                 }
                 else
@@ -115,7 +118,7 @@ namespace SabreTools.Serialization.Deserializers
                 }
 
                 // Try to get the central directory record offset
-                if (cdrOffset < 0 || cdrOffset >= data.Length)
+                if (cdrOffset < initialOffset || cdrOffset >= data.Length)
                     return null;
 
                 // Seek to the first central directory record
@@ -188,11 +191,11 @@ namespace SabreTools.Serialization.Deserializers
                             headerOffset = BitConverter.ToInt64(extraData, 4);
                     }
 
-                    if (headerOffset < 0 || headerOffset >= data.Length)
+                    if (headerOffset < 0 || initialOffset + headerOffset >= data.Length)
                         return null;
 
                     // Seek to the local file header
-                    data.Seek(headerOffset, SeekOrigin.Begin);
+                    data.Seek(initialOffset + headerOffset, SeekOrigin.Begin);
 
                     // Try to parse the local header
                     var localFileHeader = ParseLocalFileHeader(data);
@@ -212,7 +215,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Only read the encryption header if necessary
 #if NET20 || NET35
-                if ((header.Flags & GeneralPurposeBitFlags.FileEncrypted) != 0)
+                    if ((header.Flags & GeneralPurposeBitFlags.FileEncrypted) != 0)
 #else
                     if (header.Flags.HasFlag(GeneralPurposeBitFlags.FileEncrypted))
 #endif
@@ -241,7 +244,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Only read the data descriptor if necessary
 #if NET20 || NET35
-                if ((header.Flags & GeneralPurposeBitFlags.NoCRC) != 0)
+                    if ((header.Flags & GeneralPurposeBitFlags.NoCRC) != 0)
 #else
                     if (header.Flags.HasFlag(GeneralPurposeBitFlags.NoCRC))
 #endif

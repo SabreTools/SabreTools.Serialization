@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Half-Life No Cache to fill
                 var file = new Models.NCF.File();
 
@@ -37,7 +40,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Cache the current offset
-                long initialOffset = data.Position;
+                long afterHeaderPosition = data.Position;
 
                 #region Directory Header
 
@@ -148,7 +151,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Seek to end of directory section, just in case
-                data.Seek(initialOffset + directoryHeader.DirectorySize, SeekOrigin.Begin);
+                data.Seek(afterHeaderPosition + directoryHeader.DirectorySize, SeekOrigin.Begin);
 
                 #region Unknown Header
 
@@ -233,7 +236,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.Seek(initialOffset + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.Seek(afterHeaderPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 return file;
             }

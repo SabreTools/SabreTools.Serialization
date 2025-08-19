@@ -19,6 +19,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new archive to fill
                 var archive = new Archive();
 
@@ -29,9 +32,6 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(-4, SeekOrigin.Current);
                 if (possibleSignature == UserDataSignatureUInt32)
                 {
-                    // Save the current position for offset correction
-                    long basePtr = data.Position;
-
                     // Deserialize the user data, returning null if invalid
                     var userData = ParseUserData(data);
                     if (userData?.Signature != UserDataSignatureString)
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Deserializers
                     archive.UserData = userData;
 
                     // Set the starting position according to the header offset
-                    data.Seek(basePtr + (int)archive.UserData.HeaderOffset, SeekOrigin.Begin);
+                    data.Seek(initialOffset + archive.UserData.HeaderOffset, SeekOrigin.Begin);
                 }
 
                 #endregion
@@ -76,8 +76,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
                 {
                     // If we have a hash table
-                    long hashTableOffset = archive.ArchiveHeader.HashTablePosition;
-                    if (hashTableOffset != 0)
+                    long hashTableOffset = initialOffset + archive.ArchiveHeader.HashTablePosition;
+                    if (hashTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(hashTableOffset, SeekOrigin.Begin);
@@ -103,8 +103,8 @@ namespace SabreTools.Serialization.Deserializers
                     || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
                 {
                     // If we have a hash table
-                    long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
-                    if (hashTableOffset != 0)
+                    long hashTableOffset = initialOffset + (((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition);
+                    if (hashTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(hashTableOffset, SeekOrigin.Begin);
@@ -129,8 +129,8 @@ namespace SabreTools.Serialization.Deserializers
                 else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
                 {
                     // If we have a hash table
-                    long hashTableOffset = ((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition;
-                    if (hashTableOffset != 0)
+                    long hashTableOffset = initialOffset + (((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition);
+                    if (hashTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(hashTableOffset, SeekOrigin.Begin);
@@ -159,8 +159,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
                 {
                     // If we have a block table
-                    long blockTableOffset = archive.ArchiveHeader.BlockTablePosition;
-                    if (blockTableOffset != 0)
+                    long blockTableOffset = initialOffset + archive.ArchiveHeader.BlockTablePosition;
+                    if (blockTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(blockTableOffset, SeekOrigin.Begin);
@@ -186,8 +186,8 @@ namespace SabreTools.Serialization.Deserializers
                     || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
                 {
                     // If we have a block table
-                    long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
-                    if (blockTableOffset != 0)
+                    long blockTableOffset = initialOffset + (((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition);
+                    if (blockTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(blockTableOffset, SeekOrigin.Begin);
@@ -212,8 +212,8 @@ namespace SabreTools.Serialization.Deserializers
                 else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
                 {
                     // If we have a block table
-                    long blockTableOffset = ((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition;
-                    if (blockTableOffset != 0)
+                    long blockTableOffset = initialOffset + (((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition);
+                    if (blockTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(blockTableOffset, SeekOrigin.Begin);
@@ -242,8 +242,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format2)
                 {
                     // If we have a hi-block table
-                    long hiBlockTableOffset = (long)archive.ArchiveHeader.HiBlockTablePosition;
-                    if (hiBlockTableOffset != 0)
+                    long hiBlockTableOffset = initialOffset + (long)archive.ArchiveHeader.HiBlockTablePosition;
+                    if (hiBlockTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(hiBlockTableOffset, SeekOrigin.Begin);
@@ -269,8 +269,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
                 {
                     // If we have a BET table
-                    long betTableOffset = (long)archive.ArchiveHeader.BetTablePosition;
-                    if (betTableOffset != 0)
+                    long betTableOffset = initialOffset + (long)archive.ArchiveHeader.BetTablePosition;
+                    if (betTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(betTableOffset, SeekOrigin.Begin);
@@ -292,8 +292,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
                 {
                     // If we have a HET table
-                    long hetTableOffset = (long)archive.ArchiveHeader.HetTablePosition;
-                    if (hetTableOffset != 0)
+                    long hetTableOffset = initialOffset + (long)archive.ArchiveHeader.HetTablePosition;
+                    if (hetTableOffset > initialOffset)
                     {
                         // Seek to the offset
                         data.Seek(hetTableOffset, SeekOrigin.Begin);

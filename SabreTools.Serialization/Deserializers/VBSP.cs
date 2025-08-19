@@ -20,6 +20,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Half-Life 2 Level to fill
                 var file = new VbspFile();
 
@@ -51,7 +54,7 @@ namespace SabreTools.Serialization.Deserializers
                         continue;
 
                     // Seek to the lump offset
-                    data.Seek(lumpEntry.Offset, SeekOrigin.Begin);
+                    data.Seek(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
 
                     // Read according to the lump type
                     switch ((LumpType)l)

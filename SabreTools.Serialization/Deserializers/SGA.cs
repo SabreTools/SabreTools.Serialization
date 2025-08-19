@@ -18,6 +18,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new SGA to fill
                 var archive = new Archive();
 
@@ -158,11 +161,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Sections
 
             // Get and adjust the sections offset
-            long sectionOffset = directoryHeader.SectionOffset;
-            sectionOffset += currentOffset;
+            long sectionOffset = currentOffset + directoryHeader.SectionOffset;
 
             // Validate the offset
-            if (sectionOffset < 0 || sectionOffset >= data.Length)
+            if (sectionOffset < currentOffset || sectionOffset >= data.Length)
                 return null;
 
             // Seek to the sections
@@ -182,11 +184,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Folders
 
             // Get and adjust the folders offset
-            long folderOffset = directoryHeader.FolderOffset;
-            folderOffset += currentOffset;
+            long folderOffset = currentOffset + directoryHeader.FolderOffset;
 
             // Validate the offset
-            if (folderOffset < 0 || folderOffset >= data.Length)
+            if (folderOffset < currentOffset || folderOffset >= data.Length)
                 return null;
 
             // Seek to the folders
@@ -206,11 +207,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Files
 
             // Get and adjust the files offset
-            long fileOffset = directoryHeader.FileOffset;
-            fileOffset += currentOffset;
+            long fileOffset = currentOffset + directoryHeader.FileOffset;
 
             // Validate the offset
-            if (fileOffset < 0 || fileOffset >= data.Length)
+            if (fileOffset < currentOffset || fileOffset >= data.Length)
                 return null;
 
             // Seek to the files
@@ -233,11 +233,10 @@ namespace SabreTools.Serialization.Deserializers
             #region String Table
 
             // Get and adjust the string table offset
-            long stringTableOffset = directoryHeader.StringTableOffset;
-            stringTableOffset += currentOffset;
+            long stringTableOffset = currentOffset + directoryHeader.StringTableOffset;
 
             // Validate the offset
-            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+            if (stringTableOffset < currentOffset || stringTableOffset >= data.Length)
                 return null;
 
             // Seek to the string table
@@ -311,11 +310,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Sections
 
             // Get and adjust the sections offset
-            long sectionOffset = directoryHeader.SectionOffset;
-            sectionOffset += currentOffset;
+            long sectionOffset = currentOffset + directoryHeader.SectionOffset;
 
             // Validate the offset
-            if (sectionOffset < 0 || sectionOffset >= data.Length)
+            if (sectionOffset < currentOffset || sectionOffset >= data.Length)
                 return null;
 
             // Seek to the sections
@@ -335,11 +333,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Folders
 
             // Get and adjust the folders offset
-            long folderOffset = directoryHeader.FolderOffset;
-            folderOffset += currentOffset;
+            long folderOffset = currentOffset + directoryHeader.FolderOffset;
 
             // Validate the offset
-            if (folderOffset < 0 || folderOffset >= data.Length)
+            if (folderOffset < currentOffset || folderOffset >= data.Length)
                 return null;
 
             // Seek to the folders
@@ -359,11 +356,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Files
 
             // Get and adjust the files offset
-            long fileOffset = directoryHeader.FileOffset;
-            fileOffset += currentOffset;
+            long fileOffset = currentOffset + directoryHeader.FileOffset;
 
             // Validate the offset
-            if (fileOffset < 0 || fileOffset >= data.Length)
+            if (fileOffset < currentOffset || fileOffset >= data.Length)
                 return null;
 
             // Seek to the files
@@ -383,11 +379,10 @@ namespace SabreTools.Serialization.Deserializers
             #region String Table
 
             // Get and adjust the string table offset
-            long stringTableOffset = directoryHeader.StringTableOffset;
-            stringTableOffset += currentOffset;
+            long stringTableOffset = currentOffset + directoryHeader.StringTableOffset;
 
             // Validate the offset
-            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+            if (stringTableOffset < currentOffset || stringTableOffset >= data.Length)
                 return null;
 
             // Seek to the string table
@@ -461,11 +456,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Sections
 
             // Get and adjust the sections offset
-            long sectionOffset = directoryHeader.SectionOffset;
-            sectionOffset += currentOffset;
+            long sectionOffset = currentOffset + directoryHeader.SectionOffset;
 
             // Validate the offset
-            if (sectionOffset < 0 || sectionOffset >= data.Length)
+            if (sectionOffset < currentOffset || sectionOffset >= data.Length)
                 return null;
 
             // Seek to the sections
@@ -485,11 +479,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Folders
 
             // Get and adjust the folders offset
-            long folderOffset = directoryHeader.FolderOffset;
-            folderOffset += currentOffset;
+            long folderOffset = currentOffset + directoryHeader.FolderOffset;
 
             // Validate the offset
-            if (folderOffset < 0 || folderOffset >= data.Length)
+            if (folderOffset < currentOffset || folderOffset >= data.Length)
                 return null;
 
             // Seek to the folders
@@ -509,11 +502,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Files
 
             // Get and adjust the files offset
-            long fileOffset = directoryHeader.FileOffset;
-            fileOffset += currentOffset;
+            long fileOffset = currentOffset + directoryHeader.FileOffset;
 
             // Validate the offset
-            if (fileOffset < 0 || fileOffset >= data.Length)
+            if (fileOffset < currentOffset || fileOffset >= data.Length)
                 return null;
 
             // Seek to the files
@@ -533,11 +525,10 @@ namespace SabreTools.Serialization.Deserializers
             #region String Table
 
             // Get and adjust the string table offset
-            long stringTableOffset = directoryHeader.StringTableOffset;
-            stringTableOffset += currentOffset;
+            long stringTableOffset = currentOffset + directoryHeader.StringTableOffset;
 
             // Validate the offset
-            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+            if (stringTableOffset < currentOffset || stringTableOffset >= data.Length)
                 return null;
 
             // Seek to the string table
@@ -611,11 +602,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Sections
 
             // Get and adjust the sections offset
-            long sectionOffset = directoryHeader.SectionOffset;
-            sectionOffset += currentOffset;
+            long sectionOffset = currentOffset + directoryHeader.SectionOffset;
 
             // Validate the offset
-            if (sectionOffset < 0 || sectionOffset >= data.Length)
+            if (sectionOffset < currentOffset || sectionOffset >= data.Length)
                 return null;
 
             // Seek to the sections
@@ -635,11 +625,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Folders
 
             // Get and adjust the folders offset
-            long folderOffset = directoryHeader.FolderOffset;
-            folderOffset += currentOffset;
+            long folderOffset = currentOffset + directoryHeader.FolderOffset;
 
             // Validate the offset
-            if (folderOffset < 0 || folderOffset >= data.Length)
+            if (folderOffset < currentOffset || folderOffset >= data.Length)
                 return null;
 
             // Seek to the folders
@@ -659,11 +648,10 @@ namespace SabreTools.Serialization.Deserializers
             #region Files
 
             // Get and adjust the files offset
-            long fileOffset = directoryHeader.FileOffset;
-            fileOffset += currentOffset;
+            long fileOffset = currentOffset + directoryHeader.FileOffset;
 
             // Validate the offset
-            if (fileOffset < 0 || fileOffset >= data.Length)
+            if (fileOffset < currentOffset || fileOffset >= data.Length)
                 return null;
 
             // Seek to the files
@@ -683,11 +671,10 @@ namespace SabreTools.Serialization.Deserializers
             #region String Table
 
             // Get and adjust the string table offset
-            long stringTableOffset = directoryHeader.StringTableOffset;
-            stringTableOffset += currentOffset;
+            long stringTableOffset = currentOffset + directoryHeader.StringTableOffset;
 
             // Validate the offset
-            if (stringTableOffset < 0 || stringTableOffset >= data.Length)
+            if (stringTableOffset < currentOffset || stringTableOffset >= data.Length)
                 return null;
 
             // Seek to the string table

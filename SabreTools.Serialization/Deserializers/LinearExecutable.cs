@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Cache the current offset
-                int initialOffset = (int)data.Position;
+                long initialOffset = data.Position;
 
                 // Create a new executable to fill
                 var executable = new Executable();
@@ -52,8 +52,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Object Table
 
                 // Get the object table offset
-                long offset = informationBlock.ObjectTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                long offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ObjectTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -73,8 +75,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Object Page Map
 
                 // Get the object page map offset
-                offset = informationBlock.ObjectPageMapOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ObjectPageMapOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object page map
                     data.Seek(offset, SeekOrigin.Begin);
@@ -93,8 +97,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Object Iterate Data Map
 
-                offset = informationBlock.ObjectIterateDataMapOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ObjectIterateDataMapOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object page map
                     data.Seek(offset, SeekOrigin.Begin);
@@ -109,8 +115,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Resource Table
 
                 // Get the resource table offset
-                offset = informationBlock.ResourceTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ResourceTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the resource table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -130,8 +138,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Resident Names Table
 
                 // Get the resident names table offset
-                offset = informationBlock.ResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ResidentNamesTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the resident names table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -159,8 +169,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Entry Table
 
                 // Get the entry table offset
-                offset = informationBlock.EntryTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.EntryTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the entry table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -189,8 +201,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Module Format Directives Table
 
                 // Get the module format directives table offset
-                offset = informationBlock.ModuleDirectivesTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ModuleDirectivesTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the module format directives table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -218,8 +232,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Fix-up Page Table
 
                 // Get the fix-up page table offset
-                offset = informationBlock.FixupPageTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.FixupPageTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the fix-up page table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -239,8 +255,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Fix-up Record Table
 
                 // Get the fix-up record table offset
-                offset = informationBlock.FixupRecordTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.FixupRecordTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the fix-up record table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -264,8 +282,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Imported Module Name Table
 
                 // Get the imported module name table offset
-                offset = informationBlock.ImportedModulesNameTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ImportedModulesNameTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the imported module name table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -285,8 +305,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Imported Module Procedure Name Table
 
                 // Get the imported module procedure name table offset
-                offset = informationBlock.ImportProcedureNameTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.ImportProcedureNameTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the imported module procedure name table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -315,8 +337,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Per-Page Checksum Table
 
                 // Get the per-page checksum table offset
-                offset = informationBlock.PerPageChecksumTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.PerPageChecksumTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the per-page checksum name table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -336,8 +360,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Non-Resident Names Table
 
                 // Get the non-resident names table offset
-                offset = informationBlock.NonResidentNamesTableOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.NonResidentNamesTableOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the non-resident names table
                     data.Seek(offset, SeekOrigin.Begin);
@@ -365,8 +391,10 @@ namespace SabreTools.Serialization.Deserializers
                 #region Debug Information
 
                 // Get the debug information offset
-                offset = informationBlock.DebugInformationOffset + stub.Header.NewExeHeaderAddr;
-                if (offset > stub.Header.NewExeHeaderAddr && offset < data.Length)
+                offset = initialOffset
+                    + stub.Header.NewExeHeaderAddr
+                    + informationBlock.DebugInformationOffset;
+                if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the debug information
                     data.Seek(offset, SeekOrigin.Begin);

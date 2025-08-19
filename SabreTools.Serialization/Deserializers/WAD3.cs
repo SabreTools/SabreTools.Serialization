@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Half-Life Texture Package to fill
                 var file = new Models.WAD3.File();
 
@@ -35,8 +38,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directory Entries
 
                 // Get the directory offset
-                uint dirOffset = header.DirOffset;
-                if (dirOffset < 0 || dirOffset >= data.Length)
+                long dirOffset = initialOffset + header.DirOffset;
+                if (dirOffset < initialOffset || dirOffset >= data.Length)
                     return null;
 
                 // Seek to the lump offset
@@ -66,8 +69,8 @@ namespace SabreTools.Serialization.Deserializers
                         continue;
 
                     // Get the file entry offset
-                    uint fileEntryOffset = dirEntry.Offset;
-                    if (fileEntryOffset < 0 || fileEntryOffset >= data.Length)
+                    long fileEntryOffset = initialOffset + dirEntry.Offset;
+                    if (fileEntryOffset < initialOffset || fileEntryOffset >= data.Length)
                         continue;
 
                     // Seek to the file entry offset

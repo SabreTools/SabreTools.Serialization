@@ -38,8 +38,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the audio files
                 for (int i = 0; i < playlist.AudioFiles.Length; i++)
                 {
-                    long currentOffset = data.Position;
-                    var entryHeader = PlayJAudio.DeserializeStream(data, currentOffset);
+                    var entryHeader = PlayJAudio.DeserializeStream(data);
                     if (entryHeader == null)
                         continue;
 

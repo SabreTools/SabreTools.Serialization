@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Half-Life Package to fill
                 var file = new Models.PAK.File();
 
@@ -35,8 +38,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directory Items
 
                 // Get the directory items offset
-                uint directoryItemsOffset = header.DirectoryOffset;
-                if (directoryItemsOffset < 0 || directoryItemsOffset >= data.Length)
+                long directoryItemsOffset = initialOffset + header.DirectoryOffset;
+                if (directoryItemsOffset < initialOffset || directoryItemsOffset >= data.Length)
                     return null;
 
                 // Seek to the directory items

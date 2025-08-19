@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new archive to fill
                 var archive = new Archive();
 
@@ -40,7 +43,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read all entries in turn
                 for (int i = 0; i < header.Files; i++)
                 {
-                    files[i] = ParseFileEntry(data);
+                    files[i] = ParseFileEntry(data, initialOffset);
                 }
 
                 // Set the files
@@ -62,7 +65,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled FileEntry on success, null on error</returns>
-        public static FileEntry ParseFileEntry(Stream data)
+        public static FileEntry ParseFileEntry(Stream data, long initialOffset)
         {
             var fileEntry = new FileEntry();
 
@@ -78,7 +81,7 @@ namespace SabreTools.Serialization.Deserializers
             if (fileEntry.Offset > 0)
             {
                 long currentOffset = data.Position;
-                data.Seek(fileEntry.Offset, SeekOrigin.Begin);
+                data.Seek(initialOffset + fileEntry.Offset, SeekOrigin.Begin);
                 fileEntry.CompressedSize = data.ReadInt32LittleEndian();
                 data.Seek(currentOffset, SeekOrigin.Begin);
             }

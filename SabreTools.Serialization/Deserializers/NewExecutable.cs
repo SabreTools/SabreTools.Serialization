@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Cache the current offset
-                int initialOffset = (int)data.Position;
+                long initialOffset = data.Position;
 
                 // Create a new executable to fill
                 var executable = new Executable();
@@ -53,9 +53,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Segment Table
 
                 // If the offset for the segment table doesn't exist
-                int tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.SegmentTableOffset;
+                long tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.SegmentTableOffset;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -74,9 +72,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Resource Table
 
                 // If the offset for the segment table doesn't exist
-                tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.ResourceTableOffset;
+                tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ResourceTableOffset;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -91,12 +87,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Resident-Name Table
 
                 // If the offset for the resident-name table doesn't exist
-                tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.ResidentNameTableOffset;
-                int endOffset = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.ModuleReferenceTableOffset;
+                tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ResidentNameTableOffset;
+                long endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.ModuleReferenceTableOffset;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -111,9 +103,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Module-Reference Table
 
                 // If the offset for the module-reference table doesn't exist
-                tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.ModuleReferenceTableOffset;
+                tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ModuleReferenceTableOffset;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -132,12 +122,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Imported-Name Table
 
                 // If the offset for the imported-name table doesn't exist
-                tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.ImportedNamesTableOffset;
-                endOffset = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.EntryTableOffset;
+                tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ImportedNamesTableOffset;
+                endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -152,13 +138,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Entry Table
 
                 // If the offset for the imported-name table doesn't exist
-                tableAddress = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.EntryTableOffset;
-                endOffset = initialOffset
-                    + (int)stub.Header.NewExeHeaderAddr
-                    + header.EntryTableOffset
-                    + header.EntryTableSize;
+                tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset;
+                endOffset = initialOffset + stub.Header.NewExeHeaderAddr + + header.EntryTableOffset + header.EntryTableSize;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -173,11 +154,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Nonresident-Name Table
 
                 // If the offset for the nonresident-name table doesn't exist
-                tableAddress = initialOffset
-                    + (int)header.NonResidentNamesTableOffset;
-                endOffset = initialOffset
-                    + (int)header.NonResidentNamesTableOffset
-                    + header.NonResidentNameTableSize;
+                tableAddress = initialOffset + header.NonResidentNamesTableOffset;
+                endOffset = initialOffset + header.NonResidentNamesTableOffset + header.NonResidentNameTableSize;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -204,7 +182,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the entry table</param>
         /// <returns>Filled entry table on success, null on error</returns>
-        public static EntryTableBundle[] ParseEntryTable(Stream data, int endOffset)
+        public static EntryTableBundle[] ParseEntryTable(Stream data, long endOffset)
         {
             var entryTable = new List<EntryTableBundle>();
 
@@ -287,7 +265,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the imported-name table</param>
         /// <returns>Filled imported-name table on success, null on error</returns>
-        public static Dictionary<ushort, ImportedNameTableEntry> ParseImportedNameTable(Stream data, int endOffset)
+        public static Dictionary<ushort, ImportedNameTableEntry> ParseImportedNameTable(Stream data, long endOffset)
         {
             var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
 
@@ -381,7 +359,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the nonresident-name table</param>
         /// <returns>Filled nonresident-name table on success, null on error</returns>
-        public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, int endOffset)
+        public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, long endOffset)
         {
             var residentNameTable = new List<NonResidentNameTableEntry>();
 
@@ -482,7 +460,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="endOffset">First address not part of the resident-name table</param>
         /// <returns>Filled resident-name table on success, null on error</returns>
-        public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, int endOffset)
+        public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, long endOffset)
         {
             var residentNameTable = new List<ResidentNameTableEntry>();
 

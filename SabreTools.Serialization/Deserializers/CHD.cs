@@ -18,8 +18,11 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Determine the header version
-                uint version = GetVersion(data);
+                uint version = GetVersion(data, initialOffset);
 
                 // Read and return the current CHD
                 switch (version)
@@ -98,7 +101,7 @@ namespace SabreTools.Serialization.Deserializers
         /// Get the matching CHD version, if possible
         /// </summary>
         /// <returns>Matching version, 0 if none</returns>
-        private static uint GetVersion(Stream data)
+        private static uint GetVersion(Stream data, long initialOffset)
         {
             // Read the header values
             byte[] tagBytes = data.ReadBytes(8);
@@ -107,7 +110,7 @@ namespace SabreTools.Serialization.Deserializers
             uint version = data.ReadUInt32BigEndian();
 
             // Seek back to start
-            data.SeekIfPossible();
+            data.SeekIfPossible(initialOffset);
 
             // Check the signature
             if (!string.Equals(tag, Constants.SignatureString, StringComparison.Ordinal))

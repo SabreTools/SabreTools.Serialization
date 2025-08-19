@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Valve Package to fill
                 var file = new Models.VPK.File();
 
@@ -45,7 +48,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Directory Items
 
                 // Set the directory items
-                file.DirectoryItems = ParseDirectoryItemTree(data);
+                file.DirectoryItems = ParseDirectoryItemTree(data, initialOffset);
 
                 #endregion
 
@@ -60,10 +63,10 @@ namespace SabreTools.Serialization.Deserializers
                     var archiveHashes = new List<ArchiveHash>();
 
                     // Cache the current offset
-                    long initialOffset = data.Position;
+                    long afterHeaderOffset = data.Position;
 
                     // Try to parse the directory items
-                    while (data.Position < initialOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
+                    while (data.Position < afterHeaderOffset + file.ExtendedHeader.ArchiveMD5SectionSize)
                     {
                         var archiveHash = ParseArchiveHash(data);
                         archiveHashes.Add(archiveHash);
@@ -123,8 +126,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into a Valve Package directory item
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Filled Valve Package directory item on success, null on error</returns>
-        public static DirectoryItem ParseDirectoryItem(Stream data, string extension, string path, string name)
+        public static DirectoryItem ParseDirectoryItem(Stream data, long initialOffset, string extension, string path, string name)
         {
             var obj = new DirectoryItem();
 
@@ -141,7 +145,7 @@ namespace SabreTools.Serialization.Deserializers
                 && obj.DirectoryEntry.EntryLength > 0
                 && data.Position + obj.DirectoryEntry.EntryLength <= data.Length)
             {
-                preloadDataPointer = obj.DirectoryEntry.EntryOffset;
+                preloadDataPointer = initialOffset + obj.DirectoryEntry.EntryOffset;
                 preloadDataLength = (int)obj.DirectoryEntry.EntryLength;
             }
             else if (obj.DirectoryEntry.PreloadBytes > 0)
@@ -152,12 +156,12 @@ namespace SabreTools.Serialization.Deserializers
 
             // If we had a valid preload data pointer
             byte[]? preloadData = null;
-            if (preloadDataPointer >= 0
+            if (preloadDataPointer >= initialOffset
                 && preloadDataLength > 0
                 && data.Position + preloadDataLength <= data.Length)
             {
                 // Cache the current offset
-                long initialOffset = data.Position;
+                long currentOffset = data.Position;
 
                 // Seek to the preload data offset
                 data.Seek(preloadDataPointer, SeekOrigin.Begin);
@@ -166,7 +170,7 @@ namespace SabreTools.Serialization.Deserializers
                 preloadData = data.ReadBytes(preloadDataLength);
 
                 // Seek back to the original offset
-                data.Seek(initialOffset, SeekOrigin.Begin);
+                data.Seek(currentOffset, SeekOrigin.Begin);
             }
 
             // Set the preload data
@@ -179,8 +183,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into a Valve Package directory item tree
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Filled Valve Package directory item tree on success, null on error</returns>
-        public static DirectoryItem[] ParseDirectoryItemTree(Stream data)
+        public static DirectoryItem[] ParseDirectoryItemTree(Stream data, long initialOffset)
         {
             // Create the directory items list
             var directoryItems = new List<DirectoryItem>();
@@ -225,7 +230,7 @@ namespace SabreTools.Serialization.Deserializers
                         }
 
                         // Get the directory item
-                        var directoryItem = ParseDirectoryItem(data, extensionString!, pathString!, nameString!);
+                        var directoryItem = ParseDirectoryItem(data, initialOffset, extensionString!, pathString!, nameString!);
 
                         // Add the directory item
                         directoryItems.Add(directoryItem);

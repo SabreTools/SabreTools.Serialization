@@ -16,6 +16,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Half-Life Game Cache to fill
                 var file = new Models.GCF.File();
 
@@ -100,7 +103,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Cache the current offset
-                long initialOffset = data.Position;
+                long afterMapPosition = data.Position;
 
                 #region Directory Header
 
@@ -213,7 +216,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Seek to end of directory section, just in case
-                data.Seek(initialOffset + file.DirectoryHeader.DirectorySize, SeekOrigin.Begin);
+                data.Seek(afterMapPosition + file.DirectoryHeader.DirectorySize, SeekOrigin.Begin);
 
                 #region Directory Map Header
 
@@ -301,7 +304,7 @@ namespace SabreTools.Serialization.Deserializers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.Seek(initialOffset + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.Seek(afterMapPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 #region Data Block Header
 

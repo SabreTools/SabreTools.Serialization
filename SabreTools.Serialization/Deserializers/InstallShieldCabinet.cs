@@ -20,6 +20,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new cabinet to fill
                 var cabinet = new Cabinet();
 
@@ -48,8 +51,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Descriptor
 
                 // Get the descriptor offset
-                uint descriptorOffset = commonHeader.DescriptorOffset;
-                if (descriptorOffset < 0 || descriptorOffset >= data.Length)
+                long descriptorOffset = initialOffset + commonHeader.DescriptorOffset;
+                if (descriptorOffset < initialOffset || descriptorOffset >= data.Length)
                     return null;
 
                 // Seek to the descriptor
@@ -63,8 +66,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region File Descriptor Offsets
 
                 // Get the file table offset
-                uint fileTableOffset = commonHeader.DescriptorOffset + cabinet.Descriptor.FileTableOffset;
-                if (fileTableOffset < 0 || fileTableOffset >= data.Length)
+                long fileTableOffset = descriptorOffset + cabinet.Descriptor.FileTableOffset;
+                if (fileTableOffset < initialOffset || fileTableOffset >= data.Length)
                     return null;
 
                 // Seek to the file table
@@ -93,12 +96,12 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < cabinet.Descriptor.DirectoryCount; i++)
                 {
                     // Get the directory descriptor offset
-                    uint offset = descriptorOffset
+                    long offset = descriptorOffset
                         + cabinet.Descriptor.FileTableOffset
                         + cabinet.FileDescriptorOffsets[i];
 
                     // If we have an invalid offset
-                    if (offset < 0 || offset >= data.Length)
+                    if (offset < initialOffset || offset >= data.Length)
                         continue;
 
                     // Seek to the file descriptor offset
@@ -119,7 +122,7 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < cabinet.Descriptor.FileCount; i++)
                 {
                     // Get the file descriptor offset
-                    uint offset;
+                    long offset;
                     if (majorVersion <= 5)
                     {
                         offset = descriptorOffset
@@ -135,7 +138,7 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     // If we have an invalid offset
-                    if (offset < 0 || offset >= data.Length)
+                    if (offset < initialOffset || offset >= data.Length)
                         continue;
 
                     // Seek to the file descriptor offset
@@ -156,13 +159,13 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < (cabinet.Descriptor.FileGroupOffsets?.Length ?? 0); i++)
                 {
                     // Get the file group offset
-                    uint offset = cabinet.Descriptor.FileGroupOffsets![i];
+                    long offset = cabinet.Descriptor.FileGroupOffsets![i];
                     if (offset == 0)
                         continue;
 
                     // Adjust the file group offset
-                    offset += commonHeader.DescriptorOffset;
-                    if (offset < 0 || offset >= data.Length)
+                    offset += descriptorOffset;
+                    if (offset < initialOffset || offset >= data.Length)
                         continue;
 
                     // Seek to the file group offset
@@ -173,11 +176,11 @@ namespace SabreTools.Serialization.Deserializers
                     cabinet.FileGroupOffsets[offset] = offsetList;
 
                     // If we have a nonzero next offset
-                    uint nextOffset = offsetList.NextOffset;
+                    long nextOffset = offsetList.NextOffset;
                     while (nextOffset != 0)
                     {
                         // Get the next offset to read
-                        uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
+                        long internalOffset = descriptorOffset + nextOffset;
 
                         // Seek to the file group offset
                         data.Seek(internalOffset, SeekOrigin.Begin);
@@ -218,7 +221,7 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     /// Seek to the file group
-                    data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
+                    data.Seek(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
 
                     // Add the file group
                     cabinet.FileGroups[fileGroupId++] = ParseFileGroup(data, majorVersion, descriptorOffset);
@@ -233,13 +236,13 @@ namespace SabreTools.Serialization.Deserializers
                 for (int i = 0; i < (cabinet.Descriptor.ComponentOffsets?.Length ?? 0); i++)
                 {
                     // Get the component offset
-                    uint offset = cabinet.Descriptor.ComponentOffsets![i];
+                    long offset = cabinet.Descriptor.ComponentOffsets![i];
                     if (offset == 0)
                         continue;
 
                     // Adjust the component offset
-                    offset += commonHeader.DescriptorOffset;
-                    if (offset < 0 || offset >= data.Length)
+                    offset += descriptorOffset;
+                    if (offset < initialOffset || offset >= data.Length)
                         continue;
 
                     // Seek to the component offset
@@ -250,11 +253,11 @@ namespace SabreTools.Serialization.Deserializers
                     cabinet.ComponentOffsets[cabinet.Descriptor.ComponentOffsets[i]] = offsetList;
 
                     // If we have a nonzero next offset
-                    uint nextOffset = offsetList.NextOffset;
+                    long nextOffset = offsetList.NextOffset;
                     while (nextOffset != 0)
                     {
                         // Get the next offset to read
-                        uint internalOffset = nextOffset + commonHeader.DescriptorOffset;
+                        long internalOffset = descriptorOffset + nextOffset;
 
                         // Seek to the file group offset
                         data.Seek(internalOffset, SeekOrigin.Begin);
@@ -295,7 +298,7 @@ namespace SabreTools.Serialization.Deserializers
                     }
 
                     // Seek to the component
-                    data.Seek(list.DescriptorOffset + descriptorOffset, SeekOrigin.Begin);
+                    data.Seek(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
 
                     // Add the component
                     cabinet.Components[componentId++] = ParseComponent(data, majorVersion, descriptorOffset);
@@ -340,7 +343,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled Component on success, null on error</returns>
-        public static Component ParseComponent(Stream data, int majorVersion, uint descriptorOffset)
+        public static Component ParseComponent(Stream data, int majorVersion, long descriptorOffset)
         {
             var obj = new Component();
 
@@ -384,7 +387,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.IdentifierOffset != 0)
             {
                 // Seek to the identifier
-                data.Seek(obj.IdentifierOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.IdentifierOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -397,7 +400,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.DisplayNameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(obj.DisplayNameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.DisplayNameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -410,7 +413,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -423,7 +426,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.CLSIDOffset != 0)
             {
                 // Seek to the CLSID
-                data.Seek(obj.CLSIDOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.CLSIDOffset, SeekOrigin.Begin);
 
                 // Read the GUID
                 obj.CLSID = data.ReadGuid();
@@ -433,7 +436,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.FileGroupCount != 0 && obj.FileGroupNamesOffset != 0)
             {
                 // Seek to the file group table offset
-                data.Seek(obj.FileGroupNamesOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.FileGroupNamesOffset, SeekOrigin.Begin);
 
                 // Read the file group names table
                 obj.FileGroupNames = new string[obj.FileGroupCount];
@@ -446,7 +449,7 @@ namespace SabreTools.Serialization.Deserializers
                     long preNameOffset = data.Position;
 
                     // Seek to the name offset
-                    data.Seek(nameOffset + descriptorOffset, SeekOrigin.Begin);
+                    data.Seek(descriptorOffset + nameOffset, SeekOrigin.Begin);
 
                     if (majorVersion >= 17)
                         obj.FileGroupNames[j] = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
@@ -530,7 +533,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled FileDescriptor on success, null on error</returns>
-        public static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, uint descriptorOffset)
+        public static FileDescriptor ParseFileDescriptor(Stream data, int majorVersion, long descriptorOffset)
         {
             var obj = new FileDescriptor();
 
@@ -573,7 +576,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -595,7 +598,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled FileGroup on success, null on error</returns>
-        public static FileGroup ParseFileGroup(Stream data, int majorVersion, uint descriptorOffset)
+        public static FileGroup ParseFileGroup(Stream data, int majorVersion, long descriptorOffset)
         {
             var obj = new FileGroup();
 
@@ -631,7 +634,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -653,7 +656,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="majorVersion">Major version of the cabinet</param>
         /// <param name="descriptorOffset">Offset of the cabinet descriptor</param>
         /// <returns>Filled OffsetList on success, null on error</returns>
-        public static OffsetList ParseOffsetList(Stream data, int majorVersion, uint descriptorOffset)
+        public static OffsetList ParseOffsetList(Stream data, int majorVersion, long descriptorOffset)
         {
             var obj = new OffsetList();
 
@@ -665,7 +668,7 @@ namespace SabreTools.Serialization.Deserializers
             long currentOffset = data.Position;
 
             // Seek to the name offset
-            data.Seek(obj.NameOffset + descriptorOffset, SeekOrigin.Begin);
+            data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the string
             if (majorVersion >= 17)

@@ -19,6 +19,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new binary to fill
                 var binary = new Binary();
 
@@ -62,8 +65,9 @@ namespace SabreTools.Serialization.Deserializers
                         break;
 
                     // Get the new next sector information
-                    long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
-                    if (sectorOffset < 0 || sectorOffset >= data.Length)
+                    long sectorOffset = initialOffset
+                        + (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
+                    if (sectorOffset < initialOffset || sectorOffset >= data.Length)
                         return null;
 
                     // Seek to the next sector
@@ -105,8 +109,9 @@ namespace SabreTools.Serialization.Deserializers
                         break;
 
                     // Get the new next sector information
-                    long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
-                    if (sectorOffset < 0 || sectorOffset >= data.Length)
+                    long sectorOffset = initialOffset
+                        + (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
+                    if (sectorOffset < initialOffset || sectorOffset >= data.Length)
                         return null;
 
                     // Seek to the next sector
@@ -140,8 +145,9 @@ namespace SabreTools.Serialization.Deserializers
                         break;
 
                     // Get the new next sector information
-                    long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
-                    if (sectorOffset < 0 || sectorOffset >= data.Length)
+                    long sectorOffset = initialOffset
+                        + (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
+                    if (sectorOffset < initialOffset || sectorOffset >= data.Length)
                         return null;
 
                     // Seek to the next sector
@@ -194,8 +200,9 @@ namespace SabreTools.Serialization.Deserializers
                         break;
 
                     // Get the new next sector information
-                    long sectorOffset = (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
-                    if (sectorOffset < 0 || sectorOffset >= data.Length)
+                    long sectorOffset = initialOffset
+                        + (long)((long)(currentSector + 1) * Math.Pow(2, fileHeader.SectorShift));
+                    if (sectorOffset < initialOffset || sectorOffset >= data.Length)
                         return null;
 
                     // Seek to the next sector

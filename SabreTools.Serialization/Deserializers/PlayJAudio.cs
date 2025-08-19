@@ -8,20 +8,8 @@ namespace SabreTools.Serialization.Deserializers
 {
     public class PlayJAudio : BaseBinaryDeserializer<AudioFile>
     {
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static AudioFile? DeserializeStream(Stream? data, long adjust = 0)
-        {
-            var deserializer = new PlayJAudio();
-            return deserializer.Deserialize(data, adjust);
-        }
-
         /// <inheritdoc/>
         public override AudioFile? Deserialize(Stream? data)
-            => Deserialize(data, 0);
-
-        /// <inheritdoc cref="Deserialize(Stream)"/>
-        /// <param name="adjust">Offset to adjust all seeking by</param>
-        public AudioFile? Deserialize(Stream? data, long adjust)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -29,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new audio file to fill
                 var audioFile = new AudioFile();
 
@@ -54,8 +45,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (unknownOffset1 > 0)
                 {
                     // Get the unknown block 1 offset
-                    long offset = unknownOffset1 + adjust;
-                    if (offset < 0 || offset >= data.Length)
+                    long offset = initialOffset + unknownOffset1;
+                    if (offset < initialOffset || offset >= data.Length)
                         return null;
 
                     // Seek to the unknown block 1
@@ -86,8 +77,8 @@ namespace SabreTools.Serialization.Deserializers
                     if (unknownOffset2 != null && unknownOffset2 > 0)
                     {
                         // Get the unknown value 2 offset
-                        long offset = unknownOffset2.Value + adjust;
-                        if (offset < 0 || offset >= data.Length)
+                        long offset = initialOffset + unknownOffset2.Value;
+                        if (offset < initialOffset || offset >= data.Length)
                             return null;
 
                         // Seek to the unknown value 2
@@ -108,8 +99,8 @@ namespace SabreTools.Serialization.Deserializers
                     if (unknownOffset3 != null && unknownOffset3 > 0)
                     {
                         // Get the unknown block 3 offset
-                        long offset = unknownOffset3.Value + adjust;
-                        if (offset < 0 || offset >= data.Length)
+                        long offset = initialOffset + unknownOffset3.Value;
+                        if (offset < initialOffset || offset >= data.Length)
                             return null;
 
                         // Seek to the unknown block 3

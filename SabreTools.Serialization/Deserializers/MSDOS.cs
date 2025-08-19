@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Cache the current offset
-                int initialOffset = (int)data.Position;
+                long initialOffset = data.Position;
 
                 // Create a new executable to fill
                 var executable = new Executable();
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Relocation Table
 
                 // If the offset for the relocation table doesn't exist
-                int tableAddress = initialOffset + executableHeader.RelocationTableAddr;
+                long tableAddress = initialOffset + executableHeader.RelocationTableAddr;
                 if (tableAddress >= data.Length)
                     return executable;
 

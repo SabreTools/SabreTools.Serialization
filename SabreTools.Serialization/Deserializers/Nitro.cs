@@ -17,6 +17,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new cart image to fill
                 var cart = new Cart();
 
@@ -38,7 +41,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Secure Area
 
                 // Try to get the secure area offset
-                long secureAreaOffset = 0x4000;
+                long secureAreaOffset = initialOffset + 0x4000;
                 if (secureAreaOffset > data.Length)
                     return null;
 
@@ -53,8 +56,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region Name Table
 
                 // Try to get the name table offset
-                long nameTableOffset = cart.CommonHeader.FileNameTableOffset;
-                if (nameTableOffset < 0 || nameTableOffset > data.Length)
+                long nameTableOffset = initialOffset + cart.CommonHeader.FileNameTableOffset;
+                if (nameTableOffset < initialOffset || nameTableOffset > data.Length)
                     return null;
 
                 // Seek to the name table
@@ -68,8 +71,8 @@ namespace SabreTools.Serialization.Deserializers
                 #region File Allocation Table
 
                 // Try to get the file allocation table offset
-                long fileAllocationTableOffset = cart.CommonHeader.FileAllocationTableOffset;
-                if (fileAllocationTableOffset < 0 || fileAllocationTableOffset > data.Length)
+                long fileAllocationTableOffset = initialOffset + cart.CommonHeader.FileAllocationTableOffset;
+                if (fileAllocationTableOffset < initialOffset || fileAllocationTableOffset > data.Length)
                     return null;
 
                 // Seek to the file allocation table
