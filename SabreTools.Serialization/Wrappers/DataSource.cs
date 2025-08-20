@@ -71,25 +71,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
-        /// Get the ending offset of the source
-        /// </summary>
-        /// <returns>Value greater than 0 for a valid end of file, -1 on error</returns>
-        public long GetEndOffset()
-        {
-            // Validate the data souece
-            if (!IsValid())
-                return -1;
-
-            // Return the effective endpoint
-            return _dataSourceType switch
-            {
-                DataSourceType.ByteArray => _byteArrayData!.Length - _initialPosition,
-                DataSourceType.Stream => _streamData!.Length - _initialPosition,
-                _ => -1,
-            };
-        }
-
-        /// <summary>
         /// Get the filename from the source, if possible
         /// </summary>
         /// <returns>String representing the filename on success, null otherwise</returns>
@@ -156,7 +137,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // If we have an invalid position
-            if (position < 0 || position >= GetEndOffset())
+            if (position < 0 || position >= GetLength())
                 return false;
 
             return _dataSourceType switch
