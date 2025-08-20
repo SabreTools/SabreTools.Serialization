@@ -29,16 +29,15 @@ namespace SabreTools.Serialization.Wrappers
                     return _archiveFilenames;
 
                 // If we don't have a source filename
-                string? sourceFilename = _dataSource.Filename;
-                if (string.IsNullOrEmpty(sourceFilename))
+                if (string.IsNullOrEmpty(Filename))
                     return null;
 
                 // If the filename is not the right format
-                string extension = Path.GetExtension(sourceFilename).TrimStart('.');
-                string? directoryName = Path.GetDirectoryName(sourceFilename);
+                string extension = Path.GetExtension(Filename).TrimStart('.');
+                string? directoryName = Path.GetDirectoryName(Filename);
                 string fileName = directoryName == null
-                    ? Path.GetFileNameWithoutExtension(sourceFilename)
-                    : Path.Combine(directoryName, Path.GetFileNameWithoutExtension(sourceFilename));
+                    ? Path.GetFileNameWithoutExtension(Filename)
+                    : Path.Combine(directoryName, Path.GetFileNameWithoutExtension(Filename));
 
                 if (fileName.Length < 3)
                     return null;

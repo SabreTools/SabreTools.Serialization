@@ -18,9 +18,10 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public T Model { get; }
 
-        /// <summary>
-        /// Usable length of the underlying data
-        /// </summary>
+        /// <inheritdoc cref="DataSource.Filename"/>
+        public string? Filename => _dataSource.Filename;
+
+        /// <inheritdoc cref="DataSource.Length"/>
         public long Length => _dataSource.Length;
 
         #endregion
@@ -30,13 +31,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        protected readonly DataSource _dataSource;
+        private readonly DataSource _dataSource;
 
 #if NETCOREAPP
         /// <summary>
         /// JSON serializer options for output printing
         /// </summary>
-        protected System.Text.Json.JsonSerializerOptions _jsonSerializerOptions
+        private System.Text.Json.JsonSerializerOptions _jsonSerializerOptions
         {
             get
             {
