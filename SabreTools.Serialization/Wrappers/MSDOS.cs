@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var executable = Deserializers.MSDOS.DeserializeStream(data);
-                if (executable == null)
+                var model = Deserializers.MSDOS.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new MSDOS(executable, data);
+                return new MSDOS(model, data);
             }
             catch
             {

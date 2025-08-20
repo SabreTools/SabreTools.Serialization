@@ -84,11 +84,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cart = Deserializers.Nitro.DeserializeStream(data);
-                if (cart == null)
+                var model = Deserializers.Nitro.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new Nitro(cart, data);
+                return new Nitro(model, data);
             }
             catch
             {

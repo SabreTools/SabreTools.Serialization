@@ -62,11 +62,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cia = Deserializers.CIA.DeserializeStream(data);
-                if (cia == null)
+                var model = Deserializers.CIA.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new CIA(cia, data);
+                return new CIA(model, data);
             }
             catch
             {

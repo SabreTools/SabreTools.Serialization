@@ -136,11 +136,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.VPK.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.VPK.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new VPK(file, data);
+                return new VPK(model, data);
             }
             catch
             {

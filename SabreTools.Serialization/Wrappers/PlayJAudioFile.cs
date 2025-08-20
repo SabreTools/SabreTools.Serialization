@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var audioFile = Deserializers.PlayJAudio.DeserializeStream(data);
-                if (audioFile == null)
+                var model = Deserializers.PlayJAudio.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PlayJAudioFile(audioFile, data);
+                return new PlayJAudioFile(model, data);
             }
             catch
             {

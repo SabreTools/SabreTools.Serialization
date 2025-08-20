@@ -71,11 +71,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var svm = Deserializers.BDPlus.DeserializeStream(data);
-                if (svm == null)
+                var model = Deserializers.BDPlus.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new BDPlusSVM(svm, data);
+                return new BDPlusSVM(model, data);
             }
             catch
             {

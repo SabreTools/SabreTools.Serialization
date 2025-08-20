@@ -158,11 +158,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var archive = Deserializers.InstallShieldArchiveV3.DeserializeStream(data);
-                if (archive == null)
+                var model = Deserializers.InstallShieldArchiveV3.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new InstallShieldArchiveV3(archive, data);
+                return new InstallShieldArchiveV3(model, data);
             }
             catch
             {

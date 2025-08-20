@@ -118,11 +118,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var binary = Deserializers.CFB.DeserializeStream(data);
-                if (binary == null)
+                var model = Deserializers.CFB.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new CFB(binary, data);
+                return new CFB(model, data);
             }
             catch
             {

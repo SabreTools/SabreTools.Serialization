@@ -62,11 +62,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var archive = Deserializers.PKZIP.DeserializeStream(data);
-                if (archive == null)
+                var model = Deserializers.PKZIP.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PKZIP(archive, data);
+                return new PKZIP(model, data);
             }
             catch
             {

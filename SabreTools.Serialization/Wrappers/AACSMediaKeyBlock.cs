@@ -71,11 +71,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var mkb = Deserializers.AACS.DeserializeStream(data);
-                if (mkb == null)
+                var model = Deserializers.AACS.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new AACSMediaKeyBlock(mkb, data);
+                return new AACSMediaKeyBlock(model, data);
             }
             catch
             {

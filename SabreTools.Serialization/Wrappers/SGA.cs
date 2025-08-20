@@ -109,11 +109,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.SGA.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.SGA.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new SGA(file, data);
+                return new SGA(model, data);
             }
             catch
             {

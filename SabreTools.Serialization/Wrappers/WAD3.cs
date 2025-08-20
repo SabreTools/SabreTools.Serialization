@@ -70,11 +70,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.WAD3.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.WAD3.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new WAD3(file, data);
+                return new WAD3(model, data);
             }
             catch
             {

@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.IRD.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.IRD.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new IRD(file, data);
+                return new IRD(model, data);
             }
             catch
             {

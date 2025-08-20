@@ -80,11 +80,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var executable = Deserializers.LinearExecutable.DeserializeStream(data);
-                if (executable == null)
+                var model = Deserializers.LinearExecutable.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new LinearExecutable(executable, data);
+                return new LinearExecutable(model, data);
             }
             catch
             {

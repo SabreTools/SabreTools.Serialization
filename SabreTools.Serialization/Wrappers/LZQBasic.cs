@@ -65,11 +65,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.LZQBasic.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.LZQBasic.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new LZQBasic(file, data);
+                return new LZQBasic(model, data);
             }
             catch
             {

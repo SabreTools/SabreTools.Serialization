@@ -89,12 +89,12 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var xmid = Deserializers.XMID.DeserializeString(data);
-                if (xmid == null)
+                var model = Deserializers.XMID.DeserializeString(data);
+                if (model == null)
                     return null;
 
                 var ms = new MemoryStream(Encoding.ASCII.GetBytes(data));
-                return new XMID(xmid, ms);
+                return new XMID(model, ms);
             }
             catch
             {

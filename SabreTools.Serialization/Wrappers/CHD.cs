@@ -107,11 +107,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var header = Deserializers.CHD.DeserializeStream(data);
-                if (header == null)
+                var model = Deserializers.CHD.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new CHD(header, data);
+                return new CHD(model, data);
             }
             catch
             {

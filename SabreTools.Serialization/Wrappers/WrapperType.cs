@@ -235,6 +235,16 @@ namespace SabreTools.Serialization.Wrappers
         WAD,
 
         /// <summary>
+        /// Wise Installer Overlay Header
+        /// </summary>
+        WiseOverlayHeader,
+
+        /// <summary>
+        /// Wise Installer Script File
+        /// </summary>
+        WiseScript,
+
+        /// <summary>
         /// xz archive
         /// </summary>
         /// <remarks>Currently has no IWrapper implementation</remarks>

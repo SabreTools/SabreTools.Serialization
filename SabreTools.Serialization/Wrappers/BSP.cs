@@ -71,11 +71,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.BSP.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.BSP.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new BSP(file, data);
+                return new BSP(model, data);
             }
             catch
             {

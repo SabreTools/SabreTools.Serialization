@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var playlist = Deserializers.PlayJPlaylist.DeserializeStream(data);
-                if (playlist == null)
+                var model = Deserializers.PlayJPlaylist.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PlayJPlaylist(playlist, data);
+                return new PlayJPlaylist(model, data);
             }
             catch
             {

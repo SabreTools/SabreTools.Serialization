@@ -72,11 +72,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.LZSZDD.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.LZSZDD.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new LZSZDD(file, data);
+                return new LZSZDD(model, data);
             }
             catch
             {

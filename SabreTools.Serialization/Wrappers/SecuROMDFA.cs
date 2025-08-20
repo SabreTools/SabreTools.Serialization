@@ -62,11 +62,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.SecuROMDFA.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.SecuROMDFA.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new SecuROMDFA(file, data);
+                return new SecuROMDFA(model, data);
             }
             catch
             {

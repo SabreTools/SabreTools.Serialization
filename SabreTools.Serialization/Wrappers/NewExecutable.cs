@@ -368,11 +368,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var executable = Deserializers.NewExecutable.DeserializeStream(data);
-                if (executable == null)
+                var model = Deserializers.NewExecutable.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new NewExecutable(executable, data);
+                return new NewExecutable(model, data);
             }
             catch
             {

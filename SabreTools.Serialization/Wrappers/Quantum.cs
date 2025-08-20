@@ -80,11 +80,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var archive = Deserializers.Quantum.DeserializeStream(data);
-                if (archive == null)
+                var model = Deserializers.Quantum.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new Quantum(archive, data);
+                return new Quantum(model, data);
             }
             catch
             {

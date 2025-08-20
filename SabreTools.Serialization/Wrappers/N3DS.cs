@@ -256,11 +256,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cart = Deserializers.N3DS.DeserializeStream(data);
-                if (cart == null)
+                var model = Deserializers.N3DS.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new N3DS(cart, data);
+                return new N3DS(model, data);
             }
             catch
             {

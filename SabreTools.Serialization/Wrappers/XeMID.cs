@@ -104,12 +104,12 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var xemid = Deserializers.XeMID.DeserializeString(data);
-                if (xemid == null)
+                var model = Deserializers.XeMID.DeserializeString(data);
+                if (model == null)
                     return null;
 
                 var ms = new MemoryStream(Encoding.ASCII.GetBytes(data));
-                return new XeMID(xemid, ms);
+                return new XeMID(model, ms);
             }
             catch
             {

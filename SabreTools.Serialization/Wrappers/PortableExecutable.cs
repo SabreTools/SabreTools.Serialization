@@ -832,11 +832,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var executable = Deserializers.PortableExecutable.DeserializeStream(data);
-                if (executable == null)
+                var model = Deserializers.PortableExecutable.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PortableExecutable(executable, data);
+                return new PortableExecutable(model, data);
             }
             catch
             {

@@ -71,11 +71,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.PAK.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.PAK.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PAK(file, data);
+                return new PAK(model, data);
             }
             catch
             {

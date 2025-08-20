@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.NCF.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.NCF.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new NCF(file, data);
+                return new NCF(model, data);
             }
             catch
             {

@@ -150,11 +150,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cabinet = Deserializers.InstallShieldCabinet.DeserializeStream(data);
-                if (cabinet == null)
+                var model = Deserializers.InstallShieldCabinet.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new InstallShieldCabinet(cabinet, data);
+                return new InstallShieldCabinet(model, data);
             }
             catch
             {

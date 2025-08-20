@@ -70,11 +70,11 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
 
-                var di = Deserializers.PIC.DeserializeStream(data);
-                if (di == null)
+                var model = Deserializers.PIC.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PIC(di, data);
+                return new PIC(model, data);
             }
             catch
             {

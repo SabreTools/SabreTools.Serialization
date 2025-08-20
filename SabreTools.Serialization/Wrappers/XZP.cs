@@ -73,11 +73,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var file = Deserializers.XZP.DeserializeStream(data);
-                if (file == null)
+                var model = Deserializers.XZP.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new XZP(file, data);
+                return new XZP(model, data);
             }
             catch
             {

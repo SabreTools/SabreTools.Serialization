@@ -76,11 +76,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var archive = Deserializers.PFF.DeserializeStream(data);
-                if (archive == null)
+                var model = Deserializers.PFF.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new PFF(archive, data);
+                return new PFF(model, data);
             }
             catch
             {

@@ -61,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var archive = Deserializers.MoPaQ.DeserializeStream(data);
-                if (archive == null)
+                var model = Deserializers.MoPaQ.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new MoPaQ(archive, data);
+                return new MoPaQ(model, data);
             }
             catch
             {

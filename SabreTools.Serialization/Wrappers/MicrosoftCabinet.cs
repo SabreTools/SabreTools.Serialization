@@ -103,11 +103,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cabinet = Deserializers.MicrosoftCabinet.DeserializeStream(data);
-                if (cabinet == null)
+                var model = Deserializers.MicrosoftCabinet.DeserializeStream(data);
+                if (model == null)
                     return null;
 
-                return new MicrosoftCabinet(cabinet, data);
+                return new MicrosoftCabinet(model, data);
             }
             catch
             {
