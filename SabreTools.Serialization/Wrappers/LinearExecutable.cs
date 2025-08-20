@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Get the end of the file, if possible
-            long endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOffset();
             if (endOfFile == -1)
                 return -1;
 
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Wrappers
                 return -1;
 
             // Get the end of the file, if possible
-            long endOfFile = GetEndOfFile();
+            long endOfFile = GetEndOffset();
             if (endOfFile == -1)
                 return -1;
 
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we have an unset length, read the whole source
             if (length == -1)
-                length = GetEndOfFile();
+                length = GetEndOffset();
 
             return ReadFromDataSource(rangeStart, (int)length);
         }

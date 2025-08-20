@@ -314,7 +314,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get the sector data offset
                 int sectorDataOffset = (int)FATSectorToFileOffset(sectorChain[i]);
-                if (sectorDataOffset < 0 || sectorDataOffset >= GetEndOfFile())
+                if (sectorDataOffset < 0 || sectorDataOffset >= GetEndOffset())
                     return null;
 
                 // Try to read the sector data

@@ -3,7 +3,7 @@ namespace SabreTools.Serialization.Wrappers
     /// <summary>
     /// Location that the data originated from
     /// </summary>
-    public enum DataSource
+    public enum DataSourceType
     {
         /// <summary>
         /// Unknown origin / testing

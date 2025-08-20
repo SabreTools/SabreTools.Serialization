@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the entire compressed data
             int compressedDataOffset = (int)CompressedDataOffset;
-            long compressedDataLength = GetEndOfFile() - compressedDataOffset;
+            long compressedDataLength = GetEndOffset() - compressedDataOffset;
             var compressedData = ReadFromDataSource(compressedDataOffset, (int)compressedDataLength);
 
             // Print a debug reminder

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -22,20 +21,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Length of the underlying data
         /// </summary>
-        public long Length
-        {
-            get
-            {
-                return _dataSource switch
-                {
-                    DataSource.ByteArray => _byteArrayData!.Length - _initialPosition,
-                    DataSource.Stream => _streamData!.Length - _initialPosition,
-
-                    // Everything else is invalid
-                    _ => -1,
-                };
-            }
-        }
+        public long Length => _dataSource.GetLength();
 
         #endregion
 
@@ -44,30 +30,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        protected DataSource _dataSource = DataSource.UNKNOWN;
-
-        /// <summary>
-        /// Lock object for reading from the source
-        /// </summary>
-        private readonly object _streamDataLock = new();
-
-        /// <summary>
-        /// Initial position of the data source
-        /// </summary>
-        /// <remarks>Populated for both <see cref="DataSource.ByteArray"/> and <see cref="DataSource.Stream"/></remarks>
-        protected long _initialPosition = 0;
-
-        /// <summary>
-        /// Source byte array data
-        /// </summary>
-        /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.ByteArray"/></remarks>
-        protected byte[]? _byteArrayData = null;
-
-        /// <summary>
-        /// Source Stream data
-        /// </summary>
-        /// <remarks>This is only populated if <see cref="_dataSource"/> is <see cref="DataSource.Stream"/></remarks>
-        protected Stream? _streamData = null;
+        private readonly DataSource _dataSource;
 
 #if NETCOREAPP
         /// <summary>
@@ -107,9 +70,7 @@ namespace SabreTools.Serialization.Wrappers
                 throw new ArgumentOutOfRangeException(nameof(offset));
 
             Model = model;
-            _dataSource = DataSource.ByteArray;
-            _initialPosition = offset;
-            _byteArrayData = data;
+            _dataSource = new DataSource(data, offset);
         }
 
         /// <summary>
@@ -125,9 +86,7 @@ namespace SabreTools.Serialization.Wrappers
                 throw new ArgumentOutOfRangeException(nameof(data));
 
             Model = model;
-            _dataSource = DataSource.Stream;
-            _initialPosition = data.Position;
-            _streamData = data;
+            _dataSource = new DataSource(data);
         }
 
         #endregion
@@ -135,49 +94,10 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
-        /// Validate the backing data source
+        /// Get the ending offset of the source
         /// </summary>
-        /// <returns>True if the data source is valid, false otherwise</returns>
-        public bool DataSourceIsValid()
-        {
-            return _dataSource switch
-            {
-                // Byte array data requires both a valid array and offset
-                DataSource.ByteArray => _byteArrayData != null && _initialPosition >= 0,
-
-                // Stream data requires both a valid stream
-                DataSource.Stream => _streamData != null && _initialPosition >= 0 && _streamData.CanRead && _streamData.CanSeek,
-
-                // Everything else is invalid
-                _ => false,
-            };
-        }
-
-        /// <summary>
-        /// Check if a data segment is valid in the data source 
-        /// </summary>
-        /// <param name="position">Position in the source</param>
-        /// <param name="length">Length of the data to check</param>
-        /// <returns>True if the positional data is valid, false otherwise</returns>
-        public bool SegmentValid(int position, int length)
-        {
-            // Validate the data souece
-            if (!DataSourceIsValid())
-                return false;
-
-            // If we have an invalid position
-            if (position < 0 || position >= GetEndOfFile())
-                return false;
-
-            return _dataSource switch
-            {
-                DataSource.ByteArray => _initialPosition + position + length <= _byteArrayData!.Length,
-                DataSource.Stream => _initialPosition + position + length <= _streamData!.Length,
-
-                // Everything else is invalid
-                _ => false,
-            };
-        }
+        /// <returns>Value greater than 0 for a valid end of file, -1 on error</returns>
+        public long GetEndOffset() => _dataSource.GetEndOffset();
 
         /// <summary>
         /// Read data from the source
@@ -186,46 +106,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">Length of the requested data</param>
         /// <returns>Byte array containing the requested data, null on error</returns>
         public byte[]? ReadFromDataSource(int position, int length)
-        {
-            // Validate the data source
-            if (!DataSourceIsValid())
-                return null;
-
-            // Validate the requested segment
-            if (!SegmentValid(position, length))
-                return null;
-
-            try
-            {
-                // Read and return the data
-                byte[]? sectionData = null;
-                switch (_dataSource)
-                {
-                    case DataSource.ByteArray:
-                        sectionData = new byte[length];
-                        Array.Copy(_byteArrayData!, _initialPosition + position, sectionData, 0, length);
-                        break;
-
-                    case DataSource.Stream:
-                        lock (_streamDataLock)
-                        {
-                            long currentLocation = _streamData!.Position;
-                            _streamData.Seek(_initialPosition + position, SeekOrigin.Begin);
-                            sectionData = _streamData.ReadBytes(length);
-                            _streamData.Seek(currentLocation, SeekOrigin.Begin);
-                            break;
-                        }
-                }
-
-                return sectionData;
-
-            }
-            catch
-            {
-                // Absorb the error
-                return null;
-            }
-        }
+            => _dataSource.Read(position, length);
 
         /// <summary>
         /// Read string data from the source
@@ -258,25 +139,6 @@ namespace SabreTools.Serialization.Wrappers
             // Sort the strings and return
             sourceStrings.Sort();
             return sourceStrings;
-        }
-
-        /// <summary>
-        /// Get the ending offset of the source
-        /// </summary>
-        /// <returns>Value greater than 0 for a valid end of file, -1 on error</returns>
-        public long GetEndOfFile()
-        {
-            // Validate the data souece
-            if (!DataSourceIsValid())
-                return -1;
-
-            // Return the effective endpoint
-            return _dataSource switch
-            {
-                DataSource.ByteArray => _byteArrayData!.Length - _initialPosition,
-                DataSource.Stream => _streamData!.Length - _initialPosition,
-                _ => -1,
-            };
         }
 
         /// <summary>

@@ -208,7 +208,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayAddress.Value;
 
                     // Get the end of the file, if possible
-                    long endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOffset();
                     if (endOfFile == -1)
                         return -1;
 
@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayData;
 
                     // Get the end of the file, if possible
-                    long endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOffset();
                     if (endOfFile == -1)
                         return null;
 
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayStrings;
 
                     // Get the end of the file, if possible
-                    long endOfFile = GetEndOfFile();
+                    long endOfFile = GetEndOffset();
                     if (endOfFile == -1)
                         return null;
 
