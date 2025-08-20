@@ -94,12 +94,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
-        /// Get the ending offset of the source
-        /// </summary>
-        /// <returns>Value greater than 0 for a valid end of file, -1 on error</returns>
-        public long GetEndOffset() => _dataSource.GetEndOffset();
-
-        /// <summary>
         /// Read data from the source
         /// </summary>
         /// <param name="position">Position in the source to read from</param>

@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Wrappers
             int compressedSize = file.CompressedSize;
 
             // Some files can lack the length prefix
-            if (compressedSize > GetEndOffset())
+            if (compressedSize > Length)
             {
                 offset -= 4;
                 compressedSize = file.UncompressedSize;

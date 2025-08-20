@@ -39,9 +39,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayAddress != null)
                         return _overlayAddress.Value;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return -1;
 
                     // If a required property is missing
@@ -109,9 +109,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayData != null)
                         return _overlayData;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return null;
 
                     // If a required property is missing
@@ -151,14 +151,14 @@ namespace SabreTools.Serialization.Wrappers
                     endOfSectionData += 705;
 
                     // If we're at the end of the file, cache an empty byte array
-                    if (endOfSectionData >= endOfFile)
+                    if (endOfSectionData >= dataLength)
                     {
                         _overlayData = [];
                         return _overlayData;
                     }
 
                     // Otherwise, cache and return the data
-                    long overlayLength = endOfFile - endOfSectionData;
+                    long overlayLength = dataLength - endOfSectionData;
                     _overlayData = ReadFromDataSource(endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }
@@ -178,9 +178,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayStrings != null)
                         return _overlayStrings;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return null;
 
                     // If a required property is missing
@@ -220,7 +220,7 @@ namespace SabreTools.Serialization.Wrappers
                     endOfSectionData += 705;
 
                     // If we're at the end of the file, cache an empty list
-                    if (endOfSectionData >= endOfFile)
+                    if (endOfSectionData >= dataLength)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Revisit the 16 MiB limit
                     // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    long overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+                    long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
 
                     // Otherwise, cache and return the strings
                     _overlayStrings = ReadStringsFromDataSource(endOfSectionData, (int)overlayLength, charLimit: 3);
@@ -384,9 +384,9 @@ namespace SabreTools.Serialization.Wrappers
             if (Header == null)
                 return null;
 
-            // Get the end of the file, if possible
-            long endOfFile = GetEndOffset();
-            if (endOfFile == -1)
+            // Get the available source length, if possible
+            long dataLength = Length;
+            if (dataLength == -1)
                 return null;
 
             // If the resource table is invalid
@@ -462,9 +462,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Resource offset on success, -1 otherwise</returns>
         public int GetResourceOffset(int id)
         {
-            // Get the end of the file, if possible
-            long endOfFile = GetEndOffset();
-            if (endOfFile == -1)
+            // Get the available source length, if possible
+            long dataLength = Length;
+            if (dataLength == -1)
                 return -1;
 
             // If the resource table is invalid
@@ -478,7 +478,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Verify the resource offset
             int offset = resource.Offset << ResourceTable.AlignmentShiftCount;
-            if (offset < 0 || offset + resource.Length >= endOfFile)
+            if (offset < 0 || offset + resource.Length >= dataLength)
                 return -1;
 
             // Return the verified offset
@@ -558,9 +558,9 @@ namespace SabreTools.Serialization.Wrappers
             if (Header == null)
                 return -1;
 
-            // Get the end of the file, if possible
-            long endOfFile = GetEndOffset();
-            if (endOfFile == -1)
+            // Get the available source length, if possible
+            long dataLength = Length;
+            if (dataLength == -1)
                 return -1;
 
             // Get the matching segment
@@ -570,7 +570,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Verify the segment offset
             int offset = segment.Offset << Header.SegmentAlignmentShiftCount;
-            if (offset < 0 || offset + segment.Length >= endOfFile)
+            if (offset < 0 || offset + segment.Length >= dataLength)
                 return -1;
 
             // Return the verified offset
@@ -596,7 +596,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we have an unset length, read the whole source
             if (length == -1)
-                length = GetEndOffset();
+                length = Length;
 
             return ReadFromDataSource(rangeStart, (int)length);
         }

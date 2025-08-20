@@ -165,9 +165,9 @@ namespace SabreTools.Serialization.Wrappers
             if (InformationBlock == null)
                 return -1;
 
-            // Get the end of the file, if possible
-            long endOfFile = GetEndOffset();
-            if (endOfFile == -1)
+            // Get the available source length, if possible
+            long dataLength = Length;
+            if (dataLength == -1)
                 return -1;
 
             // Get the matching entry
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Verify the entry offset
             int offset = (int)(entry.PageDataOffset << (int)InformationBlock.BytesOnLastPage);
-            if (offset < 0 || offset + entry.DataSize >= endOfFile)
+            if (offset < 0 || offset + entry.DataSize >= dataLength)
                 return -1;
 
             // Return the verified offset
@@ -267,9 +267,9 @@ namespace SabreTools.Serialization.Wrappers
             if (InformationBlock == null)
                 return -1;
 
-            // Get the end of the file, if possible
-            long endOfFile = GetEndOffset();
-            if (endOfFile == -1)
+            // Get the available source length, if possible
+            long dataLength = Length;
+            if (dataLength == -1)
                 return -1;
 
             // Get the matching entry
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If we have an unset length, read the whole source
             if (length == -1)
-                length = GetEndOffset();
+                length = Length;
 
             return ReadFromDataSource(rangeStart, (int)length);
         }

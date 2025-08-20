@@ -207,9 +207,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayAddress != null)
                         return _overlayAddress.Value;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return -1;
 
                     // If the section table is missing
@@ -220,8 +220,8 @@ namespace SabreTools.Serialization.Wrappers
                     if (OptionalHeader?.CertificateTable != null)
                     {
                         int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
-                            endOfFile = certificateTableAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
@@ -278,9 +278,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayData != null)
                         return _overlayData;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return null;
 
                     // If the section table is missing
@@ -291,8 +291,8 @@ namespace SabreTools.Serialization.Wrappers
                     if (OptionalHeader?.CertificateTable != null)
                     {
                         int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
-                            endOfFile = certificateTableAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
@@ -329,14 +329,14 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If we're at the end of the file, cache an empty byte array
-                    if (endOfSectionData >= endOfFile)
+                    if (endOfSectionData >= dataLength)
                     {
                         _overlayData = [];
                         return _overlayData;
                     }
 
                     // Otherwise, cache and return the data
-                    long overlayLength = endOfFile - endOfSectionData;
+                    long overlayLength = dataLength - endOfSectionData;
                     _overlayData = ReadFromDataSource(endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }
@@ -356,9 +356,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (_overlayStrings != null)
                         return _overlayStrings;
 
-                    // Get the end of the file, if possible
-                    long endOfFile = GetEndOffset();
-                    if (endOfFile == -1)
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
                         return null;
 
                     // If the section table is missing
@@ -369,8 +369,8 @@ namespace SabreTools.Serialization.Wrappers
                     if (OptionalHeader?.CertificateTable != null)
                     {
                         int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (certificateTableAddress != 0 && certificateTableAddress < endOfFile)
-                            endOfFile = certificateTableAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
@@ -407,7 +407,7 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // If we're at the end of the file, cache an empty list
-                    if (endOfSectionData >= endOfFile)
+                    if (endOfSectionData >= dataLength)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
@@ -415,7 +415,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // TODO: Revisit the 16 MiB limit
                     // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    long overlayLength = Math.Min(endOfFile - endOfSectionData, 16 * 1024 * 1024);
+                    long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
 
                     // Otherwise, cache and return the strings
                     _overlayStrings = ReadStringsFromDataSource(endOfSectionData, (int)overlayLength, charLimit: 3);
