@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        private readonly DataSource _dataSource;
+        protected readonly DataSource _dataSource;
 
 #if NETCOREAPP
         /// <summary>

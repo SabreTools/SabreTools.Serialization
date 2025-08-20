@@ -53,23 +53,12 @@ namespace SabreTools.Serialization.Wrappers
                     foreach (var entry in SegmentTable)
                     {
                         // Get end of segment data
-                        long offset = _initialPosition + (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
+                        long offset = (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
 
                         // Read and find the end of the relocation data
                         if ((entry.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
                         {
-                            Stream? dataStream = null;
-                            if (_byteArrayData != null)
-                                dataStream = new MemoryStream(_byteArrayData);
-                            else if (_streamData != null)
-                                dataStream = _streamData;
-                            else
-                                break;
-
-                            dataStream.Seek(offset, SeekOrigin.Begin);
-                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(dataStream);
-
-                            offset = dataStream.Position;
+                            // TODO: When the model and deserializer get updated, fix this
                         }
 
                         if (offset > endOfSectionData)

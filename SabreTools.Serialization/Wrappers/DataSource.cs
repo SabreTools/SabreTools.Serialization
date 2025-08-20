@@ -90,6 +90,25 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Get the filename from the source, if possible
+        /// </summary>
+        /// <returns>String representing the filename on success, null otherwise</returns>
+        /// <remarks>This only works if the source was a <see cref="FileStream"/></remarks>
+        public string? GetFilename()
+        {
+            // Only streams can have a filename
+            if (_dataSourceType != DataSourceType.Stream)
+                return null;
+
+            // Only file streams can have a filename
+            if (_streamData == null || _streamData is not FileStream fs)
+                return null;
+
+            // Return the name
+            return fs.Name;
+        }
+
+        /// <summary>
         /// Get the usable length of the underlying data
         /// </summary>
         /// <returns>The usable length on success, -1 on error</returns>

@@ -100,6 +100,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Get the matching CHD version, if possible
         /// </summary>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Matching version, 0 if none</returns>
         private static uint GetVersion(Stream data, long initialOffset)
         {

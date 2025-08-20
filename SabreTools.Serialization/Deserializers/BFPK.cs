@@ -64,6 +64,7 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into a FileEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Filled FileEntry on success, null on error</returns>
         public static FileEntry ParseFileEntry(Stream data, long initialOffset)
         {
