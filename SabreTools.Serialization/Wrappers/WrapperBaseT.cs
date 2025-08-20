@@ -19,9 +19,9 @@ namespace SabreTools.Serialization.Wrappers
         public T Model { get; }
 
         /// <summary>
-        /// Length of the underlying data
+        /// Usable length of the underlying data
         /// </summary>
-        public long Length => _dataSource.GetLength();
+        public long Length => _dataSource.Length;
 
         #endregion
 

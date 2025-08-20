@@ -9,6 +9,51 @@ namespace SabreTools.Serialization.Wrappers
     /// </summary>
     public class DataSource
     {
+        #region Properties
+
+        /// <summary>
+        /// Filename from the source, if possible
+        /// </summary>
+        /// <returns>String representing the filename on success, null otherwise</returns>
+        /// <remarks>This only works if the source was a <see cref="FileStream"/></remarks>
+        public string? Filename
+        {
+            get
+            {
+                // Only streams can have a filename
+                if (_dataSourceType != DataSourceType.Stream)
+                    return null;
+
+                // Only file streams can have a filename
+                if (_streamData == null || _streamData is not FileStream fs)
+                    return null;
+
+                // Return the name
+                return fs.Name;
+            }
+        }
+
+        /// <summary>
+        /// Usable length of the underlying data
+        /// </summary>
+        /// <returns>The usable length on success, -1 on error</returns>
+        public long Length
+        {
+            get
+            {
+                return _dataSourceType switch
+                {
+                    DataSourceType.ByteArray => _byteArrayData!.Length - _initialPosition,
+                    DataSourceType.Stream => _streamData!.Length - _initialPosition,
+
+                    // Everything else is invalid
+                    _ => -1,
+                };
+            }
+        }
+
+        #endregion
+
         #region Instance Variables
 
         /// <summary>
@@ -71,86 +116,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
-        /// Get the filename from the source, if possible
-        /// </summary>
-        /// <returns>String representing the filename on success, null otherwise</returns>
-        /// <remarks>This only works if the source was a <see cref="FileStream"/></remarks>
-        public string? GetFilename()
-        {
-            // Only streams can have a filename
-            if (_dataSourceType != DataSourceType.Stream)
-                return null;
-
-            // Only file streams can have a filename
-            if (_streamData == null || _streamData is not FileStream fs)
-                return null;
-
-            // Return the name
-            return fs.Name;
-        }
-
-        /// <summary>
-        /// Get the usable length of the underlying data
-        /// </summary>
-        /// <returns>The usable length on success, -1 on error</returns>
-        public long GetLength()
-        {
-            return _dataSourceType switch
-            {
-                DataSourceType.ByteArray => _byteArrayData!.Length - _initialPosition,
-                DataSourceType.Stream => _streamData!.Length - _initialPosition,
-
-                // Everything else is invalid
-                _ => -1,
-            };
-        }
-
-        /// <summary>
-        /// Validate the backing data source
-        /// </summary>
-        /// <returns>True if the data source is valid, false otherwise</returns>
-        public bool IsValid()
-        {
-            return _dataSourceType switch
-            {
-                // Byte array data requires both a valid array and offset
-                DataSourceType.ByteArray => _byteArrayData != null && _initialPosition >= 0,
-
-                // Stream data requires both a valid stream
-                DataSourceType.Stream => _streamData != null && _initialPosition >= 0 && _streamData.CanRead && _streamData.CanSeek,
-
-                // Everything else is invalid
-                _ => false,
-            };
-        }
-
-        /// <summary>
-        /// Check if a data segment is valid in the data source 
-        /// </summary>
-        /// <param name="position">Position in the source</param>
-        /// <param name="length">Length of the data to check</param>
-        /// <returns>True if the positional data is valid, false otherwise</returns>
-        public bool SegmentValid(int position, int length)
-        {
-            // Validate the data souece
-            if (!IsValid())
-                return false;
-
-            // If we have an invalid position
-            if (position < 0 || position >= GetLength())
-                return false;
-
-            return _dataSourceType switch
-            {
-                DataSourceType.ByteArray => _initialPosition + position + length <= _byteArrayData!.Length,
-                DataSourceType.Stream => _initialPosition + position + length <= _streamData!.Length,
-
-                // Everything else is invalid
-                _ => false,
-            };
-        }
-
-        /// <summary>
         /// Read data from the source
         /// </summary>
         /// <param name="position">Position in the source to read from</param>
@@ -196,6 +161,51 @@ namespace SabreTools.Serialization.Wrappers
                 // Absorb the error
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Validate the backing data source
+        /// </summary>
+        /// <returns>True if the data source is valid, false otherwise</returns>
+        private bool IsValid()
+        {
+            return _dataSourceType switch
+            {
+                // Byte array data requires both a valid array and offset
+                DataSourceType.ByteArray => _byteArrayData != null && _initialPosition >= 0,
+
+                // Stream data requires both a valid stream
+                DataSourceType.Stream => _streamData != null && _initialPosition >= 0 && _streamData.CanRead && _streamData.CanSeek,
+
+                // Everything else is invalid
+                _ => false,
+            };
+        }
+
+        /// <summary>
+        /// Check if a data segment is valid in the data source 
+        /// </summary>
+        /// <param name="position">Position in the source</param>
+        /// <param name="length">Length of the data to check</param>
+        /// <returns>True if the positional data is valid, false otherwise</returns>
+        private bool SegmentValid(int position, int length)
+        {
+            // Validate the data souece
+            if (!IsValid())
+                return false;
+
+            // If we have an invalid position
+            if (position < 0 || position >= Length)
+                return false;
+
+            return _dataSourceType switch
+            {
+                DataSourceType.ByteArray => _initialPosition + position + length <= _byteArrayData!.Length,
+                DataSourceType.Stream => _initialPosition + position + length <= _streamData!.Length,
+
+                // Everything else is invalid
+                _ => false,
+            };
         }
 
         #endregion

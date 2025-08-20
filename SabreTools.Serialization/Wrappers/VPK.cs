@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _archiveFilenames;
 
                 // If we don't have a source filename
-                string? sourceFilename = _dataSource.GetFilename();
+                string? sourceFilename = _dataSource.Filename;
                 if (string.IsNullOrEmpty(sourceFilename))
                     return null;
 
