@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Internal model
         /// </summary>
-        public T Model { get; private set; }
+        public T Model { get; }
 
         /// <summary>
         /// Length of the underlying data
