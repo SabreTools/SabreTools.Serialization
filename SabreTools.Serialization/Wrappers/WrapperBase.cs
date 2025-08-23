@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -22,13 +23,15 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Properties
 
-        /// <inheritdoc cref="DataSource.AsStream"/>
-        public Stream? DataSourceStream => _dataSource.AsStream();
+        /// <summary>
+        /// Data source as a stream
+        /// </summary>
+        public Stream? DataSourceStream => _dataSource;
 
-        /// <inheritdoc cref="DataSource.Filename"/>
+        /// <inheritdoc cref="ViewStream.Filename"/>
         public string? Filename => _dataSource.Filename;
 
-        /// <inheritdoc cref="DataSource.Length"/>
+        /// <inheritdoc cref="ViewStream.Length"/>
         public long Length => _dataSource.Length;
 
         #endregion
@@ -38,7 +41,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        private readonly DataSource _dataSource;
+        private readonly ViewStream _dataSource;
 
 #if NETCOREAPP
         /// <summary>
@@ -75,7 +78,7 @@ namespace SabreTools.Serialization.Wrappers
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
 
-            _dataSource = new DataSource(data, offset);
+            _dataSource = new ViewStream(data, offset, data.Length - offset);
         }
 
         /// <summary>
@@ -88,7 +91,7 @@ namespace SabreTools.Serialization.Wrappers
             if (!data.CanSeek || !data.CanRead)
                 throw new ArgumentOutOfRangeException(nameof(data));
 
-            _dataSource = new DataSource(data);
+            _dataSource = new ViewStream(data, data.Position, data.Length - data.Position);
         }
 
         #endregion
@@ -102,7 +105,28 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">Length of the requested data</param>
         /// <returns>Byte array containing the requested data, null on error</returns>
         public byte[]? ReadFromDataSource(int position, int length)
-            => _dataSource.Read(position, length);
+        {
+            // Validate the requested segment
+            if (!_dataSource.SegmentValid(position, length))
+                return null;
+
+            try
+            {
+                long currentLocation = _dataSource.Position;
+
+                _dataSource.Seek(position, SeekOrigin.Begin);
+                byte[] sectionData = _dataSource.ReadBytes(length);
+                _dataSource.Seek(currentLocation, SeekOrigin.Begin);
+
+                return sectionData;
+
+            }
+            catch
+            {
+                // Absorb the error
+                return null;
+            }
+        }
 
         /// <summary>
         /// Read string data from the source
