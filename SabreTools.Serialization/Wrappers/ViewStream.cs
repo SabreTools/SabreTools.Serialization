@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Only file streams can have a filename
-                if (_streamData == null || _streamData is not FileStream fs)
+                if (_streamData is not FileStream fs)
                     return null;
 
                 // Return the name
