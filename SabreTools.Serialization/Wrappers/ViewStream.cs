@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Only file streams can have a filename
-                if (_streamData is not FileStream fs)
+                if (_source is not FileStream fs)
                     return null;
 
                 // Return the name
@@ -32,8 +32,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public override long Position
         {
-            get { return _streamData.Position - _initialPosition; }
-            set { _streamData.Position = value + _initialPosition; }
+            get { return _source.Position - _initialPosition; }
+            set { _source.Position = value + _initialPosition; }
         }
 
         #endregion
@@ -46,19 +46,19 @@ namespace SabreTools.Serialization.Wrappers
         private readonly object _streamDataLock = new();
 
         /// <summary>
-        /// Initial position of the data source
+        /// Initial position within the underlying data
         /// </summary>
         protected long _initialPosition;
 
         /// <summary>
-        /// Usable length of the underlying data
+        /// Usable length in the underlying data
         /// </summary>
         protected long _length;
 
         /// <summary>
-        /// Source Stream data
+        /// Source data
         /// </summary>
-        protected Stream _streamData;
+        protected Stream _source;
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public ViewStream(Stream data, long offset, long length)
         {
-            _streamData = data;
+            _source = data;
             _initialPosition = offset;
             _length = length;
         }
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public ViewStream(byte[] data, long offset, long length)
         {
-            _streamData = new MemoryStream(data, (int)offset, (int)length);
+            _source = new MemoryStream(data, (int)offset, (int)length);
             _initialPosition = 0;
             _length = length;
         }
@@ -114,10 +114,10 @@ namespace SabreTools.Serialization.Wrappers
         public override bool CanWrite => false;
 
         /// <inheritdoc/>
-        public override bool CanSeek => _streamData.CanSeek;
+        public override bool CanSeek => _source.CanSeek;
 
         /// <inheritdoc/>
-        public override void Flush() => _streamData.Flush();
+        public override void Flush() => _source.Flush();
 
         /// <inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Wrappers
                 offset += (int)_initialPosition;
                 lock (_streamDataLock)
                 {
-                    return _streamData.Read(buffer, offset, count);
+                    return _source.Read(buffer, offset, count);
                 }
 
             }
