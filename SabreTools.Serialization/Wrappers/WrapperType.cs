@@ -33,7 +33,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// bzip2 archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         BZip2,
 
         /// <summary>
@@ -65,8 +64,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// gzip archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
-        GZIP,
+        GZip,
 
         /// <summary>
         /// Key-value pair INI file
@@ -170,7 +168,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// RAR archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         RAR,
 
         /// <summary>
@@ -193,7 +190,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// 7-zip archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         SevenZip,
 
         /// <summary>
@@ -210,7 +206,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Tape archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         TapeArchive,
 
         /// <summary>
@@ -247,7 +242,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// xz archive
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         XZ,
 
         /// <summary>

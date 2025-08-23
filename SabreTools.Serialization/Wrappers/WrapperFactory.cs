@@ -20,13 +20,13 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.BDPlusSVM => BDPlusSVM.Create(data),
                 WrapperType.BFPK => BFPK.Create(data),
                 WrapperType.BSP => BSP.Create(data),
-                WrapperType.BZip2 => null,// TODO: Implement wrapper
+                WrapperType.BZip2 => BZip2.Create(data),
                 WrapperType.CFB => CFB.Create(data),
                 WrapperType.CHD => CHD.Create(data),
                 WrapperType.CIA => CIA.Create(data),
                 WrapperType.Executable => CreateExecutableWrapper(data),
                 WrapperType.GCF => GCF.Create(data),
-                WrapperType.GZIP => null,// TODO: Implement wrapper
+                WrapperType.GZip => GZip.Create(data),
                 WrapperType.IniFile => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
@@ -46,19 +46,19 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.PlayJAudioFile => PlayJAudioFile.Create(data),
                 WrapperType.PlayJPlaylist => PlayJPlaylist.Create(data),
                 WrapperType.Quantum => Quantum.Create(data),
-                WrapperType.RAR => null,// TODO: Implement wrapper
+                WrapperType.RAR => RAR.Create(data),
                 WrapperType.RealArcadeInstaller => null,// TODO: Implement wrapper
                 WrapperType.RealArcadeMezzanine => null,// TODO: Implement wrapper
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
-                WrapperType.SevenZip => null,// TODO: Implement wrapper
+                WrapperType.SevenZip => SevenZip.Create(data),
                 WrapperType.SFFS => null,// TODO: Implement wrapper
                 WrapperType.SGA => SGA.Create(data),
-                WrapperType.TapeArchive => null,// TODO: Implement wrapper
+                WrapperType.TapeArchive => TapeArchive.Create(data),
                 WrapperType.Textfile => null,// TODO: Implement wrapper
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
                 WrapperType.WAD => WAD3.Create(data),
-                WrapperType.XZ => null,// TODO: Implement wrapper
+                WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
                 _ => null,
             };
@@ -299,13 +299,13 @@ namespace SabreTools.Serialization.Wrappers
             #endregion
 
             // TODO: Use constants from Models here
-            #region GZIP
+            #region GZip
 
             if (magic.StartsWith([Models.GZIP.Constants.ID1, Models.GZIP.Constants.ID2]))
-                return WrapperType.GZIP;
+                return WrapperType.GZip;
 
             if (extension.Equals("gz", StringComparison.OrdinalIgnoreCase))
-                return WrapperType.GZIP;
+                return WrapperType.GZip;
 
             #endregion
 

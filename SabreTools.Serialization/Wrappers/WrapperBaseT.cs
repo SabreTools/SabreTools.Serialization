@@ -224,9 +224,7 @@ namespace SabreTools.Serialization.Wrappers
         #region JSON Export
 
 #if NETCOREAPP
-        /// <summary>
-        /// Export the item information as JSON
-        /// </summary>
+        /// <inheritdoc/>
         public override string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
 #endif
 
