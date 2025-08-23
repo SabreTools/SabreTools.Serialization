@@ -13,8 +13,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Filename from the source, if possible
         /// </summary>
-        /// <returns>String representing the filename on success, null otherwise</returns>
-        /// <remarks>This only works if the source was a <see cref="FileStream"/></remarks>
         public string? Filename
         {
             get
