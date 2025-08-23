@@ -1,4 +1,8 @@
 using System.IO;
+using SabreTools.Serialization.Interfaces;
+#if NET462_OR_GREATER || NETCOREAPP
+using SharpCompress.Compressors.Xz;
+#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -7,7 +11,7 @@ namespace SabreTools.Serialization.Wrappers
     /// any actual parsing. It is used as a placeholder for
     /// types that typically do not have models.
     /// </summary>
-    public class XZ : WrapperBase
+    public class XZ : WrapperBase, IExtractable
     {
         #region Descriptive Properties
 
@@ -16,7 +20,42 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Instance Variables
+
+        /// <summary>
+        /// Source filename for the wrapper
+        /// </summary>
+        private readonly string? _filename;
+
+        /// <summary>
+        /// Source stream for the wrapper
+        /// </summary>
+        private readonly Stream _stream;
+
+        #endregion
+
         #region Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a file path
+        /// </summary>
+        public XZ(string filename)
+        {
+            _filename = filename;
+            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        public XZ(Stream stream)
+        {
+            _filename = null;
+            _stream = stream;
+
+            if (stream is FileStream fs)
+                _filename = fs.Name;
+        }
 
         /// <summary>
         /// Create a XZ archive from a byte array and offset
@@ -50,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new XZ();
+            return new XZ(data);
         }
 
         #endregion
@@ -61,6 +100,52 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public override string ExportJSON() => throw new System.NotImplementedException();
 #endif
+
+        #endregion
+
+        #region Extraction
+
+        /// <inheritdoc/>
+        public bool Extract(string outDir, bool includeDebug)
+        {
+#if NET462_OR_GREATER || NETCOREAPP
+            if (_stream == null || !_stream.CanRead)
+                return false;
+
+            try
+            {
+                // Try opening the stream
+                using var xzFile = new XZStream(_stream);
+
+                // Ensure directory separators are consistent
+                string filename = System.Guid.NewGuid().ToString();
+                if (Path.DirectorySeparatorChar == '\\')
+                    filename = filename.Replace('/', '\\');
+                else if (Path.DirectorySeparatorChar == '/')
+                    filename = filename.Replace('\\', '/');
+
+                // Ensure the full output directory exists
+                filename = Path.Combine(outDir, filename);
+                var directoryName = Path.GetDirectoryName(filename);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Extract the file
+                using FileStream fs = File.OpenWrite(filename);
+                xzFile.CopyTo(fs);
+                fs.Flush();
+
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.Error.WriteLine(ex);
+                return false;
+            }
+#else
+            return false;
+#endif
+        }
 
         #endregion
     }

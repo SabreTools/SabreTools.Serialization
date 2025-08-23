@@ -1,4 +1,11 @@
 using System.IO;
+using SabreTools.Serialization.Interfaces;
+#if NET462_OR_GREATER || NETCOREAPP
+using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -7,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
     /// any actual parsing. It is used as a placeholder for
     /// types that typically do not have models.
     /// </summary>
-    public class SevenZip : WrapperBase
+    public class SevenZip : WrapperBase, IExtractable
     {
         #region Descriptive Properties
 
@@ -16,7 +23,42 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Instance Variables
+
+        /// <summary>
+        /// Source filename for the wrapper
+        /// </summary>
+        private readonly string? _filename;
+
+        /// <summary>
+        /// Source stream for the wrapper
+        /// </summary>
+        private readonly Stream _stream;
+
+        #endregion
+
         #region Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a file path
+        /// </summary>
+        public SevenZip(string filename)
+        {
+            _filename = filename;
+            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        public SevenZip(Stream stream)
+        {
+            _filename = null;
+            _stream = stream;
+
+            if (stream is FileStream fs)
+                _filename = fs.Name;
+        }
 
         /// <summary>
         /// Create a SevenZip archive (or derived format) from a byte array and offset
@@ -50,7 +92,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new SevenZip();
+            return new SevenZip(data);
         }
 
         #endregion
@@ -60,6 +102,120 @@ namespace SabreTools.Serialization.Wrappers
 #if NETCOREAPP
         /// <inheritdoc/>
         public override string ExportJSON() => throw new System.NotImplementedException();
+#endif
+
+        #endregion
+
+        #region Extraction
+
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
+            => Extract(outputDirectory, lookForHeader: false, includeDebug);
+
+        /// <inheritdoc cref="Extract(string, bool)"/>
+        public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
+        {
+            if (_stream == null || !_stream.CanRead)
+                return false;
+
+#if NET462_OR_GREATER || NETCOREAPP
+            try
+            {
+                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
+                var sevenZip = SevenZipArchive.Open(_stream, readerOptions);
+                // Try to read the file path if no entries are found
+                if (sevenZip.Entries.Count == 0 && !string.IsNullOrEmpty(_filename) && File.Exists(_filename))
+                    sevenZip = SevenZipArchive.Open(_filename, readerOptions);
+
+                // Currently doesn't flag solid 7z archives with only 1 solid block as solid, but practically speaking
+                // this is not much of a concern.
+                if (sevenZip.IsSolid)
+                    return ExtractSolid(sevenZip, outputDirectory, includeDebug);
+                else
+                    return ExtractNonSolid(sevenZip, outputDirectory, includeDebug);
+
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.Error.WriteLine(ex);
+                return false;
+            }
+#else
+            return false;
+#endif
+        }
+
+#if NET462_OR_GREATER || NETCOREAPP
+        /// <summary>
+        /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every 
+        /// file individually, in order to extract all valid files from the archive.
+        /// </summary>
+        private static bool ExtractNonSolid(SevenZipArchive sevenZip, string outputDirectory, bool includeDebug)
+        {
+            foreach (var entry in sevenZip.Entries)
+            {
+                try
+                {
+                    // If the entry is a directory
+                    if (entry.IsDirectory)
+                        continue;
+
+                    // If the entry has an invalid key
+                    if (entry.Key == null)
+                        continue;
+
+                    // If we have a partial entry due to an incomplete multi-part archive, skip it
+                    if (!entry.IsComplete)
+                        continue;
+
+                    // Ensure directory separators are consistent
+                    string filename = entry.Key;
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outputDirectory, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    entry.WriteToFile(filename);
+                }
+                catch (System.Exception ex)
+                {
+                    if (includeDebug) System.Console.Error.WriteLine(ex);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Extraction method for solid archives. Uses ExtractAllEntries because extraction for solid archives must be
+        /// done sequentially, and files beyond a corrupted point in a solid archive will be unreadable anyways.
+        /// </summary>
+        private static bool ExtractSolid(SevenZipArchive sevenZip, string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                if (!Directory.Exists(outputDirectory))
+                    Directory.CreateDirectory(outputDirectory);
+
+                sevenZip.WriteToDirectory(outputDirectory, new ExtractionOptions()
+                {
+                    ExtractFullPath = true,
+                    Overwrite = true,
+                });
+
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.Error.WriteLine(ex);
+            }
+
+            return true;
+        }
 #endif
 
         #endregion

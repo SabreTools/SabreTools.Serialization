@@ -1,4 +1,7 @@
+using System;
 using System.IO;
+using SabreTools.IO.Compression.BZip2;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -7,7 +10,7 @@ namespace SabreTools.Serialization.Wrappers
     /// any actual parsing. It is used as a placeholder for
     /// types that typically do not have models.
     /// </summary>
-    public class BZip2 : WrapperBase
+    public class BZip2 : WrapperBase, IExtractable
     {
         #region Descriptive Properties
 
@@ -16,7 +19,42 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Instance Variables
+
+        /// <summary>
+        /// Source filename for the wrapper
+        /// </summary>
+        private readonly string? _filename;
+
+        /// <summary>
+        /// Source stream for the wrapper
+        /// </summary>
+        private readonly Stream _stream;
+
+        #endregion
+
         #region Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a file path
+        /// </summary>
+        public BZip2(string filename)
+        {
+            _filename = filename;
+            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        public BZip2(Stream stream)
+        {
+            _filename = null;
+            _stream = stream;
+
+            if (stream is FileStream fs)
+                _filename = fs.Name;
+        }
 
         /// <summary>
         /// Create a BZip2 archive from a byte array and offset
@@ -50,7 +88,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new BZip2();
+            return new BZip2(data);
         }
 
         #endregion
@@ -59,9 +97,51 @@ namespace SabreTools.Serialization.Wrappers
 
 #if NETCOREAPP
         /// <inheritdoc/>
-        public override string ExportJSON() => throw new System.NotImplementedException();
+        public override string ExportJSON() => throw new NotImplementedException();
 
 #endif
+
+        #endregion
+
+        #region Extraction
+
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
+        {
+            if (_stream == null || !_stream.CanRead)
+                return false;
+
+            try
+            {
+                // Try opening the stream
+                using var bz2File = new BZip2InputStream(_stream, true);
+
+                // Ensure directory separators are consistent
+                string filename = Guid.NewGuid().ToString();
+                if (Path.DirectorySeparatorChar == '\\')
+                    filename = filename.Replace('/', '\\');
+                else if (Path.DirectorySeparatorChar == '/')
+                    filename = filename.Replace('\\', '/');
+
+                // Ensure the full output directory exists
+                filename = Path.Combine(outputDirectory, filename);
+                var directoryName = Path.GetDirectoryName(filename);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Extract the file
+                using FileStream fs = File.OpenWrite(filename);
+                bz2File.CopyTo(fs);
+                fs.Flush();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+        }
 
         #endregion
     }

@@ -1,4 +1,11 @@
 using System.IO;
+using SabreTools.Serialization.Interfaces;
+#if NET462_OR_GREATER || NETCOREAPP
+using SharpCompress.Archives;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -7,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
     /// any actual parsing. It is used as a placeholder for
     /// types that typically do not have models.
     /// </summary>
-    public class RAR : WrapperBase
+    public class RAR : WrapperBase, IExtractable
     {
         #region Descriptive Properties
 
@@ -16,7 +23,42 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Instance Variables
+
+        /// <summary>
+        /// Source filename for the wrapper
+        /// </summary>
+        private readonly string? _filename;
+
+        /// <summary>
+        /// Source stream for the wrapper
+        /// </summary>
+        private readonly Stream _stream;
+
+        #endregion
+
         #region Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a file path
+        /// </summary>
+        public RAR(string filename)
+        {
+            _filename = filename;
+            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        public RAR(Stream stream)
+        {
+            _filename = null;
+            _stream = stream;
+
+            if (stream is FileStream fs)
+                _filename = fs.Name;
+        }
 
         /// <summary>
         /// Create a RAR archive (or derived format) from a byte array and offset
@@ -50,7 +92,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new RAR();
+            return new RAR(data);
         }
 
         #endregion
@@ -60,6 +102,123 @@ namespace SabreTools.Serialization.Wrappers
 #if NETCOREAPP
         /// <inheritdoc/>
         public override string ExportJSON() => throw new System.NotImplementedException();
+#endif
+
+        #endregion
+
+        #region Extraction
+
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
+            => Extract(outputDirectory, lookForHeader: false, includeDebug);
+
+        /// <inheritdoc cref="Extract(string, bool)"/>
+        public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
+        {
+            if (_stream == null || !_stream.CanRead)
+                return false;
+
+#if NET462_OR_GREATER || NETCOREAPP
+            try
+            {
+                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
+                RarArchive rarFile = RarArchive.Open(_stream, readerOptions);
+
+                // Try to read the file path if no entries are found
+                if (rarFile.Entries.Count == 0 && !string.IsNullOrEmpty(_filename) && File.Exists(_filename))
+                    rarFile = RarArchive.Open(_filename, readerOptions);
+
+                if (!rarFile.IsComplete)
+                    return false;
+
+                if (rarFile.IsSolid)
+                    return ExtractSolid(rarFile, outputDirectory, includeDebug);
+                else
+                    return ExtractNonSolid(rarFile, outputDirectory, includeDebug);
+
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.Error.WriteLine(ex);
+                return false;
+            }
+#else
+            return false;
+#endif
+        }
+
+#if NET462_OR_GREATER || NETCOREAPP
+
+        /// <summary>
+        /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every 
+        /// file individually, in order to extract all valid files from the archive.
+        /// </summary>
+        private static bool ExtractNonSolid(RarArchive rarFile, string outDir, bool includeDebug)
+        {
+            foreach (var entry in rarFile.Entries)
+            {
+                try
+                {
+                    // If the entry is a directory
+                    if (entry.IsDirectory)
+                        continue;
+
+                    // If the entry has an invalid key
+                    if (entry.Key == null)
+                        continue;
+
+                    // If we have a partial entry due to an incomplete multi-part archive, skip it
+                    if (!entry.IsComplete)
+                        continue;
+
+                    // Ensure directory separators are consistent
+                    string filename = entry.Key;
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outDir, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    entry.WriteToFile(filename);
+                }
+                catch (System.Exception ex)
+                {
+                    if (includeDebug) System.Console.Error.WriteLine(ex);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Extraction method for solid archives. Uses ExtractAllEntries because extraction for solid archives must be
+        /// done sequentially, and files beyond a corrupted point in a solid archive will be unreadable anyways.
+        /// </summary>
+        private static bool ExtractSolid(RarArchive rarFile, string outDir, bool includeDebug)
+        {
+            try
+            {
+                if (!Directory.Exists(outDir))
+                    Directory.CreateDirectory(outDir);
+
+                rarFile.WriteToDirectory(outDir, new ExtractionOptions()
+                {
+                    ExtractFullPath = true,
+                    Overwrite = true,
+                });
+
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.Error.WriteLine(ex);
+            }
+
+            return true;
+        }
 #endif
 
         #endregion
