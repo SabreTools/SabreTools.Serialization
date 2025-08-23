@@ -41,11 +41,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Instance Variables
 
         /// <summary>
-        /// Lock object for reading from the source
-        /// </summary>
-        private readonly object _streamDataLock = new();
-
-        /// <summary>
         /// Initial position within the underlying data
         /// </summary>
         protected long _initialPosition;
@@ -59,6 +54,11 @@ namespace SabreTools.Serialization.Wrappers
         /// Source data
         /// </summary>
         protected Stream _source;
+
+        /// <summary>
+        /// Lock object for reading from the source
+        /// </summary>
+        private readonly object _sourceLock = new();
 
         #endregion
 
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Correct the read offset
                 offset += (int)_initialPosition;
-                lock (_streamDataLock)
+                lock (_sourceLock)
                 {
                     return _source.Read(buffer, offset, count);
                 }
