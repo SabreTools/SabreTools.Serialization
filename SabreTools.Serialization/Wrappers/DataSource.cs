@@ -116,6 +116,20 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
+        /// Return the underlying data as a stream
+        /// </summary>
+        /// <returns>Stream representing the data source on success, null on error</returns>
+        public Stream? AsStream()
+        {
+            return _dataSourceType switch
+            {
+                DataSourceType.ByteArray => new MemoryStream(_byteArrayData!, (int)_initialPosition, (int)Length),
+                DataSourceType.Stream => _streamData, // TODO: This should be wrapped better
+                _ => null,
+            };
+        }
+
+        /// <summary>
         /// Read data from the source
         /// </summary>
         /// <param name="position">Position in the source to read from</param>

@@ -23,41 +23,20 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Instance Variables
-
-        /// <summary>
-        /// Source filename for the wrapper
-        /// </summary>
-        private readonly string? _filename;
-
-        /// <summary>
-        /// Source stream for the wrapper
-        /// </summary>
-        private readonly Stream _stream;
-
-        #endregion
-
         #region Constructors
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a file path
-        /// </summary>
-        public SevenZip(string filename)
+        /// <inheritdoc/>
+        public SevenZip(byte[]? data, int offset)
+            : base(data, offset)
         {
-            _filename = filename;
-            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            // All logic is handled by the base class
         }
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a Stream
-        /// </summary>
-        public SevenZip(Stream stream)
+        /// <inheritdoc/>
+        public SevenZip(Stream? data)
+            : base(data)
         {
-            _filename = null;
-            _stream = stream;
-
-            if (stream is FileStream fs)
-                _filename = fs.Name;
+            // All logic is handled by the base class
         }
 
         /// <summary>
@@ -115,17 +94,17 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Extract(string, bool)"/>
         public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
         {
-            if (_stream == null || !_stream.CanRead)
+            if (DataSourceStream == null || !DataSourceStream.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                var sevenZip = SevenZipArchive.Open(_stream, readerOptions);
+                var sevenZip = SevenZipArchive.Open(DataSourceStream, readerOptions);
                 // Try to read the file path if no entries are found
-                if (sevenZip.Entries.Count == 0 && !string.IsNullOrEmpty(_filename) && File.Exists(_filename))
-                    sevenZip = SevenZipArchive.Open(_filename, readerOptions);
+                if (sevenZip.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
+                    sevenZip = SevenZipArchive.Open(Filename!, readerOptions);
 
                 // Currently doesn't flag solid 7z archives with only 1 solid block as solid, but practically speaking
                 // this is not much of a concern.

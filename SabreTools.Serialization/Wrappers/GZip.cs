@@ -19,41 +19,20 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Instance Variables
-
-        /// <summary>
-        /// Source filename for the wrapper
-        /// </summary>
-        private readonly string? _filename;
-
-        /// <summary>
-        /// Source stream for the wrapper
-        /// </summary>
-        private readonly Stream _stream;
-
-        #endregion
-
         #region Constructors
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a file path
-        /// </summary>
-        public GZip(string filename)
+        /// <inheritdoc/>
+        public GZip(byte[]? data, int offset)
+            : base(data, offset)
         {
-            _filename = filename;
-            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            // All logic is handled by the base class
         }
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a Stream
-        /// </summary>
-        public GZip(Stream stream)
+        /// <inheritdoc/>
+        public GZip(Stream? data)
+            : base(data)
         {
-            _filename = null;
-            _stream = stream;
-
-            if (stream is FileStream fs)
-                _filename = fs.Name;
+            // All logic is handled by the base class
         }
 
         /// <summary>
@@ -107,13 +86,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (_stream == null || !_stream.CanRead)
+            if (DataSourceStream == null || !DataSourceStream.CanRead)
                 return false;
 
             try
             {
                 // Try opening the stream
-                using var gzipFile = new GZipStream(_stream, CompressionMode.Decompress, true);
+                using var gzipFile = new GZipStream(DataSourceStream, CompressionMode.Decompress, true);
 
                 // Ensure directory separators are consistent
                 string filename = Guid.NewGuid().ToString();

@@ -20,41 +20,20 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Instance Variables
-
-        /// <summary>
-        /// Source filename for the wrapper
-        /// </summary>
-        private readonly string? _filename;
-
-        /// <summary>
-        /// Source stream for the wrapper
-        /// </summary>
-        private readonly Stream _stream;
-
-        #endregion
-
         #region Constructors
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a file path
-        /// </summary>
-        public XZ(string filename)
+        /// <inheritdoc/>
+        public XZ(byte[]? data, int offset)
+            : base(data, offset)
         {
-            _filename = filename;
-            _stream = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            // All logic is handled by the base class
         }
 
-        /// <summary>
-        /// Construct a new instance of the wrapper from a Stream
-        /// </summary>
-        public XZ(Stream stream)
+        /// <inheritdoc/>
+        public XZ(Stream? data)
+            : base(data)
         {
-            _filename = null;
-            _stream = stream;
-
-            if (stream is FileStream fs)
-                _filename = fs.Name;
+            // All logic is handled by the base class
         }
 
         /// <summary>
@@ -109,13 +88,13 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outDir, bool includeDebug)
         {
 #if NET462_OR_GREATER || NETCOREAPP
-            if (_stream == null || !_stream.CanRead)
+            if (DataSourceStream == null || !DataSourceStream.CanRead)
                 return false;
 
             try
             {
                 // Try opening the stream
-                using var xzFile = new XZStream(_stream);
+                using var xzFile = new XZStream(DataSourceStream);
 
                 // Ensure directory separators are consistent
                 string filename = System.Guid.NewGuid().ToString();
