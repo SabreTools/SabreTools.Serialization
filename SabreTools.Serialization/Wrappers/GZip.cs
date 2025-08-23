@@ -86,13 +86,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (DataSourceStream == null || !DataSourceStream.CanRead)
+            if (DataSource == null || !DataSource.CanRead)
                 return false;
 
             try
             {
                 // Try opening the stream
-                using var gzipFile = new GZipStream(DataSourceStream, CompressionMode.Decompress, true);
+                using var gzipFile = new GZipStream(DataSource, CompressionMode.Decompress, true);
 
                 // Ensure directory separators are consistent
                 string filename = Guid.NewGuid().ToString();

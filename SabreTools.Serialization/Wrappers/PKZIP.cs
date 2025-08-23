@@ -91,14 +91,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Extract(string, bool)"/>
         public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
         {
-            if (DataSourceStream == null || !DataSourceStream.CanRead)
+            if (DataSource == null || !DataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                var zipFile = ZipArchive.Open(DataSourceStream, readerOptions);
+                var zipFile = ZipArchive.Open(DataSource, readerOptions);
 
                 // Try to read the file path if no entries are found
                 if (zipFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))

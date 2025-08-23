@@ -88,13 +88,13 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outDir, bool includeDebug)
         {
 #if NET462_OR_GREATER || NETCOREAPP
-            if (DataSourceStream == null || !DataSourceStream.CanRead)
+            if (DataSource == null || !DataSource.CanRead)
                 return false;
 
             try
             {
                 // Try opening the stream
-                using var xzFile = new XZStream(DataSourceStream);
+                using var xzFile = new XZStream(DataSource);
 
                 // Ensure directory separators are consistent
                 string filename = System.Guid.NewGuid().ToString();

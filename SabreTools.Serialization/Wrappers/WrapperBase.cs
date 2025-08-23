@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Data source as a stream
         /// </summary>
-        public Stream? DataSourceStream => _dataSource;
+        public Stream? DataSource => _dataSource;
 
         /// <inheritdoc cref="ViewStream.Filename"/>
         public string? Filename => _dataSource.Filename;

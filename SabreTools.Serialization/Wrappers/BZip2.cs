@@ -87,13 +87,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (DataSourceStream == null || !DataSourceStream.CanRead)
+            if (DataSource == null || !DataSource.CanRead)
                 return false;
 
             try
             {
                 // Try opening the stream
-                using var bz2File = new BZip2InputStream(DataSourceStream, true);
+                using var bz2File = new BZip2InputStream(DataSource, true);
 
                 // Ensure directory separators are consistent
                 string filename = Guid.NewGuid().ToString();
