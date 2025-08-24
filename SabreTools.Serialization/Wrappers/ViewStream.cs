@@ -1,14 +1,24 @@
 using System;
 using System.IO;
 
-namespace SabreTools.Serialization.Wrappers
+// TODO: Remove when IO is updated
+namespace SabreTools.IO.Streams
 {
     /// <summary>
-    /// Represents the data source backing the wrapper
+    /// Stream representing a view into a source
     /// </summary>
     public class ViewStream : Stream
     {
         #region Properties
+
+        /// <inheritdoc/>
+        public override bool CanRead => true;
+
+        /// <inheritdoc/>
+        public override bool CanSeek => _source.CanSeek;
+
+        /// <inheritdoc/>
+        public override bool CanWrite => false;
 
         /// <summary>
         /// Filename from the source, if possible
@@ -32,8 +42,33 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public override long Position
         {
-            get { return _source.Position - _initialPosition; }
-            set { _source.Position = value + _initialPosition; }
+            get
+            {
+                // Handle 0-length sources
+                if (_length <= 0)
+                    return 0;
+
+                return _source.Position - _initialPosition;
+            }
+            set
+            {
+                // Handle 0-length sources
+                if (_length <= 0)
+                {
+                    _source.Position = 0;
+                    return;
+                }
+
+                long position = value;
+
+                // Handle out-of-bounds seeks
+                if (position < 0)
+                    position = 0;
+                else if (position >= _length)
+                    position = _length - 1;
+
+                _source.Position = _initialPosition + position;
+            }
         }
 
         #endregion
@@ -67,11 +102,53 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new ViewStream from a Stream
         /// </summary>
+        public ViewStream(Stream data, long offset)
+        {
+            if (!data.CanRead)
+                throw new ArgumentException(nameof(data));
+            if (offset < 0 || offset > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            _source = data;
+            _initialPosition = offset;
+            _length = data.Length - offset;
+
+            _source.Seek(_initialPosition, SeekOrigin.Begin);
+        }
+
+        /// <summary>
+        /// Construct a new ViewStream from a Stream
+        /// </summary>
         public ViewStream(Stream data, long offset, long length)
         {
+            if (!data.CanRead)
+                throw new ArgumentException(nameof(data));
+            if (offset < 0 || offset > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (length < 0 || offset + length > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
             _source = data;
             _initialPosition = offset;
             _length = length;
+
+            _source.Seek(_initialPosition, SeekOrigin.Begin);
+        }
+
+        /// <summary>
+        /// Construct a new ViewStream from a byte array
+        /// </summary>
+        public ViewStream(byte[] data, long offset)
+        {
+            if (offset < 0 || offset > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            long length = data.Length - offset;
+            _source = new MemoryStream(data, (int)offset, (int)length);
+            _initialPosition = 0;
+            _length = length;
+
+            _source.Seek(_initialPosition, SeekOrigin.Begin);
         }
 
         /// <summary>
@@ -79,9 +156,16 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public ViewStream(byte[] data, long offset, long length)
         {
+            if (offset < 0 || offset > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (length < 0 || offset + length > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
             _source = new MemoryStream(data, (int)offset, (int)length);
             _initialPosition = 0;
             _length = length;
+
+            _source.Seek(_initialPosition, SeekOrigin.Begin);
         }
 
         #endregion
@@ -94,13 +178,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="offset">Position in the source</param>
         /// <param name="count">Length of the data to check</param>
         /// <returns>True if the positional data is valid, false otherwise</returns>
-        public bool SegmentValid(int offset, int count)
+        public bool SegmentValid(long offset, long count)
         {
-            // If we have an invalid position
-            if (offset < 0 || offset >= Length)
+            if (offset < 0 || offset > Length)
+                return false;
+            if (count < 0 || offset + count > Length)
                 return false;
 
-            return _initialPosition + offset + count <= Length;
+            return true;
         }
 
         #endregion
@@ -108,28 +193,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Stream Implementations
 
         /// <inheritdoc/>
-        public override bool CanRead => true;
-
-        /// <inheritdoc/>
-        public override bool CanWrite => false;
-
-        /// <inheritdoc/>
-        public override bool CanSeek => _source.CanSeek;
-
-        /// <inheritdoc/>
-        public override void Flush() => _source.Flush();
+        public override void Flush()
+            => throw new NotImplementedException();
 
         /// <inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            // Validate the requested segment
-            if (!SegmentValid(offset, count))
+            // Invalid cases always return 0
+            if (buffer.Length == 0)
+                return 0;
+            if (offset < 0 || offset >= buffer.Length)
+                return 0;
+            if (count < 0 || offset + count > buffer.Length)
+                return 0;
+
+            // Short-circuit 0-byte reads
+            if (count == 0)
                 return 0;
 
             try
             {
-                // Correct the read offset
-                offset += (int)_initialPosition;
                 lock (_sourceLock)
                 {
                     return _source.Read(buffer, offset, count);
@@ -154,18 +237,11 @@ namespace SabreTools.Serialization.Wrappers
                 case SeekOrigin.End: Position = _length + offset - 1; break;
                 default: throw new ArgumentException($"Invalid value for {nameof(origin)}");
             }
-            ;
-
-            // Handle out-of-bounds seeks
-            if (Position < 0)
-                Position = 0;
-            else if (Position >= _length)
-                Position = _length - 1;
 
             return Position;
         }
 
-         /// <inheritdoc/>
+        /// <inheritdoc/>
         public override void SetLength(long value)
             => throw new NotImplementedException();
 
