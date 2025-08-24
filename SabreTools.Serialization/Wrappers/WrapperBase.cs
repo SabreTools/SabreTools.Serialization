@@ -24,11 +24,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Properties
 
-        /// <summary>
-        /// Data source as a stream
-        /// </summary>
-        public Stream? DataSource => _dataSource;
-
         /// <inheritdoc cref="ViewStream.Filename"/>
         public string? Filename => _dataSource.Filename;
 
@@ -42,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        private readonly ViewStream _dataSource;
+        protected readonly ViewStream _dataSource;
 
 #if NETCOREAPP
         /// <summary>

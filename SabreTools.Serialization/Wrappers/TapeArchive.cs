@@ -88,13 +88,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (DataSource == null || !DataSource.CanRead)
+            if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP
             try
             {
-                var tarFile = TarArchive.Open(DataSource);
+                var tarFile = TarArchive.Open(_dataSource);
 
                 // Try to read the file path if no entries are found
                 if (tarFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))

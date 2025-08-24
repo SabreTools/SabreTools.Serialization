@@ -94,14 +94,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Extract(string, bool)"/>
         public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
         {
-            if (DataSource == null || !DataSource.CanRead)
+            if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                RarArchive rarFile = RarArchive.Open(DataSource, readerOptions);
+                RarArchive rarFile = RarArchive.Open(_dataSource, readerOptions);
 
                 // Try to read the file path if no entries are found
                 if (rarFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
