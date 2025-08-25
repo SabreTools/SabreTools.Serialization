@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PortableExecutable : WrapperBase<Models.PortableExecutable.Executable>
+    public class PortableExecutable : WrapperBase<Models.PortableExecutable.Executable>, IExtractable
     {
         #region Descriptive Properties
 
@@ -1079,6 +1081,144 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extraction
+
+        /// <inheritdoc/>
+        /// <remarks>This only extracts overlay and resource data</remarks>
+        public bool Extract(string outputDirectory, bool includeDebug)
+        {
+            bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
+            bool resources = ExtractFromResources(outputDirectory, includeDebug);
+            return overlay || resources;
+        }
+
+        /// <summary>
+        /// Extract data from the overlay
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        private bool ExtractFromOverlay(string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                // Cache the overlay data for easier reading
+                var overlayData = OverlayData;
+                if (overlayData == null)
+                    return false;
+
+                // Only process the overlay if it a recognized signature
+                string extension = string.Empty;
+                if (overlayData.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                    extension = "7z";
+                else if (overlayData.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                    extension = "zip";
+                else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                    extension = "zip";
+                else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                    extension = "zip";
+                else if (overlayData.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                    extension = "zip";
+                else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                    extension = "rar";
+                else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                    extension = "rar";
+                else if (overlayData.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                    extension = "bin"; // exe/dll
+                else
+                    return false;
+
+                // Create the temp filename
+                string tempFile = $"embedded_overlay.{extension}";
+                tempFile = Path.Combine(outputDirectory, tempFile);
+                var directoryName = Path.GetDirectoryName(tempFile);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Write the resource data to a temp file
+                using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                tempStream?.Write(overlayData, 0, overlayData.Length);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Extract data from the resources
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        private bool ExtractFromResources(string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                // Cache the resource data for easier reading
+                var resourceData = ResourceData;
+                if (resourceData == null)
+                    return false;
+
+                // Get the resources that have an archive signature
+                int i = 0;
+                foreach (var value in resourceData.Values)
+                {
+                    if (value == null || value is not byte[] ba)
+                        continue;
+
+                    // Only process the resource if it a recognized signature
+                    string extension = string.Empty;
+                    if (ba.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                        extension = "7z";
+                    else if (ba.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                        extension = "zip";
+                    else if (ba.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                        extension = "zip";
+                    else if (ba.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                        extension = "zip";
+                    else if (ba.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                        extension = "zip";
+                    else if (ba.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                        extension = "rar";
+                    else if (ba.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                        extension = "rar";
+                    else if (ba.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                        extension = "bin"; // exe/dll
+                    else
+                        continue;
+
+                    try
+                    {
+                        // Create the temp filename
+                        string tempFile = $"embedded_resource_{i++}.{extension}";
+                        tempFile = Path.Combine(outputDirectory, tempFile);
+                        var directoryName = Path.GetDirectoryName(tempFile);
+                        if (directoryName != null && !Directory.Exists(directoryName))
+                            Directory.CreateDirectory(directoryName);
+
+                        // Write the resource data to a temp file
+                        using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        tempStream?.Write(ba, 0, ba.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (includeDebug) Console.Error.WriteLine(ex);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+        }
+
+        #endregion
+
         #region Resource Data
 
         /// <summary>
@@ -1171,7 +1311,7 @@ namespace SabreTools.Serialization.Wrappers
 #else
                     if (s == null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
 #endif
-                    continue;
+                        continue;
 
                     stringTables.Add(st);
                     break;
