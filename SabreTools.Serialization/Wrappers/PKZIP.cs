@@ -100,9 +100,17 @@ namespace SabreTools.Serialization.Wrappers
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
                 var zipFile = ZipArchive.Open(_dataSource, readerOptions);
 
-                // Try to read the file path if no entries are found
-                if (zipFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
-                    zipFile = ZipArchive.Open(Filename!, readerOptions);
+                // If the file exists
+                if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
+                {
+                    // Try to read the file path if no entries are found
+                    if (zipFile.Entries.Count == 0)
+                        zipFile = ZipArchive.Open(Filename!, readerOptions);
+                    
+                    // If there's any multipart items, try reading the file as well
+                    else if (System.Array.Exists([.. zipFile.Entries], e => !e.IsComplete))
+                        zipFile = ZipArchive.Open(Filename!, readerOptions);
+                }
 
                 foreach (var entry in zipFile.Entries)
                 {

@@ -103,9 +103,17 @@ namespace SabreTools.Serialization.Wrappers
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
                 RarArchive rarFile = RarArchive.Open(_dataSource, readerOptions);
 
-                // Try to read the file path if no entries are found
-                if (rarFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
-                    rarFile = RarArchive.Open(Filename!, readerOptions);
+                // If the file exists
+                if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
+                {
+                    // Try to read the file path if no entries are found
+                    if (rarFile.Entries.Count == 0)
+                        rarFile = RarArchive.Open(Filename!, readerOptions);
+                    
+                    // If there's any multipart items, try reading the file as well
+                    else if (System.Array.Exists([.. rarFile.Entries], e => !e.IsComplete))
+                        rarFile = RarArchive.Open(Filename!, readerOptions);
+                }
 
                 if (!rarFile.IsComplete)
                     return false;
