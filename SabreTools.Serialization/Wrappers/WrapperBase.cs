@@ -92,6 +92,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        // TODO: This entire section will be replaced when IO updates
         #region Data
 
         /// <summary>
