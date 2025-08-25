@@ -100,6 +100,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="position">Position in the source to read from</param>
         /// <param name="length">Length of the requested data</param>
         /// <returns>Byte array containing the requested data, null on error</returns>
+        /// TODO: This will be replaced with the ReadFrom extension method in IO
         public byte[]? ReadFromDataSource(int position, int length)
         {
             // Validate the requested segment
@@ -131,6 +132,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="length">Length of the requested data</param>
         /// <param name="charLimit">Number of characters needed to be a valid string</param>
         /// <returns>String list containing the requested data, null on error</returns>
+        /// TODO: Remove when IO updated
         public List<string>? ReadStringsFromDataSource(int position, int length, int charLimit = 5)
         {
             // Read the data as a byte array first
@@ -164,80 +166,62 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="charLimit">Number of characters needed to be a valid string</param>
         /// <param name="encoding">Character encoding to use for checking</param>
         /// <returns>String list containing the requested data, empty on error</returns>
-        /// <remarks>TODO: Move to IO?</remarks>
+        /// TODO: Remove when IO updated
 #if NET20
         private static List<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
 #else
         private static HashSet<string> ReadStringsWithEncoding(byte[] sourceData, int charLimit, Encoding encoding)
 #endif
         {
-            // If we have an invalid character limit, default to 5
-            if (charLimit <= 0)
-                charLimit = 5;
+            // Constant from IO
+            const int MaximumCharactersInString = 64;
 
-            // Create the string hash set to return
+            if (sourceData == null || sourceData.Length == 0)
+                return [];
+            if (charLimit <= 0 || charLimit > sourceData.Length)
+                return [];
+
+            // Create the string set to return
 #if NET20
-            var sourceStrings = new List<string>();
+            var strings = new List<string>();
 #else
-            var sourceStrings = new HashSet<string>();
+            var strings = new HashSet<string>();
 #endif
 
-            // Setup cached data
-            int sourceDataIndex = 0;
-            List<char> cachedChars = [];
-
             // Check for strings
-            while (sourceDataIndex < sourceData.Length)
+            int index = 0;
+            while (index < sourceData.Length)
             {
-                // Read the next character
-                char ch = encoding.GetChars(sourceData, sourceDataIndex, 1)[0];
+                // Get the maximum number of characters
+                int maxChars = encoding.GetMaxCharCount(sourceData.Length - index);
+                int maxBytes = encoding.GetMaxByteCount(Math.Min(MaximumCharactersInString, maxChars));
 
-                // If we have a control character or an invalid byte
-                bool isValid = !char.IsControl(ch) && (ch & 0xFF00) == 0;
-                if (!isValid)
+                // Read the longest string allowed
+                int maxRead = Math.Min(maxBytes, sourceData.Length - index);
+                string temp = encoding.GetString(sourceData, index, maxRead);
+                char[] tempArr = temp.ToCharArray();
+
+                // Ignore empty strings
+                if (temp.Length == 0)
                 {
-                    // If we have no cached string
-                    if (cachedChars.Count == 0)
-                    {
-                        sourceDataIndex++;
-                        continue;
-                    }
-
-                    // If we have a cached string greater than the limit
-                    if (cachedChars.Count >= charLimit)
-                        sourceStrings.Add(new string([.. cachedChars]));
-
-                    cachedChars.Clear();
-                    sourceDataIndex++;
+                    index++;
                     continue;
                 }
 
-                // If a long repeating string is found, discard it
-                if (cachedChars.Count >= 64 && cachedChars.TrueForAll(c => c == cachedChars[0]))
-                {
-                    cachedChars.Clear();
-                    sourceDataIndex++;
-                    continue;
-                }
+                // Find the first instance of a control character
+                int endOfString = Array.FindIndex(tempArr, c => char.IsControl(c) || (c & 0xFF00) != 0);
+                if (endOfString > -1)
+                    temp = temp.Substring(0, endOfString);
 
-                // Append the character to the cached string
-                cachedChars.Add(ch);
-                sourceDataIndex++;
+                // Otherwise, just add the string if long enough
+                if (temp.Length >= charLimit)
+                    strings.Add(temp);
+
+                // Increment and continue
+                index += Math.Max(encoding.GetByteCount(temp), 1);
             }
 
-            // If we have a cached string greater than the limit
-            if (cachedChars.Count >= charLimit)
-            {
-                // Get the string from the cached characters
-                string cachedString = new([.. cachedChars]);
-                cachedString = cachedString.Trim();
-
-                // Only include trimmed strings over the limit
-                if (cachedString.Length >= charLimit)
-                    sourceStrings.Add(cachedString);
-            }
-
-            return sourceStrings;
+            return strings;
         }
 
         #endregion
