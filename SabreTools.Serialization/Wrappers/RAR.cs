@@ -115,9 +115,6 @@ namespace SabreTools.Serialization.Wrappers
                         rarFile = RarArchive.Open(Filename!, readerOptions);
                 }
 
-                if (!rarFile.IsComplete)
-                    return false;
-
                 if (rarFile.IsSolid)
                     return ExtractSolid(rarFile, outputDirectory, includeDebug);
                 else
