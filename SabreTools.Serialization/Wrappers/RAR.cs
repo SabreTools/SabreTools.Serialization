@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Wrappers
                         rarFile = RarArchive.Open(Filename!, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
-                    else if (System.Array.Exists([.. rarFile.Entries], e => !e.IsComplete))
+                    else if (!rarFile.IsComplete)
                         rarFile = RarArchive.Open(Filename!, readerOptions);
                 }
 

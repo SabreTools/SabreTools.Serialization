@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Wrappers
                         zipFile = ZipArchive.Open(Filename!, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
-                    else if (System.Array.Exists([.. zipFile.Entries], e => !e.IsComplete))
+                    else if (!zipFile.IsComplete)
                         zipFile = ZipArchive.Open(Filename!, readerOptions);
                 }
 

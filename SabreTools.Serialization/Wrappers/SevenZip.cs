@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Wrappers
                         sevenZip = SevenZipArchive.Open(Filename!, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
-                    else if (System.Array.Exists([.. sevenZip.Entries], e => !e.IsComplete))
+                    else if (!sevenZip.IsComplete)
                         sevenZip = SevenZipArchive.Open(Filename!, readerOptions);
                 }
 
