@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
                 {
                     // Find all file parts
-                    FileInfo[] parts = [.. ArchiveFactory.GetFileParts(new FileInfo(file))];
+                    FileInfo[] parts = [.. ArchiveFactory.GetFileParts(new FileInfo(Filename))];
 
                     // Try to read the file path if no entries are found
                     if (rarFile.Entries.Count == 0)
