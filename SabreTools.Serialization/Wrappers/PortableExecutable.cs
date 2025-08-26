@@ -1124,9 +1124,9 @@ namespace SabreTools.Serialization.Wrappers
 
                 // If we had the decompression DLL included, it's zlib
                 if (FindResourceByNamedType("99, 1").Count > 0)
-                    data = ExtractCExeZlib(resource);
+                    data = DecompressCExeZlib(resource);
                 else
-                    data = ExtractCExeLZ(resource);
+                    data = DecompressCExeLZ(resource);
 
                 // If we have no data
                 if (data == null)
@@ -1149,75 +1149,6 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Extract CExe data compressed with LZ
-        /// </summary>
-        /// <param name="resource">Resource data to inflate</param>
-        /// <returns>Inflated data on success, null otherwise</returns>
-        private byte[]? ExtractCExeLZ(byte[] resource)
-        {
-            try
-            {
-                var decompressor = IO.Compression.SZDD.Decompressor.CreateSZDD(resource);
-                using var dataStream = new MemoryStream();
-                decompressor.CopyTo(dataStream);
-                return dataStream.ToArray();
-            }
-            catch
-            {
-                // Reset the data
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Extract CExe data compressed with zlib
-        /// </summary>
-        /// <param name="resource">Resource data to inflate</param>
-        /// <returns>Inflated data on success, null otherwise</returns>
-        private byte[]? ExtractCExeZlib(byte[] resource)
-        {
-            try
-            {
-                // Inflate the data into the buffer
-                var zstream = new ZLib.z_stream_s();
-                byte[] data = new byte[resource.Length * 4];
-                unsafe
-                {
-                    fixed (byte* payloadPtr = resource)
-                    fixed (byte* dataPtr = data)
-                    {
-                        zstream.next_in = payloadPtr;
-                        zstream.avail_in = (uint)resource.Length;
-                        zstream.total_in = (uint)resource.Length;
-                        zstream.next_out = dataPtr;
-                        zstream.avail_out = (uint)data.Length;
-                        zstream.total_out = 0;
-
-                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), resource.Length);
-                        int zret = ZLib.inflate(zstream, 1);
-                        ZLib.inflateEnd(zstream);
-                    }
-                }
-
-                // Trim the buffer to the proper size
-                uint read = zstream.total_out;
-#if NETFRAMEWORK
-                var temp = new byte[read];
-                Array.Copy(data, temp, read);
-                data = temp;
-#else
-                data = new ReadOnlySpan<byte>(data, 0, (int)read).ToArray();
-#endif
-                return data;
-            }
-            catch
-            {
-                // Reset the data
-                return null;
             }
         }
 
@@ -1343,6 +1274,75 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Decompress CExe data compressed with LZ
+        /// </summary>
+        /// <param name="resource">Resource data to inflate</param>
+        /// <returns>Inflated data on success, null otherwise</returns>
+        private byte[]? DecompressCExeLZ(byte[] resource)
+        {
+            try
+            {
+                var decompressor = IO.Compression.SZDD.Decompressor.CreateSZDD(resource);
+                using var dataStream = new MemoryStream();
+                decompressor.CopyTo(dataStream);
+                return dataStream.ToArray();
+            }
+            catch
+            {
+                // Reset the data
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Decompress CExe data compressed with zlib
+        /// </summary>
+        /// <param name="resource">Resource data to inflate</param>
+        /// <returns>Inflated data on success, null otherwise</returns>
+        private byte[]? DecompressCExeZlib(byte[] resource)
+        {
+            try
+            {
+                // Inflate the data into the buffer
+                var zstream = new ZLib.z_stream_s();
+                byte[] data = new byte[resource.Length * 4];
+                unsafe
+                {
+                    fixed (byte* payloadPtr = resource)
+                    fixed (byte* dataPtr = data)
+                    {
+                        zstream.next_in = payloadPtr;
+                        zstream.avail_in = (uint)resource.Length;
+                        zstream.total_in = (uint)resource.Length;
+                        zstream.next_out = dataPtr;
+                        zstream.avail_out = (uint)data.Length;
+                        zstream.total_out = 0;
+
+                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), resource.Length);
+                        int zret = ZLib.inflate(zstream, 1);
+                        ZLib.inflateEnd(zstream);
+                    }
+                }
+
+                // Trim the buffer to the proper size
+                uint read = zstream.total_out;
+#if NETFRAMEWORK
+                var temp = new byte[read];
+                Array.Copy(data, temp, read);
+                data = temp;
+#else
+                data = new ReadOnlySpan<byte>(data, 0, (int)read).ToArray();
+#endif
+                return data;
+            }
+            catch
+            {
+                // Reset the data
+                return null;
             }
         }
 
