@@ -107,14 +107,14 @@ namespace SabreTools.Serialization.Wrappers
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
                 {
                     // Find all file parts
-                    var parts = ArchiveFactory.GetFileParts(new FileInfo(Filename));
+                    FileInfo[] parts = [.. ArchiveFactory.GetFileParts(new FileInfo(file))];
 
                     // Try to read the file path if no entries are found
                     if (sevenZip.Entries.Count == 0)
                         sevenZip = SevenZipArchive.Open(parts, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
-                    else if (!sevenZip.IsComplete)
+                    else if (parts.Length > 1)
                         sevenZip = SevenZipArchive.Open(parts, readerOptions);
                 }
 
