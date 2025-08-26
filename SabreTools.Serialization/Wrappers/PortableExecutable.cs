@@ -1157,6 +1157,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
         public bool ExtractFromOverlay(string outputDirectory, bool includeDebug)
         {
             try
@@ -1212,6 +1213,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
         public bool ExtractFromResources(string outputDirectory, bool includeDebug)
         {
             try
