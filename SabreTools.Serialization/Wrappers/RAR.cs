@@ -106,13 +106,16 @@ namespace SabreTools.Serialization.Wrappers
                 // If the file exists
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
                 {
+                    // Find all file parts
+                    var parts = ArchiveFactory.GetFileParts(new FileInfo(Filename));
+
                     // Try to read the file path if no entries are found
                     if (rarFile.Entries.Count == 0)
-                        rarFile = RarArchive.Open(Filename!, readerOptions);
+                        rarFile = RarArchive.Open(parts, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
                     else if (!rarFile.IsComplete)
-                        rarFile = RarArchive.Open(Filename!, readerOptions);
+                        rarFile = RarArchive.Open(parts, readerOptions);
                 }
 
                 if (rarFile.IsSolid)

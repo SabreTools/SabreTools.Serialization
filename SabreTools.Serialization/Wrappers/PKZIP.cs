@@ -103,13 +103,16 @@ namespace SabreTools.Serialization.Wrappers
                 // If the file exists
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
                 {
+                    // Find all file parts
+                    var parts = ArchiveFactory.GetFileParts(new FileInfo(Filename));
+
                     // Try to read the file path if no entries are found
                     if (zipFile.Entries.Count == 0)
-                        zipFile = ZipArchive.Open(Filename!, readerOptions);
+                        zipFile = ZipArchive.Open(parts, readerOptions);
                     
                     // If there's any multipart items, try reading the file as well
                     else if (!zipFile.IsComplete)
-                        zipFile = ZipArchive.Open(Filename!, readerOptions);
+                        zipFile = ZipArchive.Open(parts, readerOptions);
                 }
 
                 foreach (var entry in zipFile.Entries)
