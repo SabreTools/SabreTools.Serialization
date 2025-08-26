@@ -1162,7 +1162,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 var decompressor = IO.Compression.SZDD.Decompressor.CreateSZDD(resource);
-                var dataStream = new MemoryStream();
+                using var dataStream = new MemoryStream();
                 decompressor.CopyTo(dataStream);
                 return dataStream.ToArray();
             }
