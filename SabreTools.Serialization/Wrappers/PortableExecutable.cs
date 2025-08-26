@@ -1115,8 +1115,8 @@ namespace SabreTools.Serialization.Wrappers
                     return false;
 
                 // Get the first resource of type 99 with index 2
-                var payload = resources[0];
-                if (payload == null || payload.Length == 0)
+                var resource = resources[0];
+                if (resource == null || resource.Length == 0)
                     return false;
 
                 // Create the output data buffer
@@ -1124,9 +1124,9 @@ namespace SabreTools.Serialization.Wrappers
 
                 // If we had the decompression DLL included, it's zlib
                 if (FindResourceByNamedType("99, 1").Count > 0)
-                    data = ExtractCExeZlib(payload);
+                    data = ExtractCExeZlib(resource);
                 else
-                    data = ExtractCExeLZ(payload);
+                    data = ExtractCExeLZ(resource);
 
                 // If we have no data
                 if (data == null)
