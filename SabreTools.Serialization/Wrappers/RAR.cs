@@ -108,13 +108,13 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     // Find all file parts
                     FileInfo[] parts = [.. ArchiveFactory.GetFileParts(new FileInfo(Filename))];
+                    
+                    // If there are multiple parts
+                    if (parts.Length > 1)
+                        rarFile = RarArchive.Open(parts, readerOptions);
 
                     // Try to read the file path if no entries are found
-                    if (rarFile.Entries.Count == 0)
-                        rarFile = RarArchive.Open(parts, readerOptions);
-                    
-                    // If there's any multipart items, try reading the file as well
-                    else if (parts.Length > 1)
+                    else if (rarFile.Entries.Count == 0)
                         rarFile = RarArchive.Open(parts, readerOptions);
                 }
 
