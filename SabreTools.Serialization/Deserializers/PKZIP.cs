@@ -221,6 +221,17 @@ namespace SabreTools.Serialization.Deserializers
 
                 } while (data.Position < data.Length);
 
+                // If no blocks were read
+                if (localFileHeaders.Count == 0
+                    && encryptionHeaders.Count == 0
+                    && fileData.Count == 0
+                    && dataDescriptors.Count == 0
+                    && zip64DataDescriptors.Count == 0
+                    && cdrs.Count == 0)
+                {
+                    return null;
+                }
+
                 // Assign the local file headers
                 archive.LocalFileHeaders = [.. localFileHeaders];
 
