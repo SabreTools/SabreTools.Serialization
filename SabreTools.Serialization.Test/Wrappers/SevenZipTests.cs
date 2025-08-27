@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Wrappers;
@@ -57,5 +58,19 @@ namespace SabreTools.Serialization.Test.Wrappers
             var actual = SevenZip.Create(data);
             Assert.Null(actual);
         }
+
+        #region FindParts
+
+        [Theory]
+        [InlineData("single.7z", 1)]
+        [InlineData("multi.7z.001", 3)]
+        public void FindPartsTest(string filename, int expectedParts)
+        {
+            string firstPart = Path.Combine(Environment.CurrentDirectory, "TestData", "SevenZip", filename);
+            var actual = SevenZip.FindParts(firstPart);
+            Assert.Equal(expectedParts, actual.Count);
+        }
+
+        #endregion
     }
 }

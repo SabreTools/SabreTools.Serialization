@@ -12,11 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="TestData\*" />
+        <None Remove="TestData\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="TestData\*">
+        <Content Include="TestData\**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

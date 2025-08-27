@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Wrappers;
@@ -57,5 +58,22 @@ namespace SabreTools.Serialization.Test.Wrappers
             var actual = PKZIP.Create(data);
             Assert.Null(actual);
         }
+
+        #region FindParts
+
+        [Theory]
+        [InlineData("single.zip", 1)]
+        [InlineData("single.zipx", 1)]
+        [InlineData("multi.zip", 4)]
+        [InlineData("multix.zipx", 4)]
+        [InlineData("multi-split.zip.001", 3)]
+        public void FindPartsTest(string filename, int expectedParts)
+        {
+            string firstPart = Path.Combine(Environment.CurrentDirectory, "TestData", "PKZIP", filename);
+            var actual = PKZIP.FindParts(firstPart);
+            Assert.Equal(expectedParts, actual.Count);
+        }
+
+        #endregion
     }
 }

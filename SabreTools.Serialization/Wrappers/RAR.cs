@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Archives;
@@ -108,7 +111,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     // Find all file parts
                     FileInfo[] parts = [.. ArchiveFactory.GetFileParts(new FileInfo(Filename))];
-                    
+
                     // If there are multiple parts
                     if (parts.Length > 1)
                         rarFile = RarArchive.Open(parts, readerOptions);
@@ -132,6 +135,84 @@ namespace SabreTools.Serialization.Wrappers
 #else
             return false;
 #endif
+        }
+
+        /// <summary>
+        /// Try to find all parts of the archive, if possible
+        /// </summary>
+        /// <param name="firstPart">Path of the first archive part</param>
+        /// <returns>List of all found parts, if possible</returns>
+        public static List<string> FindParts(string firstPart)
+        {
+            // Define the regex patterns
+            const string rarNewPattern = @"^(.*\.part)([0-9]+)(\.rar)$";
+            const string rarOldPattern = @"^(.*\.)([r-z{])(ar|[0-9]+)$";
+            const string genericPattern = @"^(.*\.)([0-9]+)$";
+
+            // Ensure the full path is available
+            firstPart = Path.GetFullPath(firstPart);
+            string filename = Path.GetFileName(firstPart);
+            string? directory = Path.GetDirectoryName(firstPart);
+
+            // Make the output list
+            List<string> parts = [];
+
+            // Determine which pattern is being used
+            Match match;
+            Func<int, string> nextPartFunc;
+            if (Regex.IsMatch(filename, rarNewPattern, RegexOptions.IgnoreCase))
+            {
+                match = Regex.Match(filename, rarNewPattern, RegexOptions.IgnoreCase);
+                nextPartFunc = (i) =>
+                {
+                    return string.Concat(
+                        match.Groups[1].Value,
+                        $"{i + 1}".PadLeft(match.Groups[2].Value.Length, '0'),
+                        match.Groups[3].Value);
+                };
+            }
+            else if (Regex.IsMatch(filename, rarOldPattern, RegexOptions.IgnoreCase))
+            {
+                match = Regex.Match(filename, rarOldPattern, RegexOptions.IgnoreCase);
+                nextPartFunc = (i) =>
+                {
+                    return string.Concat(
+                        match.Groups[1].Value,
+                        (char)(match.Groups[2].Value[0] + ((i - 1) / 100))
+                                + (i - 1).ToString("D4").Substring(2));
+                };
+            }
+            else if (Regex.IsMatch(filename, genericPattern, RegexOptions.IgnoreCase))
+            {
+                match = Regex.Match(filename, genericPattern, RegexOptions.IgnoreCase);
+                nextPartFunc = (i) =>
+                {
+                    return string.Concat(
+                        match.Groups[1].Value,
+                        $"{i + 1}".PadLeft(match.Groups[2].Value.Length, '0')
+                    );
+                };
+            }
+            else
+            {
+                return [firstPart];
+            }
+
+            // Loop and add the files
+            parts.Add(firstPart);
+            for (int i = 1; ; i++)
+            {
+                string nextPart = nextPartFunc(i);
+                if (directory != null)
+                    nextPart = Path.Combine(directory, nextPart);
+
+                if (!File.Exists(nextPart))
+                    break;
+
+                parts.Add(nextPart);
+            }
+
+            return parts;
         }
 
 #if NET462_OR_GREATER || NETCOREAPP

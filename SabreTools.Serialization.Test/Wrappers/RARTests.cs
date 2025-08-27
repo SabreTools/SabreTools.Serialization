@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Wrappers;
@@ -57,5 +58,21 @@ namespace SabreTools.Serialization.Test.Wrappers
             var actual = RAR.Create(data);
             Assert.Null(actual);
         }
+
+        #region FindParts
+
+        [Theory]
+        [InlineData("single.rar", 1)]
+        [InlineData("multi-old.rar", 4)]
+        [InlineData("multi-new.part01.rar", 3)]
+        [InlineData("multi-split.rar.001", 3)]
+        public void FindPartsTest(string filename, int expectedParts)
+        {
+            string firstPart = Path.Combine(Environment.CurrentDirectory, "TestData", "RAR", filename);
+            var actual = RAR.FindParts(firstPart);
+            Assert.Equal(expectedParts, actual.Count);
+        }
+
+        #endregion
     }
 }
