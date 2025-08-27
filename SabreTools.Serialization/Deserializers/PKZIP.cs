@@ -35,9 +35,6 @@ namespace SabreTools.Serialization.Deserializers
                 var zip64DataDescriptors = new List<DataDescriptor64>();
                 var cdrs = new List<CentralDirectoryFileHeader>();
 
-                // Flag if we have a ZIP64 archive
-                bool? zip64 = null;
-
                 // Read all blocks
                 do
                 {
@@ -64,7 +61,6 @@ namespace SabreTools.Serialization.Deserializers
                         // Local File
                         case LocalFileHeaderSignature:
                             if (!ParseLocalFile(data,
-                                ref zip64,
                                 out LocalFileHeader? localFileHeader,
                                 out byte[]? encryptionHeader,
                                 out byte[]? fileDatum,
@@ -106,7 +102,6 @@ namespace SabreTools.Serialization.Deserializers
                                 return null;
 
                             // Assign the ZIP64 end of central directory record
-                            zip64 = true;
                             validBlock = true;
                             archive.ZIP64EndOfCentralDirectoryRecord = eocdr64;
                             break;
@@ -118,7 +113,6 @@ namespace SabreTools.Serialization.Deserializers
                                 return null;
 
                             // Assign the ZIP64 end of central directory record
-                            zip64 = true;
                             validBlock = true;
                             archive.ZIP64EndOfCentralDirectoryLocator = eocdl64;
                             break;
@@ -265,10 +259,31 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new DataDescriptor();
 
-            // Signatures are expected but not required
-            obj.Signature = data.ReadUInt32LittleEndian();
-            if (obj.Signature != DataDescriptorSignature)
-                data.Seek(-4, SeekOrigin.Current);
+            // Cache the current position
+            long currentPosition = data.Position;
+
+            // Check if the block is a 12- or 16-byte
+            bool isShort = false;
+            if (data.Position + 12 == data.Length)
+            {
+                isShort = true;
+            }
+            else
+            {
+                data.Seek(12, SeekOrigin.Current);
+                byte[] nextBlock = data.ReadBytes(2);
+                data.Seek(currentPosition, SeekOrigin.Begin);
+                if (nextBlock.EqualsExactly([0x50, 0x4B]))
+                    isShort = true;
+            }
+
+            // If the 16-byte variant
+            if (!isShort)
+            {
+                obj.Signature = data.ReadUInt32LittleEndian();
+                if (obj.Signature != DataDescriptorSignature)
+                    return null;
+            }
 
             obj.CRC32 = data.ReadUInt32LittleEndian();
             obj.CompressedSize = data.ReadUInt32LittleEndian();
@@ -286,10 +301,31 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new DataDescriptor64();
 
-            // Signatures are expected but not required
-            obj.Signature = data.ReadUInt32LittleEndian();
-            if (obj.Signature != DataDescriptorSignature)
-                data.Seek(-4, SeekOrigin.Current);
+            // Cache the current position
+            long currentPosition = data.Position;
+
+            // Check if the block is a 20- or 24-byte
+            bool isShort = false;
+            if (data.Position + 20 == data.Length)
+            {
+                isShort = true;
+            }
+            else
+            {
+                data.Seek(20, SeekOrigin.Current);
+                byte[] nextBlock = data.ReadBytes(2);
+                data.Seek(currentPosition, SeekOrigin.Begin);
+                if (nextBlock.EqualsExactly([0x50, 0x4B]))
+                    isShort = true;
+            }
+
+            // If the 24-byte variant
+            if (!isShort)
+            {
+                obj.Signature = data.ReadUInt32LittleEndian();
+                if (obj.Signature != DataDescriptorSignature)
+                    return null;
+            }
 
             obj.CRC32 = data.ReadUInt32LittleEndian();
             obj.CompressedSize = data.ReadUInt64LittleEndian();
@@ -386,7 +422,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled local file on success, null on error</returns>
         public static bool ParseLocalFile(Stream data,
-            ref bool? zip64,
             out LocalFileHeader? localFileHeader,
             out byte[]? encryptionHeader,
             out byte[]? fileData,
@@ -466,30 +501,12 @@ namespace SabreTools.Serialization.Deserializers
                 return true;
             }
 
-            if (zip64 == null)
-            {
-                if (data.Position + 16 == data.Length)
-                {
-                    zip64 = false;
-                }
-                else if (data.Position + 24 == data.Length)
-                {
-                    zip64 = true;
-                }
-                else
-                {
-                    long beforeCheck = data.Position;
-                    data.Seek(16, SeekOrigin.Current);
-                    byte[] nextBlock = data.ReadBytes(2);
-                    data.Seek(beforeCheck, SeekOrigin.Begin);
+            // Determine if the entry is ZIP64
+            bool zip64 = IsZip64Descriptor(data);
 
-                    zip64 = !nextBlock.EqualsExactly([0x50, 0x4B]);
-                }
-            }
-
-            if (zip64 == true)
+            // Try to parse the correct data descriptor
+            if (zip64)
             {
-                // Try to parse the data descriptor
                 dataDescriptor = new DataDescriptor();
                 dataDescriptor64 = ParseDataDescriptor64(data);
                 if (dataDescriptor64 == null)
@@ -497,7 +514,6 @@ namespace SabreTools.Serialization.Deserializers
             }
             else
             {
-                // Try to parse the data descriptor
                 dataDescriptor = ParseDataDescriptor(data);
                 dataDescriptor64 = new DataDescriptor64();
                 if (dataDescriptor == null)
@@ -551,6 +567,44 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return obj;
+        }
+
+        /// <summary>
+        /// Determine if a data descriptor is 64-bit
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>True if the descriptor is 64-bit, false otherwise</returns>
+        private static bool IsZip64Descriptor(Stream data)
+        {
+            // Last item in the stream
+            if (data.Position + 12 == data.Length) // Short 32-bit
+                return false;
+            else if (data.Position + 16 == data.Length) // Long 32-bit
+                return false;
+            else if (data.Position + 20 == data.Length) // Short 64-bit
+                return true;
+            else if (data.Position + 24 == data.Length) // Long 64-bit
+                return true;
+
+            // Cache the current position
+            long currentPosition = data.Position;
+
+            // Short 32-bit
+            data.Seek(12, SeekOrigin.Current);
+            byte[] nextBlock = data.ReadBytes(2);
+            data.Seek(currentPosition, SeekOrigin.Begin);
+            if (nextBlock.EqualsExactly([0x50, 0x4B]))
+                return false;
+
+            // Long 32-bit
+            data.Seek(16, SeekOrigin.Current);
+            nextBlock = data.ReadBytes(2);
+            data.Seek(currentPosition, SeekOrigin.Begin);
+            if (nextBlock.EqualsExactly([0x50, 0x4B]))
+                return false;
+
+            // Assume 64-bit otherwise
+            return true;
         }
     }
 }
