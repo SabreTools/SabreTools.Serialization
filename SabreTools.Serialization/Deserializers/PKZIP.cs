@@ -197,56 +197,69 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled central directory file header on success, null on error</returns>
         public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data)
         {
-            var header = new CentralDirectoryFileHeader();
+            var obj = new CentralDirectoryFileHeader();
 
-            header.Signature = data.ReadUInt32LittleEndian();
-            if (header.Signature != CentralDirectoryFileHeaderSignature)
+            obj.Signature = data.ReadUInt32LittleEndian();
+            if (obj.Signature != CentralDirectoryFileHeaderSignature)
                 return null;
 
-            header.HostSystem = (HostSystem)data.ReadByteValue();
-            header.VersionMadeBy = data.ReadByteValue();
-            header.VersionNeededToExtract = data.ReadUInt16LittleEndian();
-            header.Flags = (GeneralPurposeBitFlags)data.ReadUInt16LittleEndian();
-            header.CompressionMethod = (CompressionMethod)data.ReadUInt16LittleEndian();
-            header.LastModifedFileTime = data.ReadUInt16LittleEndian();
-            header.LastModifiedFileDate = data.ReadUInt16LittleEndian();
-            header.CRC32 = data.ReadUInt32LittleEndian();
-            header.CompressedSize = data.ReadUInt32LittleEndian();
-            header.UncompressedSize = data.ReadUInt32LittleEndian();
-            header.FileNameLength = data.ReadUInt16LittleEndian();
-            header.ExtraFieldLength = data.ReadUInt16LittleEndian();
-            header.FileCommentLength = data.ReadUInt16LittleEndian();
-            header.DiskNumberStart = data.ReadUInt16LittleEndian();
-            header.InternalFileAttributes = (InternalFileAttributes)data.ReadUInt16LittleEndian();
-            header.ExternalFileAttributes = data.ReadUInt32LittleEndian();
-            header.RelativeOffsetOfLocalHeader = data.ReadUInt32LittleEndian();
+            obj.HostSystem = (HostSystem)data.ReadByteValue();
+            obj.VersionMadeBy = data.ReadByteValue();
+            obj.VersionNeededToExtract = data.ReadUInt16LittleEndian();
+            obj.Flags = (GeneralPurposeBitFlags)data.ReadUInt16LittleEndian();
+            obj.CompressionMethod = (CompressionMethod)data.ReadUInt16LittleEndian();
+            obj.LastModifedFileTime = data.ReadUInt16LittleEndian();
+            obj.LastModifiedFileDate = data.ReadUInt16LittleEndian();
+            obj.CRC32 = data.ReadUInt32LittleEndian();
+            obj.CompressedSize = data.ReadUInt32LittleEndian();
+            obj.UncompressedSize = data.ReadUInt32LittleEndian();
+            obj.FileNameLength = data.ReadUInt16LittleEndian();
+            obj.ExtraFieldLength = data.ReadUInt16LittleEndian();
+            obj.FileCommentLength = data.ReadUInt16LittleEndian();
+            obj.DiskNumberStart = data.ReadUInt16LittleEndian();
+            obj.InternalFileAttributes = (InternalFileAttributes)data.ReadUInt16LittleEndian();
+            obj.ExternalFileAttributes = data.ReadUInt32LittleEndian();
+            obj.RelativeOffsetOfLocalHeader = data.ReadUInt32LittleEndian();
 
-            if (header.FileNameLength > 0 && data.Position + header.FileNameLength <= data.Length)
+#if NET20 || NET35
+            bool utf8 = (obj.Flags & GeneralPurposeBitFlags.LanguageEncodingFlag) != 0;
+#else
+            bool utf8 = obj.Flags.HasFlag(GeneralPurposeBitFlags.LanguageEncodingFlag);
+#endif
+
+            if (obj.FileNameLength > 0 && data.Position + obj.FileNameLength <= data.Length)
             {
-                byte[] filenameBytes = data.ReadBytes(header.FileNameLength);
-                if (filenameBytes.Length != header.FileNameLength)
+                byte[] filenameBytes = data.ReadBytes(obj.FileNameLength);
+                if (filenameBytes.Length != obj.FileNameLength)
                     return null;
 
-                header.FileName = Encoding.ASCII.GetString(filenameBytes);
+                if (utf8)
+                    obj.FileName = Encoding.UTF8.GetString(filenameBytes);
+                else
+                    obj.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
-            if (header.ExtraFieldLength > 0 && data.Position + header.ExtraFieldLength <= data.Length)
+            if (obj.ExtraFieldLength > 0 && data.Position + obj.ExtraFieldLength <= data.Length)
             {
-                byte[] extraBytes = data.ReadBytes(header.ExtraFieldLength);
-                if (extraBytes.Length != header.ExtraFieldLength)
+                byte[] extraBytes = data.ReadBytes(obj.ExtraFieldLength);
+                if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                header.ExtraField = extraBytes;
+                // TODO: This should be decoded into the proper extras field type
+                obj.ExtraField = extraBytes;
             }
-            if (header.FileCommentLength > 0 && data.Position + header.FileCommentLength <= data.Length)
+            if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
             {
-                byte[] commentBytes = data.ReadBytes(header.FileCommentLength);
-                if (commentBytes.Length != header.FileCommentLength)
+                byte[] commentBytes = data.ReadBytes(obj.FileCommentLength);
+                if (commentBytes.Length != obj.FileCommentLength)
                     return null;
 
-                header.FileComment = Encoding.ASCII.GetString(commentBytes);
+                if (utf8)
+                    obj.FileComment = Encoding.UTF8.GetString(commentBytes);
+                else
+                    obj.FileComment = Encoding.ASCII.GetString(commentBytes);
             }
 
-            return header;
+            return obj;
         }
 
         /// <summary>
@@ -361,29 +374,29 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled end of central directory record on success, null on error</returns>
         public static EndOfCentralDirectoryRecord? ParseEndOfCentralDirectoryRecord(Stream data)
         {
-            var record = new EndOfCentralDirectoryRecord();
+            var obj = new EndOfCentralDirectoryRecord();
 
-            record.Signature = data.ReadUInt32LittleEndian();
-            if (record.Signature != EndOfCentralDirectoryRecordSignature)
+            obj.Signature = data.ReadUInt32LittleEndian();
+            if (obj.Signature != EndOfCentralDirectoryRecordSignature)
                 return null;
 
-            record.DiskNumber = data.ReadUInt16LittleEndian();
-            record.StartDiskNumber = data.ReadUInt16LittleEndian();
-            record.TotalEntriesOnDisk = data.ReadUInt16LittleEndian();
-            record.TotalEntries = data.ReadUInt16LittleEndian();
-            record.CentralDirectorySize = data.ReadUInt32LittleEndian();
-            record.CentralDirectoryOffset = data.ReadUInt32LittleEndian();
-            record.FileCommentLength = data.ReadUInt16LittleEndian();
-            if (record.FileCommentLength > 0 && data.Position + record.FileCommentLength <= data.Length)
+            obj.DiskNumber = data.ReadUInt16LittleEndian();
+            obj.StartDiskNumber = data.ReadUInt16LittleEndian();
+            obj.TotalEntriesOnDisk = data.ReadUInt16LittleEndian();
+            obj.TotalEntries = data.ReadUInt16LittleEndian();
+            obj.CentralDirectorySize = data.ReadUInt32LittleEndian();
+            obj.CentralDirectoryOffset = data.ReadUInt32LittleEndian();
+            obj.FileCommentLength = data.ReadUInt16LittleEndian();
+            if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
             {
-                byte[] commentBytes = data.ReadBytes(record.FileCommentLength);
-                if (commentBytes.Length != record.FileCommentLength)
+                byte[] commentBytes = data.ReadBytes(obj.FileCommentLength);
+                if (commentBytes.Length != obj.FileCommentLength)
                     return null;
 
-                record.FileComment = Encoding.ASCII.GetString(commentBytes);
+                obj.FileComment = Encoding.ASCII.GetString(commentBytes);
             }
 
-            return record;
+            return obj;
         }
 
         /// <summary>
@@ -393,26 +406,26 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ZIP64 end of central directory record on success, null on error</returns>
         public static EndOfCentralDirectoryRecord64? ParseEndOfCentralDirectoryRecord64(Stream data)
         {
-            var record = new EndOfCentralDirectoryRecord64();
+            var obj = new EndOfCentralDirectoryRecord64();
 
-            record.Signature = data.ReadUInt32LittleEndian();
-            if (record.Signature != EndOfCentralDirectoryRecord64Signature)
+            obj.Signature = data.ReadUInt32LittleEndian();
+            if (obj.Signature != EndOfCentralDirectoryRecord64Signature)
                 return null;
 
-            record.DirectoryRecordSize = data.ReadUInt64LittleEndian();
-            record.HostSystem = (HostSystem)data.ReadByteValue();
-            record.VersionMadeBy = data.ReadByteValue();
-            record.VersionNeededToExtract = data.ReadUInt16LittleEndian();
-            record.DiskNumber = data.ReadUInt32LittleEndian();
-            record.StartDiskNumber = data.ReadUInt32LittleEndian();
-            record.TotalEntriesOnDisk = data.ReadUInt64LittleEndian();
-            record.TotalEntries = data.ReadUInt64LittleEndian();
-            record.CentralDirectorySize = data.ReadUInt64LittleEndian();
-            record.CentralDirectoryOffset = data.ReadUInt64LittleEndian();
+            obj.DirectoryRecordSize = data.ReadUInt64LittleEndian();
+            obj.HostSystem = (HostSystem)data.ReadByteValue();
+            obj.VersionMadeBy = data.ReadByteValue();
+            obj.VersionNeededToExtract = data.ReadUInt16LittleEndian();
+            obj.DiskNumber = data.ReadUInt32LittleEndian();
+            obj.StartDiskNumber = data.ReadUInt32LittleEndian();
+            obj.TotalEntriesOnDisk = data.ReadUInt64LittleEndian();
+            obj.TotalEntries = data.ReadUInt64LittleEndian();
+            obj.CentralDirectorySize = data.ReadUInt64LittleEndian();
+            obj.CentralDirectoryOffset = data.ReadUInt64LittleEndian();
 
             // TODO: Handle the ExtensibleDataSector -- How to detect if exists?
 
-            return record;
+            return obj;
         }
 
         /// <summary>
@@ -548,13 +561,22 @@ namespace SabreTools.Serialization.Deserializers
             obj.FileNameLength = data.ReadUInt16LittleEndian();
             obj.ExtraFieldLength = data.ReadUInt16LittleEndian();
 
+            #if NET20 || NET35
+            bool utf8 = (obj.Flags & GeneralPurposeBitFlags.LanguageEncodingFlag) != 0;
+#else
+            bool utf8 = obj.Flags.HasFlag(GeneralPurposeBitFlags.LanguageEncodingFlag);
+#endif
+
             if (obj.FileNameLength > 0 && data.Position + obj.FileNameLength <= data.Length)
             {
                 byte[] filenameBytes = data.ReadBytes(obj.FileNameLength);
                 if (filenameBytes.Length != obj.FileNameLength)
                     return null;
 
-                obj.FileName = Encoding.ASCII.GetString(filenameBytes);
+                if (utf8)
+                    obj.FileName = Encoding.UTF8.GetString(filenameBytes);
+                else
+                    obj.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
             if (obj.ExtraFieldLength > 0 && data.Position + obj.ExtraFieldLength <= data.Length)
             {
@@ -562,6 +584,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
+                // TODO: This should be decoded into the proper extras field type
                 obj.ExtraField = extraBytes;
             }
 
