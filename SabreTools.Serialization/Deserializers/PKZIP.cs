@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Setup all of the collections
                 var localFileHeaders = new List<LocalFileHeader>();
                 var encryptionHeaders = new List<byte[]>();
-                var fileData = new List<byte[]>(); // TODO: Should this data be read here?
+                var fileData = new List<byte[]>();
                 var dataDescriptors = new List<DataDescriptor>();
                 var zip64DataDescriptors = new List<DataDescriptor64>();
                 var cdrs = new List<CentralDirectoryFileHeader>();
@@ -77,7 +77,6 @@ namespace SabreTools.Serialization.Deserializers
                             fileData.Add(fileDatum!);
                             dataDescriptors.Add(dataDescriptor!);
                             zip64DataDescriptors.Add(dataDescriptor64!);
-
                             break;
 
                         // TODO: Implement
