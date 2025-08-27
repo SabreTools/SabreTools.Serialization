@@ -63,54 +63,24 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Local File
                         case LocalFileHeaderSignature:
-                            #region Local File Header
-
-                            var localFileHeader = ParseLocalFileHeader(data);
-                            if (localFileHeader == null)
+                            if (!ParseLocalFile(data,
+                                ref zip64,
+                                out LocalFileHeader? localFileHeader,
+                                out byte[]? encryptionHeader,
+                                out byte[]? fileDatum,
+                                out DataDescriptor? dataDescriptor,
+                                out DataDescriptor64? dataDescriptor64))
+                            {
                                 break;
-
-                            // Add the local file header
-                            localFileHeaders.Add(localFileHeader);
-
-                            #endregion
-
-                            #region Encryption Header
-
-                            // Only read the encryption header if necessary
-#if NET20 || NET35
-                            if ((localFileHeader.Flags & GeneralPurposeBitFlags.FileEncrypted) != 0)
-#else
-                            if (localFileHeader.Flags.HasFlag(GeneralPurposeBitFlags.FileEncrypted))
-#endif
-                            {
-                                // Try to read the encryption header data -- TODO: Verify amount to read
-                                byte[] encryptionHeader = data.ReadBytes(12);
-                                if (encryptionHeader.Length != 12)
-                                    break;
-
-                                // Add the encryption header
-                                encryptionHeaders.Add(encryptionHeader);
-                            }
-                            else
-                            {
-                                // Add the empty encryption header
-                                encryptionHeaders.Add([]);
                             }
 
-                            #endregion
-
-                            #region File Data
-
-                            // Try to read the file data
-                            byte[] fileDatum = data.ReadBytes((int)localFileHeader.CompressedSize);
-                            if (fileDatum.Length < localFileHeader.CompressedSize)
-                                break;
-
-                            // Add the file data
+                            // Add the local file
                             validBlock = true;
-                            fileData.Add(fileDatum);
-
-                            #endregion
+                            localFileHeaders.Add(localFileHeader!);
+                            encryptionHeaders.Add(encryptionHeader!);
+                            fileData.Add(fileDatum!);
+                            dataDescriptors.Add(dataDescriptor!);
+                            zip64DataDescriptors.Add(dataDescriptor64!);
 
                             break;
 
@@ -163,56 +133,6 @@ namespace SabreTools.Serialization.Deserializers
                             validBlock = true;
                             archive.ArchiveExtraDataRecord = aedr;
                             break;
-
-                        // Data Descriptor -- Usually follows a local file header
-                        case DataDescriptorSignature:
-                            if (zip64 == null)
-                            {
-                                if (data.Position + 16 == data.Length)
-                                {
-                                    zip64 = false;
-                                }
-                                else if (data.Position + 24 == data.Length)
-                                {
-                                    zip64 = true;
-                                }
-                                else
-                                {
-                                    long beforeCheck = data.Position;
-                                    data.Seek(16, SeekOrigin.Current);
-                                    byte[] nextBlock = data.ReadBytes(2);
-                                    data.Seek(beforeCheck, SeekOrigin.Begin);
-
-                                    zip64 = !nextBlock.EqualsExactly([0x50, 0x4B]);
-                                }
-                            }
-
-                            if (zip64 == true)
-                            {
-                                // Try to parse the data descriptor
-                                var dataDescriptor64 = ParseDataDescriptor64(data);
-                                if (dataDescriptor64 == null)
-                                    break;
-
-                                // Add the data descriptor
-                                validBlock = true;
-                                dataDescriptors.Add(new DataDescriptor());
-                                zip64DataDescriptors.Add(dataDescriptor64);
-                            }
-                            else
-                            {
-                                // Try to parse the data descriptor
-                                var dataDescriptor = ParseDataDescriptor(data);
-                                if (dataDescriptor == null)
-                                    break;
-
-                                // Add the data descriptor
-                                validBlock = true;
-                                dataDescriptors.Add(dataDescriptor);
-                                zip64DataDescriptors.Add(new DataDescriptor64());
-                            }
-
-                            break;
                     }
 
                     // If there was an invalid block
@@ -232,16 +152,10 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
                 }
 
-                // Assign the local file headers
+                // Assign the local files
                 archive.LocalFileHeaders = [.. localFileHeaders];
-
-                // Assign the encryption headers
                 archive.EncryptionHeaders = [.. encryptionHeaders];
-
-                // Assign the file data
                 archive.FileData = [.. fileData];
-
-                // Assign the data descriptors
                 archive.DataDescriptors = [.. dataDescriptors];
                 archive.ZIP64DataDescriptors = [.. zip64DataDescriptors];
 
@@ -464,6 +378,135 @@ namespace SabreTools.Serialization.Deserializers
             // TODO: Handle the ExtensibleDataSector -- How to detect if exists?
 
             return record;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a local file
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled local file on success, null on error</returns>
+        public static bool ParseLocalFile(Stream data,
+            ref bool? zip64,
+            out LocalFileHeader? localFileHeader,
+            out byte[]? encryptionHeader,
+            out byte[]? fileData,
+            out DataDescriptor? dataDescriptor,
+            out DataDescriptor64? dataDescriptor64)
+        {
+            // Set default values
+            localFileHeader = null;
+            encryptionHeader = null;
+            fileData = null;
+            dataDescriptor = null;
+            dataDescriptor64 = null;
+
+            #region Local File Header
+
+            localFileHeader = ParseLocalFileHeader(data);
+            if (localFileHeader == null)
+                return false;
+
+            #endregion
+
+            #region Encryption Header
+
+            // Only read the encryption header if necessary
+#if NET20 || NET35
+            if ((localFileHeader.Flags & GeneralPurposeBitFlags.FileEncrypted) != 0)
+#else
+            if (localFileHeader.Flags.HasFlag(GeneralPurposeBitFlags.FileEncrypted))
+#endif
+            {
+                // Try to read the encryption header data -- TODO: Verify amount to read
+                encryptionHeader = data.ReadBytes(12);
+                if (encryptionHeader.Length != 12)
+                    return false;
+            }
+            else
+            {
+                // Add the empty encryption header
+                encryptionHeader = [];
+            }
+
+            #endregion
+
+            #region File Data
+
+            // Try to read the file data
+            fileData = data.ReadBytes((int)localFileHeader.CompressedSize);
+            if (fileData.Length < localFileHeader.CompressedSize)
+                return false;
+
+            #endregion
+
+            #region Data Descriptor
+
+            // Only attempt to read the descriptor if necessary
+#if NET20 || NET35
+            if ((localFileHeader.Flags & GeneralPurposeBitFlags.NoCRC) == 0)
+#else
+            if (!localFileHeader.Flags.HasFlag(GeneralPurposeBitFlags.NoCRC))
+#endif
+            {
+                dataDescriptor = new DataDescriptor();
+                dataDescriptor64 = new DataDescriptor64();
+                return true;
+            }
+
+            // Read the signature
+            long beforeSignature = data.Position;
+            uint signature = data.ReadUInt32LittleEndian();
+            data.Seek(beforeSignature, SeekOrigin.Begin);
+
+            // Don't fail if descriptor is missing
+            if (signature != DataDescriptorSignature)
+            {
+                dataDescriptor = new DataDescriptor();
+                dataDescriptor64 = new DataDescriptor64();
+                return true;
+            }
+
+            if (zip64 == null)
+            {
+                if (data.Position + 16 == data.Length)
+                {
+                    zip64 = false;
+                }
+                else if (data.Position + 24 == data.Length)
+                {
+                    zip64 = true;
+                }
+                else
+                {
+                    long beforeCheck = data.Position;
+                    data.Seek(16, SeekOrigin.Current);
+                    byte[] nextBlock = data.ReadBytes(2);
+                    data.Seek(beforeCheck, SeekOrigin.Begin);
+
+                    zip64 = !nextBlock.EqualsExactly([0x50, 0x4B]);
+                }
+            }
+
+            if (zip64 == true)
+            {
+                // Try to parse the data descriptor
+                dataDescriptor = new DataDescriptor();
+                dataDescriptor64 = ParseDataDescriptor64(data);
+                if (dataDescriptor64 == null)
+                    return false;
+            }
+            else
+            {
+                // Try to parse the data descriptor
+                dataDescriptor = ParseDataDescriptor(data);
+                dataDescriptor64 = new DataDescriptor64();
+                if (dataDescriptor == null)
+                    return false;
+            }
+
+            #endregion
+
+            return true;
         }
 
         /// <summary>
