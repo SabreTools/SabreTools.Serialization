@@ -24,9 +24,9 @@ namespace SabreTools.Serialization.Printers
             Print(builder,
                 archive.LocalFileHeaders,
                 archive.EncryptionHeaders,
-                archive.FileData,
-                archive.DataDescriptors,
-                archive.ZIP64DataDescriptors);
+                archive.FileData);
+            Print(builder, archive.DataDescriptors);
+            Print(builder, archive.ZIP64DataDescriptors);
         }
 
         private static void Print(StringBuilder builder, EndOfCentralDirectoryRecord? record)
@@ -158,9 +158,7 @@ namespace SabreTools.Serialization.Printers
         private static void Print(StringBuilder builder,
             LocalFileHeader[]? localFileHeaders,
             byte[][]? encryptionHeaders,
-            byte[][]? fileData,
-            DataDescriptor[]? dataDescriptors,
-            DataDescriptor64[]? zip64DataDescriptors)
+            byte[][]? fileData)
         {
             builder.AppendLine("  Local File Information:");
             builder.AppendLine("  -------------------------");
@@ -172,9 +170,7 @@ namespace SabreTools.Serialization.Printers
             }
 
             if (encryptionHeaders == null || localFileHeaders.Length > encryptionHeaders.Length
-                || fileData == null || localFileHeaders.Length > fileData.Length
-                || dataDescriptors == null || localFileHeaders.Length > dataDescriptors.Length
-                || zip64DataDescriptors == null || localFileHeaders.Length > zip64DataDescriptors.Length)
+                || fileData == null || localFileHeaders.Length > fileData.Length)
             {
                 builder.AppendLine("  Mismatch in local file array values");
                 builder.AppendLine();
@@ -185,10 +181,8 @@ namespace SabreTools.Serialization.Printers
                 var localFileHeader = localFileHeaders[i];
                 var encryptionHeader = encryptionHeaders != null && i < encryptionHeaders.Length ? encryptionHeaders[i] : null;
                 var fileDatum = fileData != null && i < fileData.Length ? fileData[i] : null;
-                var dataDescriptor = dataDescriptors != null && i < dataDescriptors.Length ? dataDescriptors[i] : null;
-                var zip64DataDescriptor = zip64DataDescriptors != null && i < zip64DataDescriptors.Length ? zip64DataDescriptors[i] : null;
 
-                Print(builder, localFileHeader, encryptionHeader, fileDatum, dataDescriptor, zip64DataDescriptor, i);
+                Print(builder, localFileHeader, encryptionHeader, fileDatum, i);
             }
 
             builder.AppendLine();
@@ -198,8 +192,6 @@ namespace SabreTools.Serialization.Printers
             LocalFileHeader localFileHeader,
             byte[]? encryptionHeader,
             byte[]? fileData,
-            DataDescriptor? dataDescriptor,
-            DataDescriptor64? zip64DataDescriptor,
             int index)
         {
             builder.AppendLine($"  Local File Entry {index}");
@@ -236,30 +228,56 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(fileData.Length, "    [File Data] Length");
                 //builder.AppendLine(fileData, "    [File Data] Data");
             }
+        }
 
-            if (dataDescriptor == null)
+        private static void Print(StringBuilder builder, DataDescriptor[]? entries)
+        {
+            builder.AppendLine("  Data Descriptors Information:");
+            builder.AppendLine("  -------------------------");
+            if (entries == null || entries.Length == 0)
             {
-                builder.AppendLine("    [Data Descriptor]: [NULL]");
-            }
-            else
-            {
-                builder.AppendLine(dataDescriptor.Signature, "    [Data Descriptor] Signature");
-                builder.AppendLine(dataDescriptor.CRC32, "    [Data Descriptor] CRC-32");
-                builder.AppendLine(dataDescriptor.CompressedSize, "    [Data Descriptor] Compressed size");
-                builder.AppendLine(dataDescriptor.UncompressedSize, "    [Data Descriptor] Uncompressed size");
+                builder.AppendLine("  No data descriptors");
+                builder.AppendLine();
+                return;
             }
 
-            if (zip64DataDescriptor == null)
+            for (int i = 0; i < entries.Length; i++)
             {
-                builder.AppendLine("    [ZIP64 Data Descriptor]: [NULL]");
+                var entry = entries[i];
+
+                builder.AppendLine($"  Data Descriptors Entry {i}");
+                builder.AppendLine(entry.Signature, "    Signature");
+                builder.AppendLine(entry.CRC32, $"    CRC-32");
+                builder.AppendLine(entry.CompressedSize, $"    Compressed size");
+                builder.AppendLine(entry.UncompressedSize, $"   Uncompressed size");
             }
-            else
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, DataDescriptor64[]? entries)
+        {
+            builder.AppendLine("  ZIP64 Data Descriptors Information:");
+            builder.AppendLine("  -------------------------");
+            if (entries == null || entries.Length == 0)
             {
-                builder.AppendLine(zip64DataDescriptor.Signature, "    [ZIP64 Data Descriptor] Signature");
-                builder.AppendLine(zip64DataDescriptor.CRC32, "    [ZIP64 Data Descriptor] CRC-32");
-                builder.AppendLine(zip64DataDescriptor.CompressedSize, "    [ZIP64 Data Descriptor] Compressed size");
-                builder.AppendLine(zip64DataDescriptor.UncompressedSize, "    [ZIP64 Data Descriptor] Uncompressed size");
+                builder.AppendLine("  No ZIP64 data descriptors");
+                builder.AppendLine();
+                return;
             }
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+
+                builder.AppendLine($"  ZIP64 Data Descriptors Entry {i}");
+                builder.AppendLine(entry.Signature, "    Signature");
+                builder.AppendLine(entry.CRC32, $"    CRC-32");
+                builder.AppendLine(entry.CompressedSize, $"    Compressed size");
+                builder.AppendLine(entry.UncompressedSize, $"   Uncompressed size");
+            }
+
+            builder.AppendLine();
         }
     }
 }
