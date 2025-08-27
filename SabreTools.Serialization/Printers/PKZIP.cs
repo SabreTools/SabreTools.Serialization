@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(dataDescriptor.Signature, "    [Data Descriptor] Signature");
                 builder.AppendLine(dataDescriptor.CRC32, $"    [Data Descriptor] CRC-32");
                 builder.AppendLine(dataDescriptor.CompressedSize, $"    [Data Descriptor] Compressed size");
-                builder.AppendLine(dataDescriptor.UncompressedSize, $"   [Data Descriptor] Uncompressed size");
+                builder.AppendLine(dataDescriptor.UncompressedSize, $"    [Data Descriptor] Uncompressed size");
             }
 
             if (zip64DataDescriptor == null)
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(zip64DataDescriptor.Signature, "    [ZIP64 Data Descriptor] Signature");
                 builder.AppendLine(zip64DataDescriptor.CRC32, $"    [ZIP64 Data Descriptor] CRC-32");
                 builder.AppendLine(zip64DataDescriptor.CompressedSize, $"    [ZIP64 Data Descriptor] Compressed size");
-                builder.AppendLine(zip64DataDescriptor.UncompressedSize, $"   [ZIP64 Data Descriptor] Uncompressed size");
+                builder.AppendLine(zip64DataDescriptor.UncompressedSize, $"    [ZIP64 Data Descriptor] Uncompressed size");
             }
         }
 
