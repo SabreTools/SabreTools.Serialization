@@ -268,18 +268,18 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled attribute certificate on success, null on error</returns>
         public static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(Stream data, long endOffset)
         {
-            var attributeCertificateTable = new List<AttributeCertificateTableEntry>();
+            var obj = new List<AttributeCertificateTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = ParseAttributeCertificateTableEntry(data);
-                attributeCertificateTable.Add(entry);
+                obj.Add(entry);
 
                 // Align to the 8-byte boundary
                 data.AlignToBoundary(8);
             }
 
-            return [.. attributeCertificateTable];
+            return [.. obj];
         }
 
         /// <summary>
@@ -310,40 +310,40 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled base relocation table on success, null on error</returns>
         public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, long endOffset)
         {
-            var baseRelocationTable = new List<BaseRelocationBlock>();
+            var obj = new List<BaseRelocationBlock>();
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
-                var baseRelocationBlock = new BaseRelocationBlock();
+                var block = new BaseRelocationBlock();
 
-                baseRelocationBlock.PageRVA = data.ReadUInt32LittleEndian();
-                baseRelocationBlock.BlockSize = data.ReadUInt32LittleEndian();
-                if (baseRelocationBlock.BlockSize == 0)
+                block.PageRVA = data.ReadUInt32LittleEndian();
+                block.BlockSize = data.ReadUInt32LittleEndian();
+                if (block.BlockSize == 0)
                     break;
 
-                var typeOffsetFieldEntries = new List<BaseRelocationTypeOffsetFieldEntry>();
+                var entries = new List<BaseRelocationTypeOffsetFieldEntry>();
                 int totalSize = 8;
-                while (totalSize < baseRelocationBlock.BlockSize && data.Position < data.Length)
+                while (totalSize < block.BlockSize && data.Position < data.Length)
                 {
-                    var baseRelocationTypeOffsetFieldEntry = new BaseRelocationTypeOffsetFieldEntry();
+                    var entry = new BaseRelocationTypeOffsetFieldEntry();
 
                     ushort typeAndOffsetField = data.ReadUInt16LittleEndian();
-                    baseRelocationTypeOffsetFieldEntry.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
-                    baseRelocationTypeOffsetFieldEntry.Offset = (ushort)(typeAndOffsetField & 0x0FFF);
+                    entry.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
+                    entry.Offset = (ushort)(typeAndOffsetField & 0x0FFF);
 
-                    typeOffsetFieldEntries.Add(baseRelocationTypeOffsetFieldEntry);
+                    entries.Add(entry);
                     totalSize += 2;
                 }
 
-                baseRelocationBlock.TypeOffsetFieldEntries = [.. typeOffsetFieldEntries];
+                block.TypeOffsetFieldEntries = [.. entries];
 
-                baseRelocationTable.Add(baseRelocationBlock);
+                obj.Add(block);
 
                 // Align to the DWORD boundary if we're not at the end
                 data.AlignToBoundary(4);
             }
 
-            return [.. baseRelocationTable];
+            return [.. obj];
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled COFF symbol table on success, null on error</returns>
         public static COFFSymbolTableEntry[]? ParseCOFFSymbolTable(Stream data, uint count)
         {
-            var coffSymbolTable = new COFFSymbolTableEntry[count];
+            var obj = new COFFSymbolTableEntry[count];
 
             int auxSymbolsRemaining = 0;
             int currentSymbolType = 0;
@@ -430,7 +430,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.SymbolType = (SymbolType)data.ReadUInt16LittleEndian();
                     entry.StorageClass = (StorageClass)data.ReadByteValue();
                     entry.NumberOfAuxSymbols = data.ReadByteValue();
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
 
                     auxSymbolsRemaining = entry.NumberOfAuxSymbols;
                     if (auxSymbolsRemaining == 0)
@@ -484,7 +484,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat1PointerToLinenumber = data.ReadUInt32LittleEndian();
                     entry.AuxFormat1PointerToNextFunction = data.ReadUInt32LittleEndian();
                     entry.AuxFormat1Unused = data.ReadUInt16LittleEndian();
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -497,7 +497,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat2Unused2 = data.ReadBytes(6);
                     entry.AuxFormat2PointerToNextFunction = data.ReadUInt32LittleEndian();
                     entry.AuxFormat2Unused3 = data.ReadUInt16LittleEndian();
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -508,7 +508,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat3TagIndex = data.ReadUInt32LittleEndian();
                     entry.AuxFormat3Characteristics = data.ReadUInt32LittleEndian();
                     entry.AuxFormat3Unused = data.ReadBytes(10);
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -517,7 +517,7 @@ namespace SabreTools.Serialization.Deserializers
                 {
                     var entry = new COFFSymbolTableEntry();
                     entry.AuxFormat4FileName = data.ReadBytes(18);
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -532,7 +532,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat5Number = data.ReadUInt16LittleEndian();
                     entry.AuxFormat5Selection = data.ReadByteValue();
                     entry.AuxFormat5Unused = data.ReadBytes(3);
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -544,7 +544,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.AuxFormat6Reserved1 = data.ReadByteValue();
                     entry.AuxFormat6SymbolTableIndex = data.ReadUInt32LittleEndian();
                     entry.AuxFormat6Reserved2 = data.ReadBytes(12);
-                    coffSymbolTable[i] = entry;
+                    obj[i] = entry;
                     auxSymbolsRemaining--;
                 }
 
@@ -559,7 +559,7 @@ namespace SabreTools.Serialization.Deserializers
                     currentSymbolType = 0;
             }
 
-            return coffSymbolTable;
+            return obj;
         }
 
         /// <summary>
@@ -606,7 +606,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled DebugTable on success, null on error</returns>
         public static DebugTable ParseDebugTable(Stream data, long endOffset)
         {
-            var debugTable = new DebugTable();
+            var obj = new DebugTable();
 
             var debugDirectoryTable = new List<DebugDirectoryEntry>();
 
@@ -616,12 +616,12 @@ namespace SabreTools.Serialization.Deserializers
                 debugDirectoryTable.Add(debugDirectoryEntry);
             }
 
-            debugTable.DebugDirectoryTable = [.. debugDirectoryTable];
+            obj.DebugDirectoryTable = [.. debugDirectoryTable];
 
             // TODO: Should we read the debug data in? Most of it is unformatted or undocumented
             // TODO: Implement .debug$F (Object Only) / IMAGE_DEBUG_TYPE_FPO
 
-            return debugTable;
+            return obj;
         }
 
         /// <summary>
@@ -669,110 +669,110 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ExportTable on success, null on error</returns>
         public static ExportTable ParseExportTable(Stream data, long initialOffset, SectionHeader[] sections)
         {
-            var exportTable = new ExportTable();
+            var obj = new ExportTable();
 
-            var exportDirectoryTable = new ExportDirectoryTable();
+            var directoryTable = new ExportDirectoryTable();
 
-            exportDirectoryTable.ExportFlags = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.TimeDateStamp = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.MajorVersion = data.ReadUInt16LittleEndian();
-            exportDirectoryTable.MinorVersion = data.ReadUInt16LittleEndian();
-            exportDirectoryTable.NameRVA = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.OrdinalBase = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.AddressTableEntries = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.NumberOfNamePointers = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.ExportAddressTableRVA = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.NamePointerRVA = data.ReadUInt32LittleEndian();
-            exportDirectoryTable.OrdinalTableRVA = data.ReadUInt32LittleEndian();
+            directoryTable.ExportFlags = data.ReadUInt32LittleEndian();
+            directoryTable.TimeDateStamp = data.ReadUInt32LittleEndian();
+            directoryTable.MajorVersion = data.ReadUInt16LittleEndian();
+            directoryTable.MinorVersion = data.ReadUInt16LittleEndian();
+            directoryTable.NameRVA = data.ReadUInt32LittleEndian();
+            directoryTable.OrdinalBase = data.ReadUInt32LittleEndian();
+            directoryTable.AddressTableEntries = data.ReadUInt32LittleEndian();
+            directoryTable.NumberOfNamePointers = data.ReadUInt32LittleEndian();
+            directoryTable.ExportAddressTableRVA = data.ReadUInt32LittleEndian();
+            directoryTable.NamePointerRVA = data.ReadUInt32LittleEndian();
+            directoryTable.OrdinalTableRVA = data.ReadUInt32LittleEndian();
 
-            exportTable.ExportDirectoryTable = exportDirectoryTable;
+            obj.ExportDirectoryTable = directoryTable;
 
             // Name
-            if (exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections) != 0)
+            if (directoryTable.NameRVA.ConvertVirtualAddress(sections) != 0)
             {
                 long nameAddress = initialOffset
-                    + exportDirectoryTable.NameRVA.ConvertVirtualAddress(sections);
+                    + directoryTable.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
                 string? name = data.ReadNullTerminatedAnsiString();
-                exportDirectoryTable.Name = name;
+                directoryTable.Name = name;
             }
 
             // Address table
-            if (exportDirectoryTable.AddressTableEntries != 0 && exportDirectoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections) != 0)
+            if (directoryTable.AddressTableEntries != 0 && directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections) != 0)
             {
                 long exportAddressTableAddress = initialOffset
-                    + exportDirectoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
+                    + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(exportAddressTableAddress, SeekOrigin.Begin);
 
-                var exportAddressTable = new ExportAddressTableEntry[exportDirectoryTable.AddressTableEntries];
+                var table = new ExportAddressTableEntry[directoryTable.AddressTableEntries];
 
-                for (int i = 0; i < exportDirectoryTable.AddressTableEntries; i++)
+                for (int i = 0; i < directoryTable.AddressTableEntries; i++)
                 {
-                    exportAddressTable[i] = ParseExportAddressTableEntry(data);
+                    table[i] = ParseExportAddressTableEntry(data);
                 }
 
-                exportTable.ExportAddressTable = exportAddressTable;
+                obj.ExportAddressTable = table;
             }
 
             // Name pointer table
-            if (exportDirectoryTable.NumberOfNamePointers != 0 && exportDirectoryTable.NamePointerRVA.ConvertVirtualAddress(sections) != 0)
+            if (directoryTable.NumberOfNamePointers != 0 && directoryTable.NamePointerRVA.ConvertVirtualAddress(sections) != 0)
             {
                 long namePointerTableAddress = initialOffset
-                    + exportDirectoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
+                    + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
                 data.Seek(namePointerTableAddress, SeekOrigin.Begin);
 
-                var namePointerTable = new ExportNamePointerTable();
+                var table = new ExportNamePointerTable();
 
-                namePointerTable.Pointers = new uint[exportDirectoryTable.NumberOfNamePointers];
-                for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
+                table.Pointers = new uint[directoryTable.NumberOfNamePointers];
+                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
                 {
                     uint pointer = data.ReadUInt32LittleEndian();
-                    namePointerTable.Pointers[i] = pointer;
+                    table.Pointers[i] = pointer;
                 }
 
-                exportTable.NamePointerTable = namePointerTable;
+                obj.NamePointerTable = table;
             }
 
             // Ordinal table
-            if (exportDirectoryTable.NumberOfNamePointers != 0 && exportDirectoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections) != 0)
+            if (directoryTable.NumberOfNamePointers != 0 && directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections) != 0)
             {
                 long ordinalTableAddress = initialOffset
-                    + exportDirectoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
+                    + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(ordinalTableAddress, SeekOrigin.Begin);
 
-                var exportOrdinalTable = new ExportOrdinalTable();
+                var table = new ExportOrdinalTable();
 
-                exportOrdinalTable.Indexes = new ushort[exportDirectoryTable.NumberOfNamePointers];
-                for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
+                table.Indexes = new ushort[directoryTable.NumberOfNamePointers];
+                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
                 {
                     ushort pointer = data.ReadUInt16LittleEndian();
-                    exportOrdinalTable.Indexes[i] = pointer;
+                    table.Indexes[i] = pointer;
                 }
 
-                exportTable.OrdinalTable = exportOrdinalTable;
+                obj.OrdinalTable = table;
             }
 
             // Name table
-            if (exportDirectoryTable.NumberOfNamePointers != 0 && exportTable.NamePointerTable?.Pointers != null)
+            if (directoryTable.NumberOfNamePointers != 0 && obj.NamePointerTable?.Pointers != null)
             {
-                var exportNameTable = new ExportNameTable();
+                var table = new ExportNameTable();
 
-                exportNameTable.Strings = new string[exportDirectoryTable.NumberOfNamePointers];
-                for (int i = 0; i < exportDirectoryTable.NumberOfNamePointers; i++)
+                table.Strings = new string[directoryTable.NumberOfNamePointers];
+                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
                 {
                     long nameAddress = initialOffset
-                        + exportTable.NamePointerTable.Pointers[i].ConvertVirtualAddress(sections); ;
+                        + obj.NamePointerTable.Pointers[i].ConvertVirtualAddress(sections); ;
                     data.Seek(nameAddress, SeekOrigin.Begin);
 
                     string? str = data.ReadNullTerminatedAnsiString();
-                    exportNameTable.Strings[i] = str ?? string.Empty;
+                    table.Strings[i] = str ?? string.Empty;
                 }
 
-                exportTable.ExportNameTable = exportNameTable;
+                obj.ExportNameTable = table;
             }
 
-            return exportTable;
+            return obj;
         }
 
         /// <summary>
@@ -818,16 +818,16 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled import table on success, null on error</returns>
         public static ImportTable ParseImportTable(Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
         {
-            var importTable = new ImportTable();
+            var obj = new ImportTable();
 
             // Import directory table
-            var importDirectoryTable = new List<ImportDirectoryTableEntry>();
+            var directoryTable = new List<ImportDirectoryTableEntry>();
 
             // Loop until the last item (all nulls) are found
             while (true)
             {
                 var entry = ParseImportDirectoryTableEntry(data);
-                importDirectoryTable.Add(entry);
+                directoryTable.Add(entry);
 
                 // All zero values means the last entry
                 if (entry.ImportLookupTableRVA == 0
@@ -838,150 +838,150 @@ namespace SabreTools.Serialization.Deserializers
                     break;
             }
 
-            importTable.ImportDirectoryTable = [.. importDirectoryTable];
+            obj.ImportDirectoryTable = [.. directoryTable];
 
             // Names
-            for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
+            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
             {
-                var importDirectoryTableEntry = importTable.ImportDirectoryTable[i];
-                if (importDirectoryTableEntry == null)
+                var entry = obj.ImportDirectoryTable[i];
+                if (entry == null)
                     continue;
 
-                if (importDirectoryTableEntry.NameRVA.ConvertVirtualAddress(sections) == 0)
+                if (entry.NameRVA.ConvertVirtualAddress(sections) == 0)
                     continue;
 
                 long nameAddress = initialOffset
-                    + importDirectoryTableEntry.NameRVA.ConvertVirtualAddress(sections);
+                    + entry.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
                 string? name = data.ReadNullTerminatedAnsiString();
-                importDirectoryTableEntry.Name = name;
+                entry.Name = name;
             }
 
             // Lookup tables
             var importLookupTables = new Dictionary<int, ImportLookupTableEntry[]?>();
 
-            for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
+            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
             {
-                var importDirectoryTableEntry = importTable.ImportDirectoryTable[i];
-                if (importDirectoryTableEntry == null)
+                var entry = obj.ImportDirectoryTable[i];
+                if (entry == null)
                     continue;
 
-                if (importDirectoryTableEntry.ImportLookupTableRVA.ConvertVirtualAddress(sections) == 0)
+                if (entry.ImportLookupTableRVA.ConvertVirtualAddress(sections) == 0)
                     continue;
 
                 long tableAddress = initialOffset
-                    + importDirectoryTableEntry.ImportLookupTableRVA.ConvertVirtualAddress(sections);
+                    + entry.ImportLookupTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 var entryLookupTable = new List<ImportLookupTableEntry>();
 
                 while (true)
                 {
-                    var entry = new ImportLookupTableEntry();
+                    var lookupEntry = new ImportLookupTableEntry();
 
                     if (magic == OptionalHeaderMagicNumber.PE32)
                     {
                         uint entryValue = data.ReadUInt32LittleEndian();
-                        entry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
-                        if (entry.OrdinalNameFlag)
-                            entry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
+                        lookupEntry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
+                        if (lookupEntry.OrdinalNameFlag)
+                            lookupEntry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
                         else
-                            entry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
+                            lookupEntry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
                     }
                     else if (magic == OptionalHeaderMagicNumber.PE32Plus)
                     {
                         ulong entryValue = data.ReadUInt64LittleEndian();
-                        entry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
-                        if (entry.OrdinalNameFlag)
-                            entry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
+                        lookupEntry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
+                        if (lookupEntry.OrdinalNameFlag)
+                            lookupEntry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
                         else
-                            entry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
+                            lookupEntry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
                     }
 
-                    entryLookupTable.Add(entry);
+                    entryLookupTable.Add(lookupEntry);
 
                     // All zero values means the last entry
-                    if (entry.OrdinalNameFlag == false
-                        && entry.OrdinalNumber == 0
-                        && entry.HintNameTableRVA == 0)
+                    if (lookupEntry.OrdinalNameFlag == false
+                        && lookupEntry.OrdinalNumber == 0
+                        && lookupEntry.HintNameTableRVA == 0)
                         break;
                 }
 
                 importLookupTables[i] = [.. entryLookupTable];
             }
 
-            importTable.ImportLookupTables = importLookupTables;
+            obj.ImportLookupTables = importLookupTables;
 
             // Address tables
             var importAddressTables = new Dictionary<int, ImportAddressTableEntry[]?>();
 
-            for (int i = 0; i < importTable.ImportDirectoryTable.Length; i++)
+            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
             {
-                var importDirectoryTableEntry = importTable.ImportDirectoryTable[i];
-                if (importDirectoryTableEntry == null)
+                var entry = obj.ImportDirectoryTable[i];
+                if (entry == null)
                     continue;
 
-                if (importDirectoryTableEntry.ImportAddressTableRVA.ConvertVirtualAddress(sections) == 0)
+                if (entry.ImportAddressTableRVA.ConvertVirtualAddress(sections) == 0)
                     continue;
 
                 long tableAddress = initialOffset
-                    + importDirectoryTableEntry.ImportAddressTableRVA.ConvertVirtualAddress(sections);
+                    + entry.ImportAddressTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 var addressLookupTable = new List<ImportAddressTableEntry>();
 
                 while (true)
                 {
-                    var entry = new ImportAddressTableEntry();
+                    var tableEntry = new ImportAddressTableEntry();
 
                     if (magic == OptionalHeaderMagicNumber.PE32)
                     {
                         uint entryValue = data.ReadUInt32LittleEndian();
-                        entry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
-                        if (entry.OrdinalNameFlag)
-                            entry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
+                        tableEntry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
+                        if (tableEntry.OrdinalNameFlag)
+                            tableEntry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
                         else
-                            entry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
+                            tableEntry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
                     }
                     else if (magic == OptionalHeaderMagicNumber.PE32Plus)
                     {
                         ulong entryValue = data.ReadUInt64LittleEndian();
-                        entry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
-                        if (entry.OrdinalNameFlag)
-                            entry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
+                        tableEntry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
+                        if (tableEntry.OrdinalNameFlag)
+                            tableEntry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
                         else
-                            entry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
+                            tableEntry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
                     }
 
-                    addressLookupTable.Add(entry);
+                    addressLookupTable.Add(tableEntry);
 
                     // All zero values means the last entry
-                    if (entry.OrdinalNameFlag == false
-                        && entry.OrdinalNumber == 0
-                        && entry.HintNameTableRVA == 0)
+                    if (tableEntry.OrdinalNameFlag == false
+                        && tableEntry.OrdinalNumber == 0
+                        && tableEntry.HintNameTableRVA == 0)
                         break;
                 }
 
                 importAddressTables[i] = [.. addressLookupTable];
             }
 
-            importTable.ImportAddressTables = importAddressTables;
+            obj.ImportAddressTables = importAddressTables;
 
             // Hint/Name table
             var importHintNameTable = new List<HintNameTableEntry>();
 
-            if ((importTable.ImportLookupTables != null && importTable.ImportLookupTables.Count > 0)
-                || importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
+            if ((obj.ImportLookupTables != null && obj.ImportLookupTables.Count > 0)
+                || obj.ImportAddressTables != null && obj.ImportAddressTables.Count > 0)
             {
                 // Get the addresses of the hint/name table entries
                 var hintNameTableEntryAddresses = new List<int>();
 
                 // If we have import lookup tables
-                if (importTable.ImportLookupTables != null && importLookupTables.Count > 0)
+                if (obj.ImportLookupTables != null && importLookupTables.Count > 0)
                 {
                     var addresses = new List<int>();
-                    foreach (var kvp in importTable.ImportLookupTables)
+                    foreach (var kvp in obj.ImportLookupTables)
                     {
                         if (kvp.Value == null || kvp.Value.Length == 0)
                             continue;
@@ -995,10 +995,10 @@ namespace SabreTools.Serialization.Deserializers
                 }
 
                 // If we have import address tables
-                if (importTable.ImportAddressTables != null && importTable.ImportAddressTables.Count > 0)
+                if (obj.ImportAddressTables != null && obj.ImportAddressTables.Count > 0)
                 {
                     var addresses = new List<int>();
-                    foreach (var kvp in importTable.ImportAddressTables)
+                    foreach (var kvp in obj.ImportAddressTables)
                     {
                         if (kvp.Value == null || kvp.Value.Length == 0)
                             continue;
@@ -1036,9 +1036,9 @@ namespace SabreTools.Serialization.Deserializers
                 }
             }
 
-            importTable.HintNameTable = [.. importHintNameTable];
+            obj.HintNameTable = [.. importHintNameTable];
 
-            return importTable;
+            return obj;
         }
 
         /// <summary>
@@ -1175,22 +1175,22 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
         public static ResourceDirectoryTable ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections, bool topLevel = false)
         {
-            var resourceDirectoryTable = new ResourceDirectoryTable();
+            var obj = new ResourceDirectoryTable();
 
-            resourceDirectoryTable.Characteristics = data.ReadUInt32LittleEndian();
-            resourceDirectoryTable.TimeDateStamp = data.ReadUInt32LittleEndian();
-            resourceDirectoryTable.MajorVersion = data.ReadUInt16LittleEndian();
-            resourceDirectoryTable.MinorVersion = data.ReadUInt16LittleEndian();
-            resourceDirectoryTable.NumberOfNameEntries = data.ReadUInt16LittleEndian();
-            resourceDirectoryTable.NumberOfIDEntries = data.ReadUInt16LittleEndian();
+            obj.Characteristics = data.ReadUInt32LittleEndian();
+            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
+            obj.MajorVersion = data.ReadUInt16LittleEndian();
+            obj.MinorVersion = data.ReadUInt16LittleEndian();
+            obj.NumberOfNameEntries = data.ReadUInt16LittleEndian();
+            obj.NumberOfIDEntries = data.ReadUInt16LittleEndian();
 
             // If we have no entries
-            int totalEntryCount = resourceDirectoryTable.NumberOfNameEntries + resourceDirectoryTable.NumberOfIDEntries;
+            int totalEntryCount = obj.NumberOfNameEntries + obj.NumberOfIDEntries;
             if (totalEntryCount == 0)
-                return resourceDirectoryTable;
+                return obj;
 
             // Perform top-level pass of data
-            resourceDirectoryTable.Entries = new ResourceDirectoryEntry[totalEntryCount];
+            obj.Entries = new ResourceDirectoryEntry[totalEntryCount];
             for (int i = 0; i < totalEntryCount; i++)
             {
                 var entry = new ResourceDirectoryEntry();
@@ -1211,7 +1211,7 @@ namespace SabreTools.Serialization.Deserializers
                 {
                     long currentOffset = data.Position;
                     long nameOffset = initialOffset + entry.NameOffset;
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.Seek(nameOffset, SeekOrigin.Begin);
 
                     var resourceDirectoryString = new ResourceDirectoryString();
 
@@ -1224,11 +1224,11 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(currentOffset, SeekOrigin.Begin);
                 }
 
-                resourceDirectoryTable.Entries[i] = entry;
+                obj.Entries[i] = entry;
             }
 
             // Loop through and process the entries
-            foreach (var entry in resourceDirectoryTable.Entries)
+            foreach (var entry in obj.Entries)
             {
                 if (entry == null)
                     continue;
@@ -1265,12 +1265,12 @@ namespace SabreTools.Serialization.Deserializers
 
             // If we are not at the top level
             if (!topLevel)
-                return resourceDirectoryTable;
+                return obj;
 
             // If we're not aligned to a section
             var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == initialOffset);
             if (firstSection == null)
-                return resourceDirectoryTable;
+                return obj;
 
             // Get the section size
             int size = (int)firstSection.SizeOfRawData;
@@ -1292,12 +1292,12 @@ namespace SabreTools.Serialization.Deserializers
             // If we have not used up the full size, parse the remaining chunk as a single resource
             if (data.Position - initialOffset < size)
             {
-                var localEntries = resourceDirectoryTable.Entries;
+                var localEntries = obj.Entries;
                 Array.Resize(ref localEntries, totalEntryCount + 1);
-                resourceDirectoryTable.Entries = localEntries;
+                obj.Entries = localEntries;
                 int length = (int)(size - (data.Position - initialOffset));
 
-                resourceDirectoryTable.Entries[totalEntryCount] = new ResourceDirectoryEntry
+                obj.Entries[totalEntryCount] = new ResourceDirectoryEntry
                 {
                     Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
                     IntegerID = uint.MaxValue,
@@ -1311,7 +1311,7 @@ namespace SabreTools.Serialization.Deserializers
                 };
             }
 
-            return resourceDirectoryTable;
+            return obj;
         }
 
         /// <summary>
