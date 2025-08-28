@@ -250,11 +250,35 @@ namespace SabreTools.Serialization.Wrappers
                 if (!Directory.Exists(outputDirectory))
                     Directory.CreateDirectory(outputDirectory);
 
-                sevenZip.WriteToDirectory(outputDirectory, new ExtractionOptions()
+                int index = 0;
+                var entries = sevenZip.ExtractAllEntries();
+                while (entries.MoveToNextEntry())
                 {
-                    ExtractFullPath = true,
-                    Overwrite = true,
-                });
+                    var entry = entries.Entry;
+                    if (entry.IsDirectory)
+                        continue;
+
+                    // Ensure directory separators are consistent
+                    string filename = entry.Key ?? $"extracted_file_{index}";
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outputDirectory, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    // Write to file
+                    using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                    entries.WriteEntryTo(fs);
+                    fs.Flush();
+
+                    // Increment the index
+                    index++;
+                }
 
             }
             catch (System.Exception ex)
