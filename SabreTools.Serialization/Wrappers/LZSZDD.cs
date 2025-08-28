@@ -100,6 +100,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Original name of the file to convert to the output name</param>
         public bool Extract(string filename, string outputDirectory, bool includeDebug)
         {
+            // Ensure the filename
+            if (filename.Length == 0 && Filename != null)
+                filename = Filename;
+
             // Get the length of the compressed data
             long compressedSize = Length - 14;
             if (compressedSize < 14)

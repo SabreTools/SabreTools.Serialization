@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extraction
 
         /// <inheritdoc/>
-        public bool Extract(string outDir, bool includeDebug)
+        public bool Extract(string outputDirectory, bool includeDebug)
         {
 #if NET462_OR_GREATER || NETCOREAPP
             if (_dataSource == null || !_dataSource.CanRead)
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Wrappers
                     filename = filename.Replace('\\', '/');
 
                 // Ensure the full output directory exists
-                filename = Path.Combine(outDir, filename);
+                filename = Path.Combine(outputDirectory, filename);
                 var directoryName = Path.GetDirectoryName(filename);
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);

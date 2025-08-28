@@ -63,6 +63,42 @@ if (!$NO_BUILD.IsPresent) {
     # Create Nuget Package
     dotnet pack SabreTools.Serialization\SabreTools.Serialization.csproj --output $BUILD_FOLDER
 
+    # Build ExtractionTool
+    foreach ($FRAMEWORK in $FRAMEWORKS) {
+        foreach ($RUNTIME in $RUNTIMES) {
+            # Output the current build
+            Write-Host "===== Build ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+
+            # If we have an invalid combination of framework and runtime
+            if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
+                Write-Host "Skipped due to invalid combination"
+                continue
+            }
+
+            # If we have Apple silicon but an unsupported framework
+            if ($VALID_APPLE_FRAMEWORKS -notcontains $FRAMEWORK -and $RUNTIME -eq 'osx-arm64') {
+                Write-Host "Skipped due to no Apple Silicon support"
+                continue
+            }
+
+            # Only .NET 5 and above can publish to a single file
+            if ($SINGLE_FILE_CAPABLE -contains $FRAMEWORK) {
+                # Only include Debug if set
+                if ($INCLUDE_DEBUG.IsPresent) {
+                    dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true
+                }
+                dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+            }
+            else {
+                # Only include Debug if set
+                if ($INCLUDE_DEBUG.IsPresent) {
+                    dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Debug --self-contained true --version-suffix $COMMIT
+                }
+                dotnet publish ExtractionTool\ExtractionTool.csproj -f $FRAMEWORK -r $RUNTIME -c Release --self-contained true --version-suffix $COMMIT -p:DebugType=None -p:DebugSymbols=false
+            }
+        }
+    }
+
     # Build InfoPrint
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
@@ -102,11 +138,40 @@ if (!$NO_BUILD.IsPresent) {
 
 # Only create archives if requested
 if (!$NO_ARCHIVE.IsPresent) {
+    # Create ExtractionTool archives
+    foreach ($FRAMEWORK in $FRAMEWORKS) {
+        foreach ($RUNTIME in $RUNTIMES) {
+            # Output the current build
+            Write-Host "===== Archive ExtractionTool - $FRAMEWORK, $RUNTIME ====="
+
+            # If we have an invalid combination of framework and runtime
+            if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
+                Write-Host "Skipped due to invalid combination"
+                continue
+            }
+
+            # If we have Apple silicon but an unsupported framework
+            if ($VALID_APPLE_FRAMEWORKS -notcontains $FRAMEWORK -and $RUNTIME -eq 'osx-arm64') {
+                Write-Host "Skipped due to no Apple Silicon support"
+                continue
+            }
+
+            # Only include Debug if set
+            if ($INCLUDE_DEBUG.IsPresent) {
+                Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Debug\${FRAMEWORK}\${RUNTIME}\publish\
+                7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_debug.zip *
+            }
+        
+            Set-Location -Path $BUILD_FOLDER\ExtractionTool\bin\Release\${FRAMEWORK}\${RUNTIME}\publish\
+            7z a -tzip $BUILD_FOLDER\ExtractionTool_${FRAMEWORK}_${RUNTIME}_release.zip *
+        }
+    }
+
     # Create InfoPrint archives
     foreach ($FRAMEWORK in $FRAMEWORKS) {
         foreach ($RUNTIME in $RUNTIMES) {
             # Output the current build
-            Write-Host "===== Archive Program - $FRAMEWORK, $RUNTIME ====="
+            Write-Host "===== Archive InfoPrint - $FRAMEWORK, $RUNTIME ====="
 
             # If we have an invalid combination of framework and runtime
             if ($VALID_CROSS_PLATFORM_FRAMEWORKS -notcontains $FRAMEWORK -and $VALID_CROSS_PLATFORM_RUNTIMES -contains $RUNTIME) {
