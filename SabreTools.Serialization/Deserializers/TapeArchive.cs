@@ -172,8 +172,9 @@ namespace SabreTools.Serialization.Deserializers
 
             var obj = new Block();
 
-            // TODO: Assign this to obj.Data when Models is updated
-            _ = data.ReadBytes(512);
+            // TODO: Assign this to obj.Data directly when Models is updated
+            byte[] temp = data.ReadBytes(512);
+            Array.Copy(temp, 0, obj.Data, 0, 512);
 
             return obj;
         }
