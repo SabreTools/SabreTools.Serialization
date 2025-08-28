@@ -37,6 +37,10 @@ namespace SabreTools.Serialization.Deserializers
                     entries.Add(entry);
                 }
 
+                // No entires indicates invalid
+                if (entries.Count == 0)
+                    return null;
+
                 // Assign the entries
                 archive.Entries = [.. entries];
 

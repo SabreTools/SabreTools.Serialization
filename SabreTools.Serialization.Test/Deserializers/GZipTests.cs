@@ -1,9 +1,9 @@
 using System.IO;
 using System.Linq;
-using SabreTools.Serialization.Wrappers;
+using SabreTools.Serialization.Deserializers;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.Wrappers
+namespace SabreTools.Serialization.Test.Deserializers
 {
     public class GZipTests
     {
@@ -12,7 +12,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         {
             byte[]? data = null;
             int offset = 0;
-            var actual = GZip.Create(data, offset);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
         }
 
@@ -21,7 +23,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         {
             byte[]? data = [];
             int offset = 0;
-            var actual = GZip.Create(data, offset);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
         }
 
@@ -30,7 +34,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         {
             byte[]? data = [.. Enumerable.Repeat<byte>(0xFF, 1024)];
             int offset = 0;
-            var actual = GZip.Create(data, offset);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
         }
 
@@ -38,7 +44,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         public void NullStream_Null()
         {
             Stream? data = null;
-            var actual = GZip.Create(data);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
         }
 
@@ -46,7 +54,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         public void EmptyStream_Null()
         {
             Stream? data = new MemoryStream([]);
-            var actual = GZip.Create(data);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
         }
 
@@ -54,7 +64,9 @@ namespace SabreTools.Serialization.Test.Wrappers
         public void InvalidStream_Null()
         {
             Stream? data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
-            var actual = GZip.Create(data);
+            var deserializer = new GZip();
+
+            var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
         }
     }
