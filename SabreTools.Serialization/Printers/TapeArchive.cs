@@ -37,36 +37,68 @@ namespace SabreTools.Serialization.Printers
             {
                 var entry = entries[i];
 
-                builder.AppendLine($"  Entry {i}");
+                builder.AppendLine($"  Entry {i}:");
+                builder.AppendLine();
 
-                var header = entry.Header;
-                if (header == null)
-                {
-                    builder.AppendLine("    Header: [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine("    Header:");
-                    builder.AppendLine(header.FileName?.TrimEnd('\0'), "      File name");
-                    builder.AppendLine(header.Mode, "      Mode");
-                    builder.AppendLine(header.UID, "      UID");
-                    builder.AppendLine(header.GID, "      GID");
-                    builder.AppendLine(header.Size, "      Size");
-                    builder.AppendLine(header.ModifiedTime, "      Modified time");
-                    builder.AppendLine(header.Checksum, "      Checksum");
-                    builder.AppendLine($"      Type flag: {header.TypeFlag} (0x{(byte)header.TypeFlag:X2})");
-                    builder.AppendLine(header.LinkName?.TrimEnd('\0'), "      Link name");
-                    builder.AppendLine(header.Magic, "      Magic");
-                    builder.AppendLine(header.Version?.TrimEnd('\0'), "      Version");
-                    builder.AppendLine(header.UserName?.TrimEnd('\0'), "      User name");
-                    builder.AppendLine(header.GroupName?.TrimEnd('\0'), "      Group name");
-                    builder.AppendLine(header.DevMajor?.TrimEnd('\0'), "      Device major");
-                    builder.AppendLine(header.DevMinor?.TrimEnd('\0'), "      Device minor");
-                    builder.AppendLine(header.Prefix?.TrimEnd('\0'), "      Prefix");
-                }
+                Print(builder, entry.Header);
+                Print(builder, entry.Blocks);
             }
 
             builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Header? header)
+        {
+            builder.AppendLine("    Header:");
+            builder.AppendLine("    -------------------------");
+
+            if (header == null)
+            {
+                builder.AppendLine("    No header");
+                builder.AppendLine();
+                return;
+            }
+
+            builder.AppendLine(header.FileName?.TrimEnd('\0'), "    File name");
+            builder.AppendLine(header.Mode, "    Mode");
+            builder.AppendLine(header.UID, "    UID");
+            builder.AppendLine(header.GID, "    GID");
+            builder.AppendLine(header.Size, "    Size");
+            builder.AppendLine(header.ModifiedTime, "    Modified time");
+            builder.AppendLine(header.Checksum, "    Checksum");
+            builder.AppendLine($"    Type flag: {header.TypeFlag} (0x{(byte)header.TypeFlag:X2})");
+            builder.AppendLine(header.LinkName?.TrimEnd('\0'), "    Link name");
+            builder.AppendLine(header.Magic, "    Magic");
+            builder.AppendLine(header.Version?.TrimEnd('\0'), "    Version");
+            builder.AppendLine(header.UserName?.TrimEnd('\0'), "    User name");
+            builder.AppendLine(header.GroupName?.TrimEnd('\0'), "    Group name");
+            builder.AppendLine(header.DevMajor?.TrimEnd('\0'), "    Device major");
+            builder.AppendLine(header.DevMinor?.TrimEnd('\0'), "    Device minor");
+            builder.AppendLine(header.Prefix?.TrimEnd('\0'), "    Prefix");
+            builder.AppendLine();
+        }
+
+        // TODO: Fix the entry type when Models is updated
+        // private static void Print(StringBuilder builder, Block[]? entries)
+        private static void Print(StringBuilder builder, List<Block>? entries)
+        {
+            builder.AppendLine("    Blocks:");
+            builder.AppendLine("    -------------------------");
+            if (entries == null || entries.Count == 0)
+            {
+                builder.AppendLine("    No blocks");
+                builder.AppendLine();
+                return;
+            }
+
+            for (int i = 0; i < entries.Count; i++)
+            {
+                var block = entries[i];
+                if (block.Data == null)
+                    builder.AppendLine($"    Block {i} Length: 0");
+                else
+                    builder.AppendLine(block.Data.Length, $"    Block {i} Length");
+            }
         }
     }
 }
