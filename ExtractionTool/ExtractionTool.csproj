@@ -66,6 +66,7 @@
 
     <ItemGroup>
         <PackageReference Include="SabreTools.IO" Version="1.7.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
     </ItemGroup>
 
 </Project>
