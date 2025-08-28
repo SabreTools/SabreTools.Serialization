@@ -144,44 +144,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (_dataSource == null || !_dataSource.CanRead)
-                return false;
-
-            try
-            {
-                // Try opening the stream
-                using var gzipFile = new GZipStream(_dataSource, CompressionMode.Decompress, true);
-
-                // Ensure directory separators are consistent
-                string filename = Guid.NewGuid().ToString();
-                if (Path.DirectorySeparatorChar == '\\')
-                    filename = filename.Replace('/', '\\');
-                else if (Path.DirectorySeparatorChar == '/')
-                    filename = filename.Replace('\\', '/');
-
-                // Ensure the full output directory exists
-                filename = Path.Combine(outputDirectory, filename);
-                var directoryName = Path.GetDirectoryName(filename);
-                if (directoryName != null && !Directory.Exists(directoryName))
-                    Directory.CreateDirectory(directoryName);
-
-                // Extract the file
-                using FileStream fs = File.OpenWrite(filename);
-                gzipFile.CopyTo(fs);
-                fs.Flush();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <inheritdoc cref="Extract(string, bool)"/>
-        public bool ExtractExperimental(string outputDirectory, bool includeDebug)
-        {
             // Ensure there is data to extract
             if (Header == null || DataOffset < 0)
             {
