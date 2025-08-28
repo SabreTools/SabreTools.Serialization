@@ -158,10 +158,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.InstallShieldArchiveV3.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new InstallShieldArchiveV3(model, data);
             }
             catch

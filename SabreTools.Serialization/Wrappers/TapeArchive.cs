@@ -73,10 +73,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.TapeArchive.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new TapeArchive(model, data);
             }
             catch
@@ -87,15 +91,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region JSON Export
-
-#if NETCOREAPP
-        /// <inheritdoc/>
-        public override string ExportJSON() => throw new System.NotImplementedException();
-#endif
-
-        #endregion
-
         #region Extraction
 
         /// <inheritdoc/>
@@ -103,7 +98,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Ensure there are entries to extract
             if (Entries == null || Entries.Length == 0)
-                return true;
+                return false;
 
             try
             {

@@ -71,10 +71,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.PAK.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new PAK(model, data);
             }
             catch

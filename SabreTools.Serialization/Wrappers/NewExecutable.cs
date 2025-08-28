@@ -357,10 +357,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.NewExecutable.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new NewExecutable(model, data);
             }
             catch

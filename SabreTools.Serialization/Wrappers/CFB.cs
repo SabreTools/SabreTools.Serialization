@@ -118,10 +118,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.CFB.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new CFB(model, data);
             }
             catch
