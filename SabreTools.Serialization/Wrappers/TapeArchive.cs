@@ -293,7 +293,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Write the file
                     using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fs.Write(dataBytes);
+                    fs.Write(dataBytes, 0, dataBytes.Length);
                     fs.Flush();
                 }
 
