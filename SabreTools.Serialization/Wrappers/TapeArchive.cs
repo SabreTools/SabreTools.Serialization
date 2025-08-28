@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Text;
 using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
@@ -146,22 +148,162 @@ namespace SabreTools.Serialization.Wrappers
 
                         entry.WriteToFile(filename);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
-                        if (includeDebug) System.Console.Error.WriteLine(ex);
+                        if (includeDebug) Console.Error.WriteLine(ex);
                     }
                 }
 
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.Error.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
 #else
             return false;
 #endif
+        }
+
+        /// <inheritdoc cref="Extract(string, bool)"/>
+        public bool ExtractExperimental(string outputDirectory, bool includeDebug)
+        {
+            // Ensure there are entries to extract
+            if (Entries == null || Entries.Length == 0)
+                return true;
+
+            try
+            {
+                // Loop through and extract the data
+                for (int i = 0; i < Entries.Length; i++)
+                {
+                    var entry = Entries[i];
+                    if (entry.Header == null)
+                        continue;
+
+                    // Handle special entries
+                    var header = entry.Header;
+                    switch (header.TypeFlag)
+                    {
+                        // Skipped types
+                        case TypeFlag.LNKTYPE:
+                        case TypeFlag.SYMTYPE:
+                        case TypeFlag.CHRTYPE:
+                        case TypeFlag.BLKTYPE:
+                        case TypeFlag.FIFOTYPE:
+                        case TypeFlag.XHDTYPE:
+                        case TypeFlag.XGLTYPE:
+                            continue;
+
+                        // Skipped vendor types
+                        case TypeFlag.VendorSpecificA:
+                        case TypeFlag.VendorSpecificB:
+                        case TypeFlag.VendorSpecificC:
+                        case TypeFlag.VendorSpecificD:
+                        case TypeFlag.VendorSpecificE:
+                        case TypeFlag.VendorSpecificF:
+                        case TypeFlag.VendorSpecificG:
+                        case TypeFlag.VendorSpecificH:
+                        case TypeFlag.VendorSpecificI:
+                        case TypeFlag.VendorSpecificJ:
+                        case TypeFlag.VendorSpecificK:
+                        case TypeFlag.VendorSpecificL:
+                        case TypeFlag.VendorSpecificM:
+                        case TypeFlag.VendorSpecificN:
+                        case TypeFlag.VendorSpecificO:
+                        case TypeFlag.VendorSpecificP:
+                        case TypeFlag.VendorSpecificQ:
+                        case TypeFlag.VendorSpecificR:
+                        case TypeFlag.VendorSpecificS:
+                        case TypeFlag.VendorSpecificT:
+                        case TypeFlag.VendorSpecificU:
+                        case TypeFlag.VendorSpecificV:
+                        case TypeFlag.VendorSpecificW:
+                        case TypeFlag.VendorSpecificX:
+                        case TypeFlag.VendorSpecificY:
+                        case TypeFlag.VendorSpecificZ:
+                            continue;
+
+                        // Directories
+                        case TypeFlag.DIRTYPE:
+                            string? entryDirectory = header.FileName?.TrimEnd('\0');
+                            if (entryDirectory == null)
+                                continue;
+
+                            // Ensure directory separators are consistent
+                            entryDirectory = Path.Combine(outputDirectory, entryDirectory);
+                            if (Path.DirectorySeparatorChar == '\\')
+                                entryDirectory = entryDirectory.Replace('/', '\\');
+                            else if (Path.DirectorySeparatorChar == '/')
+                                entryDirectory = entryDirectory.Replace('\\', '/');
+
+                            // Create the director
+                            Directory.CreateDirectory(entryDirectory);
+                            continue;
+                    }
+
+                    // Ensure there are blocks to extract
+                    if (entry.Blocks == null)
+                        continue;
+
+                    // Get the file size
+                    string sizeOctalString = Encoding.ASCII.GetString(header.Size!).TrimEnd('\0');
+                    if (sizeOctalString.Length == 0)
+                        continue;
+
+                    int entrySize = Convert.ToInt32(sizeOctalString, 8);
+
+                    // Setup the temporary buffer
+                    byte[] dataBytes = new byte[entrySize];
+                    int dataBytesPtr = 0;
+
+                    // Loop through and copy the bytes to the array for writing
+                    int blockNumber = 0;
+                    while (entrySize > 0)
+                    {
+                        // Exit early if block number is invalid
+                        if (blockNumber >= entry.Blocks.Count)
+                            break;
+
+                        // Exit early if the block has no data
+                        var block = entry.Blocks[blockNumber++];
+                        if (block.Data == null || block.Data.Length != 512)
+                            break;
+
+                        int nextBytes = Math.Min(512, entrySize);
+                        entrySize -= nextBytes;
+
+                        Array.Copy(block.Data, 0, dataBytes, dataBytesPtr, nextBytes);
+                        dataBytesPtr += nextBytes;
+                    }
+
+                    // Ensure directory separators are consistent
+                    string filename = header.FileName?.TrimEnd('\0') ?? $"entry_{i}";
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outputDirectory, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    // Write the file
+                    using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                    fs.Write(dataBytes);
+                    fs.Flush();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
         }
 
         #endregion
