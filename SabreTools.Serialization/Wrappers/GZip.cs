@@ -15,6 +15,62 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <summary>
+        /// Offset to the compressed data
+        /// </summary>
+        /// <remarks>Returns -1 on error</remarks>
+        public long DataOffset
+        {
+            get
+            {
+                if (_dataOffset != null)
+                    return _dataOffset.Value;
+
+                if (Header == null)
+                    return -1;
+
+                // Minimum offset is 10 bytes:
+                // - ID1 (1)
+                // - ID2 (1)
+                // - CompressionMethod (1)
+                // - Flags (1)
+                // - LastModifiedTime (4)
+                // - ExtraFlags (1)
+                // - OperatingSystem (1)
+                _dataOffset = 10;
+
+                // Add extra lengths
+                _dataOffset += Header.XLEN;
+                if (Header.OriginalFileName != null)
+                    _dataOffset += Header.OriginalFileName.Length + 1;
+                if (Header.FileComment != null)
+                    _dataOffset += Header.FileComment.Length + 1;
+                if (Header.CRC16 != null)
+                    _dataOffset += 2;
+
+                return _dataOffset.Value;
+            }
+        }
+
+        /// <inheritdoc cref="Archive.Header"/>
+        public Header? Header => Model.Header;
+
+        /// <inheritdoc cref="Archive.Trailer"/>
+        public Trailer? Trailer => Model.Trailer;
+
+        #endregion
+
+        #region Instance Variables
+
+        /// <summary>
+        /// Offset to the compressed data
+        /// </summary>
+        private long? _dataOffset = null;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
