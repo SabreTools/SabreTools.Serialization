@@ -1100,7 +1100,17 @@ namespace SabreTools.Serialization.Wrappers
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
-            return cexe || overlay || resources;
+
+            var sevenZipSfx = SevenZip.Create(_dataSource);
+            bool sevenZip = sevenZipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
+
+            var pkzipSfx = PKZIP.Create(_dataSource);
+            bool pkzip = pkzipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
+
+            var rarSfx = RAR.Create(_dataSource);
+            bool rar = rarSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
+
+            return cexe || overlay || resources || sevenZip || pkzip || rar;
         }
 
         /// <summary>

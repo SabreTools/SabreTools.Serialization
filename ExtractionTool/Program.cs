@@ -160,41 +160,17 @@ namespace ExtractionTool
                 if (exe == null)
                     return;
 
+                // TODO: Add Wise installer handling here
+
                 // New Executable
                 if (exe is NewExecutable nex)
                 {
-                    // Wise Installer -- Reimplement
-                    // var wi = new WiseInstaller();
-                    // if (wi.CheckExecutable(file, nex, includeDebug) != null)
-                    //     wi.Extract(file, nex, outputDirectory, includeDebug);
+                    // No-op
                 }
 
                 // Portable Executable
                 else if (exe is PortableExecutable pex)
-                {
-                    // CExe, Embedded Archives, Embedded Executables
                     pex.Extract(outputDirectory, includeDebug);
-
-                    // 7-zip SFX -- Reimplement
-                    // var szsfx = new SevenZipSFX();
-                    // if (szsfx.CheckExecutable(file, pex, includeDebug) != null)
-                    //     szsfx.Extract(file, pex, outputDirectory, includeDebug);
-
-                    // WinRAR SFX -- Reimplement
-                    // var wrsfx = new WinRARSFX();
-                    // if (wrsfx.CheckExecutable(file, pex, includeDebug) != null)
-                    //     wrsfx.Extract(file, pex, outputDirectory, includeDebug);
-
-                    // WinZip SFX -- Reimplement
-                    // var wzsfx = new WinZipSFX();
-                    // if (wzsfx.CheckExecutable(file, pex, includeDebug) != null)
-                    //     wzsfx.Extract(file, pex, outputDirectory, includeDebug);
-
-                    // Wise Installer -- Reimplement
-                    // var wi = new WiseInstaller();
-                    // if (wi.CheckExecutable(file, pex, includeDebug) != null)
-                    //     wi.Extract(file, pex, outputDirectory, includeDebug);
-                }
             }
 
             // GCF
