@@ -618,8 +618,11 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[] data)
+        public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[]? data)
         {
+            if (data == null)
+                return null;
+
             List<ExtensibleDataField> fields = [];
 
             int offset = 0;
@@ -644,13 +647,13 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
                     HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
                     HeaderID.X509CentralDirectory => ParseX509CentralDirectory(data, ref offset),
-                    HeaderID.StrongEncryptionHeader => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.StrongEncryptionHeader => ParseStrongEncryptionHeader(data, ref offset),
                     HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
                     HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
                     HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
-                    HeaderID.SmartcryptKeyProvider => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.SmartcryptPolicyKeyData => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.SmartcryptKeyProvider => ParseKeyProviderRecordExtraField(data, ref offset),
+                    HeaderID.SmartcryptPolicyKeyData => ParsePolicyKeyDataRecordRecordExtraField(data, ref offset),
                     HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
                     HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -665,7 +668,7 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.MVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.FWKCSMD5 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.FWKCSMD5 => ParseFWKCSMD5ExtraField(data, ref offset),
                     HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -682,8 +685,8 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.DataStreamAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MicrosoftOpenPackagingGrowthHint => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.DataStreamAlignment => ParseDataStreamAlignment(data, ref offset),
+                    HeaderID.MicrosoftOpenPackagingGrowthHint => ParseMicrosoftOpenPackagingGrowthHint(data, ref offset),
                     HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -706,8 +709,11 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[] data)
+        public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[]? data)
         {
+            if (data == null)
+                return null;
+
             List<ExtensibleDataField> fields = [];
 
             int offset = 0;
@@ -732,13 +738,13 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
                     HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
                     HeaderID.X509CentralDirectory => ParseX509CentralDirectory(data, ref offset),
-                    HeaderID.StrongEncryptionHeader => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.StrongEncryptionHeader => ParseStrongEncryptionHeader(data, ref offset),
                     HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
                     HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
                     HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
-                    HeaderID.SmartcryptKeyProvider => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.SmartcryptPolicyKeyData => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.SmartcryptKeyProvider => ParseKeyProviderRecordExtraField(data, ref offset),
+                    HeaderID.SmartcryptPolicyKeyData => ParsePolicyKeyDataRecordRecordExtraField(data, ref offset),
                     HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
                     HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -753,7 +759,7 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.MVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.FWKCSMD5 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.FWKCSMD5 => ParseFWKCSMD5ExtraField(data, ref offset),
                     HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -770,8 +776,8 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.DataStreamAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MicrosoftOpenPackagingGrowthHint => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.DataStreamAlignment => ParseDataStreamAlignment(data, ref offset),
+                    HeaderID.MicrosoftOpenPackagingGrowthHint => ParseMicrosoftOpenPackagingGrowthHint(data, ref offset),
                     HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -1107,6 +1113,30 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a StrongEncryptionHeader
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled StrongEncryptionHeader on success, null on error</returns>
+        private static StrongEncryptionHeader? ParseStrongEncryptionHeader(byte[] data, ref int offset)
+        {
+            var obj = new StrongEncryptionHeader();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.StrongEncryptionHeader)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Format = data.ReadUInt16LittleEndian(ref offset);
+            obj.AlgID = data.ReadUInt16LittleEndian(ref offset);
+            obj.Bitlen = data.ReadUInt16LittleEndian(ref offset);
+            obj.Flags = data.ReadUInt16LittleEndian(ref offset);
+            obj.CertData = data.ReadBytes(ref offset, obj.DataSize - 8);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into an RecordManagementControls
         /// </summary>
         /// <param name="data">Byte array to parse</param>
@@ -1189,11 +1219,55 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a KeyProviderRecordExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled KeyProviderRecordExtraField on success, null on error</returns>
+        private static KeyProviderRecordExtraField? ParseKeyProviderRecordExtraField(byte[] data, ref int offset)
+        {
+            var obj = new KeyProviderRecordExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.SmartcryptKeyProvider)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PolicyKeyDataRecordRecordExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled PolicyKeyDataRecordRecordExtraField on success, null on error</returns>
+        private static PolicyKeyDataRecordRecordExtraField? ParsePolicyKeyDataRecordRecordExtraField(byte[] data, ref int offset)
+        {
+            var obj = new PolicyKeyDataRecordRecordExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.SmartcryptPolicyKeyData)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a AS400ExtraFieldAttribute
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled AS400ExtraFieldAttribute on success, null on error</returns>
+        /// <remarks>
+        /// This header ID is shared with MVSExtraField, OS400ExtraField, and ZOSExtraFieldAttribute.
+        /// This code makes an assumption that it's always AS400ExtraFieldAttribute.
+        /// </remarks>
         private static AS400ExtraFieldAttribute? ParseAS400ExtraFieldAttribute(byte[] data, ref int offset)
         {
             var obj = new AS400ExtraFieldAttribute();
@@ -1290,6 +1364,27 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a FWKCSMD5ExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled FWKCSMD5ExtraField on success, null on error</returns>
+        private static FWKCSMD5ExtraField? ParseFWKCSMD5ExtraField(byte[] data, ref int offset)
+        {
+            var obj = new FWKCSMD5ExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.FWKCSMD5)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Preface = data.ReadBytes(ref offset, 3);
+            obj.MD5 = data.ReadBytes(ref offset, 16);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a InfoZIPUnicodeCommentExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
@@ -1331,6 +1426,49 @@ namespace SabreTools.Serialization.Deserializers
             obj.NameCRC32 = data.ReadUInt32LittleEndian(ref offset);
             byte[] unicodeBytes = data.ReadBytes(ref offset, obj.DataSize - 5);
             obj.UnicodeName = Encoding.UTF8.GetString(unicodeBytes);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DataStreamAlignment
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled DataStreamAlignment on success, null on error</returns>
+        private static DataStreamAlignment? ParseDataStreamAlignment(byte[] data, ref int offset)
+        {
+            var obj = new DataStreamAlignment();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.DataStreamAlignment)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Alignment = data.ReadUInt16LittleEndian(ref offset);
+            obj.Padding = data.ReadBytes(ref offset, obj.DataSize - 2);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a MicrosoftOpenPackagingGrowthHint
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled MicrosoftOpenPackagingGrowthHint on success, null on error</returns>
+        private static MicrosoftOpenPackagingGrowthHint? ParseMicrosoftOpenPackagingGrowthHint(byte[] data, ref int offset)
+        {
+            var obj = new MicrosoftOpenPackagingGrowthHint();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.MicrosoftOpenPackagingGrowthHint)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Sig = data.ReadUInt16LittleEndian(ref offset);
+            obj.PadVal = data.ReadUInt16LittleEndian(ref offset);
+            obj.Padding = data.ReadBytes(ref offset, obj.DataSize - 2);
 
             return obj;
         }

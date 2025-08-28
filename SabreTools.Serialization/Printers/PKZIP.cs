@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Printers
     {
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder, Archive model)
-            => Print(builder, model);
+           => Print(builder, model);
 
         public static void Print(StringBuilder builder, Archive archive)
         {
@@ -87,7 +87,9 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
             builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
             builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
-            builder.AppendLine(localFileHeader.ExtraField, "    [Local File Header] Extra field");
+
+            var extraFields = Deserializers.PKZIP.ParseExtraFields(localFileHeader, localFileHeader.ExtraField);
+            Print(builder, "    [Local File Header] Extra Fields", extraFields);
 
             if (encryptionHeader == null)
             {
@@ -236,8 +238,10 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.ExternalFileAttributes, "    External file attributes");
                 builder.AppendLine(entry.RelativeOffsetOfLocalHeader, "    Relative offset of local header");
                 builder.AppendLine(entry.FileName, "    File name");
-                builder.AppendLine(entry.ExtraField, "    Extra field");
                 builder.AppendLine(entry.FileComment, "    File comment");
+
+                var extraFields = Deserializers.PKZIP.ParseExtraFields(entry, entry.ExtraField);
+                Print(builder, "    Extra Fields", extraFields);
             }
 
             builder.AppendLine();
@@ -259,5 +263,235 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(record.ExtraFieldData, "  Extra field data");
             builder.AppendLine();
         }
+
+        #region Extras Fields
+
+        private static void Print(StringBuilder builder, string title, ExtensibleDataField[]? entries)
+        {
+            builder.AppendLine(title);
+            builder.AppendLine("    -------------------------");
+
+            if (entries == null || entries.Length == 0)
+            {
+                builder.AppendLine("    No extra fields");
+                builder.AppendLine();
+                return;
+            }
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+
+                builder.AppendLine($"    Extra Field {i}:");
+                builder.AppendLine($"      Header ID: {entry.HeaderID} (0x{(byte)entry.HeaderID:X4})");
+                builder.AppendLine(entry.DataSize, "      Data size");
+                switch (entry)
+                {
+                    case Zip64ExtendedInformationExtraField field: Print(builder, field); break;
+                    case OS2ExtraField field: Print(builder, field); break;
+                    case NTFSExtraField field: Print(builder, field); break;
+                    case OpenVMSExtraField field: Print(builder, field); break;
+                    case UnixExtraField field: Print(builder, field); break;
+                    case PatchDescriptorExtraField field: Print(builder, field); break;
+                    case PKCS7Store field: Print(builder, field); break;
+                    case X509IndividualFile field: Print(builder, field); break;
+                    case X509CentralDirectory field: Print(builder, field); break;
+                    case StrongEncryptionHeader field: Print(builder, field); break;
+                    case RecordManagementControls field: Print(builder, field); break;
+                    case PKCS7EncryptionRecipientCertificateList field: Print(builder, field); break;
+                    case PolicyDecryptionKeyRecordExtraField field: Print(builder, field); break;
+                    case KeyProviderRecordExtraField field: Print(builder, field); break;
+                    case PolicyKeyDataRecordRecordExtraField field: Print(builder, field); break;
+                    case AS400ExtraFieldAttribute field: Print(builder, field); break;
+                    case ZipItMacintoshExtraField field: Print(builder, field); break;
+                    case ZipItMacintoshShortFileExtraField field: Print(builder, field); break;
+                    case ZipItMacintoshShortDirectoryExtraField field: Print(builder, field); break;
+                    case FWKCSMD5ExtraField field: Print(builder, field); break;
+                    case InfoZIPUnicodeCommentExtraField field: Print(builder, field); break;
+                    case InfoZIPUnicodePathExtraField field: Print(builder, field); break;
+                    case DataStreamAlignment field: Print(builder, field); break;
+                    case MicrosoftOpenPackagingGrowthHint field: Print(builder, field); break;
+
+                    default: Print(builder, entry); break;
+                }
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Zip64ExtendedInformationExtraField field)
+        {
+            builder.AppendLine(field.OriginalSize, "      Original size");
+            builder.AppendLine(field.CompressedSize, "      Compressed size");
+            builder.AppendLine(field.RelativeHeaderOffset, "      Relative header offset");
+            builder.AppendLine(field.DiskStartNumber, "      Disk start number");
+        }
+
+        private static void Print(StringBuilder builder, OS2ExtraField field)
+        {
+            builder.AppendLine(field.BSize, "      Uncompressed block size");
+            builder.AppendLine(field.CType, "      Compression type");
+            builder.AppendLine(field.EACRC, "      CRC-32");
+            builder.AppendLine(field.Var, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, NTFSExtraField field)
+        {
+            builder.AppendLine(field.Reserved, "      Reserved");
+            builder.AppendLine(field.Tags, "      Tags");
+            builder.AppendLine(field.Size, "      Size");
+            builder.AppendLine(field.Vars, "      Vars");
+        }
+
+        private static void Print(StringBuilder builder, OpenVMSExtraField field)
+        {
+            builder.AppendLine(field.CRC, "      CRC-32");
+            builder.AppendLine(field.Tags, "      Tags");
+            builder.AppendLine(field.Size, "      Size");
+            builder.AppendLine(field.Vars, "      Vars");
+        }
+
+        private static void Print(StringBuilder builder, UnixExtraField field)
+        {
+            builder.AppendLine(field.Atime, "      File last access time");
+            builder.AppendLine(field.Mtime, "      File last modification time");
+            builder.AppendLine(field.Uid, "      File user ID");
+            builder.AppendLine(field.Gid, "      File group ID");
+            builder.AppendLine(field.Var, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, PatchDescriptorExtraField field)
+        {
+            builder.AppendLine(field.Version, "      Version");
+            builder.AppendLine($"      Flags: {field.Flags} (0x{field.Flags:X8})");
+            builder.AppendLine(field.OldSize, "      Old size");
+            builder.AppendLine(field.OldCRC, "      Old CRC-32");
+            builder.AppendLine(field.NewSize, "      New size");
+            builder.AppendLine(field.NewCRC, "      New CRC-32");
+        }
+
+        private static void Print(StringBuilder builder, PKCS7Store field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, X509IndividualFile field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, X509CentralDirectory field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, StrongEncryptionHeader field)
+        {
+            builder.AppendLine(field.Format, "      Format");
+            builder.AppendLine(field.AlgID, "      Algorithm ID");
+            builder.AppendLine(field.Bitlen, "      Bit length");
+            builder.AppendLine(field.Flags, "      Flags");
+            builder.AppendLine(field.CertData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, RecordManagementControls field)
+        {
+            builder.AppendLine(field.Tags, "      Tags");
+            builder.AppendLine(field.Size, "      Size");
+            builder.AppendLine(field.Vars, "      Vars");
+        }
+
+        private static void Print(StringBuilder builder, PKCS7EncryptionRecipientCertificateList field)
+        {
+            builder.AppendLine(field.Version, "      Version");
+            builder.AppendLine(field.CStore, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, PolicyDecryptionKeyRecordExtraField field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, KeyProviderRecordExtraField field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, PolicyKeyDataRecordRecordExtraField field)
+        {
+            builder.AppendLine(field.TData, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, AS400ExtraFieldAttribute field)
+        {
+            builder.AppendLine(field.FieldLength, "      Field length");
+            builder.AppendLine($"      Field code: {field.FieldCode} (0x{field.FieldCode:X8})");
+            builder.AppendLine(field.Data, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, ZipItMacintoshExtraField field)
+        {
+            builder.AppendLine(field.ExtraFieldSignature, "      Extra field signature");
+            builder.AppendLine(field.FnLen, "      Filename length");
+            builder.AppendLine(field.FileName, "      Filename");
+            builder.AppendLine(field.FileType, "      File type");
+            builder.AppendLine(field.Creator, "      Creator");
+        }
+
+        private static void Print(StringBuilder builder, ZipItMacintoshShortFileExtraField field)
+        {
+            builder.AppendLine(field.ExtraFieldSignature, "      Extra field signature");
+            builder.AppendLine(field.FileType, "      File type");
+            builder.AppendLine(field.Creator, "      Creator");
+            builder.AppendLine(field.FdFlags, "      Flags");
+            builder.AppendLine(field.Reserved, "      Reserved");
+        }
+
+        private static void Print(StringBuilder builder, ZipItMacintoshShortDirectoryExtraField field)
+        {
+            builder.AppendLine(field.ExtraFieldSignature, "      Extra field signature");
+            builder.AppendLine(field.FrFlags, "      Flags");
+            builder.AppendLine($"      Field code: {field.View} (0x{field.View:X8})");
+        }
+
+        private static void Print(StringBuilder builder, FWKCSMD5ExtraField field)
+        {
+            builder.AppendLine(field.Preface, "      Preface");
+            builder.AppendLine(field.MD5, "      MD5");
+        }
+
+        private static void Print(StringBuilder builder, InfoZIPUnicodeCommentExtraField field)
+        {
+            builder.AppendLine(field.Version, "      Version");
+            builder.AppendLine(field.ComCRC32, "      Comment CRC-32");
+            builder.AppendLine(field.UnicodeCom, "      Unicode comment");
+        }
+
+        private static void Print(StringBuilder builder, InfoZIPUnicodePathExtraField field)
+        {
+            builder.AppendLine(field.Version, "      Version");
+            builder.AppendLine(field.NameCRC32, "      Name CRC-32");
+            builder.AppendLine(field.UnicodeName, "      Unicode name");
+        }
+
+        private static void Print(StringBuilder builder, DataStreamAlignment field)
+        {
+            builder.AppendLine(field.Alignment, "      Alignment");
+            builder.AppendLine(field.Padding, "      Padding");
+        }
+
+        private static void Print(StringBuilder builder, MicrosoftOpenPackagingGrowthHint field)
+        {
+            builder.AppendLine(field.Sig, "      Signature");
+            builder.AppendLine(field.PadVal, "      Initial padding value");
+            builder.AppendLine(field.Padding, "      Padding");
+        }
+
+        private static void Print(StringBuilder builder, ExtensibleDataField field)
+        {
+            // TODO: Print byte data here
+        }
+
+        #endregion
     }
 }
