@@ -21,6 +21,26 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extension Properties
+
+        /// <inheritdoc cref="Archive.CentralDirectoryHeaders"/>
+        public CentralDirectoryFileHeader[]? CentralDirectoryHeader => Model.CentralDirectoryHeaders;
+
+        /// <inheritdoc cref="Archive.EndOfCentralDirectoryRecord"/>
+        public EndOfCentralDirectoryRecord? EndOfCentralDirectoryRecord => Model.EndOfCentralDirectoryRecord;
+
+        /// <inheritdoc cref="Archive.ZIP64EndOfCentralDirectoryLocator"/>
+        public EndOfCentralDirectoryLocator64? ZIP64EndOfCentralDirectoryLocator => Model.ZIP64EndOfCentralDirectoryLocator;
+
+        /// <inheritdoc cref="Archive.ZIP64EndOfCentralDirectoryRecord"/>
+        public EndOfCentralDirectoryRecord64? ZIP64EndOfCentralDirectoryRecord => Model.ZIP64EndOfCentralDirectoryRecord;
+
+        /// <inheritdoc cref="Archive.LocalFileHeaders"/>
+        /// TODO: Use LocalFiles when Models is updated
+        public LocalFileHeader[]? LocalFiles => Model.LocalFileHeaders;
+
+        #endregion
+
         #region Constructors
 
         /// <inheritdoc/>
