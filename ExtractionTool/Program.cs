@@ -150,29 +150,6 @@ namespace ExtractionTool
 #endif
             }
 
-            // Executable
-            else if (ft == WrapperType.Executable)
-            {
-                Console.WriteLine("Extracting executable contents");
-                Console.WriteLine();
-
-                var exe = WrapperFactory.CreateExecutableWrapper(stream);
-                if (exe == null)
-                    return;
-
-                // TODO: Add Wise installer handling here
-
-                // New Executable
-                if (exe is NewExecutable nex)
-                {
-                    // No-op
-                }
-
-                // Portable Executable
-                else if (exe is PortableExecutable pex)
-                    pex.Extract(outputDirectory, includeDebug);
-            }
-
             // GCF
             else if (wrapper is GCF gcf)
             {
@@ -260,6 +237,15 @@ namespace ExtractionTool
 #endif
             // }
 
+            // New Executable
+            else if (wrapper is NewExecutable nex)
+            {
+                Console.WriteLine("Extracting New Executable contents");
+                Console.WriteLine();
+
+                // TODO: Add Wise installer handling here
+            }
+
             // PAK
             else if (wrapper is PAK pak)
             {
@@ -290,6 +276,16 @@ namespace ExtractionTool
 #else
                 pkzip.Extract(outputDirectory, includeDebug);
 #endif
+            }
+
+            // Portable Executable
+            else if (wrapper is PortableExecutable pex)
+            {
+                Console.WriteLine("Extracting Portable Executable contents");
+                Console.WriteLine();
+
+                // TODO: Add Wise installer handling here
+                pex.Extract(outputDirectory, includeDebug);
             }
 
             // Quantum
