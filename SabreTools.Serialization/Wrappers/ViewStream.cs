@@ -27,12 +27,13 @@ namespace SabreTools.IO.Streams
         {
             get
             {
-                // Only file streams can have a filename
-                if (_source is not FileStream fs)
-                    return null;
+                // A subset of streams have a filename
+                if (_source is FileStream fs)
+                    return fs.Name;
+                else if (_source is ViewStream vs)
+                    return vs.Filename;
 
-                // Return the name
-                return fs.Name;
+                return null;
             }
         }
 
