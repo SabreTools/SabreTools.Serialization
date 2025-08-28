@@ -1,16 +1,12 @@
 using System;
 using System.IO;
 using SabreTools.IO.Compression.Deflate;
+using SabreTools.Models.GZIP;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    /// <summary>
-    /// This is a shell wrapper; one that does not contain
-    /// any actual parsing. It is used as a placeholder for
-    /// types that typically do not have models.
-    /// </summary>
-    public class GZip : WrapperBase, IExtractable
+    public class GZip : WrapperBase<Archive>, IExtractable
     {
         #region Descriptive Properties
 
@@ -22,15 +18,15 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public GZip(byte[]? data, int offset)
-            : base(data, offset)
+        public GZip(Archive? model, byte[]? data, int offset)
+            : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public GZip(Stream? data)
-            : base(data)
+        public GZip(Archive? model, Stream? data)
+            : base(model, data)
         {
             // All logic is handled by the base class
         }
@@ -67,7 +63,18 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new GZip(data);
+            try
+            {
+                var model = Deserializers.GZip.DeserializeStream(data);
+                if (model == null)
+                    return null;
+
+                return new GZip(model, data);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         #endregion

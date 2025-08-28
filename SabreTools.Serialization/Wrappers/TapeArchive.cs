@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Archives;
@@ -7,12 +8,7 @@ using SharpCompress.Archives.Tar;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    /// <summary>
-    /// This is a shell wrapper; one that does not contain
-    /// any actual parsing. It is used as a placeholder for
-    /// types that typically do not have models.
-    /// </summary>
-    public class TapeArchive : WrapperBase, IExtractable
+    public class TapeArchive : WrapperBase<Archive>, IExtractable
     {
         #region Descriptive Properties
 
@@ -23,16 +19,16 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Constructors
 
-        //// <inheritdoc/>
-        public TapeArchive(byte[]? data, int offset)
-            : base(data, offset)
+        /// <inheritdoc/>
+        public TapeArchive(Archive? model, byte[]? data, int offset)
+            : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public TapeArchive(Stream? data)
-            : base(data)
+        public TapeArchive(Archive? model, Stream? data)
+            : base(model, data)
         {
             // All logic is handled by the base class
         }
@@ -69,7 +65,18 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new TapeArchive(data);
+            try
+            {
+                var model = Deserializers.TapeArchive.DeserializeStream(data);
+                if (model == null)
+                    return null;
+
+                return new TapeArchive(model, data);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         #endregion
