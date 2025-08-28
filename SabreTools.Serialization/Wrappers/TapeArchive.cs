@@ -3,10 +3,6 @@ using System.IO;
 using System.Text;
 using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
-#if NET462_OR_GREATER || NETCOREAPP
-using SharpCompress.Archives;
-using SharpCompress.Archives.Tar;
-#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -104,70 +100,6 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
-        {
-            if (_dataSource == null || !_dataSource.CanRead)
-                return false;
-
-#if NET462_OR_GREATER || NETCOREAPP
-            try
-            {
-                var tarFile = TarArchive.Open(_dataSource);
-
-                // Try to read the file path if no entries are found
-                if (tarFile.Entries.Count == 0 && !string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
-                    tarFile = TarArchive.Open(Filename!);
-
-                foreach (var entry in tarFile.Entries)
-                {
-                    try
-                    {
-                        // If the entry is a directory
-                        if (entry.IsDirectory)
-                            continue;
-
-                        // If the entry has an invalid key
-                        if (entry.Key == null)
-                            continue;
-
-                        // If we have a partial entry due to an incomplete multi-part archive, skip it
-                        if (!entry.IsComplete)
-                            continue;
-
-                        // Ensure directory separators are consistent
-                        string filename = entry.Key;
-                        if (Path.DirectorySeparatorChar == '\\')
-                            filename = filename.Replace('/', '\\');
-                        else if (Path.DirectorySeparatorChar == '/')
-                            filename = filename.Replace('\\', '/');
-
-                        // Ensure the full output directory exists
-                        filename = Path.Combine(outputDirectory, filename);
-                        var directoryName = Path.GetDirectoryName(filename);
-                        if (directoryName != null && !Directory.Exists(directoryName))
-                            Directory.CreateDirectory(directoryName);
-
-                        entry.WriteToFile(filename);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (includeDebug) Console.Error.WriteLine(ex);
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-#else
-            return false;
-#endif
-        }
-
-        /// <inheritdoc cref="Extract(string, bool)"/>
-        public bool ExtractExperimental(string outputDirectory, bool includeDebug)
         {
             // Ensure there are entries to extract
             if (Entries == null || Entries.Length == 0)
