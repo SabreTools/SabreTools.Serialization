@@ -44,6 +44,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
+        /// <remarks>This should only be used for WinZipSFX</remarks>
+        public PKZIP(byte[]? data, int offset)
+            : base(new Archive(), data, offset)
+        {
+            // All logic is handled by the base class
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for WinZipSFX</remarks>
+        public PKZIP(Stream? data)
+            : base(new Archive(), data)
+        {
+            // All logic is handled by the base class
+        }
+
+        /// <inheritdoc/>
         public PKZIP(Archive? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
