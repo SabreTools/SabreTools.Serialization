@@ -207,7 +207,10 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // Ensure directory separators are consistent
-                string filename = Header.OriginalFileName ?? Filename ?? $"extracted_file";
+                string filename = Header.OriginalFileName
+                    ?? (Filename != null ? Path.GetFileName(Filename).Replace(".gz", string.Empty) : null)
+                    ?? $"extracted_file";
+
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')
