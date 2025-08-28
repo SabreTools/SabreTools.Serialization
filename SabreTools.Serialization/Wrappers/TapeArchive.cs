@@ -112,7 +112,10 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     var entry = Entries[i];
                     if (entry.Header == null)
+                    {
+                        if (includeDebug) Console.Error.WriteLine($"Invalid entry {i} found! Skipping...");
                         continue;
+                    }
 
                     // Handle special entries
                     var header = entry.Header;
@@ -126,6 +129,7 @@ namespace SabreTools.Serialization.Wrappers
                         case TypeFlag.FIFOTYPE:
                         case TypeFlag.XHDTYPE:
                         case TypeFlag.XGLTYPE:
+                            if (includeDebug) Console.WriteLine($"Unsupported entry type: {header.TypeFlag}");
                             continue;
 
                         // Skipped vendor types
@@ -155,13 +159,17 @@ namespace SabreTools.Serialization.Wrappers
                         case TypeFlag.VendorSpecificX:
                         case TypeFlag.VendorSpecificY:
                         case TypeFlag.VendorSpecificZ:
+                            if (includeDebug) Console.WriteLine($"Unsupported vendor entry type: {header.TypeFlag}");
                             continue;
 
                         // Directories
                         case TypeFlag.DIRTYPE:
                             string? entryDirectory = header.FileName?.TrimEnd('\0');
                             if (entryDirectory == null)
+                            {
+                                if (includeDebug) Console.Error.WriteLine($"Entry {i} reported as directory, but no path found! Skipping...");
                                 continue;
+                            }
 
                             // Ensure directory separators are consistent
                             entryDirectory = Path.Combine(outputDirectory, entryDirectory);
@@ -177,12 +185,18 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Ensure there are blocks to extract
                     if (entry.Blocks == null)
+                    {
+                        if (includeDebug) Console.WriteLine($"Entry {i} had no block data");
                         continue;
+                    }
 
                     // Get the file size
                     string sizeOctalString = Encoding.ASCII.GetString(header.Size!).TrimEnd('\0');
                     if (sizeOctalString.Length == 0)
+                    {
+                        if (includeDebug) Console.WriteLine($"Entry {i} has an invalid size, skipping...");
                         continue;
+                    }
 
                     int entrySize = Convert.ToInt32(sizeOctalString, 8);
 
@@ -196,12 +210,18 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         // Exit early if block number is invalid
                         if (blockNumber >= entry.Blocks.Count)
+                        {
+                            if (includeDebug) Console.Error.WriteLine($"Invalid block number {i + 1} of {entry.Blocks.Count}, file may be incomplete!");
                             break;
+                        }
 
                         // Exit early if the block has no data
                         var block = entry.Blocks[blockNumber++];
                         if (block.Data == null || block.Data.Length != 512)
+                        {
+                            if (includeDebug) Console.Error.WriteLine($"Invalid data for block number {i + 1}, file may be incomplete!");
                             break;
+                        }
 
                         int nextBytes = Math.Min(512, entrySize);
                         entrySize -= nextBytes;
