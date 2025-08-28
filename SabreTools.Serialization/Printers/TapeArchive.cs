@@ -38,13 +38,10 @@ namespace SabreTools.Serialization.Printers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Entry {i}:");
-                builder.AppendLine();
 
                 Print(builder, entry.Header);
                 Print(builder, entry.Blocks);
             }
-
-            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, Header? header)
@@ -99,6 +96,8 @@ namespace SabreTools.Serialization.Printers
                 else
                     builder.AppendLine(block.Data.Length, $"    Block {i} Length");
             }
+
+            builder.AppendLine();
         }
     }
 }
