@@ -618,7 +618,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        private static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[] data)
+        public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[] data)
         {
             List<ExtensibleDataField> fields = [];
 
@@ -638,27 +638,27 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.OS2 => ParseOS2ExtraField(data, ref offset),
                     HeaderID.NTFS => ParseNTFSExtraField(data, ref offset),
                     HeaderID.OpenVMS => ParseOpenVMSExtraField(data, ref offset),
-                    HeaderID.UNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.UNIX => ParseUnixExtraField(data, ref offset),
                     HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PatchDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PKCSStore => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.X509IndividualFile => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.X509CentralDirectory => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.PatchDescriptor => ParsePatchDescriptorExtraField(data, ref offset),
+                    HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
+                    HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
+                    HeaderID.X509CentralDirectory => ParseX509CentralDirectory(data, ref offset),
                     HeaderID.StrongEncryptionHeader => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.RecordManagementControls => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PKCSCertificateList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
+                    HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
                     HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PolicyDecryptionKey => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptKeyProvider => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.SmartcryptPolicyKeyData => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.IBMS390AttributesUncompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
                     HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh135Plus => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh135PlusAlt => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.ZipItMacintosh => ParseZipItMacintoshExtraField(data, ref offset),
+                    HeaderID.ZipItMacintosh135Plus => ParseZipItMacintoshShortFileExtraField(data, ref offset),
+                    HeaderID.ZipItMacintosh135PlusAlt => ParseZipItMacintoshShortDirectoryExtraField(data, ref offset),
                     HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -674,10 +674,10 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUnicodeComment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPUnicodeComment => ParseInfoZIPUnicodeCommentExtraField(data, ref offset),
                     HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.THEOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUnicodePath => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPUnicodePath => ParseInfoZIPUnicodePathExtraField(data, ref offset),
                     HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -706,7 +706,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        private static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[] data)
+        public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[] data)
         {
             List<ExtensibleDataField> fields = [];
 
@@ -726,27 +726,27 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.OS2 => ParseOS2ExtraField(data, ref offset),
                     HeaderID.NTFS => ParseNTFSExtraField(data, ref offset),
                     HeaderID.OpenVMS => ParseOpenVMSExtraField(data, ref offset),
-                    HeaderID.UNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.UNIX => ParseUnixExtraField(data, ref offset),
                     HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PatchDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PKCSStore => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.X509IndividualFile => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.X509CentralDirectory => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.PatchDescriptor => ParsePatchDescriptorExtraField(data, ref offset),
+                    HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
+                    HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
+                    HeaderID.X509CentralDirectory => ParseX509CentralDirectory(data, ref offset),
                     HeaderID.StrongEncryptionHeader => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.RecordManagementControls => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PKCSCertificateList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
+                    HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
                     HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PolicyDecryptionKey => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptKeyProvider => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.SmartcryptPolicyKeyData => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.IBMS390AttributesUncompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
                     HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh135Plus => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ZipItMacintosh135PlusAlt => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.ZipItMacintosh => ParseZipItMacintoshExtraField(data, ref offset),
+                    HeaderID.ZipItMacintosh135Plus => ParseZipItMacintoshShortFileExtraField(data, ref offset),
+                    HeaderID.ZipItMacintosh135PlusAlt => ParseZipItMacintoshShortDirectoryExtraField(data, ref offset),
                     HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -762,10 +762,10 @@ namespace SabreTools.Serialization.Deserializers
                     HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUnicodeComment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPUnicodeComment => ParseInfoZIPUnicodeCommentExtraField(data, ref offset),
                     HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.THEOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUnicodePath => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPUnicodePath => ParseInfoZIPUnicodePathExtraField(data, ref offset),
                     HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
                     HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
@@ -805,11 +805,11 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a ZIP64 extended information extra field
+        /// Parse a Stream into a Zip64ExtendedInformationExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>Filled ZIP64 extended information extra field on success, null on error</returns>
+        /// <returns>Filled Zip64ExtendedInformationExtraField on success, null on error</returns>
         private static Zip64ExtendedInformationExtraField? ParseZip64ExtendedInformationExtraField(byte[] data, ref int offset, CentralDirectoryFileHeader header)
         {
             var obj = new Zip64ExtendedInformationExtraField();
@@ -849,11 +849,11 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a ZIP64 extended information extra field
+        /// Parse a Stream into a Zip64ExtendedInformationExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>Filled ZIP64 extended information extra field on success, null on error</returns>
+        /// <returns>Filled Zip64ExtendedInformationExtraField on success, null on error</returns>
         private static Zip64ExtendedInformationExtraField? ParseZip64ExtendedInformationExtraField(byte[] data, ref int offset, LocalFileHeader header)
         {
             var obj = new Zip64ExtendedInformationExtraField();
@@ -891,11 +891,11 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an OS/2 extra field
+        /// Parse a Stream into an OS2ExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>Filled OS/2 extra field on success, null on error</returns>
+        /// <returns>Filled OS2ExtraField on success, null on error</returns>
         private static OS2ExtraField? ParseOS2ExtraField(byte[] data, ref int offset)
         {
             var obj = new OS2ExtraField();
@@ -914,11 +914,11 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a NTFS extra field
+        /// Parse a Stream into a NTFSExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>Filled NTFS field on success, null on error</returns>
+        /// <returns>Filled NTFSExtraField on success, null on error</returns>
         private static NTFSExtraField? ParseNTFSExtraField(byte[] data, ref int offset)
         {
             var obj = new NTFSExtraField();
@@ -956,11 +956,11 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an OpenVMS extra field
+        /// Parse a Stream into an OpenVMSExtraField
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <returns>Filled OpenVMS extra field on success, null on error</returns>
+        /// <returns>Filled OpenVMSExtraField on success, null on error</returns>
         private static OpenVMSExtraField? ParseOpenVMSExtraField(byte[] data, ref int offset)
         {
             var obj = new OpenVMSExtraField();
@@ -993,6 +993,344 @@ namespace SabreTools.Serialization.Deserializers
             obj.Tags = [.. tags];
             obj.Size = [.. sizes];
             obj.Vars = null; // TODO: Fix once this becomes a proper array of arrays
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a UnixExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled UnixExtraField on success, null on error</returns>
+        private static UnixExtraField? ParseUnixExtraField(byte[] data, ref int offset)
+        {
+            var obj = new UnixExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.UNIX)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Atime = data.ReadUInt32LittleEndian(ref offset);
+            obj.Mtime = data.ReadUInt32LittleEndian(ref offset);
+            obj.Uid = data.ReadUInt16LittleEndian(ref offset);
+            obj.Gid = data.ReadUInt16LittleEndian(ref offset);
+            obj.Var = data.ReadBytes(ref offset, obj.DataSize - 12);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PatchDescriptorExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled PatchDescriptorExtraField on success, null on error</returns>
+        private static PatchDescriptorExtraField? ParsePatchDescriptorExtraField(byte[] data, ref int offset)
+        {
+            var obj = new PatchDescriptorExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.PatchDescriptor)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.Flags = (ActionsReactions)data.ReadUInt32LittleEndian(ref offset);
+            obj.OldSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.OldCRC = data.ReadUInt32LittleEndian(ref offset);
+            obj.NewSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.NewCRC = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PKCS7Store
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled PKCS7Store on success, null on error</returns>
+        private static PKCS7Store? ParsePKCS7Store(byte[] data, ref int offset)
+        {
+            var obj = new PKCS7Store();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.PKCSStore)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a X509IndividualFile
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled X509IndividualFile on success, null on error</returns>
+        private static X509IndividualFile? ParseX509IndividualFile(byte[] data, ref int offset)
+        {
+            var obj = new X509IndividualFile();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.X509IndividualFile)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a X509CentralDirectory
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled X509CentralDirectory on success, null on error</returns>
+        private static X509CentralDirectory? ParseX509CentralDirectory(byte[] data, ref int offset)
+        {
+            var obj = new X509CentralDirectory();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.X509CentralDirectory)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an RecordManagementControls
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled RecordManagementControls on success, null on error</returns>
+        private static RecordManagementControls? ParseRecordManagementControls(byte[] data, ref int offset)
+        {
+            var obj = new RecordManagementControls();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.RecordManagementControls)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+
+            List<ushort> tags = [];
+            List<ushort> sizes = [];
+            List<byte[]> datas = [];
+
+            int bytesRemaining = obj.DataSize - 4;
+            while (bytesRemaining > 0)
+            {
+                ushort tag = data.ReadUInt16LittleEndian(ref offset);
+                ushort size = data.ReadUInt16LittleEndian(ref offset);
+                byte[] datum = data.ReadBytes(ref offset, size);
+
+                tags.Add(tag);
+                sizes.Add(size);
+                datas.Add(datum);
+
+                bytesRemaining -= 4 + size;
+            }
+
+            obj.Tags = [.. tags];
+            obj.Size = [.. sizes];
+            obj.Vars = null; // TODO: Fix once this becomes a proper array of arrays
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an PKCS7EncryptionRecipientCertificateList
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled PKCS7EncryptionRecipientCertificateList on success, null on error</returns>
+        private static PKCS7EncryptionRecipientCertificateList? ParsePKCS7EncryptionRecipientCertificateList(byte[] data, ref int offset)
+        {
+            var obj = new PKCS7EncryptionRecipientCertificateList();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.PKCSCertificateList)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.CStore = data.ReadBytes(ref offset, obj.DataSize - 2);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a PolicyDecryptionKeyRecordExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled PolicyDecryptionKeyRecordExtraField on success, null on error</returns>
+        private static PolicyDecryptionKeyRecordExtraField? ParsePolicyDecryptionKeyRecordExtraField(byte[] data, ref int offset)
+        {
+            var obj = new PolicyDecryptionKeyRecordExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.PolicyDecryptionKey)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.TData = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a AS400ExtraFieldAttribute
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled AS400ExtraFieldAttribute on success, null on error</returns>
+        private static AS400ExtraFieldAttribute? ParseAS400ExtraFieldAttribute(byte[] data, ref int offset)
+        {
+            var obj = new AS400ExtraFieldAttribute();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.IBMS390AttributesUncompressed)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.FieldLength = data.ReadUInt16BigEndian(ref offset);
+            obj.FieldCode = (AS400ExtraFieldAttributeFieldCode)data.ReadUInt16LittleEndian(ref offset);
+            obj.Data = data.ReadBytes(ref offset, obj.DataSize - 4);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ZipItMacintoshExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled ZipItMacintoshExtraField on success, null on error</returns>
+        private static ZipItMacintoshExtraField? ParseZipItMacintoshExtraField(byte[] data, ref int offset)
+        {
+            var obj = new ZipItMacintoshExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.ZipItMacintosh)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.ExtraFieldSignature = data.ReadUInt32LittleEndian(ref offset);
+            obj.FnLen = data.ReadByteValue(ref offset);
+            byte[] filenameBytes = data.ReadBytes(ref offset, obj.FnLen);
+            obj.FileName = Encoding.ASCII.GetString(filenameBytes);
+            obj.FileType = data.ReadBytes(ref offset, 4);
+            obj.Creator = data.ReadBytes(ref offset, 4);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ZipItMacintoshShortFileExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled ZipItMacintoshShortFileExtraField on success, null on error</returns>
+        private static ZipItMacintoshShortFileExtraField? ParseZipItMacintoshShortFileExtraField(byte[] data, ref int offset)
+        {
+            var obj = new ZipItMacintoshShortFileExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.ZipItMacintosh135Plus)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.ExtraFieldSignature = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileType = data.ReadBytes(ref offset, 4);
+            obj.Creator = data.ReadBytes(ref offset, 4);
+
+            if (obj.DataSize > 12)
+                obj.FdFlags = data.ReadUInt16LittleEndian(ref offset);
+
+            if (obj.DataSize > 14)
+                obj.Reserved = data.ReadUInt16LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ZipItMacintoshShortDirectoryExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled ZipItMacintoshShortDirectoryExtraField on success, null on error</returns>
+        private static ZipItMacintoshShortDirectoryExtraField? ParseZipItMacintoshShortDirectoryExtraField(byte[] data, ref int offset)
+        {
+            var obj = new ZipItMacintoshShortDirectoryExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.ZipItMacintosh135PlusAlt)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.ExtraFieldSignature = data.ReadUInt32LittleEndian(ref offset);
+
+            if (obj.DataSize > 4)
+                obj.FrFlags = data.ReadUInt16LittleEndian(ref offset);
+
+            if (obj.DataSize > 6)
+                obj.View = (ZipItInternalSettings)data.ReadUInt16LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a InfoZIPUnicodeCommentExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled InfoZIPUnicodeCommentExtraField on success, null on error</returns>
+        private static InfoZIPUnicodeCommentExtraField? ParseInfoZIPUnicodeCommentExtraField(byte[] data, ref int offset)
+        {
+            var obj = new InfoZIPUnicodeCommentExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.InfoZIPUnicodeComment)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadByteValue(ref offset);
+            obj.ComCRC32 = data.ReadUInt32LittleEndian(ref offset);
+            byte[] unicodeBytes = data.ReadBytes(ref offset, obj.DataSize - 5);
+            obj.UnicodeCom = Encoding.UTF8.GetString(unicodeBytes);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a InfoZIPUnicodePathExtraField
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled InfoZIPUnicodePathExtraField on success, null on error</returns>
+        private static InfoZIPUnicodePathExtraField? ParseInfoZIPUnicodePathExtraField(byte[] data, ref int offset)
+        {
+            var obj = new InfoZIPUnicodePathExtraField();
+
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            if (obj.HeaderID != HeaderID.InfoZIPUnicodePath)
+                return null;
+
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadByteValue(ref offset);
+            obj.NameCRC32 = data.ReadUInt32LittleEndian(ref offset);
+            byte[] unicodeBytes = data.ReadBytes(ref offset, obj.DataSize - 5);
+            obj.UnicodeName = Encoding.UTF8.GetString(unicodeBytes);
 
             return obj;
         }
