@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -65,19 +66,38 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.Header = header;
 
+            // TODO: Replace this with AlignToBoundary when IO is updated
+            // Align to the block size
+            while (data.Position % 512 != 0 && data.Position < data.Length)
+            {
+                _ = data.ReadByteValue();
+            }
+
             #endregion
 
             #region Blocks
 
-            List<Block> blocks = [];
+            // Exit if the size is invalid
+            string sizeOctalString = Encoding.ASCII.GetString(header.Size!).TrimEnd('\0');
+            if (sizeOctalString.Length == 0)
+                return obj;
 
-            // TODO: Implement
-            // Each block is 512 bytes of data. The size in the entry
-            // header is in octal string representation. To the best
-            // of my knowledge, the number of blocks is just the
-            // ceiling(size / 512). That is going to be how this is
-            // implemented.
+            // Get the block count from the size
+            int octalSize = Convert.ToInt32(sizeOctalString, 8);
+            int blockCount = (int)Math.Ceiling((decimal)octalSize / 512);
 
+            // Read all blocks sequentially
+            var blocks = new Block[blockCount];
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                var block = ParseBlock(data);
+                if (block == null)
+                    break;
+
+                blocks[i] = block;
+            }
+
+            // TODO: Make this a direct assignment when Models is updated
             obj.Blocks = [.. blocks];
 
             #endregion
@@ -110,14 +130,14 @@ namespace SabreTools.Serialization.Deserializers
             if (data.Position >= data.Length)
                 return obj;
 
-            // Peek at the next 6 bytes
-            byte[] temp = data.ReadBytes(6);
+            // Peek at the next 5 bytes
+            byte[] temp = data.ReadBytes(5);
             string tempString = Encoding.ASCII.GetString(temp);
-            data.Seek(-6, SeekOrigin.Current);
-            if (tempString != "ustar\0")
+            data.Seek(-5, SeekOrigin.Current);
+            if (tempString != "ustar")
                 return obj;
 
-            byte[] magicBytes = data.ReadBytes(6);
+            byte[] magicBytes = data.ReadBytes(5);
             obj.Magic = Encoding.ASCII.GetString(magicBytes);
             byte[] versionBytes = data.ReadBytes(3);
             obj.Version = Encoding.ASCII.GetString(versionBytes);
@@ -131,6 +151,25 @@ namespace SabreTools.Serialization.Deserializers
             obj.DevMinor = Encoding.ASCII.GetString(devMinorBytes);
             byte[] prefixBytes = data.ReadBytes(155);
             obj.Prefix = Encoding.ASCII.GetString(prefixBytes);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Block
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Block on success, null on error</returns>
+        public static Block? ParseBlock(Stream data)
+        {
+            // Handle incomplete blocks
+            if (data.Position + 512 >= data.Length)
+                return null;
+
+            var obj = new Block();
+
+            // TODO: Assign this to obj.Data when Models is updated
+            _ = data.ReadBytes(512);
 
             return obj;
         }

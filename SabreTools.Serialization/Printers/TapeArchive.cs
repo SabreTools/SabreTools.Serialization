@@ -1,0 +1,72 @@
+using System.Collections.Generic;
+using System.Text;
+using SabreTools.Models.TAR;
+using SabreTools.Serialization.Interfaces;
+
+namespace SabreTools.Serialization.Printers
+{
+    public class TapeArchive : IPrinter<Archive>
+    {
+        /// <inheritdoc/>
+        public void PrintInformation(StringBuilder builder, Archive model)
+            => Print(builder, model);
+
+        public static void Print(StringBuilder builder, Archive file)
+        {
+            builder.AppendLine("Tape Archive Information:");
+            builder.AppendLine("-------------------------");
+            builder.AppendLine();
+
+            Print(builder, file.Entries);
+        }
+
+        // TODO: Fix the entry type when Models is updated
+        //private static void Print(StringBuilder builder, Entry[]? entries)
+        private static void Print(StringBuilder builder, List<Entry>? entries)
+        {
+            builder.AppendLine("  Entries Information:");
+            builder.AppendLine("  -------------------------");
+            if (entries == null || entries.Count == 0)
+            {
+                builder.AppendLine("  No entries");
+                builder.AppendLine();
+                return;
+            }
+
+            for (int i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+
+                builder.AppendLine($"  Entry {i}");
+
+                var header = entry.Header;
+                if (header == null)
+                {
+                    builder.AppendLine("    Header: [NULL]");
+                }
+                else
+                {
+                    builder.AppendLine("    Header:");
+                    builder.AppendLine(header.FileName?.TrimEnd('\0'), "      File name");
+                    builder.AppendLine(header.Mode, "      Mode");
+                    builder.AppendLine(header.UID, "      UID");
+                    builder.AppendLine(header.GID, "      GID");
+                    builder.AppendLine(header.Size, "      Size");
+                    builder.AppendLine(header.ModifiedTime, "      Modified time");
+                    builder.AppendLine(header.Checksum, "      Checksum");
+                    builder.AppendLine($"      Type flag: {header.TypeFlag} (0x{(byte)header.TypeFlag:X2})");
+                    builder.AppendLine(header.LinkName?.TrimEnd('\0'), "      Link name");
+                    builder.AppendLine(header.Magic, "      Magic");
+                    builder.AppendLine(header.Version?.TrimEnd('\0'), "      Version");
+                    builder.AppendLine(header.UserName?.TrimEnd('\0'), "      User name");
+                    builder.AppendLine(header.GroupName?.TrimEnd('\0'), "      Group name");
+                    builder.AppendLine(header.DevMajor?.TrimEnd('\0'), "      Device major");
+                    builder.AppendLine(header.DevMinor?.TrimEnd('\0'), "      Device minor");
+                    builder.AppendLine(header.Prefix?.TrimEnd('\0'), "      Prefix");
+                }
+            }
+
+            builder.AppendLine();
+        }
+    }
+}

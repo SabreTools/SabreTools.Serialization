@@ -42,6 +42,7 @@ namespace SabreTools.Serialization
                 Wrapper.CHD item => item.PrettyPrint(),
                 Wrapper.CIA item => item.PrettyPrint(),
                 Wrapper.GCF item => item.PrettyPrint(),
+                Wrapper.GZip item => item.PrettyPrint(),
                 Wrapper.InstallShieldArchiveV3 item => item.PrettyPrint(),
                 Wrapper.InstallShieldCabinet item => item.PrettyPrint(),
                 Wrapper.IRD item => item.PrettyPrint(),
@@ -66,6 +67,7 @@ namespace SabreTools.Serialization
                 Wrapper.Quantum item => item.PrettyPrint(),
                 Wrapper.SecuROMDFA item => item.PrettyPrint(),
                 Wrapper.SGA item => item.PrettyPrint(),
+                Wrapper.TapeArchive item => item.PrettyPrint(),
                 Wrapper.VBSP item => item.PrettyPrint(),
                 Wrapper.VPK item => item.PrettyPrint(),
                 Wrapper.WAD3 item => item.PrettyPrint(),
@@ -92,6 +94,7 @@ namespace SabreTools.Serialization
                 Wrapper.CHD item => item.ExportJSON(),
                 Wrapper.CIA item => item.ExportJSON(),
                 Wrapper.GCF item => item.ExportJSON(),
+                Wrapper.GZip item => item.ExportJSON(),
                 Wrapper.InstallShieldArchiveV3 item => item.ExportJSON(),
                 Wrapper.InstallShieldCabinet item => item.ExportJSON(),
                 Wrapper.IRD item => item.ExportJSON(),
@@ -116,6 +119,7 @@ namespace SabreTools.Serialization
                 Wrapper.Quantum item => item.ExportJSON(),
                 Wrapper.SecuROMDFA item => item.ExportJSON(),
                 Wrapper.SGA item => item.ExportJSON(),
+                Wrapper.TapeArchive item => item.ExportJSON(),
                 Wrapper.VBSP item => item.ExportJSON(),
                 Wrapper.VPK item => item.ExportJSON(),
                 Wrapper.WAD3 item => item.ExportJSON(),
@@ -206,6 +210,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             GCF.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.GZip item)
+        {
+            var builder = new StringBuilder();
+            GZip.Print(builder, item.Model);
             return builder;
         }
 
@@ -446,6 +460,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             SGA.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.TapeArchive item)
+        {
+            var builder = new StringBuilder();
+            TapeArchive.Print(builder, item.Model);
             return builder;
         }
 

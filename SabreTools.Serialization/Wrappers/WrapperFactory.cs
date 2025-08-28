@@ -666,7 +666,7 @@ namespace SabreTools.Serialization.Wrappers
                 return WrapperType.TapeArchive;
 
             if (extension.Equals("tar", StringComparison.OrdinalIgnoreCase))
-                return WrapperType.SevenZip;
+                return WrapperType.TapeArchive;
 
             #endregion
 
