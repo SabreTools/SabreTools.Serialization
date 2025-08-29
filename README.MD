@@ -6,6 +6,16 @@ This library comprises of serializers that both read and write from files and st
 
 Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTools.Serialization).
 
+The following non-project libraries (or ports thereof) are used for file handling:
+
+- [SharpCompress](https://github.com/adamhathcock/sharpcompress) - Common archive format extraction
+- [StormLibSharp](https://github.com/robpaveza/stormlibsharp) - MoPaQ extraction [Unused in .NET Framework 2.0/3.5/4.0, non-Windows, and non-x86 builds due to Windows-specific libraries]
+
+The following projects have influenced this library:
+
+- [libmspack](https://github.com/kyz/libmspack) - Documentation around the MS-CAB format and associated compression methods.
+- [Unshield](https://github.com/twogood/unshield/) - InstallShield CAB extraction tool that influenced internal handling
+
 ## Releases
 
 For the most recent stable build, download the latest release here: [Releases Page](https://github.com/SabreTools/SabreTools.Serialization/releases)
