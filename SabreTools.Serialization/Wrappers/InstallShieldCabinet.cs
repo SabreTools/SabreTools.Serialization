@@ -464,15 +464,15 @@ namespace SabreTools.Serialization.Wrappers
             FileStream output = File.OpenWrite(filename);
             var md5 = new HashWrapper(HashType.MD5);
 
-            ulong bytesLeft = GetReadableBytes(fileDescriptor);
+            long bytesLeft = (long)GetReadableBytes(fileDescriptor);
             byte[] inputBuffer;
             byte[] outputBuffer = new byte[BUFFER_SIZE];
-            ulong totalWritten = 0;
+            long totalWritten = 0;
 
             // Read while there are bytes remaining
             while (bytesLeft > 0)
             {
-                ulong bytesToWrite = BUFFER_SIZE;
+                long bytesToWrite = BUFFER_SIZE;
                 int result;
 
                 // Handle compressed files
@@ -550,7 +550,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Validate the number of bytes written
-            if (fileDescriptor.ExpandedSize != totalWritten)
+            if ((long)fileDescriptor.ExpandedSize != totalWritten)
             {
                 Console.Error.WriteLine($"Expanded size expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
                 reader.Dispose();
@@ -632,7 +632,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private unsafe static int Uncompress(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
         {
             fixed (byte* sourcePtr = source)
             fixed (byte* destPtr = dest)
@@ -666,7 +666,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination (old version)
         /// </summary>
-        private unsafe static int UncompressOld(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
         {
             fixed (byte* sourcePtr = source)
             fixed (byte* destPtr = dest)
