@@ -1347,7 +1347,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Write the resource data to a temp file
                         using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        tempStream?.Write(ba, 0, ba.Length);
+                        tempStream?.Write(ba, resourceOffset, ba.Length - resourceOffset);
                     }
                     catch (Exception ex)
                     {
