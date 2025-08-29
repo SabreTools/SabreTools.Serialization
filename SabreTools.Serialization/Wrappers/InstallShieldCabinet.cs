@@ -492,17 +492,8 @@ namespace SabreTools.Serialization.Wrappers
                         return false;
                     }
 
-                    // Validate the number of bytes to read
-                    ushort bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
-                    if (bytesToRead == 0)
-                    {
-                        Console.Error.WriteLine($"Failed to read file {index} ({GetFileName(index)}) because {nameof(bytesToRead)} can't be zero");
-                        reader.Dispose();
-                        output?.Close();
-                        return false;
-                    }
-
                     // Attempt to read the specified number of bytes
+                    ushort bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
                     inputBuffer = new byte[BUFFER_SIZE + 1];
                     if (!reader.Read(inputBuffer, 0, bytesToRead))
                     {
