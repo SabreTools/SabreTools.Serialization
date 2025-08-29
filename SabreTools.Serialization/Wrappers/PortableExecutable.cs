@@ -245,11 +245,7 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         // Get the real section size
-                        int sectionSize;
-                        if (section.SizeOfRawData < section.VirtualSize)
-                            sectionSize = (int)section.VirtualSize;
-                        else
-                            sectionSize = (int)section.SizeOfRawData;
+                        int sectionSize = (int)section.SizeOfRawData;
 
                         // Compare and set the end of section data
                         if (sectionAddress + sectionSize > endOfSectionData)
@@ -316,11 +312,7 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         // Get the real section size
-                        int sectionSize;
-                        if (section.SizeOfRawData < section.VirtualSize)
-                            sectionSize = (int)section.VirtualSize;
-                        else
-                            sectionSize = (int)section.SizeOfRawData;
+                        int sectionSize = (int)section.SizeOfRawData;
 
                         // Compare and set the end of section data
                         if (sectionAddress + sectionSize > endOfSectionData)
