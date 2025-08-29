@@ -16,20 +16,14 @@ namespace UnshieldSharpInternal
         public Header HeaderList { get; private set; }
 
         /// <summary>
-        /// Base filename path for related CAB files
-        /// </summary>
-        public string FilenamePattern { get; private set; }
-
-        /// <summary>
         /// Default buffer size
         /// </summary>
         private const int BUFFER_SIZE = 64 * 1024;
 
         #region Constructors
 
-        public Extractor(string filenamePattern, Header headerList)
+        public Extractor(Header headerList)
         {
-            FilenamePattern = filenamePattern;
             HeaderList = headerList;
         }
 

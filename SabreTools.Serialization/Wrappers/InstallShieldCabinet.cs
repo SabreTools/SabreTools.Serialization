@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Base filename path for related CAB files
         /// </summary>
-        private string? _filenamePattern;
+        internal string? FilenamePattern { get; set; }
 
         #endregion
 
@@ -181,25 +181,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Cabinet Set
 
         /// <summary>
-        /// Create the generic filename pattern to look for from the input filename
-        /// </summary>
-        /// <returns>String representing the filename pattern for a cabinet set, null on error</returns>
-        public static string? CreateFilenamePattern(string filename)
-        {
-            string? pattern = null;
-            if (string.IsNullOrEmpty(filename))
-                return pattern;
-
-            string? directory = Path.GetDirectoryName(Path.GetFullPath(filename));
-            if (directory != null)
-                pattern = Path.Combine(directory, Path.GetFileNameWithoutExtension(filename));
-            else
-                pattern = Path.GetFileNameWithoutExtension(filename);
-
-            return new Regex(@"\d+$").Replace(pattern, string.Empty);
-        }
-
-        /// <summary>
         /// Open a cabinet set for reading, if possible
         /// </summary>
         /// <param name="pattern">Filename pattern for matching cabinet files</param>
@@ -244,6 +225,10 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
+            // Set the pattern, if possible
+            if (set != null)
+                set.FilenamePattern = pattern;
+
             return set;
         }
 
@@ -253,7 +238,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="volumeId">Volume ID, 1-indexed</param>
         /// <returns>Wrapper representing the volume on success, null otherwise</returns>
         public InstallShieldCabinet? OpenVolume(ushort volumeId)
-            => OpenVolume(_filenamePattern, volumeId);
+            => OpenVolume(FilenamePattern, volumeId);
 
         /// <summary>
         /// Open the numbered cabinet set volume
@@ -295,7 +280,26 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
         /// <returns>A Stream representing the cabinet part, null on error</returns>
         public Stream? OpenFileForReading(int index, string suffix)
-            => OpenFileForReading(_filenamePattern, index, suffix);
+            => OpenFileForReading(FilenamePattern, index, suffix);
+
+        /// <summary>
+        /// Create the generic filename pattern to look for from the input filename
+        /// </summary>
+        /// <returns>String representing the filename pattern for a cabinet set, null on error</returns>
+        private static string? CreateFilenamePattern(string filename)
+        {
+            string? pattern = null;
+            if (string.IsNullOrEmpty(filename))
+                return pattern;
+
+            string? directory = Path.GetDirectoryName(Path.GetFullPath(filename));
+            if (directory != null)
+                pattern = Path.Combine(directory, Path.GetFileNameWithoutExtension(filename));
+            else
+                pattern = Path.GetFileNameWithoutExtension(filename);
+
+            return new Regex(@"\d+$").Replace(pattern, string.Empty);
+        }
 
         /// <summary>
         /// Open a cabinet file for reading
@@ -304,7 +308,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="index">Cabinet part index to be opened</param>
         /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
         /// <returns>A Stream representing the cabinet part, null on error</returns>
-        public static Stream? OpenFileForReading(string? pattern, int index, string suffix)
+        private static Stream? OpenFileForReading(string? pattern, int index, string suffix)
         {
             // An invalid pattern means no cabinet files
             if (string.IsNullOrEmpty(pattern))
@@ -409,7 +413,7 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cabfile = new UnshieldSharpInternal.Extractor(pattern, cabinet);
+                var cabfile = new UnshieldSharpInternal.Extractor(cabinet);
                 for (int i = 0; i < cabinet.FileCount; i++)
                 {
                     try

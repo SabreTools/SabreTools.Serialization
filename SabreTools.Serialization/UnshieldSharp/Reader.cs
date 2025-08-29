@@ -168,7 +168,7 @@ namespace UnshieldSharpInternal
                 volume = 1;
 
             _volumeFile?.Close();
-            _volumeFile = SabreTools.Serialization.Wrappers.InstallShieldCabinet.OpenFileForReading(_cabinet.FilenamePattern, volume, CABINET_SUFFIX);
+            _volumeFile = _cabinet.HeaderList.OpenFileForReading(volume, CABINET_SUFFIX);
             if (_volumeFile == null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
