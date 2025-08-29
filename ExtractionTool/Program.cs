@@ -97,218 +97,186 @@ namespace ExtractionTool
             Console.WriteLine($"Attempting to extract from '{wrapper?.Description() ?? "UNKNOWN"}'");
             Console.WriteLine();
 
-            // 7-zip
-            if (wrapper is SevenZip sz)
+            switch (wrapper)
             {
+                // 7-zip
+                case SevenZip sz:
 #if NET20 || NET35 || NET40 || NET452
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                sz.Extract(outputDirectory, includeDebug);
+                    sz.Extract(outputDirectory, includeDebug);
 #endif
-            }
+                    break;
 
-            // BFPK archive
-            else if (wrapper is BFPK bfpk)
-            {
-                bfpk.Extract(outputDirectory, includeDebug);
-            }
+                // BFPK archive
+                case BFPK bfpk:
+                    bfpk.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // BSP
-            else if (wrapper is BSP bsp)
-            {
-                bsp.Extract(outputDirectory, includeDebug);
-            }
+                // BSP
+                case BSP bsp:
+                    bsp.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // bzip2
-            else if (wrapper is BZip2 bzip2)
-            {
-                bzip2.Extract(outputDirectory, includeDebug);
-            }
+                // bzip2
+                case BZip2 bzip2:
+                    bzip2.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // CFB
-            else if (wrapper is CFB cfb)
-            {
+                // CFB
+                case CFB cfb:
 #if NET20 || NET35
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                cfb.Extract(outputDirectory, includeDebug);
+                    cfb.Extract(outputDirectory, includeDebug);
 #endif
-            }
+                    break;
 
-            // GCF
-            else if (wrapper is GCF gcf)
-            {
-                gcf.Extract(outputDirectory, includeDebug);
-            }
+                // GCF
+                case GCF gcf:
+                    gcf.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // gzip
-            else if (wrapper is GZip gzip)
-            {
-                gzip.Extract(outputDirectory, includeDebug);
-            }
+                // gzip
+                case GZip gzip:
+                    gzip.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // InstallShield Archive V3 (Z)
-            else if (wrapper is InstallShieldArchiveV3 isv3)
-            {
-                isv3.Extract(outputDirectory, includeDebug);
-            }
+                // InstallShield Archive V3 (Z)
+                case InstallShieldArchiveV3 isv3:
+                    isv3.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // IS-CAB archive
-            else if (wrapper is InstallShieldCabinet)
-            {
-                // TODO: Move this handling to Serialization directly
-                ExtractInstallShieldCabinet(file, outputDirectory, includeDebug);
-            }
+                // IS-CAB archive
+                case InstallShieldCabinet:
+                    // TODO: Move this handling to Serialization directly
+                    ExtractInstallShieldCabinet(file, outputDirectory, includeDebug);
+                    break;
 
-            // LZ-compressed file, KWAJ variant
-            else if (wrapper is LZKWAJ kwaj)
-            {
-                kwaj.Extract(outputDirectory, includeDebug);
-            }
+                // LZ-compressed file, KWAJ variant
+                case LZKWAJ kwaj:
+                    kwaj.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // LZ-compressed file, QBasic variant
-            else if (wrapper is LZQBasic qbasic)
-            {
-                qbasic.Extract(outputDirectory, includeDebug);
-            }
+                // LZ-compressed file, QBasic variant
+                case LZQBasic qbasic:
+                    qbasic.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // LZ-compressed file, SZDD variant
-            else if (wrapper is LZSZDD szdd)
-            {
-                szdd.Extract(outputDirectory, includeDebug);
-            }
+                // LZ-compressed file, SZDD variant
+                case LZSZDD szdd:
+                    szdd.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // Microsoft Cabinet archive
-            else if (wrapper is MicrosoftCabinet mscab)
-            {
-                Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
-                MicrosoftCabinet.ExtractSet(file, outputDirectory, includeDebug);
-            }
+                // Microsoft Cabinet archive
+                case MicrosoftCabinet mscab:
+                    Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
+                    MicrosoftCabinet.ExtractSet(file, outputDirectory, includeDebug);
+                    break;
 
-            // MoPaQ (MPQ) archive -- Reimplement
-            else if (wrapper is MoPaQ mpq)
-            {
+                // MoPaQ (MPQ) archive -- Reimplement
+                case MoPaQ mpq:
 #if NET20 || NET35 || !(WINX86 || WINX64)
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                Console.WriteLine("Extraction needs to be reimplemented for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction needs to be reimplemented for this framework!");
+                    Console.WriteLine();
 #endif
-            }
+                    break;
 
-            // New Executable
-            else if (wrapper is NewExecutable nex)
-            {
-                nex.Extract(outputDirectory, includeDebug);
-            }
+                // New Executable
+                case NewExecutable nex:
+                    nex.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // PAK
-            else if (wrapper is PAK pak)
-            {
-                pak.Extract(outputDirectory, includeDebug);
-            }
+                // PAK
+                case PAK pak:
+                    pak.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // PFF
-            else if (wrapper is PFF pff)
-            {
-                pff.Extract(outputDirectory, includeDebug);
-            }
+                // PFF
+                case PFF pff:
+                    pff.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // PKZIP
-            else if (wrapper is PKZIP pkzip)
-            {
+                // PKZIP
+                case PKZIP pkzip:
 #if NET20 || NET35 || NET40 || NET452
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                pkzip.Extract(outputDirectory, includeDebug);
+                    pkzip.Extract(outputDirectory, includeDebug);
 #endif
-            }
+                    break;
 
-            // Portable Executable
-            else if (wrapper is PortableExecutable pex)
-            {
-                pex.Extract(outputDirectory, includeDebug);
-            }
+                // Portable Executable
+                case PortableExecutable pex:
+                    pex.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // Quantum
-            else if (wrapper is Quantum quantum)
-            {
-                quantum.Extract(outputDirectory, includeDebug);
-            }
+                // Quantum
+                case Quantum quantum:
+                    quantum.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // RAR
-            else if (wrapper is RAR rar)
-            {
+                // RAR
+                case RAR rar:
 #if NET20 || NET35 || NET40 || NET452
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                rar.Extract(outputDirectory, includeDebug);
+                    rar.Extract(outputDirectory, includeDebug);
 #endif
-            }
+                    break;
 
-            // SGA
-            else if (wrapper is SGA sga)
-            {
-                sga.Extract(outputDirectory, includeDebug);
-            }
+                // SGA
+                case SGA sga:
+                    sga.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // Tape Archive
-            else if (wrapper is TapeArchive tar)
-            {
+                // Tape Archive
+                case TapeArchive tar:
+                    tar.Extract(outputDirectory, includeDebug);
+                    break;
+
+                // VBSP
+                case VBSP vbsp:
+                    vbsp.Extract(outputDirectory, includeDebug);
+                    break;
+
+                // VPK
+                case VPK vpk:
+                    vpk.Extract(outputDirectory, includeDebug);
+                    break;
+
+                // WAD3
+                case WAD3 wad:
+                    wad.Extract(outputDirectory, includeDebug);
+                    break;
+
+                // xz
+                case XZ xz:
 #if NET20 || NET35 || NET40 || NET452
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
+                    Console.WriteLine("Extraction is not supported for this framework!");
+                    Console.WriteLine();
 #else
-                tar.Extract(outputDirectory, includeDebug);
+                    xz.Extract(outputDirectory, includeDebug);
 #endif
-            }
+                    break;
 
-            // VBSP
-            else if (wrapper is VBSP vbsp)
-            {
-                vbsp.Extract(outputDirectory, includeDebug);
-            }
+                // XZP
+                case XZP xzp:
+                    xzp.Extract(outputDirectory, includeDebug);
+                    break;
 
-            // VPK
-            else if (wrapper is VPK vpk)
-            {
-                vpk.Extract(outputDirectory, includeDebug);
-            }
-
-            // WAD3
-            else if (wrapper is WAD3 wad)
-            {
-                wad.Extract(outputDirectory, includeDebug);
-            }
-
-            // xz
-            else if (wrapper is XZ xz)
-            {
-#if NET20 || NET35 || NET40 || NET452
-                Console.WriteLine("Extraction is not supported for this framework!");
-                Console.WriteLine();
-#else
-                xz.Extract(outputDirectory, includeDebug);
-#endif
-            }
-
-            // XZP
-            else if (wrapper is XZP xzp)
-            {
-                xzp.Extract(outputDirectory, includeDebug);
-            }
-
-            // Everything else
-            else
-            {
-                Console.WriteLine("Not a supported extractable file format, skipping...");
-                Console.WriteLine();
-                return;
+                // Everything else
+                default:
+                    Console.WriteLine("Not a supported extractable file format, skipping...");
+                    Console.WriteLine();
+                    break;
             }
         }
 
