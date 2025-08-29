@@ -1099,11 +1099,7 @@ namespace SabreTools.Serialization.Wrappers
             var pkzipSfx = new PKZIP(_dataSource);
             bool pkzip = pkzipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
-            _dataSource.Position = 0;
-            var rarSfx = new RAR(_dataSource);
-            bool rar = rarSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
-
-            return cexe || overlay || resources || pkzip || rar;
+            return cexe || overlay || resources || pkzip;
         }
 
         /// <summary>
