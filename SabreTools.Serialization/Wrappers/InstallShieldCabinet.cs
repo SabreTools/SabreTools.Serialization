@@ -383,7 +383,7 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var cabfile = new UnshieldSharpInternal.InstallShieldCabinet(pattern, cabinet);
+                var cabfile = new UnshieldSharpInternal.Extractor(pattern, cabinet);
                 for (int i = 0; i < cabinet.FileCount; i++)
                 {
                     try

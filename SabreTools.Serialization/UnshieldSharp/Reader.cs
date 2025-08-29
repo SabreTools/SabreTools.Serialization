@@ -13,7 +13,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Cabinet file to read from
         /// </summary>
-        private readonly InstallShieldCabinet _cabinet;
+        private readonly Extractor _cabinet;
 
         /// <summary>
         /// Currently selected index
@@ -54,7 +54,7 @@ namespace UnshieldSharpInternal
 
         #region Constructors
 
-        private Reader(InstallShieldCabinet cabinet, uint index, FileDescriptor fileDescriptor)
+        private Reader(Extractor cabinet, uint index, FileDescriptor fileDescriptor)
         {
             _cabinet = cabinet;
             _index = index;
@@ -66,7 +66,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Create a new <see cref="Reader"> from an existing cabinet, index, and file descriptor
         /// </summary>
-        public static Reader? Create(InstallShieldCabinet cabinet, int index, FileDescriptor fileDescriptor)
+        public static Reader? Create(Extractor cabinet, int index, FileDescriptor fileDescriptor)
         {
             var reader = new Reader(cabinet, (uint)index, fileDescriptor);
             for (; ; )

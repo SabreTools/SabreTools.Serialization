@@ -8,7 +8,7 @@ using Header = SabreTools.Serialization.Wrappers.InstallShieldCabinet;
 namespace UnshieldSharpInternal
 {
     // TODO: Figure out if individual parts of a split cab can be extracted separately
-    internal class InstallShieldCabinet
+    internal class Extractor
     {
         /// <summary>
         /// Linked CAB headers
@@ -27,7 +27,7 @@ namespace UnshieldSharpInternal
 
         #region Constructors
 
-        public InstallShieldCabinet(string filenamePattern, Header headerList)
+        public Extractor(string filenamePattern, Header headerList)
         {
             FilenamePattern = filenamePattern;
             HeaderList = headerList;
