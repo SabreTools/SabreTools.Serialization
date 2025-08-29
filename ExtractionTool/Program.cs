@@ -162,8 +162,7 @@ namespace ExtractionTool
 
                 // Microsoft Cabinet archive
                 case MicrosoftCabinet mscab:
-                    Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
-                    MicrosoftCabinet.ExtractSet(file, outputDirectory, includeDebug);
+                    mscab.Extract(outputDirectory, includeDebug);
                     break;
 
                 // MoPaQ (MPQ) archive

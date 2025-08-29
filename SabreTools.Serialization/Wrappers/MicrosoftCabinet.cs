@@ -123,79 +123,29 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extraction
 
-        /// <summary>
-        /// Extract a cabinet set to an output directory, if possible
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <param name="outDir">Path to the output directory</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Indicates if all files were able to be extracted</returns>
-        /// <remarks>Will extract all items found in the set</remarks>
-        public static bool ExtractSet(string filename, string outDir, bool includeDebug)
-            => ExtractSet(stream: null, filename, outDir, includeDebug);
-
-        /// <summary>
-        /// Extract a cabinet set to an output directory, if possible
-        /// </summary>
-        /// <param name="stream">Stream representing one cabinet in the set</param>
-        /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <param name="outDir">Path to the output directory</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Indicates if all files were able to be extracted</returns>
-        /// <remarks>Will extract all items found in the set</remarks>
-        public static bool ExtractSet(Stream? stream, string filename, string outDir, bool includeDebug)
-        {
-            // Get a wrapper for the set, if possible
-            MicrosoftCabinet? current;
-            if (File.Exists(filename))
-                current = OpenSet(filename);
-            else
-                current = Create(stream);
-
-            // Validate the header exists
-            if (current?.Model?.Header == null)
-                return false;
-
-            try
-            {
-                // Loop through the cabinets
-                bool allExtracted = true;
-                do
-                {
-                    allExtracted &= current.Extract(filename, outDir, includeDebug);
-                    current = current.Next ?? current.OpenNext(filename);
-                }
-                while (current?.Header != null);
-
-                return allExtracted;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
-            => Extract(null, outputDirectory, includeDebug);
-
-        /// <inheritdoc cref="Extract(string, bool)"/>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        public bool Extract(string? filename, string outDir, bool includeDebug)
         {
+            // Display warning
+            Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
+
+            // Open the full set if possible
+            var cabinet = this;
+            if (Filename != null)
+                cabinet = OpenSet(Filename);
+
             // If the archive is invalid
-            if (Folders == null || Folders.Length == 0)
+            if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
                 return false;
 
             try
             {
                 // Loop through the folders
                 bool allExtracted = true;
-                for (int f = 0; f < Folders.Length; f++)
+                for (int f = 0; f < cabinet.Folders.Length; f++)
                 {
-                    var folder = Folders[f];
-                    allExtracted &= ExtractFolder(filename, outDir, folder, f, includeDebug);
+                    var folder = cabinet.Folders[f];
+                    allExtracted &= cabinet.ExtractFolder(Filename, outputDirectory, folder, f, includeDebug);
                 }
 
                 return allExtracted;
@@ -211,13 +161,13 @@ namespace SabreTools.Serialization.Wrappers
         /// Extract the contents of a single folder
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="outputDirectory">Path to the output directory</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all files extracted, false otherwise</returns>
         private bool ExtractFolder(string? filename,
-            string outDir,
+            string outputDirectory,
             CFFOLDER? folder,
             int folderIndex,
             bool includeDebug)
@@ -233,7 +183,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                allExtracted &= ExtractFile(outDir, blockStream, file, includeDebug);
+                allExtracted &= ExtractFile(outputDirectory, blockStream, file, includeDebug);
             }
 
             return allExtracted;
@@ -242,12 +192,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract the contents of a single file
         /// </summary>
-        /// <param name="outDir">Path to the output directory</param>
+        /// <param name="outputDirectory">Path to the output directory</param>
         /// <param name="blockStream">Stream representing the uncompressed block data</param>
         /// <param name="file">File information</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted, false otherwise</returns>
-        private static bool ExtractFile(string outDir, Stream blockStream, CFFILE file, bool includeDebug)
+        private static bool ExtractFile(string outputDirectory, Stream blockStream, CFFILE file, bool includeDebug)
         {
             try
             {
@@ -262,7 +212,7 @@ namespace SabreTools.Serialization.Wrappers
                     filename = filename.Replace('\\', '/');
 
                 // Ensure the full output directory exists
-                filename = Path.Combine(outDir, filename);
+                filename = Path.Combine(outputDirectory, filename);
                 var directoryName = Path.GetDirectoryName(filename);
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
