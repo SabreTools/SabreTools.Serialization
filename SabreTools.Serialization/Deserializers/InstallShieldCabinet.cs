@@ -50,6 +50,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Descriptor
 
+                // If the descriptor does not exist
+                if (commonHeader.DescriptorSize == 0)
+                    return cabinet;
+
                 // Get the descriptor offset
                 long descriptorOffset = initialOffset + commonHeader.DescriptorOffset;
                 if (descriptorOffset < initialOffset || descriptorOffset >= data.Length)

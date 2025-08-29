@@ -382,11 +382,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Open the full set if possible
             var cabinet = this;
-            string pattern = string.Empty;
             if (Filename != null)
             {
                 // Get the name of the first cabinet file or header
-                pattern = CreateFilenamePattern(Filename)!;
+                string pattern = CreateFilenamePattern(Filename)!;
                 bool cabinetHeaderExists = File.Exists(pattern + "1.hdr");
                 bool shouldScanCabinet = cabinetHeaderExists
                     ? Filename.Equals(pattern + "1.hdr", StringComparison.OrdinalIgnoreCase)
