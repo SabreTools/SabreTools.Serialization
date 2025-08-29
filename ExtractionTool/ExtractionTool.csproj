@@ -36,30 +36,30 @@
     </PropertyGroup>
 
     <!-- These are needed for dealing with native Windows DLLs -->
-    <!-- <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x86'">
-        <ContentWithTargetPath Include="..\BinaryObjectScanner\runtimes\win-x86\native\CascLib.dll">
+    <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x86'">
+        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x86\native\CascLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>CascLib.dll</TargetPath>
         </ContentWithTargetPath>
-        <ContentWithTargetPath Include="..\BinaryObjectScanner\runtimes\win-x86\native\StormLib.dll">
+        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x86\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>StormLib.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
-        <ContentWithTargetPath Include="..\BinaryObjectScanner\runtimes\win-x64\native\CascLib.dll">
+        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x64\native\CascLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>CascLib.dll</TargetPath>
         </ContentWithTargetPath>
-        <ContentWithTargetPath Include="..\BinaryObjectScanner\runtimes\win-x64\native\StormLib.dll">
+        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x64\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>StormLib.dll</TargetPath>
         </ContentWithTargetPath>
-    </ItemGroup> -->
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\SabreTools.Serialization\SabreTools.Serialization.csproj" />
