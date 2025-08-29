@@ -13,7 +13,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Cabinet file to read from
         /// </summary>
-        private readonly Extractor _cabinet;
+        private readonly Extractor _extractor;
 
         /// <summary>
         /// Currently selected index
@@ -56,7 +56,7 @@ namespace UnshieldSharpInternal
 
         private Reader(Extractor cabinet, uint index, FileDescriptor fileDescriptor)
         {
-            _cabinet = cabinet;
+            _extractor = cabinet;
             _index = index;
             _fileDescriptor = fileDescriptor;
         }
@@ -84,7 +84,7 @@ namespace UnshieldSharpInternal
                 }
 
                 // Start with the correct volume for IS5 cabinets
-                if (reader._cabinet.HeaderList.MajorVersion <= 5 && index > (int)reader._volumeHeader.LastFileIndex)
+                if (reader._extractor.HeaderList.MajorVersion <= 5 && index > (int)reader._volumeHeader.LastFileIndex)
                 {
                     // Normalize the volume ID for odd cases
                     if (fileDescriptor.Volume == ushort.MinValue || fileDescriptor.Volume == ushort.MaxValue)
@@ -168,7 +168,7 @@ namespace UnshieldSharpInternal
                 volume = 1;
 
             _volumeFile?.Close();
-            _volumeFile = _cabinet.HeaderList.OpenFileForReading(volume, CABINET_SUFFIX);
+            _volumeFile = _extractor.HeaderList.OpenFileForReading(volume, CABINET_SUFFIX);
             if (_volumeFile == null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
@@ -179,14 +179,14 @@ namespace UnshieldSharpInternal
             if (commonHeader == default)
                 return false;
 
-            _volumeHeader = SabreTools.Serialization.Deserializers.InstallShieldCabinet.ParseVolumeHeader(_volumeFile, _cabinet.HeaderList.MajorVersion);
+            _volumeHeader = SabreTools.Serialization.Deserializers.InstallShieldCabinet.ParseVolumeHeader(_volumeFile, _extractor.HeaderList.MajorVersion);
             if (_volumeHeader == null)
                 return false;
 
             // Enable support for split archives for IS5
-            if (_cabinet.HeaderList.MajorVersion == 5)
+            if (_extractor.HeaderList.MajorVersion == 5)
             {
-                if (_index < (_cabinet.HeaderList.FileCount - 1)
+                if (_index < (_extractor.HeaderList.FileCount - 1)
                     && _index == _volumeHeader.LastFileIndex
                     && _volumeHeader.LastFileSizeCompressed != _fileDescriptor.CompressedSize)
                 {
