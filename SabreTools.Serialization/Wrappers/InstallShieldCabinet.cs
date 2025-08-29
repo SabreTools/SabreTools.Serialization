@@ -573,19 +573,19 @@ namespace SabreTools.Serialization.Wrappers
             reader?.Dispose();
             output?.Close();
 
-            // Failing the file has been disabled because for a subset of CABs the values don't seem to match
-            // TODO: Investigate what is causing this to fail and what data needs to be hashed
+            // Validate the data written, if required
+            if (MajorVersion >= 6)
+            {
+                string expectedMd5 = BitConverter.ToString(fileDescriptor.MD5!);
+                expectedMd5 = expectedMd5.ToLowerInvariant().Replace("-", string.Empty);
 
-            // // Validate the data written, if required
-            // if (HeaderList!.MajorVersion >= 6)
-            // {
-            //     string? md5result = md5.CurrentHashString;
-            //     if (md5result == null || md5result != BitConverter.ToString(fileDescriptor.MD5!))
-            //     {
-            //         Console.Error.WriteLine($"MD5 checksum failure for file {index} ({HeaderList.GetFileName(index)})");
-            //         return false;
-            //     }
-            // }
+                string? actualMd5 = md5.CurrentHashString;
+                if (actualMd5 == null || actualMd5 != expectedMd5)
+                {
+                    Console.Error.WriteLine($"MD5 checksum failure for file {index} ({GetFileName(index)})");
+                    return false;
+                }
+            }
 
             return true;
         }
