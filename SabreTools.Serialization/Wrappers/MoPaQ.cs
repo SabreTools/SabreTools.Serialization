@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class MoPaQ : WrapperBase<Models.MoPaQ.Archive>
+    public partial class MoPaQ : WrapperBase<Models.MoPaQ.Archive>, IExtractable
     {
         #region Descriptive Properties
 
@@ -75,6 +77,25 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region Extraction
+
+        /// <inheritdoc/>
+        /// TODO: Reimplement extraction based on StormLibSharp
+        public bool Extract(string outputDirectory, bool includeDebug)
+        {
+#if NET20 || NET35 || !(WINX86 || WINX64)
+            Console.WriteLine("Extraction is not supported for this framework!");
+            Console.WriteLine();
+            return false;
+#else
+            Console.WriteLine("Extraction needs to be reimplemented for this framework!");
+            Console.WriteLine();
+            return false;
+#endif
         }
 
         #endregion

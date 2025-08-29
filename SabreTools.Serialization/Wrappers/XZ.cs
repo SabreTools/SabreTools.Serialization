@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
@@ -87,17 +88,19 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-#if NET462_OR_GREATER || NETCOREAPP
             if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
+#if NET462_OR_GREATER || NETCOREAPP
             try
             {
                 // Try opening the stream
                 using var xzFile = new XZStream(_dataSource);
 
                 // Ensure directory separators are consistent
-                string filename = System.Guid.NewGuid().ToString();
+                string filename = Filename != null
+                    ? Path.GetFileNameWithoutExtension(Filename)
+                    : Guid.NewGuid().ToString();
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')
@@ -116,12 +119,14 @@ namespace SabreTools.Serialization.Wrappers
 
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.Error.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
 #else
+            Console.WriteLine("Extraction is not supported for this framework!");
+            Console.WriteLine();
             return false;
 #endif
         }

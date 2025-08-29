@@ -203,6 +203,8 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
 #else
+            Console.WriteLine("Extraction is not supported for this framework!");
+            Console.WriteLine();
             return false;
 #endif
         }

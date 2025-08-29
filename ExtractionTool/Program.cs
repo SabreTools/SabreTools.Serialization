@@ -101,12 +101,7 @@ namespace ExtractionTool
             {
                 // 7-zip
                 case SevenZip sz:
-#if NET20 || NET35 || NET40 || NET452
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
                     sz.Extract(outputDirectory, includeDebug);
-#endif
                     break;
 
                 // BFPK archive
@@ -126,12 +121,7 @@ namespace ExtractionTool
 
                 // CFB
                 case CFB cfb:
-#if NET20 || NET35
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
                     cfb.Extract(outputDirectory, includeDebug);
-#endif
                     break;
 
                 // GCF
@@ -176,15 +166,9 @@ namespace ExtractionTool
                     MicrosoftCabinet.ExtractSet(file, outputDirectory, includeDebug);
                     break;
 
-                // MoPaQ (MPQ) archive -- Reimplement
+                // MoPaQ (MPQ) archive
                 case MoPaQ mpq:
-#if NET20 || NET35 || !(WINX86 || WINX64)
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
-                    Console.WriteLine("Extraction needs to be reimplemented for this framework!");
-                    Console.WriteLine();
-#endif
+                    mpq.Extract(outputDirectory, includeDebug);
                     break;
 
                 // New Executable
@@ -204,12 +188,7 @@ namespace ExtractionTool
 
                 // PKZIP
                 case PKZIP pkzip:
-#if NET20 || NET35 || NET40 || NET452
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
                     pkzip.Extract(outputDirectory, includeDebug);
-#endif
                     break;
 
                 // Portable Executable
@@ -224,12 +203,7 @@ namespace ExtractionTool
 
                 // RAR
                 case RAR rar:
-#if NET20 || NET35 || NET40 || NET452
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
                     rar.Extract(outputDirectory, includeDebug);
-#endif
                     break;
 
                 // SGA
@@ -259,12 +233,7 @@ namespace ExtractionTool
 
                 // xz
                 case XZ xz:
-#if NET20 || NET35 || NET40 || NET452
-                    Console.WriteLine("Extraction is not supported for this framework!");
-                    Console.WriteLine();
-#else
                     xz.Extract(outputDirectory, includeDebug);
-#endif
                     break;
 
                 // XZP
