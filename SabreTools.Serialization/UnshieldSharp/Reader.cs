@@ -26,6 +26,11 @@ namespace UnshieldSharpInternal
         private readonly FileDescriptor _fileDescriptor;
 
         /// <summary>
+        /// Offset in the data where the file exists
+        /// </summary>
+        private ulong _dataOffset;
+
+        /// <summary>
         /// Number of bytes left in the current volume
         /// </summary>
         private ulong _volumeBytesLeft;
@@ -200,7 +205,7 @@ namespace UnshieldSharpInternal
                 }
             }
 
-            ulong dataOffset, volumeBytesLeftCompressed, volumeBytesLeftExpanded;
+            ulong volumeBytesLeftCompressed, volumeBytesLeftExpanded;
 #if NET20 || NET35
             if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
 #else
@@ -210,13 +215,13 @@ namespace UnshieldSharpInternal
                 if (_index == _volumeHeader.LastFileIndex && _volumeHeader.LastFileOffset != 0x7FFFFFFF)
                 {
                     // can be first file too
-                    dataOffset = _volumeHeader.LastFileOffset;
+                    _dataOffset = _volumeHeader.LastFileOffset;
                     volumeBytesLeftExpanded = _volumeHeader.LastFileSizeExpanded;
                     volumeBytesLeftCompressed = _volumeHeader.LastFileSizeCompressed;
                 }
                 else if (_index == _volumeHeader.FirstFileIndex)
                 {
-                    dataOffset = _volumeHeader.FirstFileOffset;
+                    _dataOffset = _volumeHeader.FirstFileOffset;
                     volumeBytesLeftExpanded = _volumeHeader.FirstFileSizeExpanded;
                     volumeBytesLeftCompressed = _volumeHeader.FirstFileSizeCompressed;
                 }
@@ -227,7 +232,7 @@ namespace UnshieldSharpInternal
             }
             else
             {
-                dataOffset = _fileDescriptor.DataOffset;
+                _dataOffset = _fileDescriptor.DataOffset;
                 volumeBytesLeftExpanded = _fileDescriptor.ExpandedSize;
                 volumeBytesLeftCompressed = _fileDescriptor.CompressedSize;
             }
@@ -241,7 +246,7 @@ namespace UnshieldSharpInternal
             else
                 _volumeBytesLeft = volumeBytesLeftExpanded;
 
-            _volumeFile.Seek((long)dataOffset, SeekOrigin.Begin);
+            _volumeFile.Seek((long)_dataOffset, SeekOrigin.Begin);
             _volumeId = volume;
 
             return true;
