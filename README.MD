@@ -14,7 +14,7 @@ For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/S
 
 ## InfoPrint
 
-**InfoPrint** is a reference implementation for the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file (.NET Core 3.1 and above only).
+**InfoPrint** is a reference implementation for the deserialization and printing features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file (.NET Core 3.1 and above only).
 
 ```
 InfoPrint <options> file|directory ...
@@ -25,6 +25,48 @@ Options:
 -c, --hash               Output file hashes
 -j, --json               Print info as JSON
 ```
+
+## ExtractionTool
+
+**ExtractionTool** is a reference implementation for the extraction features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and extract many supported file types. See the table below for supported extraction functionality.
+
+```
+ExtractionTool.exe <options> file|directory ...
+
+Options:
+-?, -h, --help           Display this help text and quit
+-d, --debug              Enable debug mode
+-o, --outdir [PATH]      Set output path for extraction (required)
+```
+
+| Format Name | Notes |
+| --- | --- |
+| 7-zip archive | .NET Framework 4.6.2 and greater |
+| BFPK custom archive format | |
+| bzip2 archive | .NET Framework 4.6.2 and greater |
+| Compound File Binary (CFB) | Only CFB common pieces extractable. .NET Framework 4.0 and greater |
+| gzip archive | |
+| Half-Life Game Cache File (GCF) | |
+| Half-Life Level (BSP) | |
+| Half-Life Package File (PAK) | |
+| Half-Life Texture Package File (WAD3) | |
+| Half-Life 2 Level (VBSP) | |
+| InstallShield Archive V3 (Z) | |
+| InstallShield CAB | Currently not working |
+| Microsoft cabinet file | Does not support LZX or Quantum compression |
+| Microsoft LZ-compressed files | KWAJ, QBasic, and SZDD variants |
+| MoPaQ game data archive (MPQ) | Currently not working. Windows only. .NET Framework 4.5.2 and above |
+| New Exectuable | Currently not working. Wise installer only |
+| NovaLogic Game Archive Format (PFF) | |
+| PKZIP and derived files (ZIP, etc.) | .NET Framework 4.6.2 and greater |
+| Portable Executable | Embedded archives and executables in the resources and overlay, CExe-packed data, SFX archives (7-zip, PKZIP, and RAR), and Wise installer. Same restrictions apply to SFX archives as standalone variants. |
+| Quantum archive (Q) | Currently not working |
+| RAR archive (RAR) | .NET Framework 4.6.2 and greater |
+| SGA game archive | |
+| Tape archive (TAR) | |
+| Valve Package File (VPK) | |
+| XBox Package File (XZP) | |
+| xz archive (XZ) | .NET Framework 4.6.2 and greater |
 
 ## Interfaces
 
