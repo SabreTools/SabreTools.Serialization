@@ -13,7 +13,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Linked CAB headers
         /// </summary>
-        public Header HeaderList { get; private set; }
+        public Header HeaderList { get; }
 
         /// <summary>
         /// Default buffer size
