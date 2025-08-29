@@ -111,15 +111,6 @@ namespace UnshieldSharpInternal
         #region Reading
 
         /// <summary>
-        /// Open the next volume based on the current index
-        /// </summary>
-        public bool OpenNextVolume(out ushort nextVolume)
-        {
-            nextVolume = (ushort)(_volumeId + 1);
-            return OpenVolume(nextVolume);
-        }
-
-        /// <summary>
         /// Read a certain number of bytes from the current volume
         /// </summary>
         public bool Read(byte[] buffer, int start, long size)
@@ -156,6 +147,15 @@ namespace UnshieldSharpInternal
                 SabreTools.Serialization.Wrappers.InstallShieldCabinet.Deobfuscate(buffer, size, ref _obfuscationOffset);
 
             return true;
+        }
+
+        /// <summary>
+        /// Open the next volume based on the current index
+        /// </summary>
+        private bool OpenNextVolume(out ushort nextVolume)
+        {
+            nextVolume = (ushort)(_volumeId + 1);
+            return OpenVolume(nextVolume);
         }
 
         /// <summary>
