@@ -277,7 +277,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="index">Cabinet part index to be opened</param>
         /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
         /// <returns>A Stream representing the cabinet part, null on error</returns>
-        private static Stream? OpenFileForReading(string? pattern, int index, string suffix)
+        public static Stream? OpenFileForReading(string? pattern, int index, string suffix)
         {
             // An invalid pattern means no cabinet files
             if (string.IsNullOrEmpty(pattern))
@@ -347,6 +347,84 @@ namespace SabreTools.Serialization.Wrappers
                 return descriptor.DirectoryIndex;
             else
                 return uint.MaxValue;
+        }
+
+        #endregion
+
+        #region Extraction
+
+        /// <summary>
+        /// Uncompress a source byte array to a destination
+        /// </summary>
+        public unsafe static int Uncompress(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        {
+            fixed (byte* sourcePtr = source)
+            fixed (byte* destPtr = dest)
+            {
+                var stream = new ZLib.z_stream_s
+                {
+                    next_in = sourcePtr,
+                    avail_in = (uint)sourceLen,
+                    next_out = destPtr,
+                    avail_out = (uint)destLen,
+                };
+
+                // make second parameter negative to disable checksum verification
+                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
+                if (err != zlibConst.Z_OK)
+                    return err;
+
+                err = ZLib.inflate(stream, 1);
+                if (err != zlibConst.Z_STREAM_END)
+                {
+                    ZLib.inflateEnd(stream);
+                    return err;
+                }
+
+                destLen = stream.total_out;
+                sourceLen = stream.total_in;
+                return ZLib.inflateEnd(stream);
+            }
+        }
+
+        /// <summary>
+        /// Uncompress a source byte array to a destination (old version)
+        /// </summary>
+        public unsafe static int UncompressOld(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
+        {
+            fixed (byte* sourcePtr = source)
+            fixed (byte* destPtr = dest)
+            {
+                var stream = new ZLib.z_stream_s
+                {
+                    next_in = sourcePtr,
+                    avail_in = (uint)sourceLen,
+                    next_out = destPtr,
+                    avail_out = (uint)destLen,
+                };
+
+                destLen = 0;
+                sourceLen = 0;
+
+                // make second parameter negative to disable checksum verification
+                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
+                if (err != zlibConst.Z_OK)
+                    return err;
+
+                while (stream.avail_in > 1)
+                {
+                    err = ZLib.inflate(stream, 1);
+                    if (err != zlibConst.Z_OK)
+                    {
+                        ZLib.inflateEnd(stream);
+                        return err;
+                    }
+                }
+
+                destLen = stream.total_out;
+                sourceLen = stream.total_in;
+                return ZLib.inflateEnd(stream);
+            }
         }
 
         #endregion
@@ -519,90 +597,12 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Extraction
-
-        /// <summary>
-        /// Uncompress a source byte array to a destination
-        /// </summary>
-        public unsafe static int Uncompress(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
-        {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
-            {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
-                    next_out = destPtr,
-                    avail_out = (uint)destLen,
-                };
-
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
-
-                err = ZLib.inflate(stream, 1);
-                if (err != zlibConst.Z_STREAM_END)
-                {
-                    ZLib.inflateEnd(stream);
-                    return err;
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
-            }
-        }
-
-        /// <summary>
-        /// Uncompress a source byte array to a destination (old version)
-        /// </summary>
-        public unsafe static int UncompressOld(byte[] dest, ref ulong destLen, byte[] source, ref ulong sourceLen)
-        {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
-            {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
-                    next_out = destPtr,
-                    avail_out = (uint)destLen,
-                };
-
-                destLen = 0;
-                sourceLen = 0;
-
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
-
-                while (stream.avail_in > 1)
-                {
-                    err = ZLib.inflate(stream, 1);
-                    if (err != zlibConst.Z_OK)
-                    {
-                        ZLib.inflateEnd(stream);
-                        return err;
-                    }
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
-            }
-        }
-
-        #endregion
-
         #region Obfuscation
 
         /// <summary>
         /// Deobfuscate a buffer
         /// </summary>
-        private void Deobfuscate(byte[] buffer, long size, ref uint offset)
+        public static void Deobfuscate(byte[] buffer, long size, ref uint offset)
         {
             offset = Deobfuscate(buffer, size, offset);
         }
@@ -611,7 +611,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Deobfuscate a buffer with a seed value
         /// </summary>
         /// <remarks>Seed is 0 at file start</remarks>
-        private static uint Deobfuscate(byte[] buffer, long size, uint seed)
+        public static uint Deobfuscate(byte[] buffer, long size, uint seed)
         {
             for (int i = 0; size > 0; size--, i++, seed++)
             {
@@ -624,7 +624,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Obfuscate a buffer
         /// </summary>
-        private void Obfuscate(byte[] buffer, long size, ref uint offset)
+        public static void Obfuscate(byte[] buffer, long size, ref uint offset)
         {
             offset = Obfuscate(buffer, size, offset);
         }
@@ -633,7 +633,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Obfuscate a buffer with a seed value
         /// </summary>
         /// <remarks>Seed is 0 at file start</remarks>
-        private static uint Obfuscate(byte[] buffer, long size, uint seed)
+        public static uint Obfuscate(byte[] buffer, long size, uint seed)
         {
             for (int i = 0; size > 0; size--, i++, seed++)
             {

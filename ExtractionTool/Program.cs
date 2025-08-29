@@ -286,7 +286,7 @@ namespace ExtractionTool
                 if (!File.Exists(file))
                     return false;
 
-                var cabfile = UnshieldSharp.InstallShieldCabinet.Open(file);
+                var cabfile = UnshieldSharpInternal.InstallShieldCabinet.Open(file);
                 if (cabfile?.HeaderList == null)
                     return false;
 
