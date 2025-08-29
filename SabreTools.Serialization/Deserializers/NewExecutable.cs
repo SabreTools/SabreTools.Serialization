@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // If the offset for the imported-name table doesn't exist
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset;
-                endOffset = initialOffset + stub.Header.NewExeHeaderAddr + + header.EntryTableOffset + header.EntryTableSize;
+                endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset + header.EntryTableSize;
                 if (tableAddress >= data.Length)
                     return executable;
 
@@ -267,15 +267,15 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled imported-name table on success, null on error</returns>
         public static Dictionary<ushort, ImportedNameTableEntry> ParseImportedNameTable(Stream data, long endOffset)
         {
-            var importedNameTable = new Dictionary<ushort, ImportedNameTableEntry>();
+            var obj = new Dictionary<ushort, ImportedNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
                 ushort currentOffset = (ushort)data.Position;
-                importedNameTable[currentOffset] = ParseImportedNameTableEntry(data);
+                obj[currentOffset] = ParseImportedNameTableEntry(data);
             }
 
-            return importedNameTable;
+            return obj;
         }
 
         /// <summary>
@@ -361,15 +361,15 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled nonresident-name table on success, null on error</returns>
         public static NonResidentNameTableEntry[] ParseNonResidentNameTable(Stream data, long endOffset)
         {
-            var residentNameTable = new List<NonResidentNameTableEntry>();
+            var obj = new List<NonResidentNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = ParseNonResidentNameTableEntry(data);
-                residentNameTable.Add(entry);
+                obj.Add(entry);
             }
 
-            return [.. residentNameTable];
+            return [.. obj];
         }
 
         /// <summary>
@@ -462,15 +462,15 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled resident-name table on success, null on error</returns>
         public static ResidentNameTableEntry[] ParseResidentNameTable(Stream data, long endOffset)
         {
-            var residentNameTable = new List<ResidentNameTableEntry>();
+            var obj = new List<ResidentNameTableEntry>();
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
                 var entry = ParseResidentNameTableEntry(data);
-                residentNameTable.Add(entry);
+                obj.Add(entry);
             }
 
-            return [.. residentNameTable];
+            return [.. obj];
         }
 
         /// <summary>

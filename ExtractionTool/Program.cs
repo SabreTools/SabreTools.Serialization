@@ -244,6 +244,7 @@ namespace ExtractionTool
                 Console.WriteLine();
 
                 // TODO: Add Wise installer handling here
+                nex.Extract(outputDirectory, includeDebug);
             }
 
             // PAK
