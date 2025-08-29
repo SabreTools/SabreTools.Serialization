@@ -27,7 +27,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="ExtractionTool" />
         <InternalsVisibleTo Include="SabreTools.Serialization.Test" />
     </ItemGroup>
 

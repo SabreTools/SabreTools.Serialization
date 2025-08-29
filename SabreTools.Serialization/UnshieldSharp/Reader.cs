@@ -13,17 +13,17 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Cabinet file to read from
         /// </summary>
-        private InstallShieldCabinet? _cabinet;
+        private readonly InstallShieldCabinet _cabinet;
 
         /// <summary>
         /// Currently selected index
         /// </summary>
-        private uint _index;
+        private readonly uint _index;
 
         /// <summary>
         /// File descriptor defining the currently selected index
         /// </summary>
-        private FileDescriptor? _fileDescriptor;
+        private readonly FileDescriptor _fileDescriptor;
 
         /// <summary>
         /// Number of bytes left in the current volume
@@ -52,25 +52,23 @@ namespace UnshieldSharpInternal
 
         #endregion
 
+        #region Constructors
+
+        private Reader(InstallShieldCabinet cabinet, uint index, FileDescriptor fileDescriptor)
+        {
+            _cabinet = cabinet;
+            _index = index;
+            _fileDescriptor = fileDescriptor;
+        }
+
+        #endregion
+
         /// <summary>
         /// Create a new <see cref="Reader"> from an existing cabinet, index, and file descriptor
         /// </summary>
         public static Reader? Create(InstallShieldCabinet cabinet, int index, FileDescriptor fileDescriptor)
         {
-            var reader = new Reader
-            {
-                _cabinet = cabinet,
-                _index = (uint)index,
-                _fileDescriptor = fileDescriptor,
-            };
-
-            // If the cabinet header list is invalid
-            if (reader._cabinet.HeaderList == null)
-            {
-                Console.Error.WriteLine($"Header list is invalid");
-                return null;
-            }
-
+            var reader = new Reader(cabinet, (uint)index, fileDescriptor);
             for (; ; )
             {
                 // If the volume is invalid
@@ -151,9 +149,9 @@ namespace UnshieldSharpInternal
             }
 
 #if NET20 || NET35
-            if ((_fileDescriptor!.Flags & FileFlags.FILE_OBFUSCATED) != 0)
+            if ((_fileDescriptor.Flags & FileFlags.FILE_OBFUSCATED) != 0)
 #else
-            if (_fileDescriptor!.Flags.HasFlag(FileFlags.FILE_OBFUSCATED))
+            if (_fileDescriptor.Flags.HasFlag(FileFlags.FILE_OBFUSCATED))
 #endif
                 SabreTools.Serialization.Wrappers.InstallShieldCabinet.Deobfuscate(buffer, size, ref _obfuscationOffset);
 
@@ -170,7 +168,7 @@ namespace UnshieldSharpInternal
                 volume = 1;
 
             _volumeFile?.Close();
-            _volumeFile = SabreTools.Serialization.Wrappers.InstallShieldCabinet.OpenFileForReading(_cabinet!.FilenamePattern, volume, CABINET_SUFFIX);
+            _volumeFile = SabreTools.Serialization.Wrappers.InstallShieldCabinet.OpenFileForReading(_cabinet.FilenamePattern, volume, CABINET_SUFFIX);
             if (_volumeFile == null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
@@ -181,7 +179,7 @@ namespace UnshieldSharpInternal
             if (commonHeader == default)
                 return false;
 
-            _volumeHeader = SabreTools.Serialization.Deserializers.InstallShieldCabinet.ParseVolumeHeader(_volumeFile, _cabinet.HeaderList!.MajorVersion);
+            _volumeHeader = SabreTools.Serialization.Deserializers.InstallShieldCabinet.ParseVolumeHeader(_volumeFile, _cabinet.HeaderList.MajorVersion);
             if (_volumeHeader == null)
                 return false;
 
@@ -190,13 +188,13 @@ namespace UnshieldSharpInternal
             {
                 if (_index < (_cabinet.HeaderList.FileCount - 1)
                     && _index == _volumeHeader.LastFileIndex
-                    && _volumeHeader.LastFileSizeCompressed != _fileDescriptor!.CompressedSize)
+                    && _volumeHeader.LastFileSizeCompressed != _fileDescriptor.CompressedSize)
                 {
                     _fileDescriptor.Flags |= FileFlags.FILE_SPLIT;
                 }
                 else if (_index > 0
                     && _index == _volumeHeader.FirstFileIndex
-                    && _volumeHeader.FirstFileSizeCompressed != _fileDescriptor!.CompressedSize)
+                    && _volumeHeader.FirstFileSizeCompressed != _fileDescriptor.CompressedSize)
                 {
                     _fileDescriptor.Flags |= FileFlags.FILE_SPLIT;
                 }
@@ -204,9 +202,9 @@ namespace UnshieldSharpInternal
 
             ulong dataOffset, volumeBytesLeftCompressed, volumeBytesLeftExpanded;
 #if NET20 || NET35
-            if ((_fileDescriptor!.Flags & FileFlags.FILE_SPLIT) != 0)
+            if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
 #else
-            if (_fileDescriptor!.Flags.HasFlag(FileFlags.FILE_SPLIT))
+            if (_fileDescriptor.Flags.HasFlag(FileFlags.FILE_SPLIT))
 #endif
             {
                 if (_index == _volumeHeader.LastFileIndex && _volumeHeader.LastFileOffset != 0x7FFFFFFF)

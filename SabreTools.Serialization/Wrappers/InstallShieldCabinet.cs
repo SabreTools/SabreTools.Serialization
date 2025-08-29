@@ -3,11 +3,12 @@ using System.IO;
 using System.Text.RegularExpressions;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.Models.InstallShieldCabinet;
+using SabreTools.Serialization.Interfaces;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class InstallShieldCabinet : WrapperBase<Cabinet>
+    public partial class InstallShieldCabinet : WrapperBase<Cabinet>, IExtractable
     {
         #region Descriptive Properties
 
@@ -352,6 +353,74 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Extraction
+
+        /// <inheritdoc/>
+        public bool Extract(string outputDirectory, bool includeDebug)
+        {
+            // Open the full set if possible
+            var cabinet = this;
+            string pattern = string.Empty;
+            if (Filename != null)
+            {
+                // Get the name of the first cabinet file or header
+                pattern = CreateFilenamePattern(Filename)!;
+                bool cabinetHeaderExists = File.Exists(pattern + "1.hdr");
+                bool shouldScanCabinet = cabinetHeaderExists
+                    ? Filename.Equals(pattern + "1.hdr", StringComparison.OrdinalIgnoreCase)
+                    : Filename.Equals(pattern + "1.cab", StringComparison.OrdinalIgnoreCase);
+
+                // If we have anything but the first file
+                if (!shouldScanCabinet)
+                    return false;
+
+                // Open the set from the pattern
+                cabinet = OpenSet(pattern);
+            }
+
+            // If the cabinet set could not be opened
+            if (cabinet == null)
+                return false;
+
+            try
+            {
+                var cabfile = new UnshieldSharpInternal.InstallShieldCabinet(pattern, cabinet);
+                for (int i = 0; i < cabinet.FileCount; i++)
+                {
+                    try
+                    {
+                        // Check if the file is valid first
+                        if (!cabinet.FileIsValid(i))
+                            continue;
+
+                        // Ensure directory separators are consistent
+                        string filename = cabinet.GetFileName(i) ?? $"BAD_FILENAME{i}";
+                        if (Path.DirectorySeparatorChar == '\\')
+                            filename = filename.Replace('/', '\\');
+                        else if (Path.DirectorySeparatorChar == '/')
+                            filename = filename.Replace('\\', '/');
+
+                        // Ensure the full output directory exists
+                        filename = Path.Combine(outputDirectory, filename);
+                        var directoryName = Path.GetDirectoryName(filename);
+                        if (directoryName != null && !Directory.Exists(directoryName))
+                            Directory.CreateDirectory(directoryName);
+
+                        cabfile.FileSave(i, filename);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (includeDebug) Console.Error.WriteLine(ex);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+        }
 
         /// <summary>
         /// Uncompress a source byte array to a destination

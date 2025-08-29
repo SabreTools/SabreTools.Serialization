@@ -13,48 +13,24 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Linked CAB headers
         /// </summary>
-        public Header? HeaderList { get; private set; }
+        public Header HeaderList { get; private set; }
 
         /// <summary>
         /// Base filename path for related CAB files
         /// </summary>
-        public string? FilenamePattern { get; private set; }
+        public string FilenamePattern { get; private set; }
 
         /// <summary>
         /// Default buffer size
         /// </summary>
         private const int BUFFER_SIZE = 64 * 1024;
 
-        /// <summary>
-        /// Maximum size of the window in bits
-        /// </summary>
-        /// TODO: Remove when Serialization is updated
-        private const int MAX_WBITS = 15;
+        #region Constructors
 
-        #region Open Cabinet
-
-        /// <summary>
-        /// Open a file as an InstallShield CAB
-        /// </summary>
-        public static InstallShieldCabinet? Open(string filename)
+        public InstallShieldCabinet(string filenamePattern, Header headerList)
         {
-            var cabinet = new InstallShieldCabinet();
-
-            cabinet.FilenamePattern = Header.CreateFilenamePattern(filename);
-            if (cabinet.FilenamePattern == null)
-            {
-                Console.Error.WriteLine("Failed to create filename pattern");
-                return null;
-            }
-
-            cabinet.HeaderList = Header.OpenSet(cabinet.FilenamePattern);
-            if (cabinet.HeaderList == null)
-            {
-                Console.Error.WriteLine("Failed to read header files");
-                return null;
-            }
-
-            return cabinet;
+            FilenamePattern = filenamePattern;
+            HeaderList = headerList;
         }
 
         #endregion
@@ -66,12 +42,6 @@ namespace UnshieldSharpInternal
         /// </summary>
         public bool FileSave(int index, string filename, bool useOld = false)
         {
-            if (HeaderList == null)
-            {
-                Console.Error.WriteLine("Header list is not built");
-                return false;
-            }
-
             // Get the file descriptor
             if (!HeaderList.TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
                 return false;
@@ -219,12 +189,6 @@ namespace UnshieldSharpInternal
         /// </summary>
         public bool FileSaveRaw(int index, string filename)
         {
-            if (HeaderList == null)
-            {
-                Console.Error.WriteLine("Header list is not built");
-                return false;
-            }
-
             // Get the file descriptor
             if (!HeaderList.TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
                 return false;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Wrappers;
 
@@ -140,9 +139,8 @@ namespace ExtractionTool
                     break;
 
                 // IS-CAB archive
-                case InstallShieldCabinet:
-                    // TODO: Move this handling to Serialization directly
-                    ExtractInstallShieldCabinet(file, outputDirectory, includeDebug);
+                case InstallShieldCabinet iscab:
+                    iscab.Extract(outputDirectory, includeDebug);
                     break;
 
                 // LZ-compressed file, KWAJ variant
@@ -245,86 +243,6 @@ namespace ExtractionTool
                     Console.WriteLine("Not a supported extractable file format, skipping...");
                     Console.WriteLine();
                     break;
-            }
-        }
-
-        /// <summary>
-        /// Handle IS-CAB archives
-        /// </summary>
-        private static bool ExtractInstallShieldCabinet(string file, string outputDirectory, bool includeDebug)
-        {
-            // Get the name of the first cabinet file or header
-            var directory = Path.GetDirectoryName(file);
-            string noExtension = Path.GetFileNameWithoutExtension(file);
-
-            bool shouldScanCabinet;
-            if (directory == null)
-            {
-                string filenamePattern = noExtension;
-                filenamePattern = new Regex(@"\d+$").Replace(filenamePattern, string.Empty);
-                bool cabinetHeaderExists = File.Exists(filenamePattern + "1.hdr");
-                shouldScanCabinet = cabinetHeaderExists
-                    ? file.Equals(filenamePattern + "1.hdr", StringComparison.OrdinalIgnoreCase)
-                    : file.Equals(filenamePattern + "1.cab", StringComparison.OrdinalIgnoreCase);
-            }
-            else
-            {
-                string filenamePattern = Path.Combine(directory, noExtension);
-                filenamePattern = new Regex(@"\d+$").Replace(filenamePattern, string.Empty);
-                bool cabinetHeaderExists = File.Exists(Path.Combine(directory, filenamePattern + "1.hdr"));
-                shouldScanCabinet = cabinetHeaderExists
-                    ? file.Equals(Path.Combine(directory, filenamePattern + "1.hdr"), StringComparison.OrdinalIgnoreCase)
-                    : file.Equals(Path.Combine(directory, filenamePattern + "1.cab"), StringComparison.OrdinalIgnoreCase);
-            }
-
-            // If we have anything but the first file
-            if (!shouldScanCabinet)
-                return false;
-
-            try
-            {
-                if (!File.Exists(file))
-                    return false;
-
-                var cabfile = UnshieldSharpInternal.InstallShieldCabinet.Open(file);
-                if (cabfile?.HeaderList == null)
-                    return false;
-
-                for (int i = 0; i < cabfile.HeaderList.FileCount; i++)
-                {
-                    try
-                    {
-                        // Check if the file is valid first
-                        if (!cabfile.HeaderList.FileIsValid(i))
-                            continue;
-
-                        // Ensure directory separators are consistent
-                        string filename = cabfile.HeaderList.GetFileName(i) ?? $"BAD_FILENAME{i}";
-                        if (Path.DirectorySeparatorChar == '\\')
-                            filename = filename.Replace('/', '\\');
-                        else if (Path.DirectorySeparatorChar == '/')
-                            filename = filename.Replace('\\', '/');
-
-                        // Ensure the full output directory exists
-                        filename = Path.Combine(outputDirectory, filename);
-                        var directoryName = Path.GetDirectoryName(filename);
-                        if (directoryName != null && !Directory.Exists(directoryName))
-                            Directory.CreateDirectory(directoryName);
-
-                        cabfile.FileSave(i, filename);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (includeDebug) Console.Error.WriteLine(ex);
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
             }
         }
     }
