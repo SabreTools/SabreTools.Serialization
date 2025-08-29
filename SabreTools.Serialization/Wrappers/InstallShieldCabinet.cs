@@ -87,6 +87,15 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region Extraction State
+
+        /// <summary>
+        /// Base filename path for related CAB files
+        /// </summary>
+        private string? _filenamePattern;
+
+        #endregion
+
         #region Constants
 
         /// <summary>
@@ -241,6 +250,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Open the numbered cabinet set volume
         /// </summary>
+        /// <param name="volumeId">Volume ID, 1-indexed</param>
+        /// <returns>Wrapper representing the volume on success, null otherwise</returns>
+        public InstallShieldCabinet? OpenVolume(ushort volumeId)
+            => OpenVolume(_filenamePattern, volumeId);
+
+        /// <summary>
+        /// Open the numbered cabinet set volume
+        /// </summary>
         /// <param name="pattern">Filename pattern for matching cabinet files</param>
         /// <param name="volumeId">Volume ID, 1-indexed</param>
         /// <returns>Wrapper representing the volume on success, null otherwise</returns>
@@ -270,6 +287,15 @@ namespace SabreTools.Serialization.Wrappers
             volume.VolumeID = volumeId;
             return volume;
         }
+
+        /// <summary>
+        /// Open a cabinet file for reading
+        /// </summary>
+        /// <param name="index">Cabinet part index to be opened</param>
+        /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
+        /// <returns>A Stream representing the cabinet part, null on error</returns>
+        public Stream? OpenFileForReading(int index, string suffix)
+            => OpenFileForReading(_filenamePattern, index, suffix);
 
         /// <summary>
         /// Open a cabinet file for reading
