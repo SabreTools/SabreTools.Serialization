@@ -1094,6 +1094,7 @@ namespace SabreTools.Serialization.Wrappers
         /// - Archives and executables in the overlay
         /// - Archives and executables in resource data
         /// - CExe-compressed resource data
+        /// - SFX archives (7z, PKZIP, RAR)
         /// </remarks>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
@@ -1101,13 +1102,17 @@ namespace SabreTools.Serialization.Wrappers
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
 
-            var sevenZipSfx = SevenZip.Create(_dataSource);
+            // Use non-model constructors to allow looking for headers
+            _dataSource.Position = 0;
+            var sevenZipSfx = new SevenZip(_dataSource);
             bool sevenZip = sevenZipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
-            var pkzipSfx = PKZIP.Create(_dataSource);
+            _dataSource.Position = 0;
+            var pkzipSfx = new PKZIP(_dataSource);
             bool pkzip = pkzipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
-            var rarSfx = RAR.Create(_dataSource);
+            _dataSource.Position = 0;
+            var rarSfx = new RAR(_dataSource);
             bool rar = rarSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
             return cexe || overlay || resources || sevenZip || pkzip || rar;
