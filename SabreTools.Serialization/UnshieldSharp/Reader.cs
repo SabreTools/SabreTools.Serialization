@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using SabreTools.IO.Extensions;
 using SabreTools.Models.InstallShieldCabinet;
-using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace UnshieldSharpInternal
 {
@@ -168,25 +166,18 @@ namespace UnshieldSharpInternal
         /// </summary>
         private bool OpenVolume(ushort volume)
         {
-            // Normalize the volume ID for odd cases
-            if (volume == ushort.MinValue || volume == ushort.MaxValue)
-                volume = 1;
-
-            _volumeFile?.Close();
-            _volumeFile = _extractor.HeaderList.OpenFileForReading(volume, CABINET_SUFFIX);
-            if (_volumeFile == null)
+            // Read the volume from the cabinet set
+            var next = _extractor.HeaderList.OpenVolume(volume, out var volumeStream);
+            if (next?.VolumeHeader == null || volumeStream == null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
                 return false;
             }
 
-            var commonHeader = _volumeFile.ReadType<CommonHeader>();
-            if (commonHeader == default)
-                return false;
-
-            _volumeHeader = SabreTools.Serialization.Deserializers.InstallShieldCabinet.ParseVolumeHeader(_volumeFile, _extractor.HeaderList.MajorVersion);
-            if (_volumeHeader == null)
-                return false;
+            // Assign the next items
+            _volumeFile?.Close();
+            _volumeFile = volumeStream;
+            _volumeHeader = next.VolumeHeader;
 
             // Enable support for split archives for IS5
             if (_extractor.HeaderList.MajorVersion == 5)
