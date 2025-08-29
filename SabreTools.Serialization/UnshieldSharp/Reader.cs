@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.Models.InstallShieldCabinet;
+using Header = SabreTools.Serialization.Wrappers.InstallShieldCabinet;
 
 namespace UnshieldSharpInternal
 {
@@ -11,7 +12,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Cabinet file to read from
         /// </summary>
-        private readonly Extractor _extractor;
+        private readonly Header _cabinet;
 
         /// <summary>
         /// Currently selected index
@@ -57,9 +58,9 @@ namespace UnshieldSharpInternal
 
         #region Constructors
 
-        private Reader(Extractor cabinet, uint index, FileDescriptor fileDescriptor)
+        private Reader(Header cabinet, uint index, FileDescriptor fileDescriptor)
         {
-            _extractor = cabinet;
+            _cabinet = cabinet;
             _index = index;
             _fileDescriptor = fileDescriptor;
         }
@@ -69,7 +70,7 @@ namespace UnshieldSharpInternal
         /// <summary>
         /// Create a new <see cref="Reader"> from an existing cabinet, index, and file descriptor
         /// </summary>
-        public static Reader? Create(Extractor cabinet, int index, FileDescriptor fileDescriptor)
+        public static Reader? Create(Header cabinet, int index, FileDescriptor fileDescriptor)
         {
             var reader = new Reader(cabinet, (uint)index, fileDescriptor);
             for (; ; )
@@ -87,7 +88,7 @@ namespace UnshieldSharpInternal
                 }
 
                 // Start with the correct volume for IS5 cabinets
-                if (reader._extractor.HeaderList.MajorVersion <= 5 && index > (int)reader._volumeHeader.LastFileIndex)
+                if (reader._cabinet.MajorVersion <= 5 && index > (int)reader._volumeHeader.LastFileIndex)
                 {
                     // Normalize the volume ID for odd cases
                     if (fileDescriptor.Volume == ushort.MinValue || fileDescriptor.Volume == ushort.MaxValue)
@@ -147,7 +148,7 @@ namespace UnshieldSharpInternal
 #else
             if (_fileDescriptor.Flags.HasFlag(FileFlags.FILE_OBFUSCATED))
 #endif
-                SabreTools.Serialization.Wrappers.InstallShieldCabinet.Deobfuscate(buffer, size, ref _obfuscationOffset);
+                Header.Deobfuscate(buffer, size, ref _obfuscationOffset);
 
             return true;
         }
@@ -167,7 +168,7 @@ namespace UnshieldSharpInternal
         private bool OpenVolume(ushort volume)
         {
             // Read the volume from the cabinet set
-            var next = _extractor.HeaderList.OpenVolume(volume, out var volumeStream);
+            var next = _cabinet.OpenVolume(volume, out var volumeStream);
             if (next?.VolumeHeader == null || volumeStream == null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
@@ -180,9 +181,9 @@ namespace UnshieldSharpInternal
             _volumeHeader = next.VolumeHeader;
 
             // Enable support for split archives for IS5
-            if (_extractor.HeaderList.MajorVersion == 5)
+            if (_cabinet.MajorVersion == 5)
             {
-                if (_index < (_extractor.HeaderList.FileCount - 1)
+                if (_index < (_cabinet.FileCount - 1)
                     && _index == _volumeHeader.LastFileIndex
                     && _volumeHeader.LastFileSizeCompressed != _fileDescriptor.CompressedSize)
                 {
