@@ -8,7 +8,6 @@ using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    // TODO: Add multi-cabinet reading
     public class InstallShieldCabinet : BaseBinaryDeserializer<Cabinet>
     {
         /// <inheritdoc/>

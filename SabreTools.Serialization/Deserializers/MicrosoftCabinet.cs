@@ -6,7 +6,6 @@ using static SabreTools.Models.MicrosoftCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    // TODO: Add multi-cabinet reading
     public class MicrosoftCabinet : BaseBinaryDeserializer<Cabinet>
     {
         /// <inheritdoc/>

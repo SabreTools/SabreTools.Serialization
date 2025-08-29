@@ -26,7 +26,6 @@ namespace SabreTools.Serialization.CrossModel
                 datafile.Header = ConvertHeaderFromInternalModel(header);
             }
 
-            // TODO: Handle Dir items - Currently need to be generated from the machines
             var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
                 datafile.Game = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
