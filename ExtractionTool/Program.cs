@@ -224,18 +224,19 @@ namespace ExtractionTool
             }
 
             // MoPaQ (MPQ) archive -- Reimplement
-            // else if (wrapper is MoPaQ mpq)
-            // {
-            //     Console.WriteLine("Extracting MoPaQ contents");
-            //     Console.WriteLine();
+            else if (wrapper is MoPaQ mpq)
+            {
+                Console.WriteLine("Extracting MoPaQ contents");
+                Console.WriteLine();
 
 #if NET20 || NET35 || !(WINX86 || WINX64)
-            //     Console.WriteLine("Extraction is not supported for this framework!");
-            //     Console.WriteLine();
+                Console.WriteLine("Extraction is not supported for this framework!");
+                Console.WriteLine();
 #else
-            //     mpq.Extract(stream, file, outputDirectory, includeDebug: true);
+                Console.WriteLine("Extraction needs to be reimplemented for this framework!");
+                Console.WriteLine();
 #endif
-            // }
+            }
 
             // New Executable
             else if (wrapper is NewExecutable nex)
