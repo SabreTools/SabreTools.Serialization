@@ -303,6 +303,34 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into an BaseRelocationBlock
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BaseRelocationBlock on success, null on error</returns>
+        public static BaseRelocationBlock? ParseBaseRelocationBlock(Stream data)
+        {
+            var obj = new BaseRelocationBlock();
+
+            obj.PageRVA = data.ReadUInt32LittleEndian();
+            obj.BlockSize = data.ReadUInt32LittleEndian();
+            if (obj.BlockSize == 0)
+                return null;
+
+            var entries = new List<BaseRelocationTypeOffsetFieldEntry>();
+            int totalSize = 8;
+            while (totalSize < obj.BlockSize && data.Position < data.Length)
+            {
+                var entry = ParseBaseRelocationTypeOffsetFieldEntry(data);
+                entries.Add(entry);
+                totalSize += 2;
+            }
+
+            obj.TypeOffsetFieldEntries = [.. entries];
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a base relocation table
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -314,28 +342,9 @@ namespace SabreTools.Serialization.Deserializers
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
-                var block = new BaseRelocationBlock();
-
-                block.PageRVA = data.ReadUInt32LittleEndian();
-                block.BlockSize = data.ReadUInt32LittleEndian();
-                if (block.BlockSize == 0)
+                var block = ParseBaseRelocationBlock(data);
+                if (block == null)
                     break;
-
-                var entries = new List<BaseRelocationTypeOffsetFieldEntry>();
-                int totalSize = 8;
-                while (totalSize < block.BlockSize && data.Position < data.Length)
-                {
-                    var entry = new BaseRelocationTypeOffsetFieldEntry();
-
-                    ushort typeAndOffsetField = data.ReadUInt16LittleEndian();
-                    entry.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
-                    entry.Offset = (ushort)(typeAndOffsetField & 0x0FFF);
-
-                    entries.Add(entry);
-                    totalSize += 2;
-                }
-
-                block.TypeOffsetFieldEntries = [.. entries];
 
                 obj.Add(block);
 
@@ -344,6 +353,22 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             return [.. obj];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a BaseRelocationTypeOffsetFieldEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BaseRelocationTypeOffsetFieldEntry on success, null on error</returns>
+        public static BaseRelocationTypeOffsetFieldEntry ParseBaseRelocationTypeOffsetFieldEntry(Stream data)
+        {
+            var obj = new BaseRelocationTypeOffsetFieldEntry();
+
+            ushort typeAndOffsetField = data.ReadUInt16LittleEndian();
+            obj.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
+            obj.Offset = (ushort)(typeAndOffsetField & 0x0FFF);
+
+            return obj;
         }
 
         /// <summary>
@@ -396,6 +421,183 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Standard COFF Symbol Table Entry</remarks>
+        public static COFFSymbolTableEntry? ParseCOFFSymbolTableEntryType0(Stream data, out int currentSymbolType)
+        {
+            var entry = new COFFSymbolTableEntry();
+            entry.ShortName = data.ReadBytes(8);
+            if (entry.ShortName != null)
+                entry.Zeroes = BitConverter.ToUInt32(entry.ShortName, 0);
+
+            if (entry.Zeroes == 0)
+            {
+                if (entry.ShortName != null)
+                    entry.Offset = BitConverter.ToUInt32(entry.ShortName, 4);
+
+                entry.ShortName = null;
+            }
+            entry.Value = data.ReadUInt32LittleEndian();
+            entry.SectionNumber = data.ReadUInt16LittleEndian();
+            entry.SymbolType = (SymbolType)data.ReadUInt16LittleEndian();
+            entry.StorageClass = (StorageClass)data.ReadByteValue();
+            entry.NumberOfAuxSymbols = data.ReadByteValue();
+
+            if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
+                && entry.SymbolType == SymbolType.IMAGE_SYM_TYPE_FUNC
+                && entry.SectionNumber > 0)
+            {
+                currentSymbolType = 1;
+            }
+            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FUNCTION
+                && entry.ShortName != null
+                && ((entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x62 && entry.ShortName[2] == 0x66)  // .bf
+                    || (entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x65 && entry.ShortName[2] == 0x66))) // .ef
+            {
+                currentSymbolType = 2;
+            }
+            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
+                && entry.SectionNumber == (ushort)SectionNumber.IMAGE_SYM_UNDEFINED
+                && entry.Value == 0)
+            {
+                currentSymbolType = 3;
+            }
+            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE)
+            {
+                // TODO: Symbol name should be ".file"
+                currentSymbolType = 4;
+            }
+            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC)
+            {
+                // TODO: Should have the name of a section (like ".text")
+                currentSymbolType = 5;
+            }
+            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
+            {
+                currentSymbolType = 6;
+            }
+            else
+            {
+                currentSymbolType = -1;
+                return null;
+            }
+
+            return entry;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 1: Function Definitions</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType1(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat1TagIndex = data.ReadUInt32LittleEndian();
+            obj.AuxFormat1TotalSize = data.ReadUInt32LittleEndian();
+            obj.AuxFormat1PointerToLinenumber = data.ReadUInt32LittleEndian();
+            obj.AuxFormat1PointerToNextFunction = data.ReadUInt32LittleEndian();
+            obj.AuxFormat1Unused = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 2: .bf and .ef Symbols</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType2(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat2Unused1 = data.ReadUInt32LittleEndian();
+            obj.AuxFormat2Linenumber = data.ReadUInt16LittleEndian();
+            obj.AuxFormat2Unused2 = data.ReadBytes(6);
+            obj.AuxFormat2PointerToNextFunction = data.ReadUInt32LittleEndian();
+            obj.AuxFormat2Unused3 = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 3: Weak Externals</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType3(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat3TagIndex = data.ReadUInt32LittleEndian();
+            obj.AuxFormat3Characteristics = data.ReadUInt32LittleEndian();
+            obj.AuxFormat3Unused = data.ReadBytes(10);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 4: Files</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType4(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat4FileName = data.ReadBytes(18);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 5: Section Definitions</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType5(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat5Length = data.ReadUInt32LittleEndian();
+            obj.AuxFormat5NumberOfRelocations = data.ReadUInt16LittleEndian();
+            obj.AuxFormat5NumberOfLinenumbers = data.ReadUInt16LittleEndian();
+            obj.AuxFormat5CheckSum = data.ReadUInt32LittleEndian();
+            obj.AuxFormat5Number = data.ReadUInt16LittleEndian();
+            obj.AuxFormat5Selection = data.ReadByteValue();
+            obj.AuxFormat5Unused = data.ReadBytes(3);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a COFFSymbolTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled COFFSymbolTableEntry on success, null on error</returns>
+        /// <remarks>Auxiliary Format 6: CLR Token Definition</remarks>
+        public static COFFSymbolTableEntry ParseCOFFSymbolTableEntryType6(Stream data)
+        {
+            var obj = new COFFSymbolTableEntry();
+
+            obj.AuxFormat6AuxType = data.ReadByteValue();
+            obj.AuxFormat6Reserved1 = data.ReadByteValue();
+            obj.AuxFormat6SymbolTableIndex = data.ReadUInt32LittleEndian();
+            obj.AuxFormat6Reserved2 = data.ReadBytes(12);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a COFF symbol table
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -413,138 +615,59 @@ namespace SabreTools.Serialization.Deserializers
                 // Standard COFF Symbol Table Entry
                 if (currentSymbolType == 0)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.ShortName = data.ReadBytes(8);
-                    if (entry.ShortName != null)
-                        entry.Zeroes = BitConverter.ToUInt32(entry.ShortName, 0);
+                    var entry = ParseCOFFSymbolTableEntryType0(data, out currentSymbolType);
+                    if (entry == null)
+                        return null;
 
-                    if (entry.Zeroes == 0)
-                    {
-                        if (entry.ShortName != null)
-                            entry.Offset = BitConverter.ToUInt32(entry.ShortName, 4);
-
-                        entry.ShortName = null;
-                    }
-                    entry.Value = data.ReadUInt32LittleEndian();
-                    entry.SectionNumber = data.ReadUInt16LittleEndian();
-                    entry.SymbolType = (SymbolType)data.ReadUInt16LittleEndian();
-                    entry.StorageClass = (StorageClass)data.ReadByteValue();
-                    entry.NumberOfAuxSymbols = data.ReadByteValue();
                     obj[i] = entry;
 
                     auxSymbolsRemaining = entry.NumberOfAuxSymbols;
                     if (auxSymbolsRemaining == 0)
+                    {
+                        currentSymbolType = 0;
                         continue;
-
-                    if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                        && entry.SymbolType == SymbolType.IMAGE_SYM_TYPE_FUNC
-                        && entry.SectionNumber > 0)
-                    {
-                        currentSymbolType = 1;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FUNCTION
-                        && entry.ShortName != null
-                        && ((entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x62 && entry.ShortName[2] == 0x66)  // .bf
-                            || (entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x65 && entry.ShortName[2] == 0x66))) // .ef
-                    {
-                        currentSymbolType = 2;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                        && entry.SectionNumber == (ushort)SectionNumber.IMAGE_SYM_UNDEFINED
-                        && entry.Value == 0)
-                    {
-                        currentSymbolType = 3;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE)
-                    {
-                        // TODO: Symbol name should be ".file"
-                        currentSymbolType = 4;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC)
-                    {
-                        // TODO: Should have the name of a section (like ".text")
-                        currentSymbolType = 5;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
-                    {
-                        currentSymbolType = 6;
-                    }
-                    else
-                    {
-                        return null;
                     }
                 }
 
                 // Auxiliary Format 1: Function Definitions
                 else if (currentSymbolType == 1)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat1TagIndex = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat1TotalSize = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat1PointerToLinenumber = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat1PointerToNextFunction = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat1Unused = data.ReadUInt16LittleEndian();
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType1(data); ;
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 2: .bf and .ef Symbols
                 else if (currentSymbolType == 2)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat2Unused1 = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat2Linenumber = data.ReadUInt16LittleEndian();
-                    entry.AuxFormat2Unused2 = data.ReadBytes(6);
-                    entry.AuxFormat2PointerToNextFunction = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat2Unused3 = data.ReadUInt16LittleEndian();
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType2(data); ;
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 3: Weak Externals
                 else if (currentSymbolType == 3)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat3TagIndex = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat3Characteristics = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat3Unused = data.ReadBytes(10);
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType3(data); ;
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 4: Files
                 else if (currentSymbolType == 4)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat4FileName = data.ReadBytes(18);
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType4(data); ;
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 5: Section Definitions
                 else if (currentSymbolType == 5)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat5Length = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat5NumberOfRelocations = data.ReadUInt16LittleEndian();
-                    entry.AuxFormat5NumberOfLinenumbers = data.ReadUInt16LittleEndian();
-                    entry.AuxFormat5CheckSum = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat5Number = data.ReadUInt16LittleEndian();
-                    entry.AuxFormat5Selection = data.ReadByteValue();
-                    entry.AuxFormat5Unused = data.ReadBytes(3);
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType5(data); ;
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 6: CLR Token Definition
                 else if (currentSymbolType == 6)
                 {
-                    var entry = new COFFSymbolTableEntry();
-                    entry.AuxFormat6AuxType = data.ReadByteValue();
-                    entry.AuxFormat6Reserved1 = data.ReadByteValue();
-                    entry.AuxFormat6SymbolTableIndex = data.ReadUInt32LittleEndian();
-                    entry.AuxFormat6Reserved2 = data.ReadBytes(12);
-                    obj[i] = entry;
+                    obj[i] = ParseCOFFSymbolTableEntryType6(data); ;
                     auxSymbolsRemaining--;
                 }
 
@@ -791,6 +914,38 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a ImportAddressTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="magic">Optional header magic number</param>
+        /// <returns>Filled ImportAddressTableEntry on success, null on error</returns>
+        public static ImportAddressTableEntry ParseImportAddressTableEntry(Stream data, OptionalHeaderMagicNumber magic)
+        {
+            var obj = new ImportAddressTableEntry();
+
+            if (magic == OptionalHeaderMagicNumber.PE32)
+            {
+                uint value = data.ReadUInt32LittleEndian();
+                obj.OrdinalNameFlag = (value & 0x80000000) != 0;
+                if (obj.OrdinalNameFlag)
+                    obj.OrdinalNumber = (ushort)(value & ~0x80000000);
+                else
+                    obj.HintNameTableRVA = (uint)(value & ~0x80000000);
+            }
+            else if (magic == OptionalHeaderMagicNumber.PE32Plus)
+            {
+                ulong value = data.ReadUInt64LittleEndian();
+                obj.OrdinalNameFlag = (value & 0x8000000000000000) != 0;
+                if (obj.OrdinalNameFlag)
+                    obj.OrdinalNumber = (ushort)(value & ~0x8000000000000000);
+                else
+                    obj.HintNameTableRVA = (uint)(value & ~0x8000000000000000);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a ImportDirectoryTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -804,6 +959,38 @@ namespace SabreTools.Serialization.Deserializers
             obj.ForwarderChain = data.ReadUInt32LittleEndian();
             obj.NameRVA = data.ReadUInt32LittleEndian();
             obj.ImportAddressTableRVA = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ImportLookupTableEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="magic">Optional header magic number</param>
+        /// <returns>Filled ImportLookupTableEntry on success, null on error</returns>
+        public static ImportLookupTableEntry ParseImportLookupTableEntry(Stream data, OptionalHeaderMagicNumber magic)
+        {
+            var obj = new ImportLookupTableEntry();
+
+            if (magic == OptionalHeaderMagicNumber.PE32)
+            {
+                uint value = data.ReadUInt32LittleEndian();
+                obj.OrdinalNameFlag = (value & 0x80000000) != 0;
+                if (obj.OrdinalNameFlag)
+                    obj.OrdinalNumber = (ushort)(value & ~0x80000000);
+                else
+                    obj.HintNameTableRVA = (uint)(value & ~0x80000000);
+            }
+            else if (magic == OptionalHeaderMagicNumber.PE32Plus)
+            {
+                ulong value = data.ReadUInt64LittleEndian();
+                obj.OrdinalNameFlag = (value & 0x8000000000000000) != 0;
+                if (obj.OrdinalNameFlag)
+                    obj.OrdinalNumber = (ushort)(value & ~0x8000000000000000);
+                else
+                    obj.HintNameTableRVA = (uint)(value & ~0x8000000000000000);
+            }
 
             return obj;
         }
@@ -878,27 +1065,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 while (true)
                 {
-                    var lookupEntry = new ImportLookupTableEntry();
-
-                    if (magic == OptionalHeaderMagicNumber.PE32)
-                    {
-                        uint entryValue = data.ReadUInt32LittleEndian();
-                        lookupEntry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
-                        if (lookupEntry.OrdinalNameFlag)
-                            lookupEntry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
-                        else
-                            lookupEntry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
-                    }
-                    else if (magic == OptionalHeaderMagicNumber.PE32Plus)
-                    {
-                        ulong entryValue = data.ReadUInt64LittleEndian();
-                        lookupEntry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
-                        if (lookupEntry.OrdinalNameFlag)
-                            lookupEntry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
-                        else
-                            lookupEntry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
-                    }
-
+                    var lookupEntry = ParseImportLookupTableEntry(data, magic);
                     entryLookupTable.Add(lookupEntry);
 
                     // All zero values means the last entry
@@ -933,27 +1100,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 while (true)
                 {
-                    var tableEntry = new ImportAddressTableEntry();
-
-                    if (magic == OptionalHeaderMagicNumber.PE32)
-                    {
-                        uint entryValue = data.ReadUInt32LittleEndian();
-                        tableEntry.OrdinalNameFlag = (entryValue & 0x80000000) != 0;
-                        if (tableEntry.OrdinalNameFlag)
-                            tableEntry.OrdinalNumber = (ushort)(entryValue & ~0x80000000);
-                        else
-                            tableEntry.HintNameTableRVA = (uint)(entryValue & ~0x80000000);
-                    }
-                    else if (magic == OptionalHeaderMagicNumber.PE32Plus)
-                    {
-                        ulong entryValue = data.ReadUInt64LittleEndian();
-                        tableEntry.OrdinalNameFlag = (entryValue & 0x8000000000000000) != 0;
-                        if (tableEntry.OrdinalNameFlag)
-                            tableEntry.OrdinalNumber = (ushort)(entryValue & ~0x8000000000000000);
-                        else
-                            tableEntry.HintNameTableRVA = (uint)(entryValue & ~0x8000000000000000);
-                    }
-
+                    var tableEntry = ParseImportAddressTableEntry(data, magic);
                     addressLookupTable.Add(tableEntry);
 
                     // All zero values means the last entry
@@ -1166,6 +1313,88 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into an ResourceDataEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ResourceDataEntry on success, null on error</returns>
+        public static ResourceDataEntry ParseResourceDataEntry(Stream data, long initialOffset, SectionHeader[] sections)
+        {
+            var obj = new ResourceDataEntry();
+
+            obj.DataRVA = data.ReadUInt32LittleEndian();
+            obj.Size = data.ReadUInt32LittleEndian();
+            obj.Codepage = data.ReadUInt32LittleEndian();
+            obj.Reserved = data.ReadUInt32LittleEndian();
+
+            // Read the data from the offset
+            long offset = initialOffset + obj.DataRVA.ConvertVirtualAddress(sections);
+            if (offset > 0 && obj.Size > 0 && offset + (int)obj.Size < data.Length)
+            {
+                data.Seek(offset, SeekOrigin.Begin);
+                obj.Data = data.ReadBytes((int)obj.Size);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ResourceDirectoryEntry
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
+        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, long initialOffset)
+        {
+            var obj = new ResourceDirectoryEntry();
+
+            uint first = data.ReadUInt32LittleEndian();
+            if ((first & 0x80000000) != 0)
+                obj.NameOffset = first & ~0x80000000;
+            else
+                obj.IntegerID = first;
+
+            uint second = data.ReadUInt32LittleEndian();
+            if ((second & 0x80000000) != 0)
+                obj.SubdirectoryOffset = second & ~0x80000000;
+            else
+                obj.DataEntryOffset = second;
+
+            // Read the name from the offset, if needed
+            if (obj.NameOffset > 0)
+            {
+                long currentOffset = data.Position;
+
+                long nameOffset = initialOffset + obj.NameOffset;
+                data.Seek(nameOffset, SeekOrigin.Begin);
+
+                obj.Name = ParseResourceDirectoryString(data);
+
+                data.Seek(currentOffset, SeekOrigin.Begin);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an ResourceDirectoryString
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ResourceDirectoryString on success, null on error</returns>
+        public static ResourceDirectoryString ParseResourceDirectoryString(Stream data)
+        {
+            var obj = new ResourceDirectoryString();
+
+            obj.Length = data.ReadUInt16LittleEndian();
+            if (obj.Length > 0 && data.Position + obj.Length <= data.Length)
+                obj.UnicodeString = data.ReadBytes(obj.Length * 2);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a ResourceDirectoryTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -1193,38 +1422,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.Entries = new ResourceDirectoryEntry[totalEntryCount];
             for (int i = 0; i < totalEntryCount; i++)
             {
-                var entry = new ResourceDirectoryEntry();
-                uint offset = data.ReadUInt32LittleEndian();
-                if ((offset & 0x80000000) != 0)
-                    entry.NameOffset = offset & ~0x80000000;
-                else
-                    entry.IntegerID = offset;
-
-                offset = data.ReadUInt32LittleEndian();
-                if ((offset & 0x80000000) != 0)
-                    entry.SubdirectoryOffset = offset & ~0x80000000;
-                else
-                    entry.DataEntryOffset = offset;
-
-                // Read the name from the offset, if needed
-                if (entry.NameOffset > 0)
-                {
-                    long currentOffset = data.Position;
-                    long nameOffset = initialOffset + entry.NameOffset;
-                    data.Seek(nameOffset, SeekOrigin.Begin);
-
-                    var resourceDirectoryString = new ResourceDirectoryString();
-
-                    resourceDirectoryString.Length = data.ReadUInt16LittleEndian();
-                    if (resourceDirectoryString.Length > 0 && data.Position + resourceDirectoryString.Length <= data.Length)
-                        resourceDirectoryString.UnicodeString = data.ReadBytes(resourceDirectoryString.Length * 2);
-
-                    entry.Name = resourceDirectoryString;
-
-                    data.Seek(currentOffset, SeekOrigin.Begin);
-                }
-
-                obj.Entries[i] = entry;
+                obj.Entries[i] = ParseResourceDirectoryEntry(data, initialOffset);
             }
 
             // Loop through and process the entries
@@ -1238,20 +1436,7 @@ namespace SabreTools.Serialization.Deserializers
                     long offset = initialOffset + entry.DataEntryOffset;
                     data.Seek(offset, SeekOrigin.Begin);
 
-                    var resourceDataEntry = new ResourceDataEntry();
-                    resourceDataEntry.DataRVA = data.ReadUInt32LittleEndian();
-                    resourceDataEntry.Size = data.ReadUInt32LittleEndian();
-                    resourceDataEntry.Codepage = data.ReadUInt32LittleEndian();
-                    resourceDataEntry.Reserved = data.ReadUInt32LittleEndian();
-
-                    // Read the data from the offset
-                    offset = initialOffset + resourceDataEntry.DataRVA.ConvertVirtualAddress(sections);
-                    if (offset > 0 && resourceDataEntry.Size > 0 && offset + (int)resourceDataEntry.Size < data.Length)
-                    {
-                        data.Seek(offset, SeekOrigin.Begin);
-                        resourceDataEntry.Data = data.ReadBytes((int)resourceDataEntry.Size);
-                    }
-
+                    var resourceDataEntry = ParseResourceDataEntry(data, initialOffset, sections);
                     entry.DataEntry = resourceDataEntry;
                 }
                 else if (entry.SubdirectoryOffset > 0)
