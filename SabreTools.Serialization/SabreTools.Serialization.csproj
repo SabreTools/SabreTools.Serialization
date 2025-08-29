@@ -26,17 +26,24 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
-    <!-- Set build flags for Windows specifically -->
-    <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x86'">
-        <DefineConstants>$(DefineConstants);WINX86</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
-        <DefineConstants>$(DefineConstants);WINX64</DefineConstants>
+    <!-- Exclude certain parts of external modules for by default -->
+    <PropertyGroup>
+        <DefaultItemExcludes>
+            $(DefaultItemExcludes);
+            **\AssemblyInfo.cs;
+            _EXTERNAL\stormlibsharp\lib\**;
+            _EXTERNAL\stormlibsharp\src\TestConsole\**
+        </DefaultItemExcludes>
     </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="../README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
+    <!-- Exclude all external modules for .NET Framework 2.0, .NET Framework 3.5, or non-Windows
+    builds -->
+    <PropertyGroup Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`)) OR !$(RuntimeIdentifier.StartsWith(`win-x86`))">
+        <DefaultItemExcludes>
+            $(DefaultItemExcludes);
+            _EXTERNAL\**
+        </DefaultItemExcludes>
+    </PropertyGroup>
 
     <!-- These are needed for dealing with native Windows DLLs -->
     <ItemGroup>
@@ -44,6 +51,10 @@
             <PackagePath>%(Identity)</PackagePath>
             <Pack>true</Pack>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
     <ItemGroup>
