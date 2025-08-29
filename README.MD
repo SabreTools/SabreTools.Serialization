@@ -52,14 +52,14 @@ Options:
 | Half-Life Texture Package File (WAD3) | |
 | Half-Life 2 Level (VBSP) | |
 | InstallShield Archive V3 (Z) | |
-| InstallShield CAB | Currently not working |
+| InstallShield CAB | |
 | Microsoft cabinet file | Does not support LZX or Quantum compression |
 | Microsoft LZ-compressed files | KWAJ, QBasic, and SZDD variants |
 | MoPaQ game data archive (MPQ) | Currently not working. Windows only. .NET Framework 4.5.2 and above |
-| New Exectuable | Currently not working. Wise installer only |
+| New Exectuable | Embedded archives and executables in the overlay and Wise installer |
 | NovaLogic Game Archive Format (PFF) | |
 | PKZIP and derived files (ZIP, etc.) | .NET Framework 4.6.2 and greater |
-| Portable Executable | Embedded archives and executables in the resources and overlay, CExe-packed data, SFX archives (7-zip, PKZIP, and RAR), and Wise installer. Same restrictions apply to SFX archives as standalone variants. |
+| Portable Executable | Embedded archives and executables in the resources and overlay, CExe-packed data, SFX archives (7-zip, PKZIP, and RAR), and Wise installer |
 | Quantum archive (Q) | Currently not working |
 | RAR archive (RAR) | .NET Framework 4.6.2 and greater |
 | SGA game archive | |
