@@ -1094,12 +1094,7 @@ namespace SabreTools.Serialization.Wrappers
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
 
-            // Use non-model constructors to allow looking for headers
-            _dataSource.Position = 0;
-            var pkzipSfx = new PKZIP(_dataSource);
-            bool pkzip = pkzipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
-
-            return cexe || overlay || resources || pkzip;
+            return cexe || overlay || resources;
         }
 
         /// <summary>
@@ -1167,71 +1162,81 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Cache the overlay data for easier reading
                 var overlayData = OverlayData;
-                if (overlayData == null)
+                if (overlayData == null || overlayData.Length == 0)
                     return false;
 
                 // Set the output variables
-                int overlayOffset = -1;
+                int overlayOffset = 0;
                 string extension = string.Empty;
 
                 // Only process the overlay if it is recognized
-                if (overlayData.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                for (; overlayOffset < 0x40 && overlayOffset < overlayData.Length; overlayOffset++)
                 {
-                    overlayOffset = 0;
-                    extension = "7z";
-                }
-                else if (overlayData.StartsWith([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C]))
-                {
-                    // 7-zip SFX script -- ";!@Install" to ";!@InstallEnd@!"
-                    overlayOffset = overlayData.FirstPosition([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C, 0x45, 0x6E, 0x64, 0x40, 0x21]);
-                    if (overlayOffset == -1)
-                        return false;
+                    int temp = overlayOffset;
+                    byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
 
-                    overlayOffset += 15;
-                    extension = "7z";
+                    if (overlaySample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                    {
+                        extension = "7z";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C]))
+                    {
+                        // 7-zip SFX script -- ";!@Install" to ";!@InstallEnd@!"
+                        overlayOffset = overlayData.FirstPosition([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C, 0x45, 0x6E, 0x64, 0x40, 0x21]);
+                        if (overlayOffset == -1)
+                            return false;
+
+                        overlayOffset += 15;
+                        extension = "7z";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                    {
+                        extension = "zip";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                    {
+                        extension = "zip";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                    {
+                        extension = "zip";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                    {
+                        extension = "zip";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                    {
+                        extension = "rar";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                    {
+                        extension = "rar";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                    {
+                        extension = "bin"; // exe/dll
+                        break;
+                    }
                 }
-                else if (overlayData.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
-                {
-                    overlayOffset = 0;
-                    extension = "zip";
-                }
-                else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
-                {
-                    overlayOffset = 0;
-                    extension = "zip";
-                }
-                else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
-                {
-                    overlayOffset = 0;
-                    extension = "zip";
-                }
-                else if (overlayData.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
-                {
-                    overlayOffset = 0;
-                    extension = "zip";
-                }
-                else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
-                {
-                    overlayOffset = 0;
-                    extension = "rar";
-                }
-                else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
-                {
-                    overlayOffset = 0;
-                    extension = "rar";
-                }
-                else if (overlayData.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                {
-                    overlayOffset = 0;
-                    extension = "bin"; // exe/dll
-                }
-                else
-                {
+
+                // If the extension is unset
+                if (extension.Length == 0)
                     return false;
-                }
 
                 // Create the temp filename
                 string tempFile = $"embedded_overlay.{extension}";
+                if (Filename != null)
+                    tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
+
                 tempFile = Path.Combine(outputDirectory, tempFile);
                 var directoryName = Path.GetDirectoryName(tempFile);
                 if (directoryName != null && !Directory.Exists(directoryName))
@@ -1269,34 +1274,72 @@ namespace SabreTools.Serialization.Wrappers
                 int i = 0;
                 foreach (var value in resourceData.Values)
                 {
-                    if (value == null || value is not byte[] ba)
+                    if (value == null || value is not byte[] ba || ba.Length == 0)
                         continue;
 
-                    // Only process the resource if it a recognized signature
+                    // Set the output variables
+                    int resourceOffset = 0;
                     string extension = string.Empty;
-                    if (ba.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
-                        extension = "7z";
-                    else if (ba.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
-                        extension = "zip";
-                    else if (ba.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
-                        extension = "zip";
-                    else if (ba.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
-                        extension = "zip";
-                    else if (ba.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
-                        extension = "zip";
-                    else if (ba.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
-                        extension = "rar";
-                    else if (ba.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
-                        extension = "rar";
-                    else if (ba.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                        extension = "bin"; // exe/dll
-                    else
+
+                    // Only process the resource if it a recognized signature
+                    for (; resourceOffset < 0x40 && resourceOffset < ba.Length; resourceOffset++)
+                    {
+                        int temp = resourceOffset;
+                        byte[] resourceSample = ba.ReadBytes(ref temp, 0x10);
+
+                        if (resourceSample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                        {
+                            extension = "7z";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                        {
+                            extension = "zip";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                        {
+                            extension = "zip";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                        {
+                            extension = "zip";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                        {
+                            extension = "zip";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                        {
+                            extension = "rar";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                        {
+                            extension = "rar";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                        {
+                            extension = "bin"; // exe/dll
+                            break;
+                        }
+                    }
+
+                    // If the extension is unset
+                    if (extension.Length == 0)
                         continue;
 
                     try
                     {
                         // Create the temp filename
                         string tempFile = $"embedded_resource_{i++}.{extension}";
+                        if (Filename != null)
+                            tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
+
                         tempFile = Path.Combine(outputDirectory, tempFile);
                         var directoryName = Path.GetDirectoryName(tempFile);
                         if (directoryName != null && !Directory.Exists(directoryName))
