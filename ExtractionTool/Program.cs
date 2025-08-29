@@ -93,12 +93,13 @@ namespace ExtractionTool
             // Create the output directory
             Directory.CreateDirectory(outputDirectory);
 
+            // Print the preamble
+            Console.WriteLine($"Attempting to extract from '{wrapper?.Description() ?? "UNKNOWN"}'");
+            Console.WriteLine();
+
             // 7-zip
             if (wrapper is SevenZip sz)
             {
-                Console.WriteLine("Extracting 7-zip contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || NET40 || NET452
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -110,37 +111,24 @@ namespace ExtractionTool
             // BFPK archive
             else if (wrapper is BFPK bfpk)
             {
-                Console.WriteLine("Extracting BFPK contents");
-                Console.WriteLine();
-
                 bfpk.Extract(outputDirectory, includeDebug);
             }
 
             // BSP
             else if (wrapper is BSP bsp)
             {
-                Console.WriteLine("Extracting BSP contents");
-                Console.WriteLine();
-
                 bsp.Extract(outputDirectory, includeDebug);
             }
 
             // bzip2
             else if (wrapper is BZip2 bzip2)
             {
-                Console.WriteLine("Extracting bzip2 contents");
-                Console.WriteLine();
-
                 bzip2.Extract(outputDirectory, includeDebug);
             }
 
             // CFB
             else if (wrapper is CFB cfb)
             {
-                // Build the installer information
-                Console.WriteLine("Extracting CFB contents");
-                Console.WriteLine();
-
 #if NET20 || NET35
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -152,36 +140,24 @@ namespace ExtractionTool
             // GCF
             else if (wrapper is GCF gcf)
             {
-                Console.WriteLine("Extracting GCF contents");
-                Console.WriteLine();
-
                 gcf.Extract(outputDirectory, includeDebug);
             }
 
             // gzip
             else if (wrapper is GZip gzip)
             {
-                Console.WriteLine("Extracting gzip contents");
-                Console.WriteLine();
-
                 gzip.Extract(outputDirectory, includeDebug);
             }
 
             // InstallShield Archive V3 (Z)
             else if (wrapper is InstallShieldArchiveV3 isv3)
             {
-                Console.WriteLine("Extracting InstallShield Archive V3 contents");
-                Console.WriteLine();
-
                 isv3.Extract(outputDirectory, includeDebug);
             }
 
             // IS-CAB archive
             else if (wrapper is InstallShieldCabinet)
             {
-                Console.WriteLine("Extracting IS-CAB contents");
-                Console.WriteLine();
-
                 // TODO: Move this handling to Serialization directly
                 ExtractInstallShieldCabinet(file, outputDirectory, includeDebug);
             }
@@ -189,46 +165,31 @@ namespace ExtractionTool
             // LZ-compressed file, KWAJ variant
             else if (wrapper is LZKWAJ kwaj)
             {
-                Console.WriteLine("Extracting LZ-compressed file, KWAJ variant contents");
-                Console.WriteLine();
-
                 kwaj.Extract(outputDirectory, includeDebug);
             }
 
             // LZ-compressed file, QBasic variant
             else if (wrapper is LZQBasic qbasic)
             {
-                Console.WriteLine("Extracting LZ-compressed file, QBasic variant contents");
-                Console.WriteLine();
-
                 qbasic.Extract(outputDirectory, includeDebug);
             }
 
             // LZ-compressed file, SZDD variant
             else if (wrapper is LZSZDD szdd)
             {
-                Console.WriteLine("Extracting LZ-compressed file, SZDD variant contents");
-                Console.WriteLine();
-
                 szdd.Extract(outputDirectory, includeDebug);
             }
 
             // Microsoft Cabinet archive
             else if (wrapper is MicrosoftCabinet mscab)
             {
-                Console.WriteLine("Extracting MS-CAB contents");
                 Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
-                Console.WriteLine();
-
                 MicrosoftCabinet.ExtractSet(file, outputDirectory, includeDebug);
             }
 
             // MoPaQ (MPQ) archive -- Reimplement
             else if (wrapper is MoPaQ mpq)
             {
-                Console.WriteLine("Extracting MoPaQ contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || !(WINX86 || WINX64)
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -241,36 +202,24 @@ namespace ExtractionTool
             // New Executable
             else if (wrapper is NewExecutable nex)
             {
-                Console.WriteLine("Extracting New Executable contents");
-                Console.WriteLine();
-
                 nex.Extract(outputDirectory, includeDebug);
             }
 
             // PAK
             else if (wrapper is PAK pak)
             {
-                Console.WriteLine("Extracting PAK contents");
-                Console.WriteLine();
-
                 pak.Extract(outputDirectory, includeDebug);
             }
 
             // PFF
             else if (wrapper is PFF pff)
             {
-                Console.WriteLine("Extracting PFF contents");
-                Console.WriteLine();
-
                 pff.Extract(outputDirectory, includeDebug);
             }
 
             // PKZIP
             else if (wrapper is PKZIP pkzip)
             {
-                Console.WriteLine("Extracting PKZIP contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || NET40 || NET452
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -282,27 +231,18 @@ namespace ExtractionTool
             // Portable Executable
             else if (wrapper is PortableExecutable pex)
             {
-                Console.WriteLine("Extracting Portable Executable contents");
-                Console.WriteLine();
-
                 pex.Extract(outputDirectory, includeDebug);
             }
 
             // Quantum
             else if (wrapper is Quantum quantum)
             {
-                Console.WriteLine("Extracting Quantum contents");
-                Console.WriteLine();
-
                 quantum.Extract(outputDirectory, includeDebug);
             }
 
             // RAR
             else if (wrapper is RAR rar)
             {
-                Console.WriteLine("Extracting RAR contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || NET40 || NET452
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -314,18 +254,12 @@ namespace ExtractionTool
             // SGA
             else if (wrapper is SGA sga)
             {
-                Console.WriteLine("Extracting SGA contents");
-                Console.WriteLine();
-
                 sga.Extract(outputDirectory, includeDebug);
             }
 
             // Tape Archive
             else if (wrapper is TapeArchive tar)
             {
-                Console.WriteLine("Extracting Tape Archive contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || NET40 || NET452
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -337,36 +271,24 @@ namespace ExtractionTool
             // VBSP
             else if (wrapper is VBSP vbsp)
             {
-                Console.WriteLine("Extracting VBSP contents");
-                Console.WriteLine();
-
                 vbsp.Extract(outputDirectory, includeDebug);
             }
 
             // VPK
             else if (wrapper is VPK vpk)
             {
-                Console.WriteLine("Extracting VPK contents");
-                Console.WriteLine();
-
                 vpk.Extract(outputDirectory, includeDebug);
             }
 
             // WAD3
             else if (wrapper is WAD3 wad)
             {
-                Console.WriteLine("Extracting WAD3 contents");
-                Console.WriteLine();
-
                 wad.Extract(outputDirectory, includeDebug);
             }
 
             // xz
             else if (wrapper is XZ xz)
             {
-                Console.WriteLine("Extracting xz contents");
-                Console.WriteLine();
-
 #if NET20 || NET35 || NET40 || NET452
                 Console.WriteLine("Extraction is not supported for this framework!");
                 Console.WriteLine();
@@ -378,9 +300,6 @@ namespace ExtractionTool
             // XZP
             else if (wrapper is XZP xzp)
             {
-                Console.WriteLine("Extracting XZP contents");
-                Console.WriteLine();
-
                 xzp.Extract(outputDirectory, includeDebug);
             }
 
