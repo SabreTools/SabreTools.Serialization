@@ -464,13 +464,14 @@ namespace SabreTools.Serialization.Wrappers
             FileStream output = File.OpenWrite(filename);
             var md5 = new HashWrapper(HashType.MD5);
 
-            long bytesLeft = (long)GetReadableBytes(fileDescriptor);
+            long readBytesLeft = (long)GetReadableBytes(fileDescriptor);
+            long writeBytesLeft = (long)GetWritableBytes(fileDescriptor);
             byte[] inputBuffer;
             byte[] outputBuffer = new byte[BUFFER_SIZE];
             long totalWritten = 0;
 
             // Read while there are bytes remaining
-            while (bytesLeft > 0)
+            while (readBytesLeft > 0 && writeBytesLeft > 0)
             {
                 long bytesToWrite = BUFFER_SIZE;
                 int result;
@@ -523,14 +524,14 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Set remaining bytes
-                    bytesLeft -= 2;
-                    bytesLeft -= bytesToRead;
+                    readBytesLeft -= 2;
+                    readBytesLeft -= bytesToRead;
                 }
 
                 // Handle uncompressed files
                 else
                 {
-                    bytesToWrite = Math.Min(bytesLeft, BUFFER_SIZE);
+                    bytesToWrite = Math.Min(readBytesLeft, BUFFER_SIZE);
                     if (!reader.Read(outputBuffer, 0, (int)bytesToWrite))
                     {
                         Console.Error.WriteLine($"Failed to write {bytesToWrite} bytes from input cabinet file {fileDescriptor.Volume}");
@@ -540,23 +541,21 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Set remaining bytes
-                    bytesLeft -= (uint)bytesToWrite;
+                    readBytesLeft -= (uint)bytesToWrite;
                 }
 
                 // Hash and write the next block
+                bytesToWrite = Math.Min(bytesToWrite, writeBytesLeft);
                 md5.Process(outputBuffer, 0, (int)bytesToWrite);
                 output?.Write(outputBuffer, 0, (int)bytesToWrite);
+
                 totalWritten += bytesToWrite;
+                writeBytesLeft -= bytesToWrite;
             }
 
             // Validate the number of bytes written
             if ((long)fileDescriptor.ExpandedSize != totalWritten)
-            {
-                Console.Error.WriteLine($"Expanded size expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
-                reader.Dispose();
-                output?.Close();
-                return false;
-            }
+                Console.WriteLine($"Expanded size of file {index} ({GetFileName(index)}) expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
 
             // Finalize output values
             md5.Terminate();
@@ -651,7 +650,7 @@ namespace SabreTools.Serialization.Wrappers
                     return err;
 
                 err = ZLib.inflate(stream, 1);
-                if (err != zlibConst.Z_STREAM_END)
+                if (err != zlibConst.Z_OK && err != zlibConst.Z_STREAM_END)
                 {
                     ZLib.inflateEnd(stream);
                     return err;
@@ -802,6 +801,17 @@ namespace SabreTools.Serialization.Wrappers
             return descriptor.IsCompressed()
                 ? descriptor.CompressedSize
                 : descriptor.ExpandedSize;
+        }
+
+        /// <summary>
+        /// Get the packed size of a file, if possible
+        /// </summary>
+        public static ulong GetWritableBytes(FileDescriptor? descriptor)
+        {
+            if (descriptor == null)
+                return 0;
+
+            return descriptor.ExpandedSize;
         }
 
         #endregion
