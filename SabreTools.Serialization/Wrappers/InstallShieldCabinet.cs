@@ -496,7 +496,7 @@ namespace SabreTools.Serialization.Wrappers
                     ushort bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
                     if (bytesToRead == 0)
                     {
-                        Console.Error.WriteLine("bytesToRead can't be zero");
+                        Console.Error.WriteLine($"Failed to read file {index} ({GetFileName(index)}) because {nameof(bytesToRead)} can't be zero");
                         reader.Dispose();
                         output?.Close();
                         return false;
