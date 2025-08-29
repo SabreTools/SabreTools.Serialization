@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.Deserializers
                         data.Seek(resourceTableAddress, SeekOrigin.Begin);
 
                         // Set the resource directory table
-                        executable.ResourceDirectoryTable = ParseResourceDirectoryTable(data, data.Position, executable.SectionTable, true);
+                        executable.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, data.Position, executable.SectionTable, true);
                     }
                 }
 
@@ -1343,10 +1343,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into an ResourceDirectoryEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="tableStart">Table start address for relative reads</param>
         /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
-        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, long initialOffset)
+        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, long tableStart)
         {
             var obj = new ResourceDirectoryEntry();
 
@@ -1367,7 +1366,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 long currentOffset = data.Position;
 
-                long nameOffset = initialOffset + obj.NameOffset;
+                long nameOffset = tableStart + obj.NameOffset;
                 data.Seek(nameOffset, SeekOrigin.Begin);
 
                 obj.Name = ParseResourceDirectoryString(data);
@@ -1399,10 +1398,11 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="tableStart">Table start address for relative reads</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable ParseResourceDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections, bool topLevel = false)
+        public static ResourceDirectoryTable ParseResourceDirectoryTable(Stream data, long initialOffset, long tableStart, SectionHeader[] sections, bool topLevel = false)
         {
             var obj = new ResourceDirectoryTable();
 
@@ -1422,7 +1422,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.Entries = new ResourceDirectoryEntry[totalEntryCount];
             for (int i = 0; i < totalEntryCount; i++)
             {
-                obj.Entries[i] = ParseResourceDirectoryEntry(data, initialOffset);
+                obj.Entries[i] = ParseResourceDirectoryEntry(data, tableStart);
             }
 
             // Loop through and process the entries
@@ -1433,7 +1433,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 if (entry.DataEntryOffset > 0)
                 {
-                    long offset = initialOffset + entry.DataEntryOffset;
+                    long offset = tableStart + entry.DataEntryOffset;
                     data.Seek(offset, SeekOrigin.Begin);
 
                     var resourceDataEntry = ParseResourceDataEntry(data, initialOffset, sections);
@@ -1441,10 +1441,10 @@ namespace SabreTools.Serialization.Deserializers
                 }
                 else if (entry.SubdirectoryOffset > 0)
                 {
-                    long offset = initialOffset + entry.SubdirectoryOffset;
+                    long offset = tableStart + entry.SubdirectoryOffset;
                     data.Seek(offset, SeekOrigin.Begin);
 
-                    entry.Subdirectory = ParseResourceDirectoryTable(data, initialOffset, sections);
+                    entry.Subdirectory = ParseResourceDirectoryTable(data, initialOffset, tableStart, sections);
                 }
             }
 
@@ -1453,7 +1453,7 @@ namespace SabreTools.Serialization.Deserializers
                 return obj;
 
             // If we're not aligned to a section
-            var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == initialOffset);
+            var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == tableStart);
             if (firstSection == null)
                 return obj;
 
@@ -1461,7 +1461,7 @@ namespace SabreTools.Serialization.Deserializers
             int size = (int)firstSection.SizeOfRawData;
 
             // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
-            while (data.Position - initialOffset < size && data.Position % 0x200 != 0 && data.Position < data.Length - 1)
+            while (data.Position - tableStart < size && data.Position % 0x200 != 0 && data.Position < data.Length - 1)
             {
                 // If we find the start of an MS-DOS header
                 if (data.ReadUInt16LittleEndian() == Models.MSDOS.Constants.SignatureUInt16)
@@ -1475,12 +1475,12 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // If we have not used up the full size, parse the remaining chunk as a single resource
-            if (data.Position - initialOffset < size)
+            if (data.Position - tableStart < size)
             {
                 var localEntries = obj.Entries;
                 Array.Resize(ref localEntries, totalEntryCount + 1);
                 obj.Entries = localEntries;
-                int length = (int)(size - (data.Position - initialOffset));
+                int length = (int)(size - (data.Position - tableStart));
 
                 obj.Entries[totalEntryCount] = new ResourceDirectoryEntry
                 {
