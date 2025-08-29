@@ -1104,10 +1104,6 @@ namespace SabreTools.Serialization.Wrappers
 
             // Use non-model constructors to allow looking for headers
             _dataSource.Position = 0;
-            var sevenZipSfx = new SevenZip(_dataSource);
-            bool sevenZip = sevenZipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
-
-            _dataSource.Position = 0;
             var pkzipSfx = new PKZIP(_dataSource);
             bool pkzip = pkzipSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
@@ -1115,7 +1111,7 @@ namespace SabreTools.Serialization.Wrappers
             var rarSfx = new RAR(_dataSource);
             bool rar = rarSfx?.Extract(outputDirectory, lookForHeader: true, includeDebug) ?? false;
 
-            return cexe || overlay || resources || sevenZip || pkzip || rar;
+            return cexe || overlay || resources || pkzip || rar;
         }
 
         /// <summary>
@@ -1186,26 +1182,65 @@ namespace SabreTools.Serialization.Wrappers
                 if (overlayData == null)
                     return false;
 
-                // Only process the overlay if it a recognized signature
+                // Set the output variables
+                int overlayOffset = -1;
                 string extension = string.Empty;
+
+                // Only process the overlay if it is recognized
                 if (overlayData.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                {
+                    overlayOffset = 0;
                     extension = "7z";
+                }
+                else if (overlayData.StartsWith([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C]))
+                {
+                    // 7-zip SFX script -- ";!@Install" to ";!@InstallEnd@!"
+                    overlayOffset = overlayData.FirstPosition([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C, 0x45, 0x6E, 0x64, 0x40, 0x21]);
+                    if (overlayOffset == -1)
+                        return false;
+
+                    overlayOffset += 15;
+                    extension = "7z";
+                }
                 else if (overlayData.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                {
+                    overlayOffset = 0;
                     extension = "zip";
+                }
                 else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                {
+                    overlayOffset = 0;
                     extension = "zip";
+                }
                 else if (overlayData.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                {
+                    overlayOffset = 0;
                     extension = "zip";
+                }
                 else if (overlayData.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                {
+                    overlayOffset = 0;
                     extension = "zip";
+                }
                 else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                {
+                    overlayOffset = 0;
                     extension = "rar";
+                }
                 else if (overlayData.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                {
+                    overlayOffset = 0;
                     extension = "rar";
+                }
                 else if (overlayData.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                {
+                    overlayOffset = 0;
                     extension = "bin"; // exe/dll
+                }
                 else
+                {
                     return false;
+                }
 
                 // Create the temp filename
                 string tempFile = $"embedded_overlay.{extension}";
@@ -1216,7 +1251,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Write the resource data to a temp file
                 using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                tempStream?.Write(overlayData, 0, overlayData.Length);
+                tempStream?.Write(overlayData, overlayOffset, overlayData.Length - overlayOffset);
 
                 return true;
             }
