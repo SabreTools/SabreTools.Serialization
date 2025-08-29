@@ -85,8 +85,6 @@ namespace ExtractionTool
                 return;
             }
 
-            // TODO: When extractable wrapper types are exposed to this, use them instead of guessing
-
             // Get the file type
             WrapperType ft = WrapperFactory.GetFileType(magic, extension);
             var wrapper = WrapperFactory.CreateWrapper(ft, stream);
@@ -243,7 +241,6 @@ namespace ExtractionTool
                 Console.WriteLine("Extracting New Executable contents");
                 Console.WriteLine();
 
-                // TODO: Add Wise installer handling here
                 nex.Extract(outputDirectory, includeDebug);
             }
 
@@ -285,7 +282,6 @@ namespace ExtractionTool
                 Console.WriteLine("Extracting Portable Executable contents");
                 Console.WriteLine();
 
-                // TODO: Add Wise installer handling here
                 pex.Extract(outputDirectory, includeDebug);
             }
 

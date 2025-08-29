@@ -402,6 +402,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
+            // TODO: Add Wise installer handling here
 
             return overlay;
         }

@@ -1093,6 +1093,7 @@ namespace SabreTools.Serialization.Wrappers
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
+            // TODO: Add Wise installer handling here
 
             return cexe || overlay || resources;
         }
