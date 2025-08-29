@@ -1,10 +1,14 @@
 ﻿using System;
 using System.IO;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Models.MoPaQ;
+#if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
+using StormLibSharp;
+#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class MoPaQ : WrapperBase<Models.MoPaQ.Archive>, IExtractable
+    public partial class MoPaQ : WrapperBase<Archive>, IExtractable
     {
         #region Descriptive Properties
 
@@ -16,14 +20,30 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public MoPaQ(Models.MoPaQ.Archive? model, byte[]? data, int offset)
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(byte[]? data, int offset)
+            : base(new Archive(), data, offset)
+        {
+            // All logic is handled by the base class
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(Stream? data)
+            : base(new Archive(), data)
+        {
+            // All logic is handled by the base class
+        }
+
+        /// <inheritdoc/>
+        public MoPaQ(Archive? model, byte[]? data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public MoPaQ(Models.MoPaQ.Archive? model, Stream? data)
+        public MoPaQ(Archive? model, Stream? data)
             : base(model, data)
         {
             // All logic is handled by the base class
@@ -84,7 +104,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Extraction
 
         /// <inheritdoc/>
-        /// TODO: Reimplement extraction based on StormLibSharp
         public bool Extract(string outputDirectory, bool includeDebug)
         {
 #if NET20 || NET35 || !(WINX86 || WINX64)
@@ -92,9 +111,63 @@ namespace SabreTools.Serialization.Wrappers
             Console.WriteLine();
             return false;
 #else
-            Console.WriteLine("Extraction needs to be reimplemented for this framework!");
-            Console.WriteLine();
-            return false;
+            try
+            {
+                if (Filename == null || !File.Exists(Filename))
+                    return false;
+
+                // Try to open the archive and listfile
+                var mpqArchive = new MpqArchive(Filename, FileAccess.Read);
+                string? listfile = null;
+                MpqFileStream listStream = mpqArchive.OpenFile("(listfile)");
+
+                // If we can't read the listfile, we just return
+                if (!listStream.CanRead)
+                    return false;
+
+                // Read the listfile in for processing
+                using (var sr = new StreamReader(listStream))
+                {
+                    listfile = sr.ReadToEnd();
+                }
+
+                // Split the listfile by newlines
+                string[] listfileLines = listfile.Replace("\r\n", "\n").Split('\n');
+
+                // Loop over each entry
+                foreach (string sub in listfileLines)
+                {
+                    // Ensure directory separators are consistent
+                    string filename = sub;
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outDir, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    // Try to write the data
+                    try
+                    {
+                        mpqArchive.ExtractFile(sub, filename);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (includeDebug) System.Console.WriteLine(ex);
+                    }
+                }
+
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                if (includeDebug) System.Console.WriteLine(ex);
+                return false;
+            }
 #endif
         }
 
