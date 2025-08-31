@@ -201,11 +201,20 @@ namespace SabreTools.Serialization.Deserializers
             if (offset < initialOffset || offset >= data.Length)
                 return null;
 
-            // Seek to the offset
-            data.Seek(offset, SeekOrigin.Begin);
+            // Preprocess the table
+            byte[]? tableBytes = LoadTable(data,
+                offset,
+                header.HashTableMD5,
+                (uint)header.HashTableSizeLong,
+                92,
+                MPQ_KEY_BLOCK_TABLE,
+                out _);
+            if (tableBytes == null)
+                return null;
 
             // Read in the BET table
-            return ParseBetTable(data);
+            int tableOffset = 0;
+            return ParseBetTable(tableBytes, ref tableOffset);
         }
 
         /// <summary>
@@ -214,42 +223,42 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled BetTable on success, null on error</returns>
         /// TODO: Add MD5 validation of contents
-        public static BetTable ParseBetTable(Stream data)
+        public static BetTable ParseBetTable(byte[] data, ref int offset)
         {
             var obj = new BetTable();
 
             // Common Headers
-            byte[] signature = data.ReadBytes(4);
+            byte[] signature = data.ReadBytes(ref offset, 4);
             obj.Signature = Encoding.ASCII.GetString(signature);
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.DataSize = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
 
             // BET-Specific
-            obj.TableSize = data.ReadUInt32LittleEndian();
-            obj.FileCount = data.ReadUInt32LittleEndian();
-            obj.Unknown = data.ReadUInt32LittleEndian();
-            obj.TableEntrySize = data.ReadUInt32LittleEndian();
+            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown = data.ReadUInt32LittleEndian(ref offset);
+            obj.TableEntrySize = data.ReadUInt32LittleEndian(ref offset);
 
-            obj.FilePositionBitIndex = data.ReadUInt32LittleEndian();
-            obj.FileSizeBitIndex = data.ReadUInt32LittleEndian();
-            obj.CompressedSizeBitIndex = data.ReadUInt32LittleEndian();
-            obj.FlagIndexBitIndex = data.ReadUInt32LittleEndian();
-            obj.UnknownBitIndex = data.ReadUInt32LittleEndian();
+            obj.FilePositionBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagIndexBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.UnknownBitIndex = data.ReadUInt32LittleEndian(ref offset);
 
-            obj.FilePositionBitCount = data.ReadUInt32LittleEndian();
-            obj.FileSizeBitCount = data.ReadUInt32LittleEndian();
-            obj.CompressedSizeBitCount = data.ReadUInt32LittleEndian();
-            obj.FlagIndexBitCount = data.ReadUInt32LittleEndian();
-            obj.UnknownBitCount = data.ReadUInt32LittleEndian();
+            obj.FilePositionBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagIndexBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.UnknownBitCount = data.ReadUInt32LittleEndian(ref offset);
 
-            obj.TotalBetHashSize = data.ReadUInt32LittleEndian();
-            obj.BetHashSizeExtra = data.ReadUInt32LittleEndian();
-            obj.BetHashSize = data.ReadUInt32LittleEndian();
-            obj.BetHashArraySize = data.ReadUInt32LittleEndian();
-            obj.FlagCount = data.ReadUInt32LittleEndian();
+            obj.TotalBetHashSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashSizeExtra = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashArraySize = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagCount = data.ReadUInt32LittleEndian(ref offset);
 
             obj.FlagsArray = new uint[obj.FlagCount];
-            byte[] flagsArray = data.ReadBytes((int)obj.FlagCount * 4);
+            byte[] flagsArray = data.ReadBytes(ref offset, (int)obj.FlagCount * 4);
             Buffer.BlockCopy(flagsArray, 0, obj.FlagsArray, 0, (int)obj.FlagCount * 4);
 
             // TODO: Populate the file table
@@ -380,8 +389,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
         /// <returns>Filled HetTable on success, null on error</returns>
-        /// TODO: Add MD5 validation of contents
-        /// TODO: The table may be encrypted and compressed
         public static HetTable? ParseHetTable(Stream data, long initialOffset, ArchiveHeader header)
         {
             // Get the HET table offset by version
@@ -398,11 +405,20 @@ namespace SabreTools.Serialization.Deserializers
             if (offset < initialOffset || offset >= data.Length)
                 return null;
 
-            // Seek to the offset
-            data.Seek(offset, SeekOrigin.Begin);
+            // Preprocess the table
+            byte[]? tableBytes = LoadTable(data,
+                offset,
+                header.HashTableMD5,
+                (uint)header.HashTableSizeLong,
+                44,
+                MPQ_KEY_HASH_TABLE,
+                out _);
+            if (tableBytes == null)
+                return null;
 
             // Read in the HET table
-            return ParseHetTable(data);
+            int tableOffset = 0;
+            return ParseHetTable(tableBytes, ref tableOffset);
         }
 
         /// <summary>
@@ -410,27 +426,25 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HetTable on success, null on error</returns>
-        /// TODO: Add MD5 validation of contents
-        /// TODO: The table may be encrypted and compressed
-        public static HetTable ParseHetTable(Stream data)
+        public static HetTable ParseHetTable(byte[] data, ref int offset)
         {
             var obj = new HetTable();
 
             // Common Headers
-            byte[] signature = data.ReadBytes(4);
+            byte[] signature = data.ReadBytes(ref offset, 4);
             obj.Signature = Encoding.ASCII.GetString(signature);
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.DataSize = data.ReadUInt32LittleEndian();
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
 
             // HET-Specific
-            obj.TableSize = data.ReadUInt32LittleEndian();
-            obj.MaxFileCount = data.ReadUInt32LittleEndian();
-            obj.HashTableSize = data.ReadUInt32LittleEndian();
-            obj.TotalIndexSize = data.ReadUInt32LittleEndian();
-            obj.IndexSizeExtra = data.ReadUInt32LittleEndian();
-            obj.IndexSize = data.ReadUInt32LittleEndian();
-            obj.BlockTableSize = data.ReadUInt32LittleEndian();
-            obj.HashTable = data.ReadBytes((int)obj.HashTableSize);
+            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.MaxFileCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.HashTableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.TotalIndexSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.IndexSizeExtra = data.ReadUInt32LittleEndian(ref offset);
+            obj.IndexSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BlockTableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.HashTable = data.ReadBytes(ref offset, (int)obj.HashTableSize);
 
             // TODO: Populate the file indexes array
             obj.FileIndexes = new byte[(int)obj.HashTableSize][];
