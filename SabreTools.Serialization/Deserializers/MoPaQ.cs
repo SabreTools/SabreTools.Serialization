@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 using SabreTools.Models.MoPaQ;
 using static SabreTools.Models.MoPaQ.Constants;
 
@@ -21,6 +22,9 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Cache the current offset
                 long initialOffset = data.Position;
+
+                // Prepare the crypt table
+                PrepareCryptTable();
 
                 // Create a new archive to fill
                 var archive = new Archive();
@@ -48,264 +52,58 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Archive Header
 
-                // Check for the Header
-                possibleSignature = data.ReadUInt32LittleEndian();
-                data.Seek(-4, SeekOrigin.Current);
-                if (possibleSignature == ArchiveHeaderSignatureUInt32)
-                {
-                    // Try to parse the archive header
-                    var archiveHeader = ParseArchiveHeader(data);
-                    if (archiveHeader.Signature != ArchiveHeaderSignatureString)
-                        return null;
-
-                    // Set the archive header
-                    archive.ArchiveHeader = archiveHeader;
-                }
-                else
-                {
+                // Try to parse the archive header
+                var archiveHeader = ParseArchiveHeader(data);
+                if (archiveHeader == null)
                     return null;
-                }
+
+                // Set the archive header
+                archive.ArchiveHeader = archiveHeader;
 
                 #endregion
 
                 #region Hash Table
 
-                // TODO: The hash table has to be be decrypted before reading
-
-                // Version 1
-                if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
-                {
-                    // If we have a hash table
-                    long hashTableOffset = initialOffset + archive.ArchiveHeader.HashTablePosition;
-                    if (hashTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(hashTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
-
-                        // Read in the hash table
-                        var hashTable = new List<HashEntry>();
-
-                        while (data.Position < hashTableEnd)
-                        {
-                            var hashEntry = ParseHashEntry(data);
-                            hashTable.Add(hashEntry);
-                        }
-
-                        archive.HashTable = [.. hashTable];
-                    }
-                }
-
-                // Version 2 and 3
-                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
-                    || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
-                {
-                    // If we have a hash table
-                    long hashTableOffset = initialOffset + (((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition);
-                    if (hashTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(hashTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long hashTableEnd = hashTableOffset + archive.ArchiveHeader.HashTableSize;
-
-                        // Read in the hash table
-                        var hashTable = new List<HashEntry>();
-
-                        while (data.Position < hashTableEnd)
-                        {
-                            var hashEntry = ParseHashEntry(data);
-                            hashTable.Add(hashEntry);
-                        }
-
-                        archive.HashTable = [.. hashTable];
-                    }
-                }
-
-                // Version 4
-                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
-                {
-                    // If we have a hash table
-                    long hashTableOffset = initialOffset + (((uint)archive.ArchiveHeader.HashTablePositionHi << 23) | archive.ArchiveHeader.HashTablePosition);
-                    if (hashTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(hashTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long hashTableEnd = hashTableOffset + (long)archive.ArchiveHeader.HashTableSizeLong;
-
-                        // Read in the hash table
-                        var hashTable = new List<HashEntry>();
-
-                        while (data.Position < hashTableEnd)
-                        {
-                            var hashEntry = ParseHashEntry(data);
-                            hashTable.Add(hashEntry);
-                        }
-
-                        archive.HashTable = [.. hashTable];
-                    }
-                }
+                // Set the hash table, if possible
+                var hashTable = ParseHashTable(data, initialOffset, archive.ArchiveHeader);
+                if (hashTable != null)
+                    archive.HashTable = hashTable;
 
                 #endregion
 
                 #region Block Table
 
-                // Version 1
-                if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format1)
-                {
-                    // If we have a block table
-                    long blockTableOffset = initialOffset + archive.ArchiveHeader.BlockTablePosition;
-                    if (blockTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
-
-                        // Read in the block table
-                        var blockTable = new List<BlockEntry>();
-
-                        while (data.Position < blockTableEnd)
-                        {
-                            var blockEntry = ParseBlockEntry(data);
-                            blockTable.Add(blockEntry);
-                        }
-
-                        archive.BlockTable = [.. blockTable];
-                    }
-                }
-
-                // Version 2 and 3
-                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format2
-                    || archive.ArchiveHeader.FormatVersion == FormatVersion.Format3)
-                {
-                    // If we have a block table
-                    long blockTableOffset = initialOffset + (((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition);
-                    if (blockTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long blockTableEnd = blockTableOffset + archive.ArchiveHeader.BlockTableSize;
-
-                        // Read in the block table
-                        var blockTable = new List<BlockEntry>();
-
-                        while (data.Position < blockTableEnd)
-                        {
-                            var blockEntry = ParseBlockEntry(data);
-                            blockTable.Add(blockEntry);
-                        }
-
-                        archive.BlockTable = [.. blockTable];
-                    }
-                }
-
-                // Version 4
-                else if (archive.ArchiveHeader.FormatVersion == FormatVersion.Format4)
-                {
-                    // If we have a block table
-                    long blockTableOffset = initialOffset + (((uint)archive.ArchiveHeader.BlockTablePositionHi << 23) | archive.ArchiveHeader.BlockTablePosition);
-                    if (blockTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(blockTableOffset, SeekOrigin.Begin);
-
-                        // Find the ending offset based on size
-                        long blockTableEnd = blockTableOffset + (long)archive.ArchiveHeader.BlockTableSizeLong;
-
-                        // Read in the block table
-                        var blockTable = new List<BlockEntry>();
-
-                        while (data.Position < blockTableEnd)
-                        {
-                            var blockEntry = ParseBlockEntry(data);
-                            blockTable.Add(blockEntry);
-                        }
-
-                        archive.BlockTable = [.. blockTable];
-                    }
-                }
+                // Set the block table, if possible
+                var blockTable = ParseBlockTable(data, initialOffset, archive.ArchiveHeader);
+                if (blockTable != null)
+                    archive.BlockTable = blockTable;
 
                 #endregion
 
                 #region Hi-Block Table
 
-                // Version 2, 3, and 4
-                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format2)
-                {
-                    // If we have a hi-block table
-                    long hiBlockTableOffset = initialOffset + (long)archive.ArchiveHeader.HiBlockTablePosition;
-                    if (hiBlockTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(hiBlockTableOffset, SeekOrigin.Begin);
-
-                        // Read in the hi-block table
-                        var hiBlockTable = new List<short>();
-
-                        for (int i = 0; i < (archive.BlockTable?.Length ?? 0); i++)
-                        {
-                            short hiBlockEntry = data.ReadInt16LittleEndian();
-                            hiBlockTable.Add(hiBlockEntry);
-                        }
-
-                        archive.HiBlockTable = [.. hiBlockTable];
-                    }
-                }
+                // Set the hi-block table, if possible
+                var hiBlockTable = ParseHiBlockTable(data, initialOffset, archive.ArchiveHeader);
+                if (hiBlockTable != null)
+                    archive.HiBlockTable = hiBlockTable;
 
                 #endregion
 
                 #region BET Table
 
-                // Version 3 and 4
-                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
-                {
-                    // If we have a BET table
-                    long betTableOffset = initialOffset + (long)archive.ArchiveHeader.BetTablePosition;
-                    if (betTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(betTableOffset, SeekOrigin.Begin);
-
-                        // Read in the BET table
-                        var betTable = ParseBetTable(data);
-                        if (betTable.Signature != BetTableSignatureString)
-                            return null;
-
-                        archive.BetTable = betTable;
-                    }
-                }
+                // Set the BET table, if possible
+                var betTable = ParseBetTable(data, initialOffset, archive.ArchiveHeader);
+                if (betTable != null)
+                    archive.BetTable = betTable;
 
                 #endregion
 
                 #region HET Table
 
-                // Version 3 and 4
-                if (archive.ArchiveHeader.FormatVersion >= FormatVersion.Format3)
-                {
-                    // If we have a HET table
-                    long hetTableOffset = initialOffset + (long)archive.ArchiveHeader.HetTablePosition;
-                    if (hetTableOffset > initialOffset)
-                    {
-                        // Seek to the offset
-                        data.Seek(hetTableOffset, SeekOrigin.Begin);
-
-                        // Read in the HET table
-                        var hetTable = ParseHetTable(data);
-                        if (hetTable.Signature != HetTableSignatureString)
-                            return null;
-
-                        archive.HetTable = hetTable;
-                    }
-                }
+                // Set the HET table, if possible
+                var hetTable = ParseHetTable(data, initialOffset, archive.ArchiveHeader);
+                if (hetTable != null)
+                    archive.HetTable = hetTable;
 
                 #endregion
 
@@ -323,13 +121,15 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ArchiveHeader on success, null on error</returns>
-        public static ArchiveHeader ParseArchiveHeader(Stream data)
+        public static ArchiveHeader? ParseArchiveHeader(Stream data)
         {
             var obj = new ArchiveHeader();
 
             // V1 - Common
             byte[] signature = data.ReadBytes(4);
             obj.Signature = Encoding.ASCII.GetString(signature);
+            if (obj.Signature != ArchiveHeaderSignatureString)
+                return null;
 
             obj.HeaderSize = data.ReadUInt32LittleEndian();
             obj.ArchiveSize = data.ReadUInt32LittleEndian();
@@ -381,7 +181,39 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into a BetTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="header">Archive header to get information from</param>
         /// <returns>Filled BetTable on success, null on error</returns>
+        /// TODO: Add MD5 validation of contents
+        public static BetTable? ParseBetTable(Stream data, long initialOffset, ArchiveHeader header)
+        {
+            // Get the BET table offset by version
+            long offset = header.FormatVersion switch
+            {
+                FormatVersion.Format1 => -1,
+                FormatVersion.Format2 => -1,
+                FormatVersion.Format3 => (long)header.BetTablePosition,
+                FormatVersion.Format4 => (long)header.BetTablePosition,
+                _ => -1,
+            };
+
+            // If the offset is invalid
+            if (offset < initialOffset || offset >= data.Length)
+                return null;
+
+            // Seek to the offset
+            data.Seek(offset, SeekOrigin.Begin);
+
+            // Read in the BET table
+            return ParseBetTable(data);
+        }
+
+        /// <summary>
+        /// Parse a Stream into a BetTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled BetTable on success, null on error</returns>
+        /// TODO: Add MD5 validation of contents
         public static BetTable ParseBetTable(Stream data)
         {
             var obj = new BetTable();
@@ -431,16 +263,56 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled BlockEntry on success, null on error</returns>
-        public static BlockEntry ParseBlockEntry(Stream data)
+        public static BlockEntry ParseBlockEntry(byte[] data, ref int offset)
         {
             var obj = new BlockEntry();
 
-            obj.FilePosition = data.ReadUInt32LittleEndian();
-            obj.CompressedSize = data.ReadUInt32LittleEndian();
-            obj.UncompressedSize = data.ReadUInt32LittleEndian();
-            obj.Flags = (FileFlags)data.ReadUInt32LittleEndian();
+            obj.FilePosition = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.UncompressedSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.Flags = (FileFlags)data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a BlockTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="header">Archive header to get information from</param>
+        /// <returns>Filled BlockTable on success, null on error</returns>
+        public static BlockEntry[]? ParseBlockTable(Stream data, long initialOffset, ArchiveHeader header)
+        {
+            // Get the block table offset
+            long offset = ((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition;
+            if (offset < initialOffset || offset >= data.Length)
+                return null;
+
+            // Get the entry count
+            uint entryCount = header.BlockTableSize;
+
+            // Preprocess the table
+            byte[]? tableBytes = LoadTable(data,
+                offset,
+                header.HashTableMD5,
+                (uint)header.HashTableSizeLong,
+                entryCount * 16,
+                MPQ_KEY_BLOCK_TABLE,
+                out _);
+            if (tableBytes == null)
+                return null;
+
+            // Read in the block table
+            int tableOffset = 0;
+            var blockTable = new BlockEntry[entryCount];
+            for (int i = 0; i < blockTable.Length; i++)
+            {
+                var blockEntry = ParseBlockEntry(tableBytes, ref tableOffset);
+                blockTable[i] = blockEntry;
+            }
+
+            return blockTable;
         }
 
         /// <summary>
@@ -448,17 +320,89 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HashEntry on success, null on error</returns>
-        public static HashEntry ParseHashEntry(Stream data)
+        public static HashEntry ParseHashEntry(byte[] data, ref int offset)
         {
             var obj = new HashEntry();
 
-            obj.NameHashPartA = data.ReadUInt32LittleEndian();
-            obj.NameHashPartB = data.ReadUInt32LittleEndian();
-            obj.Locale = (Locale)data.ReadInt16LittleEndian();
-            obj.Platform = data.ReadUInt16LittleEndian();
-            obj.BlockIndex = data.ReadUInt32LittleEndian();
+            obj.NameHashPartA = data.ReadUInt32LittleEndian(ref offset);
+            obj.NameHashPartB = data.ReadUInt32LittleEndian(ref offset);
+            obj.Locale = (Locale)data.ReadInt16LittleEndian(ref offset);
+            obj.Platform = data.ReadUInt16LittleEndian(ref offset);
+            obj.BlockIndex = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a HashTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="header">Archive header to get information from</param>
+        /// <returns>Filled HashTable on success, null on error</returns>
+        public static HashEntry[]? ParseHashTable(Stream data, long initialOffset, ArchiveHeader header)
+        {
+            // Get the hash table offset
+            long offset = initialOffset + (((uint)header.HashTablePositionHi << 23) | header.HashTablePosition);
+            if (offset < initialOffset || offset >= data.Length)
+                return null;
+
+            // Get the entry count
+            uint entryCount = header.HashTableSize;
+
+            // Preprocess the table
+            byte[]? tableBytes = LoadTable(data,
+                offset,
+                header.HashTableMD5,
+                (uint)header.HashTableSizeLong,
+                entryCount * 16,
+                MPQ_KEY_HASH_TABLE,
+                out _);
+            if (tableBytes == null)
+                return null;
+
+            // Read in the hash table
+            int tableOffset = 0;
+            var hashTable = new HashEntry[entryCount];
+            for (int i = 0; i < hashTable.Length; i++)
+            {
+                var hashEntry = ParseHashEntry(tableBytes, ref tableOffset);
+                hashTable[i] = hashEntry;
+            }
+
+            return hashTable;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a HetTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="header">Archive header to get information from</param>
+        /// <returns>Filled HetTable on success, null on error</returns>
+        /// TODO: Add MD5 validation of contents
+        /// TODO: The table may be encrypted and compressed
+        public static HetTable? ParseHetTable(Stream data, long initialOffset, ArchiveHeader header)
+        {
+            // Get the HET table offset by version
+            long offset = header.FormatVersion switch
+            {
+                FormatVersion.Format1 => -1,
+                FormatVersion.Format2 => -1,
+                FormatVersion.Format3 => (long)header.HetTablePosition,
+                FormatVersion.Format4 => (long)header.HetTablePosition,
+                _ => -1,
+            };
+
+            // If the offset is invalid
+            if (offset < initialOffset || offset >= data.Length)
+                return null;
+
+            // Seek to the offset
+            data.Seek(offset, SeekOrigin.Begin);
+
+            // Read in the HET table
+            return ParseHetTable(data);
         }
 
         /// <summary>
@@ -466,6 +410,8 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HetTable on success, null on error</returns>
+        /// TODO: Add MD5 validation of contents
+        /// TODO: The table may be encrypted and compressed
         public static HetTable ParseHetTable(Stream data)
         {
             var obj = new HetTable();
@@ -493,6 +439,55 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a HiBlockTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="header">Archive header to get information from</param>
+        /// <returns>Filled HiBlockTable on success, null on error</returns>
+        /// TODO: Add MD5 validation of contents
+        /// TODO: The table has to be be decompressed before reading for V4(?)
+        public static short[]? ParseHiBlockTable(Stream data, long initialOffset, ArchiveHeader header)
+        {
+            // Get the hi-block table offset by version
+            long offset = header.FormatVersion switch
+            {
+                FormatVersion.Format1 => -1,
+                FormatVersion.Format2 => initialOffset + (long)header.HiBlockTablePosition,
+                FormatVersion.Format3 => initialOffset + (long)header.HiBlockTablePosition,
+                FormatVersion.Format4 => initialOffset + (long)header.HiBlockTablePosition,
+                _ => -1,
+            };
+
+            // If the offset is invalid
+            if (offset < initialOffset || offset >= data.Length)
+                return null;
+
+            // Get the entry count by version
+            ulong entryCount = header.FormatVersion switch
+            {
+                FormatVersion.Format1 => 0,
+                FormatVersion.Format2 => header.HiBlockTableSize >> 1,
+                FormatVersion.Format3 => header.HiBlockTableSize >> 1,
+                FormatVersion.Format4 => header.HiBlockTableSize >> 1,
+                _ => 0,
+            };
+
+            // Seek to the offset
+            data.Seek(offset, SeekOrigin.Begin);
+
+            // Read in the hi-block table
+            var hiBlockTable = new short[entryCount];
+            for (int i = 0; i < hiBlockTable.Length; i++)
+            {
+                var hiBlockEntry = data.ReadInt16LittleEndian();
+                hiBlockTable[i] = hiBlockEntry;
+            }
+
+            return hiBlockTable;
+        }
+
+        /// <summary>
         /// Parse a Stream into a UserData
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -513,15 +508,23 @@ namespace SabreTools.Serialization.Deserializers
         #region Helpers
 
         /// <summary>
+        /// Indicates if the buffer has been built or not
+        /// </summary>
+        private static bool _cryptPrepared = false;
+
+        /// <summary>
         /// Buffer for encryption and decryption
         /// </summary>
-        private readonly uint[] _stormBuffer = new uint[STORM_BUFFER_SIZE];
+        private static readonly uint[] _stormBuffer = new uint[STORM_BUFFER_SIZE];
 
         /// <summary>
         /// Prepare the encryption table
         /// </summary>
-        private void PrepareCryptTable()
+        private static void PrepareCryptTable()
         {
+            if (_cryptPrepared)
+                return;
+
             uint seed = 0x00100001;
             for (uint index1 = 0; index1 < 0x100; index1++)
             {
@@ -536,16 +539,113 @@ namespace SabreTools.Serialization.Deserializers
                     _stormBuffer[index2] = (temp1 | temp2);
                 }
             }
+
+            _cryptPrepared = true;
+        }
+
+        /// <summary>
+        /// Load a table block by optionally decompressing and
+        /// decrypting before returning the data.
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="offset">Data offset to parse</param>
+        /// <param name="expectedHash">Optional MD5 hash for validation</param>
+        /// <param name="compressedSize">Size of the table in the file</param>
+        /// <param name="tableSize">Expected size of the table</param>
+        /// <param name="key">Encryption key to use</param>
+        /// <param name="realTableSize">Output represening the real table size</param>
+        /// <returns>Byte array representing the processed table</returns>
+        private static byte[]? LoadTable(Stream data,
+            long offset,
+            byte[]? expectedHash,
+            uint compressedSize,
+            uint tableSize,
+            uint key,
+            out long realTableSize)
+        {
+            byte[]? tableData;
+            byte[]? readBytes;
+            long bytesToRead = tableSize;
+
+            // Allocate the MPQ table
+            tableData = readBytes = new byte[tableSize];
+
+            // Check if the MPQ table is compressed
+            if (compressedSize != 0 && compressedSize < tableSize)
+            {
+                // Allocate temporary buffer for holding compressed data
+                readBytes = new byte[compressedSize];
+                bytesToRead = compressedSize;
+            }
+
+            // Get the file offset from which we will read the table
+            // Note: According to Storm.dll from Warcraft III (version 2002),
+            // if the hash table position is 0xFFFFFFFF, no SetFilePointer call is done
+            // and the table is loaded from the current file offset
+            if (offset == 0xFFFFFFFF)
+                offset = data.Position;
+
+            // Is the sector table within the file?
+            if (offset >= data.Length)
+            {
+                realTableSize = 0;
+                return null;
+            }
+
+            // The hash table and block table can go beyond EOF.
+            // Storm.dll reads as much as possible, then fills the missing part with zeros.
+            // Abused by Spazzler map protector which sets hash table size to 0x00100000
+            // Abused by NP_Protect in MPQs v4 as well
+            if ((offset + bytesToRead) > data.Length)
+                bytesToRead = (uint)(data.Length - offset);
+
+            // Give the caller information that the table was cut
+            realTableSize = bytesToRead;
+
+            // If everything succeeded, read the raw table from the MPQ
+            data.Seek(offset, SeekOrigin.Begin);
+            _ = data.Read(readBytes, 0, (int)bytesToRead);
+
+            // Verify the MD5 of the table, if present
+            byte[]? actualHash = HashTool.GetByteArrayHashArray(readBytes, HashType.MD5);
+            if (expectedHash != null && actualHash != null && !actualHash.EqualsExactly(expectedHash))
+            {
+                Console.WriteLine("Table is corrupt!");
+                return null;
+            }
+
+            // First of all, decrypt the table
+            if (key != 0)
+                tableData = DecryptBlock(readBytes, bytesToRead, key);
+
+            // If the table is compressed, decompress it
+            if (compressedSize != 0 && compressedSize < tableSize)
+            {
+                Console.WriteLine("Table is compressed, it will not read properly!");
+                return null;
+
+                // TODO: Handle decompression
+                // int cbOutBuffer = (int)tableSize;
+                // int cbInBuffer = (int)compressedSize;
+
+                // if (!SCompDecompress2(readBytes, &cbOutBuffer, tableData, cbInBuffer))
+                //     errorCode = SErrGetLastError();
+
+                // tableData = readBytes;
+            }
+
+            // Return the MPQ table
+            return tableData;
         }
 
         /// <summary>
         /// Decrypt a single block of data
         /// </summary>
-        private unsafe byte[] DecryptBlock(byte[] block, uint length, uint key)
+        private static unsafe byte[] DecryptBlock(byte[] block, long length, uint key)
         {
             uint seed = 0xEEEEEEEE;
 
-            uint[] castBlock = new uint[length / 4];
+            uint[] castBlock = new uint[length >> 2];
             Buffer.BlockCopy(block, 0, castBlock, 0, (int)length);
             int castBlockPtr = 0;
 
@@ -562,7 +662,7 @@ namespace SabreTools.Serialization.Deserializers
                 castBlock[castBlockPtr++] = ch;
             }
 
-            Buffer.BlockCopy(castBlock, 0, block, 0, (int)length);
+            Buffer.BlockCopy(castBlock, 0, block, 0, block.Length >> 2);
             return block;
         }
 
