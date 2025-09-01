@@ -1,9 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Models.MoPaQ;
 using static SabreTools.Models.MoPaQ.Constants;
 
