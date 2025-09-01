@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Prepare the crypt table
-                PrepareCryptTable();
+                var decrypter = new MoPaQDecrypter();
 
                 // Create a new archive to fill
                 var archive = new Archive();
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Hash Table
 
                 // Set the hash table, if possible
-                var hashTable = ParseHashTable(data, initialOffset, archive.ArchiveHeader);
+                var hashTable = ParseHashTable(data, initialOffset, archive.ArchiveHeader, decrypter);
                 if (hashTable != null)
                     archive.HashTable = hashTable;
 
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Block Table
 
                 // Set the block table, if possible
-                var blockTable = ParseBlockTable(data, initialOffset, archive.ArchiveHeader);
+                var blockTable = ParseBlockTable(data, initialOffset, archive.ArchiveHeader, decrypter);
                 if (blockTable != null)
                     archive.BlockTable = blockTable;
 
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region BET Table
 
                 // Set the BET table, if possible
-                var betTable = ParseBetTable(data, initialOffset, archive.ArchiveHeader);
+                var betTable = ParseBetTable(data, initialOffset, archive.ArchiveHeader, decrypter);
                 if (betTable != null)
                     archive.BetTable = betTable;
 
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region HET Table
 
                 // Set the HET table, if possible
-                var hetTable = ParseHetTable(data, initialOffset, archive.ArchiveHeader);
+                var hetTable = ParseHetTable(data, initialOffset, archive.ArchiveHeader, decrypter);
                 if (hetTable != null)
                     archive.HetTable = hetTable;
 
@@ -183,8 +183,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
+        /// <param name="decrypter">Decrypter for processing table data</param>
         /// <returns>Filled BetTable on success, null on error</returns>
-        public static BetTable? ParseBetTable(Stream data, long initialOffset, ArchiveHeader header)
+        public static BetTable? ParseBetTable(Stream data, long initialOffset, ArchiveHeader header, MoPaQDecrypter decrypter)
         {
             // Get the BET table offset
             long offset = initialOffset + (long)header.BetTablePosition;
@@ -192,7 +193,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             // Preprocess the table
-            byte[]? tableBytes = LoadTable(data,
+            byte[]? tableBytes = decrypter.LoadTable(data,
                 offset,
                 header.BetTableMD5,
                 (uint)header.BetTablesize,
@@ -208,79 +209,14 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a BetTable
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled BetTable on success, null on error</returns>
-        public static BetTable ParseBetTable(byte[] data, ref int offset)
-        {
-            var obj = new BetTable();
-
-            // Common Headers
-            byte[] signature = data.ReadBytes(ref offset, 4);
-            obj.Signature = Encoding.ASCII.GetString(signature);
-            obj.Version = data.ReadUInt32LittleEndian(ref offset);
-            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
-
-            // BET-Specific
-            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.Unknown = data.ReadUInt32LittleEndian(ref offset);
-            obj.TableEntrySize = data.ReadUInt32LittleEndian(ref offset);
-
-            obj.FilePositionBitIndex = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
-            obj.CompressedSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
-            obj.FlagIndexBitIndex = data.ReadUInt32LittleEndian(ref offset);
-            obj.UnknownBitIndex = data.ReadUInt32LittleEndian(ref offset);
-
-            obj.FilePositionBitCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.CompressedSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.FlagIndexBitCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.UnknownBitCount = data.ReadUInt32LittleEndian(ref offset);
-
-            obj.TotalBetHashSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.BetHashSizeExtra = data.ReadUInt32LittleEndian(ref offset);
-            obj.BetHashSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.BetHashArraySize = data.ReadUInt32LittleEndian(ref offset);
-            obj.FlagCount = data.ReadUInt32LittleEndian(ref offset);
-
-            obj.FlagsArray = new uint[obj.FlagCount];
-            byte[] flagsArray = data.ReadBytes(ref offset, (int)obj.FlagCount * 4);
-            Buffer.BlockCopy(flagsArray, 0, obj.FlagsArray, 0, (int)obj.FlagCount * 4);
-
-            // TODO: Populate the file table
-            // TODO: Populate the hash table
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Parse a Stream into an BlockEntry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled BlockEntry on success, null on error</returns>
-        public static BlockEntry ParseBlockEntry(byte[] data, ref int offset)
-        {
-            var obj = new BlockEntry();
-
-            obj.FilePosition = data.ReadUInt32LittleEndian(ref offset);
-            obj.CompressedSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.UncompressedSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.Flags = (FileFlags)data.ReadUInt32LittleEndian(ref offset);
-
-            return obj;
-        }
-
-        /// <summary>
         /// Parse a Stream into a BlockTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
+        /// <param name="decrypter">Decrypter for processing table data</param>
         /// <returns>Filled BlockTable on success, null on error</returns>
-        public static BlockEntry[]? ParseBlockTable(Stream data, long initialOffset, ArchiveHeader header)
+        public static BlockEntry[]? ParseBlockTable(Stream data, long initialOffset, ArchiveHeader header, MoPaQDecrypter decrypter)
         {
             // Get the block table offset
             long offset = initialOffset + ((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition;
@@ -291,7 +227,7 @@ namespace SabreTools.Serialization.Deserializers
             uint entryCount = header.BlockTableSize;
 
             // Preprocess the table
-            byte[]? tableBytes = LoadTable(data,
+            byte[]? tableBytes = decrypter.LoadTable(data,
                 offset,
                 header.BlockTableMD5,
                 (uint)header.BlockTableSizeLong,
@@ -314,31 +250,14 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an HashEntry
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled HashEntry on success, null on error</returns>
-        public static HashEntry ParseHashEntry(byte[] data, ref int offset)
-        {
-            var obj = new HashEntry();
-
-            obj.NameHashPartA = data.ReadUInt32LittleEndian(ref offset);
-            obj.NameHashPartB = data.ReadUInt32LittleEndian(ref offset);
-            obj.Locale = (Locale)data.ReadInt16LittleEndian(ref offset);
-            obj.Platform = data.ReadUInt16LittleEndian(ref offset);
-            obj.BlockIndex = data.ReadUInt32LittleEndian(ref offset);
-
-            return obj;
-        }
-
-        /// <summary>
         /// Parse a Stream into a HashTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
+        /// <param name="decrypter">Decrypter for processing table data</param>
         /// <returns>Filled HashTable on success, null on error</returns>
-        public static HashEntry[]? ParseHashTable(Stream data, long initialOffset, ArchiveHeader header)
+        public static HashEntry[]? ParseHashTable(Stream data, long initialOffset, ArchiveHeader header, MoPaQDecrypter decrypter)
         {
             // Get the hash table offset
             long offset = initialOffset + (((uint)header.HashTablePositionHi << 23) | header.HashTablePosition);
@@ -349,7 +268,7 @@ namespace SabreTools.Serialization.Deserializers
             uint entryCount = header.HashTableSize;
 
             // Preprocess the table
-            byte[]? tableBytes = LoadTable(data,
+            byte[]? tableBytes = decrypter.LoadTable(data,
                 offset,
                 header.HashTableMD5,
                 (uint)header.HashTableSizeLong,
@@ -377,8 +296,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
+        /// <param name="decrypter">Decrypter for processing table data</param>
         /// <returns>Filled HetTable on success, null on error</returns>
-        public static HetTable? ParseHetTable(Stream data, long initialOffset, ArchiveHeader header)
+        public static HetTable? ParseHetTable(Stream data, long initialOffset, ArchiveHeader header, MoPaQDecrypter decrypter)
         {
             // Get the HET table offset
             long offset = initialOffset + (long)header.HetTablePosition;
@@ -386,7 +306,7 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             // Preprocess the table
-            byte[]? tableBytes = LoadTable(data,
+            byte[]? tableBytes = decrypter.LoadTable(data,
                 offset,
                 header.HetTableMD5,
                 (uint)header.HetTableSize,
@@ -399,37 +319,6 @@ namespace SabreTools.Serialization.Deserializers
             // Read in the HET table
             int tableOffset = 0;
             return ParseHetTable(tableBytes, ref tableOffset);
-        }
-
-        /// <summary>
-        /// Parse a Stream into a HetTable
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled HetTable on success, null on error</returns>
-        public static HetTable ParseHetTable(byte[] data, ref int offset)
-        {
-            var obj = new HetTable();
-
-            // Common Headers
-            byte[] signature = data.ReadBytes(ref offset, 4);
-            obj.Signature = Encoding.ASCII.GetString(signature);
-            obj.Version = data.ReadUInt32LittleEndian(ref offset);
-            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
-
-            // HET-Specific
-            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.MaxFileCount = data.ReadUInt32LittleEndian(ref offset);
-            obj.HashTableSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.TotalIndexSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.IndexSizeExtra = data.ReadUInt32LittleEndian(ref offset);
-            obj.IndexSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.BlockTableSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.HashTable = data.ReadBytes(ref offset, (int)obj.HashTableSize);
-
-            // TODO: Populate the file indexes array
-            obj.FileIndexes = new byte[(int)obj.HashTableSize][];
-
-            return obj;
         }
 
         /// <summary>
@@ -483,167 +372,119 @@ namespace SabreTools.Serialization.Deserializers
             return obj;
         }
 
-        #region Helpers
-
         /// <summary>
-        /// Indicates if the buffer has been built or not
-        /// </summary>
-        private static bool _cryptPrepared = false;
-
-        /// <summary>
-        /// Buffer for encryption and decryption
-        /// </summary>
-        private static readonly uint[] _stormBuffer = new uint[STORM_BUFFER_SIZE];
-
-        /// <summary>
-        /// Prepare the encryption table
-        /// </summary>
-        private static void PrepareCryptTable()
-        {
-            if (_cryptPrepared)
-                return;
-
-            uint seed = 0x00100001;
-            for (uint index1 = 0; index1 < 0x100; index1++)
-            {
-                for (uint index2 = index1, i = 0; i < 5; i++, index2 += 0x100)
-                {
-                    seed = (seed * 125 + 3) % 0x2AAAAB;
-                    uint temp1 = (seed & 0xFFFF) << 0x10;
-
-                    seed = (seed * 125 + 3) % 0x2AAAAB;
-                    uint temp2 = (seed & 0xFFFF);
-
-                    _stormBuffer[index2] = (temp1 | temp2);
-                }
-            }
-
-            _cryptPrepared = true;
-        }
-
-        /// <summary>
-        /// Load a table block by optionally decompressing and
-        /// decrypting before returning the data.
+        /// Parse a Stream into a BetTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="offset">Data offset to parse</param>
-        /// <param name="expectedHash">Optional MD5 hash for validation</param>
-        /// <param name="compressedSize">Size of the table in the file</param>
-        /// <param name="tableSize">Expected size of the table</param>
-        /// <param name="key">Encryption key to use</param>
-        /// <param name="realTableSize">Output represening the real table size</param>
-        /// <returns>Byte array representing the processed table</returns>
-        private static byte[]? LoadTable(Stream data,
-            long offset,
-            byte[]? expectedHash,
-            uint compressedSize,
-            uint tableSize,
-            uint key,
-            out long realTableSize)
+        /// <returns>Filled BetTable on success, null on error</returns>
+        private static BetTable ParseBetTable(byte[] data, ref int offset)
         {
-            byte[]? tableData;
-            byte[]? readBytes;
-            long bytesToRead = tableSize;
+            var obj = new BetTable();
 
-            // Allocate the MPQ table
-            tableData = readBytes = new byte[tableSize];
+            // Common Headers
+            byte[] signature = data.ReadBytes(ref offset, 4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
 
-            // Check if the MPQ table is compressed
-            if (compressedSize != 0 && compressedSize < tableSize)
-            {
-                // Allocate temporary buffer for holding compressed data
-                readBytes = new byte[compressedSize];
-                bytesToRead = compressedSize;
-            }
+            // BET-Specific
+            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.Unknown = data.ReadUInt32LittleEndian(ref offset);
+            obj.TableEntrySize = data.ReadUInt32LittleEndian(ref offset);
 
-            // Get the file offset from which we will read the table
-            // Note: According to Storm.dll from Warcraft III (version 2002),
-            // if the hash table position is 0xFFFFFFFF, no SetFilePointer call is done
-            // and the table is loaded from the current file offset
-            if (offset == 0xFFFFFFFF)
-                offset = data.Position;
+            obj.FilePositionBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSizeBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagIndexBitIndex = data.ReadUInt32LittleEndian(ref offset);
+            obj.UnknownBitIndex = data.ReadUInt32LittleEndian(ref offset);
 
-            // Is the sector table within the file?
-            if (offset >= data.Length)
-            {
-                realTableSize = 0;
-                return null;
-            }
+            obj.FilePositionBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSizeBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagIndexBitCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.UnknownBitCount = data.ReadUInt32LittleEndian(ref offset);
 
-            // The hash table and block table can go beyond EOF.
-            // Storm.dll reads as much as possible, then fills the missing part with zeros.
-            // Abused by Spazzler map protector which sets hash table size to 0x00100000
-            // Abused by NP_Protect in MPQs v4 as well
-            if ((offset + bytesToRead) > data.Length)
-                bytesToRead = (uint)(data.Length - offset);
+            obj.TotalBetHashSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashSizeExtra = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BetHashArraySize = data.ReadUInt32LittleEndian(ref offset);
+            obj.FlagCount = data.ReadUInt32LittleEndian(ref offset);
 
-            // Give the caller information that the table was cut
-            realTableSize = bytesToRead;
+            obj.FlagsArray = new uint[obj.FlagCount];
+            byte[] flagsArray = data.ReadBytes(ref offset, (int)obj.FlagCount * 4);
+            Buffer.BlockCopy(flagsArray, 0, obj.FlagsArray, 0, (int)obj.FlagCount * 4);
 
-            // If everything succeeded, read the raw table from the MPQ
-            data.Seek(offset, SeekOrigin.Begin);
-            _ = data.Read(readBytes, 0, (int)bytesToRead);
+            // TODO: Populate the file table
+            // TODO: Populate the hash table
 
-            // Verify the MD5 of the table, if present
-            byte[]? actualHash = HashTool.GetByteArrayHashArray(readBytes, HashType.MD5);
-            if (expectedHash != null && actualHash != null && !actualHash.EqualsExactly(expectedHash))
-            {
-                Console.WriteLine("Table is corrupt!");
-                return null;
-            }
-
-            // First of all, decrypt the table
-            if (key != 0)
-                tableData = DecryptBlock(readBytes, bytesToRead, key);
-
-            // If the table is compressed, decompress it
-            if (compressedSize != 0 && compressedSize < tableSize)
-            {
-                Console.WriteLine("Table is compressed, it will not read properly!");
-                return null;
-
-                // TODO: Handle decompression
-                // int cbOutBuffer = (int)tableSize;
-                // int cbInBuffer = (int)compressedSize;
-
-                // if (!SCompDecompress2(readBytes, &cbOutBuffer, tableData, cbInBuffer))
-                //     errorCode = SErrGetLastError();
-
-                // tableData = readBytes;
-            }
-
-            // Return the MPQ table
-            return tableData;
+            return obj;
         }
 
         /// <summary>
-        /// Decrypt a single block of data
+        /// Parse decrypted data into an BlockEntry
         /// </summary>
-        private static unsafe byte[] DecryptBlock(byte[] block, long length, uint key)
+        /// <param name="data">Decrypted data to parse</param>
+        /// <returns>Filled BlockEntry on success, null on error</returns>
+        private static BlockEntry ParseBlockEntry(byte[] data, ref int offset)
         {
-            uint seed = 0xEEEEEEEE;
+            var obj = new BlockEntry();
 
-            uint[] castBlock = new uint[length >> 2];
-            Buffer.BlockCopy(block, 0, castBlock, 0, (int)length);
-            int castBlockPtr = 0;
+            obj.FilePosition = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressedSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.UncompressedSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.Flags = (FileFlags)data.ReadUInt32LittleEndian(ref offset);
 
-            // Round to uints
-            length >>= 2;
-
-            while (length-- > 0)
-            {
-                seed += _stormBuffer[MPQ_HASH_KEY2_MIX + (key & 0xFF)];
-                uint ch = castBlock[castBlockPtr] ^ (key + seed);
-
-                key = ((~key << 0x15) + 0x11111111) | (key >> 0x0B);
-                seed = ch + seed + (seed << 5) + 3;
-                castBlock[castBlockPtr++] = ch;
-            }
-
-            Buffer.BlockCopy(castBlock, 0, block, 0, block.Length >> 2);
-            return block;
+            return obj;
         }
 
-        #endregion
+        /// <summary>
+        /// Parse decrypted data into an HashEntry
+        /// </summary>
+        /// <param name="data">Decrypted data to parse</param>
+        /// <returns>Filled HashEntry on success, null on error</returns>
+        private static HashEntry ParseHashEntry(byte[] data, ref int offset)
+        {
+            var obj = new HashEntry();
+
+            obj.NameHashPartA = data.ReadUInt32LittleEndian(ref offset);
+            obj.NameHashPartB = data.ReadUInt32LittleEndian(ref offset);
+            obj.Locale = (Locale)data.ReadInt16LittleEndian(ref offset);
+            obj.Platform = data.ReadUInt16LittleEndian(ref offset);
+            obj.BlockIndex = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a decrypted data into a HetTable
+        /// </summary>
+        /// <param name="data">Decrypted data to parse</param>
+        /// <returns>Filled HetTable on success, null on error</returns>
+        private static HetTable ParseHetTable(byte[] data, ref int offset)
+        {
+            var obj = new HetTable();
+
+            // Common Headers
+            byte[] signature = data.ReadBytes(ref offset, 4);
+            obj.Signature = Encoding.ASCII.GetString(signature);
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
+
+            // HET-Specific
+            obj.TableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.MaxFileCount = data.ReadUInt32LittleEndian(ref offset);
+            obj.HashTableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.TotalIndexSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.IndexSizeExtra = data.ReadUInt32LittleEndian(ref offset);
+            obj.IndexSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.BlockTableSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.HashTable = data.ReadBytes(ref offset, (int)obj.HashTableSize);
+
+            // TODO: Populate the file indexes array
+            obj.FileIndexes = new byte[(int)obj.HashTableSize][];
+
+            return obj;
+        }
     }
 }
