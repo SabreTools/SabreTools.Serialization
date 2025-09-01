@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -138,7 +139,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Load the item data
-            var data = ReadFromDataSource((int)directoryEntry.EntryOffset, (int)directoryEntry.EntryLength);
+            var data = _dataSource.ReadFrom((int)directoryEntry.EntryOffset, (int)directoryEntry.EntryLength, retainPosition: true);
             if (data == null)
                 return false;
 

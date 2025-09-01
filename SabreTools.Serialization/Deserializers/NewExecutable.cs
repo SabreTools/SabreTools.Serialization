@@ -10,7 +10,6 @@ namespace SabreTools.Serialization.Deserializers
     public class NewExecutable : BaseBinaryDeserializer<Executable>
     {
         /// <inheritdoc/>
-        /// TODO: Relocation data needs to be hooked up when Models updated
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
@@ -64,7 +63,7 @@ namespace SabreTools.Serialization.Deserializers
                 executable.SegmentTable = new SegmentTableEntry[header.FileSegmentCount];
                 for (int i = 0; i < header.FileSegmentCount; i++)
                 {
-                    executable.SegmentTable[i] = ParseSegmentTableEntry(data);
+                    executable.SegmentTable[i] = ParseSegmentTableEntry(data, initialOffset);
                 }
 
                 #endregion
@@ -624,8 +623,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into an SegmentTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <returns>Filled SegmentTableEntry on success, null on error</returns>
-        public static SegmentTableEntry ParseSegmentTableEntry(Stream data)
+        public static SegmentTableEntry ParseSegmentTableEntry(Stream data, long initialOffset)
         {
             var obj = new SegmentTableEntry();
 
@@ -633,6 +633,30 @@ namespace SabreTools.Serialization.Deserializers
             obj.Length = data.ReadUInt16LittleEndian();
             obj.FlagWord = (SegmentTableEntryFlag)data.ReadUInt16LittleEndian();
             obj.MinimumAllocationSize = data.ReadUInt16LittleEndian();
+
+            // If the data offset is invalid
+            if (obj.Offset < 0 || obj.Offset + initialOffset >= data.Length)
+                return obj;
+
+            // Cache the current offset
+            long currentOffset = data.Position;
+
+            // Seek to the data offset and read
+            data.Seek(obj.Offset + initialOffset, SeekOrigin.Begin);
+            obj.Data = data.ReadBytes(obj.Length);
+
+
+#if NET20 || NET35
+            if ((obj.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
+#else
+            if (obj.FlagWord.HasFlag(flag: SegmentTableEntryFlag.RELOCINFO))
+#endif
+            {
+                obj.PerSegmentData = ParsePerSegmentData(data);
+            }
+
+            // Seek back to the end of the entry
+            data.Seek(currentOffset, SeekOrigin.Begin);
 
             return obj;
         }

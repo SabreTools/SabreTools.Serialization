@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Compression.Deflate;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.BFPK;
 using SabreTools.Serialization.Interfaces;
 
@@ -166,7 +167,7 @@ namespace SabreTools.Serialization.Wrappers
                 using FileStream fs = File.OpenWrite(filename);
 
                 // Read the data block
-                var data = ReadFromDataSource(offset, compressedSize);
+                var data = _dataSource.ReadFrom(offset, compressedSize, retainPosition: true);
                 if (data == null)
                     return false;
 

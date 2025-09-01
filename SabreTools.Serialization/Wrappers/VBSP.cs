@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.BSP;
 using SabreTools.Serialization.Interfaces;
 
@@ -127,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the data
             var lump = Lumps[index];
-            var data = ReadFromDataSource(lump.Offset, lump.Length);
+            var data = _dataSource.ReadFrom(lump.Offset, lump.Length, retainPosition: true);
             if (data == null)
                 return false;
 

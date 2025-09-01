@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _entryPointData;
 
                     // Read the first 128 bytes of the entry point
-                    _entryPointData = ReadFromDataSource(entryPointAddress, length: 128);
+                    _entryPointData = _dataSource.ReadFrom(entryPointAddress, length: 128, retainPosition: true);
 
                     // Cache and return the entry point padding data, even if null
                     return _entryPointData;
@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.Wrappers
                     if (headerLength <= 0)
                         _headerPaddingData = [];
                     else
-                        _headerPaddingData = ReadFromDataSource((int)headerStartAddress, headerLength);
+                        _headerPaddingData = _dataSource.ReadFrom((int)headerStartAddress, headerLength, retainPosition: true);
 
                     // Cache and return the header padding data, even if null
                     return _headerPaddingData;
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Wrappers
                     if (headerLength <= 0)
                         _headerPaddingStrings = [];
                     else
-                        _headerPaddingStrings = ReadStringsFromDataSource((int)headerStartAddress, headerLength, charLimit: 3);
+                        _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
 
                     // Cache and return the header padding data, even if null
                     return _headerPaddingStrings;
@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Otherwise, cache and return the data
                     long overlayLength = dataLength - endOfSectionData;
-                    _overlayData = ReadFromDataSource(endOfSectionData, (int)overlayLength);
+                    _overlayData = _dataSource.ReadFrom(endOfSectionData, (int)overlayLength, retainPosition: true);
                     return _overlayData;
                 }
             }
@@ -414,7 +414,7 @@ namespace SabreTools.Serialization.Wrappers
                     long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = ReadStringsFromDataSource(endOfSectionData, (int)overlayLength, charLimit: 3);
+                    _overlayStrings = _dataSource.ReadStringsFrom(endOfSectionData, (int)overlayLength, charLimit: 3);
                     return _overlayStrings;
                 }
             }
@@ -487,7 +487,7 @@ namespace SabreTools.Serialization.Wrappers
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
                     int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                    _stubExecutableData = ReadFromDataSource(endOfStubHeader, lengthOfStubExecutableData);
+                    _stubExecutableData = _dataSource.ReadFrom(endOfStubHeader, lengthOfStubExecutableData, retainPosition: true);
 
                     // Cache and return the stub executable data, even if null
                     return _stubExecutableData;
@@ -1029,7 +1029,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte[]? entryData;
                 try
                 {
-                    entryData = ReadFromDataSource((int)address, (int)size);
+                    entryData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
                     if (entryData == null || entryData.Length < 4)
                         continue;
                 }
@@ -1088,15 +1088,16 @@ namespace SabreTools.Serialization.Wrappers
         /// - Archives and executables in resource data
         /// - CExe-compressed resource data
         /// - SFX archives (7z, PKZIP, RAR)
+        /// - Wise installers
         /// </remarks>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
-            // TODO: Add Wise installer handling here
+            bool wise = ExtractWise(outputDirectory, includeDebug);
 
-            return cexe || overlay || resources;
+            return cexe || overlay || resources | wise;
         }
 
         /// <summary>
@@ -1367,6 +1368,37 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Extract data from a Wise installer
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractWise(string outputDirectory, bool includeDebug)
+        {
+            // Get the source data for reading
+            Stream source = _dataSource;
+            if (Filename != null)
+            {
+                // Try to open a multipart file
+                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp != null)
+                    source = temp;
+            }
+
+            // Try to find the overlay header
+            long offset = FindWiseOverlayHeader(includeDebug);
+            if (offset > 0 && offset < Length)
+                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
+
+            // Try to find the section header
+            offset = FindWiseSectionHeader(includeDebug);
+            if (offset > 0 && offset < Length)
+                return ExtractWiseSection(outputDirectory, includeDebug, source, offset);
+
+            // Everything else could not extract
+            return false;
+        }
+
+        /// <summary>
         /// Decompress CExe data compressed with LZ
         /// </summary>
         /// <param name="resource">Resource data to inflate</param>
@@ -1433,6 +1465,81 @@ namespace SabreTools.Serialization.Wrappers
                 // Reset the data
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Extract using Wise overlay
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="source">Potentially multi-part stream to read</param>
+        /// <param name="offset">Offset to the start of the overlay header</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
+        {
+            // Seek to the overlay and parse
+            source.Seek(offset, SeekOrigin.Begin);
+            var header = WiseOverlayHeader.Create(source);
+            if (header == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
+                return false;
+            }
+
+            // Extract the header-defined files
+            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, out long dataStart);
+            if (!extracted)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
+                return false;
+            }
+
+            // Open the script file from the output directory
+            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
+            var script = WiseScript.Create(scriptStream);
+            if (script == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
+                return false;
+            }
+
+            // Get the source directory
+            string? sourceDirectory = null;
+            if (Filename != null)
+                sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
+
+            // Process the state machine
+            return script.ProcessStateMachine(_dataSource,
+                sourceDirectory,
+                dataStart,
+                outputDirectory,
+                header.IsPKZIP,
+                includeDebug);
+        }
+
+        /// <summary>
+        /// Extract using Wise section
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="source">Potentially multi-part stream to read</param>
+        /// <param name="offset">Offset to the start of the section header</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        private bool ExtractWiseSection(string outputDirectory, bool includeDebug, Stream source, long offset)
+        {
+            // Get the size of the section and seek to the start
+            source.Seek(offset, SeekOrigin.Begin);
+
+            // Write section data to new stream
+            var header = WiseSectionHeader.Create(source);
+            if (header == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
+                return false;
+            }
+
+            // Attempt to extract section
+            return header.Extract(outputDirectory, includeDebug);
         }
 
         #endregion
@@ -1618,6 +1725,149 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             return resources;
+        }
+
+        /// <summary>
+        /// Find the location of a Wise overlay header, if it exists
+        /// </summary>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Offset to the overlay header on success, -1 otherwise</returns>
+        public long FindWiseOverlayHeader(bool includeDebug)
+        {
+            // Get the overlay offset
+            long overlayOffset = OverlayAddress;
+
+            // Attempt to get the overlay header
+            if (overlayOffset >= 0 && overlayOffset < Length)
+            {
+                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                var header = Create(_dataSource);
+                if (header != null)
+                    return overlayOffset;
+            }
+
+            // Check section data
+            foreach (var section in SectionTable ?? [])
+            {
+                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
+
+                var header = Create(_dataSource);
+                if (header != null)
+                    return sectionOffset;
+
+                // Check after the resource table
+                if (sectionName == ".rsrc")
+                {
+                    // Data immediately following
+                    long afterResourceOffset = sectionOffset + section.SizeOfRawData;
+                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+
+                    header = Create(_dataSource);
+                    if (header != null)
+                        return afterResourceOffset;
+
+                    // Data following padding data
+                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+                    _ = _dataSource.ReadNullTerminatedAnsiString();
+
+                    afterResourceOffset = _dataSource.Position;
+                    header = Create(_dataSource);
+                    if (header != null)
+                        return afterResourceOffset;
+                }
+            }
+
+            // If there are no resources
+            if (OptionalHeader?.ResourceTable == null || ResourceData == null)
+                return -1;
+
+            // Get the resources that have an executable signature
+            bool exeResources = false;
+            foreach (var kvp in ResourceData)
+            {
+                if (kvp.Value == null || kvp.Value is not byte[] ba)
+                    continue;
+                if (!ba.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+                    continue;
+
+                exeResources = true;
+                break;
+            }
+
+            // If there are no executable resources
+            if (!exeResources)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+                return -1;
+            }
+
+            // Get the raw resource table offset
+            long resourceTableOffset = OptionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
+            if (resourceTableOffset <= 0)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+                return -1;
+            }
+
+            // Search the resource table data for the offset
+            long resourceOffset = -1;
+            _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
+            while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
+            {
+                ushort possibleSignature = _dataSource.ReadUInt16();
+                if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
+                {
+                    resourceOffset = _dataSource.Position - 2;
+                    break;
+                }
+
+                _dataSource.Seek(-1, SeekOrigin.Current);
+            }
+
+            // If there was no valid offset, somehow
+            if (resourceOffset == -1)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+                return -1;
+            }
+
+            // Parse the executable and recurse
+            _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
+            var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
+            if (resourceExe is not PortableExecutable resourcePex)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+                return -1;
+            }
+
+            return resourcePex.FindWiseOverlayHeader(includeDebug);
+        }
+
+        /// <summary>
+        /// Find the location of a Wise section header, if it exists
+        /// </summary>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Offset to the section header on success, -1 otherwise</returns>
+        public long FindWiseSectionHeader(bool includeDebug)
+        {
+            // If the section table is invalid
+            if (SectionTable == null)
+                return -1;
+
+            // Find the .WISE section
+            foreach (var section in SectionTable)
+            {
+                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                if (sectionName != ".WISE")
+                    continue;
+
+                return section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+            }
+
+            // Otherwise, it could not be found
+            return -1;
         }
 
         #endregion
@@ -1966,7 +2216,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _sectionData[index];
 
                 // Populate the raw section data based on the source
-                byte[]? sectionData = ReadFromDataSource((int)address, (int)size);
+                byte[]? sectionData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
 
                 // Cache and return the section data, even if null
                 _sectionData[index] = sectionData ?? [];
@@ -2052,7 +2302,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _sectionStringData[index];
 
                 // Populate the section string data based on the source
-                List<string>? sectionStringData = ReadStringsFromDataSource((int)address, (int)size);
+                List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
                 // Cache and return the section string data, even if null
                 _sectionStringData[index] = sectionStringData ?? [];
@@ -2136,7 +2386,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _tableData[index];
 
                 // Populate the raw table data based on the source
-                byte[]? tableData = ReadFromDataSource((int)address, (int)size);
+                byte[]? tableData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
 
                 // Cache and return the table data, even if null
                 _tableData[index] = tableData ?? [];
@@ -2181,7 +2431,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _tableStringData[index];
 
                 // Populate the table string data based on the source
-                List<string>? tableStringData = ReadStringsFromDataSource((int)address, (int)size);
+                List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
                 // Cache and return the table string data, even if null
                 _tableStringData[index] = tableStringData ?? [];

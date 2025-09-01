@@ -17,7 +17,6 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
 
             Print(builder, file.Header);
-            // TODO: Capture or print the compressed data
             Print(builder, file.Trailer);
         }
 

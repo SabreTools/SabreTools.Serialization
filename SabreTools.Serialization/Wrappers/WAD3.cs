@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -126,7 +127,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the data -- TODO: Handle uncompressed lumps (see BSP.ExtractTexture)
             var lump = DirEntries[index];
-            var data = ReadFromDataSource((int)lump.Offset, (int)lump.Length);
+            var data = _dataSource.ReadFrom((int)lump.Offset, (int)lump.Length, retainPosition: true);
             if (data == null)
                 return false;
 

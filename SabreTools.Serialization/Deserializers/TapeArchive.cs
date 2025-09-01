@@ -97,8 +97,7 @@ namespace SabreTools.Serialization.Deserializers
                 blocks[i] = block;
             }
 
-            // TODO: Make this a direct assignment when Models is updated
-            obj.Blocks = [.. blocks];
+            obj.Blocks = blocks;
 
             #endregion
 

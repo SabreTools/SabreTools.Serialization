@@ -1,5 +1,6 @@
 using System.Text;
 using SabreTools.Models.BSP;
+using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers
@@ -144,10 +145,21 @@ namespace SabreTools.Serialization.Printers
 
             for (int i = 0; i < lump.Entities.Length; i++)
             {
-                // TODO: Implement entity printing
                 var entity = lump.Entities[i];
 
-                builder.AppendLine($"    Entity {i}: Not printed yet");
+                builder.AppendLine($"    Entity {i}:");
+                if (entity.Attributes == null || entity.Attributes.Count == 0)
+                {
+                    builder.AppendLine("      No attributes");
+                    continue;
+                }
+
+                for (int j = 0; j < entity.Attributes.Count; j++)
+                {
+                    var kvp = entity.Attributes[j];
+
+                    builder.AppendLine($"      Attribute {j}: {kvp.Key}={kvp.Value}");
+                }
             }
         }
 

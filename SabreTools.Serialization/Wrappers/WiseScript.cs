@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Compression.Deflate;
+#if NETFRAMEWORK || NETSTANDARD
 using SabreTools.IO.Extensions;
+#endif
 using SabreTools.Models.WiseInstaller;
 using SabreTools.Models.WiseInstaller.Actions;
 
@@ -472,12 +474,10 @@ namespace SabreTools.Serialization.Wrappers
             if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
-            using (var iniFile = File.Open(iniFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-            {
-                iniFile.Write(Encoding.ASCII.GetBytes($"[{obj.Section}]\n"));
-                iniFile.Write(Encoding.ASCII.GetBytes($"{obj.Values ?? string.Empty}\n"));
-                iniFile.Flush();
-            }
+            using var iniFile = File.Open(iniFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+            iniFile.Write(Encoding.ASCII.GetBytes($"[{obj.Section}]\n"));
+            iniFile.Write(Encoding.ASCII.GetBytes($"{obj.Values ?? string.Empty}\n"));
+            iniFile.Flush();
         }
 
         #endregion

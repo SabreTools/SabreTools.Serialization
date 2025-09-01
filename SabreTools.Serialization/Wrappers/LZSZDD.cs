@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.IO.Compression.SZDD;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.LZ;
 using SabreTools.Serialization.Interfaces;
 
@@ -110,7 +111,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Read in the data as an array
-            byte[]? contents = ReadFromDataSource(14, (int)compressedSize);
+            byte[]? contents = _dataSource.ReadFrom(14, (int)compressedSize, retainPosition: true);
             if (contents == null)
                 return false;
 

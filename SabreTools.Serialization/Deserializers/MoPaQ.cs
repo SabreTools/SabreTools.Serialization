@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.MoPaQ;
 using static SabreTools.Models.MoPaQ.Constants;

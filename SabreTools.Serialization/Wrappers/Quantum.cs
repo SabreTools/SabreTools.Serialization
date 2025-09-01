@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.Quantum;
 using SabreTools.Serialization.Interfaces;
 
@@ -140,7 +141,7 @@ namespace SabreTools.Serialization.Wrappers
             // Read the entire compressed data
             int compressedDataOffset = (int)CompressedDataOffset;
             long compressedDataLength = Length - compressedDataOffset;
-            var compressedData = ReadFromDataSource(compressedDataOffset, (int)compressedDataLength);
+            var compressedData = _dataSource.ReadFrom(compressedDataOffset, (int)compressedDataLength, retainPosition: true);
 
             // Print a debug reminder
             if (includeDebug) Console.WriteLine("Quantum archive extraction is unsupported");

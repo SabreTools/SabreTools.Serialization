@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.PFF;
 using SabreTools.Serialization.Interfaces;
 
@@ -158,7 +159,7 @@ namespace SabreTools.Serialization.Wrappers
                 using FileStream fs = File.OpenWrite(filename);
 
                 // Read the data block
-                var data = ReadFromDataSource(offset, size);
+                var data = _dataSource.ReadFrom(offset, size, retainPosition: true);
                 if (data == null)
                     return false;
 

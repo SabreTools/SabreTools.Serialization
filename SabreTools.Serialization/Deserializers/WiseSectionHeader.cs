@@ -79,15 +79,6 @@ namespace SabreTools.Serialization.Deserializers
                 header.Version = data.ReadBytes(versionOffset);
                 wisOffset = offset;
             }
-            bool earlyReturn = false;
-
-            // If the header is invalid
-            if (header.Version == null)
-                earlyReturn = true;
-            if (wisOffset < 0)
-                earlyReturn =  true;
-            if (headerLength < 0)
-                earlyReturn = true;
 
             //Seek back to the beginning of the section
             data.Seek(initialOffset, 0);
@@ -101,10 +92,13 @@ namespace SabreTools.Serialization.Deserializers
             header.FirstExecutableFileEntryLength = data.ReadUInt32LittleEndian();
             header.MsiFileEntryLength = data.ReadUInt32LittleEndian();
 
-            if (earlyReturn)
-            {
+            // If the reported header information is invalid
+            if (header.Version == null)
                 return header;
-            }
+            if (wisOffset < 0)
+                return header;
+            if (headerLength < 0)
+                return header;
 
             if (headerLength > 6)
             {
@@ -155,7 +149,6 @@ namespace SabreTools.Serialization.Deserializers
             header.Strings = stringArrays;
 
             // Not sure what this data is. Might be a wisescript?
-            // TODO: Should really be done in the wrapper, but almost everything there is static so there's no good place\
             if (header.UnknownDataSize != 0)
                 data.Seek(header.UnknownDataSize, SeekOrigin.Current);
 
@@ -216,9 +209,8 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse the string table, if possible
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="header"></param>
-        /// <param name="preStringBytesSize"></param>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="preStringValues">Pre-string byte array containing string lengths</param>
         /// <returns>The filled string table on success, false otherwise</returns>
         private static byte[][]? ParseStringTable(Stream data, byte[] preStringValues)
         {

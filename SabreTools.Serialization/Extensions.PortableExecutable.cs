@@ -1186,51 +1186,9 @@ namespace SabreTools.Serialization
             while (offset < entry.Data.Length && (offset % 4) != 0)
                 versionInfo.Padding2 = entry.Data.ReadUInt16LittleEndian(ref offset);
 
-            // TODO: Make the following block a private helper method
-
-            // Determine if we have a StringFileInfo or VarFileInfo next
-            if (offset < versionInfo.Length)
-            {
-                // Cache the current offset for reading
-                int currentOffset = offset;
-
-                offset += 6;
-                string? nextKey = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
-                offset = currentOffset;
-
-                if (nextKey == "StringFileInfo")
-                {
-                    var stringFileInfo = AsStringFileInfo(entry.Data, ref offset);
-                    versionInfo.StringFileInfo = stringFileInfo;
-                }
-                else if (nextKey == "VarFileInfo")
-                {
-                    var varFileInfo = AsVarFileInfo(entry.Data, ref offset);
-                    versionInfo.VarFileInfo = varFileInfo;
-                }
-            }
-
-            // And again
-            if (offset < versionInfo.Length)
-            {
-                // Cache the current offset for reading
-                int currentOffset = offset;
-
-                offset += 6;
-                string? nextKey = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
-                offset = currentOffset;
-
-                if (nextKey == "StringFileInfo")
-                {
-                    var stringFileInfo = AsStringFileInfo(entry.Data, ref offset);
-                    versionInfo.StringFileInfo = stringFileInfo;
-                }
-                else if (nextKey == "VarFileInfo")
-                {
-                    var varFileInfo = AsVarFileInfo(entry.Data, ref offset);
-                    versionInfo.VarFileInfo = varFileInfo;
-                }
-            }
+            // Determine if we have a StringFileInfo or VarFileInfo twice
+            ReadInfoSection(entry.Data, ref offset, versionInfo);
+            ReadInfoSection(entry.Data, ref offset, versionInfo);
 
             return versionInfo;
         }
@@ -1406,6 +1364,38 @@ namespace SabreTools.Serialization
             obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
+        }
+
+        /// <summary>
+        /// Read either a `StringFileInfo` or `VarFileInfo` based on the key
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="offset"></param>
+        /// <param name="versionInfo"></param>
+        /// <returns></returns>
+        private static void ReadInfoSection(byte[] data, ref int offset, VersionInfo versionInfo)
+        {
+            // If the offset is invalid, don't move the pointer
+            if (offset < 0 || offset >= versionInfo.Length)
+                return;
+
+            // Cache the current offset for reading
+            int currentOffset = offset;
+
+            offset += 6;
+            string? nextKey = data.ReadNullTerminatedUnicodeString(ref offset);
+            offset = currentOffset;
+
+            if (nextKey == "StringFileInfo")
+            {
+                var stringFileInfo = AsStringFileInfo(data, ref offset);
+                versionInfo.StringFileInfo = stringFileInfo;
+            }
+            else if (nextKey == "VarFileInfo")
+            {
+                var varFileInfo = AsVarFileInfo(data, ref offset);
+                versionInfo.VarFileInfo = varFileInfo;
+            }
         }
 
         #endregion

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.PAK;
 using SabreTools.Serialization.Interfaces;
 
@@ -127,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the item data
             var directoryItem = DirectoryItems[index];
-            var data = ReadFromDataSource((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength);
+            var data = _dataSource.ReadFrom((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength, retainPosition: true);
             if (data == null)
                 return false;
 

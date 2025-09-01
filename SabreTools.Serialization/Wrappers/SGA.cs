@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Compression.zlib;
+using SabreTools.IO.Extensions;
 using SabreTools.Models.SGA;
 using SabreTools.Serialization.Interfaces;
 
@@ -203,7 +204,7 @@ namespace SabreTools.Serialization.Wrappers
             long outputFileSize = GetUncompressedSize(index);
 
             // Read the compressed data directly
-            var compressedData = ReadFromDataSource((int)fileOffset, (int)fileSize);
+            var compressedData = _dataSource.ReadFrom((int)fileOffset, (int)fileSize, retainPosition: true);
             if (compressedData == null)
                 return false;
 

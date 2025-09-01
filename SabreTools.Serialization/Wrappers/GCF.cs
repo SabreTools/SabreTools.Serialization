@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -320,7 +321,7 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < dataBlockOffsets.Count; i++)
                 {
                     int readSize = (int)Math.Min(BlockSize, fileSize);
-                    var data = ReadFromDataSource((int)dataBlockOffsets[i], readSize);
+                    var data = _dataSource.ReadFrom((int)dataBlockOffsets[i], readSize, retainPosition: true);
                     if (data == null)
                         return false;
 

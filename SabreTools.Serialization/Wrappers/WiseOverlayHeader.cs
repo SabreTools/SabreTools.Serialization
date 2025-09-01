@@ -1,10 +1,7 @@
 using System;
 using System.IO;
-using System.Text;
 using SabreTools.IO.Compression.Deflate;
-using SabreTools.IO.Extensions;
 using SabreTools.IO.Streams;
-using SabreTools.Matching;
 using SabreTools.Models.WiseInstaller;
 
 namespace SabreTools.Serialization.Wrappers
@@ -19,6 +16,59 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Extension Properties
+
+        /// <summary>
+        /// Returns the offset relative to the start of the header
+        /// where the compressed data lives
+        /// </summary>
+        public long CompressedDataOffset
+        {
+            get
+            {
+                long offset = 0;
+                if (Model.DllNameLen > 0)
+                {
+                    offset += Model.DllNameLen;
+                    offset += 4; // DllSize
+                }
+
+                offset += 4; // Flags
+                offset += 12; // GraphicsData
+                offset += 4; // WiseScriptExitEventOffset
+                offset += 4; // WiseScriptCancelEventOffset
+                offset += 4; // WiseScriptInflatedSize
+                offset += 4; // WiseScriptDeflatedSize
+                offset += 4; // WiseDllDeflatedSize
+                offset += 4; // Ctl3d32DeflatedSize
+                offset += 4; // SomeData4DeflatedSize
+                offset += 4; // RegToolDeflatedSize
+                offset += 4; // ProgressDllDeflatedSize
+                offset += 4; // SomeData7DeflatedSize
+                offset += 4; // SomeData8DeflatedSize
+                offset += 4; // SomeData9DeflatedSize
+                offset += 4; // SomeData10DeflatedSize
+                offset += 4; // FinalFileDeflatedSize
+                offset += 4; // FinalFileInflatedSize
+                offset += 4; // EOF
+
+                if (DibDeflatedSize == 0 && Model.Endianness == 0)
+                    return offset;
+
+                offset += 4; // DibDeflatedSize
+                offset += 4; // DibInflatedSize
+
+                if (Model.InstallScriptDeflatedSize != null)
+                    offset += 4; // InstallScriptDeflatedSize
+
+                if (Model.CharacterSet != null)
+                    offset += 4; // CharacterSet
+
+                offset += 2; // Endianness
+                offset += Model.InitTextLen;
+
+                return offset;
+            }
+        }
 
         /// <inheritdoc cref="OverlayHeader.Ctl3d32DeflatedSize"/>
         public uint Ctl3d32DeflatedSize => Model.Ctl3d32DeflatedSize;
@@ -155,280 +205,86 @@ namespace SabreTools.Serialization.Wrappers
         #region Extraction
 
         /// <summary>
-        /// Extract all files from a Wise installer to an output directory
+        /// Extract the predefined, static files defined in the header
         /// </summary>
-        /// <param name="filename">Input filename to read from</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all files extracted, false otherwise</returns>
-        public static bool ExtractAll(string? filename, string outputDirectory, bool includeDebug)
+        /// <returns>True if the files extracted successfully, false otherwise</returns>
+        public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, out long dataStart)
         {
-            // If the filename is invalid
-            if (filename == null)
+            // Seek to the compressed data offset
+            _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+
+            // Determine where the remaining compressed data starts
+            dataStart = _dataSource.Position;
+
+            // Extract WiseColors.dib, if it exists
+            var expected = new DeflateInfo { InputSize = DibDeflatedSize, OutputSize = DibInflatedSize, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "WiseColors.dib", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
-            // If the file could not be opened
-            if (!OpenFile(filename, includeDebug, out var stream))
+            // Extract WiseScript.bin
+            expected = new DeflateInfo { InputSize = WiseScriptDeflatedSize, OutputSize = WiseScriptInflatedSize, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "WiseScript.bin", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
-            // Get the source directory
-            string? sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(filename));
-
-            return ExtractAll(stream, sourceDirectory, outputDirectory, includeDebug);
-        }
-
-        /// <summary>
-        /// Extract all files from a Wise installer to an output directory
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all files extracted, false otherwise</returns>
-        public static bool ExtractAll(Stream? data, string outputDirectory, bool includeDebug)
-            => ExtractAll(data, sourceDirectory: null, outputDirectory, includeDebug);
-
-        /// <summary>
-        /// Extract all files from a Wise installer to an output directory
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="sourceDirectory">Directory where installer files live, if possible</param>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if all files extracted, false otherwise</returns>
-        public static bool ExtractAll(Stream? data, string? sourceDirectory, string outputDirectory, bool includeDebug)
-        {
-            // If the data is invalid
-            if (data == null || !data.CanRead)
+            // Extract WISE0001.DLL, if it exists
+            expected = new DeflateInfo { InputSize = WiseDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "WISE0001.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
-            // Attempt to get the overlay header
-            if (!FindOverlayHeader(data, includeDebug, out var header) || header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return false;
-            }
-
-            // Extract the header-defined files
-            bool extracted = header.ExtractHeaderDefinedFiles(data, outputDirectory, includeDebug, out long dataStart);
-            if (!extracted)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
-                return false;
-            }
-
-            // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
-            var script = WiseScript.Create(scriptStream);
-            if (script == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
-                return false;
-            }
-
-            // Process the state machine
-            return script.ProcessStateMachine(data,
-                sourceDirectory,
-                dataStart,
-                outputDirectory,
-                header.IsPKZIP,
-                includeDebug);
-        }
-
-        /// <summary>
-        /// Find the overlay header from the Wise installer, if possible
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="header">The found overlay header on success, null otherwise</param>
-        /// <returns>True if the header was found and valid, false otherwise</returns>
-        public static bool FindOverlayHeader(Stream data, bool includeDebug, out WiseOverlayHeader? header)
-        {
-            // Set the default header value
-            header = null;
-
-            // Attempt to deserialize the file as either NE or PE
-            var wrapper = WrapperFactory.CreateExecutableWrapper(data);
-            if (wrapper is NewExecutable ne)
-            {
-                return FindOverlayHeader(data, ne, includeDebug, out header);
-            }
-            else if (wrapper is PortableExecutable pe)
-            {
-                return FindOverlayHeader(data, pe, includeDebug, out header);
-            }
-            else
-            {
-                if (includeDebug) Console.Error.WriteLine("Only NE and PE executables are supported");
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Find the overlay header from a NE Wise installer, if possible
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="nex">Wrapper representing the NE</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="header">The found overlay header on success, null otherwise</param>
-        /// <returns>True if the header was found and valid, false otherwise</returns>
-        public static bool FindOverlayHeader(Stream data, NewExecutable nex, bool includeDebug, out WiseOverlayHeader? header)
-        {
-            // Set the default header value
-            header = null;
-
-            // Get the overlay offset
-            long overlayOffset = nex.OverlayAddress;
-            if (overlayOffset < 0 || overlayOffset >= data.Length)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return false;
-            }
-
-            // Attempt to get the overlay header
-            data.Seek(overlayOffset, SeekOrigin.Begin);
-            header = Create(data);
-            if (header != null)
-                return true;
-
-            // Align and loop to see if it can be found
-            data.Seek(overlayOffset, SeekOrigin.Begin);
-            data.AlignToBoundary(0x10);
-            overlayOffset = data.Position;
-            while (data.Position < data.Length)
-            {
-                data.Seek(overlayOffset, SeekOrigin.Begin);
-                header = Create(data);
-                if (header != null)
-                    return true;
-
-                overlayOffset += 0x10;
-            }
-
-            header = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Find the overlay header from a PE Wise installer, if possible
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="pex">Wrapper representing the PE</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="header">The found overlay header on success, null otherwise</param>
-        /// <returns>True if the header was found and valid, false otherwise</returns>
-        public static bool FindOverlayHeader(Stream data, PortableExecutable pex, bool includeDebug, out WiseOverlayHeader? header)
-        {
-            // Set the default header value
-            header = null;
-
-            // Get the overlay offset
-            long overlayOffset = pex.OverlayAddress;
-
-            // Attempt to get the overlay header
-            if (overlayOffset >= 0 && overlayOffset < pex.Length)
-            {
-                data.Seek(overlayOffset, SeekOrigin.Begin);
-                header = Create(data);
-                if (header != null)
-                    return true;
-            }
-
-            // Check section data
-            foreach (var section in pex.Model.SectionTable ?? [])
-            {
-                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
-                long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(pex.Model.SectionTable);
-                data.Seek(sectionOffset, SeekOrigin.Begin);
-
-                header = Create(data);
-                if (header != null)
-                    return true;
-
-                // Check after the resource table
-                if (sectionName == ".rsrc")
-                {
-                    // Data immediately following
-                    long afterResourceOffset = sectionOffset + section.SizeOfRawData;
-                    data.Seek(afterResourceOffset, SeekOrigin.Begin);
-
-                    header = Create(data);
-                    if (header != null)
-                        return true;
-
-                    // Data following padding data
-                    data.Seek(afterResourceOffset, SeekOrigin.Begin);
-                    _ = data.ReadNullTerminatedAnsiString();
-
-                    header = Create(data);
-                    if (header != null)
-                        return true;
-                }
-            }
-
-            // If there are no resources
-            if (pex.Model.OptionalHeader?.ResourceTable == null || pex.ResourceData == null)
+            // Extract CTL3D32.DLL, if it exists
+            expected = new DeflateInfo { InputSize = Ctl3d32DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "CTL3D32.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
-            // Get the resources that have an executable signature
-            bool exeResources = false;
-            foreach (var kvp in pex.ResourceData)
-            {
-                if (kvp.Value == null || kvp.Value is not byte[] ba)
-                    continue;
-                if (!ba.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                    continue;
-
-                exeResources = true;
-                break;
-            }
-
-            // If there are no executable resources
-            if (!exeResources)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+            // Extract FILE0004, if it exists
+            expected = new DeflateInfo { InputSize = SomeData4DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "FILE0004", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
-            }
 
-            // Get the raw resource table offset
-            long resourceTableOffset = pex.Model.OptionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(pex.Model.SectionTable);
-            if (resourceTableOffset <= 0)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+            // Extract Ocxreg32.EXE, if it exists
+            expected = new DeflateInfo { InputSize = RegToolDeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "Ocxreg32.EXE", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
-            }
 
-            // Search the resource table data for the offset
-            long resourceOffset = -1;
-            data.Seek(resourceTableOffset, SeekOrigin.Begin);
-            while (data.Position < resourceTableOffset + pex.Model.OptionalHeader.ResourceTable.Size && data.Position < data.Length)
-            {
-                ushort possibleSignature = data.ReadUInt16();
-                if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
-                {
-                    resourceOffset = data.Position - 2;
-                    break;
-                }
-
-                data.Seek(-1, SeekOrigin.Current);
-            }
-
-            // If there was no valid offset, somehow
-            if (resourceOffset == -1)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+            // Extract PROGRESS.DLL, if it exists
+            expected = new DeflateInfo { InputSize = ProgressDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "PROGRESS.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
-            }
 
-            // Parse the executable and recurse
-            data.Seek(resourceOffset, SeekOrigin.Begin);
-            var resourceExe = WrapperFactory.CreateExecutableWrapper(data);
-            if (resourceExe is not PortableExecutable resourcePex)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
+            // Extract FILE0007, if it exists
+            expected = new DeflateInfo { InputSize = SomeData7DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "FILE0007", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
-            }
 
-            return FindOverlayHeader(data, resourcePex, includeDebug, out header);
+            // Extract FILE0008, if it exists
+            expected = new DeflateInfo { InputSize = SomeData8DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "FILE0008", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+                return false;
+
+            // Extract FILE0009, if it exists
+            expected = new DeflateInfo { InputSize = SomeData9DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "FILE0009", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+                return false;
+
+            // Extract FILE000A, if it exists
+            expected = new DeflateInfo { InputSize = SomeData10DeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "FILE000A", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+                return false;
+
+            // Extract install script, if it exists
+            expected = new DeflateInfo { InputSize = InstallScriptDeflatedSize, OutputSize = -1, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, "INSTALL_SCRIPT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+                return false;
+
+            // Extract FILE000{n}.DAT, if it exists
+            expected = new DeflateInfo { InputSize = FinalFileDeflatedSize, OutputSize = FinalFileInflatedSize, Crc32 = 0 };
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE00XX.DAT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+                return false;
+
+            dataStart = _dataSource.Position;
+            return true;
         }
 
         /// <summary>
@@ -437,7 +293,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Input filename or base name to read from</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file could be opened, false otherwise</returns>
-        private static bool OpenFile(string filename, bool includeDebug, out ReadOnlyCompositeStream? stream)
+        public static bool OpenFile(string filename, bool includeDebug, out ReadOnlyCompositeStream? stream)
         {
             // If the file exists as-is
             if (File.Exists(filename))
@@ -532,89 +388,6 @@ namespace SabreTools.Serialization.Wrappers
                 stream.AddStream(fileStream);
             }
 
-            return true;
-        }
-
-        /// <summary>
-        /// Extract the predefined, static files defined in the header
-        /// </summary>
-        /// <param name="data">Stream representing the Wise installer</param>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if the files extracted successfully, false otherwise</returns>
-        private bool ExtractHeaderDefinedFiles(Stream data, string outputDirectory, bool includeDebug, out long dataStart)
-        {
-            // TODO: This needs to seek to the end of the header before extracting
-
-            // Determine where the remaining compressed data starts
-            dataStart = data.Position;
-
-            // Extract WiseColors.dib, if it exists
-            var expected = new DeflateInfo { InputSize = DibDeflatedSize, OutputSize = DibInflatedSize, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "WiseColors.dib", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract WiseScript.bin
-            expected = new DeflateInfo { InputSize = WiseScriptDeflatedSize, OutputSize = WiseScriptInflatedSize, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "WiseScript.bin", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract WISE0001.DLL, if it exists
-            expected = new DeflateInfo { InputSize = WiseDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "WISE0001.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract CTL3D32.DLL, if it exists
-            expected = new DeflateInfo { InputSize = Ctl3d32DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "CTL3D32.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE0004, if it exists
-            expected = new DeflateInfo { InputSize = SomeData4DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "FILE0004", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract Ocxreg32.EXE, if it exists
-            expected = new DeflateInfo { InputSize = RegToolDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "Ocxreg32.EXE", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract PROGRESS.DLL, if it exists
-            expected = new DeflateInfo { InputSize = ProgressDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "PROGRESS.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE0007, if it exists
-            expected = new DeflateInfo { InputSize = SomeData7DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "FILE0007", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE0008, if it exists
-            expected = new DeflateInfo { InputSize = SomeData8DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "FILE0008", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE0009, if it exists
-            expected = new DeflateInfo { InputSize = SomeData9DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "FILE0009", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE000A, if it exists
-            expected = new DeflateInfo { InputSize = SomeData10DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "FILE000A", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract install script, if it exists
-            expected = new DeflateInfo { InputSize = InstallScriptDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, "INSTALL_SCRIPT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            // Extract FILE000{n}.DAT, if it exists
-            expected = new DeflateInfo { InputSize = FinalFileDeflatedSize, OutputSize = FinalFileInflatedSize, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(data, IsPKZIP ? null : "FILE00XX.DAT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
-                return false;
-
-            dataStart = data.Position;
             return true;
         }
 
