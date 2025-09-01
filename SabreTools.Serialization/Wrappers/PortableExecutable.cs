@@ -1741,7 +1741,7 @@ namespace SabreTools.Serialization.Wrappers
             if (overlayOffset >= 0 && overlayOffset < Length)
             {
                 _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                var header = Create(_dataSource);
+                var header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return overlayOffset;
             }
@@ -1753,7 +1753,7 @@ namespace SabreTools.Serialization.Wrappers
                 long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
                 _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
 
-                var header = Create(_dataSource);
+                var header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return sectionOffset;
 
@@ -1764,7 +1764,7 @@ namespace SabreTools.Serialization.Wrappers
                     long afterResourceOffset = sectionOffset + section.SizeOfRawData;
                     _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
 
-                    header = Create(_dataSource);
+                    header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
                         return afterResourceOffset;
 
@@ -1773,7 +1773,7 @@ namespace SabreTools.Serialization.Wrappers
                     _ = _dataSource.ReadNullTerminatedAnsiString();
 
                     afterResourceOffset = _dataSource.Position;
-                    header = Create(_dataSource);
+                    header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
                         return afterResourceOffset;
                 }

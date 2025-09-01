@@ -711,7 +711,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Attempt to get the overlay header
             _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            var header = Create(_dataSource);
+            var header = WiseOverlayHeader.Create(_dataSource);
             if (header != null)
                 return overlayOffset;
 
@@ -722,7 +722,7 @@ namespace SabreTools.Serialization.Wrappers
             while (_dataSource.Position < Length)
             {
                 _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                header = Create(_dataSource);
+                header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return overlayOffset;
 
