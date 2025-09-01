@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.BlockTableSizeLong, "  Block table size long");
             builder.AppendLine(header.HiBlockTableSize, "  Hi-block table size");
             builder.AppendLine(header.HetTableSize, "  HET table size");
-            builder.AppendLine(header.BetTablesize, "  BET table size"); // TODO: Fix casing
+            builder.AppendLine(header.BetTableSize, "  BET table size");
             builder.AppendLine(header.RawChunkSize, "  Raw chunk size");
             builder.AppendLine(header.BlockTableMD5, "  Block table MD5");
             builder.AppendLine(header.HashTableMD5, "  Hash table MD5");

@@ -5,6 +5,7 @@ using System.Text;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
+using SabreTools.Models.PortableExecutable.ResourceEntries;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
@@ -763,12 +764,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached version info data
         /// </summary>
-        private Models.PortableExecutable.VersionInfo? _versionInfo = null;
+        private VersionInfo? _versionInfo = null;
 
         /// <summary>
         /// Cached assembly manifest data
         /// </summary>
-        private Models.PortableExecutable.AssemblyManifest? _assemblyManifest = null;
+        private AssemblyManifest? _assemblyManifest = null;
 
         /// <summary>
         /// Lock object for reading from the source
@@ -875,7 +876,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Try to find a key that matches
-            Models.PortableExecutable.StringData? match = null;
+            StringData? match = null;
             foreach (var st in stringTable)
             {
                 if (st.Children == null || st.Length == 0)
@@ -894,7 +895,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the assembly manifest, if possible
         /// </summary>
         /// <returns>Assembly manifest object, null on error</returns>
-        private Models.PortableExecutable.AssemblyManifest? GetAssemblyManifest()
+        private AssemblyManifest? GetAssemblyManifest()
         {
             // Use the cached data if possible
             if (_assemblyManifest != null)
@@ -1443,18 +1444,18 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box title to check for</param>
         /// <returns>List of matching resources</returns>
-        public List<Models.PortableExecutable.DialogBoxResource?> FindDialogByTitle(string title)
+        public List<DialogBoxResource?> FindDialogByTitle(string title)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
                 return [];
 
-            var resources = new List<Models.PortableExecutable.DialogBoxResource?>();
+            var resources = new List<DialogBoxResource?>();
             foreach (var resource in ResourceData.Values)
             {
                 if (resource == null)
                     continue;
-                if (resource is not Models.PortableExecutable.DialogBoxResource dbr || dbr == null)
+                if (resource is not DialogBoxResource dbr || dbr == null)
                     continue;
 
                 if (dbr.DialogTemplate?.TitleResource?.Contains(title) ?? false)
@@ -1471,18 +1472,18 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="title">Dialog box item title to check for</param>
         /// <returns>List of matching resources</returns>
-        public List<Models.PortableExecutable.DialogBoxResource?> FindDialogBoxByItemTitle(string title)
+        public List<DialogBoxResource?> FindDialogBoxByItemTitle(string title)
         {
             // Ensure that we have the resource data cached
             if (ResourceData == null)
                 return [];
 
-            var resources = new List<Models.PortableExecutable.DialogBoxResource?>();
+            var resources = new List<DialogBoxResource?>();
             foreach (var resource in ResourceData.Values)
             {
                 if (resource == null)
                     continue;
-                if (resource is not Models.PortableExecutable.DialogBoxResource dbr || dbr == null)
+                if (resource is not DialogBoxResource dbr || dbr == null)
                     continue;
 
                 if (dbr.DialogItemTemplates != null)

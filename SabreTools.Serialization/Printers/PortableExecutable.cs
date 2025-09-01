@@ -6,6 +6,8 @@ using SabreTools.ASN1;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Models.PortableExecutable;
+using SabreTools.Models.PortableExecutable.COFFSymbolTableEntries;
+using SabreTools.Models.PortableExecutable.ResourceEntries;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers
@@ -310,7 +312,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, COFFSymbolTableEntry[]? entries)
+        private static void Print(StringBuilder builder, BaseEntry[]? entries)
         {
             builder.AppendLine("  COFF Symbol Table Information:");
             builder.AppendLine("  -------------------------");
@@ -321,125 +323,97 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            int auxSymbolsRemaining = 0;
-            int currentSymbolType = 0;
-
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
 
-                builder.AppendLine($"  COFF Symbol Table Entry {i} (Subtype {currentSymbolType})");
-                if (currentSymbolType == 0)
+                switch (entry)
                 {
-                    if (entry.ShortName != null)
-                    {
-                        builder.AppendLine(entry.ShortName, "    Short name", Encoding.ASCII);
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.Zeroes, "    Zeroes");
-                        builder.AppendLine(entry.Offset, "    Offset");
-                    }
-                    builder.AppendLine(entry.Value, "    Value");
-                    builder.AppendLine(entry.SectionNumber, "    Section number");
-                    builder.AppendLine($"    Symbol type: {entry.SymbolType} (0x{entry.SymbolType:X})");
-                    builder.AppendLine($"    Storage class: {entry.StorageClass} (0x{entry.StorageClass:X})");
-                    builder.AppendLine(entry.NumberOfAuxSymbols, "    Number of aux symbols");
-
-                    auxSymbolsRemaining = entry.NumberOfAuxSymbols;
-                    if (auxSymbolsRemaining == 0)
-                        continue;
-
-                    if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                        && entry.SymbolType == SymbolType.IMAGE_SYM_TYPE_FUNC
-                        && entry.SectionNumber > 0)
-                    {
-                        currentSymbolType = 1;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FUNCTION
-                        && entry.ShortName != null
-                        && ((entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x62 && entry.ShortName[2] == 0x66)  // .bf
-                            || (entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x65 && entry.ShortName[2] == 0x66))) // .ef
-                    {
-                        currentSymbolType = 2;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                        && entry.SectionNumber == (ushort)SectionNumber.IMAGE_SYM_UNDEFINED
-                        && entry.Value == 0)
-                    {
-                        currentSymbolType = 3;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE)
-                    {
-                        // TODO: Symbol name should be ".file"
-                        currentSymbolType = 4;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC)
-                    {
-                        // TODO: Should have the name of a section (like ".text")
-                        currentSymbolType = 5;
-                    }
-                    else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
-                    {
-                        currentSymbolType = 6;
-                    }
+                    case StandardRecord item: Print(builder, item, i); break;
+                    case FunctionDefinition item: Print(builder, item, i); break;
+                    case Descriptor item: Print(builder, item, i); break;
+                    case WeakExternal item: Print(builder, item, i); break;
+                    case FileRecord item: Print(builder, item, i); break;
+                    case SectionDefinition item: Print(builder, item, i); break;
+                    case CLRTokenDefinition item: Print(builder, item, i); break;
                 }
-                else if (currentSymbolType == 1)
-                {
-                    builder.AppendLine(entry.AuxFormat1TagIndex, "    Tag index");
-                    builder.AppendLine(entry.AuxFormat1TotalSize, "    Total size");
-                    builder.AppendLine(entry.AuxFormat1PointerToLinenumber, "    Pointer to linenumber");
-                    builder.AppendLine(entry.AuxFormat1PointerToNextFunction, "    Pointer to next function");
-                    builder.AppendLine(entry.AuxFormat1Unused, "    Unused");
-                    auxSymbolsRemaining--;
-                }
-                else if (currentSymbolType == 2)
-                {
-                    builder.AppendLine(entry.AuxFormat2Unused1, "    Unused");
-                    builder.AppendLine(entry.AuxFormat2Linenumber, "    Linenumber");
-                    builder.AppendLine(entry.AuxFormat2Unused2, "    Unused");
-                    builder.AppendLine(entry.AuxFormat2PointerToNextFunction, "    Pointer to next function");
-                    builder.AppendLine(entry.AuxFormat2Unused3, "    Unused");
-                    auxSymbolsRemaining--;
-                }
-                else if (currentSymbolType == 3)
-                {
-                    builder.AppendLine(entry.AuxFormat3TagIndex, "    Tag index");
-                    builder.AppendLine(entry.AuxFormat3Characteristics, "    Characteristics");
-                    builder.AppendLine(entry.AuxFormat3Unused, "    Unused");
-                    auxSymbolsRemaining--;
-                }
-                else if (currentSymbolType == 4)
-                {
-                    builder.AppendLine(entry.AuxFormat4FileName, "    File name", Encoding.ASCII);
-                    auxSymbolsRemaining--;
-                }
-                else if (currentSymbolType == 5)
-                {
-                    builder.AppendLine(entry.AuxFormat5Length, "    Length");
-                    builder.AppendLine(entry.AuxFormat5NumberOfRelocations, "    Number of relocations");
-                    builder.AppendLine(entry.AuxFormat5NumberOfLinenumbers, "    Number of linenumbers");
-                    builder.AppendLine(entry.AuxFormat5CheckSum, "    Checksum");
-                    builder.AppendLine(entry.AuxFormat5Number, "    Number");
-                    builder.AppendLine(entry.AuxFormat5Selection, "    Selection");
-                    builder.AppendLine(entry.AuxFormat5Unused, "    Unused");
-                    auxSymbolsRemaining--;
-                }
-                else if (currentSymbolType == 6)
-                {
-                    builder.AppendLine(entry.AuxFormat6AuxType, "    Aux type");
-                    builder.AppendLine(entry.AuxFormat6Reserved1, "    Reserved");
-                    builder.AppendLine(entry.AuxFormat6SymbolTableIndex, "    Symbol table index");
-                    builder.AppendLine(entry.AuxFormat6Reserved2, "    Reserved");
-                    auxSymbolsRemaining--;
-                }
-
-                // If we hit the last aux symbol, go back to normal format
-                if (auxSymbolsRemaining == 0)
-                    currentSymbolType = 0;
             }
 
             builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, StandardRecord entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (Standard Record)");
+            if (entry.ShortName != null)
+            {
+                builder.AppendLine(entry.ShortName, "    Short name", Encoding.ASCII);
+            }
+            else
+            {
+                builder.AppendLine(entry.Zeroes, "    Zeroes");
+                builder.AppendLine(entry.Offset, "    Offset");
+            }
+            builder.AppendLine(entry.Value, "    Value");
+            builder.AppendLine(entry.SectionNumber, "    Section number");
+            builder.AppendLine($"    Symbol type: {entry.SymbolType} (0x{entry.SymbolType:X})");
+            builder.AppendLine($"    Storage class: {entry.StorageClass} (0x{entry.StorageClass:X})");
+            builder.AppendLine(entry.NumberOfAuxSymbols, "    Number of aux symbols");
+        }
+
+        private static void Print(StringBuilder builder, FunctionDefinition entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (Function Definition)");
+            builder.AppendLine(entry.TagIndex, "    Tag index");
+            builder.AppendLine(entry.TotalSize, "    Total size");
+            builder.AppendLine(entry.PointerToLinenumber, "    Pointer to linenumber");
+            builder.AppendLine(entry.PointerToNextFunction, "    Pointer to next function");
+            builder.AppendLine(entry.Unused, "    Unused");
+        }
+
+        private static void Print(StringBuilder builder, Descriptor entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (.bf and .ef Symbol)");
+            builder.AppendLine(entry.Unused1, "    Unused");
+            builder.AppendLine(entry.Linenumber, "    Linenumber");
+            builder.AppendLine(entry.Unused2, "    Unused");
+            builder.AppendLine(entry.PointerToNextFunction, "    Pointer to next function");
+            builder.AppendLine(entry.Unused3, "    Unused");
+        }
+
+        private static void Print(StringBuilder builder, WeakExternal entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (Weak External)");
+            builder.AppendLine(entry.TagIndex, "    Tag index");
+            builder.AppendLine(entry.Characteristics, "    Characteristics");
+            builder.AppendLine(entry.Unused, "    Unused");
+        }
+
+        private static void Print(StringBuilder builder, FileRecord entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (File)");
+            builder.AppendLine(entry.FileName, "    File name", Encoding.ASCII);
+        }
+
+        private static void Print(StringBuilder builder, SectionDefinition entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (Section Defintion)");
+            builder.AppendLine(entry.Length, "    Length");
+            builder.AppendLine(entry.NumberOfRelocations, "    Number of relocations");
+            builder.AppendLine(entry.NumberOfLinenumbers, "    Number of linenumbers");
+            builder.AppendLine(entry.CheckSum, "    Checksum");
+            builder.AppendLine(entry.Number, "    Number");
+            builder.AppendLine(entry.Selection, "    Selection");
+            builder.AppendLine(entry.Unused, "    Unused");
+        }
+
+        private static void Print(StringBuilder builder, CLRTokenDefinition entry, int i)
+        {
+            builder.AppendLine($"  COFF Symbol Table Entry {i} (CLR Token Defintion)");
+            builder.AppendLine(entry.AuxFormat6AuxType, "    Aux type");
+            builder.AppendLine(entry.AuxFormat6Reserved1, "    Reserved");
+            builder.AppendLine(entry.AuxFormat6SymbolTableIndex, "    Symbol table index");
+            builder.AppendLine(entry.AuxFormat6Reserved2, "    Reserved");
         }
 
         private static void Print(StringBuilder builder, COFFStringTable? stringTable)

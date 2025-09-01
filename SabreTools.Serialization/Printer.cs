@@ -71,6 +71,9 @@ namespace SabreTools.Serialization
                 Wrapper.VBSP item => item.PrettyPrint(),
                 Wrapper.VPK item => item.PrettyPrint(),
                 Wrapper.WAD3 item => item.PrettyPrint(),
+                Wrapper.WiseOverlayHeader item => item.PrettyPrint(),
+                Wrapper.WiseScript item => item.PrettyPrint(),
+                // TODO: Add implementation for WiseSectionHeader
                 Wrapper.XeMID item => item.PrettyPrint(),
                 Wrapper.XMID item => item.PrettyPrint(),
                 Wrapper.XZP item => item.PrettyPrint(),
@@ -123,6 +126,9 @@ namespace SabreTools.Serialization
                 Wrapper.VBSP item => item.ExportJSON(),
                 Wrapper.VPK item => item.ExportJSON(),
                 Wrapper.WAD3 item => item.ExportJSON(),
+                Wrapper.WiseOverlayHeader item => item.ExportJSON(),
+                Wrapper.WiseScript item => item.ExportJSON(),
+                // TODO: Add implementation for WiseSectionHeader
                 Wrapper.XeMID item => item.ExportJSON(),
                 Wrapper.XMID item => item.ExportJSON(),
                 Wrapper.XZP item => item.ExportJSON(),
@@ -500,6 +506,26 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             WAD3.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.WiseOverlayHeader item)
+        {
+            var builder = new StringBuilder();
+            WiseOverlayHeader.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.WiseScript item)
+        {
+            var builder = new StringBuilder();
+            WiseScript.Print(builder, item.Model);
             return builder;
         }
 

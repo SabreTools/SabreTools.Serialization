@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
 using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
 
@@ -186,7 +185,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Get the file size
-                    string sizeOctalString = Encoding.ASCII.GetString(header.Size!).TrimEnd('\0');
+                    string sizeOctalString = header.Size!.TrimEnd('\0');
                     if (sizeOctalString.Length == 0)
                     {
                         if (includeDebug) Console.WriteLine($"Entry {i} has an invalid size, skipping...");
@@ -204,9 +203,9 @@ namespace SabreTools.Serialization.Wrappers
                     while (entrySize > 0)
                     {
                         // Exit early if block number is invalid
-                        if (blockNumber >= entry.Blocks.Count)
+                        if (blockNumber >= entry.Blocks.Length)
                         {
-                            if (includeDebug) Console.Error.WriteLine($"Invalid block number {i + 1} of {entry.Blocks.Count}, file may be incomplete!");
+                            if (includeDebug) Console.Error.WriteLine($"Invalid block number {i + 1} of {entry.Blocks.Length}, file may be incomplete!");
                             break;
                         }
 

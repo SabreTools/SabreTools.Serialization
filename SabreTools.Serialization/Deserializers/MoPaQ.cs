@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Deserializers
                 obj.BlockTableSizeLong = data.ReadUInt64LittleEndian();
                 obj.HiBlockTableSize = data.ReadUInt64LittleEndian();
                 obj.HetTableSize = data.ReadUInt64LittleEndian();
-                obj.BetTablesize = data.ReadUInt64LittleEndian();
+                obj.BetTableSize = data.ReadUInt64LittleEndian();
                 obj.RawChunkSize = data.ReadUInt32LittleEndian();
 
                 obj.BlockTableMD5 = data.ReadBytes(0x10);
@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.Deserializers
             byte[]? tableBytes = decrypter.LoadTable(data,
                 offset,
                 header.BetTableMD5,
-                (uint)header.BetTablesize,
+                (uint)header.BetTableSize,
                 92,
                 MPQ_KEY_BLOCK_TABLE,
                 out _);

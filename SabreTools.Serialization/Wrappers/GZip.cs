@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
                 _dataOffset = 10;
 
                 // Add extra lengths
-                _dataOffset += Header.XLEN;
+                _dataOffset += Header.ExtraLength;
                 if (Header.OriginalFileName != null)
                     _dataOffset += Header.OriginalFileName.Length + 1;
                 if (Header.FileComment != null)
@@ -152,9 +152,9 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Ensure that DEFLATE is being used
-            if (Header.CM != CompressionMethod.Deflate)
+            if (Header.CompressionMethod != CompressionMethod.Deflate)
             {
-                if (includeDebug) Console.Error.WriteLine($"Invalid compression method {Header.CM} detected, only DEFLATE is supported. Skipping...");
+                if (includeDebug) Console.Error.WriteLine($"Invalid compression method {Header.CompressionMethod} detected, only DEFLATE is supported. Skipping...");
                 return false;
             }
 

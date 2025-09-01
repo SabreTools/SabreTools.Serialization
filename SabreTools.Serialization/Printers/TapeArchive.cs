@@ -20,20 +20,18 @@ namespace SabreTools.Serialization.Printers
             Print(builder, file.Entries);
         }
 
-        // TODO: Fix the entry type when Models is updated
-        //private static void Print(StringBuilder builder, Entry[]? entries)
-        private static void Print(StringBuilder builder, List<Entry>? entries)
+        private static void Print(StringBuilder builder, Entry[]? entries)
         {
             builder.AppendLine("  Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Count == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("  No entries");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < entries.Count; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
 
@@ -75,20 +73,18 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        // TODO: Fix the entry type when Models is updated
-        // private static void Print(StringBuilder builder, Block[]? entries)
-        private static void Print(StringBuilder builder, List<Block>? entries)
+        private static void Print(StringBuilder builder, Block[]? entries)
         {
             builder.AppendLine("    Blocks:");
             builder.AppendLine("    -------------------------");
-            if (entries == null || entries.Count == 0)
+            if (entries == null || entries.Length == 0)
             {
                 builder.AppendLine("    No blocks");
                 builder.AppendLine();
                 return;
             }
 
-            for (int i = 0; i < entries.Count; i++)
+            for (int i = 0; i < entries.Length; i++)
             {
                 var block = entries[i];
                 if (block.Data == null)

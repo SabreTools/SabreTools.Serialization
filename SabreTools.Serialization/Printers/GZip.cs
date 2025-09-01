@@ -34,12 +34,12 @@ namespace SabreTools.Serialization.Printers
 
             builder.AppendLine(header.ID1, "  ID1");
             builder.AppendLine(header.ID2, "  ID1");
-            builder.AppendLine($"  Compression method: {header.CM} (0x{(byte)header.CM:X2})");
-            builder.AppendLine($"  Flags: {header.FLG} (0x{(byte)header.FLG:X2})");
-            builder.AppendLine(header.MTIME, "  Last modified time");
-            builder.AppendLine($"  Extra flags: {header.XFL} (0x{(byte)header.XFL:X2})");
-            builder.AppendLine($"  Operating system: {header.OS} (0x{(byte)header.OS:X2})");
-            builder.AppendLine(header.XLEN, "  Extra length");
+            builder.AppendLine($"  Compression method: {header.CompressionMethod} (0x{(byte)header.CompressionMethod:X2})");
+            builder.AppendLine($"  Flags: {header.Flags} (0x{(byte)header.Flags:X2})");
+            builder.AppendLine(header.LastModifiedTime, "  Last modified time");
+            builder.AppendLine($"  Extra flags: {header.ExtraFlags} (0x{(byte)header.ExtraFlags:X2})");
+            builder.AppendLine($"  Operating system: {header.OperatingSystem} (0x{(byte)header.OperatingSystem:X2})");
+            builder.AppendLine(header.ExtraLength, "  Extra length");
             Print(builder, header.ExtraField);
             builder.AppendLine(header.OriginalFileName, "  Original file name");
             builder.AppendLine(header.FileComment, "  File comment");
@@ -63,9 +63,9 @@ namespace SabreTools.Serialization.Printers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Extra Field {i}:");
-                builder.AppendLine(entry.SI1, "    Subfield ID1");
-                builder.AppendLine(entry.SI2, "    Subfield ID2");
-                builder.AppendLine(entry.LEN, "    Length");
+                builder.AppendLine(entry.SubfieldID1, "    Subfield ID1");
+                builder.AppendLine(entry.SubfieldID2, "    Subfield ID2");
+                builder.AppendLine(entry.Length, "    Length");
                 builder.AppendLine(entry.Data, "    Data");
             }
         }
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Printers
             }
 
             builder.AppendLine(trailer.CRC32, "  CRC-32");
-            builder.AppendLine(trailer.ISIZE, "  Input size");
+            builder.AppendLine(trailer.InputSize, "  Input size");
             builder.AppendLine();
         }
     }

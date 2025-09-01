@@ -35,9 +35,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Archive.ZIP64EndOfCentralDirectoryRecord"/>
         public EndOfCentralDirectoryRecord64? ZIP64EndOfCentralDirectoryRecord => Model.ZIP64EndOfCentralDirectoryRecord;
 
-        /// <inheritdoc cref="Archive.LocalFileHeaders"/>
-        /// TODO: Use LocalFiles when Models is updated
-        public LocalFileHeader[]? LocalFiles => Model.LocalFileHeaders;
+        /// <inheritdoc cref="Archive.LocalFiles"/>
+        public LocalFile[]? LocalFiles => Model.LocalFiles;
 
         #endregion
 

@@ -28,11 +28,7 @@ namespace SabreTools.Serialization.Deserializers
                 var archive = new Archive();
 
                 // Setup all of the collections
-                var localFileHeaders = new List<LocalFileHeader>();
-                var encryptionHeaders = new List<byte[]>();
-                var fileData = new List<byte[]>();
-                var dataDescriptors = new List<DataDescriptor>();
-                var zip64DataDescriptors = new List<DataDescriptor64>();
+                var localFiles = new List<LocalFile>();
                 var cdrs = new List<CentralDirectoryFileHeader>();
 
                 // Read all blocks
@@ -60,23 +56,13 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Local File
                         case LocalFileHeaderSignature:
-                            if (!ParseLocalFile(data,
-                                out LocalFileHeader? localFileHeader,
-                                out byte[]? encryptionHeader,
-                                out byte[]? fileDatum,
-                                out DataDescriptor? dataDescriptor,
-                                out DataDescriptor64? dataDescriptor64))
-                            {
-                                break;
-                            }
+                            var lf = ParseLocalFile(data);
+                            if (lf == null)
+                                return null;
 
                             // Add the local file
                             validBlock = true;
-                            localFileHeaders.Add(localFileHeader!);
-                            encryptionHeaders.Add(encryptionHeader!);
-                            fileData.Add(fileDatum!);
-                            dataDescriptors.Add(dataDescriptor!);
-                            zip64DataDescriptors.Add(dataDescriptor64!);
+                            localFiles.Add(lf);
                             break;
 
                         // TODO: Implement
@@ -135,22 +121,11 @@ namespace SabreTools.Serialization.Deserializers
                 } while (data.Position < data.Length);
 
                 // If no blocks were read
-                if (localFileHeaders.Count == 0
-                    && encryptionHeaders.Count == 0
-                    && fileData.Count == 0
-                    && dataDescriptors.Count == 0
-                    && zip64DataDescriptors.Count == 0
-                    && cdrs.Count == 0)
-                {
+                if (localFiles.Count == 0 && cdrs.Count == 0)
                     return null;
-                }
 
                 // Assign the local files
-                archive.LocalFileHeaders = [.. localFileHeaders];
-                archive.EncryptionHeaders = [.. encryptionHeaders];
-                archive.FileData = [.. fileData];
-                archive.DataDescriptors = [.. dataDescriptors];
-                archive.ZIP64DataDescriptors = [.. zip64DataDescriptors];
+                archive.LocalFiles = [.. localFiles];
 
                 // Assign the central directory records
                 archive.CentralDirectoryHeaders = [.. cdrs];
@@ -245,10 +220,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                obj.ExtraField = extraBytes;
-
                 // TODO: This should live on the model instead of the byte representation
-                extraFields = ParseExtraFields(obj, obj.ExtraField);
+                extraFields = ParseExtraFields(obj, extraBytes);
             }
             if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
             {
@@ -436,25 +409,19 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled local file on success, null on error</returns>
-        public static bool ParseLocalFile(Stream data,
-            out LocalFileHeader? localFileHeader,
-            out byte[]? encryptionHeader,
-            out byte[]? fileData,
-            out DataDescriptor? dataDescriptor,
-            out DataDescriptor64? dataDescriptor64)
+        public static LocalFile? ParseLocalFile(Stream data)
         {
-            // Set default values
-            localFileHeader = null;
-            encryptionHeader = null;
-            fileData = null;
-            dataDescriptor = null;
-            dataDescriptor64 = null;
+            var obj = new LocalFile();
 
             #region Local File Header
 
-            localFileHeader = ParseLocalFileHeader(data, out var extraFields);
+            // Try to read the header
+            var localFileHeader = ParseLocalFileHeader(data, out var extraFields);
             if (localFileHeader == null)
-                return false;
+                return null;
+
+            // Assign the header
+            obj.LocalFileHeader = localFileHeader;
 
             ulong compressedSize = localFileHeader.CompressedSize;
             if (extraFields != null)
@@ -482,14 +449,17 @@ namespace SabreTools.Serialization.Deserializers
 #endif
             {
                 // Try to read the encryption header data -- TODO: Verify amount to read
-                encryptionHeader = data.ReadBytes(12);
-                if (encryptionHeader.Length != 12)
-                    return false;
+                byte[] encryptionHeaders = data.ReadBytes(12);
+                if (encryptionHeaders.Length != 12)
+                    return null;
+
+                // Set the encryption headers
+                obj.EncryptionHeaders = encryptionHeaders;
             }
             else
             {
                 // Add the empty encryption header
-                encryptionHeader = [];
+                obj.EncryptionHeaders = [];
             }
 
             #endregion
@@ -497,9 +467,12 @@ namespace SabreTools.Serialization.Deserializers
             #region File Data
 
             // Try to read the file data
-            fileData = data.ReadBytes((int)compressedSize);
+            var fileData = data.ReadBytes((int)compressedSize);
             if (fileData.Length < (long)compressedSize)
-                return false;
+                return null;
+
+            // Set the file data
+            obj.FileData = fileData;
 
             #endregion
 
@@ -512,9 +485,9 @@ namespace SabreTools.Serialization.Deserializers
             if (!localFileHeader.Flags.HasFlag(GeneralPurposeBitFlags.NoCRC))
 #endif
             {
-                dataDescriptor = new DataDescriptor();
-                dataDescriptor64 = new DataDescriptor64();
-                return true;
+                obj.DataDescriptor = new DataDescriptor();
+                obj.ZIP64DataDescriptor = new DataDescriptor64();
+                return obj;
             }
 
             // Read the signature
@@ -525,9 +498,9 @@ namespace SabreTools.Serialization.Deserializers
             // Don't fail if descriptor is missing
             if (signature != DataDescriptorSignature)
             {
-                dataDescriptor = new DataDescriptor();
-                dataDescriptor64 = new DataDescriptor64();
-                return true;
+                obj.DataDescriptor = new DataDescriptor();
+                obj.ZIP64DataDescriptor = new DataDescriptor64();
+                return obj;
             }
 
             // Determine if the entry is ZIP64
@@ -536,22 +509,22 @@ namespace SabreTools.Serialization.Deserializers
             // Try to parse the correct data descriptor
             if (zip64)
             {
-                dataDescriptor = new DataDescriptor();
-                dataDescriptor64 = ParseDataDescriptor64(data);
-                if (dataDescriptor64 == null)
-                    return false;
+                obj.DataDescriptor = new DataDescriptor();
+                obj.ZIP64DataDescriptor = ParseDataDescriptor64(data);
+                if (obj.ZIP64DataDescriptor == null)
+                    return null;
             }
             else
             {
-                dataDescriptor = ParseDataDescriptor(data);
-                dataDescriptor64 = new DataDescriptor64();
-                if (dataDescriptor == null)
-                    return false;
+                obj.DataDescriptor = ParseDataDescriptor(data);
+                obj.ZIP64DataDescriptor = new DataDescriptor64();
+                if (obj.DataDescriptor == null)
+                    return null;
             }
 
             #endregion
 
-            return true;
+            return obj;
         }
 
         /// <summary>
@@ -602,10 +575,8 @@ namespace SabreTools.Serialization.Deserializers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                obj.ExtraField = extraBytes;
-
                 // TODO: This should live on the model instead of the byte representation
-                extraFields = ParseExtraFields(obj, obj.ExtraField);
+                extraFields = ParseExtraFields(obj, extraBytes);
             }
 
             return obj;
@@ -633,7 +604,7 @@ namespace SabreTools.Serialization.Deserializers
                 offset -= 2;
 
                 // Read based on the ID
-                var field = id switch
+                ExtensibleDataField? field = id switch
                 {
                     HeaderID.Zip64ExtendedInformation => ParseZip64ExtendedInformationExtraField(data, ref offset, header),
                     HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
@@ -724,7 +695,7 @@ namespace SabreTools.Serialization.Deserializers
                 offset -= 2;
 
                 // Read based on the ID
-                var field = id switch
+                ExtensibleDataField? field = id switch
                 {
                     HeaderID.Zip64ExtendedInformation => ParseZip64ExtendedInformationExtraField(data, ref offset, header),
                     HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
@@ -801,13 +772,15 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled unknown extras field on success, null on error</returns>
-        private static ExtensibleDataField? ParseUnknownExtraField(byte[] data, ref int offset)
+        private static UnknownExtraField? ParseUnknownExtraField(byte[] data, ref int offset)
         {
-            _ = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
-            ushort dataSize = data.ReadUInt16LittleEndian(ref offset);
-            _ = data.ReadBytes(ref offset, dataSize);
+            var obj = new UnknownExtraField();
 
-            return null;
+            obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
+            obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            obj.Data = data.ReadBytes(ref offset, obj.DataSize);
+
+            return obj;
         }
 
         /// <summary>
@@ -911,10 +884,10 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
-            obj.BSize = data.ReadUInt32LittleEndian(ref offset);
-            obj.CType = data.ReadUInt16LittleEndian(ref offset);
-            obj.EACRC = data.ReadUInt32LittleEndian(ref offset);
-            obj.Var = data.ReadBytes(ref offset, obj.DataSize - 10);
+            obj.UncompressedBlockSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.CompressionType = data.ReadUInt16LittleEndian(ref offset);
+            obj.CRC32 = data.ReadUInt32LittleEndian(ref offset);
+            obj.Data = data.ReadBytes(ref offset, obj.DataSize - 10);
 
             return obj;
         }
@@ -936,27 +909,23 @@ namespace SabreTools.Serialization.Deserializers
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
             obj.Reserved = data.ReadUInt32LittleEndian(ref offset);
 
-            List<ushort> tags = [];
-            List<ushort> sizes = [];
-            List<byte[]> datas = [];
+            List<TagSizeVar> entries = [];
 
             int bytesRemaining = obj.DataSize - 4;
             while (bytesRemaining > 0)
             {
-                ushort tag = data.ReadUInt16LittleEndian(ref offset);
-                ushort size = data.ReadUInt16LittleEndian(ref offset);
-                byte[] datum = data.ReadBytes(ref offset, size);
+                var entry = new TagSizeVar();
 
-                tags.Add(tag);
-                sizes.Add(size);
-                datas.Add(datum);
+                entry.Tag = data.ReadUInt16LittleEndian(ref offset);
+                entry.Size = data.ReadUInt16LittleEndian(ref offset);
+                entry.Var = data.ReadBytes(ref offset, entry.Size);
 
-                bytesRemaining -= 4 + size;
+                entries.Add(entry);
+
+                bytesRemaining -= 4 + entry.Size;
             }
 
-            obj.Tags = [.. tags];
-            obj.Size = [.. sizes];
-            obj.Vars = null; // TODO: Fix once this becomes a proper array of arrays
+            obj.TagSizeVars = [.. entries];
 
             return obj;
         }
@@ -978,27 +947,23 @@ namespace SabreTools.Serialization.Deserializers
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
             obj.CRC = data.ReadUInt32LittleEndian(ref offset);
 
-            List<ushort> tags = [];
-            List<ushort> sizes = [];
-            List<byte[]> datas = [];
+            List<TagSizeVar> entries = [];
 
             int bytesRemaining = obj.DataSize - 4;
             while (bytesRemaining > 0)
             {
-                ushort tag = data.ReadUInt16LittleEndian(ref offset);
-                ushort size = data.ReadUInt16LittleEndian(ref offset);
-                byte[] datum = data.ReadBytes(ref offset, size);
+                var entry = new TagSizeVar();
 
-                tags.Add(tag);
-                sizes.Add(size);
-                datas.Add(datum);
+                entry.Tag = data.ReadUInt16LittleEndian(ref offset);
+                entry.Size = data.ReadUInt16LittleEndian(ref offset);
+                entry.Var = data.ReadBytes(ref offset, entry.Size);
 
-                bytesRemaining -= 4 + size;
+                entries.Add(entry);
+
+                bytesRemaining -= 4 + entry.Size;
             }
 
-            obj.Tags = [.. tags];
-            obj.Size = [.. sizes];
-            obj.Vars = null; // TODO: Fix once this becomes a proper array of arrays
+            obj.TagSizeVars = [.. entries];
 
             return obj;
         }
@@ -1018,11 +983,11 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
 
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
-            obj.Atime = data.ReadUInt32LittleEndian(ref offset);
-            obj.Mtime = data.ReadUInt32LittleEndian(ref offset);
-            obj.Uid = data.ReadUInt16LittleEndian(ref offset);
-            obj.Gid = data.ReadUInt16LittleEndian(ref offset);
-            obj.Var = data.ReadBytes(ref offset, obj.DataSize - 12);
+            obj.FileLastAccessTime = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileLastModificationTime = data.ReadUInt32LittleEndian(ref offset);
+            obj.FileUserID = data.ReadUInt16LittleEndian(ref offset);
+            obj.FileGroupID = data.ReadUInt16LittleEndian(ref offset);
+            obj.Data = data.ReadBytes(ref offset, obj.DataSize - 12);
 
             return obj;
         }
@@ -1152,27 +1117,23 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
 
-            List<ushort> tags = [];
-            List<ushort> sizes = [];
-            List<byte[]> datas = [];
+            List<TagSizeVar> entries = [];
 
             int bytesRemaining = obj.DataSize - 4;
             while (bytesRemaining > 0)
             {
-                ushort tag = data.ReadUInt16LittleEndian(ref offset);
-                ushort size = data.ReadUInt16LittleEndian(ref offset);
-                byte[] datum = data.ReadBytes(ref offset, size);
+                var entry = new TagSizeVar();
 
-                tags.Add(tag);
-                sizes.Add(size);
-                datas.Add(datum);
+                entry.Tag = data.ReadUInt16LittleEndian(ref offset);
+                entry.Size = data.ReadUInt16LittleEndian(ref offset);
+                entry.Var = data.ReadBytes(ref offset, entry.Size);
 
-                bytesRemaining -= 4 + size;
+                entries.Add(entry);
+
+                bytesRemaining -= 4 + entry.Size;
             }
 
-            obj.Tags = [.. tags];
-            obj.Size = [.. sizes];
-            obj.Vars = null; // TODO: Fix once this becomes a proper array of arrays
+            obj.TagSizeVars = [.. entries];
 
             return obj;
         }

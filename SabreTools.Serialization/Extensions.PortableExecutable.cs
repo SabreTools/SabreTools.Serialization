@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.PortableExecutable;
+using SabreTools.Models.PortableExecutable.ResourceEntries;
 
 namespace SabreTools.Serialization
 {

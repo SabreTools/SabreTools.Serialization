@@ -16,12 +16,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder,
-                archive.LocalFileHeaders,
-                archive.EncryptionHeaders,
-                archive.FileData,
-                archive.DataDescriptors,
-                archive.ZIP64DataDescriptors);
+            Print(builder, archive.LocalFiles);
             Print(builder, archive.EndOfCentralDirectoryRecord);
             Print(builder, archive.ZIP64EndOfCentralDirectoryLocator);
             Print(builder, archive.ZIP64EndOfCentralDirectoryRecord);
@@ -29,78 +24,77 @@ namespace SabreTools.Serialization.Printers
             Print(builder, archive.ArchiveExtraDataRecord);
         }
 
-        private static void Print(StringBuilder builder,
-            LocalFileHeader[]? localFileHeaders,
-            byte[][]? encryptionHeaders,
-            byte[][]? fileData,
-            DataDescriptor[]? dataDescriptors,
-            DataDescriptor64[]? zip64DataDescriptors)
+        private static void Print(StringBuilder builder, LocalFile[]? localFiles)
         {
             builder.AppendLine("  Local File Information:");
             builder.AppendLine("  -------------------------");
-            if (localFileHeaders == null || localFileHeaders.Length == 0)
+            if (localFiles == null || localFiles.Length == 0)
             {
                 builder.AppendLine("  No local files");
                 builder.AppendLine();
                 return;
             }
 
-            if (encryptionHeaders == null || localFileHeaders.Length > encryptionHeaders.Length
-                || fileData == null || localFileHeaders.Length > fileData.Length)
+            for (int i = 0; i < localFiles.Length; i++)
             {
-                builder.AppendLine("  Mismatch in local file array values");
-                builder.AppendLine();
-            }
-
-            for (int i = 0; i < localFileHeaders.Length; i++)
-            {
-                var localFileHeader = localFileHeaders[i];
-                var encryptionHeader = encryptionHeaders != null && i < encryptionHeaders.Length ? encryptionHeaders[i] : null;
-                var fileDatum = fileData != null && i < fileData.Length ? fileData[i] : null;
-                var dataDescriptor = dataDescriptors != null && i < dataDescriptors.Length ? dataDescriptors[i] : null;
-                var zip64DataDescriptor = zip64DataDescriptors != null && i < zip64DataDescriptors.Length ? zip64DataDescriptors[i] : null;
-
-                Print(builder, localFileHeader, encryptionHeader, fileDatum, dataDescriptor, zip64DataDescriptor, i);
+                var localFile = localFiles[i];
+                Print(builder, localFile, i);
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder,
-            LocalFileHeader localFileHeader,
-            byte[]? encryptionHeader,
-            byte[]? fileData,
-            DataDescriptor? dataDescriptor,
-            DataDescriptor64? zip64DataDescriptor,
-            int index)
+        private static void Print(StringBuilder builder, LocalFile localFile, int index)
         {
             builder.AppendLine($"  Local File Entry {index}");
-            builder.AppendLine(localFileHeader.Signature, "    [Local File Header] Signature");
-            builder.AppendLine(localFileHeader.Version, "    [Local File Header] Version");
-            builder.AppendLine($"    [Local File Header] Flags: {localFileHeader.Flags} (0x{localFileHeader.Flags:X})");
-            builder.AppendLine($"    [Local File Header] Compression method: {localFileHeader.CompressionMethod} (0x{localFileHeader.CompressionMethod:X})");
-            builder.AppendLine(localFileHeader.LastModifedFileTime, "    [Local File Header] Last modified file time"); // TODO: Parse from MS-DOS
-            builder.AppendLine(localFileHeader.LastModifiedFileDate, "    [Local File Header] Last modified file date"); // TODO: Parse from MS-DOS
-            builder.AppendLine(localFileHeader.CRC32, "    [Local File Header] CRC-32");
-            builder.AppendLine(localFileHeader.CompressedSize, "    [Local File Header] Compressed size");
-            builder.AppendLine(localFileHeader.UncompressedSize, "    [Local File Header] Uncompressed size");
-            builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
-            builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
-            builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
 
-            var extraFields = Deserializers.PKZIP.ParseExtraFields(localFileHeader, localFileHeader.ExtraField);
-            Print(builder, "    [Local File Header] Extra Fields", extraFields);
+            #region Local File Header
 
-            if (encryptionHeader == null)
+            var localFileHeader = localFile.LocalFileHeader;
+            if (localFileHeader == null)
             {
-                builder.AppendLine("    [Encryption Header]: [NULL]");
+                builder.AppendLine("    [Local File Header] [NULL]");
             }
             else
             {
-                builder.AppendLine(encryptionHeader.Length, "    [Encryption Header] Length");
-                builder.AppendLine(encryptionHeader, "    [Encryption Header] Data");
+                builder.AppendLine(localFileHeader.Signature, "    [Local File Header] Signature");
+                builder.AppendLine(localFileHeader.Version, "    [Local File Header] Version");
+                builder.AppendLine($"    [Local File Header] Flags: {localFileHeader.Flags} (0x{localFileHeader.Flags:X})");
+                builder.AppendLine($"    [Local File Header] Compression method: {localFileHeader.CompressionMethod} (0x{localFileHeader.CompressionMethod:X})");
+                builder.AppendLine(localFileHeader.LastModifedFileTime, "    [Local File Header] Last modified file time"); // TODO: Parse from MS-DOS
+                builder.AppendLine(localFileHeader.LastModifiedFileDate, "    [Local File Header] Last modified file date"); // TODO: Parse from MS-DOS
+                builder.AppendLine(localFileHeader.CRC32, "    [Local File Header] CRC-32");
+                builder.AppendLine(localFileHeader.CompressedSize, "    [Local File Header] Compressed size");
+                builder.AppendLine(localFileHeader.UncompressedSize, "    [Local File Header] Uncompressed size");
+                builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
+                builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
+                builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
+
+                // TODO: Reenable this when models are fixed
+                // var extraFields = Deserializers.PKZIP.ParseExtraFields(localFileHeader, localFileHeader.ExtraField);
+                // Print(builder, "    [Local File Header] Extra Fields", extraFields);
             }
 
+            #endregion
+
+            #region Encryption Headers
+
+            var encryptionHeaders = localFile.EncryptionHeaders;
+            if (encryptionHeaders == null)
+            {
+                builder.AppendLine("    [Encryption Headers]: [NULL]");
+            }
+            else
+            {
+                builder.AppendLine(encryptionHeaders.Length, "    [Encryption Headers] Length");
+                builder.AppendLine(encryptionHeaders, "    [Encryption Headers] Data");
+            }
+
+            #endregion
+
+            #region File Data
+
+            var fileData = localFile.FileData;
             if (fileData == null)
             {
                 builder.AppendLine("    [File Data]: [NULL]");
@@ -111,6 +105,11 @@ namespace SabreTools.Serialization.Printers
                 //builder.AppendLine(fileData, "    [File Data] Data");
             }
 
+            #endregion
+
+            #region Data Descriptor
+
+            var dataDescriptor = localFile.DataDescriptor;
             if (dataDescriptor == null)
             {
                 builder.AppendLine("    [Data Descriptor]: [NULL]");
@@ -123,6 +122,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(dataDescriptor.UncompressedSize, $"    [Data Descriptor] Uncompressed size");
             }
 
+            var zip64DataDescriptor = localFile.ZIP64DataDescriptor;
             if (zip64DataDescriptor == null)
             {
                 builder.AppendLine("    [ZIP64 Data Descriptor]: [NULL]");
@@ -134,6 +134,8 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(zip64DataDescriptor.CompressedSize, $"    [ZIP64 Data Descriptor] Compressed size");
                 builder.AppendLine(zip64DataDescriptor.UncompressedSize, $"    [ZIP64 Data Descriptor] Uncompressed size");
             }
+
+            #endregion
         }
 
         private static void Print(StringBuilder builder, EndOfCentralDirectoryRecord? record)
@@ -240,8 +242,9 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.FileName, "    File name");
                 builder.AppendLine(entry.FileComment, "    File comment");
 
-                var extraFields = Deserializers.PKZIP.ParseExtraFields(entry, entry.ExtraField);
-                Print(builder, "    Extra Fields", extraFields);
+                // TODO: Reenable this when models are fixed
+                // var extraFields = Deserializers.PKZIP.ParseExtraFields(entry, entry.ExtraField);
+                // Print(builder, "    Extra Fields", extraFields);
             }
 
             builder.AppendLine();
@@ -312,7 +315,7 @@ namespace SabreTools.Serialization.Printers
                     case DataStreamAlignment field: Print(builder, field); break;
                     case MicrosoftOpenPackagingGrowthHint field: Print(builder, field); break;
 
-                    default: Print(builder, entry); break;
+                    case UnknownExtraField field: Print(builder, field); break;
                 }
             }
 
@@ -329,35 +332,31 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, OS2ExtraField field)
         {
-            builder.AppendLine(field.BSize, "      Uncompressed block size");
-            builder.AppendLine(field.CType, "      Compression type");
-            builder.AppendLine(field.EACRC, "      CRC-32");
-            builder.AppendLine(field.Var, "      Data");
+            builder.AppendLine(field.UncompressedBlockSize, "      Uncompressed block size");
+            builder.AppendLine(field.CompressionType, "      Compression type");
+            builder.AppendLine(field.CRC32, "      CRC-32");
+            builder.AppendLine(field.Data, "      Data");
         }
 
         private static void Print(StringBuilder builder, NTFSExtraField field)
         {
             builder.AppendLine(field.Reserved, "      Reserved");
-            builder.AppendLine(field.Tags, "      Tags");
-            builder.AppendLine(field.Size, "      Size");
-            builder.AppendLine(field.Vars, "      Vars");
+            Print(builder, field.TagSizeVars);
         }
 
         private static void Print(StringBuilder builder, OpenVMSExtraField field)
         {
             builder.AppendLine(field.CRC, "      CRC-32");
-            builder.AppendLine(field.Tags, "      Tags");
-            builder.AppendLine(field.Size, "      Size");
-            builder.AppendLine(field.Vars, "      Vars");
+            Print(builder, field.TagSizeVars);
         }
 
         private static void Print(StringBuilder builder, UnixExtraField field)
         {
-            builder.AppendLine(field.Atime, "      File last access time");
-            builder.AppendLine(field.Mtime, "      File last modification time");
-            builder.AppendLine(field.Uid, "      File user ID");
-            builder.AppendLine(field.Gid, "      File group ID");
-            builder.AppendLine(field.Var, "      Data");
+            builder.AppendLine(field.FileLastAccessTime, "      File last access time");
+            builder.AppendLine(field.FileLastModificationTime, "      File last modification time");
+            builder.AppendLine(field.FileUserID, "      File user ID");
+            builder.AppendLine(field.FileGroupID, "      File group ID");
+            builder.AppendLine(field.Data, "      Data");
         }
 
         private static void Print(StringBuilder builder, PatchDescriptorExtraField field)
@@ -396,9 +395,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, RecordManagementControls field)
         {
-            builder.AppendLine(field.Tags, "      Tags");
-            builder.AppendLine(field.Size, "      Size");
-            builder.AppendLine(field.Vars, "      Vars");
+            Print(builder, field.TagSizeVars);
         }
 
         private static void Print(StringBuilder builder, PKCS7EncryptionRecipientCertificateList field)
@@ -487,9 +484,29 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(field.Padding, "      Padding");
         }
 
-        private static void Print(StringBuilder builder, ExtensibleDataField field)
+        private static void Print(StringBuilder builder, UnknownExtraField field)
         {
-            // TODO: Print byte data here
+            builder.AppendLine(field.Data, "      Data");
+        }
+
+        private static void Print(StringBuilder builder, TagSizeVar[]? tuples)
+        {
+            builder.AppendLine("      Tag/Size/Var Tuples:");
+            builder.AppendLine("      -------------------------");
+            if (tuples == null)
+            {
+                builder.AppendLine("      No tuples");
+                return;
+            }
+
+            for (int i = 0; i < tuples.Length; i++)
+            {
+                var tuple = tuples[i];
+
+                builder.AppendLine(tuple.Tag, "        Tags");
+                builder.AppendLine(tuple.Size, "        Size");
+                builder.AppendLine(tuple.Var, "        Vars");
+            }
         }
 
         #endregion

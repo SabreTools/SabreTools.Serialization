@@ -70,19 +70,15 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.Header = header;
 
-            // TODO: Replace this with AlignToBoundary when IO is updated
             // Align to the block size
-            while (data.Position % 512 != 0 && data.Position < data.Length)
-            {
-                _ = data.ReadByteValue();
-            }
+            data.AlignToBoundary(512);
 
             #endregion
 
             #region Blocks
 
             // Exit if the size is invalid
-            string sizeOctalString = Encoding.ASCII.GetString(header.Size!).TrimEnd('\0');
+            string sizeOctalString = header.Size!.TrimEnd('\0');
             if (sizeOctalString.Length == 0)
                 return obj;
 
@@ -120,12 +116,18 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] filenameBytes = data.ReadBytes(100);
             obj.FileName = Encoding.ASCII.GetString(filenameBytes);
-            obj.Mode = data.ReadBytes(8);
-            obj.UID = data.ReadBytes(8);
-            obj.GID = data.ReadBytes(8);
-            obj.Size = data.ReadBytes(12);
-            obj.ModifiedTime = data.ReadBytes(12);
-            obj.Checksum = data.ReadBytes(8);
+            byte[] modeBytes = data.ReadBytes(8);
+            obj.Mode = Encoding.ASCII.GetString(modeBytes);
+            byte[] uidBytes = data.ReadBytes(8);
+            obj.UID = Encoding.ASCII.GetString(uidBytes);
+            byte[] gidBytes = data.ReadBytes(8);
+            obj.GID = Encoding.ASCII.GetString(gidBytes);
+            byte[] sizeBytes = data.ReadBytes(12);
+            obj.Size = Encoding.ASCII.GetString(sizeBytes);
+            byte[] modifiedBytes = data.ReadBytes(12);
+            obj.ModifiedTime = Encoding.ASCII.GetString(modifiedBytes);
+            byte[] checksumBytes = data.ReadBytes(8);
+            obj.Checksum = Encoding.ASCII.GetString(checksumBytes);
             obj.TypeFlag = (TypeFlag)data.ReadByteValue();
             byte[] linkNameBytes = data.ReadBytes(100);
             obj.LinkName = Encoding.ASCII.GetString(linkNameBytes);
@@ -172,9 +174,7 @@ namespace SabreTools.Serialization.Deserializers
 
             var obj = new Block();
 
-            // TODO: Assign this to obj.Data directly when Models is updated
-            byte[] temp = data.ReadBytes(512);
-            Array.Copy(temp, 0, obj.Data, 0, 512);
+            obj.Data = data.ReadBytes(512);
 
             return obj;
         }

@@ -71,25 +71,25 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.ID1 != ID1 || obj.ID2 != ID2)
                 return null;
 
-            obj.CM = (CompressionMethod)data.ReadByteValue();
-            obj.FLG = (Flags)data.ReadByteValue();
-            obj.MTIME = data.ReadUInt32LittleEndian();
-            obj.XFL = (ExtraFlags)data.ReadByteValue();
-            obj.OS = (OperatingSystem)data.ReadByteValue();
+            obj.CompressionMethod = (CompressionMethod)data.ReadByteValue();
+            obj.Flags = (Flags)data.ReadByteValue();
+            obj.LastModifiedTime = data.ReadUInt32LittleEndian();
+            obj.ExtraFlags = (ExtraFlags)data.ReadByteValue();
+            obj.OperatingSystem = (OperatingSystem)data.ReadByteValue();
 
 #if NET20 || NET35
-            if ((obj.FLG & Flags.FEXTRA) != 0)
+            if ((obj.Flags & Flags.FEXTRA) != 0)
 #else
-            if (obj.FLG.HasFlag(Flags.FEXTRA))
+            if (obj.Flags.HasFlag(Flags.FEXTRA))
 #endif
             {
-                obj.XLEN = data.ReadUInt16LittleEndian();
+                obj.ExtraLength = data.ReadUInt16LittleEndian();
 
                 // Cache the current position
                 long currentPosition = data.Position;
 
                 List<ExtraFieldData> extraFields = [];
-                while (data.Position < currentPosition + obj.XLEN)
+                while (data.Position < currentPosition + obj.ExtraLength)
                 {
                     var extraField = ParseExtraFieldData(data);
                     if (extraField == null)
@@ -102,24 +102,24 @@ namespace SabreTools.Serialization.Deserializers
             }
 
 #if NET20 || NET35
-            if ((obj.FLG & Flags.FNAME) != 0)
+            if ((obj.Flags & Flags.FNAME) != 0)
 #else
-            if (obj.FLG.HasFlag(Flags.FNAME))
+            if (obj.Flags.HasFlag(Flags.FNAME))
 #endif
                 obj.OriginalFileName = data.ReadNullTerminatedAnsiString();
 
 #if NET20 || NET35
-            if ((obj.FLG & Flags.FCOMMENT) != 0)
+            if ((obj.Flags & Flags.FCOMMENT) != 0)
 #else
-            if (obj.FLG.HasFlag(Flags.FCOMMENT))
+            if (obj.Flags.HasFlag(Flags.FCOMMENT))
 #endif
                 obj.FileComment = data.ReadNullTerminatedAnsiString();
 
 
 #if NET20 || NET35
-            if ((obj.FLG & Flags.FHCRC) != 0)
+            if ((obj.Flags & Flags.FHCRC) != 0)
 #else
-            if (obj.FLG.HasFlag(Flags.FHCRC))
+            if (obj.Flags.HasFlag(Flags.FHCRC))
 #endif
                 obj.CRC16 = data.ReadUInt16LittleEndian();
 
@@ -135,10 +135,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ExtraFieldData();
 
-            obj.SI1 = data.ReadByteValue();
-            obj.SI2 = data.ReadByteValue();
-            obj.LEN = data.ReadUInt16LittleEndian();
-            obj.Data = data.ReadBytes(obj.LEN);
+            obj.SubfieldID1 = data.ReadByteValue();
+            obj.SubfieldID2 = data.ReadByteValue();
+            obj.Length = data.ReadUInt16LittleEndian();
+            obj.Data = data.ReadBytes(obj.Length);
 
             return obj;
         }
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new Trailer();
 
             obj.CRC32 = data.ReadUInt32LittleEndian();
-            obj.ISIZE = data.ReadUInt32LittleEndian();
+            obj.InputSize = data.ReadUInt32LittleEndian();
 
             return obj;
         }
