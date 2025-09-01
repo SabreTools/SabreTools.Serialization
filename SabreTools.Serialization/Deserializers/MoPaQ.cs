@@ -186,18 +186,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled BetTable on success, null on error</returns>
         public static BetTable? ParseBetTable(Stream data, long initialOffset, ArchiveHeader header)
         {
-            // Get the BET table offset by version
-            long offset = header.FormatVersion switch
-            {
-                FormatVersion.Format1 => -1,
-                FormatVersion.Format2 => -1,
-                FormatVersion.Format3 => (long)header.BetTablePosition,
-                FormatVersion.Format4 => (long)header.BetTablePosition,
-                _ => -1,
-            };
-
-            // If the offset is invalid
-            if (offset < initialOffset || offset >= data.Length)
+            // Get the BET table offset
+            long offset = initialOffset + (long)header.BetTablePosition;
+            if (offset <= initialOffset || offset >= data.Length)
                 return null;
 
             // Preprocess the table
@@ -292,8 +283,8 @@ namespace SabreTools.Serialization.Deserializers
         public static BlockEntry[]? ParseBlockTable(Stream data, long initialOffset, ArchiveHeader header)
         {
             // Get the block table offset
-            long offset = ((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition;
-            if (offset < initialOffset || offset >= data.Length)
+            long offset = initialOffset + ((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition;
+            if (offset <= initialOffset || offset >= data.Length)
                 return null;
 
             // Get the entry count
@@ -351,7 +342,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             // Get the hash table offset
             long offset = initialOffset + (((uint)header.HashTablePositionHi << 23) | header.HashTablePosition);
-            if (offset < initialOffset || offset >= data.Length)
+            if (offset <= initialOffset || offset >= data.Length)
                 return null;
 
             // Get the entry count
@@ -389,18 +380,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled HetTable on success, null on error</returns>
         public static HetTable? ParseHetTable(Stream data, long initialOffset, ArchiveHeader header)
         {
-            // Get the HET table offset by version
-            long offset = header.FormatVersion switch
-            {
-                FormatVersion.Format1 => -1,
-                FormatVersion.Format2 => -1,
-                FormatVersion.Format3 => (long)header.HetTablePosition,
-                FormatVersion.Format4 => (long)header.HetTablePosition,
-                _ => -1,
-            };
-
-            // If the offset is invalid
-            if (offset < initialOffset || offset >= data.Length)
+            // Get the HET table offset
+            long offset = initialOffset + (long)header.HetTablePosition;
+            if (offset <= initialOffset || offset >= data.Length)
                 return null;
 
             // Preprocess the table
@@ -461,29 +443,13 @@ namespace SabreTools.Serialization.Deserializers
         /// TODO: The table has to be be decompressed before reading for V4(?)
         public static short[]? ParseHiBlockTable(Stream data, long initialOffset, ArchiveHeader header)
         {
-            // Get the hi-block table offset by version
-            long offset = header.FormatVersion switch
-            {
-                FormatVersion.Format1 => -1,
-                FormatVersion.Format2 => initialOffset + (long)header.HiBlockTablePosition,
-                FormatVersion.Format3 => initialOffset + (long)header.HiBlockTablePosition,
-                FormatVersion.Format4 => initialOffset + (long)header.HiBlockTablePosition,
-                _ => -1,
-            };
-
-            // If the offset is invalid
-            if (offset < initialOffset || offset >= data.Length)
+            // Get the hi-block table offset
+            long offset = initialOffset + (long)header.HiBlockTablePosition;
+            if (offset <= initialOffset || offset >= data.Length)
                 return null;
 
-            // Get the entry count by version
-            ulong entryCount = header.FormatVersion switch
-            {
-                FormatVersion.Format1 => 0,
-                FormatVersion.Format2 => header.HiBlockTableSize >> 1,
-                FormatVersion.Format3 => header.HiBlockTableSize >> 1,
-                FormatVersion.Format4 => header.HiBlockTableSize >> 1,
-                _ => 0,
-            };
+            // Get the entry count
+            ulong entryCount = header.HiBlockTableSize >> 1;
 
             // Seek to the offset
             data.Seek(offset, SeekOrigin.Begin);
