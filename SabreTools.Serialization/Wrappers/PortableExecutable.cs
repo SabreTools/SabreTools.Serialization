@@ -1173,7 +1173,7 @@ namespace SabreTools.Serialization.Wrappers
                 string extension = string.Empty;
 
                 // Only process the overlay if it is recognized
-                for (; overlayOffset < 0x100 && overlayOffset < overlayData.Length; overlayOffset++)
+                for (; overlayOffset < 0x100 && overlayOffset < overlayData.Length - 0x10; overlayOffset++)
                 {
                     int temp = overlayOffset;
                     byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
@@ -1285,7 +1285,7 @@ namespace SabreTools.Serialization.Wrappers
                     string extension = string.Empty;
 
                     // Only process the resource if it a recognized signature
-                    for (; resourceOffset < 0x100 && resourceOffset < ba.Length; resourceOffset++)
+                    for (; resourceOffset < 0x100 && resourceOffset < ba.Length - 0x10; resourceOffset++)
                     {
                         int temp = resourceOffset;
                         byte[] resourceSample = ba.ReadBytes(ref temp, 0x10);
