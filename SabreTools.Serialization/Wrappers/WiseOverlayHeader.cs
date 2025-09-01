@@ -26,6 +26,8 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 long offset = 0;
+
+                offset += 1; // DllNameLen
                 if (Model.DllNameLen > 0)
                 {
                     offset += Model.DllNameLen;
@@ -64,6 +66,7 @@ namespace SabreTools.Serialization.Wrappers
                     offset += 4; // CharacterSet
 
                 offset += 2; // Endianness
+                offset += 1; // InitTextLen
                 offset += Model.InitTextLen;
 
                 return offset;
