@@ -184,7 +184,6 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="header">Archive header to get information from</param>
         /// <returns>Filled BetTable on success, null on error</returns>
-        /// TODO: Add MD5 validation of contents
         public static BetTable? ParseBetTable(Stream data, long initialOffset, ArchiveHeader header)
         {
             // Get the BET table offset by version
@@ -222,7 +221,6 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled BetTable on success, null on error</returns>
-        /// TODO: Add MD5 validation of contents
         public static BetTable ParseBetTable(byte[] data, ref int offset)
         {
             var obj = new BetTable();
