@@ -194,8 +194,8 @@ namespace SabreTools.Serialization.Deserializers
             // Preprocess the table
             byte[]? tableBytes = LoadTable(data,
                 offset,
-                header.HashTableMD5,
-                (uint)header.HashTableSizeLong,
+                header.BetTableMD5,
+                (uint)header.BetTablesize,
                 92,
                 MPQ_KEY_BLOCK_TABLE,
                 out _);
@@ -293,8 +293,8 @@ namespace SabreTools.Serialization.Deserializers
             // Preprocess the table
             byte[]? tableBytes = LoadTable(data,
                 offset,
-                header.HashTableMD5,
-                (uint)header.HashTableSizeLong,
+                header.BlockTableMD5,
+                (uint)header.BlockTableSizeLong,
                 entryCount * 16,
                 MPQ_KEY_BLOCK_TABLE,
                 out _);
@@ -388,8 +388,8 @@ namespace SabreTools.Serialization.Deserializers
             // Preprocess the table
             byte[]? tableBytes = LoadTable(data,
                 offset,
-                header.HashTableMD5,
-                (uint)header.HashTableSizeLong,
+                header.HetTableMD5,
+                (uint)header.HetTableSize,
                 44,
                 MPQ_KEY_HASH_TABLE,
                 out _);
