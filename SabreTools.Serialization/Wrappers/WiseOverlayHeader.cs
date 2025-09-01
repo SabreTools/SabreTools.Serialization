@@ -191,10 +191,14 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
                 var model = Deserializers.WiseOverlayHeader.DeserializeStream(data);
                 if (model == null)
                     return null;
 
+                data.Seek(currentOffset, SeekOrigin.Begin);
                 return new WiseOverlayHeader(model, data);
             }
             catch
@@ -217,6 +221,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Seek to the compressed data offset
             _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+            if (includeDebug) Console.WriteLine($"Beginning of header-defined files: {CompressedDataOffset}");
 
             // Determine where the remaining compressed data starts
             dataStart = _dataSource.Position;
