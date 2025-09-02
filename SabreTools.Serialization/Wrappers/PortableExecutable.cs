@@ -1385,12 +1385,12 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Try to find the overlay header
-            long offset = FindWiseOverlayHeader(includeDebug);
+            long offset = FindWiseOverlayHeader();
             if (offset > 0 && offset < Length)
                 return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
 
             // Try to find the section header
-            offset = FindWiseSectionHeader(includeDebug);
+            offset = FindWiseSectionHeader();
             if (offset > 0 && offset < Length)
                 return ExtractWiseSection(outputDirectory, includeDebug, source, offset);
 
@@ -1725,9 +1725,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Find the location of a Wise overlay header, if it exists
         /// </summary>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Offset to the overlay header on success, -1 otherwise</returns>
-        public long FindWiseOverlayHeader(bool includeDebug)
+        public long FindWiseOverlayHeader()
         {
             // Get the overlay offset
             long overlayOffset = OverlayAddress;
@@ -1793,18 +1792,12 @@ namespace SabreTools.Serialization.Wrappers
 
             // If there are no executable resources
             if (!exeResources)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
                 return -1;
-            }
 
             // Get the raw resource table offset
             long resourceTableOffset = OptionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
             if (resourceTableOffset <= 0)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
                 return -1;
-            }
 
             // Search the resource table data for the offset
             long resourceOffset = -1;
@@ -1823,29 +1816,22 @@ namespace SabreTools.Serialization.Wrappers
 
             // If there was no valid offset, somehow
             if (resourceOffset == -1)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
                 return -1;
-            }
 
             // Parse the executable and recurse
             _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
             var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
             if (resourceExe is not PortableExecutable resourcePex)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
                 return -1;
-            }
 
-            return resourcePex.FindWiseOverlayHeader(includeDebug);
+            return resourcePex.FindWiseOverlayHeader();
         }
 
         /// <summary>
         /// Find the location of a Wise section header, if it exists
         /// </summary>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Offset to the section header on success, -1 otherwise</returns>
-        public long FindWiseSectionHeader(bool includeDebug)
+        public long FindWiseSectionHeader()
         {
             // If the section table is invalid
             if (SectionTable == null)
