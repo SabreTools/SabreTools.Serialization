@@ -1538,7 +1538,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Read the section into a local array
-            int sectionLength = (int)Math.Max(section.SizeOfRawData, section.VirtualSize);
+            int sectionLength = (int)section.VirtualSize;
             byte[]? sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
 
             // Parse the section header
