@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Deserializers
                 versionSize = header.Version[header.Version.Length - 2];
 
             // Third byte seems to indicate size of NonWiseVer
-            if (versionSize <= 1)
+            if (versionSize > 1)
             {
                 byte[] stringBytes = data.ReadBytes(versionSize);
                 header.NonWiseVersion = Encoding.ASCII.GetString(stringBytes);
