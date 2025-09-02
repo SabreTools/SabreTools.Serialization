@@ -229,6 +229,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the files extracted successfully, false otherwise</returns>
+        /// <remarks>On success, this sets <see cref="InstallerDataOffset"/></remarks>
         public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug)
         {
             // Seek to the compressed data offset
