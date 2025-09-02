@@ -1487,7 +1487,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Extract the header-defined files
-            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, out long dataStart);
+            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
             if (!extracted)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
@@ -1509,7 +1509,7 @@ namespace SabreTools.Serialization.Wrappers
                 sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
 
             // Process the state machine
-            return script.ProcessStateMachine(header, sourceDirectory, dataStart, outputDirectory, includeDebug);
+            return script.ProcessStateMachine(header, sourceDirectory, outputDirectory, includeDebug);
         }
 
         /// <summary>

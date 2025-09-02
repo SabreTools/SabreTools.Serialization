@@ -74,6 +74,17 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        /// <summary>
+        /// Installer data offset
+        /// </summary>
+        /// <remarks>
+        /// This is the offset marking the point after all of the
+        /// header-defined files. It is only set during extraction
+        /// and is not used otherwise. It is automatically set if
+        /// <see cref="ExtractHeaderDefinedFiles"/> is called.
+        /// </remarks>
+        public long InstallerDataOffset { get; private set; }
+
         /// <inheritdoc cref="OverlayHeader.Ctl3d32DeflatedSize"/>
         public uint Ctl3d32DeflatedSize => Model.Ctl3d32DeflatedSize;
 
@@ -218,14 +229,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the files extracted successfully, false otherwise</returns>
-        public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, out long dataStart)
+        public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug)
         {
             // Seek to the compressed data offset
             _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
             if (includeDebug) Console.WriteLine($"Beginning of header-defined files: {CompressedDataOffset}");
-
-            // Determine where the remaining compressed data starts
-            dataStart = _dataSource.Position;
 
             // Extract WiseColors.dib, if it exists
             var expected = new DeflateInfo { InputSize = DibDeflatedSize, OutputSize = DibInflatedSize, Crc32 = 0 };
@@ -292,24 +300,21 @@ namespace SabreTools.Serialization.Wrappers
             if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE00XX.DAT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
-            dataStart = _dataSource.Position;
+            InstallerDataOffset = _dataSource.Position;
+
             return true;
         }
 
         /// <summary>
         /// Attempt to extract a file defined by a file header
         /// </summary>
-        /// <param name="dataStart">Start of the deflated data</param>
         /// <param name="obj">Deflate information</param>
         /// <param name="index">File index for automatic naming</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        public ExtractionStatus ExtractFile(long dataStart,
-            InstallFile obj,
-            int index,
-            string outputDirectory,
-            bool includeDebug)
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        public ExtractionStatus ExtractFile(InstallFile obj, int index, string outputDirectory, bool includeDebug)
         {
             // Get expected values
             var expected = new DeflateInfo
@@ -322,7 +327,7 @@ namespace SabreTools.Serialization.Wrappers
             // Perform path replacements
             string filename = obj.DestinationPathname ?? $"WISE{index:X4}";
             filename = filename.Replace("%", string.Empty);
-            _dataSource.Seek(dataStart + obj.DeflateStart, SeekOrigin.Begin);
+            _dataSource.Seek(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
             return InflateWrapper.ExtractFile(_dataSource,
                 filename,
                 outputDirectory,
@@ -334,18 +339,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Attempt to extract a file defined by a file header
         /// </summary>
-        /// <param name="dataStart">Start of the deflated data</param>
         /// <param name="obj">Deflate information</param>
-        /// <param name="index">File index for automatic naming</param>
         /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="isPkzip"> if PKZIP containers are used</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        public ExtractionStatus ExtractFile(long dataStart,
-            DisplayBillboard obj,
-            int index,
-            string outputDirectory,
-            bool includeDebug)
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        public ExtractionStatus ExtractFile(DisplayBillboard obj, string outputDirectory, bool includeDebug)
         {
             // Get the generated base name
             string baseName = $"CustomBillboardSet_{obj.Flags:X4}-{obj.Operand_2}-{obj.Operand_3}";
@@ -372,8 +371,8 @@ namespace SabreTools.Serialization.Wrappers
                 };
 
                 // Perform path replacements
-                string filename = $"{baseName}{index:X4}";
-                _dataSource.Seek(dataStart + info.DeflateStart, SeekOrigin.Begin);
+                string filename = $"{baseName}{i:X4}";
+                _dataSource.Seek(InstallerDataOffset + info.DeflateStart, SeekOrigin.Begin);
                 _ = InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
             }
 
@@ -384,12 +383,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Attempt to extract a file defined by a file header
         /// </summary>
-        /// <param name="dataStart">Start of the deflated data</param>
         /// <param name="obj">Deflate information</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        public ExtractionStatus ExtractFile(long dataStart, CustomDialogSet obj, string outputDirectory, bool includeDebug)
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        public ExtractionStatus ExtractFile(CustomDialogSet obj, string outputDirectory, bool includeDebug)
         {
             // Get expected values
             var expected = new DeflateInfo
@@ -402,7 +401,7 @@ namespace SabreTools.Serialization.Wrappers
             // Perform path replacements
             string filename = $"CustomDialogSet_{obj.DisplayVariable}-{obj.Name}";
             filename = filename.Replace("%", string.Empty);
-            _dataSource.Seek(dataStart + obj.DeflateStart, SeekOrigin.Begin);
+            _dataSource.Seek(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
             return InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
         }
 

@@ -134,13 +134,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="header">Overlay header used for reference</param>
         /// <param name="sourceDirectory">Directory where installer files live, if possible</param>
-        /// <param name="dataStart">Start of the deflated data</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if there were no errors during processing, false otherwise</returns>
         public bool ProcessStateMachine(WiseOverlayHeader header,
             string? sourceDirectory,
-            long dataStart,
             string outputDirectory,
             bool includeDebug)
         {
@@ -164,7 +162,7 @@ namespace SabreTools.Serialization.Wrappers
                             return false;
 
                         // Try to extract to the output directory
-                        header.ExtractFile(dataStart, fileHeader, ++normalFileCount, outputDirectory, includeDebug);
+                        header.ExtractFile(fileHeader, ++normalFileCount, outputDirectory, includeDebug);
                         break;
 
                     case OperationCode.EditIniFile:
@@ -180,7 +178,7 @@ namespace SabreTools.Serialization.Wrappers
                             return false;
 
                         // Try to extract to the output directory
-                        header.ExtractFile(dataStart, displayBillboard, ++normalFileCount, outputDirectory, includeDebug);
+                        header.ExtractFile(displayBillboard, outputDirectory, includeDebug);
                         break;
 
                     case OperationCode.DeleteFile:
@@ -296,7 +294,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Try to extract to the output directory
                         ++normalFileCount;
-                        header.ExtractFile(dataStart, customDialogSet, outputDirectory, includeDebug);
+                        header.ExtractFile(customDialogSet, outputDirectory, includeDebug);
                         break;
 
                     case OperationCode.GetTemporaryFilename:
