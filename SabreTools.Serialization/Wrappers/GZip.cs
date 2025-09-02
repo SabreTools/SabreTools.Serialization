@@ -25,8 +25,8 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (_dataOffset != null)
-                    return _dataOffset.Value;
+                if (_dataOffset > -1)
+                    return _dataOffset;
 
                 if (Header == null)
                     return -1;
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header.CRC16 != null)
                     _dataOffset += 2;
 
-                return _dataOffset.Value;
+                return _dataOffset;
             }
         }
 
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Offset to the compressed data
         /// </summary>
-        private long? _dataOffset = null;
+        private long _dataOffset = -1;
 
         #endregion
 
