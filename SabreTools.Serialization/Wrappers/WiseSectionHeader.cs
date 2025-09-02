@@ -198,10 +198,11 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Seek to the compressed data offset
             _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+            bool successful = true;
             
             // Extract first executable, if it exists
             if (ExtractFile("FirstExecutable.exe", outputDirectory, FirstExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                return false;
+                successful = false;
 
             // Extract second executable, if it exists
             // If there's a size provided for the second executable but no size for the first executable, the size of
@@ -209,23 +210,23 @@ namespace SabreTools.Serialization.Wrappers
             // actually is. Currently unable to extract properly in these cases, as no header value in such installers
             // seems to actually correspond to the real size of the second executable.
             if (ExtractFile("SecondExecutable.exe", outputDirectory, SecondExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                return false;
+                successful = false;
 
             // Extract third executable, if it exists
             if (ExtractFile("ThirdExecutable.exe", outputDirectory, ThirdExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                return false;
+                successful = false;
 
             // Extract main MSI file
             if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
             {
                 // Fallback- seek to the position that's the length of the MSI file entry from the end, then try and
                 // extract from there.
-                _dataSource.Seek(-MsiFileEntryLength, SeekOrigin.End);
+                _dataSource.Seek(-MsiFileEntryLength + 1, SeekOrigin.End);
                 if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
                     return false; // The fallback also failed.
             }
 
-            return true;
+            return successful;
         }
 
         /// <summary>
