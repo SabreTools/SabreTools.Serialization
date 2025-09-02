@@ -536,13 +536,24 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Try to find the overlay header
-            long offset = FindWiseOverlayHeader(includeDebug);
-            if (offset < 0)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not find the overlay header");
-                return false;
-            }
+            long offset = FindWiseOverlayHeader();
+            if (offset > 0 && offset < Length)
+                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
 
+            // Everything else could not extract
+            return false;
+        }
+
+        /// <summary>
+        /// Extract using Wise overlay
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="source">Potentially multi-part stream to read</param>
+        /// <param name="offset">Offset to the start of the overlay header</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
+        {
             // Seek to the overlay and parse
             source.Seek(offset, SeekOrigin.Begin);
             var header = WiseOverlayHeader.Create(source);
@@ -581,6 +592,42 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Resources
+
+        /// <summary>
+        /// Find the location of a Wise overlay header, if it exists
+        /// </summary>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>Offset to the overlay header on success, -1 otherwise</returns>
+        public long FindWiseOverlayHeader()
+        {
+            // Get the overlay offset
+            long overlayOffset = OverlayAddress;
+            if (overlayOffset < 0 || overlayOffset >= Length)
+                return -1;
+
+            // Attempt to get the overlay header
+            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+            var header = WiseOverlayHeader.Create(_dataSource);
+            if (header != null)
+                return overlayOffset;
+
+            // Align and loop to see if it can be found
+            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+            _dataSource.AlignToBoundary(0x10);
+            overlayOffset = _dataSource.Position;
+            while (_dataSource.Position < Length)
+            {
+                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                header = WiseOverlayHeader.Create(_dataSource);
+                if (header != null)
+                    return overlayOffset;
+
+                overlayOffset += 0x10;
+            }
+
+            header = null;
+            return -1;
+        }
 
         /// <summary>
         /// Get a single resource entry
@@ -692,45 +739,6 @@ namespace SabreTools.Serialization.Wrappers
 
             // Return the verified offset
             return offset;
-        }
-
-        /// <summary>
-        /// Find the location of a Wise overlay header, if it exists
-        /// </summary>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Offset to the overlay header on success, -1 otherwise</returns>
-        public long FindWiseOverlayHeader(bool includeDebug)
-        {
-            // Get the overlay offset
-            long overlayOffset = OverlayAddress;
-            if (overlayOffset < 0 || overlayOffset >= Length)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return -1;
-            }
-
-            // Attempt to get the overlay header
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(_dataSource);
-            if (header != null)
-                return overlayOffset;
-
-            // Align and loop to see if it can be found
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            _dataSource.AlignToBoundary(0x10);
-            overlayOffset = _dataSource.Position;
-            while (_dataSource.Position < Length)
-            {
-                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
-                    return overlayOffset;
-
-                overlayOffset += 0x10;
-            }
-
-            header = null;
-            return -1;
         }
 
         #endregion
