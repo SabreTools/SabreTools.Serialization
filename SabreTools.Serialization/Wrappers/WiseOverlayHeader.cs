@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Streams;
 using SabreTools.Models.WiseInstaller;
+using SabreTools.Models.WiseInstaller.Actions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -238,52 +239,52 @@ namespace SabreTools.Serialization.Wrappers
 
             // Extract WISE0001.DLL, if it exists
             expected = new DeflateInfo { InputSize = WiseDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "WISE0001.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "WISE0001.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract CTL3D32.DLL, if it exists
             expected = new DeflateInfo { InputSize = Ctl3d32DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "CTL3D32.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "CTL3D32.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE0004, if it exists
             expected = new DeflateInfo { InputSize = SomeData4DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "FILE0004", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE0004", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract Ocxreg32.EXE, if it exists
             expected = new DeflateInfo { InputSize = RegToolDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "Ocxreg32.EXE", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "Ocxreg32.EXE", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract PROGRESS.DLL, if it exists
             expected = new DeflateInfo { InputSize = ProgressDllDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "PROGRESS.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "PROGRESS.DLL", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE0007, if it exists
             expected = new DeflateInfo { InputSize = SomeData7DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "FILE0007", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE0007", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE0008, if it exists
             expected = new DeflateInfo { InputSize = SomeData8DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "FILE0008", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE0008", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE0009, if it exists
             expected = new DeflateInfo { InputSize = SomeData9DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "FILE0009", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE0009", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE000A, if it exists
             expected = new DeflateInfo { InputSize = SomeData10DeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "FILE000A", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "FILE000A", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract install script, if it exists
             expected = new DeflateInfo { InputSize = InstallScriptDeflatedSize, OutputSize = -1, Crc32 = 0 };
-            if (InflateWrapper.ExtractFile(_dataSource, "INSTALL_SCRIPT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
+            if (InflateWrapper.ExtractFile(_dataSource, IsPKZIP ? null : "INSTALL_SCRIPT", outputDirectory, expected, IsPKZIP, includeDebug) == ExtractionStatus.FAIL)
                 return false;
 
             // Extract FILE000{n}.DAT, if it exists
@@ -293,6 +294,116 @@ namespace SabreTools.Serialization.Wrappers
 
             dataStart = _dataSource.Position;
             return true;
+        }
+
+        /// <summary>
+        /// Attempt to extract a file defined by a file header
+        /// </summary>
+        /// <param name="dataStart">Start of the deflated data</param>
+        /// <param name="obj">Deflate information</param>
+        /// <param name="index">File index for automatic naming</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if the file extracted successfully, false otherwise</returns>
+        public ExtractionStatus ExtractFile(long dataStart,
+            InstallFile obj,
+            int index,
+            string outputDirectory,
+            bool includeDebug)
+        {
+            // Get expected values
+            var expected = new DeflateInfo
+            {
+                InputSize = obj.DeflateEnd - obj.DeflateStart,
+                OutputSize = obj.InflatedSize,
+                Crc32 = obj.Crc32,
+            };
+
+            // Perform path replacements
+            string filename = obj.DestinationPathname ?? $"WISE{index:X4}";
+            filename = filename.Replace("%", string.Empty);
+            _dataSource.Seek(dataStart + obj.DeflateStart, SeekOrigin.Begin);
+            return InflateWrapper.ExtractFile(_dataSource,
+                filename,
+                outputDirectory,
+                expected,
+                IsPKZIP,
+                includeDebug);
+        }
+
+        /// <summary>
+        /// Attempt to extract a file defined by a file header
+        /// </summary>
+        /// <param name="dataStart">Start of the deflated data</param>
+        /// <param name="obj">Deflate information</param>
+        /// <param name="index">File index for automatic naming</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="isPkzip"> if PKZIP containers are used</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if the file extracted successfully, false otherwise</returns>
+        public ExtractionStatus ExtractFile(long dataStart,
+            DisplayBillboard obj,
+            int index,
+            string outputDirectory,
+            bool includeDebug)
+        {
+            // Get the generated base name
+            string baseName = $"CustomBillboardSet_{obj.Flags:X4}-{obj.Operand_2}-{obj.Operand_3}";
+
+            // If there are no deflate objects
+            if (obj.DeflateInfo == null)
+            {
+                if (includeDebug) Console.WriteLine($"Skipping {baseName} because the deflate object array is null!");
+                return ExtractionStatus.FAIL;
+            }
+
+            // Loop through the values
+            for (int i = 0; i < obj.DeflateInfo.Length; i++)
+            {
+                // Get the deflate info object
+                var info = obj.DeflateInfo[i];
+
+                // Get expected values
+                var expected = new DeflateInfo
+                {
+                    InputSize = info.DeflateEnd - info.DeflateStart,
+                    OutputSize = info.InflatedSize,
+                    Crc32 = 0,
+                };
+
+                // Perform path replacements
+                string filename = $"{baseName}{index:X4}";
+                _dataSource.Seek(dataStart + info.DeflateStart, SeekOrigin.Begin);
+                _ = InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
+            }
+
+            // Always return good -- TODO: Fix this
+            return ExtractionStatus.GOOD;
+        }
+
+        /// <summary>
+        /// Attempt to extract a file defined by a file header
+        /// </summary>
+        /// <param name="dataStart">Start of the deflated data</param>
+        /// <param name="obj">Deflate information</param>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if the file extracted successfully, false otherwise</returns>
+        public ExtractionStatus ExtractFile(long dataStart, CustomDialogSet obj, string outputDirectory, bool includeDebug)
+        {
+            // Get expected values
+            var expected = new DeflateInfo
+            {
+                InputSize = obj.DeflateEnd - obj.DeflateStart,
+                OutputSize = obj.InflatedSize,
+                Crc32 = 0,
+            };
+
+            // Perform path replacements
+            string filename = $"CustomDialogSet_{obj.DisplayVariable}-{obj.Name}";
+            filename = filename.Replace("%", string.Empty);
+            _dataSource.Seek(dataStart + obj.DeflateStart, SeekOrigin.Begin);
+            return InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
         }
 
         /// <summary>

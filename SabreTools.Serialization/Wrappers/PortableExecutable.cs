@@ -1509,12 +1509,7 @@ namespace SabreTools.Serialization.Wrappers
                 sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
 
             // Process the state machine
-            return script.ProcessStateMachine(_dataSource,
-                sourceDirectory,
-                dataStart,
-                outputDirectory,
-                header.IsPKZIP,
-                includeDebug);
+            return script.ProcessStateMachine(header, sourceDirectory, dataStart, outputDirectory, includeDebug);
         }
 
         /// <summary>
