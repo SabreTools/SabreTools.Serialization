@@ -73,7 +73,7 @@ namespace SabreTools.Serialization
                 Wrapper.WAD3 item => item.PrettyPrint(),
                 Wrapper.WiseOverlayHeader item => item.PrettyPrint(),
                 Wrapper.WiseScript item => item.PrettyPrint(),
-                // TODO: Add implementation for WiseSectionHeader
+                Wrapper.WiseSectionHeader item => item.PrettyPrint(),
                 Wrapper.XeMID item => item.PrettyPrint(),
                 Wrapper.XMID item => item.PrettyPrint(),
                 Wrapper.XZP item => item.PrettyPrint(),
@@ -128,7 +128,7 @@ namespace SabreTools.Serialization
                 Wrapper.WAD3 item => item.ExportJSON(),
                 Wrapper.WiseOverlayHeader item => item.ExportJSON(),
                 Wrapper.WiseScript item => item.ExportJSON(),
-                // TODO: Add implementation for WiseSectionHeader
+                Wrapper.WiseSectionHeader item => item.ExportJSON(),
                 Wrapper.XeMID item => item.ExportJSON(),
                 Wrapper.XMID item => item.ExportJSON(),
                 Wrapper.XZP item => item.ExportJSON(),
@@ -526,6 +526,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             WiseScript.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.WiseSectionHeader item)
+        {
+            var builder = new StringBuilder();
+            WiseSectionHeader.Print(builder, item.Model);
             return builder;
         }
 
