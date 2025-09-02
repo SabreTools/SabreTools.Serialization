@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled WiseSectionHeader on success, null on error</returns>
         public static SectionHeader? ParseSectionHeader(Stream data, long initialOffset)
         {
-            var header = new SectionHeader();
+            var obj = new SectionHeader();
 
             // Setup required variables
             int wisOffset = -1;
@@ -76,83 +76,84 @@ namespace SabreTools.Serialization.Deserializers
                 int versionOffset = WiseSectionVersionOffsetDictionary[offset];
 
                 data.Seek(initialOffset + offset - versionOffset, 0);
-                header.Version = data.ReadBytes(versionOffset);
+                obj.Version = data.ReadBytes(versionOffset);
                 wisOffset = offset;
+                break;
             }
 
             //Seek back to the beginning of the section
             data.Seek(initialOffset, 0);
 
             // Read common values
-            header.UnknownDataSize = data.ReadUInt32LittleEndian();
-            header.SecondExecutableFileEntryLength = data.ReadUInt32LittleEndian();
-            header.UnknownValue2 = data.ReadUInt32LittleEndian();
-            header.UnknownValue3 = data.ReadUInt32LittleEndian();
-            header.UnknownValue4 = data.ReadUInt32LittleEndian();
-            header.FirstExecutableFileEntryLength = data.ReadUInt32LittleEndian();
-            header.MsiFileEntryLength = data.ReadUInt32LittleEndian();
+            obj.UnknownDataSize = data.ReadUInt32LittleEndian();
+            obj.SecondExecutableFileEntryLength = data.ReadUInt32LittleEndian();
+            obj.UnknownValue2 = data.ReadUInt32LittleEndian();
+            obj.UnknownValue3 = data.ReadUInt32LittleEndian();
+            obj.UnknownValue4 = data.ReadUInt32LittleEndian();
+            obj.FirstExecutableFileEntryLength = data.ReadUInt32LittleEndian();
+            obj.MsiFileEntryLength = data.ReadUInt32LittleEndian();
 
             // If the reported header information is invalid
-            if (header.Version == null)
-                return header;
+            if (obj.Version == null)
+                return obj;
             if (wisOffset < 0)
-                return header;
+                return obj;
             if (headerLength < 0)
-                return header;
+                return obj;
 
             if (headerLength > 6)
             {
-                header.UnknownValue7 = data.ReadUInt32LittleEndian();
-                header.UnknownValue8 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue7 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue8 = data.ReadUInt32LittleEndian();
             }
 
             if (headerLength > 8)
             {
-                header.ThirdExecutableFileEntryLength = data.ReadUInt32LittleEndian();
-                header.UnknownValue10 = data.ReadUInt32LittleEndian();
-                header.UnknownValue11 = data.ReadUInt32LittleEndian();
-                header.UnknownValue12 = data.ReadUInt32LittleEndian();
-                header.UnknownValue13 = data.ReadUInt32LittleEndian();
-                header.UnknownValue14 = data.ReadUInt32LittleEndian();
-                header.UnknownValue15 = data.ReadUInt32LittleEndian();
-                header.UnknownValue16 = data.ReadUInt32LittleEndian();
-                header.UnknownValue17 = data.ReadUInt32LittleEndian();
+                obj.ThirdExecutableFileEntryLength = data.ReadUInt32LittleEndian();
+                obj.UnknownValue10 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue11 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue12 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue13 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue14 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue15 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue16 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue17 = data.ReadUInt32LittleEndian();
             }
 
             if (headerLength > 17)
             {
-                header.UnknownValue18 = data.ReadUInt32LittleEndian();
+                obj.UnknownValue18 = data.ReadUInt32LittleEndian();
             }
 
             // Seek to the WIS string offset
             data.Seek(initialOffset + wisOffset, SeekOrigin.Begin);
 
             // Read the consistent strings
-            header.TmpString = data.ReadNullTerminatedAnsiString();
-            header.GuidString = data.ReadNullTerminatedAnsiString();
+            obj.TmpString = data.ReadNullTerminatedAnsiString();
+            obj.GuidString = data.ReadNullTerminatedAnsiString();
 
             // Parse the pre-string section
-            int preStringBytesSize = GetPreStringBytesSize(data, header, wisOffset);
+            int preStringBytesSize = GetPreStringBytesSize(data, obj, wisOffset);
             if (preStringBytesSize <= 0)
-                return header;
+                return obj;
 
             // Read the pre-string bytes
-            header.PreStringValues = data.ReadBytes(preStringBytesSize);
+            obj.PreStringValues = data.ReadBytes(preStringBytesSize);
 
             // Try to read the string arrays
             // TODO: Count size of string section for later size verification
-            byte[][]? stringArrays = ParseStringTable(data, header.PreStringValues);
+            byte[][]? stringArrays = ParseStringTable(data, obj.PreStringValues);
             if (stringArrays == null)
-                return header;
+                return obj;
 
             // Set the string arrays
-            header.Strings = stringArrays;
+            obj.Strings = stringArrays;
 
             // Not sure what this data is. Might be a wisescript?
-            if (header.UnknownDataSize != 0)
-                data.Seek(header.UnknownDataSize, SeekOrigin.Current);
+            if (obj.UnknownDataSize != 0)
+                data.Seek(obj.UnknownDataSize, SeekOrigin.Current);
 
-            return header;
+            return obj;
         }
 
         /// <summary>
