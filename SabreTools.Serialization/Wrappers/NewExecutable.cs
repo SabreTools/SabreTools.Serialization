@@ -449,6 +449,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "7z";
                         break;
                     }
+                    else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
+                    {
+                        extension = "cab";
+                        break;
+                    }
                     else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
                     {
                         extension = "zip";

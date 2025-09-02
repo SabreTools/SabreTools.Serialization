@@ -1194,6 +1194,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "7z";
                         break;
                     }
+                    else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
+                    {
+                        extension = "cab";
+                        break;
+                    }
                     else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
                     {
                         extension = "zip";
@@ -1293,6 +1298,11 @@ namespace SabreTools.Serialization.Wrappers
                         if (resourceSample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
                         {
                             extension = "7z";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
+                        {
+                            extension = "cab";
                             break;
                         }
                         else if (resourceSample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
