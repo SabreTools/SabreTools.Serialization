@@ -1413,7 +1413,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="resource">Resource data to inflate</param>
         /// <returns>Inflated data on success, null otherwise</returns>
-        private byte[]? DecompressCExeLZ(byte[] resource)
+        private static byte[]? DecompressCExeLZ(byte[] resource)
         {
             try
             {
@@ -1434,7 +1434,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="resource">Resource data to inflate</param>
         /// <returns>Inflated data on success, null otherwise</returns>
-        private byte[]? DecompressCExeZlib(byte[] resource)
+        private static byte[]? DecompressCExeZlib(byte[] resource)
         {
             try
             {
