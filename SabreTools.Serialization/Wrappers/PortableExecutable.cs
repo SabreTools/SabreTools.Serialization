@@ -353,30 +353,17 @@ namespace SabreTools.Serialization.Wrappers
                     if (SectionTable == null)
                         return null;
 
-                    // Get the overlay address if possible
-                    long endOfSectionData = OverlayAddress;
-
-                    // If we didn't find the end of section data
-                    if (endOfSectionData <= 0)
-                        return null;
-
-                    // If we're at the end of the file, cache an empty byte array
-                    if (endOfSectionData >= dataLength)
+                    // Get the overlay data, if possible
+                    byte[]? overlayData = OverlayData;
+                    if (overlayData == null || overlayData.Length == 0)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
                     }
 
-                    lock (_sourceDataLock)
-                    {
-                        // TODO: Revisit the 16 MiB limit
-                        // Cap the check for overlay strings to 16 MiB (arbitrary)
-                        long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
-
-                        // Otherwise, cache and return the strings
-                        _overlayStrings = _dataSource.ReadStringsFrom((int)endOfSectionData, (int)overlayLength, charLimit: 3);
-                        return _overlayStrings;
-                    }
+                    // Otherwise, cache and return the strings
+                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3);
+                    return _overlayStrings;
                 }
             }
         }
