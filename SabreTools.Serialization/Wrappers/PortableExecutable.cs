@@ -743,6 +743,11 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>[]? _sectionStringData = null;
 
         /// <summary>
+        /// Lock object for <see cref="_sectionStringData"/> 
+        /// </summary>
+        private readonly object _sectionStringDataLock = new();
+
+        /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
         private byte[]? _stubExecutableData = null;
@@ -2271,40 +2276,43 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Section strings on success, null on error</returns>
         public List<string>? GetSectionStrings(int index)
         {
-            // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
-                return null;
-
-            // If the section doesn't exist
-            if (index < 0 || index >= SectionTable.Length)
-                return null;
-
-            // Get the section data from the table
-            var section = SectionTable[index];
-            if (section == null)
-                return null;
-
-            uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-            if (address == 0)
-                return null;
-
-            // Set the section size
-            uint size = section.SizeOfRawData;
-            lock (_sourceDataLock)
+            lock (_sectionStringDataLock)
             {
+                // If we already have cached data, just use that immediately
+                if (_sectionStringData != null && _sectionStringData[index] != null && _sectionStringData[index].Count > 0)
+                    return _sectionStringData[index];
+
+                // If we have no sections
+                if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+                    return null;
+
                 // Create the section string array if we have to
                 _sectionStringData ??= new List<string>[SectionNames.Length];
 
-                // If we already have cached data, just use that immediately
-                if (_sectionStringData[index] != null && _sectionStringData[index].Count > 0)
-                    return _sectionStringData[index];
+                // If the section doesn't exist
+                if (index < 0 || index >= SectionTable.Length)
+                    return null;
 
-                // Populate the section string data based on the source
-                List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+                // Get the section data from the table
+                var section = SectionTable[index];
+                if (section == null)
+                    return null;
 
-                // Cache and return the section string data, even if null
-                _sectionStringData[index] = sectionStringData ?? [];
-                return sectionStringData;
+                uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                if (address == 0)
+                    return null;
+
+                // Set the section size
+                uint size = section.SizeOfRawData;
+                lock (_sourceDataLock)
+                {
+                    // Populate the section string data based on the source
+                    List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+
+                    // Cache and return the section string data, even if null
+                    _sectionStringData[index] = sectionStringData ?? [];
+                    return sectionStringData;
+                }
             }
         }
 
