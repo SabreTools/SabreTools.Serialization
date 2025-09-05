@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Wrappers
         ///     to ensure that all possible values before the temp string are found
         ///     and read properly
         public long CompressedDataOffset { get; private set; }
-        
+
         /// <inheritdoc cref="SectionHeader.UnknownDataSize"/>
         public uint UnknownDataSize => Model.UnknownDataSize;
 
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Wrappers
                 long endOffset = data.Position - currentOffset;
 
                 data.Seek(currentOffset, SeekOrigin.Begin);
-                return new WiseSectionHeader(model, data) { CompressedDataOffset = endOffset};
+                return new WiseSectionHeader(model, data) { CompressedDataOffset = endOffset };
             }
             catch
             {
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
                 return false;
             }
-            
+
             return true;
         }
 
@@ -196,37 +196,40 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>True if the files extracted successfully, false otherwise</returns>
         private bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug)
         {
-            // Seek to the compressed data offset
-            _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
-            bool successful = true;
-            
-            // Extract first executable, if it exists
-            if (ExtractFile("FirstExecutable.exe", outputDirectory, FirstExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                successful = false;
-
-            // Extract second executable, if it exists
-            // If there's a size provided for the second executable but no size for the first executable, the size of
-            // the second executable appears to be some unrelated value that's larger than the second executable
-            // actually is. Currently unable to extract properly in these cases, as no header value in such installers
-            // seems to actually correspond to the real size of the second executable.
-            if (ExtractFile("SecondExecutable.exe", outputDirectory, SecondExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                successful = false;
-
-            // Extract third executable, if it exists
-            if (ExtractFile("ThirdExecutable.exe", outputDirectory, ThirdExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                successful = false;
-
-            // Extract main MSI file
-            if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+            lock (_dataSourceLock)
             {
-                // Fallback- seek to the position that's the length of the MSI file entry from the end, then try and
-                // extract from there.
-                _dataSource.Seek(-MsiFileEntryLength + 1, SeekOrigin.End);
-                if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
-                    return false; // The fallback also failed.
-            }
+                // Seek to the compressed data offset
+                _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+                bool successful = true;
 
-            return successful;
+                // Extract first executable, if it exists
+                if (ExtractFile("FirstExecutable.exe", outputDirectory, FirstExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+                    successful = false;
+
+                // Extract second executable, if it exists
+                // If there's a size provided for the second executable but no size for the first executable, the size of
+                // the second executable appears to be some unrelated value that's larger than the second executable
+                // actually is. Currently unable to extract properly in these cases, as no header value in such installers
+                // seems to actually correspond to the real size of the second executable.
+                if (ExtractFile("SecondExecutable.exe", outputDirectory, SecondExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+                    successful = false;
+
+                // Extract third executable, if it exists
+                if (ExtractFile("ThirdExecutable.exe", outputDirectory, ThirdExecutableFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+                    successful = false;
+
+                // Extract main MSI file
+                if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+                {
+                    // Fallback- seek to the position that's the length of the MSI file entry from the end, then try and
+                    // extract from there.
+                    _dataSource.Seek(-MsiFileEntryLength + 1, SeekOrigin.End);
+                    if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
+                        return false; // The fallback also failed.
+                }
+
+                return successful;
+            }
         }
 
         /// <summary>

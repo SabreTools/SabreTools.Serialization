@@ -188,8 +188,11 @@ namespace SabreTools.Serialization.Wrappers
                         return _headerPaddingStrings;
                     }
 
-                    _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
-                    return _headerPaddingStrings;
+                    lock (_dataSourceLock)
+                    {
+                        _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
+                        return _headerPaddingStrings;
+                    }
                 }
             }
         }
@@ -1734,45 +1737,48 @@ namespace SabreTools.Serialization.Wrappers
             // Get the overlay offset
             long overlayOffset = OverlayAddress;
 
-            // Attempt to get the overlay header
-            if (overlayOffset >= 0 && overlayOffset < Length)
+            lock (_dataSourceLock)
             {
-                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                var header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
-                    return overlayOffset;
-            }
-
-            // Check section data
-            foreach (var section in SectionTable ?? [])
-            {
-                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
-                long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
-
-                var header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
-                    return sectionOffset;
-
-                // Check after the resource table
-                if (sectionName == ".rsrc")
+                // Attempt to get the overlay header
+                if (overlayOffset >= 0 && overlayOffset < Length)
                 {
-                    // Data immediately following
-                    long afterResourceOffset = sectionOffset + section.SizeOfRawData;
-                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
-
-                    header = WiseOverlayHeader.Create(_dataSource);
+                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
-                        return afterResourceOffset;
+                        return overlayOffset;
+                }
 
-                    // Data following padding data
-                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
-                    _ = _dataSource.ReadNullTerminatedAnsiString();
+                // Check section data
+                foreach (var section in SectionTable ?? [])
+                {
+                    string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                    long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
 
-                    afterResourceOffset = _dataSource.Position;
-                    header = WiseOverlayHeader.Create(_dataSource);
+                    var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
-                        return afterResourceOffset;
+                        return sectionOffset;
+
+                    // Check after the resource table
+                    if (sectionName == ".rsrc")
+                    {
+                        // Data immediately following
+                        long afterResourceOffset = sectionOffset + section.SizeOfRawData;
+                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header != null)
+                            return afterResourceOffset;
+
+                        // Data following padding data
+                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+                        _ = _dataSource.ReadNullTerminatedAnsiString();
+
+                        afterResourceOffset = _dataSource.Position;
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header != null)
+                            return afterResourceOffset;
+                    }
                 }
             }
 
@@ -1802,32 +1808,35 @@ namespace SabreTools.Serialization.Wrappers
             if (resourceTableOffset <= 0)
                 return -1;
 
-            // Search the resource table data for the offset
-            long resourceOffset = -1;
-            _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
-            while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
+            lock (_dataSourceLock)
             {
-                ushort possibleSignature = _dataSource.ReadUInt16();
-                if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
+                // Search the resource table data for the offset
+                long resourceOffset = -1;
+                _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
+                while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
                 {
-                    resourceOffset = _dataSource.Position - 2;
-                    break;
+                    ushort possibleSignature = _dataSource.ReadUInt16();
+                    if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
+                    {
+                        resourceOffset = _dataSource.Position - 2;
+                        break;
+                    }
+
+                    _dataSource.Seek(-1, SeekOrigin.Current);
                 }
 
-                _dataSource.Seek(-1, SeekOrigin.Current);
+                // If there was no valid offset, somehow
+                if (resourceOffset == -1)
+                    return -1;
+
+                // Parse the executable and recurse
+                _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
+                var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
+                if (resourceExe is not PortableExecutable resourcePex)
+                    return -1;
+
+                return resourcePex.FindWiseOverlayHeader();
             }
-
-            // If there was no valid offset, somehow
-            if (resourceOffset == -1)
-                return -1;
-
-            // Parse the executable and recurse
-            _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
-            var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
-            if (resourceExe is not PortableExecutable resourcePex)
-                return -1;
-
-            return resourcePex.FindWiseOverlayHeader();
         }
 
         /// <summary>
@@ -2285,11 +2294,14 @@ namespace SabreTools.Serialization.Wrappers
                 uint size = section.SizeOfRawData;
 
                 // Populate the section string data based on the source
-                List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+                lock (_dataSourceLock)
+                {
+                    List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
-                // Cache and return the section string data, even if null
-                _sectionStringData[index] = sectionStringData ?? [];
-                return sectionStringData;
+                    // Cache and return the section string data, even if null
+                    _sectionStringData[index] = sectionStringData ?? [];
+                    return sectionStringData;
+                }
             }
         }
 
@@ -2408,12 +2420,15 @@ namespace SabreTools.Serialization.Wrappers
             if (_tableStringData[index] != null && _tableStringData[index].Count > 0)
                 return _tableStringData[index];
 
-            // Populate the table string data based on the source
-            List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+            lock (_dataSourceLock)
+            {
+                // Populate the table string data based on the source
+                List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
-            // Cache and return the table string data, even if null
-            _tableStringData[index] = tableStringData ?? [];
-            return tableStringData;
+                // Cache and return the table string data, even if null
+                _tableStringData[index] = tableStringData ?? [];
+                return tableStringData;
+            }
         }
 
         #endregion

@@ -65,10 +65,13 @@ namespace SabreTools.Serialization.Wrappers
                         if (entry.FlagWord.HasFlag(SegmentTableEntryFlag.RELOCINFO))
 #endif
                         {
-                            _dataSource.Seek(offset, SeekOrigin.Begin);
-                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
+                            lock (_dataSourceLock)
+                            {
+                                _dataSource.Seek(offset, SeekOrigin.Begin);
+                                var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
 
-                            offset = _dataSource.Position;
+                                offset = _dataSource.Position;
+                            }
                         }
 
                         if (offset > endOfSectionData)
@@ -553,28 +556,31 @@ namespace SabreTools.Serialization.Wrappers
             if (overlayOffset < 0 || overlayOffset >= Length)
                 return -1;
 
-            // Attempt to get the overlay header
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(_dataSource);
-            if (header != null)
-                return overlayOffset;
-
-            // Align and loop to see if it can be found
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            _dataSource.AlignToBoundary(0x10);
-            overlayOffset = _dataSource.Position;
-            while (_dataSource.Position < Length)
+            lock (_dataSourceLock)
             {
+                // Attempt to get the overlay header
                 _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                header = WiseOverlayHeader.Create(_dataSource);
+                var header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return overlayOffset;
 
-                overlayOffset += 0x10;
-            }
+                // Align and loop to see if it can be found
+                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                _dataSource.AlignToBoundary(0x10);
+                overlayOffset = _dataSource.Position;
+                while (_dataSource.Position < Length)
+                {
+                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    header = WiseOverlayHeader.Create(_dataSource);
+                    if (header != null)
+                        return overlayOffset;
 
-            header = null;
-            return -1;
+                    overlayOffset += 0x10;
+                }
+
+                header = null;
+                return -1;
+            }
         }
 
         /// <summary>
