@@ -410,10 +410,10 @@ namespace SabreTools.Serialization.Printers
         private static void Print(StringBuilder builder, CLRTokenDefinition entry, int i)
         {
             builder.AppendLine($"  COFF Symbol Table Entry {i} (CLR Token Defintion)");
-            builder.AppendLine(entry.AuxFormat6AuxType, "    Aux type");
-            builder.AppendLine(entry.AuxFormat6Reserved1, "    Reserved");
-            builder.AppendLine(entry.AuxFormat6SymbolTableIndex, "    Symbol table index");
-            builder.AppendLine(entry.AuxFormat6Reserved2, "    Reserved");
+            builder.AppendLine(entry.AuxType, "    Aux type");
+            builder.AppendLine(entry.Reserved1, "    Reserved");
+            builder.AppendLine(entry.SymbolTableIndex, "    Symbol table index");
+            builder.AppendLine(entry.Reserved2, "    Reserved");
         }
 
         private static void Print(StringBuilder builder, COFFStringTable? stringTable)

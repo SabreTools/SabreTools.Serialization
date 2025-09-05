@@ -381,10 +381,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new CLRTokenDefinition();
 
-            obj.AuxFormat6AuxType = data.ReadByteValue();
-            obj.AuxFormat6Reserved1 = data.ReadByteValue();
-            obj.AuxFormat6SymbolTableIndex = data.ReadUInt32LittleEndian();
-            obj.AuxFormat6Reserved2 = data.ReadBytes(12);
+            obj.AuxType = data.ReadByteValue();
+            obj.Reserved1 = data.ReadByteValue();
+            obj.SymbolTableIndex = data.ReadUInt32LittleEndian();
+            obj.Reserved2 = data.ReadBytes(12);
 
             return obj;
         }

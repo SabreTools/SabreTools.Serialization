@@ -69,10 +69,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
                 builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
                 builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
-
-                // TODO: Reenable this when models are fixed
-                // var extraFields = Deserializers.PKZIP.ParseExtraFields(localFileHeader, localFileHeader.ExtraField);
-                // Print(builder, "    [Local File Header] Extra Fields", extraFields);
+                Print(builder, "    [Local File Header] Extra Fields", localFileHeader.ExtraFields);
             }
 
             #endregion
@@ -241,10 +238,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.RelativeOffsetOfLocalHeader, "    Relative offset of local header");
                 builder.AppendLine(entry.FileName, "    File name");
                 builder.AppendLine(entry.FileComment, "    File comment");
-
-                // TODO: Reenable this when models are fixed
-                // var extraFields = Deserializers.PKZIP.ParseExtraFields(entry, entry.ExtraField);
-                // Print(builder, "    Extra Fields", extraFields);
+                Print(builder, "    Extra Fields", entry.ExtraFields);
             }
 
             builder.AppendLine();

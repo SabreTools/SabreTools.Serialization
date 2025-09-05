@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Deserializers
                     {
                         // Central Directory File Header
                         case CentralDirectoryFileHeaderSignature:
-                            var cdr = ParseCentralDirectoryFileHeader(data, out _);
+                            var cdr = ParseCentralDirectoryFileHeader(data);
                             if (cdr == null)
                                 return null;
 
@@ -170,10 +170,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled central directory file header on success, null on error</returns>
-        public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data, out ExtensibleDataField[]? extraFields)
+        public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data)
         {
             var obj = new CentralDirectoryFileHeader();
-            extraFields = null;
 
             obj.Signature = data.ReadUInt32LittleEndian();
             if (obj.Signature != CentralDirectoryFileHeaderSignature)
@@ -220,8 +219,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                // TODO: This should live on the model instead of the byte representation
-                extraFields = ParseExtraFields(obj, extraBytes);
+                obj.ExtraFields = ParseExtraFields(obj, extraBytes);
             }
             if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
             {
@@ -416,7 +414,7 @@ namespace SabreTools.Serialization.Deserializers
             #region Local File Header
 
             // Try to read the header
-            var localFileHeader = ParseLocalFileHeader(data, out var extraFields);
+            var localFileHeader = ParseLocalFileHeader(data);
             if (localFileHeader == null)
                 return null;
 
@@ -424,9 +422,9 @@ namespace SabreTools.Serialization.Deserializers
             obj.LocalFileHeader = localFileHeader;
 
             ulong compressedSize = localFileHeader.CompressedSize;
-            if (extraFields != null)
+            if (localFileHeader.ExtraFields != null)
             {
-                foreach (var field in extraFields)
+                foreach (var field in localFileHeader.ExtraFields)
                 {
                     if (field is not Zip64ExtendedInformationExtraField infoField)
                         continue;
@@ -532,10 +530,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled local file header on success, null on error</returns>
-        public static LocalFileHeader? ParseLocalFileHeader(Stream data, out ExtensibleDataField[]? extraFields)
+        public static LocalFileHeader? ParseLocalFileHeader(Stream data)
         {
             var obj = new LocalFileHeader();
-            extraFields = null;
 
             obj.Signature = data.ReadUInt32LittleEndian();
             if (obj.Signature != LocalFileHeaderSignature)
@@ -575,8 +572,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                // TODO: This should live on the model instead of the byte representation
-                extraFields = ParseExtraFields(obj, extraBytes);
+                obj.ExtraFields = ParseExtraFields(obj, extraBytes);
             }
 
             return obj;
