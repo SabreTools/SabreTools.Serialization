@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Overlay data, if it exists
         /// </summary>
         /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
-        public byte[]? OverlayData
+        public byte[] OverlayData
         {
             get
             {
@@ -125,18 +125,27 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If a required property is missing
                     if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // Get the overlay address if possible
                     long endOfSectionData = OverlayAddress;
 
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
@@ -156,7 +165,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
-        public List<string>? OverlayStrings
+        public List<string> OverlayStrings
         {
             get
             {
@@ -169,22 +178,21 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return null;
-
-                    // If a required property is missing
-                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                        return null;
+                    {
+                        _overlayStrings = [];
+                        return _overlayStrings;
+                    }
 
                     // Get the overlay data, if possible
-                    byte[]? overlayData = OverlayData;
-                    if (overlayData == null || overlayData.Length == 0)
+                    var overlayData = OverlayData;
+                    if (overlayData.Length == 0)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
                     }
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3);
+                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
                     return _overlayStrings;
                 }
             }
@@ -205,7 +213,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
-        public byte[]? StubExecutableData
+        public byte[] StubExecutableData
         {
             get
             {
@@ -216,7 +224,10 @@ namespace SabreTools.Serialization.Wrappers
                         return _stubExecutableData;
 
                     if (Stub?.Header?.NewExeHeaderAddr == null)
-                        return null;
+                    {
+                        _stubExecutableData = [];
+                        return _stubExecutableData;
+                    }
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
@@ -371,7 +382,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Cache the overlay data for easier reading
                 var overlayData = OverlayData;
-                if (overlayData == null || overlayData.Length == 0)
+                if (overlayData.Length == 0)
                     return false;
 
                 // Set the output variables

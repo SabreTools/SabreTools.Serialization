@@ -108,15 +108,15 @@ namespace SabreTools.Serialization.Wrappers
         /// from the data source. This should be the preferred way of reading in cases
         /// where there may be multiple threads accessing the wrapper.
         /// 
-        /// This method will return a null array if the length is greater than what is left
+        /// This method will return an empty array if the length is greater than what is left
         /// in the stream. This is different behavior than a normal stream read that would
         /// attempt to read as much as possible, returning the amount of bytes read.
         /// </remarks>
-        protected byte[]? ReadRangeFromSource(long offset, int length)
+        protected byte[] ReadRangeFromSource(long offset, int length)
         {
             lock (_dataSourceLock)
             {
-                return _dataSource.ReadFrom(offset, length, retainPosition: true);
+                return _dataSource.ReadFrom(offset, length, retainPosition: true) ?? [];
             }
         }
 
