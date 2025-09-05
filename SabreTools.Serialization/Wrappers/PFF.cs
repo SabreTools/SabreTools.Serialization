@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Wrappers
                 using FileStream fs = File.OpenWrite(filename);
 
                 // Read the data block
-                var data = _dataSource.ReadFrom(offset, size, retainPosition: true);
+                var data = ReadRangeFromSource(offset, size);
                 if (data == null)
                     return false;
 

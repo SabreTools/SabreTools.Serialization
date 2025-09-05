@@ -240,7 +240,7 @@ namespace SabreTools.Serialization.Wrappers
             long outputFileSize = file.UncompressedSize;
 
             // Read the compressed data directly
-            var compressedData = _dataSource.ReadFrom((int)fileOffset, (int)fileSize, retainPosition: true);
+            var compressedData = ReadRangeFromSource((int)fileOffset, (int)fileSize);
             if (compressedData == null)
                 return false;
 

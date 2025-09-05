@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Wrappers
             // Read the entire compressed data
             int compressedDataOffset = (int)CompressedDataOffset;
             long compressedDataLength = Length - compressedDataOffset;
-            var compressedData = _dataSource.ReadFrom(compressedDataOffset, (int)compressedDataLength, retainPosition: true);
+            var compressedData = ReadRangeFromSource(compressedDataOffset, (int)compressedDataLength);
 
             // Print a debug reminder
             if (includeDebug) Console.WriteLine("Quantum archive extraction is unsupported");

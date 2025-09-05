@@ -321,7 +321,7 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < dataBlockOffsets.Count; i++)
                 {
                     int readSize = (int)Math.Min(BlockSize, fileSize);
-                    var data = _dataSource.ReadFrom((int)dataBlockOffsets[i], readSize, retainPosition: true);
+                    var data = ReadRangeFromSource((int)dataBlockOffsets[i], readSize);
                     if (data == null)
                         return false;
 

@@ -322,7 +322,7 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Try to read the sector data
-                var sectorData = _dataSource.ReadFrom(sectorDataOffset, (int)SectorSize, retainPosition: true);
+                var sectorData = ReadRangeFromSource(sectorDataOffset, (int)SectorSize);
                 if (sectorData == null)
                     return null;
 

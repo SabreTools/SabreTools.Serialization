@@ -51,59 +51,56 @@ namespace SabreTools.Serialization.Wrappers
                     if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
                         return -1;
 
-                    lock (_sourceDataLock)
+                    // Search through the segments table to find the furthest
+                    long endOfSectionData = -1;
+                    foreach (var entry in SegmentTable)
                     {
-                        // Search through the segments table to find the furthest
-                        long endOfSectionData = -1;
-                        foreach (var entry in SegmentTable)
-                        {
-                            // Get end of segment data
-                            long offset = (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
+                        // Get end of segment data
+                        long offset = (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
 
-                            // Read and find the end of the relocation data
+                        // Read and find the end of the relocation data
 #if NET20 || NET35
                         if ((entry.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
 #else
-                            if (entry.FlagWord.HasFlag(SegmentTableEntryFlag.RELOCINFO))
+                        if (entry.FlagWord.HasFlag(SegmentTableEntryFlag.RELOCINFO))
 #endif
-                            {
-                                _dataSource.Seek(offset, SeekOrigin.Begin);
-                                var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
+                        {
+                            _dataSource.Seek(offset, SeekOrigin.Begin);
+                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
 
-                                offset = _dataSource.Position;
-                            }
+                            offset = _dataSource.Position;
+                        }
 
+                        if (offset > endOfSectionData)
+                            endOfSectionData = offset;
+                    }
+
+                    // Search through the resources table to find the furthest
+                    foreach (var entry in ResourceTable.ResourceTypes)
+                    {
+                        // Skip invalid entries
+                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                            continue;
+
+                        foreach (var resource in entry.Resources)
+                        {
+                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
                             if (offset > endOfSectionData)
                                 endOfSectionData = offset;
                         }
-
-                        // Search through the resources table to find the furthest
-                        foreach (var entry in ResourceTable.ResourceTypes)
-                        {
-                            // Skip invalid entries
-                            if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
-                                continue;
-
-                            foreach (var resource in entry.Resources)
-                            {
-                                int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
-                                if (offset > endOfSectionData)
-                                    endOfSectionData = offset;
-                            }
-                        }
-
-                        // If we didn't find the end of section data
-                        if (endOfSectionData <= 0)
-                            endOfSectionData = -1;
-
-                        // Adjust the position of the data by 705 bytes
-                        // TODO: Investigate what the byte data is
-                        endOfSectionData += 705;
-
-                        // Cache and return the position
-                        _overlayAddress = endOfSectionData;
-                        return _overlayAddress.Value;
                     }
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                        endOfSectionData = -1;
+
+                    // Adjust the position of the data by 705 bytes
+                    // TODO: Investigate what the byte data is
+                    endOfSectionData += 705;
+
+                    // Cache and return the position
+                    _overlayAddress = endOfSectionData;
+                    return _overlayAddress.Value;
                 }
             }
         }
@@ -146,12 +143,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    lock (_sourceDataLock)
-                    {
-                        long overlayLength = dataLength - endOfSectionData;
-                        _overlayData = _dataSource.ReadFrom((int)endOfSectionData, (int)overlayLength, retainPosition: true);
-                        return _overlayData;
-                    }
+                    long overlayLength = dataLength - endOfSectionData;
+                    _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlayLength);
+                    return _overlayData;
                 }
             }
         }
@@ -221,16 +215,13 @@ namespace SabreTools.Serialization.Wrappers
                     if (Stub?.Header?.NewExeHeaderAddr == null)
                         return null;
 
-                    lock (_sourceDataLock)
-                    {
-                        // Populate the raw stub executable data based on the source
-                        int endOfStubHeader = 0x40;
-                        int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                        _stubExecutableData = _dataSource.ReadFrom(endOfStubHeader, lengthOfStubExecutableData, retainPosition: true);
+                    // Populate the raw stub executable data based on the source
+                    int endOfStubHeader = 0x40;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
-                        // Cache and return the stub executable data, even if null
-                        return _stubExecutableData;
-                    }
+                    // Cache and return the stub executable data, even if null
+                    return _stubExecutableData;
                 }
             }
         }
@@ -278,11 +269,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Lock object for <see cref="_stubExecutableData"/> 
         /// </summary>
         private readonly object _stubExecutableDataLock = new();
-
-        /// <summary>
-        /// Lock object for reading from the source
-        /// </summary>
-        private readonly object _sourceDataLock = new();
 
         #endregion
 
@@ -654,7 +640,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             // Read the resource data and return
-            return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            return ReadRangeFromSource(offset, length);
         }
 
         /// <summary>
@@ -746,7 +732,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             // Read the segment data and return
-            return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            return ReadRangeFromSource(offset, length);
         }
 
         /// <summary>
@@ -816,7 +802,7 @@ namespace SabreTools.Serialization.Wrappers
             if (length == -1)
                 length = Length;
 
-            return _dataSource.ReadFrom(rangeStart, (int)length, retainPosition: true);
+            return ReadRangeFromSource(rangeStart, (int)length);
         }
 
         #endregion

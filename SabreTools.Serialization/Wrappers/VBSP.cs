@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the data
             var lump = Lumps[index];
-            var data = _dataSource.ReadFrom(lump.Offset, lump.Length, retainPosition: true);
+            var data = ReadRangeFromSource(lump.Offset, lump.Length);
             if (data == null)
                 return false;
 

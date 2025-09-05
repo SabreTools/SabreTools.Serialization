@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Load the item data
-            var data = _dataSource.ReadFrom((int)directoryEntry.EntryOffset, (int)directoryEntry.EntryLength, retainPosition: true);
+            var data = ReadRangeFromSource((int)directoryEntry.EntryOffset, (int)directoryEntry.EntryLength);
             if (data == null)
                 return false;
 

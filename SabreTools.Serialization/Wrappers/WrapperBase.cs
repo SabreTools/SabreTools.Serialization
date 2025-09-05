@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SabreTools.IO.Extensions;
 using SabreTools.IO.Streams;
 using SabreTools.Serialization.Interfaces;
 
@@ -57,6 +58,11 @@ namespace SabreTools.Serialization.Wrappers
         }
 #endif
 
+        /// <summary>
+        /// Lock for accessing <see cref="_dataSource"/> 
+        /// </summary>
+        protected readonly object _dataSourceLock = new();
+
         #endregion
 
         #region Constructors
@@ -85,6 +91,33 @@ namespace SabreTools.Serialization.Wrappers
                 throw new ArgumentOutOfRangeException(nameof(data));
 
             _dataSource = new ViewStream(data, data.Position, data.Length - data.Position);
+        }
+
+        #endregion
+
+        #region Data
+
+        /// <summary>
+        /// Read a number of bytes from an offset fomr the data source, if possible
+        /// </summary>
+        /// <param name="offset">Offset within the data source to start reading</param>
+        /// <param name="length">Number of bytes to read from the offset</param>
+        /// <returns>Filled byte array on success, null on error</returns>
+        /// <remarks>
+        /// This method locks the data source to avoid potential conflicts in reading
+        /// from the data source. This should be the preferred way of reading in cases
+        /// where there may be multiple threads accessing the wrapper.
+        /// 
+        /// This method will return a null array if the length is greater than what is left
+        /// in the stream. This is different behavior than a normal stream read that would
+        /// attempt to read as much as possible, returning the amount of bytes read.
+        /// </remarks>
+        protected byte[]? ReadRangeFromSource(long offset, int length)
+        {
+            lock (_dataSourceLock)
+            {
+                return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            }
         }
 
         #endregion

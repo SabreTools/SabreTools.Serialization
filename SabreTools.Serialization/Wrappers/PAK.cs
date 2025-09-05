@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the item data
             var directoryItem = DirectoryItems[index];
-            var data = _dataSource.ReadFrom((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength, retainPosition: true);
+            var data = ReadRangeFromSource((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength);
             if (data == null)
                 return false;
 

@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             // Read the entry data and return
-            return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            return ReadRangeFromSource(offset, length);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace SabreTools.Serialization.Wrappers
             if (length == -1)
                 length = Length;
 
-            return _dataSource.ReadFrom(rangeStart, (int)length, retainPosition: true);
+            return ReadRangeFromSource(rangeStart, (int)length);
         }
 
         #endregion

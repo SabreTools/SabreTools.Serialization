@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Read in the data as an array
-            byte[]? contents = _dataSource.ReadFrom(12, (int)compressedSize, retainPosition: true);
+            byte[]? contents = ReadRangeFromSource(12, (int)compressedSize);
             if (contents == null)
                 return false;
 

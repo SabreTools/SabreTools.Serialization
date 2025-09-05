@@ -42,11 +42,8 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
 
                     // Otherwise, build and return the cached dictionary
-                    lock (_sourceDataLock)
-                    {
-                        ParseDebugTable();
-                        return _debugData;
-                    }
+                    ParseDebugTable();
+                    return _debugData;
                 }
             }
         }
@@ -90,11 +87,8 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Read the first 128 bytes of the entry point
-                    lock (_sourceDataLock)
-                    {
-                        _entryPointData = _dataSource.ReadFrom(entryPointAddress, length: 128, retainPosition: true);
-                        return _entryPointData;
-                    }
+                    _entryPointData = ReadRangeFromSource(entryPointAddress, length: 128);
+                    return _entryPointData;
                 }
             }
         }
@@ -145,11 +139,8 @@ namespace SabreTools.Serialization.Wrappers
                         return _headerPaddingData;
                     }
 
-                    lock (_sourceDataLock)
-                    {
-                        _headerPaddingData = _dataSource.ReadFrom((int)headerStartAddress, headerLength, retainPosition: true);
-                        return _headerPaddingData;
-                    }
+                    _headerPaddingData = ReadRangeFromSource((int)headerStartAddress, headerLength);
+                    return _headerPaddingData;
                 }
             }
         }
@@ -197,11 +188,8 @@ namespace SabreTools.Serialization.Wrappers
                         return _headerPaddingStrings;
                     }
 
-                    lock (_sourceDataLock)
-                    {
-                        _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
-                        return _headerPaddingStrings;
-                    }
+                    _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
+                    return _headerPaddingStrings;
                 }
             }
         }
@@ -321,12 +309,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    lock (_sourceDataLock)
-                    {
-                        long overlayLength = dataLength - endOfSectionData;
-                        _overlayData = _dataSource.ReadFrom(endOfSectionData, (int)overlayLength, retainPosition: true);
-                        return _overlayData;
-                    }
+                    long overlayLength = dataLength - endOfSectionData;
+                    _overlayData = ReadRangeFromSource(endOfSectionData, (int)overlayLength);
+                    return _overlayData;
                 }
             }
         }
@@ -432,16 +417,13 @@ namespace SabreTools.Serialization.Wrappers
                     if (Stub?.Header?.NewExeHeaderAddr == null)
                         return null;
 
-                    lock (_sourceDataLock)
-                    {
-                        // Populate the raw stub executable data based on the source
-                        int endOfStubHeader = 0x40;
-                        int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                        _stubExecutableData = _dataSource.ReadFrom(endOfStubHeader, lengthOfStubExecutableData, retainPosition: true);
+                    // Populate the raw stub executable data based on the source
+                    int endOfStubHeader = 0x40;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
-                        // Cache and return the stub executable data, even if null
-                        return _stubExecutableData;
-                    }
+                    // Cache and return the stub executable data, even if null
+                    return _stubExecutableData;
                 }
             }
         }
@@ -777,11 +759,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private AssemblyManifest? _assemblyManifest = null;
 
-        /// <summary>
-        /// Lock object for reading from the source
-        /// </summary>
-        private readonly object _sourceDataLock = new();
-
         #endregion
 
         #region Constructors
@@ -1035,7 +1012,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte[]? entryData;
                 try
                 {
-                    entryData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
+                    entryData = ReadRangeFromSource((int)address, (int)size);
                     if (entryData == null || entryData.Length < 4)
                         continue;
                 }
@@ -1545,7 +1522,11 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the section into a local array
             int sectionLength = (int)section.VirtualSize;
-            byte[]? sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
+            byte[]? sectionData;
+            lock (source)
+            {
+                sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
+            }
 
             // Parse the section header
             var header = WiseSectionHeader.Create(sectionData, 0);
@@ -2209,22 +2190,20 @@ namespace SabreTools.Serialization.Wrappers
 
             // Set the section size
             uint size = section.SizeOfRawData;
-            lock (_sourceDataLock)
-            {
-                // Create the section data array if we have to
-                _sectionData ??= new byte[SectionNames.Length][];
 
-                // If we already have cached data, just use that immediately
-                if (_sectionData[index] != null && _sectionData[index].Length > 0)
-                    return _sectionData[index];
+            // Create the section data array if we have to
+            _sectionData ??= new byte[SectionNames.Length][];
 
-                // Populate the raw section data based on the source
-                byte[]? sectionData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
+            // If we already have cached data, just use that immediately
+            if (_sectionData[index] != null && _sectionData[index].Length > 0)
+                return _sectionData[index];
 
-                // Cache and return the section data, even if null
-                _sectionData[index] = sectionData ?? [];
-                return sectionData;
-            }
+            // Populate the raw section data based on the source
+            byte[]? sectionData = ReadRangeFromSource((int)address, (int)size);
+
+            // Cache and return the section data, even if null
+            _sectionData[index] = sectionData ?? [];
+            return sectionData;
         }
 
         /// <summary>
@@ -2304,15 +2283,13 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Set the section size
                 uint size = section.SizeOfRawData;
-                lock (_sourceDataLock)
-                {
-                    // Populate the section string data based on the source
-                    List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
-                    // Cache and return the section string data, even if null
-                    _sectionStringData[index] = sectionStringData ?? [];
-                    return sectionStringData;
-                }
+                // Populate the section string data based on the source
+                List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+
+                // Cache and return the section string data, even if null
+                _sectionStringData[index] = sectionStringData ?? [];
+                return sectionStringData;
             }
         }
 
@@ -2382,22 +2359,19 @@ namespace SabreTools.Serialization.Wrappers
             if (address == 0 || size == 0)
                 return null;
 
-            lock (_sourceDataLock)
-            {
-                // Create the table data array if we have to
-                _tableData ??= new byte[16][];
+            // Create the table data array if we have to
+            _tableData ??= new byte[16][];
 
-                // If we already have cached data, just use that immediately
-                if (_tableData[index] != null && _tableData[index].Length > 0)
-                    return _tableData[index];
+            // If we already have cached data, just use that immediately
+            if (_tableData[index] != null && _tableData[index].Length > 0)
+                return _tableData[index];
 
-                // Populate the raw table data based on the source
-                byte[]? tableData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
+            // Populate the raw table data based on the source
+            byte[]? tableData = ReadRangeFromSource((int)address, (int)size);
 
-                // Cache and return the table data, even if null
-                _tableData[index] = tableData ?? [];
-                return tableData;
-            }
+            // Cache and return the table data, even if null
+            _tableData[index] = tableData ?? [];
+            return tableData;
         }
 
         /// <summary>
@@ -2427,22 +2401,19 @@ namespace SabreTools.Serialization.Wrappers
             if (address == 0 || size == 0)
                 return null;
 
-            lock (_sourceDataLock)
-            {
-                // Create the table string array if we have to
-                _tableStringData ??= new List<string>[16];
+            // Create the table string array if we have to
+            _tableStringData ??= new List<string>[16];
 
-                // If we already have cached data, just use that immediately
-                if (_tableStringData[index] != null && _tableStringData[index].Count > 0)
-                    return _tableStringData[index];
+            // If we already have cached data, just use that immediately
+            if (_tableStringData[index] != null && _tableStringData[index].Count > 0)
+                return _tableStringData[index];
 
-                // Populate the table string data based on the source
-                List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+            // Populate the table string data based on the source
+            List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
 
-                // Cache and return the table string data, even if null
-                _tableStringData[index] = tableStringData ?? [];
-                return tableStringData;
-            }
+            // Cache and return the table string data, even if null
+            _tableStringData[index] = tableStringData ?? [];
+            return tableStringData;
         }
 
         #endregion

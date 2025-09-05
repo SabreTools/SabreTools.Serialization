@@ -127,7 +127,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the data -- TODO: Handle uncompressed lumps (see BSP.ExtractTexture)
             var lump = DirEntries[index];
-            var data = _dataSource.ReadFrom((int)lump.Offset, (int)lump.Length, retainPosition: true);
+            var data = ReadRangeFromSource((int)lump.Offset, (int)lump.Length);
             if (data == null)
                 return false;
 
