@@ -1,12 +1,15 @@
 using System.IO;
 using System.Text;
+using System;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.N3DS;
+using System.Security.Cryptography;
 
 namespace SabreTools.Serialization.Deserializers
 {
     public class CIA : BaseBinaryDeserializer<Models.N3DS.CIA>
     {
+
         /// <inheritdoc/>
         public override Models.N3DS.CIA? Deserialize(Stream? data)
         {
@@ -18,6 +21,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Create a new CIA archive to fill
                 var cia = new Models.N3DS.CIA();
+                // cia.Offsets = new List<CIAOffset>();
 
                 #region CIA Header
 
@@ -37,6 +41,14 @@ namespace SabreTools.Serialization.Deserializers
                 // Set the CIA archive header
                 cia.Header = header;
 
+                // Record the offset of the header
+                // cia.Offsets.Add(new CIAOffset
+                // {
+                //     ItemType = ItemType.Header,
+                //     Offset = 0,
+                //     Size = cia.Header.HeaderSize,
+                // });
+
                 #endregion
 
                 // Align to 64-byte boundary, if needed
@@ -47,6 +59,14 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Create the certificate chain
                 cia.CertificateChain = new Certificate[3];
+
+                // Record the offset of the certificate chain
+                // cia.Offsets.Add(new CIAOffset
+                // {
+                //     ItemType = ItemType.CertChain,
+                //     Offset = data.Position,
+                //     Size = cia.Header.CertificateChainSize,
+                // });
 
                 // Try to parse the certificates
                 for (int i = 0; i < 3; i++)
@@ -66,6 +86,14 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Ticket
 
+                // Record the offset of the Ticket
+                // cia.Offsets.Add(new CIAOffset
+                // {
+                //     ItemType = ItemType.Ticket,
+                //     Offset = data.Position,
+                //     Size = cia.Header.TicketSize,
+                // });
+
                 // Try to parse the ticket
                 var ticket = ParseTicket(data);
                 if (ticket == null)
@@ -74,6 +102,38 @@ namespace SabreTools.Serialization.Deserializers
                 // Set the ticket
                 cia.Ticket = ticket;
 
+                // Get the encrypted title key
+                byte[]? titleKey = cia.Ticket.TitleKey;
+                byte[]? decryptedTitleKey = new byte[16];
+
+                // Decrypt the title key if needed
+                if (titleKey != null && titleKey.Length == 16)
+                {
+                    // Use formula from https://www.3dbrew.org/wiki/CIA
+                    // to calculate Decrypted Title Key using Title ID, Common Y Key, and Encrypted Title Key
+
+                    // Prepare IV: 16 bytes, big-endian TitleID in first 8 bytes, rest zero
+                    byte[] iv = new byte[16];
+                    byte[] titleIdBytes = BitConverter.GetBytes(cia.Ticket.TitleID);
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(titleIdBytes);
+                    Array.Copy(titleIdBytes, 0, iv, 0, 8);
+
+                    // Decrypt title key using AES CBC with Common Key Y and IV
+                    using (var aes = Aes.Create())
+                    {
+                        //aes.Key = KeyYx03D[cia.Ticket.CommonKeyYIndex];
+                        aes.IV = iv;
+                        aes.Mode = CipherMode.CBC;
+                        aes.Padding = PaddingMode.None;
+
+                        using (var decryptor = aes.CreateDecryptor())
+                        {
+                            decryptor.TransformBlock(titleKey, 0, 16, decryptedTitleKey, 0);
+                        }
+                    }
+                }
+
                 #endregion
 
                 // Align to 64-byte boundary, if needed
@@ -81,6 +141,14 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 #region Title Metadata
+
+                // Record the offset of the TMD
+                // cia.Offsets.Add(new CIAOffset
+                // {
+                //     ItemType = ItemType.TMD,
+                //     Offset = data.Position,
+                //     Size = cia.Header.TMDSize,
+                // });
 
                 // Try to parse the title metadata
                 var titleMetadata = ParseTitleMetadata(data);
@@ -98,26 +166,84 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Content File Data
 
-                // Create the partition table
-                cia.Partitions = new NCCHHeader[8];
+                // Prepare AES decryptors for each content
+                // We can reuse these for both reading NCCH header and content extraction
+                Aes[] aesArray = new Aes[cia.TMDFileData.ContentCount];
 
-                // Iterate and build the partitions
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < aesArray.Length; i++)
                 {
-                    cia.Partitions[i] = N3DS.ParseNCCHHeader(data);
+                    aesArray[i] = Aes.Create();
+                    // IV is the Content Index in big-endian, padded with zeroes
+                    byte[] iv = new byte[16];
+                    // Set the content index (big-endian)
+                    // The TMD Content Index for CIA files is not the same type as the Content Index for
+                    // Content Chunk Records, and is always the 1-byte value of it's content counter.
+                    // e.g. The first content has index 0, the second 1, etc.
+                    // The IV for content decryption is the content index (0-based) in the first 2 bytes (big-endian), rest zero
+                    // e.g. 0000000000000000 for the first, 0001000000000000 for the second, etc.
+                    // So we need to convert the loop counter to a 2-byte big-endian value
+                    iv[0] = (byte)((i >> 8) & 0xFF);
+                    iv[1] = (byte)(i & 0xFF);
+                    aesArray[i].IV = iv;
+                    aesArray[i].Key = decryptedTitleKey;
+                    aesArray[i].Mode = CipherMode.CBC;
+                    aesArray[i].Padding = PaddingMode.None;
+                }
+
+                // Create the partition table
+                cia.Partitions = new NCCHHeader[cia.TMDFileData.ContentCount];
+
+                // Iterate and build the partition metadata
+                for (int i = 0; i < cia.TMDFileData.ContentCount; i++)
+                {
+
+                    // Record the offset of the each NCCH
+                    // ulong contentOffset = (ulong)data.Position;
+                    if (cia.TMDFileData.ContentChunkRecords?[i].ContentType == TMDContentType.Encrypted)
+                    {
+                        // Decrypt the NCCH header using the prepared AES instance
+                        // We do not use leaveOpen here, but since we only read the header,
+                        // the underlying stream (data) remains open and can be reused.
+                        using (var cryptoStream = new CryptoStream(data, aesArray[i].CreateDecryptor(), CryptoStreamMode.Read))
+                        {
+                            cia.Partitions[i] = N3DS.ParseNCCHHeader(cryptoStream);
+                        }
+                    }
+                    else
+                    {
+                        cia.Partitions[i] = N3DS.ParseNCCHHeader(data);
+                    }
+                    // cia.Offsets.Add(new CIAOffset
+                    // {
+                    //     ItemType = ItemType.Content,
+                    //     Offset = contentOffset,
+                    //     Size = cia.Partitions[i].ContentSizeInMediaUnits * 0x200,
+                    // });
+
+                    // Align to 64-byte boundary, if needed
+                    // Moved to inside the loop to handle multiple content
+                    if (!data.AlignToBoundary(64))
+                        return null;
                 }
 
                 #endregion
 
-                // Align to 64-byte boundary, if needed
-                if (!data.AlignToBoundary(64))
-                    return null;
-
-                #region Meta Data
+                #region MetaData
 
                 // If we have a meta data
-                if (header.MetaSize > 0)
+                if (cia.Header.MetaSize > 0)
+                {
+                    // cia.Offsets.Add(new CIAOffset
+                    // {
+                    //     ItemType = ItemType.Meta,
+                    //     Offset = contentOffset,
+                    //     Size = cia.Header.MetaSize,
+                    // });
                     cia.MetaData = ParseMetaData(data);
+
+                    if (!data.AlignToBoundary(64))
+                        return null;
+                }
 
                 #endregion
 
