@@ -390,7 +390,7 @@ namespace SabreTools.Serialization.Wrappers
                 string extension = string.Empty;
 
                 // Only process the overlay if it is recognized
-                for (; overlayOffset < 0x100 && overlayOffset < overlayData.Length; overlayOffset++)
+                for (; overlayOffset < 0x400 && overlayOffset < overlayData.Length; overlayOffset++)
                 {
                     int temp = overlayOffset;
                     byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
