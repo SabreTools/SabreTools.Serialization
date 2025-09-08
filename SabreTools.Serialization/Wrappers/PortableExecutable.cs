@@ -765,15 +765,23 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private readonly List<string>?[] _tableStringData = new List<string>?[16];
 
+        #region Version Information
+
         /// <summary>
         /// Cached version info data
         /// </summary>
         private VersionInfo? _versionInfo = null;
 
+        #endregion
+
+        #region Manifest Information
+
         /// <summary>
         /// Cached assembly manifest data
         /// </summary>
         private AssemblyManifest? _assemblyManifest = null;
+
+        #endregion
 
         #endregion
 
