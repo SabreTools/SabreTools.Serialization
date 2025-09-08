@@ -1240,6 +1240,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "rar";
                         break;
                     }
+                    else if (overlaySample.StartsWith([0x55, 0x48, 0x41, 0x06]))
+                    {
+                        extension = "uha";
+                        break;
+                    }
                     else if (overlaySample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
                     {
                         extension = "xz";
@@ -1354,6 +1359,11 @@ namespace SabreTools.Serialization.Wrappers
                         else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
                         {
                             extension = "rar";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x55, 0x48, 0x41, 0x06]))
+                        {
+                            extension = "uha";
                             break;
                         }
                         else if (resourceSample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
