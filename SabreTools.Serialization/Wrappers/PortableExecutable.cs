@@ -1173,6 +1173,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "7z";
                         break;
                     }
+                    else if (overlaySample.StartsWith([0x42, 0x5A, 0x68]))
+                    {
+                        extension = "bz2";
+                        break;
+                    }
                     else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                     {
                         extension = "cab";
@@ -1206,6 +1211,11 @@ namespace SabreTools.Serialization.Wrappers
                     else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
                     {
                         extension = "rar";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
+                    {
+                        extension = "xz";
                         break;
                     }
                     else if (overlaySample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
@@ -1279,6 +1289,11 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "7z";
                             break;
                         }
+                        else if (resourceSample.StartsWith([0x42, 0x5A, 0x68]))
+                        {
+                            extension = "bz2";
+                            break;
+                        }
                         else if (resourceSample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                         {
                             extension = "cab";
@@ -1312,6 +1327,11 @@ namespace SabreTools.Serialization.Wrappers
                         else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
                         {
                             extension = "rar";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
+                        {
+                            extension = "xz";
                             break;
                         }
                         else if (resourceSample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
