@@ -597,6 +597,25 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Name as derived from the assembly manifest
+        /// </summary>
+        /// <remarks>
+        /// If there are multiple identities included in the manifest,
+        /// this will only retrieve the value from the first that doesn't
+        /// have a null or empty name.
+        /// </remarks>
+        public string? AssemblyName
+        {
+            get
+            {
+                var manifest = GetAssemblyManifest();
+                var identities = manifest?.AssemblyIdentities ?? [];
+                var nameIdentity = Array.Find(identities, ai => !string.IsNullOrEmpty(ai?.Name));
+                return nameIdentity?.Name;
+            }
+        }
+
+        /// <summary>
         /// Version as derived from the assembly manifest
         /// </summary>
         /// <remarks>
