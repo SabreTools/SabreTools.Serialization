@@ -137,6 +137,8 @@ namespace InfoPrint
                     Console.WriteLine(builder);
 
                 using var sw = new StreamWriter(File.OpenWrite($"{filenameBase}.txt"));
+                sw.WriteLine(file);
+                sw.WriteLine();
                 sw.WriteLine(builder.ToString());
                 sw.Flush();
             }
