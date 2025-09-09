@@ -40,7 +40,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Signature
 
-                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                // Get the new executable offset
+                long newExeOffset = initialOffset + stub.Header.NewExeHeaderAddr;
+                if (newExeOffset < initialOffset || newExeOffset > data.Length)
+                    return null;
+
+                // Try to parse the executable header
+                data.Seek(newExeOffset, SeekOrigin.Begin);
                 byte[] signature = data.ReadBytes(4);
                 executable.Signature = Encoding.ASCII.GetString(signature);
                 if (executable.Signature != SignatureString)
@@ -670,10 +676,10 @@ namespace SabreTools.Serialization.Deserializers
             obj.ExportDirectoryTable = directoryTable;
 
             // Name
-            if (directoryTable.NameRVA.ConvertVirtualAddress(sections) != 0)
+            long nameAddress = initialOffset
+                + directoryTable.NameRVA.ConvertVirtualAddress(sections);
+            if (nameAddress > initialOffset && nameAddress < data.Length)
             {
-                long nameAddress = initialOffset
-                    + directoryTable.NameRVA.ConvertVirtualAddress(sections);
                 data.Seek(nameAddress, SeekOrigin.Begin);
 
                 string? name = data.ReadNullTerminatedAnsiString();
@@ -681,10 +687,12 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Address table
-            if (directoryTable.AddressTableEntries != 0 && directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections) != 0)
+            long exportAddressTableAddress = initialOffset
+                + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
+            if (directoryTable.AddressTableEntries != 0
+                && exportAddressTableAddress > initialOffset
+                && exportAddressTableAddress < data.Length)
             {
-                long exportAddressTableAddress = initialOffset
-                    + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(exportAddressTableAddress, SeekOrigin.Begin);
 
                 var table = new ExportAddressTableEntry[directoryTable.AddressTableEntries];
@@ -698,10 +706,12 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Name pointer table
-            if (directoryTable.NumberOfNamePointers != 0 && directoryTable.NamePointerRVA.ConvertVirtualAddress(sections) != 0)
+            long namePointerTableAddress = initialOffset
+                + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
+            if (directoryTable.NumberOfNamePointers != 0
+                && namePointerTableAddress > initialOffset
+                && namePointerTableAddress < data.Length)
             {
-                long namePointerTableAddress = initialOffset
-                    + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
                 data.Seek(namePointerTableAddress, SeekOrigin.Begin);
 
                 var table = new ExportNamePointerTable();
@@ -717,10 +727,12 @@ namespace SabreTools.Serialization.Deserializers
             }
 
             // Ordinal table
-            if (directoryTable.NumberOfNamePointers != 0 && directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections) != 0)
+            long ordinalTableAddress = initialOffset
+                + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
+            if (directoryTable.NumberOfNamePointers != 0
+                && ordinalTableAddress > initialOffset
+                && ordinalTableAddress < data.Length)
             {
-                long ordinalTableAddress = initialOffset
-                    + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
                 data.Seek(ordinalTableAddress, SeekOrigin.Begin);
 
                 var table = new ExportOrdinalTable();
@@ -743,12 +755,20 @@ namespace SabreTools.Serialization.Deserializers
                 table.Strings = new string[directoryTable.NumberOfNamePointers];
                 for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
                 {
-                    long nameAddress = initialOffset
+                    long nameTableEntryAddress = initialOffset
                         + obj.NamePointerTable.Pointers[i].ConvertVirtualAddress(sections);
-                    data.Seek(nameAddress, SeekOrigin.Begin);
 
-                    string? str = data.ReadNullTerminatedAnsiString();
-                    table.Strings[i] = str ?? string.Empty;
+                    if (nameTableEntryAddress > initialOffset && nameTableEntryAddress < data.Length)
+                    {
+                        data.Seek(nameTableEntryAddress, SeekOrigin.Begin);
+
+                        string? str = data.ReadNullTerminatedAnsiString();
+                        table.Strings[i] = str ?? string.Empty;
+                    }
+                    else
+                    {
+                        table.Strings[i] = string.Empty;
+                    }
                 }
 
                 obj.ExportNameTable = table;
@@ -930,10 +950,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 long nameAddress = initialOffset
                     + entry.NameRVA.ConvertVirtualAddress(sections);
-                data.Seek(nameAddress, SeekOrigin.Begin);
+                if (nameAddress > initialOffset && nameAddress < data.Length)
+                {
+                    data.Seek(nameAddress, SeekOrigin.Begin);
 
-                string? name = data.ReadNullTerminatedAnsiString();
-                entry.Name = name;
+                    string? name = data.ReadNullTerminatedAnsiString();
+                    entry.Name = name;
+                }
             }
 
             // Lookup tables
@@ -950,23 +973,27 @@ namespace SabreTools.Serialization.Deserializers
 
                 long tableAddress = initialOffset
                     + entry.ImportLookupTableRVA.ConvertVirtualAddress(sections);
-                data.Seek(tableAddress, SeekOrigin.Begin);
 
-                var entryLookupTable = new List<ImportLookupTableEntry>();
-
-                while (true)
+                if (tableAddress > initialOffset && tableAddress < data.Length)
                 {
-                    var lookupEntry = ParseImportLookupTableEntry(data, magic);
-                    entryLookupTable.Add(lookupEntry);
+                    data.Seek(tableAddress, SeekOrigin.Begin);
 
-                    // All zero values means the last entry
-                    if (lookupEntry.OrdinalNameFlag == false
-                        && lookupEntry.OrdinalNumber == 0
-                        && lookupEntry.HintNameTableRVA == 0)
-                        break;
+                    var entryLookupTable = new List<ImportLookupTableEntry>();
+
+                    while (true)
+                    {
+                        var lookupEntry = ParseImportLookupTableEntry(data, magic);
+                        entryLookupTable.Add(lookupEntry);
+
+                        // All zero values means the last entry
+                        if (lookupEntry.OrdinalNameFlag == false
+                            && lookupEntry.OrdinalNumber == 0
+                            && lookupEntry.HintNameTableRVA == 0)
+                            break;
+                    }
+
+                    importLookupTables[i] = [.. entryLookupTable];
                 }
-
-                importLookupTables[i] = [.. entryLookupTable];
             }
 
             obj.ImportLookupTables = importLookupTables;
@@ -985,23 +1012,27 @@ namespace SabreTools.Serialization.Deserializers
 
                 long tableAddress = initialOffset
                     + entry.ImportAddressTableRVA.ConvertVirtualAddress(sections);
-                data.Seek(tableAddress, SeekOrigin.Begin);
 
-                var addressLookupTable = new List<ImportAddressTableEntry>();
-
-                while (true)
+                if (tableAddress > initialOffset && tableAddress < data.Length)
                 {
-                    var tableEntry = ParseImportAddressTableEntry(data, magic);
-                    addressLookupTable.Add(tableEntry);
+                    data.Seek(tableAddress, SeekOrigin.Begin);
 
-                    // All zero values means the last entry
-                    if (tableEntry.OrdinalNameFlag == false
-                        && tableEntry.OrdinalNumber == 0
-                        && tableEntry.HintNameTableRVA == 0)
-                        break;
+                    var addressLookupTable = new List<ImportAddressTableEntry>();
+
+                    while (true)
+                    {
+                        var tableEntry = ParseImportAddressTableEntry(data, magic);
+                        addressLookupTable.Add(tableEntry);
+
+                        // All zero values means the last entry
+                        if (tableEntry.OrdinalNameFlag == false
+                            && tableEntry.OrdinalNumber == 0
+                            && tableEntry.HintNameTableRVA == 0)
+                            break;
+                    }
+
+                    importAddressTables[i] = [.. addressLookupTable];
                 }
-
-                importAddressTables[i] = [.. addressLookupTable];
             }
 
             obj.ImportAddressTables = importAddressTables;
@@ -1067,10 +1098,14 @@ namespace SabreTools.Serialization.Deserializers
                 {
                     long hintNameTableEntryAddress = initialOffset
                         + hintNameTableEntryAddresses[i];
-                    data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
 
-                    var hintNameTableEntry = ParseHintNameTableEntry(data);
-                    importHintNameTable.Add(hintNameTableEntry);
+                    if (hintNameTableEntryAddress > initialOffset && hintNameTableEntryAddress < data.Length)
+                    {
+                        data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
+
+                        var hintNameTableEntry = ParseHintNameTableEntry(data);
+                        importHintNameTable.Add(hintNameTableEntry);
+                    }
                 }
             }
 
@@ -1221,7 +1256,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Read the data from the offset
             long offset = initialOffset + obj.DataRVA.ConvertVirtualAddress(sections);
-            if (offset > 0 && obj.Size > 0 && offset + (int)obj.Size < data.Length)
+            if (offset > initialOffset && obj.Size > 0 && offset + (int)obj.Size < data.Length)
             {
                 data.Seek(offset, SeekOrigin.Begin);
                 obj.Data = data.ReadBytes((int)obj.Size);
@@ -1255,14 +1290,14 @@ namespace SabreTools.Serialization.Deserializers
             // Read the name from the offset, if needed
             if (obj.NameOffset > 0)
             {
-                long currentOffset = data.Position;
-
                 long nameOffset = tableStart + obj.NameOffset;
-                data.Seek(nameOffset, SeekOrigin.Begin);
-
-                obj.Name = ParseResourceDirectoryString(data);
-
-                data.Seek(currentOffset, SeekOrigin.Begin);
+                if (nameOffset > tableStart && nameOffset < data.Length)
+                {
+                    long currentOffset = data.Position;
+                    data.Seek(nameOffset, SeekOrigin.Begin);
+                    obj.Name = ParseResourceDirectoryString(data);
+                    data.Seek(currentOffset, SeekOrigin.Begin);
+                }
             }
 
             return obj;
@@ -1325,17 +1360,21 @@ namespace SabreTools.Serialization.Deserializers
                 if (entry.DataEntryOffset > 0)
                 {
                     long offset = tableStart + entry.DataEntryOffset;
-                    data.Seek(offset, SeekOrigin.Begin);
-
-                    var resourceDataEntry = ParseResourceDataEntry(data, initialOffset, sections);
-                    entry.DataEntry = resourceDataEntry;
+                    if (offset > tableStart && offset < data.Length)
+                    {
+                        data.Seek(offset, SeekOrigin.Begin);
+                        var resourceDataEntry = ParseResourceDataEntry(data, initialOffset, sections);
+                        entry.DataEntry = resourceDataEntry;
+                    }
                 }
                 else if (entry.SubdirectoryOffset > 0)
                 {
                     long offset = tableStart + entry.SubdirectoryOffset;
-                    data.Seek(offset, SeekOrigin.Begin);
-
-                    entry.Subdirectory = ParseResourceDirectoryTable(data, initialOffset, tableStart, sections);
+                    if (offset > tableStart && offset < data.Length)
+                    {
+                        data.Seek(offset, SeekOrigin.Begin);
+                        entry.Subdirectory = ParseResourceDirectoryTable(data, initialOffset, tableStart, sections);
+                    }
                 }
             }
 

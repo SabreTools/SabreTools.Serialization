@@ -38,8 +38,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Executable Header
 
+                // Get the new executable offset
+                long newExeOffset = initialOffset + stub.Header.NewExeHeaderAddr;
+                if (newExeOffset < initialOffset || newExeOffset > data.Length)
+                    return null;
+
                 // Try to parse the executable header
-                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                data.Seek(newExeOffset, SeekOrigin.Begin);
                 var header = ParseExecutableHeader(data);
                 if (header.Magic != SignatureString)
                     return null;
