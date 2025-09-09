@@ -172,7 +172,54 @@ namespace SabreTools.Serialization.Deserializers
                         data.Seek(offset, SeekOrigin.Begin);
 
                         // Set the resource directory table
-                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, data.Position, pex.SectionTable, true);
+                        long tableStart = data.Position;
+                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, tableStart, pex.SectionTable);
+
+                        // TODO: Revisit the logic for this
+                        // - Don't check for signatures, just read anything that's there
+                        // - If alignment is used, use the one from the optional header
+                        #region Hidden Resources
+
+                        // Get the section size
+                        int tableSize = (int)optionalHeader.ResourceTable.Size;
+
+                        // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
+                        while (data.Position - tableStart < tableSize && data.Position % 0x200 != 0 && data.Position < data.Length - 1)
+                        {
+                            // If we find the start of an MS-DOS header
+                            if (data.ReadUInt16LittleEndian() == Models.MSDOS.Constants.SignatureUInt16)
+                            {
+                                data.Seek(-2, origin: SeekOrigin.Current);
+                                break;
+                            }
+
+                            // Otherwise
+                            data.Seek(-1, origin: SeekOrigin.Current);
+                        }
+
+                        // If we have not used up the full size, parse the remaining chunk as a single resource
+                        if (pex.ResourceDirectoryTable != null && data.Position - tableStart < tableSize)
+                        {
+                            var localEntries = pex.ResourceDirectoryTable.Entries ?? [];
+                            Array.Resize(ref localEntries, localEntries.Length + 1);
+                            pex.ResourceDirectoryTable.Entries = localEntries;
+                            int length = (int)(tableSize - (data.Position - tableStart));
+
+                            pex.ResourceDirectoryTable.Entries[localEntries.Length] = new ResourceDirectoryEntry
+                            {
+                                Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
+                                IntegerID = uint.MaxValue,
+                                DataEntryOffset = (uint)data.Position,
+                                DataEntry = new ResourceDataEntry
+                                {
+                                    Size = (uint)length,
+                                    Data = data.ReadBytes(length),
+                                    Codepage = (uint)Encoding.Unicode.CodePage,
+                                },
+                            };
+                        }
+
+                        #endregion
                     }
                 }
 
@@ -1496,9 +1543,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="tableStart">Table start address for relative reads</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
-        /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, long tableStart, SectionHeader[] sections, bool topLevel = false)
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data,
+            long initialOffset,
+            long tableStart,
+            SectionHeader[] sections)
         {
             var obj = new ResourceDirectoryTable();
 
@@ -1534,7 +1583,7 @@ namespace SabreTools.Serialization.Deserializers
                     if (offset > tableStart && offset < data.Length)
                     {
                         data.Seek(offset, SeekOrigin.Begin);
-                        entry.DataEntry = ParseResourceDataEntry(data, initialOffset, sections);;
+                        entry.DataEntry = ParseResourceDataEntry(data, initialOffset, sections); ;
                     }
                 }
                 else if (entry.SubdirectoryOffset > 0)
@@ -1547,63 +1596,6 @@ namespace SabreTools.Serialization.Deserializers
                     }
                 }
             }
-
-            // If we are not at the top level
-            if (!topLevel)
-                return obj;
-
-            // TODO: Revisit the logic for this
-            // - Use the table boundaries not the section ones
-            // - Don't check for signatures, just read anything that's there
-            // - If alignment is used, use the one from the optional header
-            // - Should this be moved out of this method entirely?
-            #region Hidden Resources
-
-            // If we're not aligned to a section
-            var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == tableStart);
-            if (firstSection == null)
-                return obj;
-
-            // Get the section size
-            int size = (int)firstSection.SizeOfRawData;
-
-            // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
-            while (data.Position - tableStart < size && data.Position % 0x200 != 0 && data.Position < data.Length - 1)
-            {
-                // If we find the start of an MS-DOS header
-                if (data.ReadUInt16LittleEndian() == Models.MSDOS.Constants.SignatureUInt16)
-                {
-                    data.Seek(-2, origin: SeekOrigin.Current);
-                    break;
-                }
-
-                // Otherwise
-                data.Seek(-1, origin: SeekOrigin.Current);
-            }
-
-            // If we have not used up the full size, parse the remaining chunk as a single resource
-            if (data.Position - tableStart < size)
-            {
-                var localEntries = obj.Entries;
-                Array.Resize(ref localEntries, totalEntryCount + 1);
-                obj.Entries = localEntries;
-                int length = (int)(size - (data.Position - tableStart));
-
-                obj.Entries[totalEntryCount] = new ResourceDirectoryEntry
-                {
-                    Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
-                    IntegerID = uint.MaxValue,
-                    DataEntryOffset = (uint)data.Position,
-                    DataEntry = new ResourceDataEntry
-                    {
-                        Size = (uint)length,
-                        Data = data.ReadBytes(length),
-                        Codepage = (uint)Encoding.Unicode.CodePage,
-                    },
-                };
-            }
-
-            #endregion
 
             return obj;
         }
