@@ -1417,9 +1417,16 @@ namespace SabreTools.Serialization.Deserializers
             obj.Codepage = data.ReadUInt32LittleEndian();
             obj.Reserved = data.ReadUInt32LittleEndian();
 
+            // Empty entries are valid
+            if (obj.Size == 0)
+            {
+                obj.Data = [];
+                return obj;
+            }
+
             // Read the data from the offset
             long offset = initialOffset + obj.DataRVA.ConvertVirtualAddress(sections);
-            if (offset > initialOffset && obj.Size > 0 && offset + obj.Size < data.Length)
+            if (offset > initialOffset && offset + obj.Size < data.Length)
             {
                 data.Seek(offset, SeekOrigin.Begin);
                 obj.Data = data.ReadBytes((int)obj.Size);
@@ -1432,26 +1439,26 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into an ResourceDirectoryEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="nameEntry">Indicates if the value is a name entry or not</param>
         /// <param name="tableStart">Table start address for relative reads</param>
         /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
-        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, long tableStart)
+        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, bool nameEntry, long tableStart)
         {
             var obj = new ResourceDirectoryEntry();
 
-            uint first = data.ReadUInt32LittleEndian();
-            if ((first & 0x80000000) != 0)
-                obj.NameOffset = first & ~0x80000000;
+            if (nameEntry)
+                obj.NameOffset = data.ReadUInt32LittleEndian();
             else
-                obj.IntegerID = first;
+                obj.IntegerID = obj.NameOffset;
 
-            uint second = data.ReadUInt32LittleEndian();
-            if ((second & 0x80000000) != 0)
-                obj.SubdirectoryOffset = second & ~0x80000000;
+            uint offset = data.ReadUInt32LittleEndian();
+            if ((offset & 0x80000000) != 0)
+                obj.SubdirectoryOffset = offset & ~0x80000000;
             else
-                obj.DataEntryOffset = second;
+                obj.DataEntryOffset = offset;
 
             // Read the name from the offset, if needed
-            if (obj.NameOffset > 0)
+            if (nameEntry && obj.NameOffset > 0)
             {
                 long nameOffset = tableStart + obj.NameOffset;
                 if (nameOffset > tableStart && nameOffset < data.Length)
@@ -1505,24 +1512,22 @@ namespace SabreTools.Serialization.Deserializers
             obj.NumberOfNameEntries = data.ReadUInt16LittleEndian();
             obj.NumberOfIDEntries = data.ReadUInt16LittleEndian();
 
-            // If we have no entries
+            // Create the entry array
             int totalEntryCount = obj.NumberOfNameEntries + obj.NumberOfIDEntries;
-            if (totalEntryCount == 0)
+            obj.Entries = new ResourceDirectoryEntry[totalEntryCount];
+            if (obj.Entries.Length == 0)
                 return obj;
 
             // Perform top-level pass of data
-            obj.Entries = new ResourceDirectoryEntry[totalEntryCount];
             for (int i = 0; i < totalEntryCount; i++)
             {
-                obj.Entries[i] = ParseResourceDirectoryEntry(data, tableStart);
+                bool nameEntry = i < obj.NumberOfNameEntries;
+                obj.Entries[i] = ParseResourceDirectoryEntry(data, nameEntry, tableStart);
             }
 
             // Loop through and process the entries
             foreach (var entry in obj.Entries)
             {
-                if (entry == null)
-                    continue;
-
                 if (entry.DataEntryOffset > 0)
                 {
                     long offset = tableStart + entry.DataEntryOffset;
