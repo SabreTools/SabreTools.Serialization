@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new executable to fill
-                var executable = new Executable();
+                var nex = new Executable();
 
                 #region MS-DOS Stub
 
@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the MS-DOS stub
-                executable.Stub = stub;
+                nex.Stub = stub;
 
                 #endregion
 
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the executable header
-                executable.Header = header;
+                nex.Header = header;
 
                 #endregion
 
@@ -59,16 +59,16 @@ namespace SabreTools.Serialization.Deserializers
                 // If the offset for the segment table doesn't exist
                 long tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.SegmentTableOffset;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the segment table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the segment table
-                executable.SegmentTable = new SegmentTableEntry[header.FileSegmentCount];
+                nex.SegmentTable = new SegmentTableEntry[header.FileSegmentCount];
                 for (int i = 0; i < header.FileSegmentCount; i++)
                 {
-                    executable.SegmentTable[i] = ParseSegmentTableEntry(data, initialOffset);
+                    nex.SegmentTable[i] = ParseSegmentTableEntry(data, initialOffset);
                 }
 
                 #endregion
@@ -78,13 +78,13 @@ namespace SabreTools.Serialization.Deserializers
                 // If the offset for the segment table doesn't exist
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ResourceTableOffset;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the resource table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the resource table
-                executable.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
+                nex.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
 
                 #endregion
 
@@ -94,13 +94,13 @@ namespace SabreTools.Serialization.Deserializers
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ResidentNameTableOffset;
                 long endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.ModuleReferenceTableOffset;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the resident-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the resident-name table
-                executable.ResidentNameTable = ParseResidentNameTable(data, endOffset);
+                nex.ResidentNameTable = ParseResidentNameTable(data, endOffset);
 
                 #endregion
 
@@ -109,16 +109,16 @@ namespace SabreTools.Serialization.Deserializers
                 // If the offset for the module-reference table doesn't exist
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ModuleReferenceTableOffset;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the module-reference table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the module-reference table
-                executable.ModuleReferenceTable = new ModuleReferenceTableEntry[header.ModuleReferenceTableSize];
+                nex.ModuleReferenceTable = new ModuleReferenceTableEntry[header.ModuleReferenceTableSize];
                 for (int i = 0; i < header.ModuleReferenceTableSize; i++)
                 {
-                    executable.ModuleReferenceTable[i] = ParseModuleReferenceTableEntry(data);
+                    nex.ModuleReferenceTable[i] = ParseModuleReferenceTableEntry(data);
                 }
 
                 #endregion
@@ -129,13 +129,13 @@ namespace SabreTools.Serialization.Deserializers
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.ImportedNamesTableOffset;
                 endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the imported-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the imported-name table
-                executable.ImportedNameTable = ParseImportedNameTable(data, endOffset);
+                nex.ImportedNameTable = ParseImportedNameTable(data, endOffset);
 
                 #endregion
 
@@ -145,13 +145,13 @@ namespace SabreTools.Serialization.Deserializers
                 tableAddress = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset;
                 endOffset = initialOffset + stub.Header.NewExeHeaderAddr + header.EntryTableOffset + header.EntryTableSize;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the imported-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the entry table
-                executable.EntryTable = ParseEntryTable(data, endOffset);
+                nex.EntryTable = ParseEntryTable(data, endOffset);
 
                 #endregion
 
@@ -161,17 +161,17 @@ namespace SabreTools.Serialization.Deserializers
                 tableAddress = initialOffset + header.NonResidentNamesTableOffset;
                 endOffset = initialOffset + header.NonResidentNamesTableOffset + header.NonResidentNameTableSize;
                 if (tableAddress >= data.Length)
-                    return executable;
+                    return nex;
 
                 // Seek to the nonresident-name table
                 data.Seek(tableAddress, SeekOrigin.Begin);
 
                 // Set the nonresident-name table
-                executable.NonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
+                nex.NonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
 
                 #endregion
 
-                return executable;
+                return nex;
             }
             catch
             {

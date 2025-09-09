@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new executable to fill
-                var executable = new Executable();
+                var pex = new Executable();
 
                 #region MS-DOS Stub
 
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the MS-DOS stub
-                executable.Stub = stub;
+                pex.Stub = stub;
 
                 #endregion
 
@@ -48,8 +48,8 @@ namespace SabreTools.Serialization.Deserializers
                 // Try to parse the executable header
                 data.Seek(newExeOffset, SeekOrigin.Begin);
                 byte[] signature = data.ReadBytes(4);
-                executable.Signature = Encoding.ASCII.GetString(signature);
-                if (executable.Signature != SignatureString)
+                pex.Signature = Encoding.ASCII.GetString(signature);
+                if (pex.Signature != SignatureString)
                     return null;
 
                 #endregion
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Set the COFF file header
-                executable.COFFFileHeader = coffFileHeader;
+                pex.COFFFileHeader = coffFileHeader;
 
                 #endregion
 
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.Deserializers
 
                     // Set the optional header
                     if (optionalHeader != null)
-                        executable.OptionalHeader = optionalHeader;
+                        pex.OptionalHeader = optionalHeader;
                 }
 
                 #endregion
@@ -94,10 +94,10 @@ namespace SabreTools.Serialization.Deserializers
                 // header and not guessing otherwise.
 
                 // Set the section table
-                executable.SectionTable = new SectionHeader[coffFileHeader.NumberOfSections];
+                pex.SectionTable = new SectionHeader[coffFileHeader.NumberOfSections];
                 for (int i = 0; i < coffFileHeader.NumberOfSections; i++)
                 {
-                    executable.SectionTable[i] = ParseSectionHeader(data);
+                    pex.SectionTable[i] = ParseSectionHeader(data);
                 }
 
                 #endregion
@@ -111,15 +111,15 @@ namespace SabreTools.Serialization.Deserializers
                     data.Seek(offset, SeekOrigin.Begin);
 
                     // Set the COFF symbol and string tables
-                    executable.COFFSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
-                    executable.COFFStringTable = ParseCOFFStringTable(data);
+                    pex.COFFSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
+                    pex.COFFStringTable = ParseCOFFStringTable(data);
                 }
 
                 #endregion
 
                 // All tables require the optional header to exist
                 if (optionalHeader == null)
-                    return executable;
+                    return pex;
 
                 #region Export Table
 
@@ -127,14 +127,14 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.ExportTable != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the export table
                         data.Seek(offset, SeekOrigin.Begin);
 
                         // Set the export table
-                        executable.ExportTable = ParseExportTable(data, initialOffset, executable.SectionTable);
+                        pex.ExportTable = ParseExportTable(data, initialOffset, pex.SectionTable);
                     }
                 }
 
@@ -146,14 +146,14 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.ImportTable != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the import table
                         data.Seek(offset, SeekOrigin.Begin);
 
                         // Set the import table
-                        executable.ImportTable = ParseImportTable(data, initialOffset, optionalHeader.Magic, executable.SectionTable);
+                        pex.ImportTable = ParseImportTable(data, initialOffset, optionalHeader.Magic, pex.SectionTable);
                     }
                 }
 
@@ -165,14 +165,14 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.ResourceTable != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the resource directory table
                         data.Seek(offset, SeekOrigin.Begin);
 
                         // Set the resource directory table
-                        executable.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, data.Position, executable.SectionTable, true);
+                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, data.Position, pex.SectionTable, true);
                     }
                 }
 
@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.CertificateTable != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the attribute certificate table
@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.Deserializers
                         long endOffset = offset + optionalHeader.CertificateTable.Size;
 
                         // Set the attribute certificate table
-                        executable.AttributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
+                        pex.AttributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
                     }
                 }
 
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.BaseRelocationTable != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the base relocation table
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.Deserializers
                         long endOffset = offset + optionalHeader.BaseRelocationTable.Size;
 
                         // Set the base relocation table
-                        executable.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset);
+                        pex.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset);
                     }
                 }
 
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.Debug != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the debug table
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.Deserializers
                         long endOffset = offset + optionalHeader.Debug.Size;
 
                         // Set the debug table
-                        executable.DebugTable = ParseDebugTable(data, endOffset);
+                        pex.DebugTable = ParseDebugTable(data, endOffset);
                     }
                 }
 
@@ -251,14 +251,14 @@ namespace SabreTools.Serialization.Deserializers
                 if (optionalHeader.DelayImportDescriptor != null)
                 {
                     offset = initialOffset
-                        + optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(executable.SectionTable);
+                        + optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Seek to the delay-load directory table
                         data.Seek(offset, SeekOrigin.Begin);
 
                         // Set the delay-load directory table
-                        executable.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(data);
+                        pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(data);
                     }
                 }
 
@@ -267,7 +267,7 @@ namespace SabreTools.Serialization.Deserializers
                 // TODO: CLR Runtime Header
                 // TODO: Reserved
 
-                return executable;
+                return pex;
             }
             catch
             {
