@@ -1534,8 +1534,7 @@ namespace SabreTools.Serialization.Deserializers
                     if (offset > tableStart && offset < data.Length)
                     {
                         data.Seek(offset, SeekOrigin.Begin);
-                        var resourceDataEntry = ParseResourceDataEntry(data, initialOffset, sections);
-                        entry.DataEntry = resourceDataEntry;
+                        entry.DataEntry = ParseResourceDataEntry(data, initialOffset, sections);;
                     }
                 }
                 else if (entry.SubdirectoryOffset > 0)
