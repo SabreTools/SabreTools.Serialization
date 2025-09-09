@@ -74,54 +74,54 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled OverlayHeader on success, null on error</returns>
         private static OverlayHeader ParseOverlayHeader(Stream data)
         {
-            var header = new OverlayHeader();
+            var obj = new OverlayHeader();
 
-            header.DllNameLen = data.ReadByteValue();
-            if (header.DllNameLen > 0)
+            obj.DllNameLen = data.ReadByteValue();
+            if (obj.DllNameLen > 0)
             {
-                byte[] dllName = data.ReadBytes(header.DllNameLen);
-                header.DllName = Encoding.ASCII.GetString(dllName);
-                header.DllSize = data.ReadUInt32LittleEndian();
+                byte[] dllName = data.ReadBytes(obj.DllNameLen);
+                obj.DllName = Encoding.ASCII.GetString(dllName);
+                obj.DllSize = data.ReadUInt32LittleEndian();
             }
 
             // Read as a single block
-            header.Flags = (OverlayHeaderFlags)data.ReadUInt32LittleEndian();
+            obj.Flags = (OverlayHeaderFlags)data.ReadUInt32LittleEndian();
 
             // Read as a single block
-            header.GraphicsData = data.ReadBytes(12);
+            obj.GraphicsData = data.ReadBytes(12);
 
             // Read as a single block
-            header.WiseScriptExitEventOffset = data.ReadUInt32LittleEndian();
-            header.WiseScriptCancelEventOffset = data.ReadUInt32LittleEndian();
+            obj.WiseScriptExitEventOffset = data.ReadUInt32LittleEndian();
+            obj.WiseScriptCancelEventOffset = data.ReadUInt32LittleEndian();
 
             // Read as a single block
-            header.WiseScriptInflatedSize = data.ReadUInt32LittleEndian();
-            header.WiseScriptDeflatedSize = data.ReadUInt32LittleEndian();
-            header.WiseDllDeflatedSize = data.ReadUInt32LittleEndian();
-            header.Ctl3d32DeflatedSize = data.ReadUInt32LittleEndian();
-            header.SomeData4DeflatedSize = data.ReadUInt32LittleEndian();
-            header.RegToolDeflatedSize = data.ReadUInt32LittleEndian();
-            header.ProgressDllDeflatedSize = data.ReadUInt32LittleEndian();
-            header.SomeData7DeflatedSize = data.ReadUInt32LittleEndian();
-            header.SomeData8DeflatedSize = data.ReadUInt32LittleEndian();
-            header.SomeData9DeflatedSize = data.ReadUInt32LittleEndian();
-            header.SomeData10DeflatedSize = data.ReadUInt32LittleEndian();
-            header.FinalFileDeflatedSize = data.ReadUInt32LittleEndian();
-            header.FinalFileInflatedSize = data.ReadUInt32LittleEndian();
-            header.EOF = data.ReadUInt32LittleEndian();
+            obj.WiseScriptInflatedSize = data.ReadUInt32LittleEndian();
+            obj.WiseScriptDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.WiseDllDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.Ctl3d32DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.SomeData4DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.RegToolDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.ProgressDllDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.SomeData7DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.SomeData8DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.SomeData9DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.SomeData10DeflatedSize = data.ReadUInt32LittleEndian();
+            obj.FinalFileDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.FinalFileInflatedSize = data.ReadUInt32LittleEndian();
+            obj.EOF = data.ReadUInt32LittleEndian();
 
             // Newer installers read this and DibInflatedSize in the above block
-            header.DibDeflatedSize = data.ReadUInt32LittleEndian();
+            obj.DibDeflatedSize = data.ReadUInt32LittleEndian();
 
             // Handle older overlay data
-            if (header.DibDeflatedSize > data.Length)
+            if (obj.DibDeflatedSize > data.Length)
             {
-                header.DibDeflatedSize = 0;
+                obj.DibDeflatedSize = 0;
                 data.Seek(-4, SeekOrigin.Current);
-                return header;
+                return obj;
             }
 
-            header.DibInflatedSize = data.ReadUInt32LittleEndian();
+            obj.DibInflatedSize = data.ReadUInt32LittleEndian();
 
             // Peek at the next 2 bytes
             ushort peek = data.ReadUInt16LittleEndian();
@@ -130,25 +130,25 @@ namespace SabreTools.Serialization.Deserializers
             // If the next value is a known Endianness
             if (Enum.IsDefined(typeof(Endianness), peek))
             {
-                header.Endianness = (Endianness)data.ReadUInt16LittleEndian();
+                obj.Endianness = (Endianness)data.ReadUInt16LittleEndian();
             }
             else
             {
                 // The first two values are part of the sizes block above
-                header.InstallScriptDeflatedSize = data.ReadUInt32LittleEndian();
-                header.CharacterSet = (CharacterSet)data.ReadUInt32LittleEndian();
-                header.Endianness = (Endianness)data.ReadUInt16LittleEndian();
+                obj.InstallScriptDeflatedSize = data.ReadUInt32LittleEndian();
+                obj.CharacterSet = (CharacterSet)data.ReadUInt32LittleEndian();
+                obj.Endianness = (Endianness)data.ReadUInt16LittleEndian();
             }
 
             // Endianness and init text len are read in a single block
-            header.InitTextLen = data.ReadByteValue();
-            if (header.InitTextLen > 0)
+            obj.InitTextLen = data.ReadByteValue();
+            if (obj.InitTextLen > 0)
             {
-                byte[] initText = data.ReadBytes(header.InitTextLen);
-                header.InitText = Encoding.ASCII.GetString(initText);
+                byte[] initText = data.ReadBytes(obj.InitTextLen);
+                obj.InitText = Encoding.ASCII.GetString(initText);
             }
 
-            return header;
+            return obj;
         }
     }
 }
