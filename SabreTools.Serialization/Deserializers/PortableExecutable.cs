@@ -1256,7 +1256,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Read the data from the offset
             long offset = initialOffset + obj.DataRVA.ConvertVirtualAddress(sections);
-            if (offset > initialOffset && obj.Size > 0 && offset + (int)obj.Size < data.Length)
+            if (offset > initialOffset && obj.Size > 0 && offset + obj.Size < data.Length)
             {
                 data.Seek(offset, SeekOrigin.Begin);
                 obj.Data = data.ReadBytes((int)obj.Size);
@@ -1313,7 +1313,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new ResourceDirectoryString();
 
             obj.Length = data.ReadUInt16LittleEndian();
-            if (obj.Length > 0 && data.Position + obj.Length <= data.Length)
+            if (obj.Length > 0 && data.Position + (obj.Length * 2) <= data.Length)
                 obj.UnicodeString = data.ReadBytes(obj.Length * 2);
 
             return obj;
@@ -1328,11 +1328,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <param name="topLevel">Indicates if this is the top level or not</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable ParseResourceDirectoryTable(Stream data, long initialOffset, long tableStart, SectionHeader[] sections, bool topLevel = false)
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data, long initialOffset, long tableStart, SectionHeader[] sections, bool topLevel = false)
         {
             var obj = new ResourceDirectoryTable();
 
             obj.Characteristics = data.ReadUInt32LittleEndian();
+            if (obj.Characteristics != 0)
+                return null;
+
             obj.TimeDateStamp = data.ReadUInt32LittleEndian();
             obj.MajorVersion = data.ReadUInt16LittleEndian();
             obj.MinorVersion = data.ReadUInt16LittleEndian();
