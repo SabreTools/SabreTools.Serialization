@@ -60,6 +60,8 @@ namespace SabreTools.Serialization.Deserializers
                 var coffFileHeader = ParseCOFFFileHeader(data);
                 if (coffFileHeader == null)
                     return null;
+                if (coffFileHeader.NumberOfSections > 96)
+                    return null;
 
                 // Set the COFF file header
                 executable.COFFFileHeader = coffFileHeader;
@@ -1257,11 +1259,16 @@ namespace SabreTools.Serialization.Deserializers
             obj.AddressOfEntryPoint = data.ReadUInt32LittleEndian();
             obj.BaseOfCode = data.ReadUInt32LittleEndian();
 
+            // ROM images do not have the remainder defined(?)
+            if (obj.Magic == OptionalHeaderMagicNumber.ROMImage)
+                return obj;
+
             if (obj.Magic == OptionalHeaderMagicNumber.PE32)
                 obj.BaseOfData = data.ReadUInt32LittleEndian();
 
             #endregion
 
+            // TODO: When Models is updated, consolidate the _PE32(Plus) below
             #region Windows-Specific Fields
 
             if (obj.Magic == OptionalHeaderMagicNumber.PE32)
