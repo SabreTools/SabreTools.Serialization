@@ -634,6 +634,24 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a ExportAddressTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="entries">Number of entries in the table</param>
+        /// <returns>Filled ExportAddressTable on success, null on error</returns>
+        public static ExportAddressTableEntry[] ParseExportAddressTable(Stream data, uint entries)
+        {
+            var obj = new ExportAddressTableEntry[entries];
+
+            for (int i = 0; i < obj.Length; i++)
+            {
+                obj[i] = ParseExportAddressTableEntry(data);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a ExportAddressTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -659,20 +677,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ExportTable();
 
-            var directoryTable = new ExportDirectoryTable();
-
-            directoryTable.ExportFlags = data.ReadUInt32LittleEndian();
-            directoryTable.TimeDateStamp = data.ReadUInt32LittleEndian();
-            directoryTable.MajorVersion = data.ReadUInt16LittleEndian();
-            directoryTable.MinorVersion = data.ReadUInt16LittleEndian();
-            directoryTable.NameRVA = data.ReadUInt32LittleEndian();
-            directoryTable.OrdinalBase = data.ReadUInt32LittleEndian();
-            directoryTable.AddressTableEntries = data.ReadUInt32LittleEndian();
-            directoryTable.NumberOfNamePointers = data.ReadUInt32LittleEndian();
-            directoryTable.ExportAddressTableRVA = data.ReadUInt32LittleEndian();
-            directoryTable.NamePointerRVA = data.ReadUInt32LittleEndian();
-            directoryTable.OrdinalTableRVA = data.ReadUInt32LittleEndian();
-
+            var directoryTable = ParseExportDirectoryTable(data);
             obj.ExportDirectoryTable = directoryTable;
 
             // Name
@@ -681,9 +686,7 @@ namespace SabreTools.Serialization.Deserializers
             if (nameAddress > initialOffset && nameAddress < data.Length)
             {
                 data.Seek(nameAddress, SeekOrigin.Begin);
-
-                string? name = data.ReadNullTerminatedAnsiString();
-                directoryTable.Name = name;
+                directoryTable.Name = data.ReadNullTerminatedAnsiString(); ;
             }
 
             // Address table
@@ -694,15 +697,7 @@ namespace SabreTools.Serialization.Deserializers
                 && exportAddressTableAddress < data.Length)
             {
                 data.Seek(exportAddressTableAddress, SeekOrigin.Begin);
-
-                var table = new ExportAddressTableEntry[directoryTable.AddressTableEntries];
-
-                for (int i = 0; i < directoryTable.AddressTableEntries; i++)
-                {
-                    table[i] = ParseExportAddressTableEntry(data);
-                }
-
-                obj.ExportAddressTable = table;
+                obj.ExportAddressTable = ParseExportAddressTable(data, directoryTable.AddressTableEntries);
             }
 
             // Name pointer table
@@ -713,17 +708,7 @@ namespace SabreTools.Serialization.Deserializers
                 && namePointerTableAddress < data.Length)
             {
                 data.Seek(namePointerTableAddress, SeekOrigin.Begin);
-
-                var table = new ExportNamePointerTable();
-
-                table.Pointers = new uint[directoryTable.NumberOfNamePointers];
-                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
-                {
-                    uint pointer = data.ReadUInt32LittleEndian();
-                    table.Pointers[i] = pointer;
-                }
-
-                obj.NamePointerTable = table;
+                obj.NamePointerTable = ParseExportNamePointerTable(data, directoryTable.NumberOfNamePointers);
             }
 
             // Ordinal table
@@ -734,44 +719,106 @@ namespace SabreTools.Serialization.Deserializers
                 && ordinalTableAddress < data.Length)
             {
                 data.Seek(ordinalTableAddress, SeekOrigin.Begin);
-
-                var table = new ExportOrdinalTable();
-
-                table.Indexes = new ushort[directoryTable.NumberOfNamePointers];
-                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
-                {
-                    ushort pointer = data.ReadUInt16LittleEndian();
-                    table.Indexes[i] = pointer;
-                }
-
-                obj.OrdinalTable = table;
+                obj.OrdinalTable = ParseExportOrdinalTable(data, directoryTable.NumberOfNamePointers);
             }
 
             // Name table
             if (directoryTable.NumberOfNamePointers != 0 && obj.NamePointerTable?.Pointers != null)
+                obj.ExportNameTable = ParseExportNameTable(data, initialOffset, obj.NamePointerTable.Pointers, sections);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExportDirectoryTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled ExportDirectoryTable on success, null on error</returns>
+        public static ExportDirectoryTable ParseExportDirectoryTable(Stream data)
+        {
+            var obj = new ExportDirectoryTable();
+
+            obj.ExportFlags = data.ReadUInt32LittleEndian();
+            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
+            obj.MajorVersion = data.ReadUInt16LittleEndian();
+            obj.MinorVersion = data.ReadUInt16LittleEndian();
+            obj.NameRVA = data.ReadUInt32LittleEndian();
+            obj.OrdinalBase = data.ReadUInt32LittleEndian();
+            obj.AddressTableEntries = data.ReadUInt32LittleEndian();
+            obj.NumberOfNamePointers = data.ReadUInt32LittleEndian();
+            obj.ExportAddressTableRVA = data.ReadUInt32LittleEndian();
+            obj.NamePointerRVA = data.ReadUInt32LittleEndian();
+            obj.OrdinalTableRVA = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExportNameTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="pointers">Set of pointers to process</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ExportNameTable on success, null on error</returns>
+        public static ExportNameTable ParseExportNameTable(Stream data, long initialOffset, uint[] pointers, SectionHeader[] sections)
+        {
+            var obj = new ExportNameTable();
+
+            obj.Strings = new string[pointers.Length];
+            for (int i = 0; i < obj.Strings.Length; i++)
             {
-                var table = new ExportNameTable();
-
-                table.Strings = new string[directoryTable.NumberOfNamePointers];
-                for (int i = 0; i < directoryTable.NumberOfNamePointers; i++)
+                long address = initialOffset + pointers[i].ConvertVirtualAddress(sections);
+                if (address > initialOffset && address < data.Length)
                 {
-                    long nameTableEntryAddress = initialOffset
-                        + obj.NamePointerTable.Pointers[i].ConvertVirtualAddress(sections);
+                    data.Seek(address, SeekOrigin.Begin);
 
-                    if (nameTableEntryAddress > initialOffset && nameTableEntryAddress < data.Length)
-                    {
-                        data.Seek(nameTableEntryAddress, SeekOrigin.Begin);
-
-                        string? str = data.ReadNullTerminatedAnsiString();
-                        table.Strings[i] = str ?? string.Empty;
-                    }
-                    else
-                    {
-                        table.Strings[i] = string.Empty;
-                    }
+                    string? str = data.ReadNullTerminatedAnsiString();
+                    obj.Strings[i] = str ?? string.Empty;
                 }
+                else
+                {
+                    obj.Strings[i] = string.Empty;
+                }
+            }
 
-                obj.ExportNameTable = table;
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExportNamePointerTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="entries">Number of entries in the table</param>
+        /// <returns>Filled ExportNamePointerTable on success, null on error</returns>
+        public static ExportNamePointerTable ParseExportNamePointerTable(Stream data, uint entries)
+        {
+            var obj = new ExportNamePointerTable();
+
+            obj.Pointers = new uint[entries];
+            for (int i = 0; i < obj.Pointers.Length; i++)
+            {
+                obj.Pointers[i] = data.ReadUInt32LittleEndian(); ;
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExportOrdinalTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="entries">Number of entries in the table</param>
+        /// <returns>Filled ExportOrdinalTable on success, null on error</returns>
+        public static ExportOrdinalTable ParseExportOrdinalTable(Stream data, uint entries)
+        {
+            var obj = new ExportOrdinalTable();
+
+            obj.Indexes = new ushort[entries];
+            for (int i = 0; i < obj.Indexes.Length; i++)
+            {
+                ushort pointer = data.ReadUInt16LittleEndian();
+                obj.Indexes[i] = pointer;
             }
 
             return obj;
