@@ -104,19 +104,15 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region COFF Symbol Table and COFF String Table
 
-                // TODO: Validate that this is correct with an "old" PE
                 long offset = initialOffset + coffFileHeader.PointerToSymbolTable;
                 if (offset > initialOffset && offset < data.Length)
                 {
                     // Seek to the COFF symbol table
                     data.Seek(offset, SeekOrigin.Begin);
 
-                    // Set the COFF symbol table
+                    // Set the COFF symbol and string tables
                     executable.COFFSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
-
-                    // Set the COFF string table
-                    if (executable.COFFSymbolTable != null)
-                        executable.COFFStringTable = ParseCOFFStringTable(data);
+                    executable.COFFStringTable = ParseCOFFStringTable(data);
                 }
 
                 #endregion
@@ -315,7 +311,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.Revision = (WindowsCertificateRevision)data.ReadUInt16LittleEndian();
             obj.CertificateType = (WindowsCertificateType)data.ReadUInt16LittleEndian();
 
-            int certificateDataLength = (int)(obj.Length - 8);
+            int certificateDataLength = (int)obj.Length - 8;
             if (certificateDataLength > 0 && data.Position + certificateDataLength <= data.Length)
                 obj.Certificate = data.ReadBytes(certificateDataLength);
 
@@ -495,7 +491,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="count">Number of COFF symbol table entries to read</param>
         /// <returns>Filled COFF symbol table on success, null on error</returns>
-        public static BaseEntry[]? ParseCOFFSymbolTable(Stream data, uint count)
+        public static BaseEntry[] ParseCOFFSymbolTable(Stream data, uint count)
         {
             var obj = new BaseEntry[count];
 
@@ -627,6 +623,9 @@ namespace SabreTools.Serialization.Deserializers
 
             // TODO: Should we read the debug data in? Most of it is unformatted or undocumented
             // TODO: Implement .debug$F (Object Only) / IMAGE_DEBUG_TYPE_FPO
+            // TODO: Implement .debug$S (Object Only)
+            // TODO: Implement .debug$P (Object Only)
+            // TODO: Implement .debug$T (Object Only)
 
             return obj;
         }
@@ -714,48 +713,49 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ExportTable();
 
+            // Parse the export directory table
             var directoryTable = ParseExportDirectoryTable(data);
+            if (directoryTable.ExportFlags != 0)
+                return obj;
+
+            // Set the export directory table
             obj.ExportDirectoryTable = directoryTable;
 
             // Name
-            long nameAddress = initialOffset
-                + directoryTable.NameRVA.ConvertVirtualAddress(sections);
-            if (nameAddress > initialOffset && nameAddress < data.Length)
+            long offset = initialOffset + directoryTable.NameRVA.ConvertVirtualAddress(sections);
+            if (offset > initialOffset && offset < data.Length)
             {
-                data.Seek(nameAddress, SeekOrigin.Begin);
-                directoryTable.Name = data.ReadNullTerminatedAnsiString(); ;
+                data.Seek(offset, SeekOrigin.Begin);
+                directoryTable.Name = data.ReadNullTerminatedAnsiString();
             }
 
             // Address table
-            long exportAddressTableAddress = initialOffset
-                + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
+            offset = initialOffset + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
             if (directoryTable.AddressTableEntries != 0
-                && exportAddressTableAddress > initialOffset
-                && exportAddressTableAddress < data.Length)
+                && offset > initialOffset
+                && offset < data.Length)
             {
-                data.Seek(exportAddressTableAddress, SeekOrigin.Begin);
+                data.Seek(offset, SeekOrigin.Begin);
                 obj.ExportAddressTable = ParseExportAddressTable(data, directoryTable.AddressTableEntries);
             }
 
             // Name pointer table
-            long namePointerTableAddress = initialOffset
-                + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
+            offset = initialOffset + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
             if (directoryTable.NumberOfNamePointers != 0
-                && namePointerTableAddress > initialOffset
-                && namePointerTableAddress < data.Length)
+                && offset > initialOffset
+                && offset < data.Length)
             {
-                data.Seek(namePointerTableAddress, SeekOrigin.Begin);
+                data.Seek(offset, SeekOrigin.Begin);
                 obj.NamePointerTable = ParseExportNamePointerTable(data, directoryTable.NumberOfNamePointers);
             }
 
             // Ordinal table
-            long ordinalTableAddress = initialOffset
-                + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
+            offset = initialOffset + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
             if (directoryTable.NumberOfNamePointers != 0
-                && ordinalTableAddress > initialOffset
-                && ordinalTableAddress < data.Length)
+                && offset > initialOffset
+                && offset < data.Length)
             {
-                data.Seek(ordinalTableAddress, SeekOrigin.Begin);
+                data.Seek(offset, SeekOrigin.Begin);
                 obj.OrdinalTable = ParseExportOrdinalTable(data, directoryTable.NumberOfNamePointers);
             }
 
@@ -835,7 +835,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.Pointers = new uint[entries];
             for (int i = 0; i < obj.Pointers.Length; i++)
             {
-                obj.Pointers[i] = data.ReadUInt32LittleEndian(); ;
+                obj.Pointers[i] = data.ReadUInt32LittleEndian();
             }
 
             return obj;
