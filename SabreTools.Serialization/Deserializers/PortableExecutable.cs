@@ -857,6 +857,94 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a HintNameTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="importLookupTables">Import lookup tables</param>
+        /// <param name="importAddressTables">Import address tables</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled HintNameTable on success, null on error</returns>
+        public static HintNameTableEntry[] ParseHintNameTable(Stream data,
+            long initialOffset,
+            Dictionary<int, ImportLookupTableEntry[]?> importLookupTables,
+            Dictionary<int, ImportAddressTableEntry[]?> importAddressTables,
+            SectionHeader[] sections)
+        {
+            var importHintNameTable = new List<HintNameTableEntry>();
+
+            if (importLookupTables.Count > 0 || importAddressTables.Count > 0)
+            {
+                // Get the addresses of the hint/name table entries
+                var hintNameTableEntryAddresses = new List<int>();
+
+                // If we have import lookup tables
+                if (importLookupTables.Count > 0)
+                {
+                    var addresses = new List<int>();
+                    foreach (var kvp in importLookupTables)
+                    {
+                        if (kvp.Value == null || kvp.Value.Length == 0)
+                            continue;
+
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                             ilte => (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        addresses.AddRange(vaddrs);
+                    }
+
+                    hintNameTableEntryAddresses.AddRange(addresses);
+                }
+
+                // If we have import address tables
+                if (importAddressTables.Count > 0)
+                {
+                    var addresses = new List<int>();
+                    foreach (var kvp in importAddressTables)
+                    {
+                        if (kvp.Value == null || kvp.Value.Length == 0)
+                            continue;
+
+                        var vaddrs = Array.ConvertAll(kvp.Value,
+                            iate => (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
+                        addresses.AddRange(vaddrs);
+                    }
+
+                    hintNameTableEntryAddresses.AddRange(addresses);
+                }
+
+                // Sanitize the addresses
+                var temp = new List<int>();
+                foreach (int addr in hintNameTableEntryAddresses)
+                {
+                    if (addr == 0)
+                        continue;
+                    if (temp.Contains(addr))
+                        continue;
+
+                    temp.Add(addr);
+                }
+
+                // If we have any addresses, add them to the table in order
+                hintNameTableEntryAddresses.Sort();
+                for (int i = 0; i < hintNameTableEntryAddresses.Count; i++)
+                {
+                    long hintNameTableEntryAddress = initialOffset
+                        + hintNameTableEntryAddresses[i];
+
+                    if (hintNameTableEntryAddress > initialOffset && hintNameTableEntryAddress < data.Length)
+                    {
+                        data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
+
+                        var hintNameTableEntry = ParseHintNameTableEntry(data);
+                        importHintNameTable.Add(hintNameTableEntry);
+                    }
+                }
+            }
+
+            return [.. importHintNameTable];
+        }
+
+        /// <summary>
         /// Parse a Stream into a HintNameTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -867,6 +955,67 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.Hint = data.ReadUInt16LittleEndian();
             obj.Name = data.ReadNullTerminatedAnsiString();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ImportAddressTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
+        /// <returns>Filled ImportAddressTable on success, null on error</returns>
+        public static ImportAddressTableEntry[] ParseImportAddressTable(Stream data, OptionalHeaderMagicNumber magic)
+        {
+            var obj = new List<ImportAddressTableEntry>();
+
+            while (true)
+            {
+                var entry = ParseImportAddressTableEntry(data, magic);
+                obj.Add(entry);
+
+                // All zero values means the last entry
+                if (entry.OrdinalNameFlag == false
+                    && entry.OrdinalNumber == 0
+                    && entry.HintNameTableRVA == 0)
+                    break;
+            }
+
+            return [.. obj];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ImportAddressTables
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
+        /// <param name="entries">Directory table entries containing the addresses</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ImportAddressTables on success, null on error</returns>
+        public static Dictionary<int, ImportAddressTableEntry[]?> ParseImportAddressTables(Stream data,
+            long initialOffset,
+            OptionalHeaderMagicNumber magic,
+            ImportDirectoryTableEntry[] entries,
+            SectionHeader[] sections)
+        {
+            var obj = new Dictionary<int, ImportAddressTableEntry[]?>();
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+                if (entry.ImportAddressTableRVA.ConvertVirtualAddress(sections) == 0)
+                    continue;
+
+                long tableAddress = initialOffset
+                    + entry.ImportAddressTableRVA.ConvertVirtualAddress(sections);
+
+                if (tableAddress > initialOffset && tableAddress < data.Length)
+                {
+                    data.Seek(tableAddress, SeekOrigin.Begin);
+                    obj[i] = ParseImportAddressTable(data, magic);
+                }
+            }
 
             return obj;
         }
@@ -904,6 +1053,56 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Parse a Stream into a ImportDirectoryTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ImportDirectoryTable on success, null on error</returns>
+        public static ImportDirectoryTableEntry[] ParseImportDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections)
+        {
+            var obj = new List<ImportDirectoryTableEntry>();
+
+            // Loop until the last item (all nulls) are found
+            while (data.Position < data.Length)
+            {
+                var entry = ParseImportDirectoryTableEntry(data);
+                obj.Add(entry);
+
+                // All zero values means the last entry
+                if (entry.ImportLookupTableRVA == 0
+                    && entry.TimeDateStamp == 0
+                    && entry.ForwarderChain == 0
+                    && entry.NameRVA == 0
+                    && entry.ImportAddressTableRVA == 0)
+                    break;
+            }
+
+            // Names
+            for (int i = 0; i < obj.Count; i++)
+            {
+                var entry = obj[i];
+                if (entry == null)
+                    continue;
+
+                if (entry.NameRVA.ConvertVirtualAddress(sections) == 0)
+                    continue;
+
+                long nameAddress = initialOffset
+                    + entry.NameRVA.ConvertVirtualAddress(sections);
+                if (nameAddress > initialOffset && nameAddress < data.Length)
+                {
+                    data.Seek(nameAddress, SeekOrigin.Begin);
+
+                    string? name = data.ReadNullTerminatedAnsiString();
+                    entry.Name = name;
+                }
+            }
+
+            return [.. obj];
+        }
+
+        /// <summary>
         /// Parse a Stream into a ImportDirectoryTableEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -917,6 +1116,68 @@ namespace SabreTools.Serialization.Deserializers
             obj.ForwarderChain = data.ReadUInt32LittleEndian();
             obj.NameRVA = data.ReadUInt32LittleEndian();
             obj.ImportAddressTableRVA = data.ReadUInt32LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ImportLookupTable
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
+        /// <returns>Filled ImportLookupTable on success, null on error</returns>
+        public static ImportLookupTableEntry[] ParseImportLookupTable(Stream data, OptionalHeaderMagicNumber magic)
+        {
+            var ojb = new List<ImportLookupTableEntry>();
+
+            while (true)
+            {
+                var entry = ParseImportLookupTableEntry(data, magic);
+                ojb.Add(entry);
+
+                // All zero values means the last entry
+                if (entry.OrdinalNameFlag == false
+                    && entry.OrdinalNumber == 0
+                    && entry.HintNameTableRVA == 0)
+                    break;
+            }
+
+            return [.. ojb];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ImportLookupTables
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
+        /// <param name="entries">Directory table entries containing the addresses</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ImportLookupTables on success, null on error</returns>
+        public static Dictionary<int, ImportLookupTableEntry[]?> ParseImportLookupTables(Stream data,
+            long initialOffset,
+            OptionalHeaderMagicNumber magic,
+            ImportDirectoryTableEntry[] entries,
+            SectionHeader[] sections)
+        {
+            // Lookup tables
+            var obj = new Dictionary<int, ImportLookupTableEntry[]?>();
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                var entry = entries[i];
+                if (entry.ImportLookupTableRVA.ConvertVirtualAddress(sections) == 0)
+                    continue;
+
+                long tableAddress = initialOffset
+                    + entry.ImportLookupTableRVA.ConvertVirtualAddress(sections);
+
+                if (tableAddress > initialOffset && tableAddress < data.Length)
+                {
+                    data.Seek(tableAddress, SeekOrigin.Begin);
+                    obj[i] = ParseImportLookupTable(data, magic);
+                }
+            }
 
             return obj;
         }
@@ -965,198 +1226,10 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ImportTable();
 
-            // Import directory table
-            var directoryTable = new List<ImportDirectoryTableEntry>();
-
-            // Loop until the last item (all nulls) are found
-            while (true)
-            {
-                var entry = ParseImportDirectoryTableEntry(data);
-                directoryTable.Add(entry);
-
-                // All zero values means the last entry
-                if (entry.ImportLookupTableRVA == 0
-                    && entry.TimeDateStamp == 0
-                    && entry.ForwarderChain == 0
-                    && entry.NameRVA == 0
-                    && entry.ImportAddressTableRVA == 0)
-                    break;
-            }
-
-            obj.ImportDirectoryTable = [.. directoryTable];
-
-            // Names
-            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
-            {
-                var entry = obj.ImportDirectoryTable[i];
-                if (entry == null)
-                    continue;
-
-                if (entry.NameRVA.ConvertVirtualAddress(sections) == 0)
-                    continue;
-
-                long nameAddress = initialOffset
-                    + entry.NameRVA.ConvertVirtualAddress(sections);
-                if (nameAddress > initialOffset && nameAddress < data.Length)
-                {
-                    data.Seek(nameAddress, SeekOrigin.Begin);
-
-                    string? name = data.ReadNullTerminatedAnsiString();
-                    entry.Name = name;
-                }
-            }
-
-            // Lookup tables
-            var importLookupTables = new Dictionary<int, ImportLookupTableEntry[]?>();
-
-            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
-            {
-                var entry = obj.ImportDirectoryTable[i];
-                if (entry == null)
-                    continue;
-
-                if (entry.ImportLookupTableRVA.ConvertVirtualAddress(sections) == 0)
-                    continue;
-
-                long tableAddress = initialOffset
-                    + entry.ImportLookupTableRVA.ConvertVirtualAddress(sections);
-
-                if (tableAddress > initialOffset && tableAddress < data.Length)
-                {
-                    data.Seek(tableAddress, SeekOrigin.Begin);
-
-                    var entryLookupTable = new List<ImportLookupTableEntry>();
-
-                    while (true)
-                    {
-                        var lookupEntry = ParseImportLookupTableEntry(data, magic);
-                        entryLookupTable.Add(lookupEntry);
-
-                        // All zero values means the last entry
-                        if (lookupEntry.OrdinalNameFlag == false
-                            && lookupEntry.OrdinalNumber == 0
-                            && lookupEntry.HintNameTableRVA == 0)
-                            break;
-                    }
-
-                    importLookupTables[i] = [.. entryLookupTable];
-                }
-            }
-
-            obj.ImportLookupTables = importLookupTables;
-
-            // Address tables
-            var importAddressTables = new Dictionary<int, ImportAddressTableEntry[]?>();
-
-            for (int i = 0; i < obj.ImportDirectoryTable.Length; i++)
-            {
-                var entry = obj.ImportDirectoryTable[i];
-                if (entry == null)
-                    continue;
-
-                if (entry.ImportAddressTableRVA.ConvertVirtualAddress(sections) == 0)
-                    continue;
-
-                long tableAddress = initialOffset
-                    + entry.ImportAddressTableRVA.ConvertVirtualAddress(sections);
-
-                if (tableAddress > initialOffset && tableAddress < data.Length)
-                {
-                    data.Seek(tableAddress, SeekOrigin.Begin);
-
-                    var addressLookupTable = new List<ImportAddressTableEntry>();
-
-                    while (true)
-                    {
-                        var tableEntry = ParseImportAddressTableEntry(data, magic);
-                        addressLookupTable.Add(tableEntry);
-
-                        // All zero values means the last entry
-                        if (tableEntry.OrdinalNameFlag == false
-                            && tableEntry.OrdinalNumber == 0
-                            && tableEntry.HintNameTableRVA == 0)
-                            break;
-                    }
-
-                    importAddressTables[i] = [.. addressLookupTable];
-                }
-            }
-
-            obj.ImportAddressTables = importAddressTables;
-
-            // Hint/Name table
-            var importHintNameTable = new List<HintNameTableEntry>();
-
-            if ((obj.ImportLookupTables != null && obj.ImportLookupTables.Count > 0)
-                || obj.ImportAddressTables != null && obj.ImportAddressTables.Count > 0)
-            {
-                // Get the addresses of the hint/name table entries
-                var hintNameTableEntryAddresses = new List<int>();
-
-                // If we have import lookup tables
-                if (obj.ImportLookupTables != null && importLookupTables.Count > 0)
-                {
-                    var addresses = new List<int>();
-                    foreach (var kvp in obj.ImportLookupTables)
-                    {
-                        if (kvp.Value == null || kvp.Value.Length == 0)
-                            continue;
-
-                        var vaddrs = Array.ConvertAll(kvp.Value,
-                             ilte => (int)ilte.HintNameTableRVA.ConvertVirtualAddress(sections));
-                        addresses.AddRange(vaddrs);
-                    }
-
-                    hintNameTableEntryAddresses.AddRange(addresses);
-                }
-
-                // If we have import address tables
-                if (obj.ImportAddressTables != null && obj.ImportAddressTables.Count > 0)
-                {
-                    var addresses = new List<int>();
-                    foreach (var kvp in obj.ImportAddressTables)
-                    {
-                        if (kvp.Value == null || kvp.Value.Length == 0)
-                            continue;
-
-                        var vaddrs = Array.ConvertAll(kvp.Value,
-                            iate => (int)iate.HintNameTableRVA.ConvertVirtualAddress(sections));
-                        addresses.AddRange(vaddrs);
-                    }
-
-                    hintNameTableEntryAddresses.AddRange(addresses);
-                }
-
-                // Sanitize the addresses
-                var temp = new List<int>();
-                foreach (int addr in hintNameTableEntryAddresses)
-                {
-                    if (addr == 0)
-                        continue;
-                    if (temp.Contains(addr))
-                        continue;
-
-                    temp.Add(addr);
-                }
-
-                // If we have any addresses, add them to the table in order
-                hintNameTableEntryAddresses.Sort();
-                for (int i = 0; i < hintNameTableEntryAddresses.Count; i++)
-                {
-                    long hintNameTableEntryAddress = initialOffset
-                        + hintNameTableEntryAddresses[i];
-
-                    if (hintNameTableEntryAddress > initialOffset && hintNameTableEntryAddress < data.Length)
-                    {
-                        data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
-
-                        var hintNameTableEntry = ParseHintNameTableEntry(data);
-                        importHintNameTable.Add(hintNameTableEntry);
-                    }
-                }
-            }
-
-            obj.HintNameTable = [.. importHintNameTable];
+            obj.ImportDirectoryTable = ParseImportDirectoryTable(data, initialOffset, sections);
+            obj.ImportLookupTables = ParseImportLookupTables(data, initialOffset, magic, obj.ImportDirectoryTable, sections);
+            obj.ImportAddressTables = ParseImportAddressTables(data, initialOffset, magic, obj.ImportDirectoryTable, sections);
+            obj.HintNameTable = ParseHintNameTable(data, initialOffset, obj.ImportLookupTables, obj.ImportAddressTables, sections);
 
             return obj;
         }
