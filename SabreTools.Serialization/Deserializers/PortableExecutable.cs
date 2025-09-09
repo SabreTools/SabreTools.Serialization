@@ -329,19 +329,22 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.PageRVA = data.ReadUInt32LittleEndian();
             obj.BlockSize = data.ReadUInt32LittleEndian();
-            if (obj.BlockSize == 0)
-                return null;
+            if (obj.BlockSize <= 8)
+                return obj;
 
-            var entries = new List<BaseRelocationTypeOffsetFieldEntry>();
-            int totalSize = 8;
-            while (totalSize < obj.BlockSize && data.Position < data.Length)
+            // Guard against invalid block sizes
+            if (obj.BlockSize % 2 != 0)
+                return obj;
+
+            int entryCount = ((int)obj.BlockSize - 8) / 2;
+            obj.TypeOffsetFieldEntries = new BaseRelocationTypeOffsetFieldEntry[entryCount];
+            for (int i = 0; i < obj.TypeOffsetFieldEntries.Length; i++)
             {
-                var entry = ParseBaseRelocationTypeOffsetFieldEntry(data);
-                entries.Add(entry);
-                totalSize += 2;
-            }
+                if (data.Position + 2 >= data.Length)
+                    break;
 
-            obj.TypeOffsetFieldEntries = [.. entries];
+                obj.TypeOffsetFieldEntries[i] = ParseBaseRelocationTypeOffsetFieldEntry(data);
+            }
 
             return obj;
         }
