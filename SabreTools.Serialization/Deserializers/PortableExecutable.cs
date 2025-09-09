@@ -1006,7 +1006,8 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new List<ImportAddressTableEntry>();
 
-            while (true)
+            // Loop until the last item (all nulls) are found
+            while (data.Position < data.Length)
             {
                 var entry = ParseImportAddressTableEntry(data, magic);
                 obj.Add(entry);
@@ -1122,17 +1123,11 @@ namespace SabreTools.Serialization.Deserializers
                 if (entry == null)
                     continue;
 
-                if (entry.NameRVA.ConvertVirtualAddress(sections) == 0)
-                    continue;
-
-                long nameAddress = initialOffset
-                    + entry.NameRVA.ConvertVirtualAddress(sections);
-                if (nameAddress > initialOffset && nameAddress < data.Length)
+                long offset = initialOffset + entry.NameRVA.ConvertVirtualAddress(sections);
+                if (offset > initialOffset && offset < data.Length)
                 {
-                    data.Seek(nameAddress, SeekOrigin.Begin);
-
-                    string? name = data.ReadNullTerminatedAnsiString();
-                    entry.Name = name;
+                    data.Seek(offset, SeekOrigin.Begin);
+                    entry.Name = data.ReadNullTerminatedAnsiString();
                 }
             }
 
@@ -1165,12 +1160,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled ImportLookupTable on success, null on error</returns>
         public static ImportLookupTableEntry[] ParseImportLookupTable(Stream data, OptionalHeaderMagicNumber magic)
         {
-            var ojb = new List<ImportLookupTableEntry>();
+            var obj = new List<ImportLookupTableEntry>();
 
-            while (true)
+            // Loop until the last item (all nulls) are found
+            while (data.Position < data.Length)
             {
                 var entry = ParseImportLookupTableEntry(data, magic);
-                ojb.Add(entry);
+                obj.Add(entry);
 
                 // All zero values means the last entry
                 if (entry.OrdinalNameFlag == false
@@ -1179,7 +1175,7 @@ namespace SabreTools.Serialization.Deserializers
                     break;
             }
 
-            return [.. ojb];
+            return [.. obj];
         }
 
         /// <summary>
@@ -1232,6 +1228,7 @@ namespace SabreTools.Serialization.Deserializers
             if (magic == OptionalHeaderMagicNumber.PE32)
             {
                 uint value = data.ReadUInt32LittleEndian();
+
                 obj.OrdinalNameFlag = (value & 0x80000000) != 0;
                 if (obj.OrdinalNameFlag)
                     obj.OrdinalNumber = (ushort)(value & ~0x80000000);
@@ -1241,6 +1238,7 @@ namespace SabreTools.Serialization.Deserializers
             else if (magic == OptionalHeaderMagicNumber.PE32Plus)
             {
                 ulong value = data.ReadUInt64LittleEndian();
+
                 obj.OrdinalNameFlag = (value & 0x8000000000000000) != 0;
                 if (obj.OrdinalNameFlag)
                     obj.OrdinalNumber = (ushort)(value & ~0x8000000000000000);
