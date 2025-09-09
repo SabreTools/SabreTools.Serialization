@@ -1552,6 +1552,13 @@ namespace SabreTools.Serialization.Deserializers
             if (!topLevel)
                 return obj;
 
+            // TODO: Revisit the logic for this
+            // - Use the table boundaries not the section ones
+            // - Don't check for signatures, just read anything that's there
+            // - If alignment is used, use the one from the optional header
+            // - Should this be moved out of this method entirely?
+            #region Hidden Resources
+
             // If we're not aligned to a section
             var firstSection = Array.Find(sections, s => s != null && s.PointerToRawData == tableStart);
             if (firstSection == null)
@@ -1595,6 +1602,8 @@ namespace SabreTools.Serialization.Deserializers
                     },
                 };
             }
+
+            #endregion
 
             return obj;
         }
