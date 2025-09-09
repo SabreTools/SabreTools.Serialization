@@ -1205,6 +1205,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "bz2";
                         break;
                     }
+                    else if (overlaySample.StartsWith([0x1F, 0x8B]))
+                    {
+                        extension = "gz";
+                        break;
+                    }
                     else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                     {
                         extension = "cab";
@@ -1301,8 +1306,12 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Get the resources that have an archive signature
                 int i = 0;
-                foreach (var value in resourceData.Values)
+                foreach (var kvp in resourceData)
                 {
+                    // Get the key and value
+                    string resourceKey = kvp.Key;
+                    var value = kvp.Value;
+
                     if (value == null || value is not byte[] ba || ba.Length == 0)
                         continue;
 
@@ -1321,9 +1330,34 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "7z";
                             break;
                         }
+                        else if (resourceSample.StartsWith([0x42, 0x4D]))
+                        {
+                            extension = "bmp";
+                            break;
+                        }
                         else if (resourceSample.StartsWith([0x42, 0x5A, 0x68]))
                         {
                             extension = "bz2";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x47, 0x49, 0x46, 0x38]))
+                        {
+                            extension = "gif";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x1F, 0x8B]))
+                        {
+                            extension = "gz";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0xFF, 0xD8, 0xFF, 0xE0]))
+                        {
+                            extension = "jpg";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x3C, 0x68, 0x74, 0x6D, 0x6C]))
+                        {
+                            extension = "html";
                             break;
                         }
                         else if (resourceSample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
@@ -1349,6 +1383,11 @@ namespace SabreTools.Serialization.Wrappers
                         else if (resourceSample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
                         {
                             extension = "zip";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x89, 0x50, 0x4E, 0x47]))
+                        {
+                            extension = "png";
                             break;
                         }
                         else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
@@ -1385,7 +1424,7 @@ namespace SabreTools.Serialization.Wrappers
                     try
                     {
                         // Create the temp filename
-                        string tempFile = $"embedded_resource_{i++}.{extension}";
+                        string tempFile = $"embedded_resource_{i++} ({resourceKey}).{extension}";
                         if (Filename != null)
                             tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
 

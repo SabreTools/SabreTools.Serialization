@@ -416,6 +416,11 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "bz2";
                         break;
                     }
+                    else if (overlaySample.StartsWith([0x1F, 0x8B]))
+                    {
+                        extension = "gz";
+                        break;
+                    }
                     else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                     {
                         extension = "cab";
