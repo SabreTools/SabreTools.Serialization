@@ -198,9 +198,9 @@ namespace SabreTools.Serialization.Deserializers
                         }
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
-                        if (pex.ResourceDirectoryTable != null && data.Position - tableStart < tableSize)
+                        if (pex.ResourceDirectoryTable?.Entries != null && data.Position - tableStart < tableSize)
                         {
-                            var localEntries = pex.ResourceDirectoryTable.Entries ?? [];
+                            var localEntries = pex.ResourceDirectoryTable.Entries;
                             Array.Resize(ref localEntries, localEntries.Length + 1);
                             pex.ResourceDirectoryTable.Entries = localEntries;
                             int length = (int)(tableSize - (data.Position - tableStart));
