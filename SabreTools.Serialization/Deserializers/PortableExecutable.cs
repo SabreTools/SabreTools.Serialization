@@ -500,78 +500,70 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new BaseEntry[count];
 
             int auxSymbolsRemaining = 0;
-            int currentSymbolType = 0;
+            int nextSymbolType = 0;
 
             for (int i = 0; i < count; i++)
             {
                 // Standard COFF Symbol Table Entry
-                if (currentSymbolType == 0)
+                if (nextSymbolType == 0)
                 {
-                    var entry = ParseStandardRecord(data, out currentSymbolType);
-                    if (entry == null)
-                        return null;
-
+                    var entry = ParseStandardRecord(data, out nextSymbolType);
                     obj[i] = entry;
-
                     auxSymbolsRemaining = entry.NumberOfAuxSymbols;
-                    if (auxSymbolsRemaining == 0)
-                    {
-                        currentSymbolType = 0;
-                        continue;
-                    }
                 }
 
                 // Auxiliary Format 1: Function Definitions
-                else if (currentSymbolType == 1)
+                else if (nextSymbolType == 1)
                 {
                     obj[i] = ParseFunctionDefinition(data);
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 2: .bf and .ef Symbols
-                else if (currentSymbolType == 2)
+                else if (nextSymbolType == 2)
                 {
                     obj[i] = ParseDescriptor(data);
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 3: Weak Externals
-                else if (currentSymbolType == 3)
+                else if (nextSymbolType == 3)
                 {
                     obj[i] = ParseWeakExternal(data);
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 4: Files
-                else if (currentSymbolType == 4)
+                else if (nextSymbolType == 4)
                 {
                     obj[i] = ParseFileRecord(data);
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 5: Section Definitions
-                else if (currentSymbolType == 5)
+                else if (nextSymbolType == 5)
                 {
                     obj[i] = ParseSectionDefinition(data);
                     auxSymbolsRemaining--;
                 }
 
                 // Auxiliary Format 6: CLR Token Definition
-                else if (currentSymbolType == 6)
+                else if (nextSymbolType == 6)
                 {
                     obj[i] = ParseCLRTokenDefinition(data);
                     auxSymbolsRemaining--;
                 }
 
-                // Invalid case, should never happen
+                // Invalid case, should be skipped
                 else
                 {
-                    return null;
+                    _ = data.ReadBytes(18);
+                    auxSymbolsRemaining--;
                 }
 
                 // If we hit the last aux symbol, go back to normal format
                 if (auxSymbolsRemaining == 0)
-                    currentSymbolType = 0;
+                    nextSymbolType = 0;
             }
 
             return obj;
@@ -1662,66 +1654,72 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled StandardRecord on success, null on error</returns>
-        public static StandardRecord? ParseStandardRecord(Stream data, out int currentSymbolType)
+        public static StandardRecord ParseStandardRecord(Stream data, out int nextSymbolType)
         {
-            var entry = new StandardRecord();
-            entry.ShortName = data.ReadBytes(8);
-            if (entry.ShortName != null)
-                entry.Zeroes = BitConverter.ToUInt32(entry.ShortName, 0);
+            var obj = new StandardRecord();
 
-            if (entry.Zeroes == 0)
-            {
-                if (entry.ShortName != null)
-                    entry.Offset = BitConverter.ToUInt32(entry.ShortName, 4);
+            obj.ShortName = data.ReadBytes(8);
 
-                entry.ShortName = null;
-            }
-            entry.Value = data.ReadUInt32LittleEndian();
-            entry.SectionNumber = data.ReadUInt16LittleEndian();
-            entry.SymbolType = (SymbolType)data.ReadUInt16LittleEndian();
-            entry.StorageClass = (StorageClass)data.ReadByteValue();
-            entry.NumberOfAuxSymbols = data.ReadByteValue();
+            obj.Zeroes = BitConverter.ToUInt32(obj.ShortName, 0);
+            obj.Offset = BitConverter.ToUInt32(obj.ShortName, 4);
+            string? shortName = null;
+            if (obj.Zeroes != 0)
+                shortName = Encoding.UTF8.GetString(obj.ShortName);
 
-            if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                && entry.SymbolType == SymbolType.IMAGE_SYM_TYPE_FUNC
-                && entry.SectionNumber > 0)
+            obj.Value = data.ReadUInt32LittleEndian();
+            obj.SectionNumber = data.ReadUInt16LittleEndian();
+            obj.SymbolType = (SymbolType)data.ReadUInt16LittleEndian();
+            obj.StorageClass = (StorageClass)data.ReadByteValue();
+            obj.NumberOfAuxSymbols = data.ReadByteValue();
+
+            // Do not determine the aux symbol if none exists
+            if (obj.NumberOfAuxSymbols == 0)
             {
-                currentSymbolType = 1;
+                nextSymbolType = 0;
+                return obj;
             }
-            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FUNCTION
-                && entry.ShortName != null
-                && ((entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x62 && entry.ShortName[2] == 0x66)  // .bf
-                    || (entry.ShortName[0] == 0x2E && entry.ShortName[1] == 0x65 && entry.ShortName[2] == 0x66))) // .ef
+
+            // Determine the next symbol type
+            if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
+                    && (obj.SymbolType & SymbolType.IMAGE_SYM_TYPE_FUNC) != 0
+                    && obj.SectionNumber > 0)
             {
-                currentSymbolType = 2;
+                nextSymbolType = 1;
             }
-            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
-                && entry.SectionNumber == (ushort)SectionNumber.IMAGE_SYM_UNDEFINED
-                && entry.Value == 0)
+            else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_FUNCTION
+                && (shortName?.StartsWith(".bf") == true
+                    || shortName?.StartsWith(".ef") == true))
             {
-                currentSymbolType = 3;
+                nextSymbolType = 2;
             }
-            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE)
+            else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_EXTERNAL
+                && obj.SectionNumber == (ushort)SectionNumber.IMAGE_SYM_UNDEFINED
+                && obj.Value == 0)
             {
-                // TODO: Symbol name should be ".file"
-                currentSymbolType = 4;
+                nextSymbolType = 3;
             }
-            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC)
+            else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE
+                && shortName != null)
             {
-                // TODO: Should have the name of a section (like ".text")
-                currentSymbolType = 5;
+                // Symbol name should be ".file"
+                nextSymbolType = 4;
             }
-            else if (entry.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
+            else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC
+                && shortName != null)
             {
-                currentSymbolType = 6;
+                // Should have the name of a section (like ".text")
+                nextSymbolType = 5;
+            }
+            else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_CLR_TOKEN)
+            {
+                nextSymbolType = 6;
             }
             else
             {
-                currentSymbolType = -1;
-                return null;
+                nextSymbolType = -1;
             }
 
-            return entry;
+            return obj;
         }
 
         /// <summary>
