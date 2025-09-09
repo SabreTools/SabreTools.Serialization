@@ -86,6 +86,13 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Section Table
 
+                // TODO: Technically this needs to be seeked to
+                // It should be found by taking the the position after the
+                // signature and COFF file header and then adding the size
+                // of the optional header. This is effectively what the code
+                // is already doing since it is parsed after the optional
+                // header and not guessing otherwise.
+
                 // Set the section table
                 executable.SectionTable = new SectionHeader[coffFileHeader.NumberOfSections];
                 for (int i = 0; i < coffFileHeader.NumberOfSections; i++)
