@@ -175,27 +175,15 @@ namespace SabreTools.Serialization.Deserializers
                         long tableStart = data.Position;
                         pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, tableStart, pex.SectionTable);
 
-                        // TODO: Revisit the logic for this
-                        // - Don't check for signatures, just read anything that's there
-                        // - If alignment is used, use the one from the optional header
                         #region Hidden Resources
 
                         // Get the table size
                         int tableSize = (int)optionalHeader.ResourceTable.Size;
 
-                        // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
-                        while (data.Position - tableStart < tableSize && data.Position % 0x200 != 0 && data.Position < data.Length - 1)
-                        {
-                            // If we find the start of an MS-DOS header
-                            if (data.ReadUInt16LittleEndian() == Models.MSDOS.Constants.SignatureUInt16)
-                            {
-                                data.Seek(-2, origin: SeekOrigin.Current);
-                                break;
-                            }
-
-                            // Otherwise
-                            data.Seek(-1, origin: SeekOrigin.Current);
-                        }
+                        // TODO: Determine if this should be aligned using OptionalHeader.FileAlignment
+                        // Former versions of this code aligned to 512-byte (0x200) boundaries, which is a
+                        // common value for the file alignment. It is unknown why this alignment was happening,
+                        // as it was also cut short if a recognized signature was found.
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
                         if (pex.ResourceDirectoryTable?.Entries != null && data.Position - tableStart < tableSize)
