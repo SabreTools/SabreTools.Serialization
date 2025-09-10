@@ -180,7 +180,7 @@ namespace SabreTools.Serialization.Deserializers
                         // - If alignment is used, use the one from the optional header
                         #region Hidden Resources
 
-                        // Get the section size
+                        // Get the table size
                         int tableSize = (int)optionalHeader.ResourceTable.Size;
 
                         // Align to the 512-byte boundary, we find the start of an MS-DOS header, or the end of the file
