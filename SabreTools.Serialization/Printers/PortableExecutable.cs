@@ -560,7 +560,6 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine($"    Type and Offset Entry {j}");
                     builder.AppendLine($"      Type: {typeOffsetFieldEntry.BaseRelocationType} (0x{typeOffsetFieldEntry.BaseRelocationType:X})");
                     builder.AppendLine(typeOffsetFieldEntry.Offset, "      Offset");
-                    builder.AppendLine();
                 }
             }
 
