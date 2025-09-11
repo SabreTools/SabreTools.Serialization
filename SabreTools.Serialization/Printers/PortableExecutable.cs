@@ -557,8 +557,16 @@ namespace SabreTools.Serialization.Printers
                     var typeOffsetFieldEntry = baseRelocationTableEntry.TypeOffsetFieldEntries[j];
 
                     builder.AppendLine($"    Type and Offset Entry {j}");
-                    builder.AppendLine($"      Type: {typeOffsetFieldEntry.BaseRelocationType} (0x{typeOffsetFieldEntry.BaseRelocationType:X})");
-                    builder.AppendLine(typeOffsetFieldEntry.Offset, "      Offset");
+                    if (typeOffsetFieldEntry == null)
+                    {
+                        builder.AppendLine($"      Type: [NULL]");
+                        builder.AppendLine($"      Offset: [NULL]");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"      Type: {typeOffsetFieldEntry.BaseRelocationType} (0x{typeOffsetFieldEntry.BaseRelocationType:X})");
+                        builder.AppendLine(typeOffsetFieldEntry.Offset, "      Offset");
+                    }
                 }
             }
 
