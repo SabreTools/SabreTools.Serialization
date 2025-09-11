@@ -452,6 +452,9 @@ namespace SabreTools.Serialization.Deserializers
             while (offset < data.Length)
             {
                 var entry = ParseAttributeCertificateTableEntry(data, ref offset);
+                if (entry == null)
+                    break;
+
                 obj.Add(entry);
 
                 // Align to the QWORD boundary if we're not at the end
@@ -469,11 +472,14 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled AttributeCertificateTableEntry on success, null on error</returns>
-        public static AttributeCertificateTableEntry ParseAttributeCertificateTableEntry(byte[] data, ref int offset)
+        public static AttributeCertificateTableEntry? ParseAttributeCertificateTableEntry(byte[] data, ref int offset)
         {
             var obj = new AttributeCertificateTableEntry();
 
             obj.Length = data.ReadUInt32LittleEndian(ref offset);
+            if (obj.Length < 8)
+                return null;
+
             obj.Revision = (WindowsCertificateRevision)data.ReadUInt16LittleEndian(ref offset);
             obj.CertificateType = (WindowsCertificateType)data.ReadUInt16LittleEndian(ref offset);
 
