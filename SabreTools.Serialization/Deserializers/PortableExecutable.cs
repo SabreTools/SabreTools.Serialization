@@ -265,18 +265,20 @@ namespace SabreTools.Serialization.Deserializers
                         int tableSize = (int)optionalHeader.ResourceTable.Size;
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
+                        tableSize = (int)Math.Min(tableSize, data.Length - offset);
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the resource directory table
                         long tableStart = data.Position;
-                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, data, initialOffset, tableStart, pex.SectionTable);
+                        int tableOffset = 0;
+                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, ref tableOffset);
 
                         #region Hidden Resources
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
-                        if (pex.ResourceDirectoryTable?.Entries != null && data.Position - tableStart < tableSize)
+                        if (pex.ResourceDirectoryTable?.Entries != null && tableOffset < tableSize)
                         {
                             // Resize the entry array to accomodate one more
                             var localEntries = pex.ResourceDirectoryTable.Entries;
@@ -284,8 +286,7 @@ namespace SabreTools.Serialization.Deserializers
                             pex.ResourceDirectoryTable.Entries = localEntries;
 
                             // Get the length of the remaining data
-                            int length = (int)(tableSize - (data.Position - tableStart));
-                            length = (int)Math.Min(length, data.Length - data.Position);
+                            int length = tableSize - tableOffset;
 
                             // Add the hidden entry
                             pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new ResourceDirectoryEntry
@@ -1362,7 +1363,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a import table
+        /// Parse a byte array into a import table
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled import table on success, null on error</returns>
@@ -1513,47 +1514,42 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an ResourceDataEntry
+        /// Parse a byte array into an ResourceDataEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDataEntry on success, null on error</returns>
-        public static ResourceDataEntry ParseResourceDataEntry(Stream data, long initialOffset, SectionHeader[] sections)
+        public static ResourceDataEntry ParseResourceDataEntry(byte[] data, ref int offset)
         {
             var obj = new ResourceDataEntry();
 
-            obj.DataRVA = data.ReadUInt32LittleEndian();
-            obj.Size = data.ReadUInt32LittleEndian();
-            obj.Codepage = data.ReadUInt32LittleEndian();
-            obj.Reserved = data.ReadUInt32LittleEndian();
+            obj.DataRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.Size = data.ReadUInt32LittleEndian(ref offset);
+            obj.Codepage = data.ReadUInt32LittleEndian(ref offset);
+            obj.Reserved = data.ReadUInt32LittleEndian(ref offset);
 
-            // Empty entries are valid
+            // Ignore empty resources
             if (obj.Size == 0)
-            {
-                obj.Data = [];
                 return obj;
-            }
 
             // Read the data from the offset
-            long offset = initialOffset + obj.DataRVA.ConvertVirtualAddress(sections);
-            if (offset > initialOffset && offset + obj.Size < data.Length)
+            if (obj.DataRVA > 0 && obj.DataRVA + obj.Size < data.Length)
             {
-                data.Seek(offset, SeekOrigin.Begin);
-                obj.Data = data.ReadBytes((int)obj.Size);
+                int dataOffset = (int)obj.DataRVA;
+                obj.Data = data.ReadBytes(ref dataOffset, (int)obj.Size);
             }
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an ResourceDirectoryEntry
+        /// Parse a byte array into an ResourceDirectoryEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <param name="nameEntry">Indicates if the value is a name entry or not</param>
-        /// <param name="tableStart">Table start address for relative reads</param>
         /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
-        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(Stream data, bool nameEntry, long tableStart)
+        public static ResourceDirectoryEntry ParseResourceDirectoryEntry(byte[] data, ref int offset, bool nameEntry)
         {
             var obj = new ResourceDirectoryEntry();
 
@@ -1563,74 +1559,58 @@ namespace SabreTools.Serialization.Deserializers
             // documentation makes no mention of the high bit being set here,
             // only for the offset below.
             if (nameEntry)
-                obj.NameOffset = data.ReadUInt32LittleEndian() & ~0x80000000U;
+                obj.NameOffset = data.ReadUInt32LittleEndian(ref offset) & ~0x80000000U;
             else
-                obj.IntegerID = data.ReadUInt32LittleEndian();
+                obj.IntegerID = data.ReadUInt32LittleEndian(ref offset);
 
-            uint offset = data.ReadUInt32LittleEndian();
-            if ((offset & 0x80000000) != 0)
-                obj.SubdirectoryOffset = offset & ~0x80000000;
+            uint offsetField = data.ReadUInt32LittleEndian(ref offset);
+            if ((offsetField & 0x80000000) != 0)
+                obj.SubdirectoryOffset = offsetField & ~0x80000000;
             else
-                obj.DataEntryOffset = offset;
-
-            // Read the name from the offset, if needed
-            if (nameEntry && obj.NameOffset > 0)
-            {
-                long nameOffset = tableStart + obj.NameOffset;
-                if (nameOffset > tableStart && nameOffset < data.Length)
-                {
-                    long currentOffset = data.Position;
-                    data.Seek(nameOffset, SeekOrigin.Begin);
-                    obj.Name = ParseResourceDirectoryString(data);
-                    data.Seek(currentOffset, SeekOrigin.Begin);
-                }
-            }
+                obj.DataEntryOffset = offsetField;
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an ResourceDirectoryString
+        /// Parse a byte array into an ResourceDirectoryString
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDirectoryString on success, null on error</returns>
-        public static ResourceDirectoryString ParseResourceDirectoryString(Stream data)
+        public static ResourceDirectoryString ParseResourceDirectoryString(byte[] data, ref int offset)
         {
             var obj = new ResourceDirectoryString();
 
-            obj.Length = data.ReadUInt16LittleEndian();
-            if (obj.Length > 0 && data.Position + (obj.Length * 2) <= data.Length)
-                obj.UnicodeString = data.ReadBytes(obj.Length * 2);
+            obj.Length = data.ReadUInt16LittleEndian(ref offset);
+            if (obj.Length > 0 && offset + (obj.Length * 2) <= data.Length)
+                obj.UnicodeString = data.ReadBytes(ref offset, obj.Length * 2);
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a ResourceDirectoryTable
+        /// Parse a byte array into a ResourceDirectoryTable
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="tableStart">Table start address for relative reads</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="tableData">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable? ParseResourceDirectoryTable(byte[]? tableData,
-            Stream data,
-            long initialOffset,
-            long tableStart,
-            SectionHeader[] sections)
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(byte[]? tableData, ref int offset)
         {
+            if (tableData == null)
+                return null;
+
             var obj = new ResourceDirectoryTable();
 
-            obj.Characteristics = data.ReadUInt32LittleEndian();
+            obj.Characteristics = tableData.ReadUInt32LittleEndian(ref offset);
             if (obj.Characteristics != 0)
                 return null;
 
-            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
-            obj.MajorVersion = data.ReadUInt16LittleEndian();
-            obj.MinorVersion = data.ReadUInt16LittleEndian();
-            obj.NumberOfNameEntries = data.ReadUInt16LittleEndian();
-            obj.NumberOfIDEntries = data.ReadUInt16LittleEndian();
+            obj.TimeDateStamp = tableData.ReadUInt32LittleEndian(ref offset);
+            obj.MajorVersion = tableData.ReadUInt16LittleEndian(ref offset);
+            obj.MinorVersion = tableData.ReadUInt16LittleEndian(ref offset);
+            obj.NumberOfNameEntries = tableData.ReadUInt16LittleEndian(ref offset);
+            obj.NumberOfIDEntries = tableData.ReadUInt16LittleEndian(ref offset);
 
             // Create the entry array
             int totalEntryCount = obj.NumberOfNameEntries + obj.NumberOfIDEntries;
@@ -1642,29 +1622,28 @@ namespace SabreTools.Serialization.Deserializers
             for (int i = 0; i < totalEntryCount; i++)
             {
                 bool nameEntry = i < obj.NumberOfNameEntries;
-                obj.Entries[i] = ParseResourceDirectoryEntry(data, nameEntry, tableStart);
+                obj.Entries[i] = ParseResourceDirectoryEntry(tableData, ref offset, nameEntry);
+
+                // Read the name from the offset, if needed
+                if (nameEntry && obj.Entries[i].NameOffset > 0 && obj.Entries[i].NameOffset < tableData.Length)
+                {
+                    int nameOffset = (int)obj.Entries[i].NameOffset;
+                    obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref nameOffset);
+                }
             }
 
             // Loop through and process the entries
             foreach (var entry in obj.Entries)
             {
-                if (entry.DataEntryOffset > 0)
+                if (entry.DataEntryOffset > 0 && entry.DataEntryOffset < tableData.Length)
                 {
-                    long offset = tableStart + entry.DataEntryOffset;
-                    if (offset > tableStart && offset < data.Length)
-                    {
-                        data.Seek(offset, SeekOrigin.Begin);
-                        entry.DataEntry = ParseResourceDataEntry(data, initialOffset, sections); ;
-                    }
+                    int entryOffset = (int)entry.DataEntryOffset;
+                    entry.DataEntry = ParseResourceDataEntry(tableData, ref entryOffset);
                 }
-                else if (entry.SubdirectoryOffset > 0)
+                else if (entry.SubdirectoryOffset > 0 && entry.SubdirectoryOffset < tableData.Length)
                 {
-                    long offset = tableStart + entry.SubdirectoryOffset;
-                    if (offset > tableStart && offset < data.Length)
-                    {
-                        data.Seek(offset, SeekOrigin.Begin);
-                        entry.Subdirectory = ParseResourceDirectoryTable(tableData, data, initialOffset, tableStart, sections);
-                    }
+                    int subdirOffset = (int)entry.SubdirectoryOffset;
+                    entry.Subdirectory = ParseResourceDirectoryTable(tableData, ref subdirOffset);
                 }
             }
 
