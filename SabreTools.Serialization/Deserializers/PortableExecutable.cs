@@ -1649,8 +1649,8 @@ namespace SabreTools.Serialization.Deserializers
                 // Read the name from the offset, if needed
                 if (nameEntry && obj.Entries[i].NameOffset > 0 && obj.Entries[i].NameOffset < tableData.Length)
                 {
-                    int nameOffset = (int)obj.Entries[i].NameOffset;
-                    obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref nameOffset);
+                    offset = (int)obj.Entries[i].NameOffset;
+                    obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref offset);
                 }
             }
 
@@ -1659,13 +1659,13 @@ namespace SabreTools.Serialization.Deserializers
             {
                 if (entry.DataEntryOffset > 0 && entry.DataEntryOffset < tableData.Length)
                 {
-                    int entryOffset = (int)entry.DataEntryOffset;
-                    entry.DataEntry = ParseResourceDataEntry(tableData, ref entryOffset);
+                    offset = (int)entry.DataEntryOffset;
+                    entry.DataEntry = ParseResourceDataEntry(tableData, ref offset);
                 }
                 else if (entry.SubdirectoryOffset > 0 && entry.SubdirectoryOffset < tableData.Length)
                 {
-                    int subdirOffset = (int)entry.SubdirectoryOffset;
-                    entry.Subdirectory = ParseResourceDirectoryTable(tableData, ref subdirOffset);
+                    offset = (int)entry.SubdirectoryOffset;
+                    entry.Subdirectory = ParseResourceDirectoryTable(tableData, ref offset);
                 }
             }
 
