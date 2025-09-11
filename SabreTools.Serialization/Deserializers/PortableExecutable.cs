@@ -130,6 +130,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.ExportTable.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the export table
                         data.Seek(offset, SeekOrigin.Begin);
 
@@ -149,6 +154,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.ImportTable.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the import table
                         data.Seek(offset, SeekOrigin.Begin);
 
@@ -168,6 +178,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.ResourceTable.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the resource directory table
                         data.Seek(offset, SeekOrigin.Begin);
 
@@ -176,13 +191,6 @@ namespace SabreTools.Serialization.Deserializers
                         pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, tableStart, pex.SectionTable);
 
                         #region Hidden Resources
-
-                        // Get the table size
-                        int tableSize = (int)optionalHeader.ResourceTable.Size;
-
-                        // Round up the table size based on the file alignment
-                        long paddingSize = optionalHeader.FileAlignment - ((tableStart + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
                         if (pex.ResourceDirectoryTable?.Entries != null && data.Position - tableStart < tableSize)
@@ -227,6 +235,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.CertificateTable.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the attribute certificate table
                         data.Seek(offset, SeekOrigin.Begin);
                         long endOffset = offset + optionalHeader.CertificateTable.Size;
@@ -247,6 +260,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.BaseRelocationTable.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the base relocation table
                         data.Seek(offset, SeekOrigin.Begin);
                         long endOffset = offset + optionalHeader.BaseRelocationTable.Size;
@@ -267,6 +285,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.Debug.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the debug table
                         data.Seek(offset, SeekOrigin.Begin);
                         long endOffset = offset + optionalHeader.Debug.Size;
@@ -293,6 +316,11 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
+                        // Get the adjusted table values
+                        int tableSize = (int)optionalHeader.DelayImportDescriptor.Size;
+                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
+
                         // Seek to the delay-load directory table
                         data.Seek(offset, SeekOrigin.Begin);
 
