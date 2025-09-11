@@ -224,28 +224,37 @@ namespace SabreTools.Serialization.Deserializers
                                     continue;
 
                                 long nameOffset = initialOffset + entry.NameRVA.ConvertVirtualAddress(pex.SectionTable);
-                                if (nameOffset > initialOffset && nameOffset < data.Length)
+
+                                // If any name RVA is invalid, then the import table is invalid
+                                if (nameOffset < initialOffset || nameOffset >= data.Length)
                                 {
-                                    data.Seek(nameOffset, SeekOrigin.Begin);
-                                    entry.Name = data.ReadNullTerminatedAnsiString();
+                                    pex.ImportTable = null;
+                                    break;
                                 }
+
+                                data.Seek(nameOffset, SeekOrigin.Begin);
+                                entry.Name = data.ReadNullTerminatedAnsiString();
                             }
 
-                            pex.ImportTable.ImportLookupTables = ParseImportLookupTables(data,
-                                initialOffset,
-                                optionalHeader.Magic,
-                                importDirectoryTable,
-                                pex.SectionTable);
-                            pex.ImportTable.ImportAddressTables = ParseImportAddressTables(data,
-                                initialOffset,
-                                optionalHeader.Magic,
-                                importDirectoryTable,
-                                pex.SectionTable);
-                            pex.ImportTable.HintNameTable = ParseHintNameTable(data,
-                                initialOffset,
-                                pex.ImportTable.ImportLookupTables,
-                                pex.ImportTable.ImportAddressTables,
-                                pex.SectionTable);
+                            // If an error was not encountered, read the remaining tables
+                            if (pex.ImportTable != null)
+                            {
+                                pex.ImportTable.ImportLookupTables = ParseImportLookupTables(data,
+                                    initialOffset,
+                                    optionalHeader.Magic,
+                                    importDirectoryTable,
+                                    pex.SectionTable);
+                                pex.ImportTable.ImportAddressTables = ParseImportAddressTables(data,
+                                    initialOffset,
+                                    optionalHeader.Magic,
+                                    importDirectoryTable,
+                                    pex.SectionTable);
+                                pex.ImportTable.HintNameTable = ParseHintNameTable(data,
+                                    initialOffset,
+                                    pex.ImportTable.ImportLookupTables,
+                                    pex.ImportTable.ImportAddressTables,
+                                    pex.SectionTable);
+                            }
                         }
                     }
                 }
@@ -508,10 +517,10 @@ namespace SabreTools.Serialization.Deserializers
                 return obj;
 
             // Guard against invalid block sizes
-            if (obj.BlockSize % 2 != 0)
-                return obj;
             if (offset + obj.BlockSize > data.Length)
                 return null;
+            if (obj.BlockSize % 2 != 0)
+                return obj;
 
             int entryCount = ((int)obj.BlockSize - 8) / 2;
             obj.TypeOffsetFieldEntries = new BaseRelocationTypeOffsetFieldEntry[entryCount];
