@@ -103,11 +103,6 @@ namespace SabreTools.Serialization.Deserializers
                     pex.SectionTable[i] = ParseSectionHeader(data);
                 }
 
-                // TODO: Figure out a way to determine the end of the data here
-                // to find hidden things between the end of the section table and
-                // the beginning of the next data block. Some packers and protections
-                // can hide things here, e.g. ActiveMark
-
                 #endregion
 
                 #region COFF Symbol Table and COFF String Table

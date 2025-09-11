@@ -390,6 +390,45 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Models.PortableExecutable.Executable.SectionTable"/>
         public Models.PortableExecutable.SectionHeader[]? SectionTable => Model.SectionTable;
 
+        /// <summary>
+        /// Data after the section table, if it exists
+        /// </summary>
+        public byte[] SectionTrailerData
+        {
+            get
+            {
+                lock (_sectionTrailerDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_sectionTrailerData != null)
+                        return _sectionTrailerData;
+
+                    if (Stub?.Header?.NewExeHeaderAddr == null)
+                    {
+                        _sectionTrailerData = [];
+                        return _sectionTrailerData;
+                    }
+                    if (COFFFileHeader == null)
+                    {
+                        _sectionTrailerData = [];
+                        return _sectionTrailerData;
+                    }
+
+                    // Get the offset from the end of the section table
+                    long endOfSectionTable = Stub.Header.NewExeHeaderAddr
+                        + 24 // Signature size + COFF file header size
+                        + COFFFileHeader.SizeOfOptionalHeader
+                        + (COFFFileHeader.NumberOfSections * 40); // Size of a section header
+
+                    // TODO: Figure out how to determine the end of the extra data
+                    _sectionTrailerData = [];
+
+                    // Cache and return the stub executable data, even if null
+                    return _sectionTrailerData;
+                }
+            }
+        }
+
         /// <inheritdoc cref="Models.PortableExecutable.Executable.Stub"/>
         public Models.MSDOS.Executable? Stub => Model.Stub;
 
@@ -744,6 +783,16 @@ namespace SabreTools.Serialization.Wrappers
         /// Lock object for <see cref="_sectionStringData"/> 
         /// </summary>
         private readonly object _sectionStringDataLock = new();
+
+        /// <summary>
+        /// Data after the section table, if it exists
+        /// </summary>
+        private byte[]? _sectionTrailerData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_sectionTrailerData"/> 
+        /// </summary>
+        private readonly object _sectionTrailerDataLock = new();
 
         /// <summary>
         /// Stub executable data, if it exists
