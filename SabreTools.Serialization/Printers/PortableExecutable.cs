@@ -549,6 +549,7 @@ namespace SabreTools.Serialization.Printers
                 if (baseRelocationTableEntry.TypeOffsetFieldEntries == null || baseRelocationTableEntry.TypeOffsetFieldEntries.Length == 0)
                 {
                     builder.AppendLine("    No base relocation table type and offset entries");
+                    builder.AppendLine();
                     continue;
                 }
 
@@ -559,6 +560,7 @@ namespace SabreTools.Serialization.Printers
                     builder.AppendLine($"    Type and Offset Entry {j}");
                     builder.AppendLine($"      Type: {typeOffsetFieldEntry.BaseRelocationType} (0x{typeOffsetFieldEntry.BaseRelocationType:X})");
                     builder.AppendLine(typeOffsetFieldEntry.Offset, "      Offset");
+                    builder.AppendLine();
                 }
             }
 
