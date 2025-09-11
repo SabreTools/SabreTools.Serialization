@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we have certificate data, use that as the end
                     if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
                             dataLength = certificateTableAddress;
                     }
