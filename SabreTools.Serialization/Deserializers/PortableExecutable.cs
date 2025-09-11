@@ -275,6 +275,9 @@ namespace SabreTools.Serialization.Deserializers
                         int tableOffset = 0;
                         pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, ref tableOffset);
 
+                        // Parse the resource data, if possible
+                        ParseResourceData(data, initialOffset, pex.ResourceDirectoryTable, pex.SectionTable);
+
                         #region Hidden Resources
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
@@ -1514,6 +1517,36 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
+        /// Fill in resource data
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="table">Resource table to fill in</param>
+        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <returns>Filled ResourceDataEntry on success, null on error</returns>
+        public static void ParseResourceData(Stream data, long initialOffset, ResourceDirectoryTable? table, SectionHeader[] sections)
+        {
+            if (table?.Entries == null)
+                return;
+
+            foreach (var entry in table.Entries)
+            {
+                // Handle directory entries directly
+                if (entry.DataEntry != null && entry.DataEntry.Size > 0)
+                {
+                    // Read the data from the offset
+                    long dataOffset = initialOffset + entry.DataEntry.DataRVA.ConvertVirtualAddress(sections);
+                    if (dataOffset > initialOffset && dataOffset + entry.DataEntry.Size < data.Length)
+                        entry.DataEntry.Data = data.ReadFrom(dataOffset, (int)entry.DataEntry.Size, retainPosition: true);
+                }
+
+                // Handle subdirectories by recursion
+                else if (entry.Subdirectory != null)
+                    ParseResourceData(data, initialOffset, entry.Subdirectory, sections);
+            }
+        }
+
+        /// <summary>
         /// Parse a byte array into an ResourceDataEntry
         /// </summary>
         /// <param name="data">Byte array to parse</param>
@@ -1527,17 +1560,6 @@ namespace SabreTools.Serialization.Deserializers
             obj.Size = data.ReadUInt32LittleEndian(ref offset);
             obj.Codepage = data.ReadUInt32LittleEndian(ref offset);
             obj.Reserved = data.ReadUInt32LittleEndian(ref offset);
-
-            // Ignore empty resources
-            if (obj.Size == 0)
-                return obj;
-
-            // Read the data from the offset
-            if (obj.DataRVA > 0 && obj.DataRVA + obj.Size < data.Length)
-            {
-                int dataOffset = (int)obj.DataRVA;
-                obj.Data = data.ReadBytes(ref dataOffset, (int)obj.Size);
-            }
 
             return obj;
         }
