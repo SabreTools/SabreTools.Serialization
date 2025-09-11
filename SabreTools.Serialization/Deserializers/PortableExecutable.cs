@@ -180,20 +180,23 @@ namespace SabreTools.Serialization.Deserializers
                         // Get the table size
                         int tableSize = (int)optionalHeader.ResourceTable.Size;
 
-                        // TODO: Determine if this should be aligned using OptionalHeader.FileAlignment
-                        // Former versions of this code aligned to 512-byte (0x200) boundaries, which is a
-                        // common value for the file alignment. It is unknown why this alignment was happening,
-                        // as it was also cut short if a recognized signature was found.
+                        // Round up the table size based on the file alignment
+                        long paddingSize = optionalHeader.FileAlignment - ((tableStart + tableSize) % optionalHeader.FileAlignment);
+                        tableSize += (int)paddingSize;
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
                         if (pex.ResourceDirectoryTable?.Entries != null && data.Position - tableStart < tableSize)
                         {
+                            // Resize the entry array to accomodate one more
                             var localEntries = pex.ResourceDirectoryTable.Entries;
                             Array.Resize(ref localEntries, localEntries.Length + 1);
                             pex.ResourceDirectoryTable.Entries = localEntries;
+
+                            // Get the length of the remaining data
                             int length = (int)(tableSize - (data.Position - tableStart));
                             length = (int)Math.Min(length, data.Length - data.Position);
 
+                            // Add the hidden entry
                             pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new ResourceDirectoryEntry
                             {
                                 Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
@@ -1485,8 +1488,13 @@ namespace SabreTools.Serialization.Deserializers
         {
             var obj = new ResourceDirectoryEntry();
 
+            // TODO: Figure out why the high bit is set for names
+            // The original version of this code also had this fix, but there
+            // was no comment or documentation as to why. The official MSDN
+            // documentation makes no mention of the high bit being set here,
+            // only for the offset below.
             if (nameEntry)
-                obj.NameOffset = data.ReadUInt32LittleEndian();
+                obj.NameOffset = data.ReadUInt32LittleEndian() & ~0x80000000U;
             else
                 obj.IntegerID = data.ReadUInt32LittleEndian();
 
