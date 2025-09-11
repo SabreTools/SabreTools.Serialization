@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the export table
-                        pex.ExportTable = ParseExportTable(data, initialOffset, pex.SectionTable);
+                        pex.ExportTable = ParseExportTable(tableData, data, initialOffset, pex.SectionTable);
                     }
                 }
 
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the import table
-                        pex.ImportTable = ParseImportTable(data, initialOffset, optionalHeader.Magic, pex.SectionTable);
+                        pex.ImportTable = ParseImportTable(tableData, data, initialOffset, optionalHeader.Magic, pex.SectionTable);
                     }
                 }
 
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Set the resource directory table
                         long tableStart = data.Position;
-                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(data, initialOffset, tableStart, pex.SectionTable);
+                        pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, data, initialOffset, tableStart, pex.SectionTable);
 
                         #region Hidden Resources
 
@@ -257,7 +257,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the attribute certificate table
-                        pex.AttributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
+                        pex.AttributeCertificateTable = ParseAttributeCertificateTable(tableData, data, endOffset);
                     }
                 }
 
@@ -285,7 +285,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the base relocation table
-                        pex.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset);
+                        pex.BaseRelocationTable = ParseBaseRelocationTable(tableData, data, endOffset);
                     }
                 }
 
@@ -313,7 +313,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the debug table
-                        pex.DebugTable = ParseDebugTable(data, endOffset);
+                        pex.DebugTable = ParseDebugTable(tableData, data, endOffset);
                     }
                 }
 
@@ -346,7 +346,7 @@ namespace SabreTools.Serialization.Deserializers
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the delay-load directory table
-                        pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(data);
+                        pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(tableData, data);
                     }
                 }
 
@@ -367,10 +367,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into an attribute certificate table
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="endOffset">First address not part of the attribute certificate table</param>
         /// <returns>Filled attribute certificate on success, null on error</returns>
-        public static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(Stream data, long endOffset)
+        public static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(byte[] tableData, Stream data, long endOffset)
         {
             var obj = new List<AttributeCertificateTableEntry>();
 
@@ -443,10 +444,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a base relocation table
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="endOffset">First address not part of the base relocation table</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        public static BaseRelocationBlock[] ParseBaseRelocationTable(Stream data, long endOffset)
+        public static BaseRelocationBlock[] ParseBaseRelocationTable(byte[] tableData, Stream data, long endOffset)
         {
             var obj = new List<BaseRelocationBlock>();
 
@@ -698,10 +700,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a DebugTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="endOffset">First address not part of the debug table</param>
         /// <returns>Filled DebugTable on success, null on error</returns>
-        public static DebugTable ParseDebugTable(Stream data, long endOffset)
+        public static DebugTable ParseDebugTable(byte[] tableData, Stream data, long endOffset)
         {
             var obj = new DebugTable();
 
@@ -727,9 +730,10 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a DelayLoadDirectoryTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <returns>Filled DelayLoadDirectoryTable on success, null on error</returns>
-        public static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(Stream data)
+        public static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(byte[] tableData, Stream data)
         {
             var obj = new DelayLoadDirectoryTable();
 
@@ -799,11 +803,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a ExportTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ExportTable on success, null on error</returns>
-        public static ExportTable ParseExportTable(Stream data, long initialOffset, SectionHeader[] sections)
+        public static ExportTable ParseExportTable(byte[] tableData, Stream data, long initialOffset, SectionHeader[] sections)
         {
             var obj = new ExportTable();
 
@@ -1346,12 +1351,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a import table
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-        public static ImportTable ParseImportTable(Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
+        public static ImportTable ParseImportTable(byte[] tableData, Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
         {
             var obj = new ImportTable();
 
@@ -1588,12 +1594,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a ResourceDirectoryTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="tableData">Byte array representing the table data</param>
+        /// <param name="data">Stream to use for additional parsing</param>
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="tableStart">Table start address for relative reads</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable? ParseResourceDirectoryTable(Stream data,
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(byte[] tableData,
+            Stream data,
             long initialOffset,
             long tableStart,
             SectionHeader[] sections)
@@ -1641,7 +1649,7 @@ namespace SabreTools.Serialization.Deserializers
                     if (offset > tableStart && offset < data.Length)
                     {
                         data.Seek(offset, SeekOrigin.Begin);
-                        entry.Subdirectory = ParseResourceDirectoryTable(data, initialOffset, tableStart, sections);
+                        entry.Subdirectory = ParseResourceDirectoryTable(tableData, data, initialOffset, tableStart, sections);
                     }
                 }
             }
