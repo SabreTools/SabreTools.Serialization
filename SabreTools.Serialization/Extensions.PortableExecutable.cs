@@ -33,6 +33,7 @@ namespace SabreTools.Serialization
                 return rva - matchingSection.VirtualAddress + matchingSection.PointerToRawData;
 
             // Loop through all of the sections
+            uint maxVirtualAddress = 0, maxRawPointer = 0;
             for (int i = 0; i < sections.Length; i++)
             {
                 // If the section "starts" at 0, just skip it
@@ -44,6 +45,13 @@ namespace SabreTools.Serialization
                 if (rva < section.VirtualAddress)
                     continue;
 
+                // Cache the maximum matching section data, in case of a miss
+                if (rva >= section.VirtualAddress)
+                {
+                    maxVirtualAddress = section.VirtualAddress;
+                    maxRawPointer = section.PointerToRawData;
+                }
+
                 // Attempt to derive the physical address from the current section
                 if (section.VirtualSize != 0 && rva <= section.VirtualAddress + section.VirtualSize)
                     return rva - section.VirtualAddress + section.PointerToRawData;
@@ -51,7 +59,7 @@ namespace SabreTools.Serialization
                     return rva - section.VirtualAddress + section.PointerToRawData;
             }
 
-            return 0;
+            return maxRawPointer != 0 ? rva - maxVirtualAddress + maxRawPointer : 0;
         }
 
         /// <summary>
