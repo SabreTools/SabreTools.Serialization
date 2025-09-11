@@ -193,7 +193,7 @@ namespace SabreTools.Serialization.Deserializers
                             pex.ResourceDirectoryTable.Entries = localEntries;
                             int length = (int)(tableSize - (data.Position - tableStart));
 
-                            pex.ResourceDirectoryTable.Entries[localEntries.Length] = new ResourceDirectoryEntry
+                            pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new ResourceDirectoryEntry
                             {
                                 Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
                                 IntegerID = uint.MaxValue,
