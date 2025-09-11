@@ -912,7 +912,7 @@ namespace SabreTools.Serialization.Deserializers
             // Parse the export directory table
             int offset = 0;
             var directoryTable = ParseExportDirectoryTable(data, ref offset);
-            if (directoryTable.ExportFlags != 0)
+            if (directoryTable.ExportFlags != 0 || directoryTable.AddressTableEntries == 0)
                 return null;
 
             // Set the export directory table
