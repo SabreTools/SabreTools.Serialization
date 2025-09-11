@@ -511,7 +511,7 @@ namespace SabreTools.Serialization.Deserializers
             if (obj.BlockSize % 2 != 0)
                 return obj;
             if (offset + obj.BlockSize > data.Length)
-                return obj;
+                return null;
 
             int entryCount = ((int)obj.BlockSize - 8) / 2;
             obj.TypeOffsetFieldEntries = new BaseRelocationTypeOffsetFieldEntry[entryCount];
@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.Deserializers
             var obj = new List<BaseRelocationBlock>();
 
             int offset = 0;
-            while (offset < data.Length)
+            while (offset + 8 <= data.Length)
             {
                 var block = ParseBaseRelocationBlock(data, ref offset);
                 if (block == null)
