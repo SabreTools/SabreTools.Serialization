@@ -135,11 +135,8 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the export table
-                        data.Seek(offset, SeekOrigin.Begin);
-
                         // Read the table data
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the export table
                         pex.ExportTable = ParseExportTable(tableData, data, initialOffset, pex.SectionTable);
@@ -162,11 +159,8 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the import table
-                        data.Seek(offset, SeekOrigin.Begin);
-
                         // Read the table data
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the import table
                         pex.ImportTable = ParseImportTable(tableData, data, initialOffset, optionalHeader.Magic, pex.SectionTable);
@@ -189,11 +183,8 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the resource directory table
-                        data.Seek(offset, SeekOrigin.Begin);
-
                         // Read the table data
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the resource directory table
                         long tableStart = data.Position;
@@ -250,7 +241,7 @@ namespace SabreTools.Serialization.Deserializers
                         tableSize += (int)paddingSize;
 
                         // Read the table data
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the attribute certificate table
                         pex.AttributeCertificateTable = ParseAttributeCertificateTable(tableData);
@@ -274,7 +265,7 @@ namespace SabreTools.Serialization.Deserializers
                         tableSize += (int)paddingSize;
 
                         // Read the table data
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the base relocation table
                         pex.BaseRelocationTable = ParseBaseRelocationTable(tableData);
@@ -810,7 +801,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="initialOffset">Initial offset to use in address comparisons</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ExportTable on success, null on error</returns>
-        public static ExportTable ParseExportTable(byte[] tableData, Stream data, long initialOffset, SectionHeader[] sections)
+        public static ExportTable ParseExportTable(byte[]? tableData, Stream data, long initialOffset, SectionHeader[] sections)
         {
             var obj = new ExportTable();
 
@@ -1359,7 +1350,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled import table on success, null on error</returns>
-        public static ImportTable ParseImportTable(byte[] tableData, Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
+        public static ImportTable ParseImportTable(byte[]? tableData, Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
         {
             var obj = new ImportTable();
 
@@ -1602,7 +1593,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="tableStart">Table start address for relative reads</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static ResourceDirectoryTable? ParseResourceDirectoryTable(byte[] tableData,
+        public static ResourceDirectoryTable? ParseResourceDirectoryTable(byte[]? tableData,
             Stream data,
             long initialOffset,
             long tableStart,
