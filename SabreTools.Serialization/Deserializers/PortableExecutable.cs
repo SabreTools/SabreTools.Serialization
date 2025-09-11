@@ -86,12 +86,15 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Section Table
 
-                // TODO: Technically this needs to be seeked to
-                // It should be found by taking the the position after the
-                // signature and COFF file header and then adding the size
-                // of the optional header. This is effectively what the code
-                // is already doing since it is parsed after the optional
-                // header and not guessing otherwise.
+                // Get the section table offset
+                long offset = newExeOffset
+                    + 24 // Signature size + COFF file header size
+                    + pex.COFFFileHeader.SizeOfOptionalHeader;
+                if (offset < initialOffset || offset >= data.Length)
+                    return null;
+                    
+                // Seek to the section table
+                data.Seek(offset, SeekOrigin.Begin);
 
                 // Set the section table
                 pex.SectionTable = new SectionHeader[coffFileHeader.NumberOfSections];
@@ -109,7 +112,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region COFF Symbol Table and COFF String Table
 
-                long offset = initialOffset + coffFileHeader.PointerToSymbolTable;
+                offset = initialOffset + coffFileHeader.PointerToSymbolTable;
                 if (offset > initialOffset && offset < data.Length)
                 {
                     // Seek to the COFF symbol table
