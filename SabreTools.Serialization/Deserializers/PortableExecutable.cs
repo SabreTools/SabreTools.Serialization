@@ -250,6 +250,23 @@ namespace SabreTools.Serialization.Deserializers
                     }
                 }
 
+                // TODO: Figure out how to use this in lieu of the current ParseImportAddressTables
+                if (optionalHeader.ImportAddressTable != null)
+                {
+                    offset = initialOffset
+                        + optionalHeader.ImportAddressTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
+                    if (offset > initialOffset && offset < data.Length)
+                    {
+                        // Get the required table size
+                        int tableSize = (int)optionalHeader.ImportAddressTable.Size;
+
+                        // Read the table data
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
+
+                        // Remaining code goes here
+                    }
+                }
+
                 #endregion
 
                 #region Resource Directory Table
