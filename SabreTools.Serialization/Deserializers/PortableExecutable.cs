@@ -1537,7 +1537,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Read the data from the offset
                     long dataOffset = initialOffset + entry.DataEntry.DataRVA.ConvertVirtualAddress(sections);
                     if (dataOffset > initialOffset && dataOffset + entry.DataEntry.Size < data.Length)
-                        entry.DataEntry.Data = data.ReadFrom(dataOffset, (int)entry.DataEntry.Size, retainPosition: true);
+                        entry.DataEntry.Data = data.ReadFrom(dataOffset, (int)entry.DataEntry.Size, retainPosition: false);
                 }
 
                 // Handle subdirectories by recursion
