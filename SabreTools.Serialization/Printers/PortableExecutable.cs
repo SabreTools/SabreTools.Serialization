@@ -193,8 +193,8 @@ namespace SabreTools.Serialization.Printers
             if (header.CertificateTable != null)
             {
                 builder.AppendLine("    Certificate Table (5)");
-                builder.AppendLine(header.CertificateTable.VirtualAddress, "      Virtual address");
-                builder.AppendLine(header.CertificateTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
+                builder.AppendLine("      Virtual address: N/A");
+                builder.AppendLine(header.CertificateTable.VirtualAddress, "      Physical address");
                 builder.AppendLine(header.CertificateTable.Size, "      Size");
             }
             if (header.BaseRelocationTable != null)
