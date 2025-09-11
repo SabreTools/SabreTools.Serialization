@@ -130,10 +130,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.ExportTable.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
@@ -203,10 +201,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.ImportTable.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
@@ -265,7 +261,7 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.ResourceTable.Size;
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
@@ -322,10 +318,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.CertificateTable.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
@@ -346,10 +340,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.BaseRelocationTable.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
@@ -370,10 +362,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.Debug.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
@@ -400,10 +390,8 @@ namespace SabreTools.Serialization.Deserializers
                         + optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
                     if (offset > initialOffset && offset < data.Length)
                     {
-                        // Get the adjusted table values
+                        // Get the required table size
                         int tableSize = (int)optionalHeader.DelayImportDescriptor.Size;
-                        long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
-                        tableSize += (int)paddingSize;
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
