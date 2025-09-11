@@ -192,6 +192,7 @@ namespace SabreTools.Serialization.Deserializers
                             Array.Resize(ref localEntries, localEntries.Length + 1);
                             pex.ResourceDirectoryTable.Entries = localEntries;
                             int length = (int)(tableSize - (data.Position - tableStart));
+                            length = (int)Math.Min(length, data.Length - data.Position);
 
                             pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new ResourceDirectoryEntry
                             {
@@ -357,8 +358,9 @@ namespace SabreTools.Serialization.Deserializers
         /// Parse a Stream into an BaseRelocationBlock
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="endOffset">First address not part of the base relocation table</param>
         /// <returns>Filled BaseRelocationBlock on success, null on error</returns>
-        public static BaseRelocationBlock? ParseBaseRelocationBlock(Stream data)
+        public static BaseRelocationBlock? ParseBaseRelocationBlock(Stream data, long endOffset)
         {
             var obj = new BaseRelocationBlock();
 
@@ -369,6 +371,8 @@ namespace SabreTools.Serialization.Deserializers
 
             // Guard against invalid block sizes
             if (obj.BlockSize % 2 != 0)
+                return obj;
+            if (data.Position + obj.BlockSize > endOffset)
                 return obj;
 
             int entryCount = ((int)obj.BlockSize - 8) / 2;
@@ -396,7 +400,7 @@ namespace SabreTools.Serialization.Deserializers
 
             while (data.Position < endOffset && data.Position < data.Length)
             {
-                var block = ParseBaseRelocationBlock(data);
+                var block = ParseBaseRelocationBlock(data, endOffset);
                 if (block == null)
                     break;
 
