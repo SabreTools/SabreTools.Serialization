@@ -335,8 +335,10 @@ namespace SabreTools.Serialization.Deserializers
 
                 if (optionalHeader.CertificateTable != null)
                 {
-                    offset = initialOffset
-                        + optionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
+                    // The Certificate Table entry points to a table of attribute certificates. These
+                    // certificates are not loaded into memory as part of the image. As such, the first
+                    // field of this entry, which is normally an RVA, is a file pointer instead.
+                    offset = initialOffset + optionalHeader.CertificateTable.VirtualAddress;
                     if (offset > initialOffset && offset < data.Length)
                     {
                         // Get the required table size
