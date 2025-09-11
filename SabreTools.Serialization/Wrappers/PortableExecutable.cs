@@ -393,25 +393,25 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Data after the section table, if it exists
         /// </summary>
-        public byte[] SectionTrailerData
+        public byte[] SectionTableTrailerData
         {
             get
             {
-                lock (_sectionTrailerDataLock)
+                lock (_sectionTableTrailerDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_sectionTrailerData != null)
-                        return _sectionTrailerData;
+                    if (_sectionTableTrailerData != null)
+                        return _sectionTableTrailerData;
 
                     if (Stub?.Header?.NewExeHeaderAddr == null)
                     {
-                        _sectionTrailerData = [];
-                        return _sectionTrailerData;
+                        _sectionTableTrailerData = [];
+                        return _sectionTableTrailerData;
                     }
                     if (COFFFileHeader == null)
                     {
-                        _sectionTrailerData = [];
-                        return _sectionTrailerData;
+                        _sectionTableTrailerData = [];
+                        return _sectionTableTrailerData;
                     }
 
                     // Get the offset from the end of the section table
@@ -420,11 +420,13 @@ namespace SabreTools.Serialization.Wrappers
                         + COFFFileHeader.SizeOfOptionalHeader
                         + (COFFFileHeader.NumberOfSections * 40); // Size of a section header
 
-                    // TODO: Figure out how to determine the end of the extra data
-                    _sectionTrailerData = [];
+                    // Assume the extra data aligns to 512-byte segments
+                    int alignment = (int)(OptionalHeader?.FileAlignment ?? 0x200);
+                    int trailerDataSize = alignment - (int)(endOfSectionTable % alignment);
 
-                    // Cache and return the stub executable data, even if null
-                    return _sectionTrailerData;
+                    // Cache and return the section table trailer data, even if null
+                    _sectionTableTrailerData = ReadRangeFromSource(endOfSectionTable, trailerDataSize);
+                    return _sectionTableTrailerData;
                 }
             }
         }
@@ -787,12 +789,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Data after the section table, if it exists
         /// </summary>
-        private byte[]? _sectionTrailerData = null;
+        private byte[]? _sectionTableTrailerData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_sectionTrailerData"/> 
+        /// Lock object for <see cref="_sectionTableTrailerData"/> 
         /// </summary>
-        private readonly object _sectionTrailerDataLock = new();
+        private readonly object _sectionTableTrailerDataLock = new();
 
         /// <summary>
         /// Stub executable data, if it exists
