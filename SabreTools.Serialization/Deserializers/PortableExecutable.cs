@@ -276,7 +276,7 @@ namespace SabreTools.Serialization.Deserializers
                         pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, ref tableOffset);
 
                         // Parse the resource data, if possible
-                        ParseResourceData(data, initialOffset, pex.ResourceDirectoryTable, pex.SectionTable);
+                        ParseResourceData(tableData, ref tableOffset, offset, pex.ResourceDirectoryTable, pex.SectionTable);
 
                         #region Hidden Resources
 
@@ -1519,13 +1519,16 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Fill in resource data
         /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="dataOffset">Offset into the byte array</param>
+        /// <param name="tableStart">Offset to the start of the table</param>
         /// <param name="table">Resource table to fill in</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ResourceDataEntry on success, null on error</returns>
-        public static void ParseResourceData(Stream data, long initialOffset, ResourceDirectoryTable? table, SectionHeader[] sections)
+        public static void ParseResourceData(byte[]? data, ref int dataOffset, long tableStart, ResourceDirectoryTable? table, SectionHeader[] sections)
         {
+            if (data == null)
+                return;
             if (table?.Entries == null)
                 return;
 
@@ -1535,14 +1538,14 @@ namespace SabreTools.Serialization.Deserializers
                 if (entry.DataEntry != null && entry.DataEntry.Size > 0)
                 {
                     // Read the data from the offset
-                    long dataOffset = initialOffset + entry.DataEntry.DataRVA.ConvertVirtualAddress(sections);
-                    if (dataOffset > initialOffset && dataOffset + entry.DataEntry.Size < data.Length)
-                        entry.DataEntry.Data = data.ReadFrom(dataOffset, (int)entry.DataEntry.Size, retainPosition: false);
+                    dataOffset = (int)(entry.DataEntry.DataRVA.ConvertVirtualAddress(sections) - tableStart);
+                    if (dataOffset > 0 && dataOffset + entry.DataEntry.Size < data.Length)
+                        entry.DataEntry.Data = data.ReadBytes(ref dataOffset, (int)entry.DataEntry.Size);
                 }
 
                 // Handle subdirectories by recursion
                 else if (entry.Subdirectory != null)
-                    ParseResourceData(data, initialOffset, entry.Subdirectory, sections);
+                    ParseResourceData(data, ref dataOffset, tableStart, entry.Subdirectory, sections);
             }
         }
 
