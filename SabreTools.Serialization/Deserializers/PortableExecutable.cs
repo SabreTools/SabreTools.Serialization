@@ -139,7 +139,56 @@ namespace SabreTools.Serialization.Deserializers
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the export table
-                        pex.ExportTable = ParseExportTable(tableData, data, initialOffset, pex.SectionTable);
+                        pex.ExportTable = ParseExportTable(tableData);
+
+                        // If the export table was parsed, read the remaining pieces
+                        if (pex.ExportTable?.ExportDirectoryTable != null)
+                        {
+                            // Cache the export directory table for easier access
+                            var exportDirectoryTable = pex.ExportTable.ExportDirectoryTable;
+
+                            // Name
+                            offset = initialOffset + exportDirectoryTable.NameRVA.ConvertVirtualAddress(pex.SectionTable);
+                            if (offset > initialOffset && offset < data.Length)
+                            {
+                                data.Seek(offset, SeekOrigin.Begin);
+                                exportDirectoryTable.Name = data.ReadNullTerminatedAnsiString();
+                            }
+
+                            // Address table
+                            offset = initialOffset + exportDirectoryTable.ExportAddressTableRVA.ConvertVirtualAddress(pex.SectionTable);
+                            if (exportDirectoryTable.AddressTableEntries != 0
+                                && offset > initialOffset
+                                && offset < data.Length)
+                            {
+                                data.Seek(offset, SeekOrigin.Begin);
+                                pex.ExportTable.ExportAddressTable = ParseExportAddressTable(data, exportDirectoryTable.AddressTableEntries);
+                            }
+
+                            // Name pointer table
+                            offset = initialOffset + exportDirectoryTable.NamePointerRVA.ConvertVirtualAddress(pex.SectionTable);
+                            if (exportDirectoryTable.NumberOfNamePointers != 0
+                                && offset > initialOffset
+                                && offset < data.Length)
+                            {
+                                data.Seek(offset, SeekOrigin.Begin);
+                                pex.ExportTable.NamePointerTable = ParseExportNamePointerTable(data, exportDirectoryTable.NumberOfNamePointers);
+                            }
+
+                            // Ordinal table
+                            offset = initialOffset + exportDirectoryTable.OrdinalTableRVA.ConvertVirtualAddress(pex.SectionTable);
+                            if (exportDirectoryTable.NumberOfNamePointers != 0
+                                && offset > initialOffset
+                                && offset < data.Length)
+                            {
+                                data.Seek(offset, SeekOrigin.Begin);
+                                pex.ExportTable.OrdinalTable = ParseExportOrdinalTable(data, exportDirectoryTable.NumberOfNamePointers);
+                            }
+
+                            // Name table
+                            if (exportDirectoryTable.NumberOfNamePointers != 0 && pex.ExportTable.NamePointerTable?.Pointers != null)
+                                pex.ExportTable.ExportNameTable = ParseExportNameTable(data, initialOffset, pex.ExportTable.NamePointerTable.Pointers, pex.SectionTable);
+                        }
                     }
                 }
 
@@ -163,7 +212,45 @@ namespace SabreTools.Serialization.Deserializers
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the import table
-                        pex.ImportTable = ParseImportTable(tableData, data, initialOffset, optionalHeader.Magic, pex.SectionTable);
+                        pex.ImportTable = ParseImportTable(tableData);
+
+                        // If the export table was parsed, read the remaining pieces
+                        if (pex.ImportTable?.ImportDirectoryTable != null)
+                        {
+                            // Cache the import directory table for easier access
+                            var importDirectoryTable = pex.ImportTable.ImportDirectoryTable;
+
+                            // Names
+                            for (int i = 0; i < importDirectoryTable.Length; i++)
+                            {
+                                var entry = importDirectoryTable[i];
+                                if (entry == null)
+                                    continue;
+
+                                long nameOffset = initialOffset + entry.NameRVA.ConvertVirtualAddress(pex.SectionTable);
+                                if (nameOffset > initialOffset && nameOffset < data.Length)
+                                {
+                                    data.Seek(nameOffset, SeekOrigin.Begin);
+                                    entry.Name = data.ReadNullTerminatedAnsiString();
+                                }
+                            }
+
+                            pex.ImportTable.ImportLookupTables = ParseImportLookupTables(data,
+                                initialOffset,
+                                optionalHeader.Magic,
+                                importDirectoryTable,
+                                pex.SectionTable);
+                            pex.ImportTable.ImportAddressTables = ParseImportAddressTables(data,
+                                initialOffset,
+                                optionalHeader.Magic,
+                                importDirectoryTable,
+                                pex.SectionTable);
+                            pex.ImportTable.HintNameTable = ParseHintNameTable(data,
+                                initialOffset,
+                                pex.ImportTable.ImportLookupTables,
+                                pex.ImportTable.ImportAddressTables,
+                                pex.SectionTable);
+                        }
                     }
                 }
 
@@ -794,90 +881,50 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a ExportTable
+        /// Parse a byte array into a ExportTable
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled ExportTable on success, null on error</returns>
-        public static ExportTable ParseExportTable(byte[]? tableData, Stream data, long initialOffset, SectionHeader[] sections)
+        public static ExportTable? ParseExportTable(byte[]? data)
         {
+            if (data == null)
+                return null;
+
             var obj = new ExportTable();
 
             // Parse the export directory table
-            var directoryTable = ParseExportDirectoryTable(data);
+            int offset = 0;
+            var directoryTable = ParseExportDirectoryTable(data, ref offset);
             if (directoryTable.ExportFlags != 0)
                 return obj;
 
             // Set the export directory table
             obj.ExportDirectoryTable = directoryTable;
 
-            // Name
-            long offset = initialOffset + directoryTable.NameRVA.ConvertVirtualAddress(sections);
-            if (offset > initialOffset && offset < data.Length)
-            {
-                data.Seek(offset, SeekOrigin.Begin);
-                directoryTable.Name = data.ReadNullTerminatedAnsiString();
-            }
-
-            // Address table
-            offset = initialOffset + directoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections);
-            if (directoryTable.AddressTableEntries != 0
-                && offset > initialOffset
-                && offset < data.Length)
-            {
-                data.Seek(offset, SeekOrigin.Begin);
-                obj.ExportAddressTable = ParseExportAddressTable(data, directoryTable.AddressTableEntries);
-            }
-
-            // Name pointer table
-            offset = initialOffset + directoryTable.NamePointerRVA.ConvertVirtualAddress(sections);
-            if (directoryTable.NumberOfNamePointers != 0
-                && offset > initialOffset
-                && offset < data.Length)
-            {
-                data.Seek(offset, SeekOrigin.Begin);
-                obj.NamePointerTable = ParseExportNamePointerTable(data, directoryTable.NumberOfNamePointers);
-            }
-
-            // Ordinal table
-            offset = initialOffset + directoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections);
-            if (directoryTable.NumberOfNamePointers != 0
-                && offset > initialOffset
-                && offset < data.Length)
-            {
-                data.Seek(offset, SeekOrigin.Begin);
-                obj.OrdinalTable = ParseExportOrdinalTable(data, directoryTable.NumberOfNamePointers);
-            }
-
-            // Name table
-            if (directoryTable.NumberOfNamePointers != 0 && obj.NamePointerTable?.Pointers != null)
-                obj.ExportNameTable = ParseExportNameTable(data, initialOffset, obj.NamePointerTable.Pointers, sections);
-
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a ExportDirectoryTable
+        /// Parse a byte array into a ExportDirectoryTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ExportDirectoryTable on success, null on error</returns>
-        public static ExportDirectoryTable ParseExportDirectoryTable(Stream data)
+        public static ExportDirectoryTable ParseExportDirectoryTable(byte[] data, ref int offset)
         {
             var obj = new ExportDirectoryTable();
 
-            obj.ExportFlags = data.ReadUInt32LittleEndian();
-            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
-            obj.MajorVersion = data.ReadUInt16LittleEndian();
-            obj.MinorVersion = data.ReadUInt16LittleEndian();
-            obj.NameRVA = data.ReadUInt32LittleEndian();
-            obj.OrdinalBase = data.ReadUInt32LittleEndian();
-            obj.AddressTableEntries = data.ReadUInt32LittleEndian();
-            obj.NumberOfNamePointers = data.ReadUInt32LittleEndian();
-            obj.ExportAddressTableRVA = data.ReadUInt32LittleEndian();
-            obj.NamePointerRVA = data.ReadUInt32LittleEndian();
-            obj.OrdinalTableRVA = data.ReadUInt32LittleEndian();
+            obj.ExportFlags = data.ReadUInt32LittleEndian(ref offset);
+            obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
+            obj.MajorVersion = data.ReadUInt16LittleEndian(ref offset);
+            obj.MinorVersion = data.ReadUInt16LittleEndian(ref offset);
+            obj.NameRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.OrdinalBase = data.ReadUInt32LittleEndian(ref offset);
+            obj.AddressTableEntries = data.ReadUInt32LittleEndian(ref offset);
+            obj.NumberOfNamePointers = data.ReadUInt32LittleEndian(ref offset);
+            obj.ExportAddressTableRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.NamePointerRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.OrdinalTableRVA = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
         }
@@ -1183,20 +1230,19 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a ImportDirectoryTable
+        /// Parse a byte array into a ImportDirectoryTable
         /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ImportDirectoryTable on success, null on error</returns>
-        public static ImportDirectoryTableEntry[] ParseImportDirectoryTable(Stream data, long initialOffset, SectionHeader[] sections)
+        public static ImportDirectoryTableEntry[] ParseImportDirectoryTable(byte[] data, ref int offset)
         {
             var obj = new List<ImportDirectoryTableEntry>();
 
             // Loop until the last item (all nulls) are found
-            while (data.Position < data.Length)
+            while (offset < data.Length)
             {
-                var entry = ParseImportDirectoryTableEntry(data);
+                var entry = ParseImportDirectoryTableEntry(data, ref offset);
                 obj.Add(entry);
 
                 // All zero values means the last entry
@@ -1208,38 +1254,24 @@ namespace SabreTools.Serialization.Deserializers
                     break;
             }
 
-            // Names
-            for (int i = 0; i < obj.Count; i++)
-            {
-                var entry = obj[i];
-                if (entry == null)
-                    continue;
-
-                long offset = initialOffset + entry.NameRVA.ConvertVirtualAddress(sections);
-                if (offset > initialOffset && offset < data.Length)
-                {
-                    data.Seek(offset, SeekOrigin.Begin);
-                    entry.Name = data.ReadNullTerminatedAnsiString();
-                }
-            }
-
             return [.. obj];
         }
 
         /// <summary>
-        /// Parse a Stream into a ImportDirectoryTableEntry
+        /// Parse a byte array into a ImportDirectoryTableEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ImportDirectoryTableEntry on success, null on error</returns>
-        public static ImportDirectoryTableEntry ParseImportDirectoryTableEntry(Stream data)
+        public static ImportDirectoryTableEntry ParseImportDirectoryTableEntry(byte[] data, ref int offset)
         {
             var obj = new ImportDirectoryTableEntry();
 
-            obj.ImportLookupTableRVA = data.ReadUInt32LittleEndian();
-            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
-            obj.ForwarderChain = data.ReadUInt32LittleEndian();
-            obj.NameRVA = data.ReadUInt32LittleEndian();
-            obj.ImportAddressTableRVA = data.ReadUInt32LittleEndian();
+            obj.ImportLookupTableRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
+            obj.ForwarderChain = data.ReadUInt32LittleEndian(ref offset);
+            obj.NameRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.ImportAddressTableRVA = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
         }
@@ -1344,20 +1376,21 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a import table
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
-        /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
-        /// <param name="sections">Section table to use for virtual address translation</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled import table on success, null on error</returns>
-        public static ImportTable ParseImportTable(byte[]? tableData, Stream data, long initialOffset, OptionalHeaderMagicNumber magic, SectionHeader[] sections)
+        public static ImportTable? ParseImportTable(byte[]? tableData)
         {
+            if (tableData == null)
+                return null;
+
             var obj = new ImportTable();
 
-            obj.ImportDirectoryTable = ParseImportDirectoryTable(data, initialOffset, sections);
-            obj.ImportLookupTables = ParseImportLookupTables(data, initialOffset, magic, obj.ImportDirectoryTable, sections);
-            obj.ImportAddressTables = ParseImportAddressTables(data, initialOffset, magic, obj.ImportDirectoryTable, sections);
-            obj.HintNameTable = ParseHintNameTable(data, initialOffset, obj.ImportLookupTables, obj.ImportAddressTables, sections);
+            // Parse the import directory table
+            int offset = 0;
+            var directoryTable = ParseImportDirectoryTable(tableData, ref offset);
+
+            // Set the export directory table
+            obj.ImportDirectoryTable = directoryTable;
 
             return obj;
         }
