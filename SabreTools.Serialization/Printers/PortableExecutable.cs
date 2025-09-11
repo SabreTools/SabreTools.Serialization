@@ -543,6 +543,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(baseRelocationTableEntry.PageRVA, "    Page RVA");
                 builder.AppendLine(baseRelocationTableEntry.PageRVA.ConvertVirtualAddress(table), "    Page physical address");
                 builder.AppendLine(baseRelocationTableEntry.BlockSize, "    Block size");
+                builder.AppendLine();
 
                 builder.AppendLine($"    Base Relocation Table {i} Type and Offset Information:");
                 builder.AppendLine("    -------------------------");
