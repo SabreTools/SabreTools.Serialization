@@ -913,7 +913,7 @@ namespace SabreTools.Serialization.Deserializers
             int offset = 0;
             var directoryTable = ParseExportDirectoryTable(data, ref offset);
             if (directoryTable.ExportFlags != 0)
-                return obj;
+                return null;
 
             // Set the export directory table
             obj.ExportDirectoryTable = directoryTable;
