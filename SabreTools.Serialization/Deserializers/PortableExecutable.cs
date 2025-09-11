@@ -1488,7 +1488,7 @@ namespace SabreTools.Serialization.Deserializers
             if (nameEntry)
                 obj.NameOffset = data.ReadUInt32LittleEndian();
             else
-                obj.IntegerID = obj.NameOffset;
+                obj.IntegerID = data.ReadUInt32LittleEndian();
 
             uint offset = data.ReadUInt32LittleEndian();
             if ((offset & 0x80000000) != 0)
