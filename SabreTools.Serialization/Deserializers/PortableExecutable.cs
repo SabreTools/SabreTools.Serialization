@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.Deserializers
                         // Seek to the export table
                         data.Seek(offset, SeekOrigin.Begin);
 
-                        // Read the table data for parsing
+                        // Read the table data
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the export table
@@ -165,7 +165,7 @@ namespace SabreTools.Serialization.Deserializers
                         // Seek to the import table
                         data.Seek(offset, SeekOrigin.Begin);
 
-                        // Read the table data for parsing
+                        // Read the table data
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the import table
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.Deserializers
                         // Seek to the resource directory table
                         data.Seek(offset, SeekOrigin.Begin);
 
-                        // Read the table data for parsing
+                        // Read the table data
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the resource directory table
@@ -249,15 +249,11 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the attribute certificate table
-                        data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + tableSize;
-
-                        // Read the table data for parsing
+                        // Read the table data
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the attribute certificate table
-                        pex.AttributeCertificateTable = ParseAttributeCertificateTable(tableData, data, endOffset);
+                        pex.AttributeCertificateTable = ParseAttributeCertificateTable(tableData);
                     }
                 }
 
@@ -277,15 +273,11 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the base relocation table
-                        data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + tableSize;
-
-                        // Read the table data for parsing
+                        // Read the table data
                         byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the base relocation table
-                        pex.BaseRelocationTable = ParseBaseRelocationTable(tableData, data, endOffset);
+                        pex.BaseRelocationTable = ParseBaseRelocationTable(tableData);
                     }
                 }
 
@@ -305,15 +297,11 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the debug table
-                        data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + tableSize;
-
-                        // Read the table data for parsing
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        // Read the table data
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the debug table
-                        pex.DebugTable = ParseDebugTable(tableData, data, endOffset);
+                        pex.DebugTable = ParseDebugTable(tableData);
                     }
                 }
 
@@ -339,14 +327,11 @@ namespace SabreTools.Serialization.Deserializers
                         long paddingSize = optionalHeader.FileAlignment - ((offset + tableSize) % optionalHeader.FileAlignment);
                         tableSize += (int)paddingSize;
 
-                        // Seek to the delay-load directory table
-                        data.Seek(offset, SeekOrigin.Begin);
-
-                        // Read the table data for parsing
-                        byte[] tableData = data.ReadBytes(tableSize);
+                        // Read the table data
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
 
                         // Set the delay-load directory table
-                        pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(tableData, data);
+                        pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(tableData);
                     }
                 }
 
@@ -365,118 +350,129 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into an attribute certificate table
+        /// Parse a byte array into an attribute certificate table
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="endOffset">First address not part of the attribute certificate table</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled attribute certificate on success, null on error</returns>
-        public static AttributeCertificateTableEntry[] ParseAttributeCertificateTable(byte[] tableData, Stream data, long endOffset)
+        public static AttributeCertificateTableEntry[]? ParseAttributeCertificateTable(byte[]? data)
         {
+            if (data == null)
+                return null;
+
             var obj = new List<AttributeCertificateTableEntry>();
 
-            while (data.Position < endOffset && data.Position < data.Length)
+            int offset = 0;
+            while (offset < data.Length)
             {
-                var entry = ParseAttributeCertificateTableEntry(data);
+                var entry = ParseAttributeCertificateTableEntry(data, ref offset);
                 obj.Add(entry);
 
-                // Align to the 8-byte boundary
-                data.AlignToBoundary(8);
+                // Align to the QWORD boundary if we're not at the end
+                while (offset < data.Length && offset % 8 != 0)
+                {
+                    offset++;
+                }
             }
 
             return [.. obj];
         }
 
         /// <summary>
-        /// Parse a Stream into an AttributeCertificateTableEntry
+        /// Parse a byte array into an AttributeCertificateTableEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled AttributeCertificateTableEntry on success, null on error</returns>
-        public static AttributeCertificateTableEntry ParseAttributeCertificateTableEntry(Stream data)
+        public static AttributeCertificateTableEntry ParseAttributeCertificateTableEntry(byte[] data, ref int offset)
         {
             var obj = new AttributeCertificateTableEntry();
 
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Revision = (WindowsCertificateRevision)data.ReadUInt16LittleEndian();
-            obj.CertificateType = (WindowsCertificateType)data.ReadUInt16LittleEndian();
+            obj.Length = data.ReadUInt32LittleEndian(ref offset);
+            obj.Revision = (WindowsCertificateRevision)data.ReadUInt16LittleEndian(ref offset);
+            obj.CertificateType = (WindowsCertificateType)data.ReadUInt16LittleEndian(ref offset);
 
             int certificateDataLength = (int)obj.Length - 8;
-            if (certificateDataLength > 0 && data.Position + certificateDataLength <= data.Length)
-                obj.Certificate = data.ReadBytes(certificateDataLength);
+            if (certificateDataLength > 0 && offset + certificateDataLength <= data.Length)
+                obj.Certificate = data.ReadBytes(ref offset, certificateDataLength);
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into an BaseRelocationBlock
+        /// Parse a byte array into an BaseRelocationBlock
         /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="endOffset">First address not part of the base relocation table</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled BaseRelocationBlock on success, null on error</returns>
-        public static BaseRelocationBlock? ParseBaseRelocationBlock(Stream data, long endOffset)
+        public static BaseRelocationBlock? ParseBaseRelocationBlock(byte[] data, ref int offset)
         {
             var obj = new BaseRelocationBlock();
 
-            obj.PageRVA = data.ReadUInt32LittleEndian();
-            obj.BlockSize = data.ReadUInt32LittleEndian();
+            obj.PageRVA = data.ReadUInt32LittleEndian(ref offset);
+            obj.BlockSize = data.ReadUInt32LittleEndian(ref offset);
             if (obj.BlockSize <= 8)
                 return obj;
 
             // Guard against invalid block sizes
             if (obj.BlockSize % 2 != 0)
                 return obj;
-            if (data.Position + obj.BlockSize > endOffset)
+            if (offset + obj.BlockSize > data.Length)
                 return obj;
 
             int entryCount = ((int)obj.BlockSize - 8) / 2;
             obj.TypeOffsetFieldEntries = new BaseRelocationTypeOffsetFieldEntry[entryCount];
             for (int i = 0; i < obj.TypeOffsetFieldEntries.Length; i++)
             {
-                if (data.Position + 2 >= data.Length)
+                if (offset + 2 >= data.Length)
                     break;
 
-                obj.TypeOffsetFieldEntries[i] = ParseBaseRelocationTypeOffsetFieldEntry(data);
+                obj.TypeOffsetFieldEntries[i] = ParseBaseRelocationTypeOffsetFieldEntry(data, ref offset);
             }
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a base relocation table
+        /// Parse a byte array into a base relocation table
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="endOffset">First address not part of the base relocation table</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        public static BaseRelocationBlock[] ParseBaseRelocationTable(byte[] tableData, Stream data, long endOffset)
+        public static BaseRelocationBlock[]? ParseBaseRelocationTable(byte[]? data)
         {
+            if (data == null)
+                return null;
+
             var obj = new List<BaseRelocationBlock>();
 
-            while (data.Position < endOffset && data.Position < data.Length)
+            int offset = 0;
+            while (offset < data.Length)
             {
-                var block = ParseBaseRelocationBlock(data, endOffset);
+                var block = ParseBaseRelocationBlock(data, ref offset);
                 if (block == null)
                     break;
 
                 obj.Add(block);
 
                 // Align to the DWORD boundary if we're not at the end
-                data.AlignToBoundary(4);
+                while (offset < data.Length && offset % 4 != 0)
+                {
+                    offset++;
+                }
             }
 
             return [.. obj];
         }
 
         /// <summary>
-        /// Parse a Stream into a BaseRelocationTypeOffsetFieldEntry
+        /// Parse a byte array into a BaseRelocationTypeOffsetFieldEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled BaseRelocationTypeOffsetFieldEntry on success, null on error</returns>
-        public static BaseRelocationTypeOffsetFieldEntry ParseBaseRelocationTypeOffsetFieldEntry(Stream data)
+        public static BaseRelocationTypeOffsetFieldEntry ParseBaseRelocationTypeOffsetFieldEntry(byte[] data, ref int offset)
         {
             var obj = new BaseRelocationTypeOffsetFieldEntry();
 
-            ushort typeAndOffsetField = data.ReadUInt16LittleEndian();
+            ushort typeAndOffsetField = data.ReadUInt16LittleEndian(ref offset);
             obj.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
             obj.Offset = (ushort)(typeAndOffsetField & 0x0FFF);
 
@@ -677,46 +673,49 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a DebugDirectoryEntry
+        /// Parse a byte array into a DebugDirectoryEntry
         /// </summary>
-        /// <param name="data">Stream to parse</param>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled DebugDirectoryEntry on success, null on error</returns>
-        public static DebugDirectoryEntry ParseDebugDirectoryEntry(Stream data)
+        public static DebugDirectoryEntry ParseDebugDirectoryEntry(byte[] data, ref int offset)
         {
             var obj = new DebugDirectoryEntry();
 
-            obj.Characteristics = data.ReadUInt32LittleEndian();
-            obj.TimeDateStamp = data.ReadUInt32LittleEndian();
-            obj.MajorVersion = data.ReadUInt16LittleEndian();
-            obj.MinorVersion = data.ReadUInt16LittleEndian();
-            obj.DebugType = (DebugType)data.ReadUInt32LittleEndian();
-            obj.SizeOfData = data.ReadUInt32LittleEndian();
-            obj.AddressOfRawData = data.ReadUInt32LittleEndian();
-            obj.PointerToRawData = data.ReadUInt32LittleEndian();
+            obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
+            obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
+            obj.MajorVersion = data.ReadUInt16LittleEndian(ref offset);
+            obj.MinorVersion = data.ReadUInt16LittleEndian(ref offset);
+            obj.DebugType = (DebugType)data.ReadUInt32LittleEndian(ref offset);
+            obj.SizeOfData = data.ReadUInt32LittleEndian(ref offset);
+            obj.AddressOfRawData = data.ReadUInt32LittleEndian(ref offset);
+            obj.PointerToRawData = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
         }
 
         /// <summary>
-        /// Parse a Stream into a DebugTable
+        /// Parse a byte array into a DebugTable
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
-        /// <param name="endOffset">First address not part of the debug table</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled DebugTable on success, null on error</returns>
-        public static DebugTable ParseDebugTable(byte[] tableData, Stream data, long endOffset)
+        public static DebugTable? ParseDebugTable(byte[]? data)
         {
+            if (data == null)
+                return null;
+
             var obj = new DebugTable();
 
-            var debugDirectoryTable = new List<DebugDirectoryEntry>();
+            var table = new List<DebugDirectoryEntry>();
 
-            while (data.Position < endOffset && data.Position < data.Length)
+            int offset = 0;
+            while (offset < data.Length)
             {
-                var debugDirectoryEntry = ParseDebugDirectoryEntry(data);
-                debugDirectoryTable.Add(debugDirectoryEntry);
+                var entry = ParseDebugDirectoryEntry(data, ref offset);
+                table.Add(entry);
             }
 
-            obj.DebugDirectoryTable = [.. debugDirectoryTable];
+            obj.DebugDirectoryTable = [.. table];
 
             // TODO: Should we read the debug data in? Most of it is unformatted or undocumented
             // TODO: Implement .debug$F (Object Only) / IMAGE_DEBUG_TYPE_FPO
@@ -728,23 +727,26 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <summary>
-        /// Parse a Stream into a DelayLoadDirectoryTable
+        /// Parse a byte array into a DelayLoadDirectoryTable
         /// </summary>
-        /// <param name="tableData">Byte array representing the table data</param>
-        /// <param name="data">Stream to use for additional parsing</param>
+        /// <param name="data">Byte array to parse</param>
         /// <returns>Filled DelayLoadDirectoryTable on success, null on error</returns>
-        public static DelayLoadDirectoryTable ParseDelayLoadDirectoryTable(byte[] tableData, Stream data)
+        public static DelayLoadDirectoryTable? ParseDelayLoadDirectoryTable(byte[]? data)
         {
+            if (data == null)
+                return null;
+
             var obj = new DelayLoadDirectoryTable();
 
-            obj.Attributes = data.ReadUInt32LittleEndian();
-            obj.Name = data.ReadUInt32LittleEndian();
-            obj.ModuleHandle = data.ReadUInt32LittleEndian();
-            obj.DelayImportAddressTable = data.ReadUInt32LittleEndian();
-            obj.DelayImportNameTable = data.ReadUInt32LittleEndian();
-            obj.BoundDelayImportTable = data.ReadUInt32LittleEndian();
-            obj.UnloadDelayImportTable = data.ReadUInt32LittleEndian();
-            obj.TimeStamp = data.ReadUInt32LittleEndian();
+            int offset = 0;
+            obj.Attributes = data.ReadUInt32LittleEndian(ref offset);
+            obj.Name = data.ReadUInt32LittleEndian(ref offset);
+            obj.ModuleHandle = data.ReadUInt32LittleEndian(ref offset);
+            obj.DelayImportAddressTable = data.ReadUInt32LittleEndian(ref offset);
+            obj.DelayImportNameTable = data.ReadUInt32LittleEndian(ref offset);
+            obj.BoundDelayImportTable = data.ReadUInt32LittleEndian(ref offset);
+            obj.UnloadDelayImportTable = data.ReadUInt32LittleEndian(ref offset);
+            obj.TimeStamp = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
         }
