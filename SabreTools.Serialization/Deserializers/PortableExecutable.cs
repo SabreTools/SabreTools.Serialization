@@ -138,6 +138,9 @@ namespace SabreTools.Serialization.Deserializers
                         // Seek to the export table
                         data.Seek(offset, SeekOrigin.Begin);
 
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
+
                         // Set the export table
                         pex.ExportTable = ParseExportTable(data, initialOffset, pex.SectionTable);
                     }
@@ -162,6 +165,9 @@ namespace SabreTools.Serialization.Deserializers
                         // Seek to the import table
                         data.Seek(offset, SeekOrigin.Begin);
 
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
+
                         // Set the import table
                         pex.ImportTable = ParseImportTable(data, initialOffset, optionalHeader.Magic, pex.SectionTable);
                     }
@@ -185,6 +191,9 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Seek to the resource directory table
                         data.Seek(offset, SeekOrigin.Begin);
+
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the resource directory table
                         long tableStart = data.Position;
@@ -242,7 +251,10 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Seek to the attribute certificate table
                         data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + optionalHeader.CertificateTable.Size;
+                        long endOffset = offset + tableSize;
+
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the attribute certificate table
                         pex.AttributeCertificateTable = ParseAttributeCertificateTable(data, endOffset);
@@ -267,7 +279,10 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Seek to the base relocation table
                         data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + optionalHeader.BaseRelocationTable.Size;
+                        long endOffset = offset + tableSize;
+
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the base relocation table
                         pex.BaseRelocationTable = ParseBaseRelocationTable(data, endOffset);
@@ -292,7 +307,10 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Seek to the debug table
                         data.Seek(offset, SeekOrigin.Begin);
-                        long endOffset = offset + optionalHeader.Debug.Size;
+                        long endOffset = offset + tableSize;
+
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the debug table
                         pex.DebugTable = ParseDebugTable(data, endOffset);
@@ -323,6 +341,9 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Seek to the delay-load directory table
                         data.Seek(offset, SeekOrigin.Begin);
+
+                        // Read the table data for parsing
+                        byte[] tableData = data.ReadBytes(tableSize);
 
                         // Set the delay-load directory table
                         pex.DelayLoadDirectoryTable = ParseDelayLoadDirectoryTable(data);
