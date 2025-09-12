@@ -302,6 +302,8 @@ namespace SabreTools.Serialization.Deserializers
 
                         // Read the table data
                         byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
+                        if (tableData != null && tableData.Length < optionalHeader.ResourceTable.Size)
+                            Array.Resize(ref tableData, (int)optionalHeader.ResourceTable.Size);
 
                         // Set the resource directory table
                         long tableStart = data.Position;
@@ -309,7 +311,13 @@ namespace SabreTools.Serialization.Deserializers
                         pex.ResourceDirectoryTable = ParseResourceDirectoryTable(tableData, ref tableOffset);
 
                         // Parse the resource data, if possible
-                        ParseResourceData(tableData, ref tableOffset, offset, pex.ResourceDirectoryTable, pex.SectionTable);
+                        ParseResourceData(data,
+                            initialOffset,
+                            tableData,
+                            ref tableOffset,
+                            offset,
+                            (int)optionalHeader.ResourceTable.Size,
+                            pex.ResourceDirectoryTable, pex.SectionTable);
 
                         #region Hidden Resources
 
@@ -1560,15 +1568,24 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Fill in resource data
         /// </summary>
-        /// <param name="data">Byte array to parse</param>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="initialOffset">Initial offset to use in address comparisons</param>
+        /// <param name="tableData">Byte array to parse</param>
         /// <param name="dataOffset">Offset into the byte array</param>
         /// <param name="tableStart">Offset to the start of the table</param>
+        /// <param name="tableStart">Unpadded length of the table</param>
         /// <param name="table">Resource table to fill in</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ResourceDataEntry on success, null on error</returns>
-        public static void ParseResourceData(byte[]? data, ref int dataOffset, long tableStart, ResourceDirectoryTable? table, SectionHeader[] sections)
+        public static void ParseResourceData(Stream data,
+            long initialOffset,
+            byte[]? tableData,
+            ref int dataOffset,
+            long tableStart,
+            long tableLength,
+            ResourceDirectoryTable? table, SectionHeader[] sections)
         {
-            if (data == null)
+            if (tableData == null)
                 return;
             if (table?.Entries == null)
                 return;
@@ -1578,15 +1595,37 @@ namespace SabreTools.Serialization.Deserializers
                 // Handle directory entries directly
                 if (entry.DataEntry != null && entry.DataEntry.Size > 0)
                 {
-                    // Read the data from the offset
-                    dataOffset = (int)(entry.DataEntry.DataRVA.ConvertVirtualAddress(sections) - tableStart);
-                    if (dataOffset > 0 && dataOffset + entry.DataEntry.Size < data.Length)
-                        entry.DataEntry.Data = data.ReadBytes(ref dataOffset, (int)entry.DataEntry.Size);
+                    // Convert the data RVA to an offset
+                    long nextOffset = entry.DataEntry.DataRVA.ConvertVirtualAddress(sections);
+                    if (nextOffset < 0)
+                        continue;
+
+                    // If the offset is within the table data, read from there
+                    if (nextOffset - tableStart + entry.DataEntry.Size <= tableLength)
+                    {
+                        dataOffset = (int)(nextOffset - tableStart);
+                        entry.DataEntry.Data = tableData.ReadBytes(ref dataOffset, (int)entry.DataEntry.Size);
+                    }
+
+                    // Otherwise, read from the data stream
+                    else if (nextOffset + entry.DataEntry.Size <= data.Length)
+                    {
+                        entry.DataEntry.Data = data.ReadFrom(nextOffset + initialOffset, (int)entry.DataEntry.Size, retainPosition: true);
+                    }
                 }
 
                 // Handle subdirectories by recursion
                 else if (entry.Subdirectory != null)
-                    ParseResourceData(data, ref dataOffset, tableStart, entry.Subdirectory, sections);
+                {
+                    ParseResourceData(data,
+                        initialOffset,
+                        tableData,
+                        ref dataOffset,
+                        tableStart,
+                        tableLength,
+                        entry.Subdirectory,
+                        sections);
+                }
             }
         }
 
