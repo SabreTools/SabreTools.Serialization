@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Deserializers
                     + pex.COFFFileHeader.SizeOfOptionalHeader;
                 if (offset < initialOffset || offset >= data.Length)
                     return null;
-                    
+
                 // Seek to the section table
                 data.Seek(offset, SeekOrigin.Begin);
 
@@ -235,8 +235,12 @@ namespace SabreTools.Serialization.Deserializers
                                     break;
                                 }
 
-                                data.Seek(nameOffset, SeekOrigin.Begin);
-                                entry.Name = data.ReadNullTerminatedAnsiString();
+                                // If the name RVA is non-zero
+                                if (nameOffset != initialOffset)
+                                {
+                                    data.Seek(nameOffset, SeekOrigin.Begin);
+                                    entry.Name = data.ReadNullTerminatedAnsiString();
+                                }
                             }
 
                             // If an error was not encountered, read the remaining tables
