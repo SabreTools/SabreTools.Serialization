@@ -24,6 +24,8 @@ namespace SabreTools.Serialization.Wrappers
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
+            bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
+            // TODO: extract matroschka here
 
             return cexe || overlay || resources | wise;
         }
@@ -404,6 +406,26 @@ namespace SabreTools.Serialization.Wrappers
             // Everything else could not extract
             return false;
         }
+        
+        /// <summary>
+        /// Extract data from a SecuROM Matroschka Package
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractMatroschka(string outputDirectory, bool includeDebug)
+        {
+            // Get the source data for reading
+            Stream source = _dataSource;
+
+            // Try to find the section header
+            var section = FindMatroschkaSection();
+            if (section != null)
+                return ExtractMatroschkaSection(outputDirectory, includeDebug, source, section);
+
+            // Everything else could not extract
+            return false;
+        }
 
         /// <summary>
         /// Decompress CExe data compressed with LZ
@@ -544,6 +566,41 @@ namespace SabreTools.Serialization.Wrappers
 
             // Parse the section header
             var header = WiseSectionHeader.Create(sectionData, 0);
+            if (header == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
+                return false;
+            }
+
+            // Attempt to extract section
+            return header.Extract(outputDirectory, includeDebug);
+        }
+        
+        /// <summary>
+        /// Extract using SecuROM Matroschka section
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="source">Stream to read</param>
+        /// <param name="section">SecuROM Matroschka section information</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        private bool ExtractMatroschkaSection(string outputDirectory, bool includeDebug, Stream source, Models.PortableExecutable.SectionHeader section)
+        {
+            // Get the offset
+            long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+            if (offset < 0 || offset >= source.Length)
+                return false;
+
+            // Read the section into a local array
+            int sectionLength = (int)section.VirtualSize;
+            byte[]? sectionData;
+            lock (source)
+            {
+                sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
+            }
+
+            // Parse the section header
+            var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
             if (header == null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse the section header");

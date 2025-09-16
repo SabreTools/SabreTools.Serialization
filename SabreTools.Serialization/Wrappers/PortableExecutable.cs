@@ -1461,6 +1461,30 @@ namespace SabreTools.Serialization.Wrappers
             // Otherwise, it could not be found
             return null;
         }
+        
+        /// <summary>
+        /// Find the location of a SecuROM Matroschka section, if it exists
+        /// </summary>
+        /// <returns>Matroschka section on success, null otherwise</returns>
+        public Models.PortableExecutable.SectionHeader? FindMatroschkaSection()
+        {
+            // If the section table is invalid
+            if (SectionTable == null)
+                return null;
+
+            // Find the matrosch or rcpacker section
+            foreach (var section in SectionTable)
+            {
+                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                if (sectionName != "matrosch" && sectionName != "rcpacker")
+                    continue;
+
+                return section;
+            }
+
+            // Otherwise, it could not be found
+            return null;
+        }
 
         #endregion
 
