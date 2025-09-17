@@ -830,6 +830,16 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private bool _matroschkaPackageFailed = false;
         
+        /// <summary>
+        /// Matroschka Package file data, if it exists
+        /// </summary>
+        private byte[][]? _matroschkaPackageFileData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_matroschkaPackageFileData"/> 
+        /// </summary>
+        private readonly object _matroschkaPackageFileDataLock = new();
+        
         #region Version Information
 
         /// <summary>
@@ -2015,9 +2025,53 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     }
                     
+                    // Check if Entries exists
+                    if (header.Entries == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Read file data
+                    byte[][] fileDataArray = new byte[header.EntryCount][];
+                    for (int i = 0; i < header.EntryCount; i++)
+                    {
+                        var entry = header.Entries[i];
+                        byte[]? fileData;
+                        lock (source)
+                        {
+                            fileData = source.ReadFrom(offset + entry.Offset, (int)entry.Size, retainPosition: true);
+                        }
+
+                        if (fileData == null)
+                        {
+                            _matroschkaPackageFailed = true;
+                            return null;
+                        }
+                        fileDataArray[i] = fileData;
+                    }
+
+                    _matroschkaPackageFileData = fileDataArray;
+
                     // Otherwise, cache and return the data
                     _matroschkaPackage = header;
                     return _matroschkaPackage;
+                }
+            }
+        }
+        
+        public byte[][]? MatroschkaPackageFileData
+        {
+            get
+            {
+                lock (_matroschkaPackageFileDataLock)
+                {
+                    // Make sure the data was read properly
+                    if (MatroschkaPackage == null)
+                        return null;
+                   
+                    // Return data
+                    return _matroschkaPackageFileData;
                 }
             }
         }

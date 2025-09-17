@@ -177,22 +177,5 @@ namespace SabreTools.Serialization.Deserializers
                 return null;
             }
         }
-
-        public static byte[][]? ReadEntriesData(MatroshkaPackage matroschka, Stream? data)
-        {
-            if (data == null)
-                return null;
-            if (matroschka.Entries == null)
-                return null;
-            long startPosition = data.Position;
-            byte[][]? fileDataArray = new byte[matroschka.EntryCount][];
-            for (int i = 0; i < matroschka.EntryCount; i++)
-            {
-                var entry = matroschka.Entries[i];
-                data.Position = startPosition + entry.Offset;
-                fileDataArray[i] = data.ReadBytes((int)entry.Size); // TODO: Handle out of bounds reading, other errors?
-            }
-            return fileDataArray;
-        }
     }
 }

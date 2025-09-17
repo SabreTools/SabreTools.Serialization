@@ -39,7 +39,6 @@ namespace SabreTools.Serialization.Wrappers
         public MatroshkaEntry[]? Entries => Model.Entries;
 
         // TODO: Temporary, until models update. Check other code to see if this is the right way to store in wrapper.
-        public byte[][]? FileDataArray  { get; set; }
         
         #endregion
 
@@ -101,9 +100,7 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 data.Seek(currentOffset, SeekOrigin.Begin);
-                var fileDataArray = Deserializers.SecuROMMatroschkaPackage.ReadEntriesData(model, data);
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new SecuROMMatroschkaPackage(model, data) {  FileDataArray = fileDataArray };
+                return new SecuROMMatroschkaPackage(model, data);
             }
             catch
             {

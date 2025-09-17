@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Extract the header-defined files
-            bool extracted = ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
+            bool extracted = ExtractHeaderDefinedFiles(outputDirectory, includeDebug, null);
             if (!extracted)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the files extracted successfully, false otherwise</returns>
-        private bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug)
+        public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
         {
             lock (_dataSourceLock)
             {
@@ -46,12 +46,12 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < Entries.Length; i++)
                 {
                     MatroshkaEntry entry = Entries[i];
-                    if (FileDataArray == null)
+                    if (fileDataArray == null)
                     {
                         return false;
                     }
 
-                    var fileData = FileDataArray[i];
+                    var fileData = fileDataArray[i];
                     
 
                     // Extract file

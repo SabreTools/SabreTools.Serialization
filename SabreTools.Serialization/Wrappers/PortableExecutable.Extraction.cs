@@ -420,7 +420,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Attempt to extract section
-            return MatroschkaPackage.Extract(outputDirectory, includeDebug);
+            return MatroschkaPackage.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, MatroschkaPackageFileData);
         }
 
         /// <summary>
