@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.IO.Compression;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -11,7 +9,7 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="path">Path to open as a stream</param>
         /// <returns>Stream representing the file, null on error</returns>
-        public static Stream? OpenStream(string? path, bool skipCompression = false)
+        public static Stream? OpenStream(string? path)
         {
             try
             {
@@ -20,25 +18,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
 
                 // Open the file for deserialization
-                var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-                // Get the extension to determine if additional handling is needed
-                string ext = Path.GetExtension(path).TrimStart('.');
-
-                // Determine what we do based on the extension
-                if (!skipCompression && string.Equals(ext, "gz", StringComparison.OrdinalIgnoreCase))
-                {
-                    return new GZipStream(stream, CompressionMode.Decompress);
-                }
-                else if (!skipCompression && string.Equals(ext, "zip", StringComparison.OrdinalIgnoreCase))
-                {
-                    // TODO: Support zip-compressed files
-                    return null;
-                }
-                else
-                {
-                    return stream;
-                }
+                return File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             }
             catch
             {

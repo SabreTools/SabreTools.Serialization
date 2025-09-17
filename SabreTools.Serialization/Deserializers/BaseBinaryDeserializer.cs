@@ -16,11 +16,6 @@ namespace SabreTools.Serialization.Deserializers
         IFileDeserializer<TModel>,
         IStreamDeserializer<TModel>
     {
-        /// <summary>
-        /// Indicates if compressed files should be decompressed before processing
-        /// </summary>
-        protected virtual bool SkipCompression => false;
-
         #region IByteDeserializer
 
         /// <inheritdoc/>
@@ -46,7 +41,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc/>
         public virtual TModel? Deserialize(string? path)
         {
-            using var stream = PathProcessor.OpenStream(path, SkipCompression);
+            using var stream = PathProcessor.OpenStream(path);
             return Deserialize(stream);
         }
 
