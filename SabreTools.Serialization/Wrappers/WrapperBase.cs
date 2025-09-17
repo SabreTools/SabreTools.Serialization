@@ -70,6 +70,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
         protected WrapperBase(byte[] data)
             : this(data, 0, data.Length)
         {
@@ -78,6 +79,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
         protected WrapperBase(byte[] data, int offset)
             : this(data, offset, data.Length - offset)
         {
@@ -86,6 +89,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected WrapperBase(byte[] data, int offset, int length)
         {
             if (offset < 0 || offset >= data.Length)
@@ -103,6 +110,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
         /// <remarks>Uses the current stream position as the offset</remarks>
         protected WrapperBase(Stream data)
             : this(data, data.Position, data.Length - data.Position)
@@ -112,6 +120,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
         protected WrapperBase(Stream data, long offset)
             : this(data, offset, data.Length - offset)
         {
@@ -120,6 +130,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected WrapperBase(Stream data, long offset, long length)
         {
             if (!data.CanSeek || !data.CanRead)
