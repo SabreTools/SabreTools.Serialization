@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
+using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.ResourceEntries;
 
 namespace SabreTools.Serialization.Wrappers
@@ -813,7 +814,22 @@ namespace SabreTools.Serialization.Wrappers
         /// Cached found string data in tables
         /// </summary>
         private readonly List<string>?[] _tableStringData = new List<string>?[16];
+        
+        /// <summary>
+        /// Matroschka Package wrapper, if it exists
+        /// </summary>
+        private SecuROMMatroschkaPackage? _matroschkaPackage = null;
 
+        /// <summary>
+        /// Lock object for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private readonly object _matroschkaPackageLock = new();
+        
+        /// <summary>
+        /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private bool _matroschkaPackageFailed = false;
+        
         #region Version Information
 
         /// <summary>
@@ -1918,6 +1934,91 @@ namespace SabreTools.Serialization.Wrappers
                 // Otherwise, cache and return the strings
                 _sectionStringData[index] = sectionData.ReadStringsFrom(charLimit: 3) ?? [];
                 return _sectionStringData[index];
+            }
+        }
+        
+        public SecuROMMatroschkaPackage? MatroschkaPackage
+        {
+            get
+            {
+                lock (_matroschkaPackageLock)
+                {
+                    // Use the cached data if possible
+                    if (_matroschkaPackage != null)
+                        return _matroschkaPackage;
+                    
+                    // Check to see if creation has already been attempted
+                    if (_matroschkaPackageFailed)
+                        return null;
+                    
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // If the section table is missing
+                    if (SectionTable == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    SectionHeader? section = null;
+                    
+                    // Find the matrosch or rcpacker section
+                    foreach (var searchedSection in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
+                        if (sectionName != "matrosch" && sectionName != "rcpacker")
+                            continue;
+
+                        section = searchedSection;
+                        break;
+                    }
+
+                    // Otherwise, it could not be found
+                    if (section == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Get the source data for reading
+                    Stream source = _dataSource;
+                    
+                    // Get the offset
+                    long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    if (offset < 0 || offset >= source.Length)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Read the section into a local array
+                    int sectionLength = (int)section.VirtualSize;
+                    byte[]? sectionData;
+                    lock (source)
+                    {
+                        sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
+                    }
+
+                    // Parse the section header
+                    var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
+                    
+                    // If header creation failed
+                    if (header == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Otherwise, cache and return the data
+                    _matroschkaPackage = header;
+                    return _matroschkaPackage;
+                }
             }
         }
 
