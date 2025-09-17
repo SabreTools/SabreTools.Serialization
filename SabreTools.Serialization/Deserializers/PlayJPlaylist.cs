@@ -32,13 +32,16 @@ namespace SabreTools.Serialization.Deserializers
 
                 #region Audio Files
 
+                // Create the audio file deserializer
+                var audioDeserializer = new PlayJAudio();
+
                 // Create the audio files array
                 playlist.AudioFiles = new AudioFile[playlistHeader.TrackCount];
 
                 // Try to parse the audio files
                 for (int i = 0; i < playlist.AudioFiles.Length; i++)
                 {
-                    var entryHeader = PlayJAudio.DeserializeStream(data);
+                    var entryHeader = audioDeserializer.Deserialize(data);
                     if (entryHeader == null)
                         continue;
 
