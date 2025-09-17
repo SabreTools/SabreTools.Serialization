@@ -22,18 +22,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PIC(DiscInformation? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public PIC(DiscInformation model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PIC(DiscInformation? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public PIC(DiscInformation model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PIC(DiscInformation model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public PIC(DiscInformation model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public PIC(DiscInformation model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PIC(DiscInformation model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a PIC disc information object from a byte array and offset
@@ -77,8 +85,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new PIC(model, data);
+                return new PIC(model, data, currentOffset);
             }
             catch
             {

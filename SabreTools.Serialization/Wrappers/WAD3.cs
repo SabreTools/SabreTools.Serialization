@@ -21,18 +21,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public WAD3(Models.WAD3.File? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public WAD3(Models.WAD3.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WAD3(Models.WAD3.File? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public WAD3(Models.WAD3.File model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public WAD3(Models.WAD3.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public WAD3(Models.WAD3.File model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public WAD3(Models.WAD3.File model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public WAD3(Models.WAD3.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a WAD3 from a byte array and offset
@@ -75,8 +83,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new WAD3(model, data);
+                return new WAD3(model, data, currentOffset);
             }
             catch
             {

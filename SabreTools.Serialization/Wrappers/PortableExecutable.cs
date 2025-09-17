@@ -4,11 +4,12 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
+using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.ResourceEntries;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class PortableExecutable : WrapperBase<Models.PortableExecutable.Executable>
+    public partial class PortableExecutable : WrapperBase<Executable>
     {
         #region Descriptive Properties
 
@@ -19,8 +20,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.COFFFileHeader"/>
-        public Models.PortableExecutable.COFFFileHeader? COFFFileHeader => Model.COFFFileHeader;
+        /// <inheritdoc cref="Executable.COFFFileHeader"/>
+        public COFFFileHeader? COFFFileHeader => Model.COFFFileHeader;
 
         /// <summary>
         /// Dictionary of debug data
@@ -46,8 +47,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.DebugTable.DebugDirectoryTable"/>
-        public Models.PortableExecutable.DebugDirectoryEntry[]? DebugDirectoryTable
+        /// <inheritdoc cref="DebugTable.DebugDirectoryTable"/>
+        public DebugDirectoryEntry[]? DebugDirectoryTable
             => Model.DebugTable?.DebugDirectoryTable;
 
         /// <summary>
@@ -100,8 +101,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.ExportTable"/>
-        public Models.PortableExecutable.ExportTable? ExportTable => Model.ExportTable;
+        /// <inheritdoc cref="Executable.ExportTable"/>
+        public ExportTable? ExportTable => Model.ExportTable;
 
         /// <summary>
         /// Header padding data, if it exists
@@ -181,11 +182,11 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.ImportTable"/>
-        public Models.PortableExecutable.ImportTable? ImportTable => Model.ImportTable;
+        /// <inheritdoc cref="Executable.ImportTable"/>
+        public ImportTable? ImportTable => Model.ImportTable;
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.OptionalHeader"/>
-        public Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
+        /// <inheritdoc cref="Executable.OptionalHeader"/>
+        public OptionalHeader? OptionalHeader => Model.OptionalHeader;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -340,8 +341,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.ResourceDirectoryTable"/>
-        public Models.PortableExecutable.ResourceDirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
+        /// <inheritdoc cref="Executable.ResourceDirectoryTable"/>
+        public ResourceDirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
 
         /// <summary>
         /// Sanitized section names
@@ -385,8 +386,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.SectionTable"/>
-        public Models.PortableExecutable.SectionHeader[]? SectionTable => Model.SectionTable;
+        /// <inheritdoc cref="Executable.SectionTable"/>
+        public SectionHeader[]? SectionTable => Model.SectionTable;
 
         /// <summary>
         /// Data after the section table, if it exists
@@ -429,7 +430,7 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Models.PortableExecutable.Executable.Stub"/>
+        /// <inheritdoc cref="Executable.Stub"/>
         public Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
@@ -837,18 +838,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PortableExecutable(Models.PortableExecutable.Executable? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public PortableExecutable(Executable model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PortableExecutable(Models.PortableExecutable.Executable? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public PortableExecutable(Executable model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a PE executable from a byte array and offset
@@ -891,8 +900,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new PortableExecutable(model, data);
+                return new PortableExecutable(model, data, currentOffset);
             }
             catch
             {
@@ -984,14 +992,14 @@ namespace SabreTools.Serialization.Wrappers
                 if (data == null)
                     continue;
 
-                if (data is Models.PortableExecutable.NB10ProgramDatabase n)
+                if (data is NB10ProgramDatabase n)
                 {
                     if (n.PdbFileName == null || !n.PdbFileName.Contains(path))
                         continue;
 
                     debugFound.Add(n);
                 }
-                else if (data is Models.PortableExecutable.RSDSProgramDatabase r)
+                else if (data is RSDSProgramDatabase r)
                 {
                     if (r.PathAndFileName == null || !r.PathAndFileName.Contains(path))
                         continue;
@@ -1094,7 +1102,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // If we have CodeView debug data, try to parse it
-                if (entry.DebugType == Models.PortableExecutable.DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
+                if (entry.DebugType == DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
                 {
                     // Read the signature
                     int offset = 0;
@@ -1442,7 +1450,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Find the location of a Wise section, if it exists
         /// </summary>
         /// <returns>Wise section on success, null otherwise</returns>
-        public Models.PortableExecutable.SectionHeader? FindWiseSection()
+        public SectionHeader? FindWiseSection()
         {
             // If the section table is invalid
             if (SectionTable == null)
@@ -1469,7 +1477,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the resource directory table information
         /// </summary>
-        private void ParseResourceDirectoryTable(Models.PortableExecutable.ResourceDirectoryTable table, List<object> types)
+        private void ParseResourceDirectoryTable(ResourceDirectoryTable table, List<object> types)
         {
             if (table?.Entries == null)
                 return;
@@ -1491,7 +1499,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the name resource directory entry information
         /// </summary>
-        private void ParseResourceDirectoryEntry(Models.PortableExecutable.ResourceDirectoryEntry entry, List<object> types)
+        private void ParseResourceDirectoryEntry(ResourceDirectoryEntry entry, List<object> types)
         {
             if (entry.DataEntry != null)
                 ParseResourceDataEntry(entry.DataEntry, types);
@@ -1507,7 +1515,7 @@ namespace SabreTools.Serialization.Wrappers
         /// of those resources in the entire exectuable. This means that only the last found version or manifest will
         /// ever be cached.
         /// </remarks>
-        private void ParseResourceDataEntry(Models.PortableExecutable.ResourceDataEntry entry, List<object> types)
+        private void ParseResourceDataEntry(ResourceDataEntry entry, List<object> types)
         {
             // Create the key and value objects
             string key = types == null
@@ -1521,70 +1529,70 @@ namespace SabreTools.Serialization.Wrappers
             {
                 try
                 {
-                    switch ((Models.PortableExecutable.ResourceType)resourceType)
+                    switch ((ResourceType)resourceType)
                     {
-                        case Models.PortableExecutable.ResourceType.RT_CURSOR:
+                        case ResourceType.RT_CURSOR:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_BITMAP:
+                        case ResourceType.RT_BITMAP:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_ICON:
+                        case ResourceType.RT_ICON:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_MENU:
+                        case ResourceType.RT_MENU:
                             value = entry.AsMenu();
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_DIALOG:
+                        case ResourceType.RT_DIALOG:
                             value = entry.AsDialogBox();
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_STRING:
+                        case ResourceType.RT_STRING:
                             value = entry.AsStringTable();
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_FONTDIR:
+                        case ResourceType.RT_FONTDIR:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_FONT:
+                        case ResourceType.RT_FONT:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_ACCELERATOR:
+                        case ResourceType.RT_ACCELERATOR:
                             value = entry.AsAcceleratorTableResource();
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_RCDATA:
+                        case ResourceType.RT_RCDATA:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_MESSAGETABLE:
+                        case ResourceType.RT_MESSAGETABLE:
                             value = entry.AsMessageResourceData();
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_GROUP_CURSOR:
+                        case ResourceType.RT_GROUP_CURSOR:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_GROUP_ICON:
+                        case ResourceType.RT_GROUP_ICON:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_VERSION:
+                        case ResourceType.RT_VERSION:
                             _versionInfo = entry.AsVersionInfo();
                             value = _versionInfo;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_DLGINCLUDE:
+                        case ResourceType.RT_DLGINCLUDE:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_PLUGPLAY:
+                        case ResourceType.RT_PLUGPLAY:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_VXD:
+                        case ResourceType.RT_VXD:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_ANICURSOR:
+                        case ResourceType.RT_ANICURSOR:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_ANIICON:
+                        case ResourceType.RT_ANIICON:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_HTML:
+                        case ResourceType.RT_HTML:
                             value = entry.Data;
                             break;
-                        case Models.PortableExecutable.ResourceType.RT_MANIFEST:
+                        case ResourceType.RT_MANIFEST:
                             _assemblyManifest = entry.AsAssemblyManifest();
                             value = _assemblyManifest;
                             break;
@@ -1667,7 +1675,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-        public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
+        public SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
             if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
@@ -1692,7 +1700,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="name">Name of the section to check for</param>
         /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
         /// <returns>Section data on success, null on error</returns>
-        public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
+        public SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
             if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
@@ -1716,7 +1724,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the section to check for</param>
         /// <returns>Section data on success, null on error</returns>
-        public Models.PortableExecutable.SectionHeader? GetSection(int index)
+        public SectionHeader? GetSection(int index)
         {
             // If we have no sections
             if (SectionTable == null || SectionTable.Length == 0)
@@ -1906,7 +1914,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="index">Index of the table to check for</param>
         /// <returns>Table on success, null on error</returns>
-        public Models.PortableExecutable.DataDirectory? GetTable(int index)
+        public DataDirectory? GetTable(int index)
         {
             // If the table doesn't exist
             if (OptionalHeader == null || index < 0 || index > 16)

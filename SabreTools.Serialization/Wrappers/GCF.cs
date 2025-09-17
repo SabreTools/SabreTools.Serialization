@@ -164,18 +164,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public GCF(Models.GCF.File? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public GCF(Models.GCF.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public GCF(Models.GCF.File? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public GCF(Models.GCF.File model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public GCF(Models.GCF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public GCF(Models.GCF.File model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public GCF(Models.GCF.File model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public GCF(Models.GCF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create an GCF from a byte array and offset
@@ -218,8 +226,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new GCF(model, data);
+                return new GCF(model, data, currentOffset);
             }
             catch
             {

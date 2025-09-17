@@ -19,18 +19,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public BZip2(byte[]? data, int offset)
-            : base(data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public BZip2(byte[] data) : base(data) { }
 
         /// <inheritdoc/>
-        public BZip2(Stream? data)
-            : base(data)
-        {
-            // All logic is handled by the base class
-        }
+        public BZip2(byte[] data, int offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public BZip2(byte[] data, int offset, int length) : base(data, offset, length) { }
+
+        /// <inheritdoc/>
+        public BZip2(Stream data) : base(data) { }
+
+        /// <inheritdoc/>
+        public BZip2(Stream data, long offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public BZip2(Stream data, long offset, long length) : base(data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a BZip2 archive from a byte array and offset

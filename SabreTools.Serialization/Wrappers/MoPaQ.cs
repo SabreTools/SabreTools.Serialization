@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
-        public MoPaQ(byte[]? data, int offset)
+        public MoPaQ(byte[] data, int offset)
             : base(new Archive(), data, offset)
         {
             // All logic is handled by the base class
@@ -24,25 +24,33 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
-        public MoPaQ(Stream? data)
+        public MoPaQ(Stream data)
             : base(new Archive(), data)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public MoPaQ(Archive? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public MoPaQ(Archive model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public MoPaQ(Archive? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public MoPaQ(Archive model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public MoPaQ(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public MoPaQ(Archive model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public MoPaQ(Archive model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public MoPaQ(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a MoPaQ archive from a byte array and offset
@@ -85,8 +93,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new MoPaQ(model, data);
+                return new MoPaQ(model, data, currentOffset);
             }
             catch
             {

@@ -19,18 +19,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public RAR(byte[]? data, int offset)
-            : base(data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public RAR(byte[] data) : base(data) { }
 
         /// <inheritdoc/>
-        public RAR(Stream? data)
-            : base(data)
-        {
-            // All logic is handled by the base class
-        }
+        public RAR(byte[] data, int offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public RAR(byte[] data, int offset, int length) : base(data, offset, length) { }
+
+        /// <inheritdoc/>
+        public RAR(Stream data) : base(data) { }
+
+        /// <inheritdoc/>
+        public RAR(Stream data, long offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public RAR(Stream data, long offset, long length) : base(data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a RAR archive (or derived format) from a byte array and offset
