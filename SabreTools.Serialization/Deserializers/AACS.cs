@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Deserializers
                     // Try to parse the record
                     var record = ParseRecord(data);
                     if (record == null)
-                        return null;
+                        continue;
 
                     // Add the record
                     records.Add(record);
@@ -64,27 +64,32 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled Record on success, null on error</returns>
         private static Record? ParseRecord(Stream data)
         {
-            // The first byte is the type
+            // The first 4 bytes are the type and length
             RecordType type = (RecordType)data.ReadByteValue();
-            data.Seek(-1, SeekOrigin.Current);
+            uint recordLength = data.ReadUInt24LittleEndian();
+            data.Seek(-4, SeekOrigin.Current);
 
             // Create a record based on the type
-            return type switch
+            switch (type)
             {
                 // Known record types
-                RecordType.EndOfMediaKeyBlock => ParseEndOfMediaKeyBlockRecord(data),
-                RecordType.ExplicitSubsetDifference => ParseExplicitSubsetDifferenceRecord(data),
-                RecordType.MediaKeyData => ParseMediaKeyDataRecord(data),
-                RecordType.SubsetDifferenceIndex => ParseSubsetDifferenceIndexRecord(data),
-                RecordType.TypeAndVersion => ParseTypeAndVersionRecord(data),
-                RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data),
-                RecordType.HostRevocationList => ParseHostRevocationListRecord(data),
-                RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data),
-                RecordType.Copyright => ParseCopyrightRecord(data),
+                case RecordType.EndOfMediaKeyBlock: return ParseEndOfMediaKeyBlockRecord(data);
+                case RecordType.ExplicitSubsetDifference: return ParseExplicitSubsetDifferenceRecord(data);
+                case RecordType.MediaKeyData: return ParseMediaKeyDataRecord(data);
+                case RecordType.SubsetDifferenceIndex: return ParseSubsetDifferenceIndexRecord(data);
+                case RecordType.TypeAndVersion: return ParseTypeAndVersionRecord(data);
+                case RecordType.DriveRevocationList: return ParseDriveRevocationListRecord(data);
+                case RecordType.HostRevocationList: return ParseHostRevocationListRecord(data);
+                case RecordType.VerifyMediaKey: return ParseVerifyMediaKeyRecord(data);
+                case RecordType.Copyright: return ParseCopyrightRecord(data);
 
                 // Unknown record type
-                _ => null,
-            };
+                default:
+                    if (recordLength > 4)
+                        _ = data.ReadBytes((int)recordLength - 4);
+                    return null;
+            }
+            ;
         }
 
         /// <summary>
