@@ -92,7 +92,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
         /// <param name="length">Length of the window into the data</param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected WrapperBase(byte[] data, int offset, int length)
         {
             if (offset < 0 || offset >= data.Length)
@@ -133,11 +132,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
         /// <param name="length">Length of the window into the data</param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected WrapperBase(Stream data, long offset, long length)
         {
             if (!data.CanSeek || !data.CanRead)
-                throw new ArgumentOutOfRangeException(nameof(data));
+                throw new InvalidDataException(nameof(data));
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             if (length < 0 || offset + length >= data.Length)
