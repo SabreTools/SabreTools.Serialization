@@ -1996,24 +1996,21 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     }
                     
-                    // Get the source data for reading
-                    Stream source = _dataSource;
-                    
                     // Get the offset
                     long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                    if (offset < 0 || offset >= source.Length)
+                    lock (_dataSourceLock)
                     {
-                        _matroschkaPackageFailed = true;
-                        return null;
+                        if (offset < 0 || offset >= _dataSource.Length)
+                        {
+                            _matroschkaPackageFailed = true;
+                            return null;
+                        } 
                     }
                     
                     // Read the section into a local array
                     int sectionLength = (int)section.VirtualSize;
                     byte[]? sectionData;
-                    lock (source)
-                    {
-                        sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
-                    }
+                    sectionData = ReadRangeFromSource(offset, sectionLength);
 
                     // Parse the section header
                     var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
@@ -2038,10 +2035,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         var entry = header.Entries[i];
                         byte[]? fileData;
-                        lock (source)
-                        {
-                            fileData = source.ReadFrom(offset + entry.Offset, (int)entry.Size, retainPosition: true);
-                        }
+                        fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
 
                         if (fileData == null)
                         {

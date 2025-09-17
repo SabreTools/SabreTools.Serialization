@@ -35,8 +35,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>True if the files extracted successfully, false otherwise</returns>
         public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
         {
-            lock (_dataSourceLock)
-            {
                 if (Entries == null)
                     return false;
                 
@@ -61,7 +59,6 @@ namespace SabreTools.Serialization.Wrappers
                 }
                 
                 return successful;
-            }
         }
 
         /// <summary>
