@@ -12,23 +12,35 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
+        #region No-Model Constructors
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(byte[] data) : base(new Archive(), data) { }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(byte[] data, int offset) : base(new Archive(), data, offset) { }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(byte[] data, int offset, int length) : base(new Archive(), data, offset, length) { }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(Stream data) : base(new Archive(), data) { }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(Stream data, long offset) : base(new Archive(), data, offset) { }
+
+        /// <inheritdoc/>
+        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
+        public MoPaQ(Stream data, long offset, long length) : base(new Archive(), data, offset, length) { }
+
+        #endregion
+
         #region Constructors
-
-        /// <inheritdoc/>
-        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
-        public MoPaQ(byte[] data, int offset)
-            : base(new Archive(), data, offset)
-        {
-            // All logic is handled by the base class
-        }
-
-        /// <inheritdoc/>
-        /// <remarks>This should only be used for until MPQ parsing is fixed</remarks>
-        public MoPaQ(Stream data)
-            : base(new Archive(), data)
-        {
-            // All logic is handled by the base class
-        }
 
         /// <inheritdoc/>
         public MoPaQ(Archive model, byte[] data) : base(model, data) { }
