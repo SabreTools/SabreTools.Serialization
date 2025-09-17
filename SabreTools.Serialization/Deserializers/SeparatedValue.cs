@@ -18,18 +18,11 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IByteDeserializer
 
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MetadataFile? DeserializeBytes(byte[]? data, int offset, char delim)
-        {
-            var deserializer = new SeparatedValue();
-            return deserializer.Deserialize(data, offset, delim);
-        }
-
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, ',');
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(byte[], int)"/>
         public MetadataFile? Deserialize(byte[]? data, int offset, char delim)
         {
             // If the data is invalid
@@ -42,41 +35,27 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream, delim);
+            return Deserialize(dataStream, delim);
         }
 
         #endregion
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MetadataFile? DeserializeFile(string? path, char delim = ',')
-        {
-            var deserializer = new SeparatedValue();
-            return deserializer.Deserialize(path, delim);
-        }
-
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(string? path)
             => Deserialize(path, ',');
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(string?)"/>
         public MetadataFile? Deserialize(string? path, char delim)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream, delim);
+            return Deserialize(stream, delim);
         }
 
         #endregion
 
         #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MetadataFile? DeserializeStream(Stream? data, char delim = ',')
-        {
-            var deserializer = new SeparatedValue();
-            return deserializer.Deserialize(data, delim);
-        }
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)
