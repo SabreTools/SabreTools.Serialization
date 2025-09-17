@@ -38,7 +38,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="MatroshkaPackage.Entries"/>
         public MatroshkaEntry[]? Entries => Model.Entries;
 
-
+        // TODO: Temporary, until models update. Check other code to see if this is the right way to store in wrapper.
+        public byte[][]? FileDataArray  { get; set; }
+        
         #endregion
 
         #region Constructors
@@ -79,10 +81,10 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a Wise Self-Extracting installer .WISE section from a Stream
+        /// Create a SecuROM Matroschka Package section from a Stream
         /// </summary>
         /// <param name="data">Stream representing the section</param>
-        /// <returns>A Wise Self-Extracting installer .WISE section wrapper on success, null on failure</returns>
+        /// <returns>A SecuROM Matroschka Package section wrapper on success, null on failure</returns>
         public static SecuROMMatroschkaPackage? Create(Stream? data)
         {
             // If the data is invalid
@@ -99,14 +101,16 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 data.Seek(currentOffset, SeekOrigin.Begin);
-                return new SecuROMMatroschkaPackage(model, data);
+                var fileDataArray = Deserializers.SecuROMMatroschkaPackage.ReadEntriesData(model, data);
+                data.Seek(currentOffset, SeekOrigin.Begin);
+                return new SecuROMMatroschkaPackage(model, data) {  FileDataArray = fileDataArray };
             }
             catch
             {
                 return null;
             }
         }
-
+        
         #endregion
     }
 }

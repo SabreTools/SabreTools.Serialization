@@ -162,10 +162,6 @@ namespace SabreTools.Serialization.Deserializers
                     entry.CreatedTime = data.ReadUInt64LittleEndian();
                     entry.AccessedTime = data.ReadUInt64LittleEndian();
                     entry.MD5 = data.ReadBytes(16);
-                    tempPosition = data.Position;
-                    data.Position = startPosition + entry.Offset;
-                    entry.FileData = data.ReadBytes((int)entry.Size); // TODO: Handle out of bounds reading, other errors?
-                    data.Position = tempPosition;
                     entries[i] = entry;
                 }
                 
@@ -180,6 +176,23 @@ namespace SabreTools.Serialization.Deserializers
                 // Ignore the actual error
                 return null;
             }
+        }
+
+        public static byte[][]? ReadEntriesData(MatroshkaPackage matroschka, Stream? data)
+        {
+            if (data == null)
+                return null;
+            if (matroschka.Entries == null)
+                return null;
+            long startPosition = data.Position;
+            byte[][]? fileDataArray = new byte[matroschka.EntryCount][];
+            for (int i = 0; i < matroschka.EntryCount; i++)
+            {
+                var entry = matroschka.Entries[i];
+                data.Position = startPosition + entry.Offset;
+                fileDataArray[i] = data.ReadBytes((int)entry.Size); // TODO: Handle out of bounds reading, other errors?
+            }
+            return fileDataArray;
         }
     }
 }

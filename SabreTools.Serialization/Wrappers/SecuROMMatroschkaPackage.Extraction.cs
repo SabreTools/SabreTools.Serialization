@@ -46,9 +46,16 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < Entries.Length; i++)
                 {
                     MatroshkaEntry entry = Entries[i];
+                    if (FileDataArray == null)
+                    {
+                        return false;
+                    }
+
+                    var fileData = FileDataArray[i];
                     
+
                     // Extract file
-                    if (ExtractFile(entry, outputDirectory, includeDebug) !=
+                    if (ExtractFile(entry, fileData, outputDirectory, includeDebug) !=
                         ExtractionStatus.GOOD)
                         successful = false;
                 }
@@ -66,13 +73,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Extraction status representing the final state</returns>
         /// <remarks>Assumes that the current stream position is the end of where the data lives</remarks>
         private ExtractionStatus ExtractFile(MatroshkaEntry entry,
+            byte[] fileData,
             string outputDirectory,
             bool includeDebug)
         {
             if (entry.Path == null)
                 return ExtractionStatus.INVALID;
             
-            if (entry.FileData == null)
+            if (fileData == null)
                 return ExtractionStatus.INVALID;
 
             string filename = System.Text.Encoding.ASCII.GetString(entry.Path);
@@ -86,7 +94,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Extract the file
             ExtractionStatus status;
-            status = CheckBytes(entry, includeDebug);
+            status = CheckBytes(entry, fileData, includeDebug);
 
             // If the extracted data is invalid
             if (status != ExtractionStatus.GOOD)
@@ -99,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
                 Directory.CreateDirectory(directoryName);
 
             // Write the output file
-            File.WriteAllBytes(filename, entry.FileData);
+            File.WriteAllBytes(filename, fileData);
             return status;
         }
 
@@ -109,7 +117,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="entry">Entry being extracted</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns></returns>
-        private ExtractionStatus CheckBytes(MatroshkaEntry entry, bool includeDebug)
+        private ExtractionStatus CheckBytes(MatroshkaEntry entry, byte[] fileData, bool includeDebug)
         {
             // Debug output
             if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
@@ -128,12 +136,12 @@ namespace SabreTools.Serialization.Wrappers
             // Debug output
             if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMD5}");
 
-            if (entry.FileData == null)
+            if (fileData == null)
             {
                 return ExtractionStatus.INVALID;
             }
 
-            byte[]? hashBytes = HashTool.GetByteArrayHashArray(entry.FileData, HashType.MD5);
+            byte[]? hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
             if (hashBytes != null)
             {
 #if NET5_0_OR_GREATER
