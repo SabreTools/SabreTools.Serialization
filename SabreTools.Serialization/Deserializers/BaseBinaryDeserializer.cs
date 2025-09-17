@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream);
+            return Deserialize(dataStream);
         }
 
         #endregion
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Deserializers
         public virtual TModel? Deserialize(string? path)
         {
             using var stream = PathProcessor.OpenStream(path, SkipCompression);
-            return DeserializeStream(stream);
+            return Deserialize(stream);
         }
 
         #endregion
