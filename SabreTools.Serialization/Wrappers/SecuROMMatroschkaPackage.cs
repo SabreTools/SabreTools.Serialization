@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                MatroshkaPackage? model = Deserializers.SecuROMMatroschkaPackage.DeserializeStream(data);
+                var model = Deserializers.SecuROMMatroschkaPackage.DeserializeStream(data);
                 if (model == null)
                     return null;
 
