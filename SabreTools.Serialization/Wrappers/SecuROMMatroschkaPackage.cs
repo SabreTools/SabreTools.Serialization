@@ -45,14 +45,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[]? data, int offset)
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[] data, int offset)
             : base(model, data, offset)
         {
             // All logic is handled by the base class
         }
 
         /// <inheritdoc/>
-        public SecuROMMatroschkaPackage(MatroshkaPackage? model, Stream? data)
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, Stream data)
             : base(model, data)
         {
             // All logic is handled by the base class
