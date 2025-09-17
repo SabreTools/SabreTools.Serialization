@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="MatroshkaPackage.Entries"/>
         public MatroshkaEntry[]? Entries => Model.Entries;
 
-        // TODO: Temporary, until models update. Check other code to see if this is the right way to store in wrapper.
+        // TODO: Use entries from model after models update.
         
         #endregion
 
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.SecuROMMatroschkaPackage.DeserializeStream(data);
+                MatroshkaPackage? model = Deserializers.SecuROMMatroschkaPackage.DeserializeStream(data);
                 if (model == null)
                     return null;
 
