@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.PAK.DeserializeStream(data);
+                var model = new Deserializers.PAK().Deserialize(data);
                 if (model == null)
                     return null;
 

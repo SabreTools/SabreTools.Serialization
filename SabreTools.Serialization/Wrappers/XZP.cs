@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.XZP.DeserializeStream(data);
+                var model = new Deserializers.XZP().Deserialize(data);
                 if (model == null)
                     return null;
 

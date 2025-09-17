@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.WiseScript.DeserializeStream(data);
+                var model = new Deserializers.WiseScript().Deserialize(data);
                 if (model == null)
                     return null;
 

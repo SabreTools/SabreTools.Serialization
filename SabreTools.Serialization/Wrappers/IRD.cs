@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.IRD.DeserializeStream(data);
+                var model = new Deserializers.IRD().Deserialize(data);
                 if (model == null)
                     return null;
 

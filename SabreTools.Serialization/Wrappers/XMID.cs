@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var model = Deserializers.XMID.DeserializeString(data);
+                var model = new Deserializers.XMID().Deserialize(data);
                 if (model == null)
                     return null;
 
