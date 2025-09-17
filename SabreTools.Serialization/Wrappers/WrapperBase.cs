@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
-            if (length < 0 || offset + length >= data.Length)
+            if (length < 0 || offset + length > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             _dataSource = new ViewStream(data, offset, length);
@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.Wrappers
                 throw new InvalidDataException(nameof(data));
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
-            if (length < 0 || offset + length >= data.Length)
+            if (length < 0 || offset + length > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
             _dataSource = new ViewStream(data, offset, length);
