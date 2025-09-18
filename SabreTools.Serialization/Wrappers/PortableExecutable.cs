@@ -491,6 +491,71 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        /// <summary>
+        /// Wise section wrapper, if it exists
+        /// </summary>
+        public WiseSectionHeader? WiseSection
+        {
+            get
+            {
+                lock (_wiseSectionHeaderLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_wiseSectionHeader != null)
+                        return _wiseSectionHeader;
+
+                    // If the header will not be found due to missing section data
+                    if (_wiseSectionHeaderMissing)
+                        return null;
+
+                    // If the section table is invalid
+                    if (SectionTable == null)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Find the .WISE section
+                    SectionHeader? wiseSection = null;
+                    foreach (var section in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                        if (sectionName != ".WISE")
+                            continue;
+
+                        wiseSection = section;
+                        break;
+                    }
+
+                    // If the section cannot be found
+                    if (wiseSection == null)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Get the physical offset of the section
+                    long offset = wiseSection.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    if (offset < 0 || offset >= Length)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Read the section into a local array
+                    int sectionLength = (int)wiseSection.VirtualSize;
+                    byte[]? sectionData = ReadRangeFromSource(offset, sectionLength);
+
+                    // Parse the section header
+                    _wiseSectionHeader = WiseSectionHeader.Create(sectionData, 0);
+                    if (_wiseSectionHeader == null)
+                        _wiseSectionHeaderMissing = true;
+
+                    return _wiseSectionHeader;
+                }
+            }
+        }
+
         #region Version Information
 
         /// <summary>
@@ -814,6 +879,21 @@ namespace SabreTools.Serialization.Wrappers
         /// Cached found string data in tables
         /// </summary>
         private readonly List<string>?[] _tableStringData = new List<string>?[16];
+
+        /// <summary>
+        /// Wise section wrapper, if it exists
+        /// </summary>
+        private WiseSectionHeader? _wiseSectionHeader = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_wiseSectionHeader"/> 
+        /// </summary>
+        private readonly object _wiseSectionHeaderLock = new();
+
+        /// <summary>
+        /// Indicates if <see cref="_wiseSectionHeader"/> cannot be found 
+        /// </summary>
+        private bool _wiseSectionHeaderMissing = false;
 
         #region Version Information
 
@@ -1444,30 +1524,6 @@ namespace SabreTools.Serialization.Wrappers
 
                 return resourcePex.FindWiseOverlayHeader();
             }
-        }
-
-        /// <summary>
-        /// Find the location of a Wise section, if it exists
-        /// </summary>
-        /// <returns>Wise section on success, null otherwise</returns>
-        public SectionHeader? FindWiseSection()
-        {
-            // If the section table is invalid
-            if (SectionTable == null)
-                return null;
-
-            // Find the .WISE section
-            foreach (var section in SectionTable)
-            {
-                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
-                if (sectionName != ".WISE")
-                    continue;
-
-                return section;
-            }
-
-            // Otherwise, it could not be found
-            return null;
         }
 
         #endregion
