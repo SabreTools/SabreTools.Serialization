@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.Hashing;
-using SabreTools.IO.Compression.Deflate;
 using SabreTools.Matching;
 using SabreTools.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
@@ -11,6 +10,9 @@ namespace SabreTools.Serialization.Wrappers
     public partial class SecuROMMatroschkaPackage : IExtractable
     {
         /// <inheritdoc/>
+        // TODO: I don't really know how to make use of this since I need to pass in fileDataArray, but I need it here for
+        // TODO: IExtractable. I assume you'll probably not approve of fileDataArray to begin with and just want me to use
+        // TODO: offsets, so let me know if that's indeed the case.
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Extract the header-defined files
@@ -23,9 +25,6 @@ namespace SabreTools.Serialization.Wrappers
 
             return true;
         }
-
-        // Currently unaware of any NE samples. That said, as they wouldn't have a .WISE section, it's unclear how such
-        // samples could be identified.
 
         /// <summary>
         /// Extract the predefined, static files defined in the header
@@ -53,8 +52,7 @@ namespace SabreTools.Serialization.Wrappers
                     
 
                     // Extract file
-                    if (ExtractFile(entry, fileData, outputDirectory, includeDebug) !=
-                        ExtractionStatus.GOOD)
+                    if (!ExtractFile(entry, fileData, outputDirectory, includeDebug))
                         successful = false;
                 }
                 
@@ -62,23 +60,24 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Attempt to extract a file defined by a filename
+        /// Attempt to extract a file
         /// </summary>
-        /// <param name="entry">Entry being extracted</param>
+        /// <param name="entry">Matroschka file entry being extracted</param>
+        /// <param name="fileData">File data being extracted</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Extraction status representing the final state</returns>
+        /// <returns>Boolean representing true on success or false on failure</returns>
         /// <remarks>Assumes that the current stream position is the end of where the data lives</remarks>
-        private ExtractionStatus ExtractFile(MatroshkaEntry entry,
+        private bool ExtractFile(MatroshkaEntry entry,
             byte[] fileData,
             string outputDirectory,
             bool includeDebug)
         {
             if (entry.Path == null)
-                return ExtractionStatus.INVALID;
+                return false;
             
             if (fileData == null)
-                return ExtractionStatus.INVALID;
+                return false;
 
             string filename = System.Text.Encoding.ASCII.GetString(entry.Path);
             // Ensure directory separators are consistent
@@ -90,11 +89,11 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
             // Extract the file
-            ExtractionStatus status;
+            bool status;
             status = CheckBytes(entry, fileData, includeDebug);
 
             // If the extracted data is invalid
-            if (status != ExtractionStatus.GOOD)
+            if (!status)
                 return status;
 
             // Ensure the full output directory exists
@@ -112,16 +111,17 @@ namespace SabreTools.Serialization.Wrappers
         /// Check bytes to be extracted against MD5 checksum.
         /// </summary>
         /// <param name="entry">Entry being extracted</param>
+        /// <param name="fileData">File data being extracted</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns></returns>
-        private ExtractionStatus CheckBytes(MatroshkaEntry entry, byte[] fileData, bool includeDebug)
+        private bool CheckBytes(MatroshkaEntry entry, byte[] fileData, bool includeDebug)
         {
             // Debug output
             if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
 
             if (entry.MD5 == null)
             {
-                return ExtractionStatus.INVALID;
+                return false;
             }
             
 #if NET5_0_OR_GREATER
@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.Wrappers
 
             if (fileData == null)
             {
-                return ExtractionStatus.INVALID;
+                return false;
             }
 
             byte[]? hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
@@ -153,11 +153,11 @@ namespace SabreTools.Serialization.Wrappers
                 if (!hashBytes.EqualsExactly(entry.MD5))
                 {
                     if (includeDebug) Console.Error.WriteLine("Mismatched MD5 values!");
-                    return ExtractionStatus.INVALID;
+                    return false;
                 }
             }
             
-            return ExtractionStatus.GOOD;
+            return true;
         }
     }
 }

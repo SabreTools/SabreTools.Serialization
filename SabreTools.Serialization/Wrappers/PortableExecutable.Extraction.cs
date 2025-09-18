@@ -25,7 +25,6 @@ namespace SabreTools.Serialization.Wrappers
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
-            // TODO: extract matroschka here
 
             return cexe || overlay || resources | wise | matroschka;
         }

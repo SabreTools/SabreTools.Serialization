@@ -1976,10 +1976,11 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     }
                     
-                    SectionHeader? section = null;
+                    SectionHeader? section;
                     
                     // Find the matrosch or rcpacker section
-                    foreach (var searchedSection in SectionTable)
+                    // TODO: I was using same foreach getstring trimend etc your example .WISE one does already, but I figure it'd be better to use GetFirstSectionName. If that's wrong, I can revert.
+                    /*foreach (var searchedSection in SectionTable)
                     {
                         string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
                         if (sectionName != "matrosch" && sectionName != "rcpacker")
@@ -1987,7 +1988,13 @@ namespace SabreTools.Serialization.Wrappers
 
                         section = searchedSection;
                         break;
-                    }
+                    }*/
+                    
+                    section = GetFirstSection("matrosch", true);
+                    
+                    if (section == null)
+                        section = GetFirstSection("rcpacker", true);
+
 
                     // Otherwise, it could not be found
                     if (section == null)
@@ -2037,7 +2044,7 @@ namespace SabreTools.Serialization.Wrappers
                         byte[]? fileData;
                         fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
 
-                        if (fileData == null)
+                        if (fileData == (byte[])[]) //TODO: is this the right way to check if RRFS failed?
                         {
                             _matroschkaPackageFailed = true;
                             return null;

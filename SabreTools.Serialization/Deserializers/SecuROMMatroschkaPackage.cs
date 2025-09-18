@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Deserializers
                     matHeaderType = MatroschkaHeaderType.ShortHeader;
 
                 if (matHeaderType > MatroschkaHeaderType.LongHeader)
-                    return null; // Only here as a placeholder before this value gets used elsewhere to avoid compiler error.
+                    return null; // TODO: Only here as a placeholder before this value gets used elsewhere to avoid compiler error.
 
                 #endregion
 
@@ -96,6 +96,7 @@ namespace SabreTools.Serialization.Deserializers
                 MatroschkaHasUnknown matHasUnknown = MatroschkaHasUnknown.Error;
                 
                 // Read entries
+                // TODO: reading strings and gaps can and should be combined, making this cleaner, but that requires a models update
                 for (int i = 0; i < entries.Length; i++) 
                 {
                     MatroshkaEntry entry = new MatroshkaEntry();
