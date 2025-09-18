@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Extract the header-defined files
-            bool extracted = ExtractHeaderDefinedFiles(outputDirectory, includeDebug, null);
+            var extracted = ExtractHeaderDefinedFiles(outputDirectory, includeDebug, null);
             if (!extracted)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
@@ -31,18 +31,20 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="fileDataArray">File data array being extracted</param>
+
         /// <returns>True if the files extracted successfully, false otherwise</returns>
         public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
         {
                 if (Entries == null)
                     return false;
                 
-                bool successful = true;
+                var successful = true;
 
                 //Extract entries
-                for (int i = 0; i < Entries.Length; i++)
+                for (var i = 0; i < Entries.Length; i++)
                 {
-                    MatroshkaEntry entry = Entries[i];
+                    var entry = Entries[i];
                     if (fileDataArray == null)
                         return false;
 
@@ -77,7 +79,7 @@ namespace SabreTools.Serialization.Wrappers
             if (fileData == null)
                 return false;
 
-            string filename = System.Text.Encoding.ASCII.GetString(entry.Path);
+            var filename = System.Text.Encoding.ASCII.GetString(entry.Path);
             // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
@@ -121,9 +123,9 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             
 #if NET5_0_OR_GREATER
-            string expectedMD5 = Convert.ToHexString(entry.MD5).ToUpper(); // TODO: is ToUpper right?
+            var expectedMD5 = Convert.ToHexString(entry.MD5).ToUpper(); // TODO: is ToUpper right?
 #else
-                string expectedMD5 = BitConverter.ToString(entry.MD5).Replace("-",""); // TODO: endianness?
+                var expectedMD5 = BitConverter.ToString(entry.MD5).Replace("-",""); // TODO: endianness?
 #endif
             
             // Debug output
@@ -132,13 +134,13 @@ namespace SabreTools.Serialization.Wrappers
             if (fileData == null)
                 return false;
 
-            byte[]? hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
+            var hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
             if (hashBytes != null)
             {
 #if NET5_0_OR_GREATER
-                string actualMD5 = Convert.ToHexString(hashBytes).ToUpper(); // TODO: is ToUpper right?
+                var actualMD5 = Convert.ToHexString(hashBytes).ToUpper(); // TODO: is ToUpper right?
 #else
-                string actualMD5 = BitConverter.ToString(hashBytes).Replace("-",""); // TODO: endianness?
+                var actualMD5 = BitConverter.ToString(hashBytes).Replace("-",""); // TODO: endianness?
 #endif
 
                 // Debug output

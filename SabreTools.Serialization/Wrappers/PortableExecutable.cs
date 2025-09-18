@@ -1501,7 +1501,7 @@ namespace SabreTools.Serialization.Wrappers
             // Find the matrosch or rcpacker section
             foreach (var section in SectionTable)
             {
-                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                var sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
                 if (sectionName != "matrosch" && sectionName != "rcpacker")
                     continue;
 
@@ -1948,7 +1948,7 @@ namespace SabreTools.Serialization.Wrappers
         }
         
         public SecuROMMatroschkaPackage? MatroschkaPackage
-        {
+        { // TODO: move to extension properties if sabre thinks it's ok
             get
             {
                 lock (_matroschkaPackageLock)
@@ -1962,7 +1962,7 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     
                     // Get the available source length, if possible
-                    long dataLength = Length;
+                    var dataLength = Length;
                     if (dataLength == -1)
                     {
                         _matroschkaPackageFailed = true;
@@ -2015,7 +2015,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
                     
                     // Read the section into a local array
-                    int sectionLength = (int)section.VirtualSize;
+                    var sectionLength = (int)section.VirtualSize;
                     byte[]? sectionData;
                     sectionData = ReadRangeFromSource(offset, sectionLength);
 
@@ -2037,7 +2037,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
                     
                     // Read file data
-                    byte[][] fileDataArray = new byte[header.EntryCount][];
+                    var fileDataArray = new byte[header.EntryCount][];
                     for (int i = 0; i < header.EntryCount; i++)
                     {
                         var entry = header.Entries[i];

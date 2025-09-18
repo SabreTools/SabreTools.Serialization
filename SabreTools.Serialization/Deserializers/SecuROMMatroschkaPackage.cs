@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
@@ -8,21 +7,21 @@ using static SabreTools.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public enum MatroschkaHeaderType : int
+    public enum MatroschkaHeaderType
     {
         Error = -1,
         ShortHeader = 0,
         LongHeader = 1,
     }
     
-    public enum MatroschkaGapType : int
+    public enum MatroschkaGapType
     {
         Error = -1,
         ShortGap = 0, // 256 bytes
         LongGap = 1, // 512 bytes
     }
     
-    public enum MatroschkaHasUnknown : int
+    public enum MatroschkaHasUnknown
     {
         Error = -1,
         NoUnknown = 0,
@@ -40,7 +39,6 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
-                long startPosition = data.Position;
                 // Create a new file to fill
                 // TODO: Unify matroschka spelling. They spell it matroschka in all official stuff, as far as has been observed. Will double check.
                 var matroschka = new MatroshkaPackage();
