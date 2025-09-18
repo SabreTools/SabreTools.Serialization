@@ -398,7 +398,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to find the section header
             if (WiseSection != null)
-                return ExtractWiseSection(outputDirectory, includeDebug, source);
+                return ExtractWiseSection(outputDirectory, includeDebug);
 
             // Everything else could not extract
             return false;
@@ -523,10 +523,8 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="section">Wise section information</param>
         /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseSection(string outputDirectory, bool includeDebug, Stream source)
+        private bool ExtractWiseSection(string outputDirectory, bool includeDebug)
         {
             // Get the section header
             var header = WiseSection;
