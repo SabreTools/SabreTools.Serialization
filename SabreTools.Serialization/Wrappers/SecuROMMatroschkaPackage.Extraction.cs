@@ -44,9 +44,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     MatroshkaEntry entry = Entries[i];
                     if (fileDataArray == null)
-                    {
                         return false;
-                    }
 
                     var fileData = fileDataArray[i];
                     
@@ -120,9 +118,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
 
             if (entry.MD5 == null)
-            {
                 return false;
-            }
             
 #if NET5_0_OR_GREATER
             string expectedMD5 = Convert.ToHexString(entry.MD5).ToUpper(); // TODO: is ToUpper right?
@@ -134,9 +130,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMD5}");
 
             if (fileData == null)
-            {
                 return false;
-            }
 
             byte[]? hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
             if (hashBytes != null)
