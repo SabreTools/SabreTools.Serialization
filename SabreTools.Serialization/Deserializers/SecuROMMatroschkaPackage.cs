@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Deserializers
             }
         }
 
-        public MatroshkaPackage? ParsePreEntryHeader(Stream data)
+        private static MatroshkaPackage? ParsePreEntryHeader(Stream data)
         { 
             var obj = new MatroshkaPackage();
             
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Deserializers
             return obj;
         }
 
-        public MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage package)
+        private static MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage package)
         {
                 
                 // If we have any entries
