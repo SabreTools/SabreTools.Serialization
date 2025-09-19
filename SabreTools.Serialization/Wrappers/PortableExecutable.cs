@@ -227,7 +227,6 @@ namespace SabreTools.Serialization.Wrappers
                         break;
                     }
 
-
                     // Otherwise, it could not be found
                     if (section == null)
                     {
@@ -250,15 +249,8 @@ namespace SabreTools.Serialization.Wrappers
                     // Parse the section header
                     var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
                     
-                    // If header creation failed
-                    if (header == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-                    
-                    // Check if Entries exists
-                    if (header.Entries == null)
+                    // If header creation failed, or if Entries does not exist
+                    if (header?.Entries == null)
                     {
                         _matroschkaPackageFailed = true;
                         return null;
