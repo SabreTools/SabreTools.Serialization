@@ -79,6 +79,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             var filename = System.Text.Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
+
             // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
