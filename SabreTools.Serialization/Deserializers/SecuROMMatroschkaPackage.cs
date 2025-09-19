@@ -44,6 +44,7 @@ namespace SabreTools.Serialization.Deserializers
         public MatroshkaPackage? ParsePreEntryHeader(Stream data)
         { 
             var package = new MatroshkaPackage();
+            
             byte[] magic = data.ReadBytes(4);
             package.Signature = Encoding.ASCII.GetString(magic);
             if (package.Signature != MatroshkaMagicString)
