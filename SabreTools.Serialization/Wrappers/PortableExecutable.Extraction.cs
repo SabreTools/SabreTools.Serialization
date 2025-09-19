@@ -374,6 +374,22 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
+                
+        /// <summary>
+        /// Extract data from a SecuROM Matroschka Package
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractMatroschka(string outputDirectory, bool includeDebug)
+        {
+            // Check if executable contains Matroschka package or not
+            if (MatroschkaPackage == null)
+                return false;
+
+            // Attempt to extract section
+            return MatroschkaPackage.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, MatroschkaPackageFileData);
+        }
 
         /// <summary>
         /// Extract data from a Wise installer
@@ -404,22 +420,6 @@ namespace SabreTools.Serialization.Wrappers
 
             // Everything else could not extract
             return false;
-        }
-        
-        /// <summary>
-        /// Extract data from a SecuROM Matroschka Package
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractMatroschka(string outputDirectory, bool includeDebug)
-        {
-            // Check if executable contains Matroschka package or not
-            if (MatroschkaPackage == null)
-                return false;
-
-            // Attempt to extract section
-            return MatroschkaPackage.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, MatroschkaPackageFileData);
         }
 
         /// <summary>
