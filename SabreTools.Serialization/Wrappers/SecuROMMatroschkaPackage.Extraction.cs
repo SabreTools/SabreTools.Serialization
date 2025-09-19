@@ -117,40 +117,31 @@ namespace SabreTools.Serialization.Wrappers
             // Debug output
             if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
 
-            if (entry.MD5 == null)
-                return false;
-            
-#if NET5_0_OR_GREATER
-            var expectedMD5 = Convert.ToHexString(entry.MD5).ToUpper(); // TODO: is ToUpper right?
-#else
-                var expectedMD5 = BitConverter.ToString(entry.MD5).Replace("-",""); // TODO: endianness?
-#endif
-            
+            string expectedMd5 = BitConverter.ToString(entry.MD5!);
+            expectedMd5 = expectedMd5.ToLowerInvariant().Replace("-", string.Empty);
+
             // Debug output
-            if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMD5}");
+            if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMd5}");
 
             if (fileData == null)
                 return false;
 
             var hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
-            if (hashBytes != null)
-            {
-#if NET5_0_OR_GREATER
-                var actualMD5 = Convert.ToHexString(hashBytes).ToUpper(); // TODO: is ToUpper right?
-#else
-                var actualMD5 = BitConverter.ToString(hashBytes).Replace("-",""); // TODO: endianness?
-#endif
 
-                // Debug output
-                if (includeDebug) Console.WriteLine($"Actual MD5: {actualMD5}");
-                
-                if (!hashBytes.EqualsExactly(entry.MD5))
-                {
-                    if (includeDebug) Console.Error.WriteLine("Mismatched MD5 values!");
-                    return false;
-                }
-            }
+            string actualMd5 = BitConverter.ToString(hashBytes!);
+            actualMd5 = actualMd5.ToLowerInvariant().Replace("-", string.Empty);
             
+            // Debug output
+            if (includeDebug) Console.WriteLine($"Actual MD5: {actualMd5}");
+                
+            if (hashBytes == null || actualMd5 != expectedMd5)
+            {
+                var filename = System.Text.Encoding.ASCII.GetString(entry.Path!).TrimEnd('\0');
+                Console.Error.WriteLine($"MD5 checksum failure for file {filename})");
+                return false;
+            }
+
+
             return true;
         }
     }
