@@ -245,8 +245,7 @@ namespace SabreTools.Serialization.Wrappers
                         
                     // Read the section into a local array
                     var sectionLength = (int)section.VirtualSize;
-                    byte[]? sectionData;
-                    sectionData = ReadRangeFromSource(offset, sectionLength);
+                    var sectionData = ReadRangeFromSource(offset, sectionLength);
 
                     // Parse the section header
                     var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
@@ -270,8 +269,7 @@ namespace SabreTools.Serialization.Wrappers
                     for (int i = 0; i < header.EntryCount; i++)
                     {
                         var entry = header.Entries[i];
-                        byte[]? fileData;
-                        fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
+                        var fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
 
                         if (fileData == (byte[])[]) //TODO: is this the right way to check if RRFS failed?
                         {
