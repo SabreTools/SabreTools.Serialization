@@ -43,15 +43,15 @@ namespace SabreTools.Serialization.Deserializers
 
         public MatroshkaPackage? ParsePreEntryHeader(Stream data)
         { 
-            var package = new MatroshkaPackage();
+            var obj = new MatroshkaPackage();
             
             byte[] magic = data.ReadBytes(4);
-            package.Signature = Encoding.ASCII.GetString(magic);
-            if (package.Signature != MatroshkaMagicString)
+            obj.Signature = Encoding.ASCII.GetString(magic);
+            if (obj.Signature != MatroshkaMagicString)
                 return null;
 
-            package.EntryCount = data.ReadUInt32LittleEndian();
-            if (package.EntryCount == 0)
+            obj.EntryCount = data.ReadUInt32LittleEndian();
+            if (obj.EntryCount == 0)
                 return null; // TODO: This should never occur, log output should happen even without debug.
 
             // Check if "matrosch" section is a longer header one or not based on whether the next uint is 0 or 1. Anything
@@ -64,17 +64,17 @@ namespace SabreTools.Serialization.Deserializers
 
             if (tempValue < 2) // Only big-endian 0 or 1 have been observed for long sections.
             {
-                package.UnknownRCValue1 = data.ReadUInt32LittleEndian();
-                package.UnknownRCValue2 = data.ReadUInt32LittleEndian();
-                package.UnknownRCValue3 = data.ReadUInt32LittleEndian();
+                obj.UnknownRCValue1 = data.ReadUInt32LittleEndian();
+                obj.UnknownRCValue2 = data.ReadUInt32LittleEndian();
+                obj.UnknownRCValue3 = data.ReadUInt32LittleEndian();
 
                 // TODO: Not actually reliable for distinguishing keys, update models documentation to reflect.
                 // Exact byte count has to be used because non-RC executables have all 0x00 here.
-                package.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
+                obj.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
                     return null; // TODO: This should never occur, log output should happen even without debug.
             }
-            return package;
+            return obj;
         }
 
         public MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage package)
