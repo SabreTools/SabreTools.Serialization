@@ -23,16 +23,16 @@ namespace SabreTools.Serialization.Deserializers
                 
                 // TODO: Unify matroschka spelling. They spell it matroschka in all official stuff, as far as has been observed. Will double check.
                 // Try to parse the header
-                var matroschka = ParsePreEntryHeader(data);
-                if (matroschka == null)
+                var package = ParsePreEntryHeader(data);
+                if (package == null)
                     return null;
 
-                var entries = ParseEntries(data, matroschka);
+                var entries = ParseEntries(data, package);
                 if (entries == null)
                     return null;
                 
-                matroschka.Entries = entries;
-                return matroschka;
+                package.Entries = entries;
+                return package;
             }
             catch
             {
@@ -43,14 +43,14 @@ namespace SabreTools.Serialization.Deserializers
 
         public MatroshkaPackage? ParsePreEntryHeader(Stream data)
         { 
-            var matroschka = new MatroshkaPackage();
+            var package = new MatroshkaPackage();
             byte[] magic = data.ReadBytes(4);
-            matroschka.Signature = Encoding.ASCII.GetString(magic);
-            if (matroschka.Signature != MatroshkaMagicString)
+            package.Signature = Encoding.ASCII.GetString(magic);
+            if (package.Signature != MatroshkaMagicString)
                 return null;
 
-            matroschka.EntryCount = data.ReadUInt32LittleEndian();
-            if (matroschka.EntryCount == 0)
+            package.EntryCount = data.ReadUInt32LittleEndian();
+            if (package.EntryCount == 0)
                 return null; // TODO: This should never occur, log output should happen even without debug.
 
             // Check if "matrosch" section is a longer header one or not based on whether the next uint is 0 or 1. Anything
@@ -63,24 +63,24 @@ namespace SabreTools.Serialization.Deserializers
 
             if (tempValue < 2) // Only big-endian 0 or 1 have been observed for long sections.
             {
-                matroschka.UnknownRCValue1 = data.ReadUInt32LittleEndian();
-                matroschka.UnknownRCValue2 = data.ReadUInt32LittleEndian();
-                matroschka.UnknownRCValue3 = data.ReadUInt32LittleEndian();
+                package.UnknownRCValue1 = data.ReadUInt32LittleEndian();
+                package.UnknownRCValue2 = data.ReadUInt32LittleEndian();
+                package.UnknownRCValue3 = data.ReadUInt32LittleEndian();
 
                 // TODO: Not actually reliable for distinguishing keys, update models documentation to reflect.
                 // Exact byte count has to be used because non-RC executables have all 0x00 here.
-                matroschka.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
+                package.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
                     return null; // TODO: This should never occur, log output should happen even without debug.
             }
-            return matroschka;
+            return package;
         }
 
-        public MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage matroschka)
+        public MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage package)
         {
                 
                 // If we have any entries
-                var entries = new MatroshkaEntry[matroschka.EntryCount];
+                var entries = new MatroshkaEntry[package.EntryCount];
 
                 int matGapType = 0;
                 bool? matHasUnknown = null;
