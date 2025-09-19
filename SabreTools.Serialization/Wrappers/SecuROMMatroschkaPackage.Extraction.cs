@@ -32,7 +32,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <param name="fileDataArray">File data array being extracted</param>
-
         /// <returns>True if the files extracted successfully, false otherwise</returns>
         public bool ExtractPackagedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
         {
