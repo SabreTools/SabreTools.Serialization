@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Deserializers
             uint tempValue = data.ReadUInt32LittleEndian();
             data.Position = tempPosition;
 
-            if (tempValue < 2) // Only big-endian 0 or 1 have been observed for long sections.
+            if (tempValue < 2) // Only little-endian 0 or 1 have been observed for long sections.
             {
                 obj.UnknownRCValue1 = data.ReadUInt32LittleEndian();
                 obj.UnknownRCValue2 = data.ReadUInt32LittleEndian();
