@@ -237,15 +237,12 @@ namespace SabreTools.Serialization.Wrappers
                     
                     // Get the offset
                     long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                    lock (_dataSourceLock)
+                    if (offset < 0 || offset >= Length)
                     {
-                        if (offset < 0 || offset >= _dataSource.Length)
-                        {
-                            _matroschkaPackageFailed = true;
-                            return null;
-                        } 
-                    }
-                    
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    } 
+                        
                     // Read the section into a local array
                     var sectionLength = (int)section.VirtualSize;
                     byte[]? sectionData;
