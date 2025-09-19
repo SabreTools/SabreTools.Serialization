@@ -214,11 +214,10 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     }
                     
-                    SectionHeader? section;
+                    SectionHeader? section = null;
                     
                     // Find the matrosch or rcpacker section
-                    // TODO: I was using same foreach getstring trimend etc your example .WISE one does already, but I figure it'd be better to use GetFirstSectionName. If that's wrong, I can revert.
-                    /*foreach (var searchedSection in SectionTable)
+                    foreach (var searchedSection in SectionTable)
                     {
                         string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
                         if (sectionName != "matrosch" && sectionName != "rcpacker")
@@ -226,12 +225,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         section = searchedSection;
                         break;
-                    }*/
-                    
-                    section = GetFirstSection("matrosch", true);
-                    
-                    if (section == null)
-                        section = GetFirstSection("rcpacker", true);
+                    }
 
 
                     // Otherwise, it could not be found
