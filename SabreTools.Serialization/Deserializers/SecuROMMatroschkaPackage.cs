@@ -17,8 +17,8 @@ namespace SabreTools.Serialization.Deserializers
     public enum MatroschkaGapType
     {
         Error = -1,
-        ShortGap = 0, // 256 bytes
-        LongGap = 1, // 512 bytes
+        ShortGap = 256, // 256 bytes
+        LongGap = 512, // 512 bytes
     }
     
     public enum MatroschkaHasUnknown
@@ -102,7 +102,6 @@ namespace SabreTools.Serialization.Deserializers
 
         public bool ParseEntries(Stream data, MatroshkaPackage matroschka, out MatroshkaEntry[] entries)
         {
-                long tempPosition;
                 
                 // If we have any entries
                 entries = new MatroshkaEntry[matroschka.EntryCount];
@@ -111,28 +110,16 @@ namespace SabreTools.Serialization.Deserializers
                 MatroschkaHasUnknown matHasUnknown = MatroschkaHasUnknown.Error;
                 
                 // Read entries
-                // TODO: reading strings and gaps can and should be combined, making this cleaner, but that requires a models update
                 for (int i = 0; i < entries.Length; i++) 
                 {
                     MatroshkaEntry entry = new MatroshkaEntry();
-                    tempPosition = data.Position;
-                    // TODO: Spaces/non-ASCII have not yet been observed. Still, probably safer to store as byte array?
-                    string? pathString = data.ReadNullTerminatedString(Encoding.ASCII);
-                    if (pathString != null)
-                        entry.Path = Encoding.ASCII.GetBytes(pathString);
-                    else
-                        return false; // TODO: This should never occur, log output should happen even without debug.
-                    data.Position = tempPosition;
-                    
-                    // Determine if gap size is 256 or 512 bytes, then jump the gap.
+                    // Determine if file path size is 256 or 512 bytes
                     if (matGapType == MatroschkaGapType.Error)
-                        matGapType = GapHelper(data, tempPosition);
-                    else if (matGapType == MatroschkaGapType.ShortGap) // If already known, simply jump the gap
-                        data.Position += 256;
-                    else if (matGapType == MatroschkaGapType.LongGap)
-                        data.Position += 512;
-                    else
-                        return false; // TODO: This should never occur, log output should happen even without debug.
+                        matGapType = GapHelper(data);
+                                      
+                    // TODO: Spaces/non-ASCII have not yet been observed. Still, probably safer to store as byte array?
+                    // TODO: Read as string and trim once models is bumped. For now, this needs to be trimmed by anything reading it.
+                    entry.Path = data.ReadBytes((int)matGapType); 
                     
                     // Entry type isn't currently validated as it's always predictable anyways, nor necessary to know.
                     entry.EntryType = (MatroshkaEntryType)data.ReadUInt32LittleEndian();
@@ -157,29 +144,25 @@ namespace SabreTools.Serialization.Deserializers
                 return true;
         }
 
-        public MatroschkaGapType GapHelper(Stream data, long tempPosition)
+        private static MatroschkaGapType GapHelper(Stream data)
         {
-            uint tempValue;
+            var tempPosition = data.Position;
             data.Position = tempPosition + 256;
-            tempPosition = data.Position;
-            tempValue = data.ReadUInt32LittleEndian();
-            data.Position = tempPosition;
+            var tempValue = data.ReadUInt32LittleEndian();
             MatroschkaGapType matGapType;
             if (tempValue <= 0) // Gap is 512 bytes. Actually just == 0, but ST prefers ranges.
-            {
                 matGapType = MatroschkaGapType.LongGap;
-                data.Position += 256;
-            }
             else // Gap is 256 bytes.
                 matGapType = MatroschkaGapType.ShortGap;
             
+            data.Position = tempPosition;
             return matGapType;
         }
         
-        public MatroschkaHasUnknown UnknownHelper(Stream data, MatroshkaEntry entry)
+        private static MatroschkaHasUnknown UnknownHelper(Stream data, MatroshkaEntry entry)
         {
-            long tempPosition = data.Position;
-            uint tempValue = data.ReadUInt32LittleEndian();
+            var tempPosition = data.Position;
+            var tempValue = data.ReadUInt32LittleEndian();
             MatroschkaHasUnknown matHasUnknown;
             if (tempValue <= 0) // Entry has the Unknown value.
             {
