@@ -15,8 +15,8 @@ namespace SabreTools.Serialization.Wrappers
         // TODO: offsets, so let me know if that's indeed the case.
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // Extract the header-defined files
-            var extracted = ExtractHeaderDefinedFiles(outputDirectory, includeDebug, null);
+            // Extract the packaged files
+            var extracted = ExtractPackagedFiles(outputDirectory, includeDebug, null);
             if (!extracted)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="fileDataArray">File data array being extracted</param>
 
         /// <returns>True if the files extracted successfully, false otherwise</returns>
-        public bool ExtractHeaderDefinedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
+        public bool ExtractPackagedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
         {
                 if (Entries == null)
                     return false;
