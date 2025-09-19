@@ -81,13 +81,13 @@ namespace SabreTools.Serialization.Deserializers
         {
                 
                 // If we have any entries
-                var entries = new MatroshkaEntry[package.EntryCount];
+                var obj = new MatroshkaEntry[package.EntryCount];
 
                 int matGapType = 0;
                 bool? matHasUnknown = null;
                 
                 // Read entries
-                for (int i = 0; i < entries.Length; i++) 
+                for (int i = 0; i < obj.Length; i++) 
                 {
                     MatroshkaEntry entry = new MatroshkaEntry();
                     // Determine if file path size is 256 or 512 bytes
@@ -114,10 +114,10 @@ namespace SabreTools.Serialization.Deserializers
                     entry.CreatedTime = data.ReadUInt64LittleEndian();
                     entry.AccessedTime = data.ReadUInt64LittleEndian();
                     entry.MD5 = data.ReadBytes(16);
-                    entries[i] = entry;
+                    obj[i] = entry;
                 }
 
-                return entries;
+                return obj;
         }
 
         private static int GapHelper(Stream data)
