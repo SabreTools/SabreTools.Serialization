@@ -719,7 +719,32 @@ namespace SabreTools.Serialization.Wrappers
         /// Lock object for <see cref="_headerPaddingStrings"/> 
         /// </summary>
         private readonly object _headerPaddingStringsLock = new();
+                
+        /// <summary>
+        /// Matroschka Package wrapper, if it exists
+        /// </summary>
+        private SecuROMMatroschkaPackage? _matroschkaPackage = null;
 
+        /// <summary>
+        /// Lock object for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private readonly object _matroschkaPackageLock = new();
+        
+        /// <summary>
+        /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private bool _matroschkaPackageFailed = false;
+        
+        /// <summary>
+        /// Matroschka Package file data, if it exists
+        /// </summary>
+        private byte[][]? _matroschkaPackageFileData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_matroschkaPackageFileData"/> 
+        /// </summary>
+        private readonly object _matroschkaPackageFileDataLock = new();
+        
         /// <summary>
         /// Address of the overlay, if it exists
         /// </summary>
@@ -814,31 +839,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Cached found string data in tables
         /// </summary>
         private readonly List<string>?[] _tableStringData = new List<string>?[16];
-        
-        /// <summary>
-        /// Matroschka Package wrapper, if it exists
-        /// </summary>
-        private SecuROMMatroschkaPackage? _matroschkaPackage = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_matroschkaPackage"/> 
-        /// </summary>
-        private readonly object _matroschkaPackageLock = new();
-        
-        /// <summary>
-        /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
-        /// </summary>
-        private bool _matroschkaPackageFailed = false;
-        
-        /// <summary>
-        /// Matroschka Package file data, if it exists
-        /// </summary>
-        private byte[][]? _matroschkaPackageFileData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_matroschkaPackageFileData"/> 
-        /// </summary>
-        private readonly object _matroschkaPackageFileDataLock = new();
         
         #region Version Information
 
