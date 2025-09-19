@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Wrappers
                 
                 var successful = true;
 
-                //Extract entries
+                // Extract entries
                 for (var i = 0; i < Entries.Length; i++)
                 {
                     var entry = Entries[i];
