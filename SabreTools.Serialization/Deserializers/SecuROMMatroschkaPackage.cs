@@ -114,6 +114,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.CreatedTime = data.ReadUInt64LittleEndian();
                     entry.AccessedTime = data.ReadUInt64LittleEndian();
                     entry.MD5 = data.ReadBytes(16);
+                    
                     obj[i] = entry;
                 }
 
