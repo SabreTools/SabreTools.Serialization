@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Deserializers
                 // Read entries
                 for (int i = 0; i < obj.Length; i++) 
                 {
-                    MatroshkaEntry entry = new MatroshkaEntry();
+                    var entry = new MatroshkaEntry();
                     // Determine if file path size is 256 or 512 bytes
                     if (matGapType == 0)
                         matGapType = GapHelper(data);
