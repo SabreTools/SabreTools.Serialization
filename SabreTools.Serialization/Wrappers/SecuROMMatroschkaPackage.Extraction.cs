@@ -91,7 +91,6 @@ namespace SabreTools.Serialization.Wrappers
             // Extract the file
             var status = CheckBytes(entry, fileData, includeDebug);
 
-            // If the extracted data is invalid
             if (!status)
                 return status;
 
