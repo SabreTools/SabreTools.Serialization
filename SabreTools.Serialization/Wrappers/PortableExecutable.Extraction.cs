@@ -387,7 +387,7 @@ namespace SabreTools.Serialization.Wrappers
             if (MatroschkaPackage == null)
                 return false;
 
-            // Attempt to extract section
+            // Attempt to extract package
             return MatroschkaPackage.ExtractHeaderDefinedFiles(outputDirectory, includeDebug, MatroschkaPackageFileData);
         }
 
