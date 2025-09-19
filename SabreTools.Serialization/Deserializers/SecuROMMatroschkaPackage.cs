@@ -23,10 +23,12 @@ namespace SabreTools.Serialization.Deserializers
                 
                 // TODO: Unify matroschka spelling. They spell it matroschka in all official stuff, as far as has been observed. Will double check.
                 // Try to parse the header
-                if (!ParsePreEntryHeader(data, out MatroshkaPackage matroschka))
+                var matroschka = ParsePreEntryHeader(data);
+                if (matroschka == null)
                     return null;
-                
-                if (!ParseEntries(data, matroschka, out MatroshkaEntry[] entries))
+
+                var entries = ParseEntries(data, matroschka);
+                if (entries == null)
                     return null;
                 
                 matroschka.Entries = entries;
@@ -39,17 +41,17 @@ namespace SabreTools.Serialization.Deserializers
             }
         }
 
-        public bool ParsePreEntryHeader(Stream data, out MatroshkaPackage matroschka)
+        public MatroshkaPackage? ParsePreEntryHeader(Stream data)
         { 
-            matroschka = new MatroshkaPackage();
+            var matroschka = new MatroshkaPackage();
             byte[] magic = data.ReadBytes(4);
             matroschka.Signature = Encoding.ASCII.GetString(magic);
             if (matroschka.Signature != MatroshkaMagicString)
-                return false;
+                return null;
 
             matroschka.EntryCount = data.ReadUInt32LittleEndian();
             if (matroschka.EntryCount == 0)
-                return false; // TODO: This should never occur, log output should happen even without debug.
+                return null; // TODO: This should never occur, log output should happen even without debug.
 
             // Check if "matrosch" section is a longer header one or not based on whether the next uint is 0 or 1. Anything
             // else will just already be starting the filename string, which is never going to start with this.
@@ -69,16 +71,16 @@ namespace SabreTools.Serialization.Deserializers
                 // Exact byte count has to be used because non-RC executables have all 0x00 here.
                 matroschka.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
-                    return false; // TODO: This should never occur, log output should happen even without debug.
+                    return null; // TODO: This should never occur, log output should happen even without debug.
             }
-            return true;
+            return matroschka;
         }
 
-        public bool ParseEntries(Stream data, MatroshkaPackage matroschka, out MatroshkaEntry[] entries)
+        public MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage matroschka)
         {
                 
                 // If we have any entries
-                entries = new MatroshkaEntry[matroschka.EntryCount];
+                var entries = new MatroshkaEntry[matroschka.EntryCount];
 
                 int matGapType = 0;
                 bool? matHasUnknown = null;
@@ -114,7 +116,7 @@ namespace SabreTools.Serialization.Deserializers
                     entries[i] = entry;
                 }
 
-                return true;
+                return entries;
         }
 
         private static int GapHelper(Stream data)
