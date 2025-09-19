@@ -7,13 +7,6 @@ using static SabreTools.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public enum MatroschkaHeaderType
-    {
-        Error = -1,
-        ShortHeader = 0,
-        LongHeader = 1,
-    }
-    
     public enum MatroschkaGapType
     {
         Error = -1,
@@ -77,10 +70,8 @@ namespace SabreTools.Serialization.Deserializers
             uint tempValue = data.ReadUInt32LittleEndian();
             data.Position = tempPosition;
 
-            MatroschkaHeaderType matHeaderType;
             if (tempValue < 2) // Only big-endian 0 or 1 have been observed for long sections.
             {
-                matHeaderType = MatroschkaHeaderType.LongHeader;
                 matroschka.UnknownRCValue1 = data.ReadUInt32LittleEndian();
                 matroschka.UnknownRCValue2 = data.ReadUInt32LittleEndian();
                 matroschka.UnknownRCValue3 = data.ReadUInt32LittleEndian();
@@ -91,12 +82,6 @@ namespace SabreTools.Serialization.Deserializers
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
                     return false; // TODO: This should never occur, log output should happen even without debug.
             }
-            else
-                matHeaderType = MatroschkaHeaderType.ShortHeader;
-
-            if (matHeaderType > MatroschkaHeaderType.LongHeader)
-                return false; // TODO: Only here as a placeholder before this value gets used elsewhere to avoid compiler error.
-
             return true;
         }
 
