@@ -7,13 +7,6 @@ using static SabreTools.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public enum MatroschkaGapType
-    {
-        Error = -1,
-        ShortGap = 256, // 256 bytes
-        LongGap = 512, // 512 bytes
-    }
-    
     public enum MatroschkaHasUnknown
     {
         Error = -1,
@@ -91,7 +84,7 @@ namespace SabreTools.Serialization.Deserializers
                 // If we have any entries
                 entries = new MatroshkaEntry[matroschka.EntryCount];
 
-                MatroschkaGapType matGapType = MatroschkaGapType.Error;
+                int matGapType = 0;
                 MatroschkaHasUnknown matHasUnknown = MatroschkaHasUnknown.Error;
                 
                 // Read entries
@@ -99,7 +92,7 @@ namespace SabreTools.Serialization.Deserializers
                 {
                     MatroshkaEntry entry = new MatroshkaEntry();
                     // Determine if file path size is 256 or 512 bytes
-                    if (matGapType == MatroschkaGapType.Error)
+                    if (matGapType == 0)
                         matGapType = GapHelper(data);
                                       
                     // TODO: Spaces/non-ASCII have not yet been observed. Still, probably safer to store as byte array?
@@ -129,19 +122,17 @@ namespace SabreTools.Serialization.Deserializers
                 return true;
         }
 
-        private static MatroschkaGapType GapHelper(Stream data)
+        private static int GapHelper(Stream data)
         {
             var tempPosition = data.Position;
             data.Position = tempPosition + 256;
             var tempValue = data.ReadUInt32LittleEndian();
-            MatroschkaGapType matGapType;
-            if (tempValue <= 0) // Gap is 512 bytes. Actually just == 0, but ST prefers ranges.
-                matGapType = MatroschkaGapType.LongGap;
-            else // Gap is 256 bytes.
-                matGapType = MatroschkaGapType.ShortGap;
-            
             data.Position = tempPosition;
-            return matGapType;
+            if (tempValue <= 0) // Gap is 512 bytes. Actually just == 0, but ST prefers ranges.
+                return 512;
+            
+            // Otherwise, gap is 256 bytes. 
+            return 256;
         }
         
         private static MatroschkaHasUnknown UnknownHelper(Stream data, MatroshkaEntry entry)
