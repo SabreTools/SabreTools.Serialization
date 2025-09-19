@@ -89,8 +89,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
             // Extract the file
-            bool status;
-            status = CheckBytes(entry, fileData, includeDebug);
+            var status = CheckBytes(entry, fileData, includeDebug);
 
             // If the extracted data is invalid
             if (!status)
