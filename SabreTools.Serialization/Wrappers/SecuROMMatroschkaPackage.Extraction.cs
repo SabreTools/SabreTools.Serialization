@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Wrappers
             var status = CheckBytes(entry, fileData, includeDebug);
 
             if (!status)
-                return status;
+                return false;
 
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
