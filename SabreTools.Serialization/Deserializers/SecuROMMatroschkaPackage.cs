@@ -7,13 +7,6 @@ using static SabreTools.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public enum MatroschkaHasUnknown
-    {
-        Error = -1,
-        NoUnknown = 0,
-        HasUnknown = 1,
-    }
-    
     public class SecuROMMatroschkaPackage : BaseBinaryDeserializer<MatroshkaPackage>
     {
         /// <inheritdoc/>
@@ -85,7 +78,7 @@ namespace SabreTools.Serialization.Deserializers
                 entries = new MatroshkaEntry[matroschka.EntryCount];
 
                 int matGapType = 0;
-                MatroschkaHasUnknown matHasUnknown = MatroschkaHasUnknown.Error;
+                bool? matHasUnknown = null;
                 
                 // Read entries
                 for (int i = 0; i < entries.Length; i++) 
@@ -105,13 +98,12 @@ namespace SabreTools.Serialization.Deserializers
                     entry.Offset = data.ReadUInt32LittleEndian();
                     
                     // Check for unknown 4-byte 0x00 value. Not correlated with 256 vs 512-byte gaps.
-                    if (matHasUnknown == MatroschkaHasUnknown.Error)
+                    if (matHasUnknown == null)
                         matHasUnknown = UnknownHelper(data, entry);
-                    else if (matHasUnknown == MatroschkaHasUnknown.HasUnknown) // If already known, read or don't read the unknown value.
-                        entry.Unknown = data.ReadUInt32LittleEndian(); // TODO: Validate it's zero?
-                    else if (matHasUnknown != MatroschkaHasUnknown.NoUnknown)
-                        return false; // TODO: This should never occur, log output should happen even without debug.
                     
+                    if (matHasUnknown == true) // If already known, read or don't read the unknown value.
+                        entry.Unknown = data.ReadUInt32LittleEndian(); // TODO: Validate it's zero?
+                                       
                     entry.ModifiedTime = data.ReadUInt64LittleEndian();
                     entry.CreatedTime = data.ReadUInt64LittleEndian();
                     entry.AccessedTime = data.ReadUInt64LittleEndian();
@@ -135,23 +127,17 @@ namespace SabreTools.Serialization.Deserializers
             return 256;
         }
         
-        private static MatroschkaHasUnknown UnknownHelper(Stream data, MatroshkaEntry entry)
+        private static bool UnknownHelper(Stream data, MatroshkaEntry entry)
         {
             var tempPosition = data.Position;
             var tempValue = data.ReadUInt32LittleEndian();
-            MatroschkaHasUnknown matHasUnknown;
-            if (tempValue <= 0) // Entry has the Unknown value.
-            {
-                matHasUnknown = MatroschkaHasUnknown.HasUnknown;
-                entry.Unknown = tempValue; // TODO: Will entry be changed outside of this function?
-            } 
-            else
-            {
-                matHasUnknown = MatroschkaHasUnknown.NoUnknown;
-                data.Position = tempPosition;
-            }
-            
-            return matHasUnknown;
+            data.Position = tempPosition;
+
+            if (tempValue > 0) // Entry does not have the Unknown value.
+                return false;
+
+            // Entry does have the unknown value.
+            return true; 
         }
     }
 }
