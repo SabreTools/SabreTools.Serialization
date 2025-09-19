@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Deserializers
 
             obj.EntryCount = data.ReadUInt32LittleEndian();
             if (obj.EntryCount == 0)
-                return null; // TODO: This should never occur, log output should happen even without debug.
+                return null;
 
             // Check if "matrosch" section is a longer header one or not based on whether the next uint is 0 or 1. Anything
             // else will just already be starting the filename string, which is never going to start with this.
@@ -68,11 +68,10 @@ namespace SabreTools.Serialization.Deserializers
                 obj.UnknownRCValue2 = data.ReadUInt32LittleEndian();
                 obj.UnknownRCValue3 = data.ReadUInt32LittleEndian();
 
-                // TODO: Not actually reliable for distinguishing keys, update models documentation to reflect.
                 // Exact byte count has to be used because non-RC executables have all 0x00 here.
                 obj.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
-                    return null; // TODO: This should never occur, log output should happen even without debug.
+                    return null;
             }
             return obj;
         }
