@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Deserializers
             // (NecroVisioN.exe from the GamersGate patch NecroVisioN_Patch1.2_GG.exe) isn't RC and still has it.
             long tempPosition = data.Position;
             uint tempValue = data.ReadUInt32LittleEndian();
-            data.Position = tempPosition;
+            data.Seek(tempPosition, SeekOrigin.Begin);
 
             if (tempValue < 2) // Only little-endian 0 or 1 have been observed for long sections.
             {
@@ -123,9 +123,9 @@ namespace SabreTools.Serialization.Deserializers
         private static int GapHelper(Stream data)
         {
             var tempPosition = data.Position;
-            data.Position = tempPosition + 256;
+            data.Seek(data.Position + 256, SeekOrigin.Begin);
             var tempValue = data.ReadUInt32LittleEndian();
-            data.Position = tempPosition;
+            data.Seek(tempPosition, SeekOrigin.Begin);
             if (tempValue <= 0) // Gap is 512 bytes. Actually just == 0, but ST prefers ranges.
                 return 512;
             
@@ -137,8 +137,7 @@ namespace SabreTools.Serialization.Deserializers
         {
             var tempPosition = data.Position;
             var tempValue = data.ReadUInt32LittleEndian();
-            data.Position = tempPosition;
-
+            data.Seek(tempPosition, SeekOrigin.Begin);
             if (tempValue > 0) // Entry does not have the Unknown value.
                 return false;
 
