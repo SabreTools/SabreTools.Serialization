@@ -71,11 +71,10 @@ namespace SabreTools.Serialization.Wrappers
 
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
-            // Extract the file
-            var fileData = ReadRangeFromSource(entry.Offset, (int)entry.Size); // TODO: safety? validation? anything?
-            var status = CheckBytes(entry, fileData, includeDebug);
+            // Read the file
+            var fileData = ReadFile(entry, includeDebug);
 
-            if (!status)
+            if (fileData == null) 
                 return false;
 
             // Ensure the full output directory exists
@@ -86,18 +85,18 @@ namespace SabreTools.Serialization.Wrappers
 
             // Write the output file
             File.WriteAllBytes(filename, fileData);
-            return status;
+            return true;
         }
 
         /// <summary>
-        /// Check bytes to be extracted against MD5 checksum.
+        /// Read file and check bytes to be extracted against MD5 checksum.
         /// </summary>
         /// <param name="entry">Entry being extracted</param>
-        /// <param name="fileData">File data being extracted</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns></returns>
-        private bool CheckBytes(MatroshkaEntry entry, byte[] fileData, bool includeDebug)
+        /// <returns>Byte array of the file data if successful, null if unsuccessful.</returns>
+        public byte[]? ReadFile(MatroshkaEntry entry, bool includeDebug)
         {
+            var fileData = ReadRangeFromSource(entry.Offset, (int)entry.Size); // TODO: safety? validation? anything?
             // Debug output
             if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
 
@@ -108,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMd5}");
 
             if (fileData == null)
-                return false;
+                return null;
 
             var hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
 
@@ -122,11 +121,11 @@ namespace SabreTools.Serialization.Wrappers
             {
                 var filename = System.Text.Encoding.ASCII.GetString(entry.Path!).TrimEnd('\0');
                 Console.Error.WriteLine($"MD5 checksum failure for file {filename})");
-                return false;
+                return null;
             }
 
 
-            return true;
+            return fileData;
         }
     }
 }
