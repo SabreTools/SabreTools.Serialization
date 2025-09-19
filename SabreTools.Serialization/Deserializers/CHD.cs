@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Deserializers
                         return headerV3;
 
                     case 4:
-                        var headerV4 = ParseHeaderV1(data);
+                        var headerV4 = ParseHeaderV4(data);
 
                         if (headerV4.Tag != Constants.SignatureString)
                             return null;
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Deserializers
                         return headerV4;
 
                     case 5:
-                        var headerV5 = ParseHeaderV1(data);
+                        var headerV5 = ParseHeaderV5(data);
 
                         if (headerV5.Tag != Constants.SignatureString)
                             return null;
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a V4 header
         /// </summary>
-        public static HeaderV4? ParseHeaderV4(Stream data)
+        public static HeaderV4 ParseHeaderV4(Stream data)
         {
             var obj = new HeaderV4();
 
