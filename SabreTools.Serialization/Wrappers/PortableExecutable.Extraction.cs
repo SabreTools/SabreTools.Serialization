@@ -21,10 +21,10 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
+            bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
-            bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
 
             return cexe || overlay || resources | wise | matroschka;
         }
