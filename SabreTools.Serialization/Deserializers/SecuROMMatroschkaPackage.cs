@@ -69,7 +69,8 @@ namespace SabreTools.Serialization.Deserializers
                 obj.UnknownRCValue3 = data.ReadUInt32LittleEndian();
 
                 // Exact byte count has to be used because non-RC executables have all 0x00 here.
-                obj.KeyHexString = Encoding.ASCII.GetString(data.ReadBytes(32));
+                var keyHexBytes = data.ReadBytes(32);
+                obj.KeyHexString = Encoding.ASCII.GetString(keyHexBytes);
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
                     return null;
             }
