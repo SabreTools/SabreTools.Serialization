@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
             var extracted = ExtractPackagedFiles(outputDirectory, includeDebug, null);
             if (!extracted)
             {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
+                if (includeDebug) Console.Error.WriteLine("Could not extract packaged files");
                 return false;
             }
 
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Extract the predefined, static files defined in the header
+        /// Extract the packaged files.
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
