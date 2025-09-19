@@ -18,6 +18,9 @@ namespace SabreTools.Serialization.Deserializers
 
             try
             {
+                // Cache the initial offset
+                long initialOffset = data.Position;
+                
                 // TODO: Unify matroschka spelling. They spell it matroschka in all official stuff, as far as has been observed. Will double check.
                 // Try to parse the header
                 if (!ParsePreEntryHeader(data, out MatroshkaPackage matroschka))
