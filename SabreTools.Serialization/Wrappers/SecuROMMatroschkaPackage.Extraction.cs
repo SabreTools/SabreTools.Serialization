@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.Hashing;
-using SabreTools.Matching;
 using SabreTools.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
 
@@ -10,13 +9,10 @@ namespace SabreTools.Serialization.Wrappers
     public partial class SecuROMMatroschkaPackage : IExtractable
     {
         /// <inheritdoc/>
-        // TODO: I don't really know how to make use of this since I need to pass in fileDataArray, but I need it here for
-        // TODO: IExtractable. I assume you'll probably not approve of fileDataArray to begin with and just want me to use
-        // TODO: offsets, so let me know if that's indeed the case.
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Extract the packaged files
-            var extracted = ExtractPackagedFiles(outputDirectory, includeDebug, null);
+            var extracted = ExtractPackagedFiles(outputDirectory, includeDebug);
             if (!extracted)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not extract packaged files");
@@ -31,9 +27,8 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="fileDataArray">File data array being extracted</param>
         /// <returns>True if the files extracted successfully, false otherwise</returns>
-        public bool ExtractPackagedFiles(string outputDirectory, bool includeDebug, byte[][]? fileDataArray)
+        private bool ExtractPackagedFiles(string outputDirectory, bool includeDebug)
         {
                 if (Entries == null)
                     return false;
@@ -44,14 +39,9 @@ namespace SabreTools.Serialization.Wrappers
                 for (var i = 0; i < Entries.Length; i++)
                 {
                     var entry = Entries[i];
-                    if (fileDataArray == null)
-                        return false;
-
-                    var fileData = fileDataArray[i];
                     
-
                     // Extract file
-                    if (!ExtractFile(entry, fileData, outputDirectory, includeDebug))
+                    if (!ExtractFile(entry, outputDirectory, includeDebug))
                         successful = false;
                 }
                 
@@ -62,20 +52,13 @@ namespace SabreTools.Serialization.Wrappers
         /// Attempt to extract a file
         /// </summary>
         /// <param name="entry">Matroschka file entry being extracted</param>
-        /// <param name="fileData">File data being extracted</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Boolean representing true on success or false on failure</returns>
         /// <remarks>Assumes that the current stream position is the end of where the data lives</remarks>
-        private bool ExtractFile(MatroshkaEntry entry,
-            byte[] fileData,
-            string outputDirectory,
-            bool includeDebug)
+        private bool ExtractFile(MatroshkaEntry entry, string outputDirectory, bool includeDebug)
         {
             if (entry.Path == null)
-                return false;
-            
-            if (fileData == null)
                 return false;
 
             var filename = System.Text.Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
@@ -89,6 +72,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
             // Extract the file
+            var fileData = ReadRangeFromSource(entry.Offset, (int)entry.Size); // TODO: safety? validation? anything?
             var status = CheckBytes(entry, fileData, includeDebug);
 
             if (!status)

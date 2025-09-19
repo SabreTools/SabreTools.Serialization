@@ -255,43 +255,10 @@ namespace SabreTools.Serialization.Wrappers
                         _matroschkaPackageFailed = true;
                         return null;
                     }
-                    
-                    // Read file data
-                    var fileDataArray = new byte[header.EntryCount][];
-                    for (int i = 0; i < header.EntryCount; i++)
-                    {
-                        var entry = header.Entries[i];
-                        var fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
-
-                        if (fileData == (byte[])[]) //TODO: is this the right way to check if RRFS failed?
-                        {
-                            _matroschkaPackageFailed = true;
-                            return null;
-                        }
-                        fileDataArray[i] = fileData;
-                    }
-
-                    _matroschkaPackageFileData = fileDataArray;
 
                     // Otherwise, cache and return the data
                     _matroschkaPackage = header;
                     return _matroschkaPackage;
-                }
-            }
-        }
-        
-        public byte[][]? MatroschkaPackageFileData
-        {
-            get
-            {
-                lock (_matroschkaPackageFileDataLock)
-                {
-                    // Make sure the data was read properly
-                    if (MatroschkaPackage == null)
-                        return null;
-                   
-                    // Return data
-                    return _matroschkaPackageFileData;
                 }
             }
         }
@@ -845,16 +812,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
         /// </summary>
         private bool _matroschkaPackageFailed = false;
-        
-        /// <summary>
-        /// Matroschka Package file data, if it exists
-        /// </summary>
-        private byte[][]? _matroschkaPackageFileData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_matroschkaPackageFileData"/> 
-        /// </summary>
-        private readonly object _matroschkaPackageFileDataLock = new();
         
         /// <summary>
         /// Address of the overlay, if it exists

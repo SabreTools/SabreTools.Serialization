@@ -388,7 +388,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Attempt to extract package
-            return MatroschkaPackage.ExtractPackagedFiles(outputDirectory, includeDebug, MatroschkaPackageFileData);
+            return MatroschkaPackage.Extract(outputDirectory, includeDebug);
         }
 
         /// <summary>
