@@ -184,6 +184,136 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Models.PortableExecutable.Executable.ImportTable"/>
         public Models.PortableExecutable.ImportTable? ImportTable => Model.ImportTable;
+        
+        public SecuROMMatroschkaPackage? MatroschkaPackage
+        {
+            get
+            {
+                lock (_matroschkaPackageLock)
+                {
+                    // Use the cached data if possible
+                    if (_matroschkaPackage != null)
+                        return _matroschkaPackage;
+                    
+                    // Check to see if creation has already been attempted
+                    if (_matroschkaPackageFailed)
+                        return null;
+                    
+                    // Get the available source length, if possible
+                    var dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // If the section table is missing
+                    if (SectionTable == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    SectionHeader? section;
+                    
+                    // Find the matrosch or rcpacker section
+                    // TODO: I was using same foreach getstring trimend etc your example .WISE one does already, but I figure it'd be better to use GetFirstSectionName. If that's wrong, I can revert.
+                    /*foreach (var searchedSection in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
+                        if (sectionName != "matrosch" && sectionName != "rcpacker")
+                            continue;
+
+                        section = searchedSection;
+                        break;
+                    }*/
+                    
+                    section = GetFirstSection("matrosch", true);
+                    
+                    if (section == null)
+                        section = GetFirstSection("rcpacker", true);
+
+
+                    // Otherwise, it could not be found
+                    if (section == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Get the offset
+                    long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    lock (_dataSourceLock)
+                    {
+                        if (offset < 0 || offset >= _dataSource.Length)
+                        {
+                            _matroschkaPackageFailed = true;
+                            return null;
+                        } 
+                    }
+                    
+                    // Read the section into a local array
+                    var sectionLength = (int)section.VirtualSize;
+                    byte[]? sectionData;
+                    sectionData = ReadRangeFromSource(offset, sectionLength);
+
+                    // Parse the section header
+                    var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
+                    
+                    // If header creation failed
+                    if (header == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Check if Entries exists
+                    if (header.Entries == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Read file data
+                    var fileDataArray = new byte[header.EntryCount][];
+                    for (int i = 0; i < header.EntryCount; i++)
+                    {
+                        var entry = header.Entries[i];
+                        byte[]? fileData;
+                        fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
+
+                        if (fileData == (byte[])[]) //TODO: is this the right way to check if RRFS failed?
+                        {
+                            _matroschkaPackageFailed = true;
+                            return null;
+                        }
+                        fileDataArray[i] = fileData;
+                    }
+
+                    _matroschkaPackageFileData = fileDataArray;
+
+                    // Otherwise, cache and return the data
+                    _matroschkaPackage = header;
+                    return _matroschkaPackage;
+                }
+            }
+        }
+        
+        public byte[][]? MatroschkaPackageFileData
+        {
+            get
+            {
+                lock (_matroschkaPackageFileDataLock)
+                {
+                    // Make sure the data was read properly
+                    if (MatroschkaPackage == null)
+                        return null;
+                   
+                    // Return data
+                    return _matroschkaPackageFileData;
+                }
+            }
+        }
 
         /// <inheritdoc cref="Models.PortableExecutable.Executable.OptionalHeader"/>
         public Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
@@ -1944,136 +2074,6 @@ namespace SabreTools.Serialization.Wrappers
                 // Otherwise, cache and return the strings
                 _sectionStringData[index] = sectionData.ReadStringsFrom(charLimit: 3) ?? [];
                 return _sectionStringData[index];
-            }
-        }
-        
-        public SecuROMMatroschkaPackage? MatroschkaPackage
-        { // TODO: move to extension properties if sabre thinks it's ok
-            get
-            {
-                lock (_matroschkaPackageLock)
-                {
-                    // Use the cached data if possible
-                    if (_matroschkaPackage != null)
-                        return _matroschkaPackage;
-                    
-                    // Check to see if creation has already been attempted
-                    if (_matroschkaPackageFailed)
-                        return null;
-                    
-                    // Get the available source length, if possible
-                    var dataLength = Length;
-                    if (dataLength == -1)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-
-                    // If the section table is missing
-                    if (SectionTable == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-                    
-                    SectionHeader? section;
-                    
-                    // Find the matrosch or rcpacker section
-                    // TODO: I was using same foreach getstring trimend etc your example .WISE one does already, but I figure it'd be better to use GetFirstSectionName. If that's wrong, I can revert.
-                    /*foreach (var searchedSection in SectionTable)
-                    {
-                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
-                        if (sectionName != "matrosch" && sectionName != "rcpacker")
-                            continue;
-
-                        section = searchedSection;
-                        break;
-                    }*/
-                    
-                    section = GetFirstSection("matrosch", true);
-                    
-                    if (section == null)
-                        section = GetFirstSection("rcpacker", true);
-
-
-                    // Otherwise, it could not be found
-                    if (section == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-                    
-                    // Get the offset
-                    long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                    lock (_dataSourceLock)
-                    {
-                        if (offset < 0 || offset >= _dataSource.Length)
-                        {
-                            _matroschkaPackageFailed = true;
-                            return null;
-                        } 
-                    }
-                    
-                    // Read the section into a local array
-                    var sectionLength = (int)section.VirtualSize;
-                    byte[]? sectionData;
-                    sectionData = ReadRangeFromSource(offset, sectionLength);
-
-                    // Parse the section header
-                    var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
-                    
-                    // If header creation failed
-                    if (header == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-                    
-                    // Check if Entries exists
-                    if (header.Entries == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-                    
-                    // Read file data
-                    var fileDataArray = new byte[header.EntryCount][];
-                    for (int i = 0; i < header.EntryCount; i++)
-                    {
-                        var entry = header.Entries[i];
-                        byte[]? fileData;
-                        fileData = ReadRangeFromSource(offset + entry.Offset, (int)entry.Size);
-
-                        if (fileData == (byte[])[]) //TODO: is this the right way to check if RRFS failed?
-                        {
-                            _matroschkaPackageFailed = true;
-                            return null;
-                        }
-                        fileDataArray[i] = fileData;
-                    }
-
-                    _matroschkaPackageFileData = fileDataArray;
-
-                    // Otherwise, cache and return the data
-                    _matroschkaPackage = header;
-                    return _matroschkaPackage;
-                }
-            }
-        }
-        
-        public byte[][]? MatroschkaPackageFileData
-        {
-            get
-            {
-                lock (_matroschkaPackageFileDataLock)
-                {
-                    // Make sure the data was read properly
-                    if (MatroschkaPackage == null)
-                        return null;
-                   
-                    // Return data
-                    return _matroschkaPackageFileData;
-                }
             }
         }
 
