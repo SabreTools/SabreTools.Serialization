@@ -21,11 +21,12 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
+            bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
 
-            return cexe || overlay || resources | wise;
+            return cexe || matroschka || overlay || resources || wise;
         }
 
         /// <summary>
@@ -372,6 +373,22 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
+        }
+                
+        /// <summary>
+        /// Extract data from a SecuROM Matroschka Package
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractMatroschka(string outputDirectory, bool includeDebug)
+        {
+            // Check if executable contains Matroschka package or not
+            if (MatroschkaPackage == null)
+                return false;
+
+            // Attempt to extract package
+            return MatroschkaPackage.Extract(outputDirectory, includeDebug);
         }
 
         /// <summary>

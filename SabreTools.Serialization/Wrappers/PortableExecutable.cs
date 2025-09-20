@@ -184,6 +184,84 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Executable.ImportTable"/>
         public ImportTable? ImportTable => Model.ImportTable;
+        
+        public SecuROMMatroschkaPackage? MatroschkaPackage
+        {
+            get
+            {
+                lock (_matroschkaPackageLock)
+                {
+                    // Use the cached data if possible
+                    if (_matroschkaPackage != null)
+                        return _matroschkaPackage;
+                    
+                    // Check to see if creation has already been attempted
+                    if (_matroschkaPackageFailed)
+                        return null;
+                    
+                    // Get the available source length, if possible
+                    var dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // If the section table is missing
+                    if (SectionTable == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    SectionHeader? section = null;
+                    
+                    // Find the matrosch or rcpacker section
+                    foreach (var searchedSection in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
+                        if (sectionName != "matrosch" && sectionName != "rcpacker")
+                            continue;
+
+                        section = searchedSection;
+                        break;
+                    }
+
+                    // Otherwise, it could not be found
+                    if (section == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+                    
+                    // Get the offset
+                    long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    if (offset < 0 || offset >= Length)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    } 
+                        
+                    // Read the section into a local array
+                    var sectionLength = (int)section.VirtualSize;
+                    var sectionData = ReadRangeFromSource(offset, sectionLength);
+
+                    // Parse the section header
+                    var header = SecuROMMatroschkaPackage.Create(sectionData, 0);
+                    
+                    // If header creation failed, or if Entries does not exist
+                    if (header?.Entries == null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // Otherwise, cache and return the data
+                    _matroschkaPackage = header;
+                    return _matroschkaPackage;
+                }
+            }
+        }
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
         public OptionalHeader? OptionalHeader => Model.OptionalHeader;
@@ -784,7 +862,22 @@ namespace SabreTools.Serialization.Wrappers
         /// Lock object for <see cref="_headerPaddingStrings"/> 
         /// </summary>
         private readonly object _headerPaddingStringsLock = new();
+                
+        /// <summary>
+        /// Matroschka Package wrapper, if it exists
+        /// </summary>
+        private SecuROMMatroschkaPackage? _matroschkaPackage = null;
 
+        /// <summary>
+        /// Lock object for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private readonly object _matroschkaPackageLock = new();
+        
+        /// <summary>
+        /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
+        /// </summary>
+        private bool _matroschkaPackageFailed = false;
+        
         /// <summary>
         /// Address of the overlay, if it exists
         /// </summary>
@@ -1524,6 +1617,30 @@ namespace SabreTools.Serialization.Wrappers
 
                 return resourcePex.FindWiseOverlayHeader();
             }
+        }
+
+        /// <summary>
+        /// Find the location of a SecuROM Matroschka section, if it exists
+        /// </summary>
+        /// <returns>Matroschka section on success, null otherwise</returns>
+        public Models.PortableExecutable.SectionHeader? FindMatroschkaSection()
+        {
+            // If the section table is invalid
+            if (SectionTable == null)
+                return null;
+
+            // Find the matrosch or rcpacker section
+            foreach (var section in SectionTable)
+            {
+                var sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                if (sectionName != "matrosch" && sectionName != "rcpacker")
+                    continue;
+
+                return section;
+            }
+
+            // Otherwise, it could not be found
+            return null;
         }
 
         #endregion
