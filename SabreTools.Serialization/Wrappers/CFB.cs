@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Try to read the sector data
                 var sectorData = ReadRangeFromSource(sectorDataOffset, (int)SectorSize);
-                if (sectorData == null)
+                if (sectorData.Length == 0)
                     return null;
 
                 // Add the sector data to the output

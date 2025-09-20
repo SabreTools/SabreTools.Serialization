@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     int readSize = (int)Math.Min(BlockSize, fileSize);
                     var data = ReadRangeFromSource((int)dataBlockOffsets[i], readSize);
-                    if (data == null)
+                    if (data.Length == 0)
                         return false;
 
                     fs.Write(data, 0, data.Length);

@@ -1173,7 +1173,7 @@ namespace SabreTools.Serialization.Wrappers
                 try
                 {
                     entryData = ReadRangeFromSource((int)address, (int)size);
-                    if (entryData == null || entryData.Length < 4)
+                    if (entryData.Length < 4)
                         continue;
                 }
                 catch (EndOfStreamException)
@@ -1871,10 +1871,10 @@ namespace SabreTools.Serialization.Wrappers
                 return _sectionData[index];
 
             // Populate the raw section data based on the source
-            byte[]? sectionData = ReadRangeFromSource((int)address, (int)size);
+            var sectionData = ReadRangeFromSource((int)address, (int)size);
 
-            // Cache and return the section data, even if null
-            _sectionData[index] = sectionData ?? [];
+            // Cache and return the section data
+            _sectionData[index] = sectionData;
             return sectionData;
         }
 
@@ -2032,10 +2032,10 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Populate the raw table data based on the source
-            byte[]? tableData = ReadRangeFromSource((int)address, (int)size);
+            var tableData = ReadRangeFromSource((int)address, (int)size);
 
-            // Cache and return the table data, even if null
-            _tableData[index] = tableData ?? [];
+            // Cache and return the table data
+            _tableData[index] = tableData;
             return tableData;
         }
 

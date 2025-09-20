@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Wrappers
             // Read the item data
             var directoryItem = DirectoryItems[index];
             var data = ReadRangeFromSource((int)directoryItem.ItemOffset, (int)directoryItem.ItemLength);
-            if (data == null)
+            if (data.Length == 0)
                 return false;
 
             // If we have an invalid output directory
