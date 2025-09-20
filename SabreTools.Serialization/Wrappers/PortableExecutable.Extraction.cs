@@ -174,6 +174,21 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "uha";
                         break;
                     }
+                    else if (overlaySample.StartsWith([0x3C, 0x3F, 0x78, 0x6D, 0x6C]))
+                    {
+                        extension = "xml";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                    {
+                        extension = "xml";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0xFF, 0xFE, 0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                    {
+                        extension = "xml";
+                        break;
+                    }
                     else if (overlaySample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
                     {
                         extension = "xz";
@@ -329,6 +344,21 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "uha";
                             break;
                         }
+                        else if (resourceSample.StartsWith([0x3C, 0x3F, 0x78, 0x6D, 0x6C]))
+                        {
+                            extension = "xml";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                        {
+                            extension = "xml";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith([0xFF, 0xFE, 0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                        {
+                            extension = "xml";
+                            break;
+                        }
                         else if (resourceSample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
                         {
                             extension = "xz";
@@ -375,7 +405,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
-                
+
         /// <summary>
         /// Extract data from a SecuROM Matroschka Package
         /// </summary>
