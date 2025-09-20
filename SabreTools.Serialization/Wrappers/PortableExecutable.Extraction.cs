@@ -15,6 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         /// - Archives and executables in the overlay
         /// - Archives and executables in resource data
         /// - CExe-compressed resource data
+        /// - SecuROM Matroschka package sections
         /// - SFX archives (7z, MS-CAB, PKZIP, RAR)
         /// - Wise installers
         /// </remarks>

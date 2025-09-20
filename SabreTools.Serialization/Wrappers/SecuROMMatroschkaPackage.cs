@@ -38,32 +38,38 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="MatroshkaPackage.Entries"/>
         public MatroshkaEntry[]? Entries => Model.Entries;
 
-        // TODO: Use entries from model after models update.
-        
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[] data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SecuROMMatroschkaPackage(MatroshkaPackage model, Stream data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public SecuROMMatroschkaPackage(MatroshkaPackage model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
-        /// Create a SecuROM Matroschka Package section from a byte array and offset
+        /// Create a SecuROM Matroschka package from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the section</param>
+        /// <param name="data">Byte array representing the package</param>
         /// <param name="offset">Offset within the array to parse</param>
-        /// <returns>A SecuROM Matroschka Package section wrapper on success, null on failure</returns>
+        /// <returns>A SecuROM Matroschka package wrapper on success, null on failure</returns>
         public static SecuROMMatroschkaPackage? Create(byte[]? data, int offset)
         {
             // If the data is invalid
@@ -80,10 +86,10 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create a SecuROM Matroschka Package section from a Stream
+        /// Create a SecuROM Matroschka package from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the section</param>
-        /// <returns>A SecuROM Matroschka Package section wrapper on success, null on failure</returns>
+        /// <param name="data">Stream representing the package</param>
+        /// <returns>A SecuROM Matroschka package wrapper on success, null on failure</returns>
         public static SecuROMMatroschkaPackage? Create(Stream? data)
         {
             // If the data is invalid
@@ -99,8 +105,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new SecuROMMatroschkaPackage(model, data);
+                return new SecuROMMatroschkaPackage(model, data, currentOffset);
             }
             catch
             {

@@ -10,6 +10,7 @@ namespace SabreTools.Serialization.Deserializers
     public class SecuROMMatroschkaPackage : BaseBinaryDeserializer<MatroshkaPackage>
     {
         /// <inheritdoc/>
+        /// TODO: Unify matroschka spelling to "Matroschka"
         public override MatroshkaPackage? Deserialize(Stream? data)
         {
             // If the data is invalid
@@ -20,18 +21,15 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Cache the initial offset
                 long initialOffset = data.Position;
-                
-                // TODO: Unify matroschka spelling. They spell it matroschka in all official stuff, as far as has been observed. Will double check.
+
                 // Try to parse the header
-                var package = ParsePreEntryHeader(data);
+                var package = ParseMatroshkaPackage(data);
                 if (package == null)
                     return null;
 
-                var entries = ParseEntries(data, package);
-                if (entries == null)
-                    return null;
-                
-                package.Entries = entries;
+                // Try to parse the entries
+                package.Entries = ParseEntries(data, package.EntryCount);
+
                 return package;
             }
             catch
@@ -41,10 +39,15 @@ namespace SabreTools.Serialization.Deserializers
             }
         }
 
-        private static MatroshkaPackage? ParsePreEntryHeader(Stream data)
-        { 
+        /// <summary>
+        /// Parse a Stream into a MatroshkaPackage
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled MatroshkaPackage on success, null on error</returns>
+        public static MatroshkaPackage? ParseMatroshkaPackage(Stream data)
+        {
             var obj = new MatroshkaPackage();
-            
+
             byte[] magic = data.ReadBytes(4);
             obj.Signature = Encoding.ASCII.GetString(magic);
             if (obj.Signature != MatroshkaMagicString)
@@ -62,88 +65,74 @@ namespace SabreTools.Serialization.Deserializers
             uint tempValue = data.ReadUInt32LittleEndian();
             data.Seek(tempPosition, SeekOrigin.Begin);
 
-            if (tempValue < 2) // Only little-endian 0 or 1 have been observed for long sections.
+            // Only 0 or 1 have been observed for long sections
+            if (tempValue < 2)
             {
                 obj.UnknownRCValue1 = data.ReadUInt32LittleEndian();
                 obj.UnknownRCValue2 = data.ReadUInt32LittleEndian();
                 obj.UnknownRCValue3 = data.ReadUInt32LittleEndian();
 
-                // Exact byte count has to be used because non-RC executables have all 0x00 here.
                 var keyHexBytes = data.ReadBytes(32);
                 obj.KeyHexString = Encoding.ASCII.GetString(keyHexBytes);
                 if (!data.ReadBytes(4).EqualsExactly([0x00, 0x00, 0x00, 0x00]))
                     return null;
             }
+
             return obj;
         }
 
-        private static MatroshkaEntry[]? ParseEntries(Stream data, MatroshkaPackage package)
+        /// <summary>
+        /// Parse a Stream into a MatroshkaEntry array
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="entryCount">Number of entries in the array</param>
+        /// <returns>Filled MatroshkaEntry array on success, null on error</returns>
+        private static MatroshkaEntry[] ParseEntries(Stream data, uint entryCount)
         {
-                
-                // If we have any entries
-                var obj = new MatroshkaEntry[package.EntryCount];
+            var obj = new MatroshkaEntry[entryCount];
 
-                int matGapType = 0;
-                bool? matHasUnknown = null;
-                
-                // Read entries
-                for (int i = 0; i < obj.Length; i++) 
-                {
-                    var entry = new MatroshkaEntry();
-                    // Determine if file path size is 256 or 512 bytes
-                    if (matGapType == 0)
-                        matGapType = GapHelper(data);
-                                      
-                    // TODO: Spaces/non-ASCII have not yet been observed. Still, probably safer to store as byte array?
-                    // TODO: Read as string and trim once models is bumped. For now, this needs to be trimmed by anything reading it.
-                    entry.Path = data.ReadBytes((int)matGapType); 
-                    
-                    // Entry type isn't currently validated as it's always predictable anyways, nor necessary to know.
-                    entry.EntryType = (MatroshkaEntryType)data.ReadUInt32LittleEndian();
-                    entry.Size = data.ReadUInt32LittleEndian();
-                    entry.Offset = data.ReadUInt32LittleEndian();
-                    
-                    // Check for unknown 4-byte 0x00 value. Not correlated with 256 vs 512-byte gaps.
-                    if (matHasUnknown == null)
-                        matHasUnknown = UnknownHelper(data, entry);
-                    
-                    if (matHasUnknown == true) // If already known, read or don't read the unknown value.
-                        entry.Unknown = data.ReadUInt32LittleEndian(); // TODO: Validate it's zero?
-                                       
-                    entry.ModifiedTime = data.ReadUInt64LittleEndian();
-                    entry.CreatedTime = data.ReadUInt64LittleEndian();
-                    entry.AccessedTime = data.ReadUInt64LittleEndian();
-                    entry.MD5 = data.ReadBytes(16);
-                    
-                    obj[i] = entry;
-                }
-
-                return obj;
-        }
-
-        private static int GapHelper(Stream data)
-        {
-            var tempPosition = data.Position;
+            // Determine if file path size is 256 or 512 bytes
+            long tempPosition = data.Position;
             data.Seek(data.Position + 256, SeekOrigin.Begin);
             var tempValue = data.ReadUInt32LittleEndian();
             data.Seek(tempPosition, SeekOrigin.Begin);
-            if (tempValue <= 0) // Gap is 512 bytes. Actually just == 0, but ST prefers ranges.
-                return 512;
-            
-            // Otherwise, gap is 256 bytes. 
-            return 256;
-        }
-        
-        private static bool UnknownHelper(Stream data, MatroshkaEntry entry)
-        {
-            var tempPosition = data.Position;
-            var tempValue = data.ReadUInt32LittleEndian();
-            data.Seek(tempPosition, SeekOrigin.Begin);
-            if (tempValue > 0) // Entry does not have the Unknown value.
-                return false;
+            int gapSize = tempValue == 0 ? 512 : 256;
 
-            // Entry does have the unknown value.
-            return true; 
+            // Set default value for unknown value checking
+            bool? hasUnknown = null;
+
+            // Read entries
+            for (int i = 0; i < obj.Length; i++)
+            {
+                var entry = new MatroshkaEntry();
+
+                entry.Path = data.ReadBytes(gapSize);
+                entry.EntryType = (MatroshkaEntryType)data.ReadUInt32LittleEndian();
+                entry.Size = data.ReadUInt32LittleEndian();
+                entry.Offset = data.ReadUInt32LittleEndian();
+
+                // On the first entry, determine if the unknown value exists
+                if (hasUnknown == null)
+                {
+                    tempPosition = data.Position;
+                    tempValue = data.ReadUInt32LittleEndian();
+                    data.Seek(tempPosition, SeekOrigin.Begin);
+                    hasUnknown = tempValue == 0;
+                }
+
+                // TODO: Validate it's zero?
+                if (hasUnknown == true)
+                    entry.Unknown = data.ReadUInt32LittleEndian();
+
+                entry.ModifiedTime = data.ReadUInt64LittleEndian();
+                entry.CreatedTime = data.ReadUInt64LittleEndian();
+                entry.AccessedTime = data.ReadUInt64LittleEndian();
+                entry.MD5 = data.ReadBytes(16);
+
+                obj[i] = entry;
+            }
+
+            return obj;
         }
     }
 }

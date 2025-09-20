@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using SabreTools.Hashing;
 using SabreTools.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
@@ -11,59 +12,44 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // Extract the packaged files
-            var extracted = ExtractPackagedFiles(outputDirectory, includeDebug);
-            if (!extracted)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not extract packaged files");
+            // If we have no entries
+            if (Entries == null || Entries.Length == 0)
                 return false;
+
+            // Loop through and extract all files to the output
+            bool allExtracted = true;
+            for (var i = 0; i < Entries.Length; i++)
+            {
+                allExtracted &= ExtractFile(i, outputDirectory, includeDebug);
             }
 
-            return true;
+            return allExtracted;
         }
 
         /// <summary>
-        /// Extract the packaged files.
+        /// Extract a file from the package to an output directory by index
         /// </summary>
+        /// <param name="index">File index to extract</param>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if the files extracted successfully, false otherwise</returns>
-        private bool ExtractPackagedFiles(string outputDirectory, bool includeDebug)
+        /// <returns>True if the file extracted, false otherwise</returns>
+        public bool ExtractFile(int index, string outputDirectory, bool includeDebug)
         {
-                if (Entries == null)
-                    return false;
-                
-                var successful = true;
+            // If we have no entries
+            if (Entries == null || Entries.Length == 0)
+                return false;
 
-                // Extract entries
-                for (var i = 0; i < Entries.Length; i++)
-                {
-                    var entry = Entries[i];
-                    
-                    // Extract file
-                    if (!ExtractFile(entry, outputDirectory, includeDebug))
-                        successful = false;
-                }
-                
-                return successful;
-        }
+            // If the entry index is invalid
+            if (index < 0 || index >= Entries.Length)
+                return false;
 
-        /// <summary>
-        /// Attempt to extract a file
-        /// </summary>
-        /// <param name="entry">Matroschka file entry being extracted</param>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Boolean representing true on success or false on failure</returns>
-        /// <remarks>Assumes that the current stream position is the end of where the data lives</remarks>
-        private bool ExtractFile(MatroshkaEntry entry, string outputDirectory, bool includeDebug)
-        {
+            // Get the entry
+            var entry = Entries[index];
             if (entry.Path == null)
                 return false;
 
-            var filename = System.Text.Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
-
             // Ensure directory separators are consistent
+            string filename = Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
             else if (Path.DirectorySeparatorChar == '/')
@@ -72,9 +58,8 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
             // Read the file
-            var fileData = ReadFile(entry, includeDebug);
-
-            if (fileData == null) 
+            var data = ReadFile(entry, includeDebug);
+            if (data == null)
                 return false;
 
             // Ensure the full output directory exists
@@ -83,47 +68,63 @@ namespace SabreTools.Serialization.Wrappers
             if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
-            // Write the output file
-            File.WriteAllBytes(filename, fileData);
+            // Try to write the data
+            try
+            {
+                // Open the output file for writing
+                using Stream fs = File.OpenWrite(filename);
+                fs.Write(data, 0, data.Length);
+                fs.Flush();
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+
             return true;
         }
 
         /// <summary>
-        /// Read file and check bytes to be extracted against MD5 checksum.
+        /// Read file and check bytes to be extracted against MD5 checksum
         /// </summary>
         /// <param name="entry">Entry being extracted</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Byte array of the file data if successful, null if unsuccessful.</returns>
-        public byte[]? ReadFile(MatroshkaEntry entry, bool includeDebug)
+        /// <returns>Byte array of the file data if successful, null otherwise</returns>
+        private byte[]? ReadFile(MatroshkaEntry entry, bool includeDebug)
         {
-            var fileData = ReadRangeFromSource(entry.Offset, (int)entry.Size); // TODO: safety? validation? anything?
-            // Debug output
-            if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}");
+            // Skip if the entry is incomplete
+            if (entry.Path == null || entry.MD5 == null)
+                return null;
 
-            string expectedMd5 = BitConverter.ToString(entry.MD5!);
+            // Cache the expected MD5
+            string expectedMd5 = BitConverter.ToString(entry.MD5);
             expectedMd5 = expectedMd5.ToLowerInvariant().Replace("-", string.Empty);
 
             // Debug output
-            if (includeDebug) Console.WriteLine($"Expected MD5: {expectedMd5}");
+            if (includeDebug) Console.WriteLine($"Offset: {entry.Offset:X8}, Expected Size: {entry.Size}, Expected MD5: {expectedMd5}");
 
-            if (fileData == null)
-                return null;
-
-            var hashBytes = HashTool.GetByteArrayHashArray(fileData, HashType.MD5);
-
-            string actualMd5 = BitConverter.ToString(hashBytes!);
-            actualMd5 = actualMd5.ToLowerInvariant().Replace("-", string.Empty);
-            
-            // Debug output
-            if (includeDebug) Console.WriteLine($"Actual MD5: {actualMd5}");
-                
-            if (hashBytes == null || actualMd5 != expectedMd5)
+            // Attempt to read from the offset
+            var fileData = ReadRangeFromSource(entry.Offset, (int)entry.Size);
+            if (fileData.Length == 0)
             {
-                var filename = System.Text.Encoding.ASCII.GetString(entry.Path!).TrimEnd('\0');
-                Console.Error.WriteLine($"MD5 checksum failure for file {filename})");
+                if (includeDebug) Console.Error.WriteLine($"Could not read {entry.Size} bytes from {entry.Offset:X8}");
                 return null;
             }
 
+            // Get the actual MD5 of the data
+            string actualMd5 = HashTool.GetByteArrayHash(fileData, HashType.MD5) ?? string.Empty;
+
+            // Debug output
+            if (includeDebug) Console.WriteLine($"Actual MD5: {actualMd5}");
+
+            // Do not return on a hash mismatch
+            if (actualMd5 != expectedMd5)
+            {
+                string filename = Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
+                if (includeDebug) Console.Error.WriteLine($"MD5 checksum failure for file {filename})");
+                return null;
+            }
 
             return fileData;
         }
