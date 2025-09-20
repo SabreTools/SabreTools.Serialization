@@ -15,18 +15,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public CIA(Models.N3DS.CIA model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public CIA(Models.N3DS.CIA model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public CIA(Models.N3DS.CIA model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public CIA(Models.N3DS.CIA model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public CIA(Models.N3DS.CIA model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public CIA(Models.N3DS.CIA model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a CIA archive from a byte array and offset
@@ -65,12 +73,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.CIA.DeserializeStream(data);
+                var model = new Deserializers.CIA().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new CIA(model, data);
+                return new CIA(model, data, currentOffset);
             }
             catch
             {

@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the compressed data directly
             var compressedData = ReadRangeFromSource((int)fileOffset, (int)fileSize);
-            if (compressedData == null)
+            if (compressedData.Length == 0)
                 return false;
 
             // If the compressed and uncompressed sizes match

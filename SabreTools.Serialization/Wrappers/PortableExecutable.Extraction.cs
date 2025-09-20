@@ -414,9 +414,8 @@ namespace SabreTools.Serialization.Wrappers
                 return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
 
             // Try to find the section header
-            var section = FindWiseSection();
-            if (section != null)
-                return ExtractWiseSection(outputDirectory, includeDebug, source, section);
+            if (WiseSection != null)
+                return ExtractWiseSection(outputDirectory, includeDebug);
 
             // Everything else could not extract
             return false;
@@ -541,26 +540,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="section">Wise section information</param>
         /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseSection(string outputDirectory, bool includeDebug, Stream source, Models.PortableExecutable.SectionHeader section)
+        private bool ExtractWiseSection(string outputDirectory, bool includeDebug)
         {
-            // Get the offset
-            long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-            if (offset < 0 || offset >= source.Length)
-                return false;
-
-            // Read the section into a local array
-            int sectionLength = (int)section.VirtualSize;
-            byte[]? sectionData;
-            lock (source)
-            {
-                sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
-            }
-
-            // Parse the section header
-            var header = WiseSectionHeader.Create(sectionData, 0);
+            // Get the section header
+            var header = WiseSection;
             if (header == null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse the section header");

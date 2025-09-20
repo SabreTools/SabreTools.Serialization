@@ -96,18 +96,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public WiseSectionHeader(SectionHeader? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public WiseSectionHeader(SectionHeader model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WiseSectionHeader(SectionHeader? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public WiseSectionHeader(SectionHeader model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public WiseSectionHeader(SectionHeader model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public WiseSectionHeader(SectionHeader model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public WiseSectionHeader(SectionHeader model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public WiseSectionHeader(SectionHeader model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a Wise Self-Extracting installer .WISE section from a byte array and offset
@@ -146,15 +154,14 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.WiseSectionHeader.DeserializeStream(data);
+                var model = new Deserializers.WiseSectionHeader().Deserialize(data);
                 if (model == null)
                     return null;
 
                 // HACK: Cache the end-of-header offset
                 long endOffset = data.Position - currentOffset;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new WiseSectionHeader(model, data) { CompressedDataOffset = endOffset };
+                return new WiseSectionHeader(model, data, currentOffset) { CompressedDataOffset = endOffset };
             }
             catch
             {

@@ -34,34 +34,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        /// <remarks>This should only be used for WinZipSFX</remarks>
-        public PKZIP(byte[]? data, int offset)
-            : base(new Archive(), data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public PKZIP(Archive model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        /// <remarks>This should only be used for WinZipSFX</remarks>
-        public PKZIP(Stream? data)
-            : base(new Archive(), data)
-        {
-            // All logic is handled by the base class
-        }
+        public PKZIP(Archive model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PKZIP(Archive? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public PKZIP(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public PKZIP(Archive? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public PKZIP(Archive model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public PKZIP(Archive model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PKZIP(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a PKZIP archive (or derived format) from a byte array and offset
@@ -100,12 +92,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.PKZIP.DeserializeStream(data);
+                var model = new Deserializers.PKZIP().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new PKZIP(model, data);
+                return new PKZIP(model, data, currentOffset);
             }
             catch
             {

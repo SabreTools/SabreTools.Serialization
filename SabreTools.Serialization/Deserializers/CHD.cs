@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Deserializers
                         return headerV3;
 
                     case 4:
-                        var headerV4 = ParseHeaderV1(data);
+                        var headerV4 = ParseHeaderV4(data);
 
                         if (headerV4.Tag != Constants.SignatureString)
                             return null;
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Deserializers
                         return headerV4;
 
                     case 5:
-                        var headerV5 = ParseHeaderV1(data);
+                        var headerV5 = ParseHeaderV5(data);
 
                         if (headerV5.Tag != Constants.SignatureString)
                             return null;
@@ -150,15 +150,15 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] tag = data.ReadBytes(8);
             obj.Tag = Encoding.ASCII.GetString(tag);
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
-            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
-            obj.HunkSize = data.ReadUInt32LittleEndian();
-            obj.TotalHunks = data.ReadUInt32LittleEndian();
-            obj.Cylinders = data.ReadUInt32LittleEndian();
-            obj.Heads = data.ReadUInt32LittleEndian();
-            obj.Sectors = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.Flags = (Flags)data.ReadUInt32BigEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32BigEndian();
+            obj.HunkSize = data.ReadUInt32BigEndian();
+            obj.TotalHunks = data.ReadUInt32BigEndian();
+            obj.Cylinders = data.ReadUInt32BigEndian();
+            obj.Heads = data.ReadUInt32BigEndian();
+            obj.Sectors = data.ReadUInt32BigEndian();
             obj.MD5 = data.ReadBytes(16);
             obj.ParentMD5 = data.ReadBytes(16);
 
@@ -174,18 +174,18 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] tag = data.ReadBytes(8);
             obj.Tag = Encoding.ASCII.GetString(tag);
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
-            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
-            obj.HunkSize = data.ReadUInt32LittleEndian();
-            obj.TotalHunks = data.ReadUInt32LittleEndian();
-            obj.Cylinders = data.ReadUInt32LittleEndian();
-            obj.Heads = data.ReadUInt32LittleEndian();
-            obj.Sectors = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.Flags = (Flags)data.ReadUInt32BigEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32BigEndian();
+            obj.HunkSize = data.ReadUInt32BigEndian();
+            obj.TotalHunks = data.ReadUInt32BigEndian();
+            obj.Cylinders = data.ReadUInt32BigEndian();
+            obj.Heads = data.ReadUInt32BigEndian();
+            obj.Sectors = data.ReadUInt32BigEndian();
             obj.MD5 = data.ReadBytes(16);
             obj.ParentMD5 = data.ReadBytes(16);
-            obj.BytesPerSector = data.ReadUInt32LittleEndian();
+            obj.BytesPerSector = data.ReadUInt32BigEndian();
 
             return obj;
         }
@@ -199,16 +199,16 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] tag = data.ReadBytes(8);
             obj.Tag = Encoding.ASCII.GetString(tag);
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
-            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
-            obj.TotalHunks = data.ReadUInt32LittleEndian();
-            obj.LogicalBytes = data.ReadUInt64LittleEndian();
-            obj.MetaOffset = data.ReadUInt64LittleEndian();
+            obj.Length = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.Flags = (Flags)data.ReadUInt32BigEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32BigEndian();
+            obj.TotalHunks = data.ReadUInt32BigEndian();
+            obj.LogicalBytes = data.ReadUInt64BigEndian();
+            obj.MetaOffset = data.ReadUInt64BigEndian();
             obj.MD5 = data.ReadBytes(16);
             obj.ParentMD5 = data.ReadBytes(16);
-            obj.HunkBytes = data.ReadUInt32LittleEndian();
+            obj.HunkBytes = data.ReadUInt32BigEndian();
             obj.SHA1 = data.ReadBytes(20);
             obj.ParentSHA1 = data.ReadBytes(20);
 
@@ -218,20 +218,20 @@ namespace SabreTools.Serialization.Deserializers
         /// <summary>
         /// Parse a Stream into a V4 header
         /// </summary>
-        public static HeaderV4? ParseHeaderV4(Stream data)
+        public static HeaderV4 ParseHeaderV4(Stream data)
         {
             var obj = new HeaderV4();
 
             byte[] tag = data.ReadBytes(8);
             obj.Tag = Encoding.ASCII.GetString(tag);
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadUInt32LittleEndian();
-            obj.Flags = (Flags)data.ReadUInt32LittleEndian();
-            obj.Compression = (CompressionType)data.ReadUInt32LittleEndian();
-            obj.TotalHunks = data.ReadUInt32LittleEndian();
-            obj.LogicalBytes = data.ReadUInt64LittleEndian();
-            obj.MetaOffset = data.ReadUInt64LittleEndian();
-            obj.HunkBytes = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
+            obj.Flags = (Flags)data.ReadUInt32BigEndian();
+            obj.Compression = (CompressionType)data.ReadUInt32BigEndian();
+            obj.TotalHunks = data.ReadUInt32BigEndian();
+            obj.LogicalBytes = data.ReadUInt64BigEndian();
+            obj.MetaOffset = data.ReadUInt64BigEndian();
+            obj.HunkBytes = data.ReadUInt32BigEndian();
             obj.SHA1 = data.ReadBytes(20);
             obj.ParentSHA1 = data.ReadBytes(20);
             obj.RawSHA1 = data.ReadBytes(20);
@@ -248,18 +248,18 @@ namespace SabreTools.Serialization.Deserializers
 
             byte[] tag = data.ReadBytes(8);
             obj.Tag = Encoding.ASCII.GetString(tag);
-            obj.Length = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadUInt32LittleEndian();
+            obj.Length = data.ReadUInt32BigEndian();
+            obj.Version = data.ReadUInt32BigEndian();
             obj.Compressors = new CodecType[4];
             for (int i = 0; i < 4; i++)
             {
-                obj.Compressors[i] = (CodecType)data.ReadUInt32LittleEndian();
+                obj.Compressors[i] = (CodecType)data.ReadUInt32BigEndian();
             }
-            obj.LogicalBytes = data.ReadUInt64LittleEndian();
-            obj.MapOffset = data.ReadUInt64LittleEndian();
-            obj.MetaOffset = data.ReadUInt64LittleEndian();
-            obj.HunkBytes = data.ReadUInt32LittleEndian();
-            obj.UnitBytes = data.ReadUInt32LittleEndian();
+            obj.LogicalBytes = data.ReadUInt64BigEndian();
+            obj.MapOffset = data.ReadUInt64BigEndian();
+            obj.MetaOffset = data.ReadUInt64BigEndian();
+            obj.HunkBytes = data.ReadUInt32BigEndian();
+            obj.UnitBytes = data.ReadUInt32BigEndian();
             obj.RawSHA1 = data.ReadBytes(20);
             obj.SHA1 = data.ReadBytes(20);
             obj.ParentSHA1 = data.ReadBytes(20);

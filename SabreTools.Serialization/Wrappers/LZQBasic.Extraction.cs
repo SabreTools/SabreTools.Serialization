@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read in the data as an array
             byte[]? contents = ReadRangeFromSource(12, (int)compressedSize);
-            if (contents == null)
+            if (contents.Length == 0)
                 return false;
 
             // Get the decompressor

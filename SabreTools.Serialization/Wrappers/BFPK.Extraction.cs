@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Read the data block
                 var data = ReadRangeFromSource(offset, compressedSize);
-                if (data == null)
+                if (data.Length == 0)
                     return false;
 
                 // If we have uncompressed data

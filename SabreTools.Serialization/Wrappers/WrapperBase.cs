@@ -65,32 +65,83 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Constructors
+        #region Byte Array Constructors
 
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
-        protected WrapperBase(byte[]? data, int offset)
+        /// <param name="data">Underlying data for the wrapper</param>
+        protected WrapperBase(byte[] data)
+            : this(data, 0, data.Length)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a byte array
+        /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        protected WrapperBase(byte[] data, int offset)
+            : this(data, offset, data.Length - offset)
+        {
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a byte array
+        /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        protected WrapperBase(byte[] data, int offset, int length)
+        {
             if (offset < 0 || offset >= data.Length)
                 throw new ArgumentOutOfRangeException(nameof(offset));
+            if (length < 0 || offset + length > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
 
-            _dataSource = new ViewStream(data, offset, data.Length - offset);
+            _dataSource = new ViewStream(data, offset, length);
+        }
+
+        #endregion
+
+        #region Stream Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <remarks>Uses the current stream position as the offset</remarks>
+        protected WrapperBase(Stream data)
+            : this(data, data.Position, data.Length - data.Position)
+        {
         }
 
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
-        protected WrapperBase(Stream? data)
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        protected WrapperBase(Stream data, long offset)
+            : this(data, offset, data.Length - offset)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            if (!data.CanSeek || !data.CanRead)
-                throw new ArgumentOutOfRangeException(nameof(data));
+        }
 
-            _dataSource = new ViewStream(data, data.Position, data.Length - data.Position);
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        protected WrapperBase(Stream data, long offset, long length)
+        {
+            if (!data.CanSeek || !data.CanRead)
+                throw new InvalidDataException(nameof(data));
+            if (offset < 0 || offset >= data.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (length < 0 || offset + length > data.Length)
+                throw new ArgumentOutOfRangeException(nameof(length));
+
+            _dataSource = new ViewStream(data, offset, length);
         }
 
         #endregion

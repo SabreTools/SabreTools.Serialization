@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Load the item data
             var data = ReadRangeFromSource((int)directoryEntry.EntryOffset, (int)directoryEntry.EntryLength);
-            if (data == null)
+            if (data.Length == 0)
                 return false;
 
             // If we have an invalid output directory

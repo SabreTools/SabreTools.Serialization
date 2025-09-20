@@ -11,18 +11,11 @@ namespace SabreTools.Serialization.Deserializers
     {
         #region IByteDeserializer
 
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static MetadataFile? DeserializeBytes(byte[]? data, int offset, bool quotes = true)
-        {
-            var deserializer = new ClrMamePro();
-            return deserializer.Deserialize(data, offset, quotes);
-        }
-
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, true);
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(byte[], int)"/>
         public MetadataFile? Deserialize(byte[]? data, int offset, bool quotes)
         {
             // If the data is invalid
@@ -35,41 +28,27 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream, quotes);
+            return Deserialize(dataStream, quotes);
         }
 
         #endregion
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static MetadataFile? DeserializeFile(string? path, bool quotes = true)
-        {
-            var deserializer = new ClrMamePro();
-            return deserializer.Deserialize(path, quotes);
-        }
-
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(string? path)
             => Deserialize(path, true);
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(string?)"/>
         public MetadataFile? Deserialize(string? path, bool quotes)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream, quotes);
+            return Deserialize(stream, quotes);
         }
 
         #endregion
 
         #region IStreamDeserializer
-
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static MetadataFile? DeserializeStream(Stream? data, bool quotes = true)
-        {
-            var deserializer = new ClrMamePro();
-            return deserializer.Deserialize(data, quotes);
-        }
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

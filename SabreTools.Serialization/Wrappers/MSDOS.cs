@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using SabreTools.Models.MSDOS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class MSDOS : WrapperBase<Models.MSDOS.Executable>
+    public class MSDOS : WrapperBase<Executable>
     {
         #region Descriptive Properties
 
@@ -14,18 +15,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public MSDOS(Models.MSDOS.Executable? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public MSDOS(Executable model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public MSDOS(Models.MSDOS.Executable? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public MSDOS(Executable model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public MSDOS(Executable model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public MSDOS(Executable model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public MSDOS(Executable model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public MSDOS(Executable model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create an MS-DOS executable from a byte array and offset
@@ -64,12 +73,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.MSDOS.DeserializeStream(data);
+                var model = new Deserializers.MSDOS().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new MSDOS(model, data);
+                return new MSDOS(model, data, currentOffset);
             }
             catch
             {

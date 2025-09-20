@@ -14,18 +14,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public IRD(Models.IRD.File? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public IRD(Models.IRD.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public IRD(Models.IRD.File? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public IRD(Models.IRD.File model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public IRD(Models.IRD.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public IRD(Models.IRD.File model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public IRD(Models.IRD.File model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public IRD(Models.IRD.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create an IRD from a byte array and offset
@@ -64,12 +72,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.IRD.DeserializeStream(data);
+                var model = new Deserializers.IRD().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new IRD(model, data);
+                return new IRD(model, data, currentOffset);
             }
             catch
             {

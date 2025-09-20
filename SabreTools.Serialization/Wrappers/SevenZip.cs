@@ -19,18 +19,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public SevenZip(byte[]? data, int offset)
-            : base(data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public SevenZip(byte[] data) : base(data) { }
 
         /// <inheritdoc/>
-        public SevenZip(Stream? data)
-            : base(data)
-        {
-            // All logic is handled by the base class
-        }
+        public SevenZip(byte[] data, int offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public SevenZip(byte[] data, int offset, int length) : base(data, offset, length) { }
+
+        /// <inheritdoc/>
+        public SevenZip(Stream data) : base(data) { }
+
+        /// <inheritdoc/>
+        public SevenZip(Stream data, long offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public SevenZip(Stream data, long offset, long length) : base(data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a SevenZip archive (or derived format) from a byte array and offset

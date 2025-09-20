@@ -69,7 +69,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Read the data block
                 var data = ReadRangeFromSource(offset, size);
-                if (data == null)
+                if (data.Length == 0)
                     return false;
 
                 // Write the data -- TODO: Compressed data?

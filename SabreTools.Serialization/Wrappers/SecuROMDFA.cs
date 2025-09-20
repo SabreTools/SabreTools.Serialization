@@ -15,18 +15,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public SecuROMDFA(DFAFile? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public SecuROMDFA(DFAFile model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SecuROMDFA(DFAFile? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public SecuROMDFA(DFAFile model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public SecuROMDFA(DFAFile model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public SecuROMDFA(DFAFile model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public SecuROMDFA(DFAFile model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public SecuROMDFA(DFAFile model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a SecuROM DFA file from a byte array and offset
@@ -65,12 +73,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.SecuROMDFA.DeserializeStream(data);
+                var model = new Deserializers.SecuROMDFA().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new SecuROMDFA(model, data);
+                return new SecuROMDFA(model, data, currentOffset);
             }
             catch
             {

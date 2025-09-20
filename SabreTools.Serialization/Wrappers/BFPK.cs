@@ -22,18 +22,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public BFPK(Archive? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public BFPK(Archive model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public BFPK(Archive? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public BFPK(Archive model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public BFPK(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public BFPK(Archive model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public BFPK(Archive model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public BFPK(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a BFPK archive from a byte array and offset
@@ -72,12 +80,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.BFPK.DeserializeStream(data);
+                var model = new Deserializers.BFPK().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new BFPK(model, data);
+                return new BFPK(model, data, currentOffset);
             }
             catch
             {

@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Wrappers
             // Read the data
             var lump = Lumps[index];
             var data = ReadRangeFromSource(lump.Offset, lump.Length);
-            if (data == null)
+            if (data.Length == 0)
                 return false;
 
             // If we have an invalid output directory

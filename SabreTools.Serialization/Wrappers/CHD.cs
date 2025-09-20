@@ -60,18 +60,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public CHD(Header? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public CHD(Header model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public CHD(Header? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public CHD(Header model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public CHD(Header model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public CHD(Header model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public CHD(Header model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public CHD(Header model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a CHD header from a byte array and offset
@@ -110,12 +118,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.CHD.DeserializeStream(data);
+                var model = new Deserializers.CHD().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new CHD(model, data);
+                return new CHD(model, data, currentOffset);
             }
             catch
             {

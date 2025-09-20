@@ -10,18 +10,11 @@ namespace SabreTools.Serialization.Deserializers
     {
         #region IByteDeserializer
 
-        /// <inheritdoc cref="IByteDeserializer.Deserialize(byte[]?, int)"/>
-        public static Models.Hashfile.Hashfile? DeserializeBytes(byte[]? data, int offset, HashType hash = HashType.CRC32)
-        {
-            var deserializer = new Hashfile();
-            return deserializer.Deserialize(data, offset, hash);
-        }
-
         /// <inheritdoc/>
         public override Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, HashType.CRC32);
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(byte[], int)"/>
         public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
         {
             // If the data is invalid
@@ -34,43 +27,28 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create a memory stream and parse that
             var dataStream = new MemoryStream(data, offset, data.Length - offset);
-            return DeserializeStream(dataStream, hash);
+            return Deserialize(dataStream, hash);
         }
 
         #endregion
 
         #region IFileDeserializer
 
-        /// <inheritdoc cref="IFileDeserializer.Deserialize(string?)"/>
-        public static Models.Hashfile.Hashfile? DeserializeFile(string? path, HashType hash = HashType.CRC32)
-        {
-            var deserializer = new Hashfile();
-            return deserializer.Deserialize(path, hash);
-        }
-
         /// <inheritdoc/>
         public override Models.Hashfile.Hashfile? Deserialize(string? path)
             => Deserialize(path, HashType.CRC32);
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="Deserialize(string?)"/>
         public Models.Hashfile.Hashfile? Deserialize(string? path, HashType hash)
         {
             using var stream = PathProcessor.OpenStream(path);
-            return DeserializeStream(stream, hash);
+            return Deserialize(stream, hash);
         }
 
         #endregion
 
         #region IStreamDeserializer
 
-        /// <inheritdoc cref="IStreamDeserializer.Deserialize(Stream?)"/>
-        public static Models.Hashfile.Hashfile? DeserializeStream(Stream? data, HashType hash = HashType.CRC32)
-        {
-            var deserializer = new Hashfile();
-            return deserializer.Deserialize(data, hash);
-        }
-
-        /// <inheritdoc/>
         public override Models.Hashfile.Hashfile? Deserialize(Stream? data)
             => Deserialize(data, HashType.CRC32);
 

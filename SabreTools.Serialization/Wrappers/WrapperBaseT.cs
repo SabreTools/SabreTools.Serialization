@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
@@ -18,37 +17,78 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Constructors
+        #region Byte Array Constructors
 
         /// <summary>
         /// Construct a new instance of the wrapper from a byte array
         /// </summary>
-        protected WrapperBase(T? model, byte[]? data, int offset)
-            : base(data, offset)
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        protected WrapperBase(T model, byte[] data)
+            : this(model, data, 0, data.Length)
         {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            if (offset < 0 || offset >= data.Length)
-                throw new ArgumentOutOfRangeException(nameof(offset));
+        }
 
+        /// <summary>
+        /// Construct a new instance of the wrapper from a byte array
+        /// </summary>
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        protected WrapperBase(T model, byte[] data, int offset)
+            : this(model, data, offset, data.Length - offset)
+        {
+        }
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a byte array
+        /// </summary>
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        protected WrapperBase(T model, byte[] data, int offset, int length)
+            : base(data, offset, length)
+        {
             Model = model;
+        }
+
+        #endregion
+
+        #region Stream Constructors
+
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <remarks>Uses the current stream position as the offset</remarks>
+        protected WrapperBase(T model, Stream data)
+            : this(model, data, data.Position, data.Length - data.Position)
+        {
         }
 
         /// <summary>
         /// Construct a new instance of the wrapper from a Stream
         /// </summary>
-        protected WrapperBase(T? model, Stream? data)
-            : base(data)
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        protected WrapperBase(T model, Stream data, long offset)
+            : this(model, data, offset, data.Length - offset)
         {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            if (!data.CanSeek || !data.CanRead)
-                throw new ArgumentOutOfRangeException(nameof(data));
+        }
 
+        /// <summary>
+        /// Construct a new instance of the wrapper from a Stream
+        /// </summary>
+        /// <param name="model">Model to be used in the wrapper</param>
+        /// <param name="data">Underlying data for the wrapper</param>
+        /// <param name="offset">Offset into the data to use as the window start</param>
+        /// <param name="length">Length of the window into the data</param>
+        protected WrapperBase(T model, Stream data, long offset, long length)
+            : base(data, offset, length)
+        {
             Model = model;
         }
 

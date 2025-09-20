@@ -68,18 +68,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public InstallShieldCabinet(Cabinet? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public InstallShieldCabinet(Cabinet model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public InstallShieldCabinet(Cabinet? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public InstallShieldCabinet(Cabinet model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public InstallShieldCabinet(Cabinet model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public InstallShieldCabinet(Cabinet model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public InstallShieldCabinet(Cabinet model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public InstallShieldCabinet(Cabinet model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create an InstallShield Cabinet from a byte array and offset
@@ -118,12 +126,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = Deserializers.InstallShieldCabinet.DeserializeStream(data);
+                var model = new Deserializers.InstallShieldCabinet().Deserialize(data);
                 if (model == null)
                     return null;
 
-                data.Seek(currentOffset, SeekOrigin.Begin);
-                return new InstallShieldCabinet(model, data);
+                return new InstallShieldCabinet(model, data, currentOffset);
             }
             catch
             {

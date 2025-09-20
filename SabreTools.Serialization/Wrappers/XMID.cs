@@ -63,18 +63,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public XMID(Models.Xbox.XMID? model, byte[]? data, int offset)
-            : base(model, data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public XMID(Models.Xbox.XMID model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XMID(Models.Xbox.XMID? model, Stream? data)
-            : base(model, data)
-        {
-            // All logic is handled by the base class
-        }
+        public XMID(Models.Xbox.XMID model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public XMID(Models.Xbox.XMID model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public XMID(Models.Xbox.XMID model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public XMID(Models.Xbox.XMID model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public XMID(Models.Xbox.XMID model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a XMID from a string
@@ -89,7 +97,7 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var model = Deserializers.XMID.DeserializeString(data);
+                var model = new Deserializers.XMID().Deserialize(data);
                 if (model == null)
                     return null;
 

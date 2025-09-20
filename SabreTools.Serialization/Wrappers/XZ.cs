@@ -19,18 +19,26 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public XZ(byte[]? data, int offset)
-            : base(data, offset)
-        {
-            // All logic is handled by the base class
-        }
+        public XZ(byte[] data) : base(data) { }
 
         /// <inheritdoc/>
-        public XZ(Stream? data)
-            : base(data)
-        {
-            // All logic is handled by the base class
-        }
+        public XZ(byte[] data, int offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public XZ(byte[] data, int offset, int length) : base(data, offset, length) { }
+
+        /// <inheritdoc/>
+        public XZ(Stream data) : base(data) { }
+
+        /// <inheritdoc/>
+        public XZ(Stream data, long offset) : base(data, offset) { }
+
+        /// <inheritdoc/>
+        public XZ(Stream data, long offset, long length) : base(data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
 
         /// <summary>
         /// Create a XZ archive from a byte array and offset

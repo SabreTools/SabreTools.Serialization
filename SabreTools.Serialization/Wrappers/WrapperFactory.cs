@@ -298,7 +298,6 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region GZip
 
             if (magic.StartsWith(new byte[] { Models.GZIP.Constants.ID1, Models.GZIP.Constants.ID2 }))
