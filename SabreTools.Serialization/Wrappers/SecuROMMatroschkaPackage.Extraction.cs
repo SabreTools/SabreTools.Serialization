@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine($"Attempting to extract {filename}");
 
             // Read the file
-            var data = ReadFile(entry, includeDebug);
+            var data = ReadFileData(entry, includeDebug);
             if (data == null)
                 return false;
 
@@ -91,7 +91,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="entry">Entry being extracted</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Byte array of the file data if successful, null otherwise</returns>
-        private byte[]? ReadFile(MatroshkaEntry entry, bool includeDebug)
+        /// <remarks>Marked as public because it is needed outside of file extraction</remarks>
+        public byte[]? ReadFileData(MatroshkaEntry entry, bool includeDebug)
         {
             // Skip if the entry is incomplete
             if (entry.Path == null || entry.MD5 == null)
