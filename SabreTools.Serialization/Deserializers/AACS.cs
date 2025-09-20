@@ -89,7 +89,6 @@ namespace SabreTools.Serialization.Deserializers
                         _ = data.ReadBytes((int)recordLength - 4);
                     return null;
             }
-            ;
         }
 
         /// <summary>
