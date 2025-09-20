@@ -1108,6 +1108,10 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(key))
                 return null;
 
+            // Ensure the resource table has been parsed
+            if (ResourceData == null)
+                return null;
+
             // If we don't have string version info in this executable
             var stringTable = _versionInfo?.StringFileInfo?.Children;
             if (stringTable == null || stringTable.Length == 0)
