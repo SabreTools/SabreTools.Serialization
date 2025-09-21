@@ -420,7 +420,14 @@ namespace SabreTools.Serialization.Deserializers
             obj.RelocationRecords = new RelocationRecord[obj.RelocationRecordCount];
             for (int i = 0; i < obj.RelocationRecords.Length; i++)
             {
-                obj.RelocationRecords[i] = ParseRelocationRecord(data);
+                if (data.Position >= data.Length)
+                    break;
+
+                var record = ParseRelocationRecord(data);
+                if (record == null)
+                    break;
+
+                obj.RelocationRecords[i] = record;
             }
 
             return obj;
@@ -433,11 +440,19 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled RelocationRecord on success, null on error</returns>
         public static RelocationRecord ParseRelocationRecord(Stream data)
         {
+            // Handle partial relocation sections
+            if (data.Position > data.Length - 4)
+                return null;
+
             var obj = new RelocationRecord();
 
             obj.SourceType = (RelocationRecordSourceType)data.ReadByteValue();
             obj.Flags = (RelocationRecordFlag)data.ReadByteValue();
             obj.Offset = data.ReadUInt16LittleEndian();
+
+            // Handle incomplete entries
+            if (data.Position > data.Length - 4)
+                return obj;
 
             switch (obj.Flags & RelocationRecordFlag.TARGET_MASK)
             {

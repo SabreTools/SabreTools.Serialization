@@ -1601,7 +1601,7 @@ namespace SabreTools.Serialization.Deserializers
                         continue;
 
                     // If the offset is within the table data, read from there
-                    if (nextOffset - tableStart + entry.DataEntry.Size <= tableLength)
+                    if (nextOffset > tableStart && nextOffset - tableStart + entry.DataEntry.Size <= tableLength)
                     {
                         dataOffset = (int)(nextOffset - tableStart);
                         entry.DataEntry.Data = tableData.ReadBytes(ref dataOffset, (int)entry.DataEntry.Size);

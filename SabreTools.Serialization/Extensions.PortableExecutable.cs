@@ -729,7 +729,7 @@ namespace SabreTools.Serialization
                     #region Creation data
 
                     dialogItemTemplate.CreationDataSize = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    if (dialogItemTemplate.CreationDataSize != 0)
+                    if (dialogItemTemplate.CreationDataSize != 0 && dialogItemTemplate.CreationDataSize + offset < entry.Data.Length)
                         dialogItemTemplate.CreationData = entry.Data.ReadBytes(ref offset, dialogItemTemplate.CreationDataSize);
 
                     #endregion
