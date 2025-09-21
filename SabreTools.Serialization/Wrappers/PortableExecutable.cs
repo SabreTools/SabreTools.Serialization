@@ -2029,21 +2029,18 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Section strings on success, null on error</returns>
         public List<string>? GetSectionStrings(int index)
         {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (index < 0 || index >= SectionTable.Length)
+                return null;
+
             lock (_sectionStringDataLock)
             {
-                // If we have no sections
-                if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
-                {
-                    _sectionStringData = [];
-                    return null;
-                }
-
                 // Create the section string array if we have to
                 _sectionStringData ??= new List<string>?[SectionNames.Length];
-
-                // If the section doesn't exist
-                if (index < 0 || index >= SectionTable.Length)
-                    return null;
 
                 // If we already have cached data, just use that immediately
                 if (_sectionStringData[index] != null)
