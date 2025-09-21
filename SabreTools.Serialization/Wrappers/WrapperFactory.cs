@@ -703,6 +703,14 @@ namespace SabreTools.Serialization.Wrappers
             if (magic.StartsWith([0x3C, 0x3F, 0x78, 0x6D, 0x6C]))
                 return WrapperType.Textfile;
 
+            // "<?xml" in UTF-16 encoding
+            if (magic.StartsWith([0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                return WrapperType.Textfile;
+
+            // "<?xml" in UTF-16 encoding with byte order marks
+            if (magic.StartsWith([0xFF, 0xFE, 0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                return WrapperType.Textfile;
+
             // "Description in Zip"
             if (extension.Equals("diz", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Textfile;
