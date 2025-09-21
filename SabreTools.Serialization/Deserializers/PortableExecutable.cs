@@ -337,11 +337,11 @@ namespace SabreTools.Serialization.Deserializers
                             {
                                 Name = new ResourceDirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
                                 IntegerID = uint.MaxValue,
-                                DataEntryOffset = (uint)data.Position,
+                                DataEntryOffset = (uint)tableOffset,
                                 DataEntry = new ResourceDataEntry
                                 {
                                     Size = (uint)length,
-                                    Data = data.ReadBytes(length),
+                                    Data = tableData.ReadBytes(ref tableOffset, length),
                                     Codepage = (uint)Encoding.Unicode.CodePage,
                                 },
                             };
