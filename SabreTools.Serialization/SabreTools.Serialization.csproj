@@ -8,6 +8,8 @@
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <LangVersion>latest</LangVersion>
+        <!-- Added due to StormLibSharp -->
+        <NoWarn>CS8600;CS8601;CS8603;CS8604;CS8618;CS8625;CS8634;IL3000</NoWarn>
         <Nullable>enable</Nullable>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -58,9 +60,8 @@
         </DefaultItemExcludes>
     </PropertyGroup>
 
-    <!-- Exclude all external modules for .NET Framework 2.0, .NET Framework 3.5, or non-Windows
-    builds -->
-    <PropertyGroup Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`)) OR !$(RuntimeIdentifier.StartsWith(`win-x86`))">
+    <!-- Exclude all external modules for .NET Framework 2.0, .NET Framework 3.5, or non-Windows builds -->
+    <PropertyGroup Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`)) OR !($(RuntimeIdentifier.StartsWith(`win-x86`)) OR $(RuntimeIdentifier.StartsWith(`win-x64`)))">
         <DefaultItemExcludes>
             $(DefaultItemExcludes);
             _EXTERNAL\**

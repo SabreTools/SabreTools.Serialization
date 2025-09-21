@@ -1,6 +1,7 @@
 ﻿using System;
 using SabreTools.Serialization.Interfaces;
 #if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
+using System.IO;
 using StormLibSharp;
 #endif
 
@@ -42,7 +43,6 @@ namespace SabreTools.Serialization.Wrappers
                 // Loop over each entry
                 foreach (string sub in listfileLines)
                 {
-                    // Ensure directory separators are consistent
                     string filename = sub;
                     if (Path.DirectorySeparatorChar == '\\')
                         filename = filename.Replace('/', '\\');
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
                         filename = filename.Replace('\\', '/');
 
                     // Ensure the full output directory exists
-                    filename = Path.Combine(outDir, filename);
+                    filename = Path.Combine(outputDirectory, filename);
                     var directoryName = Path.GetDirectoryName(filename);
                     if (directoryName != null && !Directory.Exists(directoryName))
                         Directory.CreateDirectory(directoryName);
