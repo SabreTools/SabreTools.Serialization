@@ -36,14 +36,14 @@ namespace SabreTools.Serialization.Printers
             Print(builder, executable.COFFSymbolTable);
             Print(builder, executable.COFFStringTable);
             Print(builder, executable.AttributeCertificateTable);
-            Print(builder, executable.DelayLoadDirectoryTable);
+            Print(builder, executable.DelayLoadDirectoryTable, executable.SectionTable);
 
             // Named Sections
             Print(builder, executable.BaseRelocationTable, executable.SectionTable);
             Print(builder, executable.DebugTable);
-            Print(builder, executable.ExportTable);
+            Print(builder, executable.ExportTable, executable.SectionTable);
             Print(builder, executable.ImportTable, executable.SectionTable);
-            Print(builder, executable.ResourceDirectoryTable);
+            Print(builder, executable.ResourceDirectoryTable, executable.SectionTable);
         }
 
         private static void Print(StringBuilder builder, Models.MSDOS.ExecutableHeader? header)
@@ -502,7 +502,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, DelayLoadDirectoryTable? table)
+        private static void Print(StringBuilder builder, DelayLoadDirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Delay-Load Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -515,16 +515,21 @@ namespace SabreTools.Serialization.Printers
 
             builder.AppendLine(table.Attributes, "  Attributes");
             builder.AppendLine(table.Name, "  Name RVA");
+            builder.AppendLine(table.Name.ConvertVirtualAddress(sections), "  Name physical address");
             builder.AppendLine(table.ModuleHandle, "  Module handle");
             builder.AppendLine(table.DelayImportAddressTable, "  Delay import address table RVA");
+            builder.AppendLine(table.DelayImportAddressTable.ConvertVirtualAddress(sections), "  Delay import address table physical address");
             builder.AppendLine(table.DelayImportNameTable, "  Delay import name table RVA");
+            builder.AppendLine(table.DelayImportNameTable.ConvertVirtualAddress(sections), "  Delay import name table physical address");
             builder.AppendLine(table.BoundDelayImportTable, "  Bound delay import table RVA");
+            builder.AppendLine(table.BoundDelayImportTable.ConvertVirtualAddress(sections), "  Bound delay import table physical address");
             builder.AppendLine(table.UnloadDelayImportTable, "  Unload delay import table RVA");
+            builder.AppendLine(table.UnloadDelayImportTable.ConvertVirtualAddress(sections), "  Unload delay import table physical address");
             builder.AppendLine(table.TimeStamp, "  Timestamp");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BaseRelocationBlock[]? entries, SectionHeader[]? table)
+        private static void Print(StringBuilder builder, BaseRelocationBlock[]? entries, SectionHeader[]? sections)
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
@@ -541,7 +546,7 @@ namespace SabreTools.Serialization.Printers
 
                 builder.AppendLine($"  Base Relocation Table Entry {i}");
                 builder.AppendLine(baseRelocationTableEntry.PageRVA, "    Page RVA");
-                builder.AppendLine(baseRelocationTableEntry.PageRVA.ConvertVirtualAddress(table), "    Page physical address");
+                builder.AppendLine(baseRelocationTableEntry.PageRVA.ConvertVirtualAddress(sections), "    Page physical address");
                 builder.AppendLine(baseRelocationTableEntry.BlockSize, "    Block size");
                 builder.AppendLine();
 
@@ -597,7 +602,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExportTable? table)
+        private static void Print(StringBuilder builder, ExportTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Export Table Information:");
             builder.AppendLine("  -------------------------");
@@ -621,13 +626,17 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(table.ExportDirectoryTable.MajorVersion, "    Major version");
                 builder.AppendLine(table.ExportDirectoryTable.MinorVersion, "    Minor version");
                 builder.AppendLine(table.ExportDirectoryTable.NameRVA, "    Name RVA");
+                builder.AppendLine(table.ExportDirectoryTable.NameRVA.ConvertVirtualAddress(sections), "    Name physical address");
                 builder.AppendLine(table.ExportDirectoryTable.Name, "    Name");
                 builder.AppendLine(table.ExportDirectoryTable.OrdinalBase, "    Ordinal base");
                 builder.AppendLine(table.ExportDirectoryTable.AddressTableEntries, "    Address table entries");
                 builder.AppendLine(table.ExportDirectoryTable.NumberOfNamePointers, "    Number of name pointers");
                 builder.AppendLine(table.ExportDirectoryTable.ExportAddressTableRVA, "    Export address table RVA");
+                builder.AppendLine(table.ExportDirectoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections), "    Export address table physical address");
                 builder.AppendLine(table.ExportDirectoryTable.NamePointerRVA, "    Name pointer table RVA");
+                builder.AppendLine(table.ExportDirectoryTable.NamePointerRVA.ConvertVirtualAddress(sections), "    Name pointer table physical address");
                 builder.AppendLine(table.ExportDirectoryTable.OrdinalTableRVA, "    Ordinal table RVA");
+                builder.AppendLine(table.ExportDirectoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections), "    Ordinal table physical address");
             }
             builder.AppendLine();
 
@@ -644,7 +653,8 @@ namespace SabreTools.Serialization.Printers
                     var entry = table.ExportAddressTable[i];
 
                     builder.AppendLine($"    Export Address Table Entry {i}");
-                    builder.AppendLine(entry.ExportRVA, "      Export RVA / Forwarder RVA");
+                    builder.AppendLine(entry.ExportRVA, "      Export / Forwarder RVA");
+                    builder.AppendLine(entry.ExportRVA.ConvertVirtualAddress(sections), "      Export / Forwarder physical address");
                 }
             }
 
@@ -708,7 +718,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ImportTable? table, SectionHeader[]? sectionTable)
+        private static void Print(StringBuilder builder, ImportTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Import Table Information:");
             builder.AppendLine("  -------------------------");
@@ -734,13 +744,14 @@ namespace SabreTools.Serialization.Printers
 
                     builder.AppendLine($"    Import Directory Table Entry {i}");
                     builder.AppendLine(entry.ImportLookupTableRVA, "      Import lookup table RVA");
-                    builder.AppendLine(entry.ImportLookupTableRVA.ConvertVirtualAddress(sectionTable), "      Import lookup table Physical Address");
+                    builder.AppendLine(entry.ImportLookupTableRVA.ConvertVirtualAddress(sections), "      Import lookup table physical address");
                     builder.AppendLine(entry.TimeDateStamp, "      Time/Date stamp");
                     builder.AppendLine(entry.ForwarderChain, "      Forwarder chain");
                     builder.AppendLine(entry.NameRVA, "      Name RVA");
+                    builder.AppendLine(entry.NameRVA.ConvertVirtualAddress(sections), "      Name physical address");
                     builder.AppendLine(entry.Name, "      Name");
                     builder.AppendLine(entry.ImportAddressTableRVA, "      Import address table RVA");
-                    builder.AppendLine(entry.ImportAddressTableRVA.ConvertVirtualAddress(sectionTable), "      Import address table Physical Address");
+                    builder.AppendLine(entry.ImportAddressTableRVA.ConvertVirtualAddress(sections), "      Import address table physical address");
                 }
             }
 
@@ -781,7 +792,7 @@ namespace SabreTools.Serialization.Printers
                         else
                         {
                             builder.AppendLine(entry.HintNameTableRVA, "        Hint/Name table RVA");
-                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sectionTable), "        Hint/Name table Physical Address");
+                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "        Hint/Name table physical address");
                         }
                     }
                 }
@@ -824,7 +835,7 @@ namespace SabreTools.Serialization.Printers
                         else
                         {
                             builder.AppendLine(entry.HintNameTableRVA, "        Hint/Name table RVA");
-                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sectionTable), "        Hint/Name table Physical Address");
+                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "        Hint/Name table physical address");
                         }
                     }
                 }
@@ -853,7 +864,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResourceDirectoryTable? table)
+        private static void Print(StringBuilder builder, ResourceDirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Resource Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -864,11 +875,11 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            Print(table, level: 0, types: [], builder);
+            Print(builder, table, level: 0, types: [], sections);
             builder.AppendLine();
         }
 
-        private static void Print(ResourceDirectoryTable table, int level, List<object> types, StringBuilder builder)
+        private static void Print(StringBuilder builder, ResourceDirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -903,12 +914,12 @@ namespace SabreTools.Serialization.Printers
                     else
                         newTypes.Add(entry.IntegerID);
 
-                    PrintResourceDirectoryEntry(entry, level + 1, newTypes, builder);
+                    Print(builder, entry, level + 1, newTypes, sections);
                 }
             }
         }
 
-        private static void PrintResourceDirectoryEntry(ResourceDirectoryEntry entry, int level, List<object> types, StringBuilder builder)
+        private static void Print(StringBuilder builder, ResourceDirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -924,12 +935,12 @@ namespace SabreTools.Serialization.Printers
             }
 
             if (entry.DataEntry != null)
-                PrintResourceDataEntry(entry.DataEntry, level: level + 1, types, builder);
+                Print(builder, entry.DataEntry, level: level + 1, types, sections);
             else if (entry.Subdirectory != null)
-                Print(entry.Subdirectory, level: level + 1, types, builder);
+                Print(builder, entry.Subdirectory, level: level + 1, types, sections);
         }
 
-        private static void PrintResourceDataEntry(ResourceDataEntry entry, int level, List<object> types, StringBuilder builder)
+        private static void Print(StringBuilder builder, ResourceDataEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -939,6 +950,7 @@ namespace SabreTools.Serialization.Printers
 
             builder.AppendLine(level, $"{padding}Entry level");
             builder.AppendLine(entry.DataRVA, $"{padding}Data RVA");
+            builder.AppendLine(entry.DataRVA.ConvertVirtualAddress(sections), $"{padding}Data physical address");
             builder.AppendLine(entry.Size, $"{padding}Size");
             builder.AppendLine(entry.Codepage, $"{padding}Codepage");
             builder.AppendLine(entry.Reserved, $"{padding}Reserved");
