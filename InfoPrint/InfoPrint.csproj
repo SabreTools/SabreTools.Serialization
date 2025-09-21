@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="SabreTools.IO" Version="1.7.2" />
+        <PackageReference Include="SabreTools.IO" Version="1.7.3" />
         <PackageReference Include="SabreTools.Hashing" Version="1.5.0" />
     </ItemGroup>
 
