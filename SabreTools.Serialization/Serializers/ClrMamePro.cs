@@ -57,8 +57,10 @@ namespace SabreTools.Serialization.Serializers
             if (stream == null)
                 return false;
 
-            using var fs = File.OpenWrite(path);
+            using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
             stream.CopyTo(fs);
+            fs.Flush();
+
             return true;
         }
 

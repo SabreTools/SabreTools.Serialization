@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Wrappers
                     Directory.CreateDirectory(directoryName);
 
                 // Open the output file for writing
-                using var fs = File.OpenWrite(filename);
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
                 fs.Write(fileData, 0, fileData.Length);
                 fs.Flush();
             }

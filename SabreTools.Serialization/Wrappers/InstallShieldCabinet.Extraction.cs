@@ -285,7 +285,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Create the output file and hasher
-            FileStream output = File.OpenWrite(filename);
+            using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
             var md5 = new HashWrapper(HashType.MD5);
 
             long readBytesLeft = (long)GetReadableBytes(fileDescriptor);
@@ -313,7 +313,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Console.Error.WriteLine($"Failed to read {lengthArr.Length} bytes of file {index} ({GetFileName(index)}) from input cabinet file {fileDescriptor.Volume}");
                         reader.Dispose();
-                        output?.Close();
+                        fs?.Close();
                         return false;
                     }
 
@@ -324,7 +324,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Console.Error.WriteLine($"Failed to read {lengthArr.Length} bytes of file {index} ({GetFileName(index)}) from input cabinet file {fileDescriptor.Volume}");
                         reader.Dispose();
-                        output?.Close();
+                        fs?.Close();
                         return false;
                     }
 
@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Console.Error.WriteLine($"Decompression failed with code {result.ToZlibConstName()}. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={readBytes}");
                         reader.Dispose();
-                        output?.Close();
+                        fs?.Close();
                         return false;
                     }
 
@@ -360,7 +360,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Console.Error.WriteLine($"Failed to write {bytesToWrite} bytes from input cabinet file {fileDescriptor.Volume}");
                         reader.Dispose();
-                        output?.Close();
+                        fs?.Close();
                         return false;
                     }
 
@@ -371,7 +371,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Hash and write the next block
                 bytesToWrite = Math.Min(bytesToWrite, writeBytesLeft);
                 md5.Process(outputBuffer, 0, (int)bytesToWrite);
-                output?.Write(outputBuffer, 0, (int)bytesToWrite);
+                fs?.Write(outputBuffer, 0, (int)bytesToWrite);
 
                 totalWritten += bytesToWrite;
                 writeBytesLeft -= bytesToWrite;
@@ -384,7 +384,7 @@ namespace SabreTools.Serialization.Wrappers
             // Finalize output values
             md5.Terminate();
             reader?.Dispose();
-            output?.Close();
+            fs?.Close();
 
             // Validate the data written, if required
             if (MajorVersion >= 6)
@@ -422,7 +422,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Create the output file
-            FileStream output = File.OpenWrite(filename);
+            using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
 
             ulong bytesLeft = GetReadableBytes(fileDescriptor);
             byte[] outputBuffer = new byte[BUFFER_SIZE];
@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     Console.Error.WriteLine($"Failed to read {bytesToWrite} bytes from input cabinet file {fileDescriptor.Volume}");
                     reader.Dispose();
-                    output?.Close();
+                    fs?.Close();
                     return false;
                 }
 
@@ -443,12 +443,12 @@ namespace SabreTools.Serialization.Wrappers
                 bytesLeft -= (uint)bytesToWrite;
 
                 // Write the next block
-                output.Write(outputBuffer, 0, (int)bytesToWrite);
+                fs.Write(outputBuffer, 0, (int)bytesToWrite);
             }
 
             // Finalize output values
             reader.Dispose();
-            output?.Close();
+            fs?.Close();
             return true;
         }
 

@@ -100,10 +100,9 @@ namespace SabreTools.Serialization.Wrappers
             // try
             // {
             //     // Open the output file for writing
-            //     using (Stream fs = File.OpenWrite(filename))
-            //     {
-            //         fs.Write(data, 0, data.Length);
-            //     }
+            //     using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+            //     fs.Write(data, 0, data.Length);
+            //     fs.Flush();
             // }
             // catch
             // {

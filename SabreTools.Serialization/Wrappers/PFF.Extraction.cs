@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
                     Directory.CreateDirectory(directoryName);
 
                 // Create the output file
-                using FileStream fs = File.OpenWrite(filename);
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
 
                 // Read the data block
                 var data = ReadRangeFromSource(offset, size);

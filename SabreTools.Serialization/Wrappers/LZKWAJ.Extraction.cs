@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Open the output file for writing
-                using Stream fs = File.OpenWrite(filename);
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
                 decompressor.CopyTo(fs);
                 fs.Flush();
             }

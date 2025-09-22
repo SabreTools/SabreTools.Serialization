@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Open the output file for writing
-                using Stream fs = File.OpenWrite(filename);
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
 
                 // Now read the data sequentially and write out while we have data left
                 long fileSize = file.Size;

@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Wrappers
                     Directory.CreateDirectory(directoryName);
 
                 // Extract the file
-                using FileStream fs = File.OpenWrite(filename);
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
                 xzFile.CopyTo(fs);
                 fs.Flush();
 
