@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
                 string extension = string.Empty;
 
                 // Only process the overlay if it is recognized
-                for (; overlayOffset < 0x400 && overlayOffset < overlayData.Length; overlayOffset++)
+                for (; overlayOffset < 0x400 && overlayOffset < overlayData.Length - 0x10; overlayOffset++)
                 {
                     int temp = overlayOffset;
                     byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
@@ -111,6 +111,21 @@ namespace SabreTools.Serialization.Wrappers
                     else if (overlaySample.StartsWith([0x55, 0x48, 0x41, 0x06]))
                     {
                         extension = "uha";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x3C, 0x3F, 0x78, 0x6D, 0x6C]))
+                    {
+                        extension = "xml";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                    {
+                        extension = "xml";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith([0xFF, 0xFE, 0x3C, 0x00, 0x3F, 0x00, 0x78, 0x00, 0x6D, 0x00, 0x6C, 0x00]))
+                    {
+                        extension = "xml";
                         break;
                     }
                     else if (overlaySample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
