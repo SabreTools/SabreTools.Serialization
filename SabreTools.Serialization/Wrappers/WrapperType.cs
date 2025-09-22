@@ -195,7 +195,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// StarForce FileSystem file
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         SFFS,
 
         /// <summary>

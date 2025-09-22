@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.RealArcadeMezzanine => null,// TODO: Implement wrapper
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => SevenZip.Create(data),
-                WrapperType.SFFS => null,// TODO: Implement wrapper
+                WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
                 WrapperType.Textfile => null,// TODO: Implement wrapper
