@@ -438,6 +438,10 @@ namespace SabreTools.Serialization.Wrappers
             // TODO: Use constants from Models here
             #region PFF
 
+            // Version 0
+            if (magic.StartsWith([0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x30]))
+                return WrapperType.PFF;
+
             // Version 2
             if (magic.StartsWith([0x14, 0x00, 0x00, 0x00, 0x50, 0x46, 0x46, 0x32]))
                 return WrapperType.PFF;
