@@ -85,11 +85,11 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, string? signature, COFFFileHeader? header)
         {
-            builder.AppendLine("  COFF File Header Information:");
+            builder.AppendLine("  File Header Information:");
             builder.AppendLine("  -------------------------");
             if (header == null)
             {
-                builder.AppendLine("  No COFF file header");
+                builder.AppendLine("  No file header");
                 builder.AppendLine();
                 return;
             }
@@ -314,11 +314,11 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, BaseEntry[]? entries)
         {
-            builder.AppendLine("  COFF Symbol Table Information:");
+            builder.AppendLine("  Symbol Table Information:");
             builder.AppendLine("  -------------------------");
             if (entries == null || entries.Length == 0)
             {
-                builder.AppendLine("  No COFF symbol table items");
+                builder.AppendLine("  No symbol table items");
                 builder.AppendLine();
                 return;
             }
@@ -344,7 +344,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, StandardRecord entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (Standard Record)");
+            builder.AppendLine($"  Symbol Table Entry {i} (Standard Record)");
             if (entry.ShortName != null)
             {
                 builder.AppendLine(entry.ShortName, "    Short name", Encoding.ASCII);
@@ -363,7 +363,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, FunctionDefinition entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (Function Definition)");
+            builder.AppendLine($"  Symbol Table Entry {i} (Function Definition)");
             builder.AppendLine(entry.TagIndex, "    Tag index");
             builder.AppendLine(entry.TotalSize, "    Total size");
             builder.AppendLine(entry.PointerToLinenumber, "    Pointer to linenumber");
@@ -373,7 +373,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, Descriptor entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (.bf and .ef Symbol)");
+            builder.AppendLine($"  Symbol Table Entry {i} (.bf and .ef Symbol)");
             builder.AppendLine(entry.Unused1, "    Unused");
             builder.AppendLine(entry.Linenumber, "    Linenumber");
             builder.AppendLine(entry.Unused2, "    Unused");
@@ -383,7 +383,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, WeakExternal entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (Weak External)");
+            builder.AppendLine($"  Symbol Table Entry {i} (Weak External)");
             builder.AppendLine(entry.TagIndex, "    Tag index");
             builder.AppendLine(entry.Characteristics, "    Characteristics");
             builder.AppendLine(entry.Unused, "    Unused");
@@ -391,13 +391,13 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, FileRecord entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (File)");
+            builder.AppendLine($"  Symbol Table Entry {i} (File)");
             builder.AppendLine(entry.FileName, "    File name", Encoding.ASCII);
         }
 
         private static void Print(StringBuilder builder, SectionDefinition entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (Section Defintion)");
+            builder.AppendLine($"  Symbol Table Entry {i} (Section Defintion)");
             builder.AppendLine(entry.Length, "    Length");
             builder.AppendLine(entry.NumberOfRelocations, "    Number of relocations");
             builder.AppendLine(entry.NumberOfLinenumbers, "    Number of linenumbers");
@@ -409,7 +409,7 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, CLRTokenDefinition entry, int i)
         {
-            builder.AppendLine($"  COFF Symbol Table Entry {i} (CLR Token Defintion)");
+            builder.AppendLine($"  Symbol Table Entry {i} (CLR Token Defintion)");
             builder.AppendLine(entry.AuxType, "    Aux type");
             builder.AppendLine(entry.Reserved1, "    Reserved");
             builder.AppendLine(entry.SymbolTableIndex, "    Symbol table index");
@@ -418,11 +418,11 @@ namespace SabreTools.Serialization.Printers
 
         private static void Print(StringBuilder builder, COFFStringTable? stringTable)
         {
-            builder.AppendLine("  COFF String Table Information:");
+            builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
             if (stringTable?.Strings == null || stringTable.Strings.Length == 0)
             {
-                builder.AppendLine("  No COFF string table items");
+                builder.AppendLine("  No string table items");
                 builder.AppendLine();
                 return;
             }
@@ -431,7 +431,7 @@ namespace SabreTools.Serialization.Printers
             for (int i = 0; i < stringTable.Strings.Length; i++)
             {
                 string? entry = stringTable.Strings[i];
-                builder.AppendLine($"  COFF String Table Entry {i})");
+                builder.AppendLine($"  String Table Entry {i})");
                 builder.AppendLine(entry, "    Value");
             }
 

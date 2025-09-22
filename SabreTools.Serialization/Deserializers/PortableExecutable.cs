@@ -54,16 +54,16 @@ namespace SabreTools.Serialization.Deserializers
 
                 #endregion
 
-                #region COFF File Header
+                #region File Header
 
-                // Parse the COFF file header
+                // Parse the file header
                 var coffFileHeader = ParseCOFFFileHeader(data);
                 if (coffFileHeader == null)
                     return null;
                 if (coffFileHeader.NumberOfSections > 96)
                     return null;
 
-                // Set the COFF file header
+                // Set the file header
                 pex.COFFFileHeader = coffFileHeader;
 
                 #endregion
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Get the section table offset
                 long offset = newExeOffset
-                    + 24 // Signature size + COFF file header size
+                    + 24 // Signature size + file header size
                     + pex.COFFFileHeader.SizeOfOptionalHeader;
                 if (offset < initialOffset || offset >= data.Length)
                     return null;
@@ -105,15 +105,15 @@ namespace SabreTools.Serialization.Deserializers
 
                 #endregion
 
-                #region COFF Symbol Table and COFF String Table
+                #region Symbol Table and String Table
 
                 offset = initialOffset + coffFileHeader.PointerToSymbolTable;
                 if (offset > initialOffset && offset < data.Length)
                 {
-                    // Seek to the COFF symbol table
+                    // Seek to the symbol table
                     data.Seek(offset, SeekOrigin.Begin);
 
-                    // Set the COFF symbol and string tables
+                    // Set the symbol and string tables
                     pex.COFFSymbolTable = ParseCOFFSymbolTable(data, coffFileHeader.NumberOfSymbols);
                     pex.COFFStringTable = ParseCOFFStringTable(data);
                 }

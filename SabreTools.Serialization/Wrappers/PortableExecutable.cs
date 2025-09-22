@@ -493,7 +493,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Get the offset from the end of the section table
                     long endOfSectionTable = Stub.Header.NewExeHeaderAddr
-                        + 24 // Signature size + COFF file header size
+                        + 24 // Signature size + file header size
                         + COFFFileHeader.SizeOfOptionalHeader
                         + (COFFFileHeader.NumberOfSections * 40); // Size of a section header
 
