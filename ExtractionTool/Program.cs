@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Extensions;
+using SabreTools.Serialization;
 using SabreTools.Serialization.Wrappers;
 
 namespace ExtractionTool
