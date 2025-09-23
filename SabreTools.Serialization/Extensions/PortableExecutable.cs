@@ -9,9 +9,9 @@ using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.Resource.Entries;
 using SabreTools.Models.SecuROM;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Extensions
 {
-    public static partial class Extensions
+    public static class PortableExecutable
     {
         /// <summary>
         /// Convert a relative virtual address to a physical one

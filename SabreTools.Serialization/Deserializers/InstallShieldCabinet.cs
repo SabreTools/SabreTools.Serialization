@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.InstallShieldCabinet;
+using SabreTools.Serialization.Extensions;
 using static SabreTools.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers

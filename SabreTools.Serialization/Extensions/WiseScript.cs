@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Extensions
 {
-    public static partial class Extensions
+    public static class WiseScript
     {
         /// <summary>
         /// Convert a Wise function ID to the formal action name

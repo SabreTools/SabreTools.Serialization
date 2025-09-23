@@ -7,6 +7,7 @@ using SabreTools.Matching;
 using SabreTools.Models.COFF;
 using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.Resource.Entries;
+using SabreTools.Serialization.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {

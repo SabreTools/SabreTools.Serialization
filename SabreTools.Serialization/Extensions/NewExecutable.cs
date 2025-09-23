@@ -1,8 +1,8 @@
 using SabreTools.Models.NewExecutable;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Extensions
 {
-    public static partial class Extensions
+    public static class NewExecutable
     {
         /// <summary>
         /// Determine if a resource type information entry is an integer or offset

@@ -1,8 +1,8 @@
 using SabreTools.Models.InstallShieldCabinet;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Extensions
 {
-    public static partial class Extensions
+    public static class InstallShieldCabinet
     {
         #region File Descriptors
 

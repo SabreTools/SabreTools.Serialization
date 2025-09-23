@@ -9,6 +9,7 @@ using SabreTools.Models.COFF;
 using SabreTools.Models.COFF.SymbolTableEntries;
 using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.Resource.Entries;
+using SabreTools.Serialization.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers

@@ -1,8 +1,8 @@
 using System.Text;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Serialization.Extensions
 {
-    public static partial class Extensions
+    public static class CFB
     {
         /// <summary>
         /// Decode a MIME-encoded stream name stored as a byte array

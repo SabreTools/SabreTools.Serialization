@@ -1,6 +1,7 @@
 using System.Text;
 using SabreTools.Models.WiseInstaller;
 using SabreTools.Models.WiseInstaller.Actions;
+using SabreTools.Serialization.Extensions;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers

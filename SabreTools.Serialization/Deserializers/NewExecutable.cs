@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Models.NewExecutable;
+using SabreTools.Serialization.Extensions;
 using static SabreTools.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers

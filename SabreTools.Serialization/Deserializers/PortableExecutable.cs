@@ -6,6 +6,7 @@ using SabreTools.IO.Extensions;
 using SabreTools.Models.COFF;
 using SabreTools.Models.COFF.SymbolTableEntries;
 using SabreTools.Models.PortableExecutable;
+using SabreTools.Serialization.Extensions;
 using static SabreTools.Models.COFF.Constants;
 using static SabreTools.Models.PortableExecutable.Constants;
 
