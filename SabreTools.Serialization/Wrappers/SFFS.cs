@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.Models.StarForce;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -8,7 +9,7 @@ namespace SabreTools.Serialization.Wrappers
     /// types that typically do not have models.
     /// </summary>
     /// TODO: Hook up the models to a proper deserializer
-    public class SFFS : WrapperBase
+    public class SFFS : WrapperBase<FileSystem>
     {
         #region Descriptive Properties
 
@@ -20,22 +21,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public SFFS(byte[] data) : base(data) { }
+        public SFFS(FileSystem model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SFFS(byte[] data, int offset) : base(data, offset) { }
+        public SFFS(FileSystem model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public SFFS(byte[] data, int offset, int length) : base(data, offset, length) { }
+        public SFFS(FileSystem model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public SFFS(Stream data) : base(data) { }
+        public SFFS(FileSystem model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SFFS(Stream data, long offset) : base(data, offset) { }
+        public SFFS(FileSystem model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public SFFS(Stream data, long offset, long length) : base(data, offset, length) { }
+        public SFFS(FileSystem model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 
@@ -73,7 +74,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new SFFS(data);
+            return new SFFS(new FileSystem(), data);
         }
 
         #endregion

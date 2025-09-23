@@ -28,6 +28,8 @@ namespace SabreTools.Serialization.CrossModel
             var md2s = new List<MD2>();
             var md4s = new List<MD4>();
             var md5s = new List<MD5>();
+            var ripemd128s = new List<RIPEMD128>();
+            var ripemd160s = new List<RIPEMD160>();
             var sha1s = new List<SHA1>();
             var sha256s = new List<SHA256>();
             var sha384s = new List<SHA384>();
@@ -44,6 +46,10 @@ namespace SabreTools.Serialization.CrossModel
                     md4s.AddRange(hashfile.MD4);
                 if (hashfile.MD5 != null && hashfile.MD5.Length > 0)
                     md5s.AddRange(hashfile.MD5);
+                if (hashfile.RIPEMD128 != null && hashfile.RIPEMD128.Length > 0)
+                    ripemd128s.AddRange(hashfile.RIPEMD128);
+                if (hashfile.RIPEMD160 != null && hashfile.RIPEMD160.Length > 0)
+                    ripemd160s.AddRange(hashfile.RIPEMD160);
                 if (hashfile.SHA1 != null && hashfile.SHA1.Length > 0)
                     sha1s.AddRange(hashfile.SHA1);
                 if (hashfile.SHA256 != null && hashfile.SHA256.Length > 0)
@@ -66,6 +72,10 @@ namespace SabreTools.Serialization.CrossModel
                 hashfileItem.MD4 = [.. md4s];
             if (md5s.Count > 0)
                 hashfileItem.MD5 = [.. md5s];
+            if (ripemd128s.Count > 0)
+                hashfileItem.RIPEMD128 = [.. ripemd128s];
+            if (ripemd160s.Count > 0)
+                hashfileItem.RIPEMD160 = [.. ripemd160s];
             if (sha1s.Count > 0)
                 hashfileItem.SHA1 = [.. sha1s];
             if (sha256s.Count > 0)
@@ -102,6 +112,12 @@ namespace SabreTools.Serialization.CrossModel
                     : null,
                 MD5 = hash == HashType.MD5
                     ? Array.ConvertAll(roms, ConvertToMD5)
+                    : null,
+                RIPEMD128 = hash == HashType.RIPEMD128
+                    ? Array.ConvertAll(roms, ConvertToRIPEMD128)
+                    : null,
+                RIPEMD160 = hash == HashType.RIPEMD160
+                    ? Array.ConvertAll(roms, ConvertToRIPEMD160)
                     : null,
                 SHA1 = hash == HashType.SHA1
                     ? Array.ConvertAll(roms, ConvertToSHA1)
@@ -158,6 +174,32 @@ namespace SabreTools.Serialization.CrossModel
                 File = item.ReadString(Models.Metadata.Rom.NameKey),
             };
             return md5;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.RIPEMD128"/>
+        /// </summary>
+        private static RIPEMD128 ConvertToRIPEMD128(Models.Metadata.Rom item)
+        {
+            var ripemd128 = new RIPEMD128
+            {
+                Hash = item.ReadString(Models.Metadata.Rom.RIPEMD128Key),
+                File = item.ReadString(Models.Metadata.Rom.NameKey),
+            };
+            return ripemd128;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Models.Hashfile.RIPEMD160"/>
+        /// </summary>
+        private static RIPEMD160 ConvertToRIPEMD160(Models.Metadata.Rom item)
+        {
+            var ripemd160 = new RIPEMD160
+            {
+                Hash = item.ReadString(Models.Metadata.Rom.RIPEMD160Key),
+                File = item.ReadString(Models.Metadata.Rom.NameKey),
+            };
+            return ripemd160;
         }
 
         /// <summary>

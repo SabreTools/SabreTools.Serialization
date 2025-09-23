@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public MetadataFile? Deserialize(Stream? data, char delim)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 

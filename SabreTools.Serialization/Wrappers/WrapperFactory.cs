@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.IniFile => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
-                WrapperType.LDSCRYPT => null,// TODO: Implement wrapper
+                WrapperType.LDSCRYPT => LDSCRYPT.Create(data),
                 WrapperType.LZKWAJ => LZKWAJ.Create(data),
                 WrapperType.LZQBasic => LZQBasic.Create(data),
                 WrapperType.LZSZDD => LZSZDD.Create(data),
@@ -47,8 +47,8 @@ namespace SabreTools.Serialization.Wrappers
                 WrapperType.PlayJPlaylist => PlayJPlaylist.Create(data),
                 WrapperType.Quantum => Quantum.Create(data),
                 WrapperType.RAR => RAR.Create(data),
-                WrapperType.RealArcadeInstaller => null,// TODO: Implement wrapper
-                WrapperType.RealArcadeMezzanine => null,// TODO: Implement wrapper
+                WrapperType.RealArcadeInstaller => RealArcadeInstaller.Create(data),
+                WrapperType.RealArcadeMezzanine => RealArcadeMezzanine.Create(data),
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => SevenZip.Create(data),
                 WrapperType.SFFS => SFFS.Create(data),
@@ -158,10 +158,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region BDPlusSVM
 
-            if (magic.StartsWith([0x42, 0x44, 0x53, 0x56, 0x4D, 0x5F, 0x43, 0x43]))
+            if (magic.StartsWith(Models.BDPlus.Constants.SignatureBytes))
                 return WrapperType.BDPlusSVM;
 
             if (extension.Equals("svm", StringComparison.OrdinalIgnoreCase))
@@ -191,10 +190,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region BZip2
 
-            if (magic.StartsWith([0x42, 0x52, 0x68]))
+            if (magic.StartsWith(Models.BZip2.Constants.SignatureBytes))
                 return WrapperType.BZip2;
 
             if (extension.Equals("bz2", StringComparison.OrdinalIgnoreCase))
@@ -229,10 +227,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region CHD
 
-            if (magic.StartsWith([0x4D, 0x43, 0x6F, 0x6D, 0x70, 0x72, 0x48, 0x44]))
+            if (magic.StartsWith(Models.CHD.Constants.SignatureBytes))
                 return WrapperType.CHD;
 
             #endregion
@@ -315,10 +312,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region InstallShieldArchiveV3
 
-            if (magic.StartsWith([0x13, 0x5D, 0x65, 0x8C]))
+            if (magic.StartsWith(Models.InstallShieldArchiveV3.Constants.HeaderSignatureBytes))
                 return WrapperType.InstallShieldArchiveV3;
 
             if (extension.Equals("z", StringComparison.OrdinalIgnoreCase))
@@ -335,10 +331,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region LDSCRYPT
 
-            if (magic.StartsWith([0x4C, 0x44, 0x53, 0x43, 0x52, 0x59, 0x50, 0x54]))
+            if (magic.StartsWith(Models.LDSCRYPT.Constants.SignatureBytes))
                 return WrapperType.LDSCRYPT;
 
             #endregion
@@ -592,15 +587,14 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region RAR
 
             // RAR archive version 1.50 onwards
-            if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00]))
+            if (magic.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                 return WrapperType.RAR;
 
             // RAR archive version 5.0 onwards
-            if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x01, 0x00]))
+            if (magic.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                 return WrapperType.RAR;
 
             if (extension.Equals("rar", StringComparison.OrdinalIgnoreCase))
@@ -608,17 +602,16 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region RealArcade
 
             // RASGI2.0
             // Found in the ".rgs files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith([0x52, 0x41, 0x53, 0x47, 0x49, 0x32, 0x2E, 0x30]))
+            if (magic.StartsWith(Models.RealArcades.Constants.RgsSignatureBytes))
                 return WrapperType.RealArcadeInstaller;
 
             // XZip2.0
             // Found in the ".mez" files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith([0x58, 0x5A, 0x69, 0x70, 0x32, 0x2E, 0x30]))
+            if (magic.StartsWith(Models.RealArcades.Constants.MezzanineSignatureBytes))
                 return WrapperType.RealArcadeMezzanine;
 
             #endregion
@@ -630,10 +623,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region SevenZip
 
-            if (magic.StartsWith([0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c]))
+            if (magic.StartsWith(Models.SevenZip.Constants.SignatureBytes))
                 return WrapperType.SevenZip;
 
             if (extension.Equals("7z", StringComparison.OrdinalIgnoreCase))
@@ -644,7 +636,7 @@ namespace SabreTools.Serialization.Wrappers
             #region SFFS
 
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
-            if (magic.StartsWith(Models.SFFS.Constants.SignatureBytes))
+            if (magic.StartsWith(Models.StarForce.Constants.SignatureBytes))
                 return WrapperType.SFFS;
 
             #endregion 
@@ -796,10 +788,9 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            // TODO: Use constants from Models here
             #region XZ
 
-            if (magic.StartsWith([0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00]))
+            if (magic.StartsWith(Models.XZ.Constants.SignatureBytes))
                 return WrapperType.XZ;
 
             if (extension.Equals("xz", StringComparison.OrdinalIgnoreCase))

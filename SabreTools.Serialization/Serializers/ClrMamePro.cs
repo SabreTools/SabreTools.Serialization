@@ -272,7 +272,11 @@ namespace SabreTools.Serialization.Serializers
                 writer.WriteRequiredAttributeString("name", rom.Name, throwOnError: true);
                 writer.WriteRequiredAttributeString("size", rom.Size, throwOnError: true);
                 writer.WriteOptionalAttributeString("crc", rom.CRC);
+                writer.WriteOptionalAttributeString("md2", rom.MD2);
+                writer.WriteOptionalAttributeString("md4", rom.MD4);
                 writer.WriteOptionalAttributeString("md5", rom.MD5);
+                writer.WriteOptionalAttributeString("ripemd128", rom.RIPEMD128);
+                writer.WriteOptionalAttributeString("ripemd160", rom.RIPEMD160);
                 writer.WriteOptionalAttributeString("sha1", rom.SHA1);
                 writer.WriteOptionalAttributeString("sha256", rom.SHA256);
                 writer.WriteOptionalAttributeString("sha384", rom.SHA384);

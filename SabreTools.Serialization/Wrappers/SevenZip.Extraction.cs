@@ -6,7 +6,6 @@ using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
-using SharpCompress.Common;
 using SharpCompress.Readers;
 #endif
 

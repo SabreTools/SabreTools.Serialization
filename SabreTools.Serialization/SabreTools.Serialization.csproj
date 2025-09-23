@@ -85,11 +85,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="SabreTools.ASN1" Version="1.6.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="SabreTools.ASN1" Version="1.6.4" />
         <PackageReference Include="SabreTools.Hashing" Version="1.5.0" />
-        <PackageReference Include="SabreTools.IO" Version="1.7.3" />
-        <PackageReference Include="SabreTools.Models" Version="1.7.1" />
+        <PackageReference Include="SabreTools.IO" Version="1.7.4" />
+        <PackageReference Include="SabreTools.Models" Version="1.7.2" />
         <PackageReference Include="SabreTools.Matching" Version="1.6.0" />
         <PackageReference Include="SharpCompress" Version="0.40.0" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
     </ItemGroup>

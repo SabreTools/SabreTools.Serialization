@@ -112,6 +112,12 @@ namespace SabreTools.Serialization.Serializers
                 case HashType.MD5:
                     WriteMD5(obj.MD5, writer);
                     break;
+                case HashType.RIPEMD128:
+                    WriteRIPEMD128(obj.RIPEMD128, writer);
+                    break;
+                case HashType.RIPEMD160:
+                    WriteRIPEMD160(obj.RIPEMD160, writer);
+                    break;
                 case HashType.SHA1:
                     WriteSHA1(obj.SHA1, writer);
                     break;
@@ -220,6 +226,50 @@ namespace SabreTools.Serialization.Serializers
                     continue;
 
                 writer.WriteValues([md5.Hash!, md5.File!]);
+                writer.Flush();
+            }
+        }
+
+        /// <summary>
+        /// Write RIPEMD128 information to the current writer
+        /// </summary>
+        /// <param name="ripemd128s">Array of RIPEMD128 objects representing the files</param>
+        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        private static void WriteRIPEMD128(RIPEMD128[]? ripemd128s, SeparatedValueWriter writer)
+        {
+            // If the item information is missing, we can't do anything
+            if (ripemd128s == null || ripemd128s.Length == 0)
+                return;
+
+            // Loop through and write out the items
+            foreach (var ripemd128 in ripemd128s)
+            {
+                if (string.IsNullOrEmpty(ripemd128.Hash) || string.IsNullOrEmpty(ripemd128.File))
+                    continue;
+
+                writer.WriteValues([ripemd128.Hash!, ripemd128.File!]);
+                writer.Flush();
+            }
+        }
+
+        /// <summary>
+        /// Write RIPEMD160 information to the current writer
+        /// </summary>
+        /// <param name="ripemd160s">Array of RIPEMD160 objects representing the files</param>
+        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        private static void WriteRIPEMD160(RIPEMD160[]? ripemd160s, SeparatedValueWriter writer)
+        {
+            // If the item information is missing, we can't do anything
+            if (ripemd160s == null || ripemd160s.Length == 0)
+                return;
+
+            // Loop through and write out the items
+            foreach (var ripemd160 in ripemd160s)
+            {
+                if (string.IsNullOrEmpty(ripemd160.Hash) || string.IsNullOrEmpty(ripemd160.File))
+                    continue;
+
+                writer.WriteValues([ripemd160.Hash!, ripemd160.File!]);
                 writer.Flush();
             }
         }

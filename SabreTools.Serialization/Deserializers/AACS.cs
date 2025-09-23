@@ -70,25 +70,22 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(-4, SeekOrigin.Current);
 
             // Create a record based on the type
-            switch (type)
+            return type switch
             {
                 // Known record types
-                case RecordType.EndOfMediaKeyBlock: return ParseEndOfMediaKeyBlockRecord(data);
-                case RecordType.ExplicitSubsetDifference: return ParseExplicitSubsetDifferenceRecord(data);
-                case RecordType.MediaKeyData: return ParseMediaKeyDataRecord(data);
-                case RecordType.SubsetDifferenceIndex: return ParseSubsetDifferenceIndexRecord(data);
-                case RecordType.TypeAndVersion: return ParseTypeAndVersionRecord(data);
-                case RecordType.DriveRevocationList: return ParseDriveRevocationListRecord(data);
-                case RecordType.HostRevocationList: return ParseHostRevocationListRecord(data);
-                case RecordType.VerifyMediaKey: return ParseVerifyMediaKeyRecord(data);
-                case RecordType.Copyright: return ParseCopyrightRecord(data);
+                RecordType.EndOfMediaKeyBlock => ParseEndOfMediaKeyBlockRecord(data),
+                RecordType.ExplicitSubsetDifference => ParseExplicitSubsetDifferenceRecord(data),
+                RecordType.MediaKeyData => ParseMediaKeyDataRecord(data),
+                RecordType.SubsetDifferenceIndex => ParseSubsetDifferenceIndexRecord(data),
+                RecordType.TypeAndVersion => ParseTypeAndVersionRecord(data),
+                RecordType.DriveRevocationList => ParseDriveRevocationListRecord(data),
+                RecordType.HostRevocationList => ParseHostRevocationListRecord(data),
+                RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data),
+                RecordType.Copyright => ParseCopyrightRecord(data),
 
                 // Unknown record type
-                default:
-                    if (recordLength > 4)
-                        _ = data.ReadBytes((int)recordLength - 4);
-                    return null;
-            }
+                _ => ParseGenericRecord(data),
+            };
         }
 
         /// <summary>
@@ -231,6 +228,22 @@ namespace SabreTools.Serialization.Deserializers
             // If there's any data left, discard it
             if (data.Position < initialOffset + obj.RecordLength)
                 _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a GenericRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled GenericRecord on success, null on error</returns>
+        public static GenericRecord ParseGenericRecord(Stream data)
+        {
+            var obj = new GenericRecord();
+
+            obj.RecordType = (RecordType)data.ReadByteValue();
+            obj.RecordLength = data.ReadUInt24LittleEndian();
+            obj.Data = data.ReadBytes(0x10);
 
             return obj;
         }

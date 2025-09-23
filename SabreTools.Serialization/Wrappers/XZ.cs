@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.Models.XZ;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -7,7 +8,7 @@ namespace SabreTools.Serialization.Wrappers
     /// any actual parsing. It is used as a placeholder for
     /// types that typically do not have models.
     /// </summary>
-    public partial class XZ : WrapperBase
+    public partial class XZ : WrapperBase<Archive>
     {
         #region Descriptive Properties
 
@@ -19,22 +20,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public XZ(byte[] data) : base(data) { }
+        public XZ(Archive model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XZ(byte[] data, int offset) : base(data, offset) { }
+        public XZ(Archive model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XZ(byte[] data, int offset, int length) : base(data, offset, length) { }
+        public XZ(Archive model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public XZ(Stream data) : base(data) { }
+        public XZ(Archive model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XZ(Stream data, long offset) : base(data, offset) { }
+        public XZ(Archive model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XZ(Stream data, long offset, long length) : base(data, offset, length) { }
+        public XZ(Archive model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 
@@ -72,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new XZ(data);
+            return new XZ(new Archive(), data);
         }
 
         #endregion

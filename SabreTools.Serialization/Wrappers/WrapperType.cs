@@ -85,7 +85,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Link Data Security encrypted file
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         LDSCRYPT,
 
         /// <summary>
@@ -141,7 +140,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// PIC data object
         /// </summary>
-        /// <remarks>Currently has no detection method</remarks>
         PIC,
 
         /// <summary>
@@ -157,7 +155,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// PlayJ playlist file
         /// </summary>
-        /// <remarks>Currently has no detection method/remarks>
         PlayJPlaylist,
 
         /// <summary>
@@ -173,13 +170,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// RealArcade Installer
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         RealArcadeInstaller,
 
         /// <summary>
         /// RealArcade Mezzanine
         /// </summary>
-        /// <remarks>Currently has no IWrapper implementation</remarks>
         RealArcadeMezzanine,
 
         /// <summary>

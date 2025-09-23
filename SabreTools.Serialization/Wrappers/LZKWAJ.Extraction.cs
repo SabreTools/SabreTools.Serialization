@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Get the decompressor
-            var decompressor = Decompressor.CreateKWAJ(contents, CompressionType);
+            var decompressor = Decompressor.CreateKWAJ(contents, (ushort)CompressionType);
             if (decompressor == null)
                 return false;
 

@@ -61,6 +61,8 @@ namespace SabreTools.Serialization.Deserializers
                 HashType.MD2 => DeserializeMD2(data),
                 HashType.MD4 => DeserializeMD4(data),
                 HashType.MD5 => DeserializeMD5(data),
+                HashType.RIPEMD128 => DeserializeRIPEMD128(data),
+                HashType.RIPEMD160 => DeserializeRIPEMD160(data),
                 HashType.SHA1 => DeserializeSHA1(data),
                 HashType.SHA256 => DeserializeSHA256(data),
                 HashType.SHA384 => DeserializeSHA384(data),
@@ -74,7 +76,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSFV(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -117,7 +119,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD2(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -161,7 +163,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD4(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -205,7 +207,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeMD5(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -239,9 +241,81 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
+        public Models.Hashfile.Hashfile? DeserializeRIPEMD128(Stream? data)
+        {
+            // If the data is invalid
+            if (data == null || !data.CanRead)
+                return null;
+
+            // Setup the reader and output
+            var reader = new StreamReader(data);
+            var ripemd128List = new List<RIPEMD128>();
+
+            // Loop through the rows and parse out values
+            while (!reader.EndOfStream)
+            {
+                // Read and split the line
+                string? line = reader.ReadLine();
+                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                if (lineParts == null || lineParts.Length < 2)
+                    continue;
+
+                // Parse the line into a hash
+                var ripemd128 = new RIPEMD128
+                {
+                    Hash = lineParts[0],
+                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                };
+                ripemd128List.Add(ripemd128);
+            }
+
+            // Assign the hashes to the hashfile and return
+            if (ripemd128List.Count > 0)
+                return new Models.Hashfile.Hashfile { RIPEMD128 = [.. ripemd128List] };
+
+            return null;
+        }
+
+        /// <inheritdoc cref="Deserialize(Stream)"/>
+        public Models.Hashfile.Hashfile? DeserializeRIPEMD160(Stream? data)
+        {
+            // If the data is invalid
+            if (data == null || !data.CanRead)
+                return null;
+
+            // Setup the reader and output
+            var reader = new StreamReader(data);
+            var ripemd160List = new List<RIPEMD160>();
+
+            // Loop through the rows and parse out values
+            while (!reader.EndOfStream)
+            {
+                // Read and split the line
+                string? line = reader.ReadLine();
+                string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+                if (lineParts == null || lineParts.Length < 2)
+                    continue;
+
+                // Parse the line into a hash
+                var ripemd160 = new RIPEMD160
+                {
+                    Hash = lineParts[0],
+                    File = string.Join(" ", lineParts, 1, lineParts.Length - 1),
+                };
+                ripemd160List.Add(ripemd160);
+            }
+
+            // Assign the hashes to the hashfile and return
+            if (ripemd160List.Count > 0)
+                return new Models.Hashfile.Hashfile { RIPEMD160 = [.. ripemd160List] };
+
+            return null;
+        }
+
+        /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA1(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -285,7 +359,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA256(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -329,7 +403,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA384(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -373,7 +447,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSHA512(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -417,7 +491,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Models.Hashfile.Hashfile? DeserializeSpamSum(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return default;
 

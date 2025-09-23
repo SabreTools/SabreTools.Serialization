@@ -7,6 +7,7 @@ using static SabreTools.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
+    // TODO: Cache data blocks during parse
     public class SecuROMMatroschkaPackage : BaseBinaryDeserializer<MatroshkaPackage>
     {
         /// <inheritdoc/>
@@ -96,7 +97,7 @@ namespace SabreTools.Serialization.Deserializers
             data.Seek(data.Position + 256, SeekOrigin.Begin);
             var tempValue = data.ReadUInt32LittleEndian();
             data.Seek(tempPosition, SeekOrigin.Begin);
-            int gapSize = tempValue == 0 ? 512 : 256;
+            int pathSize = tempValue == 0 ? 512 : 256;
 
             // Set default value for unknown value checking
             bool? hasUnknown = null;
@@ -106,7 +107,8 @@ namespace SabreTools.Serialization.Deserializers
             {
                 var entry = new MatroshkaEntry();
 
-                entry.Path = data.ReadBytes(gapSize);
+                byte[] pathBytes = data.ReadBytes(pathSize);
+                entry.Path = Encoding.ASCII.GetString(pathBytes);
                 entry.EntryType = (MatroshkaEntryType)data.ReadUInt32LittleEndian();
                 entry.Size = data.ReadUInt32LittleEndian();
                 entry.Offset = data.ReadUInt32LittleEndian();

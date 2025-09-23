@@ -5,9 +5,10 @@ using System.Xml;
 using SabreTools.ASN1;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
+using SabreTools.Models.COFF;
+using SabreTools.Models.COFF.SymbolTableEntries;
 using SabreTools.Models.PortableExecutable;
-using SabreTools.Models.PortableExecutable.COFFSymbolTableEntries;
-using SabreTools.Models.PortableExecutable.ResourceEntries;
+using SabreTools.Models.PortableExecutable.Resource.Entries;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Printers
@@ -28,22 +29,36 @@ namespace SabreTools.Serialization.Printers
             Print(builder, executable.Stub?.Header);
 
             // Header
-            Print(builder, executable.Signature, executable.COFFFileHeader);
+            Print(builder, executable.Signature, executable.FileHeader);
             Print(builder, executable.OptionalHeader, executable.SectionTable);
 
-            // Tables
+            // COFF Tables
             Print(builder, executable.SectionTable);
-            Print(builder, executable.COFFSymbolTable);
-            Print(builder, executable.COFFStringTable);
+            Print(builder, executable.SymbolTable);
+            Print(builder, executable.StringTable);
+
+            // Export Table
+            Print(builder, executable.ExportDirectoryTable, executable.SectionTable);
+            Print(builder, executable.ExportAddressTable, executable.SectionTable);
+            Print(builder, executable.NamePointerTable);
+            Print(builder, executable.OrdinalTable);
+            Print(builder, executable.ExportNameTable);
+
+            // Import Table
+            Print(builder, executable.ImportDirectoryTable, executable.SectionTable);
+            Print(builder, executable.ImportLookupTables, executable.SectionTable);
+            Print(builder, executable.ImportAddressTables, executable.SectionTable);
+            Print(builder, executable.HintNameTable);
+
+            // Resource Table
+            Print(builder, executable.ResourceDirectoryTable, executable.SectionTable);
+
             Print(builder, executable.AttributeCertificateTable);
             Print(builder, executable.DelayLoadDirectoryTable, executable.SectionTable);
 
             // Named Sections
             Print(builder, executable.BaseRelocationTable, executable.SectionTable);
             Print(builder, executable.DebugTable);
-            Print(builder, executable.ExportTable, executable.SectionTable);
-            Print(builder, executable.ImportTable, executable.SectionTable);
-            Print(builder, executable.ResourceDirectoryTable, executable.SectionTable);
         }
 
         private static void Print(StringBuilder builder, Models.MSDOS.ExecutableHeader? header)
@@ -83,7 +98,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, string? signature, COFFFileHeader? header)
+        private static void Print(StringBuilder builder, string? signature, FileHeader? header)
         {
             builder.AppendLine("  File Header Information:");
             builder.AppendLine("  -------------------------");
@@ -105,7 +120,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, OptionalHeader? header, SectionHeader[]? table)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.OptionalHeader? header, SectionHeader[]? table)
         {
             builder.AppendLine("  Optional Header Information:");
             builder.AppendLine("  -------------------------");
@@ -127,10 +142,7 @@ namespace SabreTools.Serialization.Printers
             if (header.Magic == OptionalHeaderMagicNumber.PE32)
                 builder.AppendLine(header.BaseOfData, "  Base of data");
 
-            if (header.Magic == OptionalHeaderMagicNumber.PE32)
-                builder.AppendLine(header.ImageBase_PE32, "  Image base");
-            else
-                builder.AppendLine(header.ImageBase_PE32Plus, "  Image base");
+            builder.AppendLine(header.ImageBase, "  Image base");
             builder.AppendLine(header.SectionAlignment, "  Section alignment");
             builder.AppendLine(header.FileAlignment, "  File alignment");
             builder.AppendLine(header.MajorOperatingSystemVersion, "  Major operating system version");
@@ -145,20 +157,10 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(header.CheckSum, "  Checksum");
             builder.AppendLine($"  Subsystem: {header.Subsystem} (0x{header.Subsystem:X})");
             builder.AppendLine($"  DLL characteristics: {header.DllCharacteristics} (0x{header.DllCharacteristics:X})");
-            if (header.Magic == OptionalHeaderMagicNumber.PE32)
-            {
-                builder.AppendLine(header.SizeOfStackReserve_PE32, "  Size of stack reserve");
-                builder.AppendLine(header.SizeOfStackCommit_PE32, "  Size of stack commit");
-                builder.AppendLine(header.SizeOfHeapReserve_PE32, "  Size of heap reserve");
-                builder.AppendLine(header.SizeOfHeapCommit_PE32, "  Size of heap commit");
-            }
-            else
-            {
-                builder.AppendLine(header.SizeOfStackReserve_PE32Plus, "  Size of stack reserve");
-                builder.AppendLine(header.SizeOfStackCommit_PE32Plus, "  Size of stack commit");
-                builder.AppendLine(header.SizeOfHeapReserve_PE32Plus, "  Size of heap reserve");
-                builder.AppendLine(header.SizeOfHeapCommit_PE32Plus, "  Size of heap commit");
-            }
+            builder.AppendLine(header.SizeOfStackReserve, "  Size of stack reserve");
+            builder.AppendLine(header.SizeOfStackCommit, "  Size of stack commit");
+            builder.AppendLine(header.SizeOfHeapReserve, "  Size of heap reserve");
+            builder.AppendLine(header.SizeOfHeapCommit, "  Size of heap commit");
             builder.AppendLine(header.LoaderFlags, "  Loader flags");
             builder.AppendLine(header.NumberOfRvaAndSizes, "  Number of data-directory entries");
 
@@ -355,7 +357,7 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(entry.Offset, "    Offset");
             }
             builder.AppendLine(entry.Value, "    Value");
-            builder.AppendLine(entry.SectionNumber, "    Section number");
+            builder.AppendLine($"    Section number: {entry.SectionNumber} (0x{entry.SectionNumber:X})");
             builder.AppendLine($"    Symbol type: {entry.SymbolType} (0x{entry.SymbolType:X})");
             builder.AppendLine($"    Storage class: {entry.StorageClass} (0x{entry.StorageClass:X})");
             builder.AppendLine(entry.NumberOfAuxSymbols, "    Number of aux symbols");
@@ -416,7 +418,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(entry.Reserved2, "    Reserved");
         }
 
-        private static void Print(StringBuilder builder, COFFStringTable? stringTable)
+        private static void Print(StringBuilder builder, Models.COFF.StringTable? stringTable)
         {
             builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
@@ -438,7 +440,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, AttributeCertificateTableEntry[]? entries)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.AttributeCertificate.Entry[]? entries)
         {
             builder.AppendLine("  Attribute Certificate Table Information:");
             builder.AppendLine("  -------------------------");
@@ -502,7 +504,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, DelayLoadDirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.DelayLoad.DirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Delay-Load Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -514,8 +516,8 @@ namespace SabreTools.Serialization.Printers
             }
 
             builder.AppendLine(table.Attributes, "  Attributes");
-            builder.AppendLine(table.Name, "  Name RVA");
-            builder.AppendLine(table.Name.ConvertVirtualAddress(sections), "  Name physical address");
+            builder.AppendLine(table.NameRVA, "  Name RVA");
+            builder.AppendLine(table.NameRVA.ConvertVirtualAddress(sections), "  Name physical address");
             builder.AppendLine(table.ModuleHandle, "  Module handle");
             builder.AppendLine(table.DelayImportAddressTable, "  Delay import address table RVA");
             builder.AppendLine(table.DelayImportAddressTable.ConvertVirtualAddress(sections), "  Delay import address table physical address");
@@ -529,7 +531,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BaseRelocationBlock[]? entries, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.BaseRelocation.Block[]? entries, SectionHeader[]? sections)
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
@@ -572,7 +574,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DebugTable? table)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.DebugData.Table? table)
         {
             builder.AppendLine("  Debug Table Information:");
             builder.AppendLine("  -------------------------");
@@ -602,180 +604,176 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExportTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Export.DirectoryTable? table, SectionHeader[]? sections)
         {
-            builder.AppendLine("  Export Table Information:");
+            builder.AppendLine(value: "  Export Directory Table Information:");
             builder.AppendLine("  -------------------------");
             if (table == null)
-            {
-                builder.AppendLine("  No export table");
-                builder.AppendLine();
-                return;
-            }
-
-            builder.AppendLine("    Export Directory Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ExportDirectoryTable == null)
             {
                 builder.AppendLine("  No export directory table");
             }
             else
             {
-                builder.AppendLine(table.ExportDirectoryTable.ExportFlags, "    Export flags");
-                builder.AppendLine(table.ExportDirectoryTable.TimeDateStamp, "    Time/Date stamp");
-                builder.AppendLine(table.ExportDirectoryTable.MajorVersion, "    Major version");
-                builder.AppendLine(table.ExportDirectoryTable.MinorVersion, "    Minor version");
-                builder.AppendLine(table.ExportDirectoryTable.NameRVA, "    Name RVA");
-                builder.AppendLine(table.ExportDirectoryTable.NameRVA.ConvertVirtualAddress(sections), "    Name physical address");
-                builder.AppendLine(table.ExportDirectoryTable.Name, "    Name");
-                builder.AppendLine(table.ExportDirectoryTable.OrdinalBase, "    Ordinal base");
-                builder.AppendLine(table.ExportDirectoryTable.AddressTableEntries, "    Address table entries");
-                builder.AppendLine(table.ExportDirectoryTable.NumberOfNamePointers, "    Number of name pointers");
-                builder.AppendLine(table.ExportDirectoryTable.ExportAddressTableRVA, "    Export address table RVA");
-                builder.AppendLine(table.ExportDirectoryTable.ExportAddressTableRVA.ConvertVirtualAddress(sections), "    Export address table physical address");
-                builder.AppendLine(table.ExportDirectoryTable.NamePointerRVA, "    Name pointer table RVA");
-                builder.AppendLine(table.ExportDirectoryTable.NamePointerRVA.ConvertVirtualAddress(sections), "    Name pointer table physical address");
-                builder.AppendLine(table.ExportDirectoryTable.OrdinalTableRVA, "    Ordinal table RVA");
-                builder.AppendLine(table.ExportDirectoryTable.OrdinalTableRVA.ConvertVirtualAddress(sections), "    Ordinal table physical address");
+                builder.AppendLine(table.ExportFlags, "  Export flags");
+                builder.AppendLine(table.TimeDateStamp, "  Time/Date stamp");
+                builder.AppendLine(table.MajorVersion, "  Major version");
+                builder.AppendLine(table.MinorVersion, "  Minor version");
+                builder.AppendLine(table.NameRVA, "  Name RVA");
+                builder.AppendLine(table.NameRVA.ConvertVirtualAddress(sections), "  Name physical address");
+                builder.AppendLine(table.Name, "  Name");
+                builder.AppendLine(table.OrdinalBase, "  Ordinal base");
+                builder.AppendLine(table.AddressTableEntries, "  Address table entries");
+                builder.AppendLine(table.NumberOfNamePointers, "  Number of name pointers");
+                builder.AppendLine(table.ExportAddressTableRVA, "  Export address table RVA");
+                builder.AppendLine(table.ExportAddressTableRVA.ConvertVirtualAddress(sections), "  Export address table physical address");
+                builder.AppendLine(table.NamePointerRVA, "  Name pointer table RVA");
+                builder.AppendLine(table.NamePointerRVA.ConvertVirtualAddress(sections), "  Name pointer table physical address");
+                builder.AppendLine(table.OrdinalTableRVA, "    Ordinal table RVA");
+                builder.AppendLine(table.OrdinalTableRVA.ConvertVirtualAddress(sections), "  Ordinal table physical address");
             }
             builder.AppendLine();
+        }
 
-            builder.AppendLine("    Export Address Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ExportAddressTable == null || table.ExportAddressTable.Length == 0)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Export.AddressTableEntry[]? table, SectionHeader[]? sections)
+        {
+            builder.AppendLine("  Export Address Table Information:");
+            builder.AppendLine("  -------------------------");
+            if (table == null || table.Length == 0)
             {
-                builder.AppendLine("    No export address table items");
+                builder.AppendLine("  No export address table items");
             }
             else
             {
-                for (int i = 0; i < table.ExportAddressTable.Length; i++)
+                for (int i = 0; i < table.Length; i++)
                 {
-                    var entry = table.ExportAddressTable[i];
+                    var entry = table[i];
 
-                    builder.AppendLine($"    Export Address Table Entry {i}");
-                    builder.AppendLine(entry.ExportRVA, "      Export / Forwarder RVA");
-                    builder.AppendLine(entry.ExportRVA.ConvertVirtualAddress(sections), "      Export / Forwarder physical address");
-                }
-            }
-
-            builder.AppendLine();
-
-            builder.AppendLine("    Name Pointer Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.NamePointerTable?.Pointers == null || table.NamePointerTable.Pointers.Length == 0)
-            {
-                builder.AppendLine("    No name pointer table items");
-            }
-            else
-            {
-                for (int i = 0; i < table.NamePointerTable.Pointers.Length; i++)
-                {
-                    var entry = table.NamePointerTable.Pointers[i];
-
-                    builder.AppendLine($"    Name Pointer Table Entry {i}");
-                    builder.AppendLine(entry, "      Pointer");
-                }
-            }
-
-            builder.AppendLine();
-
-            builder.AppendLine("    Ordinal Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.OrdinalTable?.Indexes == null || table.OrdinalTable.Indexes.Length == 0)
-            {
-                builder.AppendLine("    No ordinal table items");
-            }
-            else
-            {
-                for (int i = 0; i < table.OrdinalTable.Indexes.Length; i++)
-                {
-                    var entry = table.OrdinalTable.Indexes[i];
-
-                    builder.AppendLine($"    Ordinal Table Entry {i}");
-                    builder.AppendLine(entry, "      Index");
-                }
-            }
-
-            builder.AppendLine();
-
-            builder.AppendLine("    Export Name Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ExportNameTable?.Strings == null || table.ExportNameTable.Strings.Length == 0)
-            {
-                builder.AppendLine("    No export name table items");
-            }
-            else
-            {
-                for (int i = 0; i < table.ExportNameTable.Strings.Length; i++)
-                {
-                    var entry = table.ExportNameTable.Strings[i];
-
-                    builder.AppendLine($"    Export Name Table Entry {i}");
-                    builder.AppendLine(entry, "      String");
+                    builder.AppendLine($"  Export Address Table Entry {i}");
+                    builder.AppendLine(entry.ExportRVA, "    Export / Forwarder RVA");
+                    builder.AppendLine(entry.ExportRVA.ConvertVirtualAddress(sections), "    Export / Forwarder physical address");
                 }
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ImportTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Export.NamePointerTable? table)
         {
-            builder.AppendLine("  Import Table Information:");
+            builder.AppendLine("  Export Name Pointer Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table?.Pointers == null || table.Pointers.Length == 0)
             {
-                builder.AppendLine("  No import table");
-                builder.AppendLine();
-                return;
-            }
-
-            builder.AppendLine();
-            builder.AppendLine("    Import Directory Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ImportDirectoryTable == null || table.ImportDirectoryTable.Length == 0)
-            {
-                builder.AppendLine("    No import directory table items");
+                builder.AppendLine("  No export name pointer table items");
             }
             else
             {
-                for (int i = 0; i < table.ImportDirectoryTable.Length; i++)
+                for (int i = 0; i < table.Pointers.Length; i++)
                 {
-                    var entry = table.ImportDirectoryTable[i];
+                    var entry = table.Pointers[i];
 
-                    builder.AppendLine($"    Import Directory Table Entry {i}");
-                    builder.AppendLine(entry.ImportLookupTableRVA, "      Import lookup table RVA");
-                    builder.AppendLine(entry.ImportLookupTableRVA.ConvertVirtualAddress(sections), "      Import lookup table physical address");
-                    builder.AppendLine(entry.TimeDateStamp, "      Time/Date stamp");
-                    builder.AppendLine(entry.ForwarderChain, "      Forwarder chain");
-                    builder.AppendLine(entry.NameRVA, "      Name RVA");
-                    builder.AppendLine(entry.NameRVA.ConvertVirtualAddress(sections), "      Name physical address");
-                    builder.AppendLine(entry.Name, "      Name");
-                    builder.AppendLine(entry.ImportAddressTableRVA, "      Import address table RVA");
-                    builder.AppendLine(entry.ImportAddressTableRVA.ConvertVirtualAddress(sections), "      Import address table physical address");
+                    builder.AppendLine($"  Export Name Pointer Table Entry {i}");
+                    builder.AppendLine(entry, "    Pointer");
                 }
             }
 
             builder.AppendLine();
+        }
 
-            builder.AppendLine("    Import Lookup Tables Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ImportLookupTables == null || table.ImportLookupTables.Count == 0)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Export.OrdinalTable? table)
+        {
+            builder.AppendLine("  Export Ordinal Table Information:");
+            builder.AppendLine("  -------------------------");
+            if (table?.Indexes == null || table.Indexes.Length == 0)
             {
-                builder.AppendLine("    No import lookup tables");
+                builder.AppendLine("  No export ordinal table items");
             }
             else
             {
-                foreach (var kvp in table.ImportLookupTables)
+                for (int i = 0; i < table.Indexes.Length; i++)
+                {
+                    var entry = table.Indexes[i];
+
+                    builder.AppendLine($"  Export Ordinal Table Entry {i}");
+                    builder.AppendLine(entry, "    Index");
+                }
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Export.NameTable? table)
+        {
+            builder.AppendLine("  Export Name Table Information:");
+            builder.AppendLine("  -------------------------");
+            if (table?.Strings == null || table.Strings.Length == 0)
+            {
+                builder.AppendLine("  No export name table items");
+            }
+            else
+            {
+                for (int i = 0; i < table.Strings.Length; i++)
+                {
+                    var entry = table.Strings[i];
+
+                    builder.AppendLine($"  Export Name Table Entry {i}");
+                    builder.AppendLine(entry, "    String");
+                }
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Import.DirectoryTableEntry[]? table, SectionHeader[]? sections)
+        {
+            builder.AppendLine("  Import Directory Table Information:");
+            builder.AppendLine("  -------------------------");
+            if (table == null || table.Length == 0)
+            {
+                builder.AppendLine("  No import directory table items");
+            }
+            else
+            {
+                for (int i = 0; i < table.Length; i++)
+                {
+                    var entry = table[i];
+
+                    builder.AppendLine($"  Import Directory Table Entry {i}");
+                    builder.AppendLine(entry.ImportLookupTableRVA, "    Import lookup table RVA");
+                    builder.AppendLine(entry.ImportLookupTableRVA.ConvertVirtualAddress(sections), "    Import lookup table physical address");
+                    builder.AppendLine(entry.TimeDateStamp, "    Time/Date stamp");
+                    builder.AppendLine(entry.ForwarderChain, "    Forwarder chain");
+                    builder.AppendLine(entry.NameRVA, "    Name RVA");
+                    builder.AppendLine(entry.NameRVA.ConvertVirtualAddress(sections), "    Name physical address");
+                    builder.AppendLine(entry.Name, "    Name");
+                    builder.AppendLine(entry.ImportAddressTableRVA, "    Import address table RVA");
+                    builder.AppendLine(entry.ImportAddressTableRVA.ConvertVirtualAddress(sections), "    Import address table physical address");
+                }
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Dictionary<int, Models.PortableExecutable.Import.LookupTableEntry[]?>? tables, SectionHeader[]? sections)
+        {
+            builder.AppendLine("  Import Lookup Tables Information:");
+            builder.AppendLine("  -------------------------");
+            if (tables == null || tables.Count == 0)
+            {
+                builder.AppendLine("  No import lookup tables");
+            }
+            else
+            {
+                foreach (var kvp in tables)
                 {
                     int index = kvp.Key;
                     var importLookupTable = kvp.Value;
 
                     builder.AppendLine();
-                    builder.AppendLine($"      Import Lookup Table {index} Information:");
-                    builder.AppendLine("      -------------------------");
+                    builder.AppendLine($"    Import Lookup Table {index} Information:");
+                    builder.AppendLine("    -------------------------");
                     if (importLookupTable == null || importLookupTable.Length == 0)
                     {
-                        builder.AppendLine("      No import lookup table items");
+                        builder.AppendLine("    No import lookup table items");
                         continue;
                     }
 
@@ -783,42 +781,45 @@ namespace SabreTools.Serialization.Printers
                     {
                         var entry = importLookupTable[i];
 
-                        builder.AppendLine($"      Import Lookup Table {index} Entry {i}");
-                        builder.AppendLine(entry.OrdinalNameFlag, "        Ordinal/Name flag");
+                        builder.AppendLine($"    Import Lookup Table {index} Entry {i}");
+                        builder.AppendLine(entry.OrdinalNameFlag, "      Ordinal/Name flag");
                         if (entry.OrdinalNameFlag)
                         {
-                            builder.AppendLine(entry.OrdinalNumber, "        Ordinal number");
+                            builder.AppendLine(entry.OrdinalNumber, "      Ordinal number");
                         }
                         else
                         {
-                            builder.AppendLine(entry.HintNameTableRVA, "        Hint/Name table RVA");
-                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "        Hint/Name table physical address");
+                            builder.AppendLine(entry.HintNameTableRVA, "      Hint/Name table RVA");
+                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "      Hint/Name table physical address");
                         }
                     }
                 }
             }
 
             builder.AppendLine();
+        }
 
-            builder.AppendLine("    Import Address Tables Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.ImportAddressTables == null || table.ImportAddressTables.Count == 0)
+        private static void Print(StringBuilder builder, Dictionary<int, Models.PortableExecutable.Import.AddressTableEntry[]?>? tables, SectionHeader[]? sections)
+        {
+            builder.AppendLine("  Import Address Tables Information:");
+            builder.AppendLine("  -------------------------");
+            if (tables == null || tables.Count == 0)
             {
-                builder.AppendLine("    No import address tables");
+                builder.AppendLine("  No import address tables");
             }
             else
             {
-                foreach (var kvp in table.ImportAddressTables)
+                foreach (var kvp in tables)
                 {
                     int index = kvp.Key;
                     var importAddressTable = kvp.Value;
 
                     builder.AppendLine();
-                    builder.AppendLine($"      Import Address Table {index} Information:");
-                    builder.AppendLine("      -------------------------");
+                    builder.AppendLine($"    Import Address Table {index} Information:");
+                    builder.AppendLine("    -------------------------");
                     if (importAddressTable == null || importAddressTable.Length == 0)
                     {
-                        builder.AppendLine("      No import address table items");
+                        builder.AppendLine("    No import address table items");
                         continue;
                     }
 
@@ -826,45 +827,48 @@ namespace SabreTools.Serialization.Printers
                     {
                         var entry = importAddressTable[i];
 
-                        builder.AppendLine($"      Import Address Table {index} Entry {i}");
-                        builder.AppendLine(entry.OrdinalNameFlag, "        Ordinal/Name flag");
+                        builder.AppendLine($"    Import Address Table {index} Entry {i}");
+                        builder.AppendLine(entry.OrdinalNameFlag, "      Ordinal/Name flag");
                         if (entry.OrdinalNameFlag)
                         {
-                            builder.AppendLine(entry.OrdinalNumber, "        Ordinal number");
+                            builder.AppendLine(entry.OrdinalNumber, "      Ordinal number");
                         }
                         else
                         {
-                            builder.AppendLine(entry.HintNameTableRVA, "        Hint/Name table RVA");
-                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "        Hint/Name table physical address");
+                            builder.AppendLine(entry.HintNameTableRVA, "      Hint/Name table RVA");
+                            builder.AppendLine(entry.HintNameTableRVA.ConvertVirtualAddress(sections), "      Hint/Name table physical address");
                         }
                     }
                 }
             }
 
             builder.AppendLine();
+        }
 
-            builder.AppendLine("    Hint/Name Table Information:");
-            builder.AppendLine("    -------------------------");
-            if (table.HintNameTable == null || table.HintNameTable.Length == 0)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Import.HintNameTableEntry[]? table)
+        {
+            builder.AppendLine("  Import Hint/Name Table Information:");
+            builder.AppendLine("  -------------------------");
+            if (table == null || table.Length == 0)
             {
-                builder.AppendLine("    No hint/name table items");
+                builder.AppendLine("  No import hint/name table items");
             }
             else
             {
-                for (int i = 0; i < table.HintNameTable.Length; i++)
+                for (int i = 0; i < table.Length; i++)
                 {
-                    var entry = table.HintNameTable[i];
+                    var entry = table[i];
 
-                    builder.AppendLine($"    Hint/Name Table Entry {i}");
-                    builder.AppendLine(entry.Hint, "      Hint");
-                    builder.AppendLine(entry.Name, "      Name");
+                    builder.AppendLine($"  Hint/Name Table Entry {i}");
+                    builder.AppendLine(entry.Hint, "    Hint");
+                    builder.AppendLine(entry.Name, "    Name");
                 }
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResourceDirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Resource.DirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Resource Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -879,7 +883,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResourceDirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Resource.DirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -919,7 +923,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, ResourceDirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Resource.DirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -940,7 +944,7 @@ namespace SabreTools.Serialization.Printers
                 Print(builder, entry.Subdirectory, level: level + 1, types, sections);
         }
 
-        private static void Print(StringBuilder builder, ResourceDataEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Models.PortableExecutable.Resource.DataEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1036,25 +1040,25 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void PrintResourceRT_CURSOR(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_CURSOR(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-dependent cursor resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_BITMAP(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_BITMAP(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Bitmap resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ICON(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ICON(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-dependent icon resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_MENU(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MENU(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1132,7 +1136,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_DIALOG(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_DIALOG(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1267,7 +1271,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_STRING(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_STRING(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1287,19 +1291,19 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_FONTDIR(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_FONTDIR(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Font directory resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_FONT(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_FONT(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Font resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ACCELERATOR(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ACCELERATOR(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1322,7 +1326,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_RCDATA(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_RCDATA(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Application-defined resource found, not parsed yet");
@@ -1381,7 +1385,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_MESSAGETABLE(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MESSAGETABLE(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1448,19 +1452,19 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_GROUP_CURSOR(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_GROUP_CURSOR(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-independent cursor resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_GROUP_ICON(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_GROUP_ICON(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-independent icon resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_VERSION(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_VERSION(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1581,37 +1585,37 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_DLGINCLUDE(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_DLGINCLUDE(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}External header resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_PLUGPLAY(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_PLUGPLAY(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Plug and Play resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_VXD(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_VXD(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}VXD found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ANICURSOR(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ANICURSOR(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Animated cursor found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ANIICON(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ANIICON(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Animated icon found, not parsed yet");
         }
 
-        private static void PrintResourceRT_HTML(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_HTML(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}HTML resource found, not parsed yet");
@@ -1624,7 +1628,7 @@ namespace SabreTools.Serialization.Printers
             //    builder.AppendLine(Encoding.Unicode.GetString(entry.Data), $"{padding}Value (Unicode)");
         }
 
-        private static void PrintResourceRT_MANIFEST(ResourceDataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MANIFEST(Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1801,7 +1805,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceUNKNOWN(ResourceDataEntry entry, int level, object resourceType, StringBuilder builder)
+        private static void PrintResourceUNKNOWN(Models.PortableExecutable.Resource.DataEntry entry, int level, object resourceType, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 

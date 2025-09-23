@@ -150,7 +150,11 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Name = "XXXXXX",
                 Size = "XXXXXX",
                 CRC = "XXXXXX",
+                MD2 = "XXXXXX",
+                MD4 = "XXXXXX",
                 MD5 = "XXXXXX",
+                RIPEMD128 = "XXXXXX",
+                RIPEMD160 = "XXXXXX",
                 SHA1 = "XXXXXX",
                 SHA256 = "XXXXXX",
                 SHA384 = "XXXXXX",
@@ -460,7 +464,11 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", rom.Name);
             Assert.Equal("XXXXXX", rom.Size);
             Assert.Equal("XXXXXX", rom.CRC);
+            Assert.Equal("XXXXXX", rom.MD2);
+            Assert.Equal("XXXXXX", rom.MD4);
             Assert.Equal("XXXXXX", rom.MD5);
+            Assert.Equal("XXXXXX", rom.RIPEMD128);
+            Assert.Equal("XXXXXX", rom.RIPEMD160);
             Assert.Equal("XXXXXX", rom.SHA1);
             Assert.Equal("XXXXXX", rom.SHA256);
             Assert.Equal("XXXXXX", rom.SHA384);

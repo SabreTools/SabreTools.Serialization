@@ -4,8 +4,9 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
+using SabreTools.Models.COFF;
 using SabreTools.Models.PortableExecutable;
-using SabreTools.Models.PortableExecutable.ResourceEntries;
+using SabreTools.Models.PortableExecutable.Resource.Entries;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -20,8 +21,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <inheritdoc cref="Executable.COFFFileHeader"/>
-        public COFFFileHeader? COFFFileHeader => Model.COFFFileHeader;
+        /// <inheritdoc cref="Executable.FileHeader"/>
+        public FileHeader? COFFFileHeader => Model.FileHeader;
 
         /// <summary>
         /// Dictionary of debug data
@@ -47,8 +48,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="DebugTable.DebugDirectoryTable"/>
-        public DebugDirectoryEntry[]? DebugDirectoryTable
+        /// <inheritdoc cref="Models.PortableExecutable.DebugData.Table.Table"/>
+        public Models.PortableExecutable.DebugData.Entry[]? DebugDirectoryTable
             => Model.DebugTable?.DebugDirectoryTable;
 
         /// <summary>
@@ -101,8 +102,20 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Executable.ExportTable"/>
-        public ExportTable? ExportTable => Model.ExportTable;
+        /// <inheritdoc cref="Executable.ExportAddressTable"/>
+        public Models.PortableExecutable.Export.AddressTableEntry[]? ExportTable => Model.ExportAddressTable;
+
+        /// <inheritdoc cref="Executable.ExportDirectoryTable"/>
+        public Models.PortableExecutable.Export.DirectoryTable? ExportDirectoryTable => Model.ExportDirectoryTable;
+
+        /// <inheritdoc cref="Executable.NamePointerTable"/>
+        public Models.PortableExecutable.Export.NamePointerTable? ExportNamePointerTable => Model.NamePointerTable;
+
+        /// <inheritdoc cref="Executable.ExportNameTable"/>
+        public Models.PortableExecutable.Export.NameTable? ExportNameTable => Model.ExportNameTable;
+
+        /// <inheritdoc cref="Executable.OrdinalTable"/>
+        public Models.PortableExecutable.Export.OrdinalTable? ExportOrdinalTable => Model.OrdinalTable;
 
         /// <summary>
         /// Header padding data, if it exists
@@ -182,8 +195,17 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Executable.ImportTable"/>
-        public ImportTable? ImportTable => Model.ImportTable;
+        /// <inheritdoc cref="Executable.ImportAddressTables"/>
+        public Dictionary<int, Models.PortableExecutable.Import.AddressTableEntry[]?>? ImportAddressTables => Model.ImportAddressTables;
+
+        /// <inheritdoc cref="Executable.ImportDirectoryTable"/>
+        public Models.PortableExecutable.Import.DirectoryTableEntry[]? ImportDirectoryTable => Model.ImportDirectoryTable;
+
+        /// <inheritdoc cref="Executable.HintNameTable"/>
+        public Models.PortableExecutable.Import.HintNameTableEntry[]? ImportHintNameTable => Model.HintNameTable;
+
+        /// <inheritdoc cref="Executable.ImportLookupTables"/>
+        public Dictionary<int, Models.PortableExecutable.Import.LookupTableEntry[]?>? ImportLookupTables => Model.ImportLookupTables;
 
         /// <summary>
         /// SecuROM Matroschka package wrapper, if it exists
@@ -264,7 +286,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
-        public OptionalHeader? OptionalHeader => Model.OptionalHeader;
+        public Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -420,7 +442,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.ResourceDirectoryTable"/>
-        public ResourceDirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
+        public Models.PortableExecutable.Resource.DirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
 
         /// <summary>
         /// Sanitized section names
@@ -1174,14 +1196,14 @@ namespace SabreTools.Serialization.Wrappers
                 if (data == null)
                     continue;
 
-                if (data is NB10ProgramDatabase n)
+                if (data is Models.PortableExecutable.DebugData.NB10ProgramDatabase n)
                 {
                     if (n.PdbFileName == null || !n.PdbFileName.Contains(path))
                         continue;
 
                     debugFound.Add(n);
                 }
-                else if (data is RSDSProgramDatabase r)
+                else if (data is Models.PortableExecutable.DebugData.RSDSProgramDatabase r)
                 {
                     if (r.PathAndFileName == null || !r.PathAndFileName.Contains(path))
                         continue;
@@ -1635,7 +1657,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the resource directory table information
         /// </summary>
-        private void ParseResourceDirectoryTable(ResourceDirectoryTable table, List<object> types)
+        private void ParseResourceDirectoryTable(Models.PortableExecutable.Resource.DirectoryTable table, List<object> types)
         {
             if (table?.Entries == null)
                 return;
@@ -1657,7 +1679,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the name resource directory entry information
         /// </summary>
-        private void ParseResourceDirectoryEntry(ResourceDirectoryEntry entry, List<object> types)
+        private void ParseResourceDirectoryEntry(Models.PortableExecutable.Resource.DirectoryEntry entry, List<object> types)
         {
             if (entry.DataEntry != null)
                 ParseResourceDataEntry(entry.DataEntry, types);
@@ -1673,7 +1695,7 @@ namespace SabreTools.Serialization.Wrappers
         /// of those resources in the entire exectuable. This means that only the last found version or manifest will
         /// ever be cached.
         /// </remarks>
-        private void ParseResourceDataEntry(ResourceDataEntry entry, List<object> types)
+        private void ParseResourceDataEntry(Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
         {
             // Create the key and value objects
             string key = types == null

@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public MetadataFile? Deserialize(Stream? data, bool quotes)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return null;
 
@@ -460,8 +460,20 @@ namespace SabreTools.Serialization.Deserializers
                     case "crc":
                         rom.CRC = kvp.Value;
                         break;
+                    case "md2":
+                        rom.MD2 = kvp.Value;
+                        break;
+                    case "md4":
+                        rom.MD4 = kvp.Value;
+                        break;
                     case "md5":
                         rom.MD5 = kvp.Value;
+                        break;
+                    case "ripemd128":
+                        rom.RIPEMD128 = kvp.Value;
+                        break;
+                    case "ripemd160":
+                        rom.RIPEMD160 = kvp.Value;
                         break;
                     case "sha1":
                         rom.SHA1 = kvp.Value;

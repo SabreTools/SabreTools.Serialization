@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Ensure directory separators are consistent
-            string filename = Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
+            string filename = entry.Path.TrimEnd('\0');
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
             else if (Path.DirectorySeparatorChar == '/')
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Wrappers
             // Do not return on a hash mismatch
             if (actualMd5 != expectedMd5)
             {
-                string filename = Encoding.ASCII.GetString(entry.Path).TrimEnd('\0');
+                string filename = entry.Path.TrimEnd('\0');
                 if (includeDebug) Console.Error.WriteLine($"MD5 checksum failure for file {filename})");
                 return null;
             }

@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)
         {
-            // If tthe data is invalid
+            // If the data is invalid
             if (data == null || !data.CanRead)
                 return default;
 

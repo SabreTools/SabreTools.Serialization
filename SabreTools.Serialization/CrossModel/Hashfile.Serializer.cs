@@ -50,6 +50,10 @@ namespace SabreTools.Serialization.CrossModel
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD4, ConvertToInternalModel);
             else if (item.MD5 != null && item.MD5.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.MD5, ConvertToInternalModel);
+            else if (item.RIPEMD128 != null && item.RIPEMD128.Length > 0)
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.RIPEMD128, ConvertToInternalModel);
+            else if (item.RIPEMD160 != null && item.RIPEMD160.Length > 0)
+                machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.RIPEMD160, ConvertToInternalModel);
             else if (item.SHA1 != null && item.SHA1.Length > 0)
                 machine[Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.SHA1, ConvertToInternalModel);
             else if (item.SHA256 != null && item.SHA256.Length > 0)
@@ -98,6 +102,32 @@ namespace SabreTools.Serialization.CrossModel
             var rom = new Models.Metadata.Rom
             {
                 [Models.Metadata.Rom.MD5Key] = item.Hash,
+                [Models.Metadata.Rom.NameKey] = item.File,
+            };
+            return rom;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Hashfile.RIPEMD128"/> to <see cref="Models.Metadata.Rom"/>
+        /// </summary>
+        private static Models.Metadata.Rom ConvertToInternalModel(RIPEMD128 item)
+        {
+            var rom = new Models.Metadata.Rom
+            {
+                [Models.Metadata.Rom.RIPEMD128Key] = item.Hash,
+                [Models.Metadata.Rom.NameKey] = item.File,
+            };
+            return rom;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Hashfile.RIPEMD160"/> to <see cref="Models.Metadata.Rom"/>
+        /// </summary>
+        private static Models.Metadata.Rom ConvertToInternalModel(RIPEMD160 item)
+        {
+            var rom = new Models.Metadata.Rom
+            {
+                [Models.Metadata.Rom.RIPEMD160Key] = item.Hash,
                 [Models.Metadata.Rom.NameKey] = item.File,
             };
             return rom;

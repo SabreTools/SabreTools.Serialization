@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.PortableExecutable;
+using SabreTools.Models.SecuROM;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SecuROMAddD : BaseBinaryDeserializer<Models.PortableExecutable.SecuROMAddD>
+    public class SecuROMAddD : BaseBinaryDeserializer<AddD>
     {
         /// <inheritdoc/>
-        public override Models.PortableExecutable.SecuROMAddD? Deserialize(Stream? data)
+        public override AddD? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -37,9 +37,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SecuROMAddD on success, null on error</returns>
-        private static Models.PortableExecutable.SecuROMAddD ParseSecuROMAddD(Stream data)
+        private static AddD ParseSecuROMAddD(Stream data)
         {
-            var obj = new Models.PortableExecutable.SecuROMAddD();
+            var obj = new AddD();
 
             obj.Signature = data.ReadUInt32LittleEndian();
             obj.EntryCount = data.ReadUInt32LittleEndian();
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.Build = buildStr.ToCharArray();
             obj.Unknown14h = data.ReadBytes(1); // TODO: Figure out how to determine how many bytes are here consistently
 
-            obj.Entries = new SecuROMAddDEntry[obj.EntryCount];
+            obj.Entries = new AddDEntry[obj.EntryCount];
             for (int i = 0; i < obj.Entries.Length; i++)
             {
                 var entry = ParseSecuROMAddDEntry(data);
@@ -64,9 +64,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled SecuROMAddDEntry on success, null on error</returns>
-        private static SecuROMAddDEntry ParseSecuROMAddDEntry(Stream data)
+        private static AddDEntry ParseSecuROMAddDEntry(Stream data)
         {
-            var obj = new SecuROMAddDEntry();
+            var obj = new AddDEntry();
 
             obj.PhysicalOffset = data.ReadUInt32LittleEndian();
             obj.Length = data.ReadUInt32LittleEndian();
