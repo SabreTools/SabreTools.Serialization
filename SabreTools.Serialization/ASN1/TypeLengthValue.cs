@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
 using System.Text;
-using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.ASN1
 {
@@ -15,56 +12,17 @@ namespace SabreTools.Serialization.ASN1
         /// <summary>
         /// The ASN.1 type
         /// </summary>
-        public ASN1Type Type { get; private set; }
+        public ASN1Type Type { get; set; }
 
         /// <summary>
         /// Length of the value
         /// </summary>
-        public ulong Length { get; private set; }
+        public ulong Length { get; set; }
 
         /// <summary>
         /// Generic value associated with <see cref="Type"/>
         /// </summary>
-        public object? Value { get; private set; }
-
-        /// <summary>
-        /// Manual constructor
-        /// </summary>
-        public TypeLengthValue(ASN1Type type, ulong length, object? value)
-        {
-            Type = type;
-            Length = length;
-            Value = value;
-        }
-
-        /// <summary>
-        /// Read from the source data array at an index
-        /// </summary>
-        /// <param name="data">Byte array representing data to read</param>
-        /// <param name="index">Index within the array to read at</param>
-        public TypeLengthValue(byte[] data, ref int index)
-        {
-            // If the data is invalid
-            if (data.Length == 0)
-                throw new InvalidDataException(nameof(data));
-            if (index < 0 || index >= data.Length)
-                throw new IndexOutOfRangeException(nameof(index));
-
-            using var stream = new MemoryStream(data);
-            stream.Seek(index, SeekOrigin.Begin);
-            if (!Parse(stream))
-                throw new InvalidDataException(nameof(data));
-        }
-
-        /// <summary>
-        /// Read from the source data stream
-        /// </summary>
-        /// <param name="data">Stream representing data to read</param>
-        public TypeLengthValue(Stream data)
-        {
-            if (!Parse(data))
-                throw new InvalidDataException(nameof(data));
-        }
+        public object? Value { get; set; }
 
         /// <summary>
         /// Format the TLV as a string
@@ -213,121 +171,6 @@ namespace SabreTools.Serialization.ASN1
 
             // Return the formatted string
             return formatBuilder.ToString();
-        }
-
-        /// <summary>
-        /// Parse a stream into TLV data
-        /// </summary>
-        /// <param name="data">Stream representing data to read</param>
-        /// <returns>Indication if parsing was successful</returns>
-        private bool Parse(Stream data)
-        {
-            // If the data is invalid
-            if (data.Length == 0 || !data.CanRead)
-                return false;
-            if (data.Position < 0 || data.Position >= data.Length)
-                throw new IndexOutOfRangeException(nameof(data));
-
-            // Get the type and modifiers
-            Type = (ASN1Type)data.ReadByteValue();
-
-            // If we have an end indicator, we just return
-            if (Type == ASN1Type.V_ASN1_EOC)
-                return true;
-
-            // Get the length of the value
-            Length = ReadLength(data);
-
-            // Read the value
-#if NET20 || NET35
-            if ((Type & ASN1Type.V_ASN1_CONSTRUCTED) != 0)
-#else
-            if (Type.HasFlag(ASN1Type.V_ASN1_CONSTRUCTED))
-#endif
-            {
-                var valueList = new List<TypeLengthValue>();
-
-                long currentIndex = data.Position;
-                while (data.Position < currentIndex + (long)Length)
-                {
-                    valueList.Add(new TypeLengthValue(data));
-                }
-
-                Value = valueList.ToArray();
-            }
-            else
-            {
-                // TODO: Get more granular based on type
-                Value = data.ReadBytes((int)Length);
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Reads the length field for a type
-        /// </summary>
-        /// <param name="data">Stream representing data to read</param>
-        /// <returns>The length value read from the array</returns>
-        private static ulong ReadLength(Stream data)
-        {
-            // If the data is invalid
-            if (data.Length == 0 || !data.CanRead)
-                throw new InvalidDataException(nameof(data));
-            if (data.Position < 0 || data.Position >= data.Length)
-                throw new IndexOutOfRangeException(nameof(data));
-
-            // Read the first byte, assuming it's the length
-            byte length = data.ReadByteValue();
-
-            // If the bit 7 is not set, then use the value as it is
-            if ((length & 0x80) == 0)
-                return length;
-
-            // Otherwise, use the value as the number of remaining bytes to read
-            int bytesToRead = length & ~0x80;
-
-            // Assemble the length based on byte count
-            ulong fullLength = 0;
-            switch (bytesToRead)
-            {
-                case 8:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 7;
-                case 7:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 6;
-                case 6:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 5;
-                case 5:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 4;
-                case 4:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 3;
-                case 3:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 2;
-                case 2:
-                    fullLength |= data.ReadByteValue();
-                    fullLength <<= 8;
-                    goto case 1;
-                case 1:
-                    fullLength |= data.ReadByteValue();
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-
-            return fullLength;
         }
     }
 }

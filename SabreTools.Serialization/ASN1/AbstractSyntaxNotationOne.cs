@@ -39,13 +39,19 @@ namespace SabreTools.Serialization.ASN1
             if (data.Position < 0 || data.Position >= data.Length)
                 throw new IndexOutOfRangeException(nameof(data));
 
+            // Create the deserializer
+            var deserializer = new Deserializers.TypeLengthValue();
+
             // Create the output list to return
             var topLevelValues = new List<TypeLengthValue>();
 
             // Loop through the data and return all top-level values
             while (data.Position < data.Length)
             {
-                var topLevelValue = new TypeLengthValue(data);
+                var topLevelValue = deserializer.Deserialize(data);
+                if (topLevelValue == null)
+                    break;
+
                 topLevelValues.Add(topLevelValue);
             }
 
