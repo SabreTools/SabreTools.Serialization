@@ -1,13 +1,13 @@
-using SabreTools.Serialization.ASN1;
+using SabreTools.Serialization.ObjectIdentifier;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.ASN1
+namespace SabreTools.Serialization.Test.ObjectIdentifier
 {
     // These tests are known to be incomplete due to the sheer number
     // of possible OIDs that exist. The tests below are a minimal
     // representation of functionality to guarantee proper behavior
     // not necessarily absolute outputs
-    public class ObjectIdentifierTests
+    public class ParserTests
     {
         #region ASN.1
 
@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void ASN1Notation_AlwaysNull()
         {
             ulong[]? values = null;
-            string? actual = ObjectIdentifier.ParseOIDToASN1Notation(values); 
+            string? actual = Parser.ParseOIDToASN1Notation(values); 
             Assert.Null(actual);
         }
 
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void DotNotation_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = ObjectIdentifier.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values); 
             Assert.Null(actual);
         }
 
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void DotNotation_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = ObjectIdentifier.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values); 
             Assert.Null(actual);
         }
 
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Test.ASN1
         {
             string expected = "0.1.2.3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = ObjectIdentifier.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values); 
             Assert.Equal(expected, actual);
         }
 
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void ModifiedOIDIRI_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = ObjectIdentifier.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
             Assert.Null(actual);
         }
 
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void ModifiedOIDIRI_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = ObjectIdentifier.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
             Assert.Null(actual);
         }
 
@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Test.ASN1
         {
             string expected = "/ITU-T/[question]/2/3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = ObjectIdentifier.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
             Assert.Equal(expected, actual);
         }
 
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void OIDIRI_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = ObjectIdentifier.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
             Assert.Null(actual);
         }
 
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Test.ASN1
         public void OIDIRI_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = ObjectIdentifier.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
             Assert.Null(actual);
         }
 
@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Test.ASN1
         {
             string expected = "/ITU-T/1/2/3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = ObjectIdentifier.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
             Assert.Equal(expected, actual);
         }
 

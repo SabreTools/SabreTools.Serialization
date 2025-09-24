@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.ASN1
+namespace SabreTools.Serialization.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID)
     /// </summary>
-    public static partial class ObjectIdentifier
+    public static partial class Parser
     {
         // TODO: ulong[] isn't going to work. If we can use .NET 7, we can use UInt128
         // We might want to look into storing all values as GUID? I don't remember if

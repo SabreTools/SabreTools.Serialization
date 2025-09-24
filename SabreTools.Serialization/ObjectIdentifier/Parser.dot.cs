@@ -1,11 +1,11 @@
 using System;
 
-namespace SabreTools.Serialization.ASN1
+namespace SabreTools.Serialization.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID) and dot notation
     /// </summary>
-    public static partial class ObjectIdentifier
+    public static partial class Parser
     {
         /// <summary>
         /// Parse an OID in separated-value notation into dot notation

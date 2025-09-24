@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using System.Text;
 using SabreTools.Models.ASN1;
-using SabreTools.Serialization.ASN1;
+using SabreTools.Serialization.ObjectIdentifier;
 
 namespace SabreTools.Serialization.Extensions
 {
@@ -107,11 +107,11 @@ namespace SabreTools.Serialization.Extensions
                 /// <see cref="http://snmpsharpnet.com/index.php/2009/03/02/ber-encoding-and-decoding-oid-values/"/>
                 case ASN1Type.V_ASN1_OBJECT:
                     // Derive array of values
-                    ulong[] objectNodes = ObjectIdentifier.ParseDERIntoArray(valueAsByteArray, tlv.Length);
+                    ulong[] objectNodes = Parser.ParseDERIntoArray(valueAsByteArray, tlv.Length);
 
                     // Append the dot and modified OID-IRI notations
-                    string? dotNotationString = ObjectIdentifier.ParseOIDToDotNotation(objectNodes);
-                    string? oidIriString = ObjectIdentifier.ParseOIDToOIDIRINotation(objectNodes);
+                    string? dotNotationString = Parser.ParseOIDToDotNotation(objectNodes);
+                    string? oidIriString = Parser.ParseOIDToOIDIRINotation(objectNodes);
                     formatBuilder.Append($", Value: {dotNotationString} ({oidIriString})");
                     break;
 
