@@ -451,6 +451,9 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
+            // Create the deserializer
+            var deserializer = new Deserializers.AbstractSyntaxNotationOne();
+
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
@@ -470,7 +473,7 @@ namespace SabreTools.Serialization.Printers
                     }
                     else
                     {
-                        var topLevelValues = AbstractSyntaxNotationOne.Parse(entry.Certificate, 0);
+                        var topLevelValues = deserializer.Deserialize(entry.Certificate, 0);
                         if (topLevelValues == null)
                         {
                             builder.AppendLine("    INVALID DATA FOUND");

@@ -4,10 +4,10 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class ASN1TypeLengthValue : BaseBinaryDeserializer<ASN1.TypeLengthValue>
+    public class AbstractSyntaxNotationOne : BaseBinaryDeserializer<ASN1.TypeLengthValue[]>
     {
         /// <inheritdoc/>
-        public override ASN1.TypeLengthValue? Deserialize(Stream? data)
+        public override ASN1.TypeLengthValue[]? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -18,12 +18,19 @@ namespace SabreTools.Serialization.Deserializers
                 // Cache the current offset
                 long initialOffset = data.Position;
 
-                var tlv = ParseTypeLengthValue(data);
-                if (tlv == null)
-                    return null;
+                // Loop through the data and return all top-level values
+                var topLevelValues = new List<ASN1.TypeLengthValue>();
+                while (data.Position < data.Length)
+                {
+                    var topLevelValue = ParseTypeLengthValue(data);
+                    if (topLevelValue == null)
+                        break;
 
-                // Return the Type/Length/Value
-                return tlv;
+                    topLevelValues.Add(topLevelValue);
+                }
+
+                // Return the top-level values
+                return [.. topLevelValues];
             }
             catch
             {

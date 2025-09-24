@@ -6,14 +6,14 @@ using Xunit;
 
 namespace SabreTools.Serialization.Test.Deserializers
 {
-    public class ASN1TypeLengthValueTests
+    public class AbstractSyntaxNotationOneTests
     {
         [Fact]
         public void NullArray_Null()
         {
             byte[]? data = null;
             int offset = 0;
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             byte[]? data = [];
             int offset = 0;
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             byte[]? data = [.. Enumerable.Repeat<byte>(0xFF, 1024)];
             int offset = 0;
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void NullStream_Null()
         {
             Stream? data = null;
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void EmptyStream_Null()
         {
             Stream? data = new MemoryStream([]);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void InvalidStream_Null()
         {
             Stream? data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -75,28 +75,32 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void ValidMinimalStream_NotNull()
         {
             Stream data = new MemoryStream([0x00]);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.NotNull(actual);
-            Assert.Equal(ASN1Type.V_ASN1_EOC, actual.Type);
-            Assert.Equal(default, actual.Length);
-            Assert.Null(actual.Value);
+
+            var actualSingle = Assert.Single(actual);
+            Assert.Equal(ASN1Type.V_ASN1_EOC, actualSingle.Type);
+            Assert.Equal(default, actualSingle.Length);
+            Assert.Null(actualSingle.Value);
         }
 
         [Fact]
         public void ValidBoolean_NotNull()
         {
             Stream data = new MemoryStream([0x01, 0x01, 0x01]);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.NotNull(actual);
-            Assert.Equal(ASN1Type.V_ASN1_BOOLEAN, actual.Type);
-            Assert.Equal(1UL, actual.Length);
-            Assert.NotNull(actual.Value);
 
-            byte[]? valueAsArray = actual.Value as byte[];
+            var actualSingle = Assert.Single(actual);
+            Assert.Equal(ASN1Type.V_ASN1_BOOLEAN, actualSingle.Type);
+            Assert.Equal(1UL, actualSingle.Length);
+            Assert.NotNull(actualSingle.Value);
+
+            byte[]? valueAsArray = actualSingle.Value as byte[];
             Assert.NotNull(valueAsArray);
             byte actualValue = Assert.Single(valueAsArray);
             Assert.Equal(0x01, actualValue);
@@ -114,15 +118,17 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void ComplexValue_NotNull(byte[] arr)
         {
             Stream data = new MemoryStream(arr);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
             Assert.NotNull(actual);
-            Assert.Equal(ASN1Type.V_ASN1_CONSTRUCTED | ASN1Type.V_ASN1_OBJECT, actual.Type);
-            Assert.Equal(3UL, actual.Length);
-            Assert.NotNull(actual.Value);
 
-            TypeLengthValue[]? valueAsArray = actual.Value as TypeLengthValue[];
+            var actualSingle = Assert.Single(actual);
+            Assert.Equal(ASN1Type.V_ASN1_CONSTRUCTED | ASN1Type.V_ASN1_OBJECT, actualSingle.Type);
+            Assert.Equal(3UL, actualSingle.Length);
+            Assert.NotNull(actualSingle.Value);
+
+            TypeLengthValue[]? valueAsArray = actualSingle.Value as TypeLengthValue[];
             Assert.NotNull(valueAsArray);
             TypeLengthValue actualSub = Assert.Single(valueAsArray);
 
@@ -134,13 +140,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         [Theory]
         [InlineData(new byte[] { 0x26, 0x80 })]
         [InlineData(new byte[] { 0x26, 0x89 })]
-        public void ComplexValueInvalidLength_Null(byte[] arr)
+        public void ComplexValueInvalidLength_Empty(byte[] arr)
         {
             Stream data = new MemoryStream(arr);
-            var deserializer = new ASN1TypeLengthValue();
+            var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
-            Assert.Null(actual);
+            Assert.NotNull(actual);
+            Assert.Empty(actual);
         }
     }
 }
