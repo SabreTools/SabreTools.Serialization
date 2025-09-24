@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.ASN1
         /// <param name="values">List of values to check against</param>
         /// <param name="index">Current index into the list</param>
         /// <returns>OID-IRI formatted string, if possible</returns>
-        /// <see href="http://www.oid-info.com/index.htm"/>
+        /// <see href="https://oid-base.com/"/>
         public static string? ParseOIDToOIDIRINotation(ulong[]? values)
         {
             // If we have an invalid set of values, we can't do anything
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.ASN1
         /// <param name="values">List of values to check against</param>
         /// <param name="index">Current index into the list</param>
         /// <returns>OID-IRI formatted string, if possible</returns>
-        /// <see href="http://www.oid-info.com/index.htm"/>
+        /// <see href="https://oid-base.com/"/>
         private static string? ParseOIDToOIDIRINotation(ulong[]? values, ref int index)
         {
             // If we have an invalid set of values, we can't do anything

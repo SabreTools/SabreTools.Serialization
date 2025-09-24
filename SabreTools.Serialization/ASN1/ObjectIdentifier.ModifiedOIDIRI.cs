@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.ASN1
         /// a string from the official description. As such, the output of this is
         /// not considered to be fully OID-IRI compliant.
         /// </remarks>
-        /// <see href="http://www.oid-info.com/index.htm"/>
+        /// <see href="https://oid-base.com/"/>
         public static string? ParseOIDToModifiedOIDIRI(ulong[]? values)
         {
             // If we have an invalid set of values, we can't do anything
@@ -10508,34 +10508,33 @@ namespace SabreTools.Serialization.ASN1
                 case 48: return $"{oidPath}/[Croydon Health Services National Health Service (NHS) Trust]";
                 case 49: return $"{oidPath}/[Alder Hey Children's National Health Service (NHS) Foundation Trust]";
                 case 50: return $"{oidPath}/[Royal Liverpool and Broadgreen University Hospitals Trust]";
-                // TODO: Left off at http://www.oid-info.com/get/2.16.840.1.113883.2.1.3.51
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
-                // case 1: return $"{oidPath}/[XXXXX]";
+                case 51: return $"{oidPath}/[Liverpool Heart & Chest Hospital National Health Service (NHS) Trust]";
+                case 52: return $"{oidPath}/[Merseycare National Health Service (NHS) Trust]";
+                case 53: return $"{oidPath}/[Kingston Hospital National Health Service (NHS) Foundation Trust]";
+                case 54: return $"{oidPath}/[The Clatterbridge Cancer Centre National Health Service (NHS) Foundation Trust]";
+                case 55: return $"{oidPath}/[St Helens and Knowsley Teaching Hospitals National Health Service (NHS) Trust]";
+                case 56: return $"{oidPath}/[Epsom and St Helier University Hospitals National Health Service (NHS) Trust]";
+                case 57: return $"{oidPath}/[OUH National Health Service (NHS) Foundation Trust]";
+                case 58: return $"{oidPath}/[London North West University Healthcare National Health Service (NHS) Trust]";
+                case 59: return $"{oidPath}/[InHealth Group]";
+                case 60: return $"{oidPath}/[Dorset Care Record Partnership]";
+                case 61: return $"{oidPath}/[East Lancashire Hospitals National Health Service (NHS) Trust]";
+                case 62: return $"{oidPath}/[Newcastle Hospitals National Health Service (NHS) Foundation Trust interoperability for Great North Care Record]";
+                case 63: return $"{oidPath}/[South Tyneside and Sunderland National Health Service (NHS) Foundation Trust]";
+                case 64: return $"{oidPath}/[Liverpool Women's National Health Service (NHS) Foundation Trust]";
+                case 65: return $"{oidPath}/[Sunderland City Council interoperability for Great North Care Record]";
+                case 66: return $"{oidPath}/[North Tees and Hartlepool National Health Service (NHS) Foundation Trust]";
+                case 67: return $"{oidPath}/[Gateshead Health National Health Service (NHS) Foundation Trust]";
+                case 68: return $"{oidPath}/[North West London Radiology Network]";
+                case 69: return $"{oidPath}/[Aintree University Hospital National Health Service (NHS) Foundation Trust]";
+                case 70: return $"{oidPath}/[South Tees Hospitals National Health Service (NHS) Foundation Trust]";
+                case 71: return $"{oidPath}/[Warrington & Halton Teaching Hospital National Health Service (NHS) Foundation Trust]";
+                case 72: return $"{oidPath}/[Tees, Esk and Wear Valleys National Health Service (NHS) Foundation Trust]";
+                case 73: return $"{oidPath}/[Greater Manchester Combined Authority, Health and Social Care]";
+                case 74: return $"{oidPath}/[Chelsea and Westminster Hospital National Health Service (NHS) Foundation Trust]";
+                case 75: return $"{oidPath}/[North West Boroughs Healthcare National Health Service (NHS) Foundation Trust]";
+                case 76: return $"{oidPath}/[Mid and South Essex National Health Service (NHS) Foundation Trust]";
+                // TODO: Left off at https://oid-base.com/get/2.16.840.1.113883.2.1.3.76
                 // case 1: return $"{oidPath}/[XXXXX]";
                 // case 1: return $"{oidPath}/[XXXXX]";
                 // case 1: return $"{oidPath}/[XXXXX]";
@@ -12951,7 +12950,7 @@ namespace SabreTools.Serialization.ASN1
                 //case 2474299330026746002885628159579243803: return $"{oidPath}/01dc8860-25fb-11da-82b2-0002a5d5c51b";
                 //case 3263645701162998421821186056373271854: return $"{oidPath}/02748e28-08c4-1085-b21d-0002a5d5fd2e";
                 //case 3325839809379844461264382260940242222: return $"{oidPath}/02808890-0ad8-1085-9bdf-0002a5d5fd2e";
-                // TODO: Left off at http://www.oid-info.com/get/2.25.3664154270495270126161055518190585115
+                // TODO: Left off at https://oid-base.com/cgi-bin/display?oid=2.25.3664154270495270126161055518190585115
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
