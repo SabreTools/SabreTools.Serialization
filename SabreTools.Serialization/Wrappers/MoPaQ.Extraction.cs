@@ -12,11 +12,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-#if NET20 || NET35 || !(WINX86 || WINX64)
-            Console.WriteLine("Extraction is not supported for this framework!");
-            Console.WriteLine();
-            return false;
-#else
+#if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
             try
             {
                 if (Filename == null || !File.Exists(Filename))
@@ -73,6 +69,10 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) System.Console.WriteLine(ex);
                 return false;
             }
+#else
+            Console.WriteLine("Extraction is not supported for this framework!");
+            Console.WriteLine();
+            return false;
 #endif
         }
     }

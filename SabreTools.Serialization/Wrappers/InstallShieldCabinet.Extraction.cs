@@ -249,7 +249,7 @@ namespace SabreTools.Serialization.Wrappers
                         if (directoryName != null && !Directory.Exists(directoryName))
                             Directory.CreateDirectory(directoryName);
 
-                        cabinet.FileSave(i, filename);
+                        cabinet.FileSave(i, filename, includeDebug);
                     }
                     catch (Exception ex)
                     {
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Save the file at the given index to the filename specified
         /// </summary>
-        public bool FileSave(int index, string filename, bool useOld = false)
+        public bool FileSave(int index, string filename, bool includeDebug, bool useOld = false)
         {
             // Get the file descriptor
             if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
@@ -277,7 +277,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If the file is split
             if (fileDescriptor.LinkFlags == LinkFlags.LINK_PREV)
-                return FileSave((int)fileDescriptor.LinkPrevious, filename, useOld);
+                return FileSave((int)fileDescriptor.LinkPrevious, filename, includeDebug, useOld);
 
             // Get the reader at the index
             var reader = Reader.Create(this, index, fileDescriptor);
@@ -379,7 +379,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Validate the number of bytes written
             if ((long)fileDescriptor.ExpandedSize != totalWritten)
-                Console.WriteLine($"Expanded size of file {index} ({GetFileName(index)}) expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
+                if (includeDebug) Console.WriteLine($"Expanded size of file {index} ({GetFileName(index)}) expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
 
             // Finalize output values
             md5.Terminate();
