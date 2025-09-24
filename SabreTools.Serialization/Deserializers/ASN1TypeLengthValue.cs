@@ -4,7 +4,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class TypeLengthValue : BaseBinaryDeserializer<ASN1.TypeLengthValue>
+    public class ASN1TypeLengthValue : BaseBinaryDeserializer<ASN1.TypeLengthValue>
     {
         /// <inheritdoc/>
         public override ASN1.TypeLengthValue? Deserialize(Stream? data)

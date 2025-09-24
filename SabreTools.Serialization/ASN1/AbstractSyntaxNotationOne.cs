@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Serialization.Deserializers;
 
 namespace SabreTools.Serialization.ASN1
 {
@@ -40,12 +41,10 @@ namespace SabreTools.Serialization.ASN1
                 throw new IndexOutOfRangeException(nameof(data));
 
             // Create the deserializer
-            var deserializer = new Deserializers.TypeLengthValue();
-
-            // Create the output list to return
-            var topLevelValues = new List<TypeLengthValue>();
+            var deserializer = new ASN1TypeLengthValue();
 
             // Loop through the data and return all top-level values
+            var topLevelValues = new List<TypeLengthValue>();
             while (data.Position < data.Length)
             {
                 var topLevelValue = deserializer.Deserialize(data);
