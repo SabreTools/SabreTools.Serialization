@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
+using SabreTools.Models.ASN1;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class AbstractSyntaxNotationOne : BaseBinaryDeserializer<ASN1.TypeLengthValue[]>
+    public class AbstractSyntaxNotationOne : BaseBinaryDeserializer<TypeLengthValue[]>
     {
         /// <inheritdoc/>
-        public override ASN1.TypeLengthValue[]? Deserialize(Stream? data)
+        public override TypeLengthValue[]? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -19,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Loop through the data and return all top-level values
-                var topLevelValues = new List<ASN1.TypeLengthValue>();
+                var topLevelValues = new List<TypeLengthValue>();
                 while (data.Position < data.Length)
                 {
                     var topLevelValue = ParseTypeLengthValue(data);
@@ -48,15 +49,15 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled TypeLengthValue on success, null on error</returns>
-        public ASN1.TypeLengthValue? ParseTypeLengthValue(Stream data)
+        public TypeLengthValue? ParseTypeLengthValue(Stream data)
         {
-            var obj = new ASN1.TypeLengthValue();
+            var obj = new TypeLengthValue();
 
             // Get the type and modifiers
-            obj.Type = (ASN1.ASN1Type)data.ReadByteValue();
+            obj.Type = (ASN1Type)data.ReadByteValue();
 
             // If we have an end indicator, we just return
-            if (obj.Type == ASN1.ASN1Type.V_ASN1_EOC)
+            if (obj.Type == ASN1Type.V_ASN1_EOC)
                 return obj;
 
             // Get the length of the value
@@ -69,12 +70,12 @@ namespace SabreTools.Serialization.Deserializers
 
             // Read the value
 #if NET20 || NET35
-            if ((obj.Type & ASN1.ASN1Type.V_ASN1_CONSTRUCTED) != 0)
+            if ((obj.Type & ASN1Type.V_ASN1_CONSTRUCTED) != 0)
 #else
-            if (obj.Type.HasFlag(ASN1.ASN1Type.V_ASN1_CONSTRUCTED))
+            if (obj.Type.HasFlag(ASN1Type.V_ASN1_CONSTRUCTED))
 #endif
             {
-                var valueList = new List<ASN1.TypeLengthValue>();
+                var valueList = new List<TypeLengthValue>();
 
                 long currentIndex = data.Position;
                 while (data.Position < currentIndex + (long)obj.Length)

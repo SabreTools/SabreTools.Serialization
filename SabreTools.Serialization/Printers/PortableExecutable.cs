@@ -7,7 +7,6 @@ using SabreTools.Models.COFF;
 using SabreTools.Models.COFF.SymbolTableEntries;
 using SabreTools.Models.PortableExecutable;
 using SabreTools.Models.PortableExecutable.Resource.Entries;
-using SabreTools.Serialization.ASN1;
 using SabreTools.Serialization.Extensions;
 using SabreTools.Serialization.Interfaces;
 
@@ -481,7 +480,7 @@ namespace SabreTools.Serialization.Printers
                         }
                         else
                         {
-                            foreach (ASN1.TypeLengthValue tlv in topLevelValues)
+                            foreach (Models.ASN1.TypeLengthValue tlv in topLevelValues)
                             {
                                 string tlvString = tlv.Format(paddingLevel: 4);
                                 builder.AppendLine(tlvString);

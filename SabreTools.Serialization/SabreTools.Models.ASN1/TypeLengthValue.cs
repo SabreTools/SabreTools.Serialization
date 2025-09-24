@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.ASN1
+﻿namespace SabreTools.Models.ASN1
 {
     /// <summary>
     /// ASN.1 type/length/value class that all types are based on
