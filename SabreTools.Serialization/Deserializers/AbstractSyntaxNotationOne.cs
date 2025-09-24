@@ -29,6 +29,10 @@ namespace SabreTools.Serialization.Deserializers
                     topLevelValues.Add(topLevelValue);
                 }
 
+                // Return null instead of empty
+                if (topLevelValues.Count == 0)
+                    return null;
+
                 // Return the top-level values
                 return [.. topLevelValues];
             }

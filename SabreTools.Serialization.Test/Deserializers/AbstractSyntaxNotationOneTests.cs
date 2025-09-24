@@ -140,14 +140,13 @@ namespace SabreTools.Serialization.Test.Deserializers
         [Theory]
         [InlineData(new byte[] { 0x26, 0x80 })]
         [InlineData(new byte[] { 0x26, 0x89 })]
-        public void ComplexValueInvalidLength_Empty(byte[] arr)
+        public void ComplexValueInvalidLength_Null(byte[] arr)
         {
             Stream data = new MemoryStream(arr);
             var deserializer = new AbstractSyntaxNotationOne();
 
             var actual = deserializer.Deserialize(data);
-            Assert.NotNull(actual);
-            Assert.Empty(actual);
+            Assert.Null(actual);
         }
     }
 }
