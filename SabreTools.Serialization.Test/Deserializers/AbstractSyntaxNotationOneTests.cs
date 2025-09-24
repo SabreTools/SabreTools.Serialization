@@ -1,6 +1,6 @@
 using System.IO;
 using System.Linq;
-using SabreTools.Serialization.ASN1;
+using SabreTools.Models.ASN1;
 using SabreTools.Serialization.Deserializers;
 using Xunit;
 
