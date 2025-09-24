@@ -3771,7 +3771,7 @@ namespace SabreTools.Serialization.ASN1
             {
                 case 1: goto oid_0_0_8_341_1_1_1;
                 case 2: goto oid_0_0_8_341_1_1_2;
-                //TODO: case 3: goto oid_0_0_8_341_1_1_3;
+                case 3: goto oid_0_0_8_341_1_1_3;
                 //TODO: case 4: goto oid_0_0_8_341_1_1_4;
                 //TODO: case 5: goto oid_0_0_8_341_1_1_5;
                 //TODO: case 6: goto oid_0_0_8_341_1_1_6;
@@ -4503,6 +4503,24 @@ namespace SabreTools.Serialization.ASN1
         #endregion
 
         #endregion
+
+        #endregion
+
+        // h323Terminal
+        #region 0.0.8.341.1.1.3.*
+
+        oid_0_0_8_341_1_1_3:
+
+            oidPath += "/[h323Terminal]";
+            if (index == values.Length) return oidPath;
+            switch (values[index++])
+            {
+                // TODO: case 1: goto oid_0_0_8_341_1_1_3_1;
+                // TODO: case 2: goto oid_0_0_8_341_1_1_3_2;
+                // TODO: case 3: goto oid_0_0_8_341_1_1_3_3;
+                // TODO: case 5: goto oid_0_0_8_341_1_1_3_5;
+                default: return $"{oidPath}/{values[index - 1]}";
+            }
 
         #endregion
 
