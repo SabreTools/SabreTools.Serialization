@@ -478,7 +478,7 @@ namespace SabreTools.Serialization.Printers
                         }
                         else
                         {
-                            foreach (TypeLengthValue tlv in topLevelValues)
+                            foreach (ASN1.TypeLengthValue tlv in topLevelValues)
                             {
                                 string tlvString = tlv.Format(paddingLevel: 4);
                                 builder.AppendLine(tlvString);
