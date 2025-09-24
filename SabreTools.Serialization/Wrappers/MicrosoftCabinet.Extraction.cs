@@ -144,8 +144,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // Display warning
-            Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
+            // Display warning in debug runs
+            if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
 
             // Open the full set if possible
             var cabinet = this;
