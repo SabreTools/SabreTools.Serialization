@@ -56,8 +56,21 @@ namespace SabreTools.Serialization.Deserializers
         /// <returns>Filled object on success, null on error</returns>
         public T? Deserialize(string? path, Encoding encoding)
         {
-            using var data = PathProcessor.OpenStream(path);
-            return Deserialize(data, encoding);
+            try
+            {
+                // If we don't have a file
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                    return default;
+
+                // Open the file for deserialization
+                using var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return Deserialize(stream, encoding);
+            }
+            catch
+            {
+                // TODO: Handle logging the exception
+                return default;
+            }
         }
 
         #endregion

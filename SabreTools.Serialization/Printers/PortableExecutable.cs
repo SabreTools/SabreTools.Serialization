@@ -588,7 +588,6 @@ namespace SabreTools.Serialization.Printers
                 return;
             }
 
-            // TODO: If more sections added, model this after the Export Table
             for (int i = 0; i < table.DebugDirectoryTable.Length; i++)
             {
                 var entry = table.DebugDirectoryTable[i];

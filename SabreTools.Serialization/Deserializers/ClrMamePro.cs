@@ -42,8 +42,21 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(string?)"/>
         public MetadataFile? Deserialize(string? path, bool quotes)
         {
-            using var stream = PathProcessor.OpenStream(path);
-            return Deserialize(stream, quotes);
+            try
+            {
+                // If we don't have a file
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                    return default;
+
+                // Open the file for deserialization
+                using var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return Deserialize(stream, quotes);
+            }
+            catch
+            {
+                // TODO: Handle logging the exception
+                return default;
+            }
         }
 
         #endregion

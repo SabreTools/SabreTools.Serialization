@@ -41,8 +41,21 @@ namespace SabreTools.Serialization.Deserializers
         /// <inheritdoc cref="Deserialize(string?)"/>
         public Models.Hashfile.Hashfile? Deserialize(string? path, HashType hash)
         {
-            using var stream = PathProcessor.OpenStream(path);
-            return Deserialize(stream, hash);
+            try
+            {
+                // If we don't have a file
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                    return default;
+
+                // Open the file for deserialization
+                using var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return Deserialize(stream, hash);
+            }
+            catch
+            {
+                // TODO: Handle logging the exception
+                return default;
+            }
         }
 
         #endregion
