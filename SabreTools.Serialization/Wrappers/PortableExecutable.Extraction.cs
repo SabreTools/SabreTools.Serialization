@@ -2,7 +2,6 @@
 using System.IO;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers

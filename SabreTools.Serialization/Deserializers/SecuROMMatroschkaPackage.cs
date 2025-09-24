@@ -1,7 +1,6 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Models.SecuROM;
 using static SabreTools.Models.SecuROM.Constants;
 

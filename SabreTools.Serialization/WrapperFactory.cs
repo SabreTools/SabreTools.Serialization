@@ -1,10 +1,8 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Serialization.Interfaces;
 using SabreTools.Serialization.Wrappers;
-using static SabreTools.Matching.Extensions;
 
 namespace SabreTools.Serialization
 {

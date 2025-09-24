@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Models.COFF;
 using SabreTools.Models.COFF.SymbolTableEntries;
 using SabreTools.Models.PortableExecutable;
