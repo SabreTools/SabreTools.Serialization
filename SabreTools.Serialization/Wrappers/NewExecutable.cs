@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    overlaySize = Math.Min(overlaySize, int.MaxValue);
+                    overlaySize = Math.Min(overlaySize, int.MaxValue - 1);
 
                     _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlaySize);
                     return _overlayData;
