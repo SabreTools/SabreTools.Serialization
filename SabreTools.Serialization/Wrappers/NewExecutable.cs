@@ -109,6 +109,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
+        /// <remarks>Can only cache up to <see cref="int.MaxValue"/> bytes</remarks> 
         /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
         public byte[] OverlayData
         {
@@ -154,6 +155,8 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Otherwise, cache and return the data
                     long overlayLength = dataLength - endOfSectionData;
+                    overlayLength = Math.Min(overlayLength, int.MaxValue);
+
                     _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }

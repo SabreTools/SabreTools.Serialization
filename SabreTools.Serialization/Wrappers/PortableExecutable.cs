@@ -362,6 +362,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
+        /// <remarks>Can only cache up to <see cref="int.MaxValue"/> bytes</remarks> 
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
         public byte[] OverlayData
         {
@@ -407,6 +408,8 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Otherwise, cache and return the data
                     long overlayLength = dataLength - endOfSectionData;
+                    overlayLength = Math.Min(overlayLength, int.MaxValue);
+
                     _overlayData = ReadRangeFromSource(endOfSectionData, (int)overlayLength) ?? [];
                     return _overlayData;
                 }
