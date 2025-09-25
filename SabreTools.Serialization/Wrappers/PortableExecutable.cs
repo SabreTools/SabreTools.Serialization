@@ -55,6 +55,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Entry point data, if it exists
         /// </summary>
+        /// <remarks>Can only cache up to 128 bytes</remarks> 
         public byte[] EntryPointData
         {
             get
