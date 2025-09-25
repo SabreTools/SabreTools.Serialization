@@ -216,6 +216,8 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Write the resource data to a temp file
                 using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+
+                // TODO: This should read directly from the overlay instead of the cached data if too large
                 tempStream?.Write(overlayData, overlayOffset, overlayData.Length - overlayOffset);
 
                 return true;
