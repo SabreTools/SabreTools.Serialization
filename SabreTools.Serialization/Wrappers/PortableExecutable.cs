@@ -438,6 +438,14 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlaySize;
                     }
 
+                    // If we have certificate data, use that as the end
+                    if (OptionalHeader?.CertificateTable != null)
+                    {
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
+                    }
+
                     // Get the overlay address if possible
                     long endOfSectionData = OverlayAddress;
 
