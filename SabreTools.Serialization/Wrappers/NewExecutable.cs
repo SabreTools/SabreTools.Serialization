@@ -129,18 +129,12 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlayData;
                     }
 
-                    // If a required property is missing
-                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                    {
-                        _overlayData = [];
-                        return _overlayData;
-                    }
-
-                    // Get the overlay address if possible
+                    // Get the overlay address and size if possible
                     long endOfSectionData = OverlayAddress;
+                    long overlaySize = OverlaySize;
 
-                    // If we didn't find the end of section data
-                    if (endOfSectionData <= 0)
+                    // If we didn't find the address or size
+                    if (endOfSectionData <= 0 || overlaySize <= 0)
                     {
                         _overlayData = [];
                         return _overlayData;
@@ -154,11 +148,63 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    long overlayLength = dataLength - endOfSectionData;
-                    overlayLength = Math.Min(overlayLength, int.MaxValue);
+                    overlaySize = Math.Min(overlaySize, int.MaxValue);
 
-                    _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlayLength);
+                    _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlaySize);
                     return _overlayData;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Size of the overlay data, if it exists
+        /// </summary>
+        /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
+        public long OverlaySize
+        {
+            get
+            {
+                lock (_overlaySizeLock)
+                {
+                    // Use the cached data if possible
+                    if (_overlaySize >= 0)
+                        return _overlaySize;
+
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _overlaySize = 0;
+                        return _overlaySize;
+                    }
+
+                    // If a required property is missing
+                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
+                    {
+                        _overlaySize = 0;
+                        return _overlaySize;
+                    }
+
+                    // Get the overlay address if possible
+                    long endOfSectionData = OverlayAddress;
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                    {
+                        _overlaySize = 0;
+                        return _overlaySize;
+                    }
+
+                    // If we're at the end of the file, cache an empty byte array
+                    if (endOfSectionData >= dataLength)
+                    {
+                        _overlaySize = 0;
+                        return _overlaySize;
+                    }
+
+                    // Otherwise, cache and return the data
+                    _overlaySize = dataLength - endOfSectionData;
+                    return _overlaySize;
                 }
             }
         }
@@ -264,6 +310,16 @@ namespace SabreTools.Serialization.Wrappers
         /// Lock object for <see cref="_overlayData"/> 
         /// </summary>
         private readonly object _overlayDataLock = new();
+
+        /// <summary>
+        /// Size of the overlay data, if it exists
+        /// </summary>
+        private long _overlaySize = -1;
+
+        /// <summary>
+        /// Lock object for <see cref="_overlaySize"/> 
+        /// </summary>
+        private readonly object _overlaySizeLock = new();
 
         /// <summary>
         /// Overlay strings, if they exist
