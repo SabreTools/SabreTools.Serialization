@@ -43,11 +43,17 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return -1;
+                    {
+                        _overlayAddress = -1;
+                        return _overlayAddress.Value;
+                    }
 
                     // If a required property is missing
                     if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                        return -1;
+                    {
+                        _overlayAddress = -1;
+                        return _overlayAddress.Value;
+                    }
 
                     // Search through the segments table to find the furthest
                     long endOfSectionData = -1;

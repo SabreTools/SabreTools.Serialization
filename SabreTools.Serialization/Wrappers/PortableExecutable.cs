@@ -292,7 +292,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Address of the overlay, if it exists
         /// </summary>
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
-        public int OverlayAddress
+        public long OverlayAddress
         {
             get
             {
@@ -305,11 +305,17 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return -1;
+                    {
+                        _overlayAddress = -1;
+                        return _overlayAddress.Value;
+                    }
 
                     // If the section table is missing
                     if (SectionTable == null)
-                        return -1;
+                    {
+                        _overlayAddress = -1;
+                        return _overlayAddress.Value;
+                    }
 
                     // If we have certificate data, use that as the end
                     if (OptionalHeader?.CertificateTable != null)
