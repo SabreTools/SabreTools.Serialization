@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Entry point data, if it exists
         /// </summary>
-        /// <remarks>Can only cache up to 128 bytes</remarks> 
+        /// <remarks>Caches up to 128 bytes</remarks> 
         public byte[] EntryPointData
         {
             get
@@ -369,7 +369,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
-        /// <remarks>Can only cache up to <see cref="int.MaxValue"/> bytes</remarks> 
+        /// <remarks>Caches up to 0x10000 bytes</remarks> 
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
         public byte[] OverlayData
         {
@@ -387,6 +387,14 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         _overlayData = [];
                         return _overlayData;
+                    }
+
+                    // If we have certificate data, use that as the end
+                    if (OptionalHeader?.CertificateTable != null)
+                    {
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
                     }
 
                     // Get the overlay address and size if possible
@@ -408,7 +416,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, cache and return the data
-                    overlaySize = Math.Min(overlaySize, int.MaxValue - 1);
+                    overlaySize = Math.Min(overlaySize, 0x10000);
 
                     _overlayData = ReadRangeFromSource(endOfSectionData, (int)overlaySize) ?? [];
                     return _overlayData;
