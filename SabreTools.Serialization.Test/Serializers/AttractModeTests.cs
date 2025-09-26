@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Test.Serializers
         public void SerializeStream_Null_Null()
         {
             var serializer = new AttractMode();
-            Stream? actual = serializer.Serialize(null);
+            Stream? actual = serializer.SerializeStream(null);
             Assert.Null(actual);
         }
     }

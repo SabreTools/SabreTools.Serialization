@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,8 +74,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.ArchiveDotOrg();
-            var serializer = new Serialization.Serializers.ArchiveDotOrg();
+            var deserializer = new ArchiveDotOrg();
+            var serializer = new SabreTools.Serialization.Serializers.ArchiveDotOrg();
 
             // Build the data
             Models.ArchiveDotOrg.Files files = Build();

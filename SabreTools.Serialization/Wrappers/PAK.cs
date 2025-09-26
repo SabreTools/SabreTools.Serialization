@@ -3,7 +3,7 @@ using SabreTools.Models.PAK;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class PAK : WrapperBase<Models.PAK.File>
+    public partial class PAK : WrapperBase<SabreTools.Models.PAK.File>
     {
         #region Descriptive Properties
 
@@ -22,22 +22,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, byte[] data) : base(model, data) { }
+        public PAK(SabreTools.Models.PAK.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public PAK(SabreTools.Models.PAK.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public PAK(SabreTools.Models.PAK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, Stream data) : base(model, data) { }
+        public PAK(SabreTools.Models.PAK.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, Stream data, long offset) : base(model, data, offset) { }
+        public PAK(SabreTools.Models.PAK.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PAK(Models.PAK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public PAK(SabreTools.Models.PAK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

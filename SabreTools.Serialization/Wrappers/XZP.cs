@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class XZP : WrapperBase<Models.XZP.File>
+    public partial class XZP : WrapperBase<SabreTools.Models.XZP.File>
     {
         #region Descriptive Properties
 
@@ -14,32 +14,32 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Models.XZP.File.DirectoryEntries"/>
-        public Models.XZP.DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
+        public SabreTools.Models.XZP.DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
 
         /// <inheritdoc cref="Models.XZP.File.DirectoryItems"/>
-        public Models.XZP.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
+        public SabreTools.Models.XZP.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, byte[] data) : base(model, data) { }
+        public XZP(SabreTools.Models.XZP.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public XZP(SabreTools.Models.XZP.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public XZP(SabreTools.Models.XZP.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, Stream data) : base(model, data) { }
+        public XZP(SabreTools.Models.XZP.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, Stream data, long offset) : base(model, data, offset) { }
+        public XZP(SabreTools.Models.XZP.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XZP(Models.XZP.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public XZP(SabreTools.Models.XZP.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

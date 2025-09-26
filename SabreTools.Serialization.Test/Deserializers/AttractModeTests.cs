@@ -75,14 +75,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripShortTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.AttractMode();
-            var serializer = new Serialization.Serializers.AttractMode();
+            var deserializer = new AttractMode();
+            var serializer = new SabreTools.Serialization.Serializers.AttractMode();
 
             // Build the data
             Models.AttractMode.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf, longHeader: false);
+            Stream? actual = serializer.SerializeStream(mf, longHeader: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -100,14 +100,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripLongTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.AttractMode();
-            var serializer = new Serialization.Serializers.AttractMode();
+            var deserializer = new AttractMode();
+            var serializer = new SabreTools.Serialization.Serializers.AttractMode();
 
             // Build the data
             Models.AttractMode.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf, longHeader: true);
+            Stream? actual = serializer.SerializeStream(mf, longHeader: true);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -168,9 +168,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             Assert.NotNull(header);
             if (longHeader)
-                Assert.True(Serialization.Serializers.AttractMode.HeaderArrayWithRomname.SequenceEqual(header));
+                Assert.True(SabreTools.Serialization.Serializers.AttractMode.HeaderArrayWithRomname.SequenceEqual(header));
             else
-                Assert.True(Serialization.Serializers.AttractMode.HeaderArrayWithoutRomname.SequenceEqual(header));
+                Assert.True(SabreTools.Serialization.Serializers.AttractMode.HeaderArrayWithoutRomname.SequenceEqual(header));
         }
 
         /// <summary>

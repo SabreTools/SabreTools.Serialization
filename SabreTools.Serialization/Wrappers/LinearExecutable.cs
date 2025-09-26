@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
         public ResourceTableEntry[]? ResourceTable => Model.ResourceTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public Models.MSDOS.Executable? Stub => Model.Stub;
+        public SabreTools.Models.MSDOS.Executable? Stub => Model.Stub;
 
         #endregion
 

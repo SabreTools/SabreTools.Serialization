@@ -4,10 +4,10 @@ using System.Text;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class IRD : BaseBinarySerializer<Models.IRD.File>
+    public class IRD : BaseBinarySerializer<SabreTools.Models.IRD.File>
     {
         /// <inheritdoc/>
-        public override Stream? Serialize(Models.IRD.File? obj)
+        public override Stream? SerializeStream(SabreTools.Models.IRD.File? obj)
         {
             // If the data is invalid
             if (obj?.Magic == null)

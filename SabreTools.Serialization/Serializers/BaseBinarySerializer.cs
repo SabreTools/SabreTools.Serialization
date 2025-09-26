@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Serializers
         /// <inheritdoc/>
         public virtual byte[]? SerializeArray(TModel? obj)
         {
-            using var stream = Serialize(obj);
+            using var stream = SerializeStream(obj);
             if (stream == null)
                 return null;
 
@@ -35,12 +35,12 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc/>
-        public virtual bool Serialize(TModel? obj, string? path)
+        public virtual bool SerializeFile(TModel? obj, string? path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            using var stream = Serialize(obj);
+            using var stream = SerializeStream(obj);
             if (stream == null)
                 return false;
 
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc/>
-        public abstract Stream? Serialize(TModel? obj);
+        public abstract Stream? SerializeStream(TModel? obj);
 
         #endregion
     }

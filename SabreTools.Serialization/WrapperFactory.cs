@@ -97,22 +97,22 @@ namespace SabreTools.Serialization
             }
 
             // New Executable
-            else if (magic.StartsWith(Models.NewExecutable.Constants.SignatureBytes))
+            else if (magic.StartsWith(SabreTools.Models.NewExecutable.Constants.SignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return NewExecutable.Create(stream);
             }
 
             // Linear Executable
-            else if (magic.StartsWith(Models.LinearExecutable.Constants.LESignatureBytes)
-                || magic.StartsWith(Models.LinearExecutable.Constants.LXSignatureBytes))
+            else if (magic.StartsWith(SabreTools.Models.LinearExecutable.Constants.LESignatureBytes)
+                || magic.StartsWith(SabreTools.Models.LinearExecutable.Constants.LXSignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return LinearExecutable.Create(stream);
             }
 
             // Portable Executable
-            else if (magic.StartsWith(Models.PortableExecutable.Constants.SignatureBytes))
+            else if (magic.StartsWith(SabreTools.Models.PortableExecutable.Constants.SignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return PortableExecutable.Create(stream);
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization
 
             #region BDPlusSVM
 
-            if (magic.StartsWith(Models.BDPlus.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.BDPlus.Constants.SignatureBytes))
                 return WrapperType.BDPlusSVM;
 
             if (extension.Equals("svm", StringComparison.OrdinalIgnoreCase))
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization
 
             #region BFPK
 
-            if (magic.StartsWith(Models.BFPK.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.BFPK.Constants.SignatureBytes))
                 return WrapperType.BFPK;
 
             #endregion
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization
 
             #region BZip2
 
-            if (magic.StartsWith(Models.BZip2.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.BZip2.Constants.SignatureBytes))
                 return WrapperType.BZip2;
 
             if (extension.Equals("bz2", StringComparison.OrdinalIgnoreCase))
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization
 
             #region CFB
 
-            if (magic.StartsWith(Models.CFB.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.CFB.Constants.SignatureBytes))
                 return WrapperType.CFB;
 
             // Installer package
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization
 
             #region CHD
 
-            if (magic.StartsWith(Models.CHD.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.CHD.Constants.SignatureBytes))
                 return WrapperType.CHD;
 
             #endregion
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization
             #region Executable
 
             // DOS MZ executable file format (and descendants)
-            if (magic.StartsWith(Models.MSDOS.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.MSDOS.Constants.SignatureBytes))
                 return WrapperType.Executable;
 
             // None of the following are supported yet
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization
 
             #region GZip
 
-            if (magic.StartsWith(new byte[] { Models.GZIP.Constants.ID1, Models.GZIP.Constants.ID2 }))
+            if (magic.StartsWith(new byte[] { SabreTools.Models.GZIP.Constants.ID1, SabreTools.Models.GZIP.Constants.ID2 }))
                 return WrapperType.GZip;
 
             if (extension.Equals("gz", StringComparison.OrdinalIgnoreCase))
@@ -313,7 +313,7 @@ namespace SabreTools.Serialization
 
             #region InstallShieldArchiveV3
 
-            if (magic.StartsWith(Models.InstallShieldArchiveV3.Constants.HeaderSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.InstallShieldArchiveV3.Constants.HeaderSignatureBytes))
                 return WrapperType.InstallShieldArchiveV3;
 
             if (extension.Equals("z", StringComparison.OrdinalIgnoreCase))
@@ -323,7 +323,7 @@ namespace SabreTools.Serialization
 
             #region InstallShieldCAB
 
-            if (magic.StartsWith(Models.InstallShieldCabinet.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.InstallShieldCabinet.Constants.SignatureBytes))
                 return WrapperType.InstallShieldCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
@@ -332,27 +332,27 @@ namespace SabreTools.Serialization
 
             #region LDSCRYPT
 
-            if (magic.StartsWith(Models.LDSCRYPT.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.LDSCRYPT.Constants.SignatureBytes))
                 return WrapperType.LDSCRYPT;
 
             #endregion
 
             #region LZ
 
-            if (magic.StartsWith(Models.LZ.Constants.KWAJSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.LZ.Constants.KWAJSignatureBytes))
                 return WrapperType.LZKWAJ;
 
-            if (magic.StartsWith(Models.LZ.Constants.QBasicSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.LZ.Constants.QBasicSignatureBytes))
                 return WrapperType.LZQBasic;
 
-            if (magic.StartsWith(Models.LZ.Constants.SZDDSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.LZ.Constants.SZDDSignatureBytes))
                 return WrapperType.LZSZDD;
 
             #endregion
 
             #region MicrosoftCAB
 
-            if (magic.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.MicrosoftCabinet.Constants.SignatureBytes))
                 return WrapperType.MicrosoftCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
@@ -361,10 +361,10 @@ namespace SabreTools.Serialization
 
             #region MoPaQ
 
-            if (magic.StartsWith(Models.MoPaQ.Constants.ArchiveHeaderSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.MoPaQ.Constants.ArchiveHeaderSignatureBytes))
                 return WrapperType.MoPaQ;
 
-            if (magic.StartsWith(Models.MoPaQ.Constants.UserDataSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.MoPaQ.Constants.UserDataSignatureBytes))
                 return WrapperType.MoPaQ;
 
             if (extension.Equals("mpq", StringComparison.OrdinalIgnoreCase))
@@ -420,7 +420,7 @@ namespace SabreTools.Serialization
 
             #region PAK
 
-            if (magic.StartsWith(Models.PAK.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.PAK.Constants.SignatureBytes))
                 return WrapperType.PAK;
 
             // Both PAK and Quantum share one extension
@@ -461,17 +461,17 @@ namespace SabreTools.Serialization
                 return WrapperType.PKZIP;
 
             // PKZIP
-            if (magic.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP (Empty Archive)
-            if (magic.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
                 return WrapperType.PKZIP;
-            else if (magic.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+            else if (magic.StartsWith(SabreTools.Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP (Spanned Archive)
-            if (magic.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.PKZIP.Constants.DataDescriptorSignatureBytes))
                 return WrapperType.PKZIP;
 
             // PKZIP
@@ -563,7 +563,7 @@ namespace SabreTools.Serialization
             #region PLJ
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
-            if (magic.StartsWith(Models.PlayJ.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.PlayJ.Constants.SignatureBytes))
                 return WrapperType.PlayJAudioFile;
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
@@ -574,7 +574,7 @@ namespace SabreTools.Serialization
 
             #region Quantum
 
-            if (magic.StartsWith(Models.Quantum.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.Quantum.Constants.SignatureBytes))
                 return WrapperType.Quantum;
 
             if (extension.Equals("q", StringComparison.OrdinalIgnoreCase))
@@ -589,11 +589,11 @@ namespace SabreTools.Serialization
             #region RAR
 
             // RAR archive version 1.50 onwards
-            if (magic.StartsWith(Models.RAR.Constants.OldSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.RAR.Constants.OldSignatureBytes))
                 return WrapperType.RAR;
 
             // RAR archive version 5.0 onwards
-            if (magic.StartsWith(Models.RAR.Constants.NewSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.RAR.Constants.NewSignatureBytes))
                 return WrapperType.RAR;
 
             if (extension.Equals("rar", StringComparison.OrdinalIgnoreCase))
@@ -605,26 +605,26 @@ namespace SabreTools.Serialization
 
             // RASGI2.0
             // Found in the ".rgs files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith(Models.RealArcades.Constants.RgsSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.RealArcades.Constants.RgsSignatureBytes))
                 return WrapperType.RealArcadeInstaller;
 
             // XZip2.0
             // Found in the ".mez" files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith(Models.RealArcades.Constants.MezzanineSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.RealArcades.Constants.MezzanineSignatureBytes))
                 return WrapperType.RealArcadeMezzanine;
 
             #endregion
 
             #region SecuROM DFA
 
-            if (magic.StartsWith(Models.SecuROM.Constants.DFAMagicBytes))
+            if (magic.StartsWith(SabreTools.Models.SecuROM.Constants.DFAMagicBytes))
                 return WrapperType.SecuROMDFA;
 
             #endregion
 
             #region SevenZip
 
-            if (magic.StartsWith(Models.SevenZip.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.SevenZip.Constants.SignatureBytes))
                 return WrapperType.SevenZip;
 
             if (extension.Equals("7z", StringComparison.OrdinalIgnoreCase))
@@ -635,14 +635,14 @@ namespace SabreTools.Serialization
             #region SFFS
 
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
-            if (magic.StartsWith(Models.StarForce.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.StarForce.Constants.SignatureBytes))
                 return WrapperType.SFFS;
 
             #endregion 
 
             #region SGA
 
-            if (magic.StartsWith(Models.SGA.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.SGA.Constants.SignatureBytes))
                 return WrapperType.SGA;
 
             if (extension.Equals("sga", StringComparison.OrdinalIgnoreCase))
@@ -756,7 +756,7 @@ namespace SabreTools.Serialization
 
             #region VBSP
 
-            if (magic.StartsWith(Models.BSP.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.BSP.Constants.SignatureBytes))
                 return WrapperType.VBSP;
 
             // Shares an extension with BSP
@@ -767,7 +767,7 @@ namespace SabreTools.Serialization
 
             #region VPK
 
-            if (magic.StartsWith(Models.VPK.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.VPK.Constants.SignatureBytes))
                 return WrapperType.VPK;
 
             // Common extension so this cannot be used accurately
@@ -778,7 +778,7 @@ namespace SabreTools.Serialization
 
             #region WAD
 
-            if (magic.StartsWith(Models.WAD3.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.WAD3.Constants.SignatureBytes))
                 return WrapperType.WAD;
 
             // Common extension so this cannot be used accurately
@@ -789,7 +789,7 @@ namespace SabreTools.Serialization
 
             #region XZ
 
-            if (magic.StartsWith(Models.XZ.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.XZ.Constants.SignatureBytes))
                 return WrapperType.XZ;
 
             if (extension.Equals("xz", StringComparison.OrdinalIgnoreCase))
@@ -799,7 +799,7 @@ namespace SabreTools.Serialization
 
             #region XZP
 
-            if (magic.StartsWith(Models.XZP.Constants.HeaderSignatureBytes))
+            if (magic.StartsWith(SabreTools.Models.XZP.Constants.HeaderSignatureBytes))
                 return WrapperType.XZP;
 
             if (extension.Equals("xzp", StringComparison.OrdinalIgnoreCase))

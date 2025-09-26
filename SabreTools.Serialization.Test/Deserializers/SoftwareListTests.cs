@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,8 +74,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.SoftwareList();
-            var serializer = new Serialization.Serializers.SoftwareList();
+            var deserializer = new SoftwareList();
+            var serializer = new SabreTools.Serialization.Serializers.SoftwareList();
 
             // Build the data
             Models.SoftwareList.SoftwareList sl = Build();

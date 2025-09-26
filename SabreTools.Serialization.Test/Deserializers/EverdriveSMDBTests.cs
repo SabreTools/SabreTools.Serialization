@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,14 +74,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.EverdriveSMDB();
-            var serializer = new Serialization.Serializers.EverdriveSMDB();
+            var deserializer = new EverdriveSMDB();
+            var serializer = new SabreTools.Serialization.Serializers.EverdriveSMDB();
 
             // Build the data
             Models.EverdriveSMDB.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf);
+            Stream? actual = serializer.SerializeStream(mf);
             Assert.NotNull(actual);
 
             // Serialize back to original model

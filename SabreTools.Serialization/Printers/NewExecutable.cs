@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, executable.NonResidentNameTable);
         }
 
-        private static void Print(StringBuilder builder, Models.MSDOS.ExecutableHeader? header)
+        private static void Print(StringBuilder builder, SabreTools.Models.MSDOS.ExecutableHeader? header)
         {
             builder.AppendLine("  MS-DOS Stub Header Information:");
             builder.AppendLine("  -------------------------");
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ModuleReferenceTableEntry[]? entries, Models.MSDOS.ExecutableHeader? stub, ExecutableHeader? header)
+        private static void Print(StringBuilder builder, ModuleReferenceTableEntry[]? entries, SabreTools.Models.MSDOS.ExecutableHeader? stub, ExecutableHeader? header)
         {
             builder.AppendLine("  Module-Reference Table Information:");
             builder.AppendLine("  -------------------------");

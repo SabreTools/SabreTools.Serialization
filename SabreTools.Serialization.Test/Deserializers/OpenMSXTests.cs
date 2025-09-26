@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,8 +74,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.OpenMSX();
-            var serializer = new Serialization.Serializers.OpenMSX();
+            var deserializer = new OpenMSX();
+            var serializer = new SabreTools.Serialization.Serializers.OpenMSX();
 
             // Build the data
             Models.OpenMSX.SoftwareDb sdb = Build();

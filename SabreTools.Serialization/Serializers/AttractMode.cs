@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Writers;
-using SabreTools.Models.AttractMode;
+using SabreTools.Serialization.Models.AttractMode;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -64,13 +64,6 @@ namespace SabreTools.Serialization.Serializers
 
         #region IByteSerializer
 
-        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
-        public static byte[]? SerializeBytes(MetadataFile? obj, bool longHeader = false)
-        {
-            var serializer = new AttractMode();
-            return serializer.SerializeArray(obj, longHeader);
-        }
-
         /// <inheritdoc/>
         public override byte[]? SerializeArray(MetadataFile? obj)
             => SerializeArray(obj, false);
@@ -91,19 +84,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IFileSerializer
 
-        /// <inheritdoc cref="Interfaces.IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path, bool longHeader = false)
-        {
-            var serializer = new AttractMode();
-            return serializer.Serialize(obj, path, longHeader);
-        }
+        /// <inheritdoc/>
+        public override bool SerializeFile(MetadataFile? obj, string? path)
+            => SerializeFile(obj, path, false);
 
         /// <inheritdoc/>
-        public override bool Serialize(MetadataFile? obj, string? path)
-            => Serialize(obj, path, false);
-
-        /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path, bool longHeader)
+        public bool SerializeFile(MetadataFile? obj, string? path, bool longHeader)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -123,19 +109,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <inheritdoc cref="Interfaces.IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(MetadataFile? obj, bool longHeader = false)
-        {
-            var serializer = new AttractMode();
-            return serializer.Serialize(obj, longHeader);
-        }
+        /// <inheritdoc/>
+        public override Stream? SerializeStream(MetadataFile? obj)
+            => SerializeStream(obj, false);
 
         /// <inheritdoc/>
-        public override Stream? Serialize(MetadataFile? obj)
-            => Serialize(obj, false);
-
-        /// <inheritdoc/>
-        public Stream? Serialize(MetadataFile? obj, bool longHeader)
+        public Stream? SerializeStream(MetadataFile? obj, bool longHeader)
         {
             // If the metadata file is null
             if (obj == null)

@@ -5,10 +5,10 @@ using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class CueSheet : BaseBinarySerializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinarySerializer<SabreTools.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-        public override Stream? Serialize(Models.CueSheets.CueSheet? obj)
+        public override Stream? SerializeStream(SabreTools.Models.CueSheets.CueSheet? obj)
         {
             // If the cuesheet is null
             if (obj == null)
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="cueSheet">CueSheet to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-        private static void WriteCueSheet(Models.CueSheets.CueSheet cueSheet, StreamWriter sw)
+        private static void WriteCueSheet(SabreTools.Models.CueSheets.CueSheet cueSheet, StreamWriter sw)
         {
             // If we don't have any files, it's invalid
             if (cueSheet.Files == null)

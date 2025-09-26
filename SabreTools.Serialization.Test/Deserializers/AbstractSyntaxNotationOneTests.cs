@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
-using SabreTools.Models.ASN1;
 using SabreTools.Serialization.Deserializers;
+using SabreTools.Serialization.Models.ASN1;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.Deserializers

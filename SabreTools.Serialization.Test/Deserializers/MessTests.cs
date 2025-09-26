@@ -74,8 +74,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripGameTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Mess();
-            var serializer = new Serialization.Serializers.Mess();
+            var deserializer = new Mess();
+            var serializer = new SabreTools.Serialization.Serializers.Mess();
 
             // Build the data
             Models.Listxml.Mess m1 = Build(game: true);
@@ -100,8 +100,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMachineTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Mess();
-            var serializer = new Serialization.Serializers.Mess();
+            var deserializer = new Mess();
+            var serializer = new SabreTools.Serialization.Serializers.Mess();
 
             // Build the data
             Models.Listxml.Mess m1 = Build(game: false);

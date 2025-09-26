@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.Logiqx;
+using SabreTools.Serialization.Models.Logiqx;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?, string?)" />
-        public override bool Serialize(Datafile? obj, string? path)
+        public override bool SerializeFile(Datafile? obj, string? path)
             => Serialize(obj, path, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
 
         #endregion
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
-        public override Stream? Serialize(Datafile? obj)
+        public override Stream? SerializeStream(Datafile? obj)
             => Serialize(obj, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
 
         #endregion

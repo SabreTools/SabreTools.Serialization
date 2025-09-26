@@ -4,13 +4,13 @@ using static SabreTools.Models.Xbox.Constants;
 
 namespace SabreTools.Serialization.Printers
 {
-    public class XeMID : IPrinter<Models.Xbox.XeMID>
+    public class XeMID : IPrinter<SabreTools.Models.Xbox.XeMID>
     {
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder, Models.Xbox.XeMID model)
+        public void PrintInformation(StringBuilder builder, SabreTools.Models.Xbox.XeMID model)
             => Print(builder, model);
 
-        public static void Print(StringBuilder builder, Models.Xbox.XeMID xemid)
+        public static void Print(StringBuilder builder, SabreTools.Models.Xbox.XeMID xemid)
         {
             builder.AppendLine("Xbox Media Identifier Information:");
             builder.AppendLine("-------------------------");

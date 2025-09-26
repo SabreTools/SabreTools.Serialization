@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,8 +74,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripGameTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Listxml();
-            var serializer = new Serialization.Serializers.Listxml();
+            var deserializer = new Listxml();
+            var serializer = new SabreTools.Serialization.Serializers.Listxml();
 
             // Build the data
             Models.Listxml.Mame mame = Build(game: true);
@@ -103,8 +102,8 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMachineTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Listxml();
-            var serializer = new Serialization.Serializers.Listxml();
+            var deserializer = new Listxml();
+            var serializer = new SabreTools.Serialization.Serializers.Listxml();
 
             // Build the data
             Models.Listxml.Mame mame = Build(game: false);

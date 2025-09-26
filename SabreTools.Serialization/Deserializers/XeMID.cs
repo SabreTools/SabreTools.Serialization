@@ -2,17 +2,17 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public partial class XeMID : IStringDeserializer<Models.Xbox.XeMID>
+    public partial class XeMID : IStringDeserializer<SabreTools.Models.Xbox.XeMID>
     {
         /// <inheritdoc cref="IStringDeserializer.Deserialize(string?)"/>
-        public static Models.Xbox.XeMID? DeserializeString(string? str)
+        public static SabreTools.Models.Xbox.XeMID? DeserializeString(string? str)
         {
             var deserializer = new XeMID();
             return deserializer.Deserialize(str);
         }
 
         /// <inheritdoc/>
-        public Models.Xbox.XeMID? Deserialize(string? str)
+        public SabreTools.Models.Xbox.XeMID? Deserialize(string? str)
         {
             if (string.IsNullOrEmpty(str))
                 return null;
@@ -29,14 +29,14 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="xemidString">XeMID string to attempt to parse</param>
         /// <returns>Filled XeMID on success, null on error</returns>
-        private static Models.Xbox.XeMID? ParseXeMID(string? xemidString)
+        private static SabreTools.Models.Xbox.XeMID? ParseXeMID(string? xemidString)
         {
             if (xemidString == null)
                 return null;
             if (!(xemidString.Length == 13 || xemidString.Length == 14 || xemidString.Length == 21 || xemidString.Length == 22))
                 return null;
 
-            var xemid = new Models.Xbox.XeMID();
+            var xemid = new SabreTools.Models.Xbox.XeMID();
 
             xemid.PublisherIdentifier = xemidString.Substring(0, 2);
             xemid.PlatformIdentifier = xemidString[2];

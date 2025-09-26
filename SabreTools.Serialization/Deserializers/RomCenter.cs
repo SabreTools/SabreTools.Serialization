@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Readers;
-using SabreTools.Models.RomCenter;
+using SabreTools.Serialization.Models.RomCenter;
 
 namespace SabreTools.Serialization.Deserializers
 {

@@ -12,6 +12,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="obj">Data to serialize</param>
         /// <param name="path">Path to the file to serialize to</param>
         /// <returns>True on successful serialization, false otherwise</returns>
-        bool Serialize(T? obj, string? path);
+        bool SerializeFile(T? obj, string? path);
     }
 }

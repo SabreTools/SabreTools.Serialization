@@ -3,22 +3,22 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Mess : IModelSerializer<Models.Listxml.Mess, Models.Metadata.MetadataFile>
+    public partial class Mess : IModelSerializer<SabreTools.Serialization.Models.Listxml.Mess, Serialization.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(Models.Listxml.Mess? item)
+        public Serialization.Models.Metadata.MetadataFile? Serialize(SabreTools.Serialization.Models.Listxml.Mess? item)
         {
             if (item == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Serialization.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                [Serialization.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Game != null && item.Game.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Serialization.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Game, Listxml.ConvertMachineToInternalModel);
             }
 
@@ -26,13 +26,13 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.Listxml.Mess"/> to <see cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="SabreTools.Serialization.Models.Listxml.Mess"/> to <see cref="Serialization.Models.Metadata.Header"/>
         /// </summary>
-        private static Models.Metadata.Header ConvertHeaderToInternalModel(Models.Listxml.Mess item)
+        private static Serialization.Models.Metadata.Header ConvertHeaderToInternalModel(SabreTools.Serialization.Models.Listxml.Mess item)
         {
-            var header = new Models.Metadata.Header
+            var header = new Serialization.Models.Metadata.Header
             {
-                [Models.Metadata.Header.VersionKey] = item.Version,
+                [Serialization.Models.Metadata.Header.VersionKey] = item.Version,
             };
             return header;
         }

@@ -1,6 +1,8 @@
+using SabreTools.Serialization.Models.Logiqx;
+
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Logiqx : XmlFile<Models.Logiqx.Datafile>
+    public class Logiqx : XmlFile<Datafile>
     {
         // All logic taken care of in the base class
     }

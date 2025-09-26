@@ -1,13 +1,13 @@
 using System.IO;
 using System.Text;
-using SabreTools.Models.Listrom;
+using SabreTools.Serialization.Models.Listrom;
 
 namespace SabreTools.Serialization.Serializers
 {
     public class Listrom : BaseBinarySerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public override Stream? Serialize(MetadataFile? obj)
+        public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
             if (obj == null)

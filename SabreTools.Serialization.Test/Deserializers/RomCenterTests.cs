@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using SabreTools.Serialization.Deserializers;
@@ -75,14 +74,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.RomCenter();
-            var serializer = new Serialization.Serializers.RomCenter();
+            var deserializer = new RomCenter();
+            var serializer = new SabreTools.Serialization.Serializers.RomCenter();
 
             // Build the data
             Models.RomCenter.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? metadata = serializer.Serialize(mf);
+            Stream? metadata = serializer.SerializeStream(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model

@@ -1,3 +1,4 @@
+using SabreTools.Serialization.CrossModel;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.CrossModel
@@ -8,13 +9,13 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripTest()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.ArchiveDotOrg();
+            var serializer = new ArchiveDotOrg();
 
             // Build the data
             Models.ArchiveDotOrg.Files files = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
+            SabreTools.Serialization.Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
             Assert.NotNull(metadata);
 
             // Serialize back to original model

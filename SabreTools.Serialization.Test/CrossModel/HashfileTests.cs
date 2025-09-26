@@ -1,3 +1,4 @@
+using SabreTools.Serialization.CrossModel;
 using System;
 using SabreTools.Hashing;
 using Xunit;
@@ -10,7 +11,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSFVTest()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.CRC32);
@@ -33,7 +34,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripMD2Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD2);
@@ -56,7 +57,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripMD4Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD4);
@@ -79,7 +80,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripMD5Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD5);
@@ -102,7 +103,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSHA1Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA1);
@@ -125,7 +126,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSHA256Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA256);
@@ -148,7 +149,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSHA384Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA384);
@@ -171,7 +172,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSHA512Test()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA512);
@@ -194,7 +195,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripSpamSumTest()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.Hashfile();
+            var serializer = new Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SpamSum);

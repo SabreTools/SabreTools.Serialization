@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Writers;
-using SabreTools.Models.RomCenter;
+using SabreTools.Serialization.Models.RomCenter;
 
 namespace SabreTools.Serialization.Serializers
 {
     public class RomCenter : BaseBinarySerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public override Stream? Serialize(MetadataFile? obj)
+        public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
             if (obj == null)

@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc/>
-        public override bool Serialize(T? obj, string? path)
+        public override bool SerializeFile(T? obj, string? path)
             => Serialize(obj, path, new UTF8Encoding(false));
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc/>
-        public override Stream? Serialize(T? obj)
+        public override Stream? SerializeStream(T? obj)
             => Serialize(obj, new UTF8Encoding(false));
 
         /// <summary>

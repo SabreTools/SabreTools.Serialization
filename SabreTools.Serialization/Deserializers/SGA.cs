@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">SGA major version</param>
         /// <returns>Filled SGA directory on success, null on error</returns>
-        private static Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
+        private static SabreTools.Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
         {
             return majorVersion switch
             {

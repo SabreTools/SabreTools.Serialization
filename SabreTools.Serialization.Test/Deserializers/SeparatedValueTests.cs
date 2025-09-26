@@ -75,14 +75,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripShortTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.SeparatedValue();
-            var serializer = new Serialization.Serializers.SeparatedValue();
+            var deserializer = new SeparatedValue();
+            var serializer = new SabreTools.Serialization.Serializers.SeparatedValue();
 
             // Build the data
             Models.SeparatedValue.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? actual = Serialization.Serializers.SeparatedValue.SerializeStream(mf, longHeader: false);
+            Stream? actual = serializer.SerializeStream(mf, ',', longHeader: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -103,14 +103,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripLongTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.SeparatedValue();
-            var serializer = new Serialization.Serializers.SeparatedValue();
+            var deserializer = new SeparatedValue();
+            var serializer = new SabreTools.Serialization.Serializers.SeparatedValue();
 
             // Build the data
             Models.SeparatedValue.MetadataFile mf = Build();
 
             // Serialize to stream
-            Stream? actual = Serialization.Serializers.SeparatedValue.SerializeStream(mf, longHeader: true);
+            Stream? actual = serializer.SerializeStream(mf, ',', longHeader: true);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -197,9 +197,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         {
             Assert.NotNull(header);
             if (longHeader)
-                Assert.True(Serialization.Serializers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
+                Assert.True(SabreTools.Serialization.Serializers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
             else
-                Assert.True(Serialization.Serializers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
+                Assert.True(SabreTools.Serialization.Serializers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
         }
 
         /// <summary>

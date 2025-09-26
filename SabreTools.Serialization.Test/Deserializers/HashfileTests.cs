@@ -76,14 +76,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSFVTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.CRC32);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.CRC32);
+            Stream? actual = serializer.SerializeStream(hf, HashType.CRC32);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -100,14 +100,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMD2Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD2);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.MD2);
+            Stream? actual = serializer.SerializeStream(hf, HashType.MD2);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -124,14 +124,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMD4Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD4);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.MD4);
+            Stream? actual = serializer.SerializeStream(hf, HashType.MD4);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -148,14 +148,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMD5Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.MD5);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.MD5);
+            Stream? actual = serializer.SerializeStream(hf, HashType.MD5);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -172,14 +172,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSHA1Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA1);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.SHA1);
+            Stream? actual = serializer.SerializeStream(hf, HashType.SHA1);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -196,14 +196,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSHA256Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA256);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.SHA256);
+            Stream? actual = serializer.SerializeStream(hf, HashType.SHA256);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -220,14 +220,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSHA384Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA384);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.SHA384);
+            Stream? actual = serializer.SerializeStream(hf, HashType.SHA384);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -244,14 +244,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSHA512Test()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SHA512);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.SHA512);
+            Stream? actual = serializer.SerializeStream(hf, HashType.SHA512);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -268,14 +268,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripSpamSumTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.Hashfile();
-            var serializer = new Serialization.Serializers.Hashfile();
+            var deserializer = new Hashfile();
+            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
 
             // Build the data
             Models.Hashfile.Hashfile hf = Build(HashType.SpamSum);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(hf, HashType.SpamSum);
+            Stream? actual = serializer.SerializeStream(hf, HashType.SpamSum);
             Assert.NotNull(actual);
 
             // Serialize back to original model

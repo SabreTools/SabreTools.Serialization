@@ -3,27 +3,20 @@ using System.IO;
 using System.Text;
 using SabreTools.Hashing;
 using SabreTools.IO.Writers;
-using SabreTools.Models.Hashfile;
+using SabreTools.Serialization.Models.Hashfile;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class Hashfile : BaseBinarySerializer<Models.Hashfile.Hashfile>
+    public class Hashfile : BaseBinarySerializer<SabreTools.Serialization.Models.Hashfile.Hashfile>
     {
         #region IByteSerializer
 
-        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
-        public static byte[]? SerializeBytes(Models.Hashfile.Hashfile? obj, HashType hash = HashType.CRC32)
-        {
-            var serializer = new Hashfile();
-            return serializer.SerializeArray(obj, hash);
-        }
-
         /// <inheritdoc/>
-        public override byte[]? SerializeArray(Models.Hashfile.Hashfile? obj)
+        public override byte[]? SerializeArray(SabreTools.Serialization.Models.Hashfile.Hashfile? obj)
             => SerializeArray(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public byte[]? SerializeArray(Models.Hashfile.Hashfile? obj, HashType hash)
+        public byte[]? SerializeArray(SabreTools.Serialization.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             using var stream = SerializeStream(obj, hash);
             if (stream == null)
@@ -38,19 +31,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IFileSerializer
 
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path, HashType hash = HashType.CRC32)
-        {
-            var serializer = new Hashfile();
-            return serializer.Serialize(obj, path, hash);
-        }
+        /// <inheritdoc/>
+        public override bool SerializeFile(SabreTools.Serialization.Models.Hashfile.Hashfile? obj, string? path)
+            => SerializeFile(obj, path, HashType.CRC32);
 
         /// <inheritdoc/>
-        public override bool Serialize(Models.Hashfile.Hashfile? obj, string? path)
-            => Serialize(obj, path, HashType.CRC32);
-
-        /// <inheritdoc/>
-        public bool Serialize(Models.Hashfile.Hashfile? obj, string? path, HashType hash)
+        public bool SerializeFile(SabreTools.Serialization.Models.Hashfile.Hashfile? obj, string? path, HashType hash)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -70,19 +56,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(Models.Hashfile.Hashfile? obj, HashType hash = HashType.CRC32)
-        {
-            var serializer = new Hashfile();
-            return serializer.Serialize(obj, hash);
-        }
+        /// <inheritdoc/>
+        public override Stream? SerializeStream(SabreTools.Serialization.Models.Hashfile.Hashfile? obj)
+            => SerializeStream(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public override Stream? Serialize(Models.Hashfile.Hashfile? obj)
-            => Serialize(obj, HashType.CRC32);
-
-        /// <inheritdoc/>
-        public Stream? Serialize(Models.Hashfile.Hashfile? obj, HashType hash)
+        public Stream? SerializeStream(SabreTools.Serialization.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             // If the metadata file is null
             if (obj == null)

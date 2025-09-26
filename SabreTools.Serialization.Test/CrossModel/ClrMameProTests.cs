@@ -1,3 +1,4 @@
+using SabreTools.Serialization.CrossModel;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.CrossModel
@@ -8,7 +9,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripGameTest()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.ClrMamePro();
+            var serializer = new ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: true);
@@ -32,7 +33,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         public void RoundTripMachineTest()
         {
             // Get the cross-model serializer
-            var serializer = new Serialization.CrossModel.ClrMamePro();
+            var serializer = new ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: false);

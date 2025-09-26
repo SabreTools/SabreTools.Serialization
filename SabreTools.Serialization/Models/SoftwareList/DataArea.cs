@@ -1,0 +1,28 @@
+using System.Xml;
+using System.Xml.Serialization;
+
+namespace SabreTools.Serialization.Models.SoftwareList
+{
+    [XmlRoot("dataarea")]
+    public class DataArea
+    {
+        [SabreTools.Models.Required]
+        [XmlAttribute("name")]
+        public string? Name { get; set; }
+
+        [SabreTools.Models.Required]
+        [XmlAttribute("size")]
+        public string? Size { get; set; }
+
+        /// <remarks>(8|16|32|64) "8"</remarks>
+        [XmlAttribute("width")]
+        public string? Width { get; set; }
+
+        /// <remarks>(big|little) "little"</remarks>
+        [XmlAttribute("endianness")]
+        public string? Endianness { get; set; }
+
+        [XmlElement("rom")]
+        public Rom[]? Rom { get; set; }
+    }
+}

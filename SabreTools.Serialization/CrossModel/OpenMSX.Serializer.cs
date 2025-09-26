@@ -1,25 +1,25 @@
 using System;
-using SabreTools.Models.OpenMSX;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.OpenMSX;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class OpenMSX : IModelSerializer<SoftwareDb, Models.Metadata.MetadataFile>
+    public partial class OpenMSX : IModelSerializer<SoftwareDb, Serialization.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(SoftwareDb? item)
+        public Serialization.Models.Metadata.MetadataFile? Serialize(SoftwareDb? item)
         {
             if (item == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Serialization.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                [Serialization.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Software != null && item.Software.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Serialization.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
             }
 
@@ -27,35 +27,35 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.OpenMSX.SoftwareDb"/> to <see cref="Models.Metadata.Header"/>
+        /// Convert from <see cref="SoftwareDb"/> to <see cref="Serialization.Models.Metadata.Header"/>
         /// </summary>
-        public static Models.Metadata.Header ConvertHeaderToInternalModel(SoftwareDb item)
+        public static Serialization.Models.Metadata.Header ConvertHeaderToInternalModel(SoftwareDb item)
         {
-            var header = new Models.Metadata.Header
+            var header = new Serialization.Models.Metadata.Header
             {
-                [Models.Metadata.Header.TimestampKey] = item.Timestamp,
+                [Serialization.Models.Metadata.Header.TimestampKey] = item.Timestamp,
             };
             return header;
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.OpenMSX.Software"/> to <see cref="Models.Metadata.Machine"/>
+        /// Convert from <see cref="Software"/> to <see cref="Serialization.Models.Metadata.Machine"/>
         /// </summary>
-        public static Models.Metadata.Machine ConvertMachineToInternalModel(Software item)
+        public static Serialization.Models.Metadata.Machine ConvertMachineToInternalModel(Software item)
         {
-            var machine = new Models.Metadata.Machine
+            var machine = new Serialization.Models.Metadata.Machine
             {
-                [Models.Metadata.Machine.NameKey] = item.Title,
-                [Models.Metadata.Machine.GenMSXIDKey] = item.GenMSXID,
-                [Models.Metadata.Machine.SystemKey] = item.System,
-                [Models.Metadata.Machine.CompanyKey] = item.Company,
-                [Models.Metadata.Machine.YearKey] = item.Year,
-                [Models.Metadata.Machine.CountryKey] = item.Country,
+                [Serialization.Models.Metadata.Machine.NameKey] = item.Title,
+                [Serialization.Models.Metadata.Machine.GenMSXIDKey] = item.GenMSXID,
+                [Serialization.Models.Metadata.Machine.SystemKey] = item.System,
+                [Serialization.Models.Metadata.Machine.CompanyKey] = item.Company,
+                [Serialization.Models.Metadata.Machine.YearKey] = item.Year,
+                [Serialization.Models.Metadata.Machine.CountryKey] = item.Country,
             };
 
             if (item.Dump != null && item.Dump.Length > 0)
             {
-                machine[Models.Metadata.Machine.DumpKey]
+                machine[Serialization.Models.Metadata.Machine.DumpKey]
                     = Array.ConvertAll(item.Dump, ConvertToInternalModel);
             }
 
@@ -63,29 +63,29 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.OpenMSX.Dump"/> to <see cref="Models.Metadata.Dump"/>
+        /// Convert from <see cref="Dump"/> to <see cref="Serialization.Models.Metadata.Dump"/>
         /// </summary>
-        public static Models.Metadata.Dump ConvertToInternalModel(Dump item)
+        public static Serialization.Models.Metadata.Dump ConvertToInternalModel(Dump item)
         {
-            var dump = new Models.Metadata.Dump();
+            var dump = new Serialization.Models.Metadata.Dump();
 
             if (item.Original != null)
-                dump[Models.Metadata.Dump.OriginalKey] = ConvertToInternalModel(item.Original);
+                dump[Serialization.Models.Metadata.Dump.OriginalKey] = ConvertToInternalModel(item.Original);
 
             if (item.Rom != null)
             {
                 switch (item.Rom)
                 {
                     case Rom rom:
-                        dump[Models.Metadata.Dump.RomKey] = ConvertToInternalModel(rom);
+                        dump[Serialization.Models.Metadata.Dump.RomKey] = ConvertToInternalModel(rom);
                         break;
 
                     case MegaRom megaRom:
-                        dump[Models.Metadata.Dump.MegaRomKey] = ConvertToInternalModel(megaRom);
+                        dump[Serialization.Models.Metadata.Dump.MegaRomKey] = ConvertToInternalModel(megaRom);
                         break;
 
                     case SCCPlusCart sccPlusCart:
-                        dump[Models.Metadata.Dump.SCCPlusCartKey] = ConvertToInternalModel(sccPlusCart);
+                        dump[Serialization.Models.Metadata.Dump.SCCPlusCartKey] = ConvertToInternalModel(sccPlusCart);
                         break;
                 }
             }
@@ -94,29 +94,29 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.OpenMSX.Original"/> to <see cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="Original"/> to <see cref="Serialization.Models.Metadata.Rom"/>
         /// </summary>
-        public static Models.Metadata.Original ConvertToInternalModel(Original item)
+        public static Serialization.Models.Metadata.Original ConvertToInternalModel(Original item)
         {
-            var original = new Models.Metadata.Original
+            var original = new Serialization.Models.Metadata.Original
             {
-                [Models.Metadata.Original.ValueKey] = item.Value,
-                [Models.Metadata.Original.ContentKey] = item.Content,
+                [Serialization.Models.Metadata.Original.ValueKey] = item.Value,
+                [Serialization.Models.Metadata.Original.ContentKey] = item.Content,
             };
             return original;
         }
 
         /// <summary>
-        /// Convert from <see cref="Models.OpenMSX.RomBase"/> to <see cref="Models.Metadata.Rom"/>
+        /// Convert from <see cref="RomBase"/> to <see cref="Serialization.Models.Metadata.Rom"/>
         /// </summary>
-        public static Models.Metadata.Rom ConvertToInternalModel(RomBase item)
+        public static Serialization.Models.Metadata.Rom ConvertToInternalModel(RomBase item)
         {
-            var rom = new Models.Metadata.Rom
+            var rom = new Serialization.Models.Metadata.Rom
             {
-                [Models.Metadata.Rom.StartKey] = item.Start,
-                [Models.Metadata.Rom.OpenMSXType] = item.Type,
-                [Models.Metadata.Rom.SHA1Key] = item.Hash,
-                [Models.Metadata.Rom.RemarkKey] = item.Remark,
+                [Serialization.Models.Metadata.Rom.StartKey] = item.Start,
+                [Serialization.Models.Metadata.Rom.OpenMSXType] = item.Type,
+                [Serialization.Models.Metadata.Rom.SHA1Key] = item.Hash,
+                [Serialization.Models.Metadata.Rom.RemarkKey] = item.Remark,
             };
             return rom;
         }

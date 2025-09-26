@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 using System.Text;
-using SabreTools.Models.ASN1;
+using SabreTools.Serialization.Models.ASN1;
 using SabreTools.Serialization.ObjectIdentifier;
 
 namespace SabreTools.Serialization.Extensions
@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="paddingLevel">Padding level of the item when formatting</param>
         /// <returns>String representing the TypeLengthValue, if possible</returns>
-        public static string Format(this Models.ASN1.TypeLengthValue tlv, int paddingLevel = 0)
+        public static string Format(this SabreTools.Serialization.Models.ASN1.TypeLengthValue tlv, int paddingLevel = 0)
         {
             // Create the left-padding string
             string padding = new(' ', paddingLevel);
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Extensions
             if (tlv.Type.HasFlag(ASN1Type.V_ASN1_CONSTRUCTED))
 #endif
             {
-                if (tlv.Value is not Models.ASN1.TypeLengthValue[] valueAsObjectArray)
+                if (tlv.Value is not SabreTools.Serialization.Models.ASN1.TypeLengthValue[] valueAsObjectArray)
                 {
                     formatBuilder.Append(", Value: [INVALID DATA TYPE]");
                     return formatBuilder.ToString();

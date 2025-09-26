@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.ASN1;
+using SabreTools.Serialization.Models.ASN1;
 
 namespace SabreTools.Serialization.Deserializers
 {

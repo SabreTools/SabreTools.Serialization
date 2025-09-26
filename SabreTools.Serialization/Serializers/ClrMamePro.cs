@@ -1,20 +1,13 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Writers;
-using SabreTools.Models.ClrMamePro;
+using SabreTools.Serialization.Models.ClrMamePro;
 
 namespace SabreTools.Serialization.Serializers
 {
     public class ClrMamePro : BaseBinarySerializer<MetadataFile>
     {
         #region IByteSerializer
-
-        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
-        public static byte[]? SerializeBytes(MetadataFile? obj, bool quotes = false)
-        {
-            var serializer = new ClrMamePro();
-            return serializer.SerializeArray(obj, quotes);
-        }
 
         /// <inheritdoc/>
         public override byte[]? SerializeArray(MetadataFile? obj)
@@ -36,19 +29,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IFileSerializer
 
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path, bool quotes = true)
-        {
-            var serializer = new ClrMamePro();
-            return serializer.Serialize(obj, path, quotes);
-        }
-
         /// <inheritdoc/>
-        public override bool Serialize(MetadataFile? obj, string? path)
-            => Serialize(obj, path, true);
+        public override bool SerializeFile(MetadataFile? obj, string? path)
+            => SerializeFile(obj, path, true);
 
-        /// <inheritdoc cref="Serialize(MetadataFile, string)"/>
-        public bool Serialize(MetadataFile? obj, string? path, bool quotes)
+        /// <inheritdoc cref="SerializeFile(MetadataFile, string)"/>
+        public bool SerializeFile(MetadataFile? obj, string? path, bool quotes)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -68,19 +54,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(MetadataFile? obj, bool quotes = true)
-        {
-            var serializer = new ClrMamePro();
-            return serializer.Serialize(obj, quotes);
-        }
-
         /// <inheritdoc/>
-        public override Stream? Serialize(MetadataFile? obj)
-            => Serialize(obj, true);
+        public override Stream? SerializeStream(MetadataFile? obj)
+            => SerializeStream(obj, true);
 
-        /// <inheritdoc cref="Serialize(MetadataFile)"/>
-        public Stream? Serialize(MetadataFile? obj, bool quotes)
+        /// <inheritdoc cref="SerializeStream(MetadataFile)"/>
+        public Stream? SerializeStream(MetadataFile? obj, bool quotes)
         {
             // If the metadata file is null
             if (obj == null)
@@ -106,7 +85,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="header">ClrMamePro representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteHeader(Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
+        private static void WriteHeader(SabreTools.Serialization.Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
             if (header == null)

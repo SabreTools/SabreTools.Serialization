@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Wrappers
         public SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public Models.MSDOS.Executable? Stub => Model.Stub;
+        public SabreTools.Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists

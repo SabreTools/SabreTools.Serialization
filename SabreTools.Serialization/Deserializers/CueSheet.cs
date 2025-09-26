@@ -7,10 +7,10 @@ using SabreTools.Models.CueSheets;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CueSheet : BaseBinaryDeserializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinaryDeserializer<SabreTools.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-        public override Models.CueSheets.CueSheet? Deserialize(Stream? data)
+        public override SabreTools.Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Setup the reader and output
                 var reader = new StreamReader(data, Encoding.UTF8);
-                var cueSheet = new Models.CueSheets.CueSheet();
+                var cueSheet = new SabreTools.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
 
                 // Read the next line from the input

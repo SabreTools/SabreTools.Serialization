@@ -74,14 +74,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripGameTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.ClrMamePro();
-            var serializer = new Serialization.Serializers.ClrMamePro();
+            var deserializer = new ClrMamePro();
+            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: true);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf);
+            Stream? actual = serializer.SerializeStream(mf);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -99,14 +99,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripGameWithoutQuotesTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.ClrMamePro();
-            var serializer = new Serialization.Serializers.ClrMamePro();
+            var deserializer = new ClrMamePro();
+            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: true);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf, quotes: false);
+            Stream? actual = serializer.SerializeStream(mf, quotes: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -124,14 +124,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMachineTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.ClrMamePro();
-            var serializer = new Serialization.Serializers.ClrMamePro();
+            var deserializer = new ClrMamePro();
+            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: false);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf);
+            Stream? actual = serializer.SerializeStream(mf);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -149,14 +149,14 @@ namespace SabreTools.Serialization.Test.Deserializers
         public void RoundTripMachineWithoutQuotesTest()
         {
             // Get the serializer and deserializer
-            var deserializer = new Serialization.Deserializers.ClrMamePro();
-            var serializer = new Serialization.Serializers.ClrMamePro();
+            var deserializer = new ClrMamePro();
+            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
 
             // Build the data
             Models.ClrMamePro.MetadataFile mf = Build(game: false);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mf, quotes: false);
+            Stream? actual = serializer.SerializeStream(mf, quotes: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model

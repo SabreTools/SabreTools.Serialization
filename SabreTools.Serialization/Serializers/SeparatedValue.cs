@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Writers;
-using SabreTools.Models.SeparatedValue;
+using SabreTools.Serialization.Models.SeparatedValue;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -52,13 +52,6 @@ namespace SabreTools.Serialization.Serializers
 
         #region IByteSerializer
 
-        /// <inheritdoc cref="Interfaces.IByteSerializer.SerializeArray(T?)"/>
-        public static byte[]? SerializeBytes(MetadataFile? obj, char delim = ',', bool longHeader = false)
-        {
-            var serializer = new SeparatedValue();
-            return serializer.SerializeArray(obj, delim, longHeader);
-        }
-
         /// <inheritdoc/>
         public override byte[]? SerializeArray(MetadataFile? obj)
             => SerializeArray(obj, ',', false);
@@ -79,19 +72,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IFileSerializer
 
-        /// <inheritdoc cref="IFileSerializer.Serialize(T?, string?)"/>
-        public static bool SerializeFile(MetadataFile? obj, string? path, char delim = ',', bool longHeader = false)
-        {
-            var serializer = new SeparatedValue();
-            return serializer.Serialize(obj, path, delim, longHeader);
-        }
+        /// <inheritdoc/>
+        public override bool SerializeFile(MetadataFile? obj, string? path)
+            => SerializeFile(obj, path, ',', false);
 
         /// <inheritdoc/>
-        public override bool Serialize(MetadataFile? obj, string? path)
-            => Serialize(obj, path, ',', false);
-
-        /// <inheritdoc/>
-        public bool Serialize(MetadataFile? obj, string? path, char delim, bool longHeader)
+        public bool SerializeFile(MetadataFile? obj, string? path, char delim, bool longHeader)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -111,19 +97,12 @@ namespace SabreTools.Serialization.Serializers
 
         #region IStreamSerializer
 
-        /// <inheritdoc cref="IStreamSerializer.Serialize(T?)"/>
-        public static Stream? SerializeStream(MetadataFile? obj, char delim = ',', bool longHeader = false)
-        {
-            var serializer = new SeparatedValue();
-            return serializer.Serialize(obj, delim, longHeader);
-        }
-
         /// <inheritdoc/>
-        public override Stream? Serialize(MetadataFile? obj)
-            => Serialize(obj, ',', false);
+        public override Stream? SerializeStream(MetadataFile? obj)
+            => SerializeStream(obj, ',', false);
 
-        /// <inheritdoc cref="Serialize(MetadataFile)"/>
-        public Stream? Serialize(MetadataFile? obj, char delim, bool longHeader)
+        /// <inheritdoc cref="SerializeStream(MetadataFile)"/>
+        public Stream? SerializeStream(MetadataFile? obj, char delim, bool longHeader)
         {
             // If the metadata file is null
             if (obj == null)
