@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                var model = new Deserializers.XeMID().Deserialize(data);
+                var model = new Readers.XeMID().Deserialize(data);
                 if (model == null)
                     return null;
 

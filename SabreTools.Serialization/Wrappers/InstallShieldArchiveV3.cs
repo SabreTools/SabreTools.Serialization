@@ -166,7 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.InstallShieldArchiveV3().Deserialize(data);
+                var model = new Readers.InstallShieldArchiveV3().Deserialize(data);
                 if (model == null)
                     return null;
 

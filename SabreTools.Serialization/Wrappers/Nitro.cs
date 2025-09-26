@@ -86,7 +86,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.Nitro().Deserialize(data);
+                var model = new Readers.Nitro().Deserialize(data);
                 if (model == null)
                     return null;
 

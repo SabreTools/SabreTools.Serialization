@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.LZSZDD().Deserialize(data);
+                var model = new Readers.LZSZDD().Deserialize(data);
                 if (model == null)
                     return null;
 

@@ -451,7 +451,7 @@ namespace SabreTools.Data.Printers
             }
 
             // Create the deserializer
-            var deserializer = new Serialization.Deserializers.AbstractSyntaxNotationOne();
+            var deserializer = new Serialization.Readers.AbstractSyntaxNotationOne();
 
             for (int i = 0; i < entries.Length; i++)
             {

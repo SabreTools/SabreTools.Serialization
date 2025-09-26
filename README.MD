@@ -114,7 +114,7 @@ Below is a table of all namespaces within the library and what they represent
 | `SabreTools.Data.ObjectIdentifier` | Object Identifier (OID) parsing |
 | `SabreTools.Data.Printers` | Export model information in a formatted manner |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
-| `SabreTools.Serialization.Deserializers` | Convert from external sources to models |
 | `SabreTools.Serialization.Interfaces` | Interfaces used commonly throughout the library |
+| `SabreTools.Serialization.Readers` | Convert from external sources to models |
 | `SabreTools.Serialization.Serializers` | Convert from models to external sources |
 | `SabreTools.Serialization.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |

@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.NCF().Deserialize(data);
+                var model = new Readers.NCF().Deserialize(data);
                 if (model == null)
                     return null;
 

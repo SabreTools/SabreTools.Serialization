@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.SecuROMDFA().Deserialize(data);
+                var model = new Readers.SecuROMDFA().Deserialize(data);
                 if (model == null)
                     return null;
 

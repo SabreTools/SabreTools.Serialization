@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Wrappers
                             lock (_dataSourceLock)
                             {
                                 _dataSource.Seek(offset, SeekOrigin.Begin);
-                                var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
+                                var relocationData = Readers.NewExecutable.ParsePerSegmentData(_dataSource);
 
                                 offset = _dataSource.Position;
                             }
@@ -410,7 +410,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Deserializers.NewExecutable().Deserialize(data);
+                var model = new Readers.NewExecutable().Deserialize(data);
                 if (model == null)
                     return null;
 
