@@ -97,22 +97,22 @@ namespace SabreTools.Serialization
             }
 
             // New Executable
-            else if (magic.StartsWith(SabreTools.Models.NewExecutable.Constants.SignatureBytes))
+            else if (magic.StartsWith(SabreTools.Serialization.Models.NewExecutable.Constants.SignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return NewExecutable.Create(stream);
             }
 
             // Linear Executable
-            else if (magic.StartsWith(SabreTools.Models.LinearExecutable.Constants.LESignatureBytes)
-                || magic.StartsWith(SabreTools.Models.LinearExecutable.Constants.LXSignatureBytes))
+            else if (magic.StartsWith(SabreTools.Serialization.Models.LinearExecutable.Constants.LESignatureBytes)
+                || magic.StartsWith(SabreTools.Serialization.Models.LinearExecutable.Constants.LXSignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return LinearExecutable.Create(stream);
             }
 
             // Portable Executable
-            else if (magic.StartsWith(SabreTools.Models.PortableExecutable.Constants.SignatureBytes))
+            else if (magic.StartsWith(SabreTools.Serialization.Models.PortableExecutable.Constants.SignatureBytes))
             {
                 stream.Seek(initialOffset, SeekOrigin.Begin);
                 return PortableExecutable.Create(stream);
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization
             #region Executable
 
             // DOS MZ executable file format (and descendants)
-            if (magic.StartsWith(SabreTools.Models.MSDOS.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.MSDOS.Constants.SignatureBytes))
                 return WrapperType.Executable;
 
             // None of the following are supported yet
@@ -617,7 +617,7 @@ namespace SabreTools.Serialization
 
             #region SecuROM DFA
 
-            if (magic.StartsWith(SabreTools.Models.SecuROM.Constants.DFAMagicBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.SecuROM.Constants.DFAMagicBytes))
                 return WrapperType.SecuROMDFA;
 
             #endregion

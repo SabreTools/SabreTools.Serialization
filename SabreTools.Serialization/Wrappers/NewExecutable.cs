@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.NewExecutable;
+using SabreTools.Serialization.Models.NewExecutable;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Wrappers
         public SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public SabreTools.Models.MSDOS.Executable? Stub => Model.Stub;
+        public SabreTools.Serialization.Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists

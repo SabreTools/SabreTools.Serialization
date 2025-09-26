@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.COFF;
-using SabreTools.Models.PortableExecutable;
-using SabreTools.Models.PortableExecutable.Resource.Entries;
 using SabreTools.Serialization.Extensions;
+using SabreTools.Serialization.Models.COFF;
+using SabreTools.Serialization.Models.PortableExecutable;
+using SabreTools.Serialization.Models.PortableExecutable.Resource.Entries;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Models.PortableExecutable.DebugData.Table.Table"/>
-        public SabreTools.Models.PortableExecutable.DebugData.Entry[]? DebugDirectoryTable
+        public SabreTools.Serialization.Models.PortableExecutable.DebugData.Entry[]? DebugDirectoryTable
             => Model.DebugTable?.DebugDirectoryTable;
 
         /// <summary>
@@ -104,19 +104,19 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.ExportAddressTable"/>
-        public SabreTools.Models.PortableExecutable.Export.AddressTableEntry[]? ExportTable => Model.ExportAddressTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry[]? ExportTable => Model.ExportAddressTable;
 
         /// <inheritdoc cref="Executable.ExportDirectoryTable"/>
-        public SabreTools.Models.PortableExecutable.Export.DirectoryTable? ExportDirectoryTable => Model.ExportDirectoryTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Export.DirectoryTable? ExportDirectoryTable => Model.ExportDirectoryTable;
 
         /// <inheritdoc cref="Executable.NamePointerTable"/>
-        public SabreTools.Models.PortableExecutable.Export.NamePointerTable? ExportNamePointerTable => Model.NamePointerTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Export.NamePointerTable? ExportNamePointerTable => Model.NamePointerTable;
 
         /// <inheritdoc cref="Executable.ExportNameTable"/>
-        public SabreTools.Models.PortableExecutable.Export.NameTable? ExportNameTable => Model.ExportNameTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Export.NameTable? ExportNameTable => Model.ExportNameTable;
 
         /// <inheritdoc cref="Executable.OrdinalTable"/>
-        public SabreTools.Models.PortableExecutable.Export.OrdinalTable? ExportOrdinalTable => Model.OrdinalTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Export.OrdinalTable? ExportOrdinalTable => Model.OrdinalTable;
 
         /// <summary>
         /// Header padding data, if it exists
@@ -197,16 +197,16 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.ImportAddressTables"/>
-        public Dictionary<int, SabreTools.Models.PortableExecutable.Import.AddressTableEntry[]?>? ImportAddressTables => Model.ImportAddressTables;
+        public Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[]?>? ImportAddressTables => Model.ImportAddressTables;
 
         /// <inheritdoc cref="Executable.ImportDirectoryTable"/>
-        public SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry[]? ImportDirectoryTable => Model.ImportDirectoryTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry[]? ImportDirectoryTable => Model.ImportDirectoryTable;
 
         /// <inheritdoc cref="Executable.HintNameTable"/>
-        public SabreTools.Models.PortableExecutable.Import.HintNameTableEntry[]? ImportHintNameTable => Model.HintNameTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry[]? ImportHintNameTable => Model.HintNameTable;
 
         /// <inheritdoc cref="Executable.ImportLookupTables"/>
-        public Dictionary<int, SabreTools.Models.PortableExecutable.Import.LookupTableEntry[]?>? ImportLookupTables => Model.ImportLookupTables;
+        public Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[]?>? ImportLookupTables => Model.ImportLookupTables;
 
         /// <summary>
         /// SecuROM Matroschka package wrapper, if it exists
@@ -287,7 +287,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
-        public SabreTools.Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
+        public SabreTools.Serialization.Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -501,7 +501,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.ResourceDirectoryTable"/>
-        public SabreTools.Models.PortableExecutable.Resource.DirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
+        public SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
 
         /// <summary>
         /// Sanitized section names
@@ -590,7 +590,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public SabreTools.Models.MSDOS.Executable? Stub => Model.Stub;
+        public SabreTools.Serialization.Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists
@@ -1265,14 +1265,14 @@ namespace SabreTools.Serialization.Wrappers
                 if (data == null)
                     continue;
 
-                if (data is SabreTools.Models.PortableExecutable.DebugData.NB10ProgramDatabase n)
+                if (data is SabreTools.Serialization.Models.PortableExecutable.DebugData.NB10ProgramDatabase n)
                 {
                     if (n.PdbFileName == null || !n.PdbFileName.Contains(path))
                         continue;
 
                     debugFound.Add(n);
                 }
-                else if (data is SabreTools.Models.PortableExecutable.DebugData.RSDSProgramDatabase r)
+                else if (data is SabreTools.Serialization.Models.PortableExecutable.DebugData.RSDSProgramDatabase r)
                 {
                     if (r.PathAndFileName == null || !r.PathAndFileName.Contains(path))
                         continue;
@@ -1672,7 +1672,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (kvp.Value == null || kvp.Value is not byte[] ba)
                     continue;
-                if (!ba.StartsWith(SabreTools.Models.MSDOS.Constants.SignatureBytes))
+                if (!ba.StartsWith(SabreTools.Serialization.Models.MSDOS.Constants.SignatureBytes))
                     continue;
 
                 exeResources = true;
@@ -1696,7 +1696,7 @@ namespace SabreTools.Serialization.Wrappers
                 while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
                 {
                     ushort possibleSignature = _dataSource.ReadUInt16();
-                    if (possibleSignature == SabreTools.Models.MSDOS.Constants.SignatureUInt16)
+                    if (possibleSignature == SabreTools.Serialization.Models.MSDOS.Constants.SignatureUInt16)
                     {
                         resourceOffset = _dataSource.Position - 2;
                         break;
@@ -1726,7 +1726,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the resource directory table information
         /// </summary>
-        private void ParseResourceDirectoryTable(SabreTools.Models.PortableExecutable.Resource.DirectoryTable table, List<object> types)
+        private void ParseResourceDirectoryTable(SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable table, List<object> types)
         {
             if (table?.Entries == null)
                 return;
@@ -1748,7 +1748,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the name resource directory entry information
         /// </summary>
-        private void ParseResourceDirectoryEntry(SabreTools.Models.PortableExecutable.Resource.DirectoryEntry entry, List<object> types)
+        private void ParseResourceDirectoryEntry(SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry entry, List<object> types)
         {
             if (entry.DataEntry != null)
                 ParseResourceDataEntry(entry.DataEntry, types);
@@ -1764,7 +1764,7 @@ namespace SabreTools.Serialization.Wrappers
         /// of those resources in the entire exectuable. This means that only the last found version or manifest will
         /// ever be cached.
         /// </remarks>
-        private void ParseResourceDataEntry(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
+        private void ParseResourceDataEntry(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
         {
             // Create the key and value objects
             string key = types == null

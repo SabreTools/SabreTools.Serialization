@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.WiseInstaller;
+using SabreTools.Serialization.Models.WiseInstaller;
 
 namespace SabreTools.Serialization.Deserializers
 {

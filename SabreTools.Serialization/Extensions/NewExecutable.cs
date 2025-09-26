@@ -1,4 +1,4 @@
-using SabreTools.Models.NewExecutable;
+using SabreTools.Serialization.Models.NewExecutable;
 
 namespace SabreTools.Serialization.Extensions
 {

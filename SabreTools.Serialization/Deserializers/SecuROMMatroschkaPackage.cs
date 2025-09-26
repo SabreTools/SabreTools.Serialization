@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.SecuROM;
-using static SabreTools.Models.SecuROM.Constants;
+using SabreTools.Serialization.Models.SecuROM;
+using static SabreTools.Serialization.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

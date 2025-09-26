@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.LinearExecutable;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.LinearExecutable;
 
 namespace SabreTools.Serialization.Printers
 {
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, executable.DebugInformation);
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.MSDOS.ExecutableHeader? header)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.MSDOS.ExecutableHeader? header)
         {
             builder.AppendLine("  MS-DOS Stub Header Information:");
             builder.AppendLine("  -------------------------");

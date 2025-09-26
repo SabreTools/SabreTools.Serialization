@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.MSDOS;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.MSDOS;
 
 namespace SabreTools.Serialization.Printers
 {

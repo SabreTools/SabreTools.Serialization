@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "xz";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Models.MSDOS.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.MSDOS.Constants.SignatureBytes))
                     {
                         extension = "bin"; // exe/dll
                         break;

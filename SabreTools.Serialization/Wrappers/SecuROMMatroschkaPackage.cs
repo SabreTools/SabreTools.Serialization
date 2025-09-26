@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.SecuROM;
+using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
             }
         }
-        
+
         #endregion
     }
 }

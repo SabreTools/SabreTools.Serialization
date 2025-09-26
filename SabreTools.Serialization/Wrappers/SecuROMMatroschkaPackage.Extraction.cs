@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Hashing;
-using SabreTools.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Wrappers
 {

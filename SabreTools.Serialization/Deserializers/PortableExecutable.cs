@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.COFF;
-using SabreTools.Models.COFF.SymbolTableEntries;
-using SabreTools.Models.PortableExecutable;
 using SabreTools.Serialization.Extensions;
-using static SabreTools.Models.COFF.Constants;
-using static SabreTools.Models.PortableExecutable.Constants;
+using SabreTools.Serialization.Models.COFF;
+using SabreTools.Serialization.Models.COFF.SymbolTableEntries;
+using SabreTools.Serialization.Models.PortableExecutable;
+using static SabreTools.Serialization.Models.COFF.Constants;
+using static SabreTools.Serialization.Models.PortableExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Optional Header
 
                 // If the optional header exists
-                SabreTools.Models.PortableExecutable.OptionalHeader? optionalHeader = null;
+                SabreTools.Serialization.Models.PortableExecutable.OptionalHeader? optionalHeader = null;
                 if (fileHeader.SizeOfOptionalHeader > 0)
                 {
                     // Parse the optional header
@@ -337,12 +337,12 @@ namespace SabreTools.Serialization.Deserializers
                             int length = tableSize - tableOffset;
 
                             // Add the hidden entry
-                            pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new SabreTools.Models.PortableExecutable.Resource.DirectoryEntry
+                            pex.ResourceDirectoryTable.Entries[localEntries.Length - 1] = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry
                             {
-                                Name = new SabreTools.Models.PortableExecutable.Resource.DirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
+                                Name = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryString { UnicodeString = Encoding.Unicode.GetBytes("HIDDEN RESOURCE") },
                                 IntegerID = uint.MaxValue,
                                 DataEntryOffset = (uint)tableOffset,
-                                DataEntry = new SabreTools.Models.PortableExecutable.Resource.DataEntry
+                                DataEntry = new SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry
                                 {
                                     Size = (uint)length,
                                     Data = tableData.ReadBytes(ref tableOffset, length),
@@ -471,12 +471,12 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled attribute certificate on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.AttributeCertificate.Entry[]? ParseAttributeCertificateTable(byte[]? data)
+        public static SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate.Entry[]? ParseAttributeCertificateTable(byte[]? data)
         {
             if (data == null)
                 return null;
 
-            var obj = new List<SabreTools.Models.PortableExecutable.AttributeCertificate.Entry>();
+            var obj = new List<SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate.Entry>();
 
             int offset = 0;
             while (offset < data.Length)
@@ -502,9 +502,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled AttributeCertificateTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.AttributeCertificate.Entry? ParseAttributeCertificateTableEntry(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate.Entry? ParseAttributeCertificateTableEntry(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.AttributeCertificate.Entry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate.Entry();
 
             obj.Length = data.ReadUInt32LittleEndian(ref offset);
             if (obj.Length < 8)
@@ -526,9 +526,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled BaseRelocationBlock on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.BaseRelocation.Block? ParseBaseRelocationBlock(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.Block? ParseBaseRelocationBlock(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.BaseRelocation.Block();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.Block();
 
             obj.PageRVA = data.ReadUInt32LittleEndian(ref offset);
             obj.BlockSize = data.ReadUInt32LittleEndian(ref offset);
@@ -542,7 +542,7 @@ namespace SabreTools.Serialization.Deserializers
                 return obj;
 
             int entryCount = ((int)obj.BlockSize - 8) / 2;
-            obj.TypeOffsetFieldEntries = new SabreTools.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry[entryCount];
+            obj.TypeOffsetFieldEntries = new SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry[entryCount];
             for (int i = 0; i < obj.TypeOffsetFieldEntries.Length; i++)
             {
                 if (offset + 2 >= data.Length)
@@ -559,12 +559,12 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled base relocation table on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.BaseRelocation.Block[]? ParseBaseRelocationTable(byte[]? data)
+        public static SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.Block[]? ParseBaseRelocationTable(byte[]? data)
         {
             if (data == null)
                 return null;
 
-            var obj = new List<SabreTools.Models.PortableExecutable.BaseRelocation.Block>();
+            var obj = new List<SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.Block>();
 
             int offset = 0;
             while (offset + 8 <= data.Length)
@@ -591,9 +591,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled BaseRelocationTypeOffsetFieldEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry ParseBaseRelocationTypeOffsetFieldEntry(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry ParseBaseRelocationTypeOffsetFieldEntry(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.TypeOffsetFieldEntry();
 
             ushort typeAndOffsetField = data.ReadUInt16LittleEndian(ref offset);
             obj.BaseRelocationType = (BaseRelocationTypes)(typeAndOffsetField >> 12);
@@ -640,9 +640,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled DebugDirectoryEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.DebugData.Entry ParseDebugDirectoryEntry(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.DebugData.Entry ParseDebugDirectoryEntry(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.DebugData.Entry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.DebugData.Entry();
 
             obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
             obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
@@ -661,14 +661,14 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled DebugTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.DebugData.Table? ParseDebugTable(byte[]? data)
+        public static SabreTools.Serialization.Models.PortableExecutable.DebugData.Table? ParseDebugTable(byte[]? data)
         {
             if (data == null)
                 return null;
 
-            var obj = new SabreTools.Models.PortableExecutable.DebugData.Table();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.DebugData.Table();
 
-            var table = new List<SabreTools.Models.PortableExecutable.DebugData.Entry>();
+            var table = new List<SabreTools.Serialization.Models.PortableExecutable.DebugData.Entry>();
 
             int offset = 0;
             while (offset < data.Length)
@@ -693,12 +693,12 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Filled DelayLoadDirectoryTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.DelayLoad.DirectoryTable? ParseDelayLoadDirectoryTable(byte[]? data)
+        public static SabreTools.Serialization.Models.PortableExecutable.DelayLoad.DirectoryTable? ParseDelayLoadDirectoryTable(byte[]? data)
         {
             if (data == null)
                 return null;
 
-            var obj = new SabreTools.Models.PortableExecutable.DelayLoad.DirectoryTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.DelayLoad.DirectoryTable();
 
             int offset = 0;
             obj.Attributes = data.ReadUInt32LittleEndian(ref offset);
@@ -737,9 +737,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="entries">Number of entries in the table</param>
         /// <returns>Filled ExportAddressTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.AddressTableEntry[] ParseExportAddressTable(Stream data, uint entries)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry[] ParseExportAddressTable(Stream data, uint entries)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.AddressTableEntry[entries];
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry[entries];
 
             for (int i = 0; i < obj.Length; i++)
             {
@@ -754,9 +754,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled ExportAddressTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.AddressTableEntry ParseExportAddressTableEntry(Stream data)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry ParseExportAddressTableEntry(Stream data)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.AddressTableEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry();
 
             obj.ExportRVA = data.ReadUInt32LittleEndian();
             obj.ForwarderRVA = obj.ExportRVA;
@@ -770,9 +770,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ExportDirectoryTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.DirectoryTable ParseExportDirectoryTable(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.DirectoryTable ParseExportDirectoryTable(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.DirectoryTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.DirectoryTable();
 
             obj.ExportFlags = data.ReadUInt32LittleEndian(ref offset);
             obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
@@ -797,9 +797,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="pointers">Set of pointers to process</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ExportNameTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.NameTable ParseExportNameTable(Stream data, long initialOffset, uint[] pointers, SectionHeader[] sections)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.NameTable ParseExportNameTable(Stream data, long initialOffset, uint[] pointers, SectionHeader[] sections)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.NameTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.NameTable();
 
             obj.Strings = new string[pointers.Length];
             for (int i = 0; i < obj.Strings.Length; i++)
@@ -827,9 +827,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="entries">Number of entries in the table</param>
         /// <returns>Filled ExportNamePointerTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.NamePointerTable ParseExportNamePointerTable(Stream data, uint entries)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.NamePointerTable ParseExportNamePointerTable(Stream data, uint entries)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.NamePointerTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.NamePointerTable();
 
             obj.Pointers = new uint[entries];
             for (int i = 0; i < obj.Pointers.Length; i++)
@@ -846,9 +846,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="entries">Number of entries in the table</param>
         /// <returns>Filled ExportOrdinalTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Export.OrdinalTable ParseExportOrdinalTable(Stream data, uint entries)
+        public static SabreTools.Serialization.Models.PortableExecutable.Export.OrdinalTable ParseExportOrdinalTable(Stream data, uint entries)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Export.OrdinalTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Export.OrdinalTable();
 
             obj.Indexes = new ushort[entries];
             for (int i = 0; i < obj.Indexes.Length; i++)
@@ -921,13 +921,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="importAddressTables">Import address tables</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled HintNameTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.HintNameTableEntry[] ParseHintNameTable(Stream data,
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry[] ParseHintNameTable(Stream data,
             long initialOffset,
-            Dictionary<int, SabreTools.Models.PortableExecutable.Import.LookupTableEntry[]?> importLookupTables,
-            Dictionary<int, SabreTools.Models.PortableExecutable.Import.AddressTableEntry[]?> importAddressTables,
+            Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[]?> importLookupTables,
+            Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[]?> importAddressTables,
             SectionHeader[] sections)
         {
-            var importHintNameTable = new List<SabreTools.Models.PortableExecutable.Import.HintNameTableEntry>();
+            var importHintNameTable = new List<SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry>();
 
             if (importLookupTables.Count > 0 || importAddressTables.Count > 0)
             {
@@ -1005,9 +1005,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled HintNameTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.HintNameTableEntry ParseHintNameTableEntry(Stream data)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry ParseHintNameTableEntry(Stream data)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Import.HintNameTableEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry();
 
             obj.Hint = data.ReadUInt16LittleEndian();
             obj.Name = data.ReadNullTerminatedAnsiString();
@@ -1021,9 +1021,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <returns>Filled ImportAddressTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.AddressTableEntry[] ParseImportAddressTable(Stream data, OptionalHeaderMagicNumber magic)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[] ParseImportAddressTable(Stream data, OptionalHeaderMagicNumber magic)
         {
-            var obj = new List<SabreTools.Models.PortableExecutable.Import.AddressTableEntry>();
+            var obj = new List<SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry>();
 
             // Loop until the last item (all nulls) are found
             while (data.Position < data.Length)
@@ -1050,13 +1050,13 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="entries">Directory table entries containing the addresses</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ImportAddressTables on success, null on error</returns>
-        public static Dictionary<int, SabreTools.Models.PortableExecutable.Import.AddressTableEntry[]?> ParseImportAddressTables(Stream data,
+        public static Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[]?> ParseImportAddressTables(Stream data,
             long initialOffset,
             OptionalHeaderMagicNumber magic,
-            SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry[] entries,
+            SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry[] entries,
             SectionHeader[] sections)
         {
-            var obj = new Dictionary<int, SabreTools.Models.PortableExecutable.Import.AddressTableEntry[]?>();
+            var obj = new Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[]?>();
 
             for (int i = 0; i < entries.Length; i++)
             {
@@ -1083,9 +1083,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="magic">Optional header magic number</param>
         /// <returns>Filled ImportAddressTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.AddressTableEntry ParseImportAddressTableEntry(Stream data, OptionalHeaderMagicNumber magic)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry ParseImportAddressTableEntry(Stream data, OptionalHeaderMagicNumber magic)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Import.AddressTableEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry();
 
             if (magic == OptionalHeaderMagicNumber.PE32)
             {
@@ -1115,9 +1115,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ImportDirectoryTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry[] ParseImportDirectoryTable(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry[] ParseImportDirectoryTable(byte[] data, ref int offset)
         {
-            var obj = new List<SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry>();
+            var obj = new List<SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry>();
 
             // Loop until the last item (all nulls) are found
             while (offset < data.Length)
@@ -1143,9 +1143,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ImportDirectoryTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry ParseImportDirectoryTableEntry(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry ParseImportDirectoryTableEntry(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry();
 
             obj.ImportLookupTableRVA = data.ReadUInt32LittleEndian(ref offset);
             obj.TimeDateStamp = data.ReadUInt32LittleEndian(ref offset);
@@ -1162,9 +1162,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="magic">Optional header magic number indicating PE32 or PE32+</param>
         /// <returns>Filled ImportLookupTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.LookupTableEntry[] ParseImportLookupTable(Stream data, OptionalHeaderMagicNumber magic)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[] ParseImportLookupTable(Stream data, OptionalHeaderMagicNumber magic)
         {
-            var obj = new List<SabreTools.Models.PortableExecutable.Import.LookupTableEntry>();
+            var obj = new List<SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry>();
 
             // Loop until the last item (all nulls) are found
             while (data.Position < data.Length)
@@ -1191,14 +1191,14 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="entries">Directory table entries containing the addresses</param>
         /// <param name="sections">Section table to use for virtual address translation</param>
         /// <returns>Filled ImportLookupTables on success, null on error</returns>
-        public static Dictionary<int, SabreTools.Models.PortableExecutable.Import.LookupTableEntry[]?> ParseImportLookupTables(Stream data,
+        public static Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[]?> ParseImportLookupTables(Stream data,
             long initialOffset,
             OptionalHeaderMagicNumber magic,
-            SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry[] entries,
+            SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry[] entries,
             SectionHeader[] sections)
         {
             // Lookup tables
-            var obj = new Dictionary<int, SabreTools.Models.PortableExecutable.Import.LookupTableEntry[]?>();
+            var obj = new Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[]?>();
 
             for (int i = 0; i < entries.Length; i++)
             {
@@ -1225,9 +1225,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="magic">Optional header magic number</param>
         /// <returns>Filled ImportLookupTableEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Import.LookupTableEntry ParseImportLookupTableEntry(Stream data, OptionalHeaderMagicNumber magic)
+        public static SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry ParseImportLookupTableEntry(Stream data, OptionalHeaderMagicNumber magic)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Import.LookupTableEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry();
 
             if (magic == OptionalHeaderMagicNumber.PE32)
             {
@@ -1275,11 +1275,11 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="optionalSize">Size of the optional header</param>
         /// <returns>Filled OptionalHeader on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.OptionalHeader ParseOptionalHeader(Stream data, int optionalSize)
+        public static SabreTools.Serialization.Models.PortableExecutable.OptionalHeader ParseOptionalHeader(Stream data, int optionalSize)
         {
             long initialOffset = data.Position;
 
-            var obj = new SabreTools.Models.PortableExecutable.OptionalHeader();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.OptionalHeader();
 
             #region Standard Fields
 
@@ -1431,7 +1431,7 @@ namespace SabreTools.Serialization.Deserializers
             ref int dataOffset,
             long tableStart,
             long tableLength,
-            SabreTools.Models.PortableExecutable.Resource.DirectoryTable? table,
+            SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable? table,
             SectionHeader[] sections)
         {
             if (tableData == null)
@@ -1484,9 +1484,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDataEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Resource.DataEntry ParseResourceDataEntry(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry ParseResourceDataEntry(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Resource.DataEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry();
 
             obj.DataRVA = data.ReadUInt32LittleEndian(ref offset);
             obj.Size = data.ReadUInt32LittleEndian(ref offset);
@@ -1503,9 +1503,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="offset">Offset into the byte array</param>
         /// <param name="nameEntry">Indicates if the value is a name entry or not</param>
         /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Resource.DirectoryEntry ParseResourceDirectoryEntry(byte[] data, ref int offset, bool nameEntry)
+        public static SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry ParseResourceDirectoryEntry(byte[] data, ref int offset, bool nameEntry)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Resource.DirectoryEntry();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry();
 
             // TODO: Figure out why the high bit is set for names
             // The original version of this code also had this fix, but there
@@ -1532,9 +1532,9 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDirectoryString on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Resource.DirectoryString ParseResourceDirectoryString(byte[] data, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryString ParseResourceDirectoryString(byte[] data, ref int offset)
         {
-            var obj = new SabreTools.Models.PortableExecutable.Resource.DirectoryString();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryString();
 
             obj.Length = data.ReadUInt16LittleEndian(ref offset);
             if (obj.Length > 0 && offset + (obj.Length * 2) <= data.Length)
@@ -1549,12 +1549,12 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="tableData">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
-        public static SabreTools.Models.PortableExecutable.Resource.DirectoryTable? ParseResourceDirectoryTable(byte[]? tableData, ref int offset)
+        public static SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable? ParseResourceDirectoryTable(byte[]? tableData, ref int offset)
         {
             if (tableData == null)
                 return null;
 
-            var obj = new SabreTools.Models.PortableExecutable.Resource.DirectoryTable();
+            var obj = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable();
 
             obj.Characteristics = tableData.ReadUInt32LittleEndian(ref offset);
             if (obj.Characteristics != 0)
@@ -1568,7 +1568,7 @@ namespace SabreTools.Serialization.Deserializers
 
             // Create the entry array
             int totalEntryCount = obj.NumberOfNameEntries + obj.NumberOfIDEntries;
-            obj.Entries = new SabreTools.Models.PortableExecutable.Resource.DirectoryEntry[totalEntryCount];
+            obj.Entries = new SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry[totalEntryCount];
             if (obj.Entries.Length == 0)
                 return obj;
 

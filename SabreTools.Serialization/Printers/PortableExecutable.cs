@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.COFF;
-using SabreTools.Models.COFF.SymbolTableEntries;
-using SabreTools.Models.PortableExecutable;
-using SabreTools.Models.PortableExecutable.Resource.Entries;
 using SabreTools.Serialization.Extensions;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.COFF;
+using SabreTools.Serialization.Models.COFF.SymbolTableEntries;
+using SabreTools.Serialization.Models.PortableExecutable;
+using SabreTools.Serialization.Models.PortableExecutable.Resource.Entries;
 
 namespace SabreTools.Serialization.Printers
 {
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Printers
             Print(builder, executable.DebugTable);
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.MSDOS.ExecutableHeader? header)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.MSDOS.ExecutableHeader? header)
         {
             builder.AppendLine("  MS-DOS Stub Header Information:");
             builder.AppendLine("  -------------------------");
@@ -119,7 +119,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.OptionalHeader? header, SectionHeader[]? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.OptionalHeader? header, SectionHeader[]? table)
         {
             builder.AppendLine("  Optional Header Information:");
             builder.AppendLine("  -------------------------");
@@ -417,7 +417,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(entry.Reserved2, "    Reserved");
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.COFF.StringTable? stringTable)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.COFF.StringTable? stringTable)
         {
             builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
@@ -439,7 +439,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.AttributeCertificate.Entry[]? entries)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate.Entry[]? entries)
         {
             builder.AppendLine("  Attribute Certificate Table Information:");
             builder.AppendLine("  -------------------------");
@@ -506,7 +506,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.DelayLoad.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.DelayLoad.DirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Delay-Load Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -533,7 +533,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.BaseRelocation.Block[]? entries, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.BaseRelocation.Block[]? entries, SectionHeader[]? sections)
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
@@ -576,7 +576,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.DebugData.Table? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.DebugData.Table? table)
         {
             builder.AppendLine("  Debug Table Information:");
             builder.AppendLine("  -------------------------");
@@ -605,7 +605,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Export.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Export.DirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine(value: "  Export Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -635,7 +635,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Export.AddressTableEntry[]? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Export.AddressTableEntry[]? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Export Address Table Information:");
             builder.AppendLine("  -------------------------");
@@ -658,7 +658,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Export.NamePointerTable? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Export.NamePointerTable? table)
         {
             builder.AppendLine("  Export Name Pointer Table Information:");
             builder.AppendLine("  -------------------------");
@@ -680,7 +680,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Export.OrdinalTable? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Export.OrdinalTable? table)
         {
             builder.AppendLine("  Export Ordinal Table Information:");
             builder.AppendLine("  -------------------------");
@@ -702,7 +702,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Export.NameTable? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Export.NameTable? table)
         {
             builder.AppendLine("  Export Name Table Information:");
             builder.AppendLine("  -------------------------");
@@ -724,7 +724,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Import.DirectoryTableEntry[]? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Import.DirectoryTableEntry[]? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Import Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -754,7 +754,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<int, SabreTools.Models.PortableExecutable.Import.LookupTableEntry[]?>? tables, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.LookupTableEntry[]?>? tables, SectionHeader[]? sections)
         {
             builder.AppendLine("  Import Lookup Tables Information:");
             builder.AppendLine("  -------------------------");
@@ -800,7 +800,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<int, SabreTools.Models.PortableExecutable.Import.AddressTableEntry[]?>? tables, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Dictionary<int, SabreTools.Serialization.Models.PortableExecutable.Import.AddressTableEntry[]?>? tables, SectionHeader[]? sections)
         {
             builder.AppendLine("  Import Address Tables Information:");
             builder.AppendLine("  -------------------------");
@@ -846,7 +846,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Import.HintNameTableEntry[]? table)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Import.HintNameTableEntry[]? table)
         {
             builder.AppendLine("  Import Hint/Name Table Information:");
             builder.AppendLine("  -------------------------");
@@ -869,7 +869,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Resource.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable? table, SectionHeader[]? sections)
         {
             builder.AppendLine("  Resource Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -884,7 +884,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Resource.DirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -924,7 +924,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Resource.DirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Resource.DirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -945,7 +945,7 @@ namespace SabreTools.Serialization.Printers
                 Print(builder, entry.Subdirectory, level: level + 1, types, sections);
         }
 
-        private static void Print(StringBuilder builder, SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, List<object> types, SectionHeader[]? sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1041,25 +1041,25 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine();
         }
 
-        private static void PrintResourceRT_CURSOR(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_CURSOR(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-dependent cursor resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_BITMAP(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_BITMAP(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Bitmap resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ICON(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ICON(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-dependent icon resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_MENU(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MENU(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1137,7 +1137,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_DIALOG(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_DIALOG(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1272,7 +1272,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_STRING(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_STRING(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1292,19 +1292,19 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_FONTDIR(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_FONTDIR(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Font directory resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_FONT(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_FONT(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Font resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ACCELERATOR(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ACCELERATOR(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1327,7 +1327,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_RCDATA(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_RCDATA(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Application-defined resource found, not parsed yet");
@@ -1386,7 +1386,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_MESSAGETABLE(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MESSAGETABLE(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1453,19 +1453,19 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_GROUP_CURSOR(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_GROUP_CURSOR(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-independent cursor resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_GROUP_ICON(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_GROUP_ICON(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Hardware-independent icon resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_VERSION(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_VERSION(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1586,37 +1586,37 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceRT_DLGINCLUDE(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_DLGINCLUDE(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}External header resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_PLUGPLAY(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_PLUGPLAY(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Plug and Play resource found, not parsed yet");
         }
 
-        private static void PrintResourceRT_VXD(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_VXD(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}VXD found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ANICURSOR(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ANICURSOR(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Animated cursor found, not parsed yet");
         }
 
-        private static void PrintResourceRT_ANIICON(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_ANIICON(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}Animated icon found, not parsed yet");
         }
 
-        private static void PrintResourceRT_HTML(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_HTML(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}HTML resource found, not parsed yet");
@@ -1629,7 +1629,7 @@ namespace SabreTools.Serialization.Printers
             //    builder.AppendLine(Encoding.Unicode.GetString(entry.Data), $"{padding}Value (Unicode)");
         }
 
-        private static void PrintResourceRT_MANIFEST(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
+        private static void PrintResourceRT_MANIFEST(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -1806,7 +1806,7 @@ namespace SabreTools.Serialization.Printers
             }
         }
 
-        private static void PrintResourceUNKNOWN(SabreTools.Models.PortableExecutable.Resource.DataEntry entry, int level, object resourceType, StringBuilder builder)
+        private static void PrintResourceUNKNOWN(SabreTools.Serialization.Models.PortableExecutable.Resource.DataEntry entry, int level, object resourceType, StringBuilder builder)
         {
             string padding = new(' ', (level + 1) * 2);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.LinearExecutable;
+using SabreTools.Serialization.Models.LinearExecutable;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
         public ResourceTableEntry[]? ResourceTable => Model.ResourceTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public SabreTools.Models.MSDOS.Executable? Stub => Model.Stub;
+        public SabreTools.Serialization.Models.MSDOS.Executable? Stub => Model.Stub;
 
         #endregion
 

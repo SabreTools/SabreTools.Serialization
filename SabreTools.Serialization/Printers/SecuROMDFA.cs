@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Printers
 {
@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Printers
             builder.AppendLine(dfaFile.BlockOrHeaderSize, "Block or header size");
             builder.AppendLine();
 
-            
+
             Print(builder, dfaFile.Entries);
         }
 
