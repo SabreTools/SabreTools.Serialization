@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using SabreTools.Data.Models.ArchiveDotOrg;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class ArchiveDotOrg : ICrossModel<Files, Data.Models.Metadata.MetadataFile>
+    public partial class ArchiveDotOrg : BaseMetadataSerializer<Files>
     {
         /// <inheritdoc/>
-        public Files? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+        public override Files? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;

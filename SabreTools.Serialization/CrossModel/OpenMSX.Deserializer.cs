@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.OpenMSX;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class OpenMSX : ICrossModel<SoftwareDb, Data.Models.Metadata.MetadataFile>
+    public partial class OpenMSX : BaseMetadataSerializer<SoftwareDb>
     {
         /// <inheritdoc/>
-        public SoftwareDb? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+        public override SoftwareDb? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;

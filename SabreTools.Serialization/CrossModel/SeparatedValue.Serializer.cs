@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.SeparatedValue;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class SeparatedValue : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class SeparatedValue : BaseMetadataSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
+        public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
             if (obj == null)
                 return null;

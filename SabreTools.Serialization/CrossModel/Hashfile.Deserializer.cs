@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Hashfile : ICrossModel<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
+    public partial class Hashfile : BaseMetadataSerializer<Data.Models.Hashfile.Hashfile>
     {
         /// <inheritdoc/>
-        public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, HashType.CRC32);
+        public override Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+            => Deserialize(obj, HashType.CRC32);
 
         /// <inheritdoc/>
         public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj, HashType hash)

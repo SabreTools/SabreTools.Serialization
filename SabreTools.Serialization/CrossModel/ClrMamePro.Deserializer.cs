@@ -1,13 +1,13 @@
 using System;
 using SabreTools.Data.Models.ClrMamePro;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class ClrMamePro : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class ClrMamePro : BaseMetadataSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, true);
+        public override MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+            => Deserialize(obj, true);
 
         /// <inheritdoc cref="Deserialize(Data.Models.Metadata.MetadataFile)"/>
         public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj, bool game)

@@ -1,13 +1,13 @@
 using System;
 using SabreTools.Data.Models.Logiqx;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Logiqx : ICrossModel<Datafile, Data.Models.Metadata.MetadataFile>
+    public partial class Logiqx : BaseMetadataSerializer<Datafile>
     {
         /// <inheritdoc/>
-        public Datafile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, false);
+        public override Datafile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+            => Deserialize(obj, false);
 
         /// <inheritdoc/>
         public Datafile? Deserialize(Data.Models.Metadata.MetadataFile? obj, bool game)

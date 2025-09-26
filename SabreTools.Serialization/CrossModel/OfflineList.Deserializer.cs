@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.OfflineList;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class OfflineList : ICrossModel<Dat, Data.Models.Metadata.MetadataFile>
+    public partial class OfflineList : BaseMetadataSerializer<Dat>
     {
         /// <inheritdoc/>
-        public Dat? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+        public override Dat? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;

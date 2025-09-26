@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.Hashfile;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Hashfile : ICrossModel<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
+    public partial class Hashfile : BaseMetadataSerializer<Data.Models.Hashfile.Hashfile>
     {
         /// <inheritdoc/>
-        public Data.Models.Metadata.MetadataFile? Serialize(Data.Models.Hashfile.Hashfile? obj)
+        public override Data.Models.Metadata.MetadataFile? Serialize(Data.Models.Hashfile.Hashfile? obj)
         {
             if (obj == null)
                 return null;

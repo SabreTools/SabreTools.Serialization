@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using SabreTools.Data.Models.Logiqx;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Logiqx : ICrossModel<Datafile, Data.Models.Metadata.MetadataFile>
+    public partial class Logiqx : BaseMetadataSerializer<Datafile>
     {
-        public Data.Models.Metadata.MetadataFile? Serialize(Datafile? item)
+        public override Data.Models.Metadata.MetadataFile? Serialize(Datafile? item)
         {
             if (item == null)
                 return null;

@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using SabreTools.Data.Models.Listrom;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Listrom : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class Listrom : BaseMetadataSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
+        public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
             if (obj == null)
                 return null;

@@ -1,12 +1,11 @@
 using System;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class M1 : ICrossModel<Data.Models.Listxml.M1, Data.Models.Metadata.MetadataFile>
+    public partial class M1 : BaseMetadataSerializer<Data.Models.Listxml.M1>
     {
         /// <inheritdoc/>
-        public Data.Models.Listxml.M1? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+        public override Data.Models.Listxml.M1? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;

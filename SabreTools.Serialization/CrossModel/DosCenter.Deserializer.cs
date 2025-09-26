@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.DosCenter;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class DosCenter : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class DosCenter : BaseMetadataSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
+        public override MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;

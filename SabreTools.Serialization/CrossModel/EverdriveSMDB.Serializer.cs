@@ -1,13 +1,12 @@
 using System;
 using SabreTools.Data.Models.EverdriveSMDB;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class EverdriveSMDB : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class EverdriveSMDB : BaseMetadataSerializer<MetadataFile>
     {
         /// <inheritdoc/>
-        public Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
+        public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
             if (obj == null)
                 return null;
