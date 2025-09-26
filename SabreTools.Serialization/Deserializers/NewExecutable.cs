@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NewExecutable;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Extensions;
 using static SabreTools.Data.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers

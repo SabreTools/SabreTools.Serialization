@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Extensions;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers

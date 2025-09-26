@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class WiseScript
     {

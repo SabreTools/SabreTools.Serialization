@@ -1,6 +1,6 @@
 using System;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ASN1;
-using SabreTools.Serialization.Extensions;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.Extensions

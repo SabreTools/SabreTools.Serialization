@@ -1,6 +1,6 @@
 using SabreTools.Data.Models.InstallShieldCabinet;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class InstallShieldCabinet
     {

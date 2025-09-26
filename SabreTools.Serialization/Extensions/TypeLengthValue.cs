@@ -4,7 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.ASN1;
 using SabreTools.Data.ObjectIdentifier;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class TypeLengthValue
     {

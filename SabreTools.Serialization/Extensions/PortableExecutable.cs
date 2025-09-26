@@ -9,7 +9,7 @@ using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class PortableExecutable
     {

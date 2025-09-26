@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.CFB;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Extensions;
 using static SabreTools.Data.Models.CFB.Constants;
 
 namespace SabreTools.Serialization.Deserializers

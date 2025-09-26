@@ -1,6 +1,6 @@
 using SabreTools.Data.Models.NewExecutable;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class NewExecutable
     {

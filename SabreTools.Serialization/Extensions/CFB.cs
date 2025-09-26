@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SabreTools.Serialization.Extensions
+namespace SabreTools.Data.Extensions
 {
     public static class CFB
     {

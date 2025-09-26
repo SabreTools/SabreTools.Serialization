@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
