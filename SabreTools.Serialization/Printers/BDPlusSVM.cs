@@ -2,7 +2,7 @@ using System.Text;
 using SabreTools.Data.Models.BDPlus;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class BDPlusSVM : IPrinter<SVM>
     {

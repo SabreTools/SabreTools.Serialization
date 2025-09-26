@@ -2,7 +2,7 @@ using System.Text;
 using SabreTools.Data.Models.Quantum;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class Quantum : IPrinter<Archive>
     {

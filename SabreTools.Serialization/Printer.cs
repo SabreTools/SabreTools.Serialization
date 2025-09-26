@@ -1,7 +1,7 @@
 using System;
 using System.Text;
+using SabreTools.Data.Printers;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Printers;
 using Wrapper = SabreTools.Serialization.Wrappers;
 
 namespace SabreTools.Serialization

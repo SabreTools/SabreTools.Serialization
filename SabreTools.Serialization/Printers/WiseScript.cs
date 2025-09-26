@@ -4,7 +4,7 @@ using SabreTools.Data.Models.WiseInstaller.Actions;
 using SabreTools.Serialization.Extensions;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class WiseScript : IPrinter<ScriptFile>
     {

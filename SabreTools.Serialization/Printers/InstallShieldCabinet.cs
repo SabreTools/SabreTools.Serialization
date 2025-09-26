@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class InstallShieldCabinet : IPrinter<Cabinet>
     {

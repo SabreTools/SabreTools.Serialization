@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.GCF;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class GCF : IPrinter<File>
     {

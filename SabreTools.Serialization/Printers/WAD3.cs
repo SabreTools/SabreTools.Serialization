@@ -2,7 +2,7 @@ using System.Text;
 using SabreTools.Data.Models.WAD3;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class WAD3 : IPrinter<File>
     {

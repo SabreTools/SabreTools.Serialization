@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.N3DS;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Printers
+namespace SabreTools.Data.Printers
 {
     public class N3DS : IPrinter<Cart>
     {
