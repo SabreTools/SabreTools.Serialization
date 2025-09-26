@@ -22,9 +22,11 @@ namespace SabreTools.Serialization.Wrappers
             bool cai = ExtractAdvancedInstaller(outputDirectory, includeDebug);
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
-            bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
+
+            // Overlay can be skipped in some situations
+            bool overlay = cai || ExtractFromOverlay(outputDirectory, includeDebug);
 
             return cai || cexe || matroschka || overlay || resources || wise;
         }
@@ -42,12 +44,43 @@ namespace SabreTools.Serialization.Wrappers
                 // Try to deserialize the source data
                 var deserializer = new Readers.AdvancedInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
-                if (sfx == null)
+                if (sfx?.Entries == null)
                     return false;
 
-                // TODO: Loop through the entries and read as much as possible
+                // Loop through the entries and extract
+                for (int i = 0; i < sfx.Entries.Length; i++)
+                {
+                    var entry = sfx.Entries[i];
 
-                return false;
+                    // Get the offset and size
+                    long offset = entry.FileOffset;
+                    int size = (int)entry.FileSize;
+
+                    // Try to read the file data
+                    byte[] data = ReadRangeFromSource(offset, size);
+                    if (data.Length == 0)
+                        continue;
+
+                    // Ensure directory separators are consistent
+                    string filename = entry.Name ?? $"FILE_{i}";
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outputDirectory, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    // Write the output file
+                    var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                    fs.Write(data, 0, data.Length);
+                    fs.Flush();
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -99,6 +132,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Write the file data to a temp file
                 var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 tempStream.Write(data, 0, data.Length);
+                tempStream.Flush();
 
                 return true;
             }
@@ -454,7 +488,8 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Write the resource data to a temp file
                         using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        tempStream?.Write(ba, resourceOffset, ba.Length - resourceOffset);
+                        tempStream.Write(ba, resourceOffset, ba.Length - resourceOffset);
+                        tempStream.Flush();
                     }
                     catch (Exception ex)
                     {
