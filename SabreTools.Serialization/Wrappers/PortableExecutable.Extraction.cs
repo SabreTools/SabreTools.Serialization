@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (OverlaySize > overlayData.Length)
                 {
                     long currentOffset = OverlayAddress + overlayOffset;
-                    long bytesLeft = OverlaySize;
+                    long bytesLeft = OverlaySize - overlayOffset;
 
                     while (bytesLeft > 0)
                     {
