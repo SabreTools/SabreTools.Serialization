@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Models.Listxml
     public class Control
     {
         /// <remarks>(joy|stick|paddle|pedal|lightgun|positional|dial|trackball|mouse|only_buttons|keypad|keyboard|mahjong|hanafuda|gambling)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("type")]
         public string? Type { get; set; }
 

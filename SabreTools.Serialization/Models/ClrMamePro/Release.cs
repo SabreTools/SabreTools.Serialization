@@ -4,11 +4,11 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Release
     {
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         /// <remarks>region</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Region { get; set; }
 
         /// <remarks>language</remarks>

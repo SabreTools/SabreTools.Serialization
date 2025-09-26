@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Models.Logiqx
     /// </summary>
     public abstract class GameBase
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Models.Logiqx
         [XmlElement("comment")]
         public string[]? Comment { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("description")]
         public string? Description { get; set; }
 

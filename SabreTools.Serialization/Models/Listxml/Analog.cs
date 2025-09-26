@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("analog")]
     public class Analog
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("mask")]
         public string? Mask { get; set; }
     }

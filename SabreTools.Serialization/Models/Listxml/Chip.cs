@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("chip")]
     public class Chip
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? Tag { get; set; }
 
         /// <remarks>(cpu|audio)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("type")]
         public string? Type { get; set; }
 

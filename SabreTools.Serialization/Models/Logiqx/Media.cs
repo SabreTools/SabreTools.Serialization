@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("media")]
     public class Media
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

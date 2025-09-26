@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("info")]
     public class Info
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

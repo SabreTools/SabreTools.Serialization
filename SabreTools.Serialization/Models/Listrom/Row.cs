@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Models.Listrom
     /// </summary>
     public class Row
     {
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         public string? Size { get; set; }

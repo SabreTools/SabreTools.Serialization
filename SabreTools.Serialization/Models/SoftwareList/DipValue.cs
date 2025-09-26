@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("dipvalue")]
     public class DipValue
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("value")]
         public string? Value { get; set; }
 

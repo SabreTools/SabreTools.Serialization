@@ -5,10 +5,10 @@ namespace SabreTools.Serialization.Models.Hashfile
     /// </summary>
     public class SHA256
     {
-        [SabreTools.Models.Required]
+        [Required]
         public string? Hash { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         public string? File { get; set; }
     }
 }

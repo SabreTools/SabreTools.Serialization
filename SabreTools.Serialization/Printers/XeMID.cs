@@ -1,16 +1,16 @@
 using System.Text;
 using SabreTools.Serialization.Interfaces;
-using static SabreTools.Models.Xbox.Constants;
+using static SabreTools.Serialization.Models.Xbox.Constants;
 
 namespace SabreTools.Serialization.Printers
 {
-    public class XeMID : IPrinter<SabreTools.Models.Xbox.XeMID>
+    public class XeMID : IPrinter<SabreTools.Serialization.Models.Xbox.XeMID>
     {
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder, SabreTools.Models.Xbox.XeMID model)
+        public void PrintInformation(StringBuilder builder, SabreTools.Serialization.Models.Xbox.XeMID model)
             => Print(builder, model);
 
-        public static void Print(StringBuilder builder, SabreTools.Models.Xbox.XeMID xemid)
+        public static void Print(StringBuilder builder, SabreTools.Serialization.Models.Xbox.XeMID xemid)
         {
             builder.AppendLine("Xbox Media Identifier Information:");
             builder.AppendLine("-------------------------");

@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Models.Listxml
     public class Feature
     {
         /// <remarks>(protection|timing|graphics|palette|sound|capture|camera|microphone|controls|keyboard|mouse|media|disk|printer|tape|punch|drum|rom|comms|lan|wan)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("type")]
         public string? Type { get; set; }
 

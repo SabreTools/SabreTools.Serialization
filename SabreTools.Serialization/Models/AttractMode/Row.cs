@@ -3,7 +3,7 @@ namespace SabreTools.Serialization.Models.AttractMode
     public class Row
     {
         /// <remarks>Also called Romname</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         public string? Title { get; set; }

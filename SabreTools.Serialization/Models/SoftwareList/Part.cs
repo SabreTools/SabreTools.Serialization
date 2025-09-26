@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("part")]
     public class Part
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("interface")]
         public string? Interface { get; set; }
 

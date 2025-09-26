@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Models.Listxml
     public class Sound
     {
         /// <remarks>Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("channels")]
         public string? Channels { get; set; }
     }

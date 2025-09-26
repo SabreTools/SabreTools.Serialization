@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("rom")]
     public class Rom
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? Bios { get; set; }
 
         /// <remarks>Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("size")]
         public string? Size { get; set; }
 

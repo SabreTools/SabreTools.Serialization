@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.IRD;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.IRD;
 
 namespace SabreTools.Serialization.Printers
 {

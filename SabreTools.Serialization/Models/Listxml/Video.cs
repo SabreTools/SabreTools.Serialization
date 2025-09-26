@@ -7,12 +7,12 @@ namespace SabreTools.Serialization.Models.Listxml
     public class Video
     {
         /// <remarks>(raster|vector)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("screen")]
         public string? Screen { get; set; }
 
         /// <remarks>(vertical|horizontal)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("orientation")]
         public string? Orientation { get; set; }
 

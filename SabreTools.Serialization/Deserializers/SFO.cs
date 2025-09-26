@@ -1,14 +1,14 @@
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.PlayStation3;
-using static SabreTools.Models.PlayStation3.Constants;
+using SabreTools.Serialization.Models.PlayStation3;
+using static SabreTools.Serialization.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SFO : BaseBinaryDeserializer<SabreTools.Models.PlayStation3.SFO>
+    public class SFO : BaseBinaryDeserializer<SabreTools.Serialization.Models.PlayStation3.SFO>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.PlayStation3.SFO? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.PlayStation3.SFO? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Create a new SFO to fill
-                var sfo = new SabreTools.Models.PlayStation3.SFO();
+                var sfo = new SabreTools.Serialization.Models.PlayStation3.SFO();
 
                 #region Header
 

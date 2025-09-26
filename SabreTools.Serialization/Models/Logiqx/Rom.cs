@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("rom")]
     public class Rom
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("size")]
         public string? Size { get; set; }
 

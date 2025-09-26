@@ -4,11 +4,11 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class BiosSet
     {
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         /// <remarks>description</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Description { get; set; }
 
         /// <remarks>default</remarks>

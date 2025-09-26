@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.PIC;
-using static SabreTools.Models.PIC.Constants;
+using SabreTools.Serialization.Models.PIC;
+using static SabreTools.Serialization.Models.PIC.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

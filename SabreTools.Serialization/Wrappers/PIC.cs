@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.PIC;
+using SabreTools.Serialization.Models.PIC;
 
 namespace SabreTools.Serialization.Wrappers
 {

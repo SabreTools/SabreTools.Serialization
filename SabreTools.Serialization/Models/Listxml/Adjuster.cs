@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("adjuster")]
     public class Adjuster
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

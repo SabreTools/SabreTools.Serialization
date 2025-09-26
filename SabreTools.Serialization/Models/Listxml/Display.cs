@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? Tag { get; set; }
 
         /// <remarks>(raster|vector|lcd|svg|unknown)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("type")]
         public string? Type { get; set; }
 
@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? Height { get; set; }
 
         /// <remarks>Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("refresh")]
         public string? Refresh { get; set; }
 

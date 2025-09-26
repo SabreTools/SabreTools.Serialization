@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("extension")]
     public class Extension
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
     }

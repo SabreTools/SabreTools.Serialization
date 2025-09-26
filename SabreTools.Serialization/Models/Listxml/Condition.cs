@@ -6,20 +6,20 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("condition")]
     public class Condition
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("tag")]
         public string? Tag { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("mask")]
         public string? Mask { get; set; }
 
         /// <remarks>(eq|ne|gt|le|lt|ge)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("relation")]
         public string? Relation { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("value")]
         public string? Value { get; set; }
     }

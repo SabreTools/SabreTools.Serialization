@@ -4,10 +4,10 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class IRD : BaseBinaryDeserializer<SabreTools.Models.IRD.File>
+    public class IRD : BaseBinaryDeserializer<SabreTools.Serialization.Models.IRD.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.IRD.File? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.IRD.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Deserialize the IRD
-                var ird = new SabreTools.Models.IRD.File();
+                var ird = new SabreTools.Serialization.Models.IRD.File();
 
                 ird.Magic = data.ReadBytes(4);
                 string magic = Encoding.ASCII.GetString(ird.Magic);

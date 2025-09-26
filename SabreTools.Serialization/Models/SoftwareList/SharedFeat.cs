@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("sharedfeat")]
     public class SharedFeat
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

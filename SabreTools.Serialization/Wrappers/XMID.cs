@@ -1,10 +1,10 @@
 using System.IO;
 using System.Text;
-using static SabreTools.Models.Xbox.Constants;
+using static SabreTools.Serialization.Models.Xbox.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class XMID : WrapperBase<SabreTools.Models.Xbox.XMID>
+    public class XMID : WrapperBase<SabreTools.Serialization.Models.Xbox.XMID>
     {
         #region Descriptive Properties
 
@@ -63,22 +63,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, byte[] data) : base(model, data) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, byte[] data, int offset) : base(model, data, offset) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, Stream data) : base(model, data) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, Stream data, long offset) : base(model, data, offset) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XMID(SabreTools.Models.Xbox.XMID model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public XMID(SabreTools.Serialization.Models.Xbox.XMID model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

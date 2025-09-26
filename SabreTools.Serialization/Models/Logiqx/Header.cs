@@ -10,11 +10,11 @@ namespace SabreTools.Serialization.Models.Logiqx
         [XmlElement("id")]
         public string? Id { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("description")]
         public string? Description { get; set; }
 
@@ -25,14 +25,14 @@ namespace SabreTools.Serialization.Models.Logiqx
         [XmlElement("category")]
         public string? Category { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("version")]
         public string? Version { get; set; }
 
         [XmlElement("date")]
         public string? Date { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("author")]
         public string? Author { get; set; }
 

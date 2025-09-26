@@ -5,19 +5,19 @@ namespace SabreTools.Serialization.Models.EverdriveSMDB
     /// </summary>
     public class Row
     {
-        [SabreTools.Models.Required]
+        [Required]
         public string? SHA256 { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         public string? SHA1 { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         public string? MD5 { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         public string? CRC32 { get; set; }
 
         public string? Size { get; set; }

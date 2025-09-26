@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("instance")]
     public class Instance
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("briefname")]
         public string? BriefName { get; set; }
     }

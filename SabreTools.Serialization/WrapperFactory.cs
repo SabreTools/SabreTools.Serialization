@@ -159,7 +159,7 @@ namespace SabreTools.Serialization
 
             #region BDPlusSVM
 
-            if (magic.StartsWith(SabreTools.Models.BDPlus.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.BDPlus.Constants.SignatureBytes))
                 return WrapperType.BDPlusSVM;
 
             if (extension.Equals("svm", StringComparison.OrdinalIgnoreCase))

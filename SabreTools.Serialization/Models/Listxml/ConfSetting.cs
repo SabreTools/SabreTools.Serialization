@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("confsetting")]
     public class ConfSetting
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("value")]
         public string? Value { get; set; }
 

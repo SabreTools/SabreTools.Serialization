@@ -4,7 +4,7 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Sample
     {
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
     }
 }

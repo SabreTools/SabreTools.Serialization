@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("port")]
     public class Port
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("tag")]
         public string? Tag { get; set; }
 

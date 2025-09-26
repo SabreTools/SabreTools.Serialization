@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? Tilt { get; set; }
 
         /// <remarks>Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("players")]
         public string? Players { get; set; }
 

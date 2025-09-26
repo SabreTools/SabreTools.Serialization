@@ -4,11 +4,11 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Rom
     {
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         /// <remarks>size, Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Size { get; set; }
 
         /// <remarks>crc</remarks>

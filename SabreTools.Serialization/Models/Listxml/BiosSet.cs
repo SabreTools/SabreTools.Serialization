@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("biosset")]
     public class BiosSet
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("description")]
         public string? Description { get; set; }
 

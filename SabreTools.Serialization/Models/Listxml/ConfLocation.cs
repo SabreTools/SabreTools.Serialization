@@ -6,12 +6,12 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("conflocation")]
     public class ConfLocation
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
         /// <remarks>Numeric?</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("number")]
         public string? Number { get; set; }
 

@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("disk")]
     public class Disk
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

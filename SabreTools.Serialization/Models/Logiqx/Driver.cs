@@ -7,22 +7,22 @@ namespace SabreTools.Serialization.Models.Logiqx
     public class Driver
     {
         /// <remarks>(good|imperfect|preliminary)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("status")]
         public string? Status { get; set; }
 
         /// <remarks>(good|imperfect|preliminary)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("emulation")]
         public string? Emulation { get; set; }
 
         /// <remarks>(good|imperfect|preliminary)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("cocktail")]
         public string? Cocktail { get; set; }
 
         /// <remarks>(supported|unsupported)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("savestate")]
         public string? SaveState { get; set; }
 

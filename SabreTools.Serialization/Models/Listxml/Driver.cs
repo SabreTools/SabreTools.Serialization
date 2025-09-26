@@ -7,7 +7,7 @@ namespace SabreTools.Serialization.Models.Listxml
     public class Driver
     {
         /// <remarks>(good|imperfect|preliminary), (good|preliminary|test) in older versions</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("status")]
         public string? Status { get; set; }
 
@@ -24,17 +24,17 @@ namespace SabreTools.Serialization.Models.Listxml
         public string? PaletteSize { get; set; }
 
         /// <remarks>(good|imperfect|preliminary)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("emulation")]
         public string? Emulation { get; set; }
 
         /// <remarks>(good|imperfect|preliminary)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("cocktail")]
         public string? Cocktail { get; set; }
 
         /// <remarks>(supported|unsupported)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("savestate")]
         public string? SaveState { get; set; }
 

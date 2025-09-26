@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("slotoption")]
     public class SlotOption
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("devname")]
         public string? DevName { get; set; }
 

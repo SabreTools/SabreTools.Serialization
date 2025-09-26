@@ -6,16 +6,16 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("softwarelist")]
     public class SoftwareList
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("tag")]
         public string? Tag { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
         /// <remarks>(original|compatible)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("status")]
         public string? Status { get; set; }
 

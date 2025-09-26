@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.AACS;
+using SabreTools.Serialization.Models.AACS;
 
 namespace SabreTools.Serialization.Deserializers
 {

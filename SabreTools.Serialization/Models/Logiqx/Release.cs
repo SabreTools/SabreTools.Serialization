@@ -6,11 +6,11 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("release")]
     public class Release
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("region")]
         public string? Region { get; set; }
 

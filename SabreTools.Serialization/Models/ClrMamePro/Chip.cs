@@ -4,11 +4,11 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Chip
     {
         /// <remarks>type, (cpu|audio)</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Type { get; set; }
 
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         /// <remarks>flags</remarks>

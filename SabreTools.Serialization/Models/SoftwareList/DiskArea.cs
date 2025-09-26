@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("diskarea")]
     public class DiskArea
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

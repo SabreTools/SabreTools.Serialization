@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Models.AttractMode
     /// </summary>
     public class MetadataFile
     {
-        [SabreTools.Models.Required]
+        [Required]
         public string[]? Header { get; set; }
 
         public Row[]? Row { get; set; }

@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using static SabreTools.Models.PlayStation3.Constants;
+using static SabreTools.Serialization.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class SFB : BaseBinaryDeserializer<SabreTools.Models.PlayStation3.SFB>
+    public class SFB : BaseBinaryDeserializer<SabreTools.Serialization.Models.PlayStation3.SFB>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.PlayStation3.SFB? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.PlayStation3.SFB? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Deserialize the SFB
-                var sfb = new SabreTools.Models.PlayStation3.SFB();
+                var sfb = new SabreTools.Serialization.Models.PlayStation3.SFB();
 
                 sfb.Magic = data.ReadUInt32BigEndian();
                 if (sfb.Magic != SFBMagic)

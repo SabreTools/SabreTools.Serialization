@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public abstract class GameBase
     {
         /// <remarks>name</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Name { get; set; }
 
         /// <remarks>description</remarks>

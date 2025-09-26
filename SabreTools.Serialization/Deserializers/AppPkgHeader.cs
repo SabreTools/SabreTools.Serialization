@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using static SabreTools.Models.PlayStation4.Constants;
+using static SabreTools.Serialization.Models.PlayStation4.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class AppPkgHeader : BaseBinaryDeserializer<SabreTools.Models.PlayStation4.AppPkgHeader>
+    public class AppPkgHeader : BaseBinaryDeserializer<SabreTools.Serialization.Models.PlayStation4.AppPkgHeader>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.PlayStation4.AppPkgHeader? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.PlayStation4.AppPkgHeader? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Create a new app.pkg header to fill
-                var appPkgHeader = new SabreTools.Models.PlayStation4.AppPkgHeader();
+                var appPkgHeader = new SabreTools.Serialization.Models.PlayStation4.AppPkgHeader();
 
                 appPkgHeader.Magic = data.ReadUInt32BigEndian();
                 if (appPkgHeader.Magic != AppPkgMagic)

@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Listxml
     [XmlRoot("device")]
     public class Device
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("type")]
         public string? Type { get; set; }
 

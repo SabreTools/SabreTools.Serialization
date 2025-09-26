@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("archive")]
     public class Archive
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
     }

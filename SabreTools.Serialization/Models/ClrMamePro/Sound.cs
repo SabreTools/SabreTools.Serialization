@@ -4,7 +4,7 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Sound
     {
         /// <remarks>channels, Numeric?</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Channels { get; set; }
     }
 }

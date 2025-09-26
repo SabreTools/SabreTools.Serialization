@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.BDPlus;
-using static SabreTools.Models.BDPlus.Constants;
+using SabreTools.Serialization.Models.BDPlus;
+using static SabreTools.Serialization.Models.BDPlus.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

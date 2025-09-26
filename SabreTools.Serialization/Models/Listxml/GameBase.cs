@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Models.Listxml
     /// </summary>
     public abstract class GameBase
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Models.Listxml
         [XmlAttribute("sampleof")]
         public string? SampleOf { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("description")]
         public string? Description { get; set; }
 

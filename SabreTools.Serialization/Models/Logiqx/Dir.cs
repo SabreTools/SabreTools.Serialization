@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.Logiqx
     [XmlRoot("dir")]
     public class Dir
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 

@@ -4,14 +4,14 @@ namespace SabreTools.Serialization.Models.ClrMamePro
     public class Input
     {
         /// <remarks>players, Numeric/remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Players { get; set; }
 
         /// <remarks>control</remarks>
         public string? Control { get; set; }
 
         /// <remarks>buttons, Numeric</remarks>
-        [SabreTools.Models.Required]
+        [Required]
         public string? Buttons { get; set; }
 
         /// <remarks>coins, Numeric</remarks>

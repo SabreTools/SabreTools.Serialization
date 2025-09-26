@@ -1,5 +1,3 @@
-using SabreTools.Models;
-
 namespace SabreTools.Serialization.Models.Metadata
 {
     /// <summary>

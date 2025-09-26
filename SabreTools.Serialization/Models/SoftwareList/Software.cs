@@ -6,7 +6,7 @@ namespace SabreTools.Serialization.Models.SoftwareList
     [XmlRoot("software")]
     public class Software
     {
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
@@ -17,15 +17,15 @@ namespace SabreTools.Serialization.Models.SoftwareList
         [XmlAttribute("supported")]
         public string? Supported { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("description")]
         public string? Description { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("year")]
         public string? Year { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlElement("publisher")]
         public string? Publisher { get; set; }
 

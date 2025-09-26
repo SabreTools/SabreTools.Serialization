@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Models.Listxml
         [XmlAttribute("debug")]
         public string? Debug { get; set; }
 
-        [SabreTools.Models.Required]
+        [Required]
         [XmlAttribute("mameconfig")]
         public string? MameConfig { get; set; }
 
