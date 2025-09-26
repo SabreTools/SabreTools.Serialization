@@ -24,7 +24,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/SabreTools/SabreTools.Serialization</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>serialize serialization deserialize deserialization file stream</PackageTags>
+        <PackageTags>serialization reader writer conversion models wrappers printers oid asn1</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
