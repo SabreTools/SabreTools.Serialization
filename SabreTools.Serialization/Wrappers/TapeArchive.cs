@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.TAR;
+using SabreTools.Serialization.Models.TAR;
 
 namespace SabreTools.Serialization.Wrappers
 {

@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.Quantum;
-using static SabreTools.Models.Quantum.Constants;
+using SabreTools.Serialization.Models.Quantum;
+using static SabreTools.Serialization.Models.Quantum.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

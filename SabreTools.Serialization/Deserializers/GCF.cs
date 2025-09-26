@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.GCF;
+using SabreTools.Serialization.Models.GCF;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class GCF : BaseBinaryDeserializer<SabreTools.Models.GCF.File>
+    public class GCF : BaseBinaryDeserializer<SabreTools.Serialization.Models.GCF.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.GCF.File? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.GCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life Game Cache to fill
-                var file = new SabreTools.Models.GCF.File();
+                var file = new SabreTools.Serialization.Models.GCF.File();
 
                 #region Header
 
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Deserializers
                     return null;
                 if (directoryHeader.Dummy1 != 0x00008000)
                     return null;
-                
+
                 // Set the game cache directory header
                 file.DirectoryHeader = directoryHeader;
 

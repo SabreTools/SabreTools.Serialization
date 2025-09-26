@@ -3,9 +3,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using SabreTools.Hashing;
 using SabreTools.IO.Compression.zlib;
-using SabreTools.Models.InstallShieldCabinet;
 using SabreTools.Serialization.Interfaces;
-using static SabreTools.Models.InstallShieldCabinet.Constants;
+using SabreTools.Serialization.Models.InstallShieldCabinet;
+using static SabreTools.Serialization.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {

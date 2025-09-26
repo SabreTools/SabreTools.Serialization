@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.TAR;
+using SabreTools.Serialization.Models.TAR;
 
 namespace SabreTools.Serialization.Deserializers
 {

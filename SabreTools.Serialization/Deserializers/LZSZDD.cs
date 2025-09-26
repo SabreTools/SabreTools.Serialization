@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.LZ;
-using static SabreTools.Models.LZ.Constants;
+using SabreTools.Serialization.Models.LZ;
+using static SabreTools.Serialization.Models.LZ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

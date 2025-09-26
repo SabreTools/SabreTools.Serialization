@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using System.Text;
-using SabreTools.Models.TAR;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.TAR;
 
 namespace SabreTools.Serialization.Printers
 {

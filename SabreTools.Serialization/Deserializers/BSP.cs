@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.BSP;
-using static SabreTools.Models.BSP.Constants;
+using SabreTools.Serialization.Models.BSP;
+using static SabreTools.Serialization.Models.BSP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

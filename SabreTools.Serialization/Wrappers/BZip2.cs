@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.BZip2;
+using SabreTools.Serialization.Models.BZip2;
 
 namespace SabreTools.Serialization.Wrappers
 {

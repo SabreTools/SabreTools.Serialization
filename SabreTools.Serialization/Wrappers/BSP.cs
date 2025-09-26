@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.BSP;
+using SabreTools.Serialization.Models.BSP;
 
 namespace SabreTools.Serialization.Wrappers
 {

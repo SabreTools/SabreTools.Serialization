@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.PKZIP;
-using static SabreTools.Models.PKZIP.Constants;
+using SabreTools.Serialization.Models.PKZIP;
+using static SabreTools.Serialization.Models.PKZIP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

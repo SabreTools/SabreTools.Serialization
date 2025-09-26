@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using SabreTools.Models.InstallShieldCabinet;
 using SabreTools.Serialization.Extensions;
+using SabreTools.Serialization.Models.InstallShieldCabinet;
 
 namespace SabreTools.Serialization.Wrappers
 {

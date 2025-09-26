@@ -3,8 +3,8 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.MoPaQ;
-using static SabreTools.Models.MoPaQ.Constants;
+using SabreTools.Serialization.Models.MoPaQ;
+using static SabreTools.Serialization.Models.MoPaQ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

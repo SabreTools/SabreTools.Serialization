@@ -1,9 +1,9 @@
 using System.IO;
-using SabreTools.Models.PAK;
+using SabreTools.Serialization.Models.PAK;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class PAK : WrapperBase<SabreTools.Models.PAK.File>
+    public partial class PAK : WrapperBase<SabreTools.Serialization.Models.PAK.File>
     {
         #region Descriptive Properties
 
@@ -22,22 +22,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, byte[] data) : base(model, data) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, Stream data) : base(model, data) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, Stream data, long offset) : base(model, data, offset) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PAK(SabreTools.Models.PAK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public PAK(SabreTools.Serialization.Models.PAK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

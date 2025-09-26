@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.PAK;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.PAK;
 
 namespace SabreTools.Serialization.Printers
 {

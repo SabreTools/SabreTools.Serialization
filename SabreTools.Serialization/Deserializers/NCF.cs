@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.NCF;
+using SabreTools.Serialization.Models.NCF;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class NCF : BaseBinaryDeserializer<SabreTools.Models.NCF.File>
+    public class NCF : BaseBinaryDeserializer<SabreTools.Serialization.Models.NCF.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Models.NCF.File? Deserialize(Stream? data)
+        public override SabreTools.Serialization.Models.NCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life No Cache to fill
-                var file = new SabreTools.Models.NCF.File();
+                var file = new SabreTools.Serialization.Models.NCF.File();
 
                 #region Header
 

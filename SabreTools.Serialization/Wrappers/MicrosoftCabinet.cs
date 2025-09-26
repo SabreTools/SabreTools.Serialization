@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Compression.MSZIP;
-using SabreTools.Models.MicrosoftCabinet;
+using SabreTools.Serialization.Models.MicrosoftCabinet;
 
 namespace SabreTools.Serialization.Wrappers
 {

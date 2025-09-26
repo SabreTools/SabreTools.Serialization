@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.RAR;
+using SabreTools.Serialization.Models.RAR;
 
 namespace SabreTools.Serialization.Wrappers
 {

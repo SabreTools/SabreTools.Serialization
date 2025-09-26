@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.PFF;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.PFF;
 
 namespace SabreTools.Serialization.Printers
 {

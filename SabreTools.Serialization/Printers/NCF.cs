@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
-using SabreTools.Models.NCF;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.NCF;
 
 namespace SabreTools.Serialization.Printers
 {

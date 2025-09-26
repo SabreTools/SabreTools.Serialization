@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.WAD3;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.WAD3;
 
 namespace SabreTools.Serialization.Printers
 {

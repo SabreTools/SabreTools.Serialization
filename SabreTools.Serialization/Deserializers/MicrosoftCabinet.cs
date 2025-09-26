@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.MicrosoftCabinet;
-using static SabreTools.Models.MicrosoftCabinet.Constants;
+using SabreTools.Serialization.Models.MicrosoftCabinet;
+using static SabreTools.Serialization.Models.MicrosoftCabinet.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -227,12 +227,12 @@ namespace SabreTools.Serialization.Deserializers
             file.FolderIndex = (FolderIndex)data.ReadUInt16LittleEndian();
             file.Date = data.ReadUInt16LittleEndian();
             file.Time = data.ReadUInt16LittleEndian();
-            file.Attributes = (SabreTools.Models.MicrosoftCabinet.FileAttributes)data.ReadUInt16LittleEndian();
+            file.Attributes = (SabreTools.Serialization.Models.MicrosoftCabinet.FileAttributes)data.ReadUInt16LittleEndian();
 
 #if NET20 || NET35
-            if ((file.Attributes & SabreTools.Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF) != 0)
+            if ((file.Attributes & SabreTools.Serialization.Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF) != 0)
 #else
-            if (file.Attributes.HasFlag(SabreTools.Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF))
+            if (file.Attributes.HasFlag(SabreTools.Serialization.Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF))
 #endif
                 file.Name = data.ReadNullTerminatedUnicodeString();
             else

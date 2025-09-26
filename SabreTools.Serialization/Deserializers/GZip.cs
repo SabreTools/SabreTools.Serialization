@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.GZIP;
-using static SabreTools.Models.GZIP.Constants;
+using SabreTools.Serialization.Models.GZIP;
+using static SabreTools.Serialization.Models.GZIP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

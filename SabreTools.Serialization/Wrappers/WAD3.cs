@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class WAD3 : WrapperBase<SabreTools.Models.WAD3.File>
+    public partial class WAD3 : WrapperBase<SabreTools.Serialization.Models.WAD3.File>
     {
         #region Descriptive Properties
 
@@ -14,29 +14,29 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Models.WAD3.File.DirEntries"/>
-        public SabreTools.Models.WAD3.DirEntry[]? DirEntries => Model.DirEntries;
+        public SabreTools.Serialization.Models.WAD3.DirEntry[]? DirEntries => Model.DirEntries;
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, byte[] data) : base(model, data) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, Stream data) : base(model, data) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, Stream data, long offset) : base(model, data, offset) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public WAD3(SabreTools.Models.WAD3.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public WAD3(SabreTools.Serialization.Models.WAD3.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

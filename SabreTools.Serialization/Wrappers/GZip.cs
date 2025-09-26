@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.GZIP;
+using SabreTools.Serialization.Models.GZIP;
 
 namespace SabreTools.Serialization.Wrappers
 {

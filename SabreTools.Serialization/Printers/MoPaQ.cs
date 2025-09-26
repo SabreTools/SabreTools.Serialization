@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.MoPaQ;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.MoPaQ;
 
 namespace SabreTools.Serialization.Printers
 {
