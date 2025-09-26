@@ -84,23 +84,24 @@ Below is a table representing the various conversion interfaces that are impleme
 
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
-| `SabreTools.Serialization.Interfaces.IByteReader` | `byte[]?` | Model |
-| `SabreTools.Serialization.Interfaces.IByteWriter` | Model | `byte[]?` |
-| `SabreTools.Serialization.Interfaces.IFileReader` | `string?` path | Model |
-| `SabreTools.Serialization.Interfaces.IFileWriter` | Model | `string?` path |
-| `SabreTools.Serialization.Interfaces.IModelSerializer` | Model | Model |
-| `SabreTools.Serialization.Interfaces.IStreamReader` | `Stream?` | Model |
-| `SabreTools.Serialization.Interfaces.IStreamWriter` | Model | `Stream?` |
-| `SabreTools.Serialization.Interfaces.IStringReader` | `string?` representation | Model |
-| `SabreTools.Serialization.Interfaces.IStringWriter` | Model | `string?` representation |
+| `SabreTools.Serialization.Interfaces.IByteReader<TModel>` | `byte[]?` | `TModel` |
+| `SabreTools.Serialization.Interfaces.IByteWriter<TModel>` | `TModel` | `byte[]?` |
+| `SabreTools.Serialization.Interfaces.IFileReader<TModel>` | `string?` path | `TModel` |
+| `SabreTools.Serialization.Interfaces.IFileWriter<TModel>` | `TModel` | `string?` path |
+| `SabreTools.Serialization.Interfaces.IModelSerializer<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
+| `SabreTools.Serialization.Interfaces.IStreamReader<TModel>` | `Stream?` | `TModel` |
+| `SabreTools.Serialization.Interfaces.IStreamWriter<TModel>` | `TModel` | `Stream?` |
+| `SabreTools.Serialization.Interfaces.IStringReader<TModel>` | `string?` representation | `TModel` |
+| `SabreTools.Serialization.Interfaces.IStringWriter<TModel>` | `TModel` | `string?` representation |
 
 Below is a table representing the various non-conversion interfaces that are implemented within this library.
 
 | Interface Name | Purpose |
 | --- | --- |
-| `SabreTools.Data.Printers.IPrinter` | Provides a formatted output for a model |
+| `SabreTools.Data.Printers.IPrinter<TModel>` | Provides a formatted output for a `TModel` |
 | `SabreTools.Serialization.Wrappers.IExtractable` | Marks a wrapper as able to be extracted |
-| `SabreTools.Serialization.Wrappers.IWrapper` / `SabreTools.Serialization.Wrappers.IWrapper<T>` | Wraps a model or set of models to provide additional functionality |
+| `SabreTools.Serialization.Wrappers.IWrapper` | Represents an item with a description and JSON serializable state, allowing for extensions |
+| `SabreTools.Serialization.Wrappers.IWrapper<TModel>` | Wraps a model with source data, allowing for extensions |
 
 ## Namespaces
 

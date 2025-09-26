@@ -3,14 +3,14 @@ namespace SabreTools.Serialization.Interfaces
     /// <summary>
     /// Defines how to write to Streams
     /// </summary>
-    public interface IStreamWriter<T>
+    public interface IStreamWriter<TModel>
     {
         /// <summary>
-        /// Serialize a <typeparamref name="T"/> into a Stream
+        /// Serialize a <typeparamref name="TModel"/> into a Stream
         /// </summary>
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
         /// <returns>Filled object on success, null on error</returns>
-        System.IO.Stream? SerializeStream(T? obj);
+        System.IO.Stream? SerializeStream(TModel? obj);
     }
 }
