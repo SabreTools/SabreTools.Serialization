@@ -1362,11 +1362,11 @@ namespace SabreTools.Serialization.Printers
                 {
                     builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                else if (magic.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded RAR file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                else if (magic.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded RAR5 file]"); // TODO: Parse this out and print separately
                 }
@@ -1848,11 +1848,11 @@ namespace SabreTools.Serialization.Printers
                 {
                     builder.AppendLine($"{padding}Data: [Embedded spanned PKZIP file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                else if (magic.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded RAR file]"); // TODO: Parse this out and print separately
                 }
-                else if (magic.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                else if (magic.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                 {
                     builder.AppendLine($"{padding}Data: [Embedded RAR5 file]"); // TODO: Parse this out and print separately
                 }

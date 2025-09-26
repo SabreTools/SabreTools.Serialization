@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
                     int temp = overlayOffset;
                     byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
 
-                    if (overlaySample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                    if (overlaySample.StartsWith(Models.SevenZip.Constants.SignatureBytes))
                     {
                         extension = "7z";
                         break;
@@ -123,9 +123,15 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "7z";
                         break;
                     }
-                    else if (overlaySample.StartsWith([0x42, 0x5A, 0x68]))
+                    else if (overlaySample.StartsWith(Models.BZip2.Constants.SignatureBytes))
                     {
                         extension = "bz2";
+                        break;
+                    }
+                    else if (overlaySample.StartsWith(Models.CFB.Constants.SignatureBytes))
+                    {
+                        // Assume embedded CFB files are MSI
+                        extension = "msi";
                         break;
                     }
                     else if (overlaySample.StartsWith([0x1F, 0x8B]))
@@ -158,12 +164,12 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "zip";
                         break;
                     }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                    else if (overlaySample.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                     {
                         extension = "rar";
                         break;
                     }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                    else if (overlaySample.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                     {
                         extension = "rar";
                         break;
@@ -188,7 +194,7 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "xml";
                         break;
                     }
-                    else if (overlaySample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
+                    else if (overlaySample.StartsWith(Models.XZ.Constants.SignatureBytes))
                     {
                         extension = "xz";
                         break;
@@ -290,7 +296,7 @@ namespace SabreTools.Serialization.Wrappers
                         int temp = resourceOffset;
                         byte[] resourceSample = ba.ReadBytes(ref temp, 0x10);
 
-                        if (resourceSample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
+                        if (resourceSample.StartsWith(Models.SevenZip.Constants.SignatureBytes))
                         {
                             extension = "7z";
                             break;
@@ -300,9 +306,15 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "bmp";
                             break;
                         }
-                        else if (resourceSample.StartsWith([0x42, 0x5A, 0x68]))
+                        else if (resourceSample.StartsWith(Models.BZip2.Constants.SignatureBytes))
                         {
                             extension = "bz2";
+                            break;
+                        }
+                        else if (resourceSample.StartsWith(Models.CFB.Constants.SignatureBytes))
+                        {
+                            // Assume embedded CFB files are MSI
+                            extension = "msi";
                             break;
                         }
                         else if (resourceSample.StartsWith([0x47, 0x49, 0x46, 0x38]))
@@ -355,12 +367,12 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "png";
                             break;
                         }
-                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
+                        else if (resourceSample.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                         {
                             extension = "rar";
                             break;
                         }
-                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
+                        else if (resourceSample.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                         {
                             extension = "rar";
                             break;
@@ -385,7 +397,7 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "xml";
                             break;
                         }
-                        else if (resourceSample.StartsWith([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00]))
+                        else if (resourceSample.StartsWith(Models.XZ.Constants.SignatureBytes))
                         {
                             extension = "xz";
                             break;
