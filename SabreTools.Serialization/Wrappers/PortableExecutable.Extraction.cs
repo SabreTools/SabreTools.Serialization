@@ -14,18 +14,46 @@ namespace SabreTools.Serialization.Wrappers
         /// - Archives and executables in resource data
         /// - CExe-compressed resource data
         /// - SecuROM Matroschka package sections
-        /// - SFX archives (7z, MS-CAB, PKZIP, RAR)
+        /// - SFX archives (7z, Advanced Installer, MS-CAB, PKZIP, RAR)
         /// - Wise installers
         /// </remarks>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
+            bool cai = ExtractAdvancedInstaller(outputDirectory, includeDebug);
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
 
-            return cexe || matroschka || overlay || resources || wise;
+            return cai || cexe || matroschka || overlay || resources || wise;
+        }
+
+        /// <summary>
+        /// Extract a Caphyon Advanced Installer SFX overlay
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractAdvancedInstaller(string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                // Try to deserialize the source data
+                var deserializer = new Readers.AdvancedInstaller();
+                var sfx = deserializer.Deserialize(_dataSource);
+                if (sfx == null)
+                    return false;
+
+                // TODO: Loop through the entries and read as much as possible
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
         }
 
         /// <summary>
