@@ -163,11 +163,10 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a Footer
+        /// Parse a Stream into a FileEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="count">Number of entries to parse</param>
-        /// <returns>Filled Footer on success, null on error</returns>
+        /// <returns>Filled FileEntry on success, null on error</returns>
         public static FileEntry ParseFileEntry(Stream data)
         {
             var obj = new FileEntry();
