@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Compression.zlib;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {

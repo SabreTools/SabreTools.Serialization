@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Data.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Wrappers

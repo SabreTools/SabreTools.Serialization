@@ -1,5 +1,4 @@
 ﻿using System;
-using SabreTools.Serialization.Interfaces;
 #if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
 using System.IO;
 using StormLibSharp;

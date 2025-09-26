@@ -2,7 +2,6 @@ using System;
 #if NET462_OR_GREATER || NETCOREAPP
 using System.IO;
 #endif
-using SabreTools.Serialization.Interfaces;
 #if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Compressors.Xz;
 #endif

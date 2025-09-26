@@ -4,12 +4,11 @@ using System.Text.RegularExpressions;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Hashing;
 using SabreTools.IO.Compression.zlib;
-using SabreTools.Serialization.Interfaces;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class InstallShieldCabinet : WrapperBase<Cabinet>, IExtractable
+    public partial class InstallShieldCabinet : IExtractable
     {
         #region Extension Properties
 

@@ -5,7 +5,6 @@ using SabreTools.Data.Models.CFB;
 #if NETFRAMEWORK || NETSTANDARD
 using SabreTools.IO.Extensions;
 #endif
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {

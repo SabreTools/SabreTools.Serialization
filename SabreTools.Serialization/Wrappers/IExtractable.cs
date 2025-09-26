@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
     /// Represents an item that is extractable

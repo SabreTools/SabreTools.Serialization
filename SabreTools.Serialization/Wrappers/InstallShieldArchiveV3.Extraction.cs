@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.IO.Compression.Blast;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {

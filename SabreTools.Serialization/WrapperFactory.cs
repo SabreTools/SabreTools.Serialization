@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Interfaces;
 using SabreTools.Serialization.Wrappers;
 
 namespace SabreTools.Serialization

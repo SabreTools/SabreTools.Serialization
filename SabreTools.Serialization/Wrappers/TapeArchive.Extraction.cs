@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.TAR;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {

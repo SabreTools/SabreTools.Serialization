@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using SabreTools.Data.Printers;
-using SabreTools.Serialization.Interfaces;
 using Wrapper = SabreTools.Serialization.Wrappers;
 
 namespace SabreTools.Serialization
@@ -15,7 +14,7 @@ namespace SabreTools.Serialization
         /// Print the item information from a wrapper to console as
         /// pretty-printed text
         /// </summary>
-        public static void PrintToConsole(this IWrapper wrapper)
+        public static void PrintToConsole(this Wrapper.IWrapper wrapper)
         {
             var sb = wrapper.ExportStringBuilder();
             if (sb == null)
@@ -30,7 +29,7 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Export the item information as a StringBuilder
         /// </summary>
-        public static StringBuilder? ExportStringBuilder(this IWrapper wrapper)
+        public static StringBuilder? ExportStringBuilder(this Wrapper.IWrapper wrapper)
         {
             return wrapper switch
             {
@@ -85,7 +84,7 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Export the item information as JSON
         /// </summary>
-        public static string ExportJSON(this IWrapper wrapper)
+        public static string ExportJSON(this Wrapper.IWrapper wrapper)
         {
             return wrapper switch
             {

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>
     /// Represents a wrapper around a top-level model
