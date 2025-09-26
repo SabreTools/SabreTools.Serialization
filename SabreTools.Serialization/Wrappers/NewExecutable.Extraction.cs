@@ -175,9 +175,6 @@ namespace SabreTools.Serialization.Wrappers
                         currentOffset += bytesToRead;
                         bytesLeft -= bytesToRead;
                     }
-
-                    tempStream.Write(overlayData, overlayOffset, overlayData.Length - overlayOffset);
-                    tempStream.Flush();
                 }
 
                 // Otherwise, read from the cached data
