@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class SecuROMDFA : BaseBinaryDeserializer<DFAFile>
+    public class SecuROMDFA : BaseBinaryReader<DFAFile>
     {
         /// <inheritdoc/>
         public override DFAFile? Deserialize(Stream? data)

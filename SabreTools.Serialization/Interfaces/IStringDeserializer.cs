@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize from strings
+    /// Defines how to read from strings
     /// </summary>
-    public interface IStringDeserializer<T>
+    public interface IStringReader<T>
     {
         /// <summary>
         /// Deserialize a string into <typeparamref name="T"/>

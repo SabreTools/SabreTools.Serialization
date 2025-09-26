@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Readers
     /// Base class for other XML deserializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class XmlFile<T> : BaseBinaryDeserializer<T>
+    public abstract class XmlFile<T> : BaseBinaryReader<T>
     {
         /// <inheritdoc/>
         public override T? Deserialize(Stream? data)

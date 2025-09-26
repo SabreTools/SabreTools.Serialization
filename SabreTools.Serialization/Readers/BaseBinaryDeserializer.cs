@@ -8,15 +8,15 @@ namespace SabreTools.Serialization.Readers
     /// </summary>
     /// <typeparam name="TModel">Type of the model to deserialize</typeparam>
     /// <remarks>
-    /// This class allows all inheriting types to only implement <see cref="IStreamDeserializer<>"/>
-    /// and still implicitly implement <see cref="IByteDeserializer<>"/>  and <see cref="IFileDeserializer<>"/> 
+    /// This class allows all inheriting types to only implement <see cref="IStreamReader<>"/>
+    /// and still implicitly implement <see cref="IByteReader<>"/>  and <see cref="IFileReader<>"/> 
     /// </remarks>
-    public abstract class BaseBinaryDeserializer<TModel> :
-        IByteDeserializer<TModel>,
-        IFileDeserializer<TModel>,
-        IStreamDeserializer<TModel>
+    public abstract class BaseBinaryReader<TModel> :
+        IByteReader<TModel>,
+        IFileReader<TModel>,
+        IStreamReader<TModel>
     {
-        #region IByteDeserializer
+        #region IByteReader
 
         /// <inheritdoc/>
         public virtual TModel? Deserialize(byte[]? data, int offset)
@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IFileDeserializer
+        #region IFileReader
 
         /// <inheritdoc/>
         public virtual TModel? Deserialize(string? path)
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         /// <inheritdoc/>
         public abstract TModel? Deserialize(Stream? data);

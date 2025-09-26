@@ -5,7 +5,7 @@ using static SabreTools.Data.Models.PlayStation4.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class AppPkgHeader : BaseBinaryDeserializer<Data.Models.PlayStation4.AppPkgHeader>
+    public class AppPkgHeader : BaseBinaryReader<Data.Models.PlayStation4.AppPkgHeader>
     {
         /// <inheritdoc/>
         public override Data.Models.PlayStation4.AppPkgHeader? Deserialize(Stream? data)

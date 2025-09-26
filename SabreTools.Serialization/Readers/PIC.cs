@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.PIC.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PIC : BaseBinaryDeserializer<DiscInformation>
+    public class PIC : BaseBinaryReader<DiscInformation>
     {
         /// <inheritdoc/>
         public override DiscInformation? Deserialize(Stream? data)

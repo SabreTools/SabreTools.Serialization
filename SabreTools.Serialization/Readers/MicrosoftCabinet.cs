@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.MicrosoftCabinet.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class MicrosoftCabinet : BaseBinaryDeserializer<Cabinet>
+    public class MicrosoftCabinet : BaseBinaryReader<Cabinet>
     {
         /// <inheritdoc/>
         public override Cabinet? Deserialize(Stream? data)

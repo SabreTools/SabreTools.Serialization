@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.MSDOS.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class MSDOS : BaseBinaryDeserializer<Executable>
+    public class MSDOS : BaseBinaryReader<Executable>
     {
         /// <inheritdoc/>
         public override Executable? Deserialize(Stream? data)

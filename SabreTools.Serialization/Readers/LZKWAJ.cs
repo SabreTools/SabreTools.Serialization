@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.LZ.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class LZKWAJ : BaseBinaryDeserializer<KWAJFile>
+    public class LZKWAJ : BaseBinaryReader<KWAJFile>
     {
         /// <inheritdoc/>
         public override KWAJFile? Deserialize(Stream? data)

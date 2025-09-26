@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.SecuROM.Constants;
 namespace SabreTools.Serialization.Readers
 {
     // TODO: Cache data blocks during parse
-    public class SecuROMMatroschkaPackage : BaseBinaryDeserializer<MatroshkaPackage>
+    public class SecuROMMatroschkaPackage : BaseBinaryReader<MatroshkaPackage>
     {
         /// <inheritdoc/>
         /// TODO: Unify matroschka spelling to "Matroschka"

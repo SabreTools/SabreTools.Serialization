@@ -2,9 +2,9 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Readers
 {
-    public partial class XeMID : IStringDeserializer<Data.Models.Xbox.XeMID>
+    public partial class XeMID : IStringReader<Data.Models.Xbox.XeMID>
     {
-        /// <inheritdoc cref="IStringDeserializer.Deserialize(string?)"/>
+        /// <inheritdoc cref="IStringReader.Deserialize(string?)"/>
         public static Data.Models.Xbox.XeMID? DeserializeString(string? str)
         {
             var deserializer = new XeMID();

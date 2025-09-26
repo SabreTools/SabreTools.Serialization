@@ -6,7 +6,7 @@ using SabreTools.IO.Readers;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class AttractMode : BaseBinaryDeserializer<MetadataFile>
+    public class AttractMode : BaseBinaryReader<MetadataFile>
     {
         #region Constants
 
@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

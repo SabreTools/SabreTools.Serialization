@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class GCF : BaseBinaryDeserializer<Data.Models.GCF.File>
+    public class GCF : BaseBinaryReader<Data.Models.GCF.File>
     {
         /// <inheritdoc/>
         public override Data.Models.GCF.File? Deserialize(Stream? data)

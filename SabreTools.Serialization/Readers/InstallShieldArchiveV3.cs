@@ -6,7 +6,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class InstallShieldArchiveV3 : BaseBinaryDeserializer<Archive>
+    public class InstallShieldArchiveV3 : BaseBinaryReader<Archive>
     {
         public override Archive? Deserialize(Stream? data)
         {

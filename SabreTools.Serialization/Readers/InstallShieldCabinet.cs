@@ -9,7 +9,7 @@ using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class InstallShieldCabinet : BaseBinaryDeserializer<Cabinet>
+    public class InstallShieldCabinet : BaseBinaryReader<Cabinet>
     {
         /// <inheritdoc/>
         public override Cabinet? Deserialize(Stream? data)

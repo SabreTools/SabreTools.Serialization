@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class VPK : BaseBinaryDeserializer<Data.Models.VPK.File>
+    public class VPK : BaseBinaryReader<Data.Models.VPK.File>
     {
         /// <inheritdoc/>
         public override Data.Models.VPK.File? Deserialize(Stream? data)

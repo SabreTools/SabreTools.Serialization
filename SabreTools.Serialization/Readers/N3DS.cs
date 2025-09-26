@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class N3DS : BaseBinaryDeserializer<Cart>
+    public class N3DS : BaseBinaryReader<Cart>
     {
         /// <inheritdoc/>
         public override Cart? Deserialize(Stream? data)

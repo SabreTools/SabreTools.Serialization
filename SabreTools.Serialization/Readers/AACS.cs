@@ -6,7 +6,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class AACS : BaseBinaryDeserializer<MediaKeyBlock>
+    public class AACS : BaseBinaryReader<MediaKeyBlock>
     {
         /// <inheritdoc/>
         public override MediaKeyBlock? Deserialize(Stream? data)

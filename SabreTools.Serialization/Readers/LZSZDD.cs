@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.LZ.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class LZSZDD : BaseBinaryDeserializer<SZDDFile>
+    public class LZSZDD : BaseBinaryReader<SZDDFile>
     {
         /// <inheritdoc/>
         public override SZDDFile? Deserialize(Stream? data)

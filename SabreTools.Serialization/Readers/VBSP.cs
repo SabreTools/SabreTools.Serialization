@@ -9,7 +9,7 @@ using static SabreTools.Data.Models.BSP.Constants;
 // TODO: Finish replacing ReadType
 namespace SabreTools.Serialization.Readers
 {
-    public class VBSP : BaseBinaryDeserializer<VbspFile>
+    public class VBSP : BaseBinaryReader<VbspFile>
     {
         /// <inheritdoc/>
         public override VbspFile? Deserialize(Stream? data)

@@ -7,7 +7,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class TapeArchive : BaseBinaryDeserializer<Archive>
+    public class TapeArchive : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

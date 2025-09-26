@@ -6,9 +6,9 @@ using SabreTools.Hashing;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class Hashfile : BaseBinaryDeserializer<Data.Models.Hashfile.Hashfile>
+    public class Hashfile : BaseBinaryReader<Data.Models.Hashfile.Hashfile>
     {
-        #region IByteDeserializer
+        #region IByteReader
 
         /// <inheritdoc/>
         public override Data.Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IFileDeserializer
+        #region IFileReader
 
         /// <inheritdoc/>
         public override Data.Models.Hashfile.Hashfile? Deserialize(string? path)
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         public override Data.Models.Hashfile.Hashfile? Deserialize(Stream? data)
             => Deserialize(data, HashType.CRC32);

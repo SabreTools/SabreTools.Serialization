@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.Quantum.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class Quantum : BaseBinaryDeserializer<Archive>
+    public class Quantum : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

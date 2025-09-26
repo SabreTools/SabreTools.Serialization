@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.WAD3.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class WAD3 : BaseBinaryDeserializer<Data.Models.WAD3.File>
+    public class WAD3 : BaseBinaryReader<Data.Models.WAD3.File>
     {
         /// <inheritdoc/>
         public override Data.Models.WAD3.File? Deserialize(Stream? data)

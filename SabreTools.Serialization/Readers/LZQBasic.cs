@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.LZ.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class LZQBasic : BaseBinaryDeserializer<QBasicFile>
+    public class LZQBasic : BaseBinaryReader<QBasicFile>
     {
         /// <inheritdoc/>
         public override QBasicFile? Deserialize(Stream? data)

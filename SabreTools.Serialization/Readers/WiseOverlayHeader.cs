@@ -6,7 +6,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class WiseOverlayHeader : BaseBinaryDeserializer<OverlayHeader>
+    public class WiseOverlayHeader : BaseBinaryReader<OverlayHeader>
     {
         /// <inheritdoc/>
         public override OverlayHeader? Deserialize(Stream? data)

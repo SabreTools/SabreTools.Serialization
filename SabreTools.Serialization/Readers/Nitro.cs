@@ -6,7 +6,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class Nitro : BaseBinaryDeserializer<Cart>
+    public class Nitro : BaseBinaryReader<Cart>
     {
         /// <inheritdoc/>
         public override Cart? Deserialize(Stream? data)

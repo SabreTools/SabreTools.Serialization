@@ -7,7 +7,7 @@ using SabreTools.IO.Extensions;
 namespace SabreTools.Serialization.Readers
 {
     // TODO: Expand this to full CHD files eventually
-    public class CHD : BaseBinaryDeserializer<Header>
+    public class CHD : BaseBinaryReader<Header>
     {
         /// <inheritdoc/>
         public override Header? Deserialize(Stream? data)

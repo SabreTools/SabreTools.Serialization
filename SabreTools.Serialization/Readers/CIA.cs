@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class CIA : BaseBinaryDeserializer<Data.Models.N3DS.CIA>
+    public class CIA : BaseBinaryReader<Data.Models.N3DS.CIA>
     {
         /// <inheritdoc/>
         public override Data.Models.N3DS.CIA? Deserialize(Stream? data)

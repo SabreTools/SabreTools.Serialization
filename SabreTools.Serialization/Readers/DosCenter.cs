@@ -6,7 +6,7 @@ using SabreTools.IO.Readers;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class DosCenter : BaseBinaryDeserializer<MetadataFile>
+    public class DosCenter : BaseBinaryReader<MetadataFile>
     {
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

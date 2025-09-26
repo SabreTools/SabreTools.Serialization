@@ -6,7 +6,7 @@ using SabreTools.IO.Readers;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class RomCenter : BaseBinaryDeserializer<MetadataFile>
+    public class RomCenter : BaseBinaryReader<MetadataFile>
     {
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

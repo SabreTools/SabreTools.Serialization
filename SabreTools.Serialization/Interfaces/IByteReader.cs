@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to deserialize from byte arrays
+    /// Defines how to read from byte arrays
     /// </summary>
-    public interface IByteDeserializer<T>
+    public interface IByteReader<T>
     {
         /// <summary>
         /// Deserialize a byte array into <typeparamref name="T"/>

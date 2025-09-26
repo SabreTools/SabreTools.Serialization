@@ -6,7 +6,7 @@ using SabreTools.IO.Readers;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class SeparatedValue : BaseBinaryDeserializer<MetadataFile>
+    public class SeparatedValue : BaseBinaryReader<MetadataFile>
     {
         #region Constants
 
@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IByteDeserializer
+        #region IByteReader
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(byte[]? data, int offset)
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IFileDeserializer
+        #region IFileReader
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(string? path)
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

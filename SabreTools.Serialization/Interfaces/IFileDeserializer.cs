@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to deserialize from files
+    /// Defines how to read from files
     /// </summary>
-    public interface IFileDeserializer<T>
+    public interface IFileReader<T>
     {
         /// <summary>
         /// Deserialize a file into <typeparamref name="T"/>

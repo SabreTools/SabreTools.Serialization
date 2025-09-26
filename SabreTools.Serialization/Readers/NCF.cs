@@ -6,7 +6,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class NCF : BaseBinaryDeserializer<Data.Models.NCF.File>
+    public class NCF : BaseBinaryReader<Data.Models.NCF.File>
     {
         /// <inheritdoc/>
         public override Data.Models.NCF.File? Deserialize(Stream? data)

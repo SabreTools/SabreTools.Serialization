@@ -8,7 +8,7 @@ using static SabreTools.Data.Models.MoPaQ.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class MoPaQ : BaseBinaryDeserializer<Archive>
+    public class MoPaQ : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

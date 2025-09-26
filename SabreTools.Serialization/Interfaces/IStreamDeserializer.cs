@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize from Streams
+    /// Defines how to read from Streams
     /// </summary>
-    public interface IStreamDeserializer<T>
+    public interface IStreamReader<T>
     {
         /// <summary>
         /// Deserialize a Stream into <typeparamref name="T"/>

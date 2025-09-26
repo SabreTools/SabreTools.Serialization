@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.PAK.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PAK : BaseBinaryDeserializer<Data.Models.PAK.File>
+    public class PAK : BaseBinaryReader<Data.Models.PAK.File>
     {
         /// <inheritdoc/>
         public override Data.Models.PAK.File? Deserialize(Stream? data)

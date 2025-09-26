@@ -8,9 +8,9 @@ namespace SabreTools.Serialization.Readers
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class JsonFile<T> : BaseBinaryDeserializer<T>
+    public abstract class JsonFile<T> : BaseBinaryReader<T>
     {
-        #region IByteDeserializer
+        #region IByteReader
 
         /// <inheritdoc/>
         public override T? Deserialize(byte[]? data, int offset)
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IFileDeserializer
+        #region IFileReader
 
         /// <inheritdoc/>
         public override T? Deserialize(string? path)
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         /// <inheritdoc/>
         public override T? Deserialize(Stream? data)

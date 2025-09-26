@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.BDPlus.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class BDPlus : BaseBinaryDeserializer<SVM>
+    public class BDPlus : BaseBinaryReader<SVM>
     {
         /// <inheritdoc/>
         public override SVM? Deserialize(Stream? data)

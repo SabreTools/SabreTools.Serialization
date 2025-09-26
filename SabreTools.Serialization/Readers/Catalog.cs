@@ -5,7 +5,7 @@ namespace SabreTools.Serialization.Readers
 {
     public class Catalog : JsonFile<Data.Models.Xbox.Catalog>
     {
-        #region IByteDeserializer
+        #region IByteReader
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
         public override Data.Models.Xbox.Catalog? Deserialize(byte[]? data, int offset)
@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IFileDeserializer
+        #region IFileReader
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
         public override Data.Models.Xbox.Catalog? Deserialize(string? path)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region IStreamDeserializer
+        #region IStreamReader
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
         public override Data.Models.Xbox.Catalog? Deserialize(Stream? data)

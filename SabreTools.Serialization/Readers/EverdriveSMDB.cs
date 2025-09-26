@@ -6,7 +6,7 @@ using SabreTools.IO.Readers;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class EverdriveSMDB : BaseBinaryDeserializer<MetadataFile>
+    public class EverdriveSMDB : BaseBinaryReader<MetadataFile>
     {
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

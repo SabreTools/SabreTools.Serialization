@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class SecuROMAddD : BaseBinaryDeserializer<AddD>
+    public class SecuROMAddD : BaseBinaryReader<AddD>
     {
         /// <inheritdoc/>
         public override AddD? Deserialize(Stream? data)

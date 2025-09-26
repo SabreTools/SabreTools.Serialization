@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.PlayJ.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PlayJAudio : BaseBinaryDeserializer<AudioFile>
+    public class PlayJAudio : BaseBinaryReader<AudioFile>
     {
         /// <inheritdoc/>
         public override AudioFile? Deserialize(Stream? data)

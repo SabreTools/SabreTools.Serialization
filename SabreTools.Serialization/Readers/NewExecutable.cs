@@ -8,7 +8,7 @@ using static SabreTools.Data.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class NewExecutable : BaseBinaryDeserializer<Executable>
+    public class NewExecutable : BaseBinaryReader<Executable>
     {
         /// <inheritdoc/>
         public override Executable? Deserialize(Stream? data)

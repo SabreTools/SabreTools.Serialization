@@ -7,7 +7,7 @@ using SabreTools.Data.Models.CueSheets;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class CueSheet : BaseBinaryDeserializer<Data.Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinaryReader<Data.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
         public override Data.Models.CueSheets.CueSheet? Deserialize(Stream? data)

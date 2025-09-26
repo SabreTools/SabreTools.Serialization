@@ -9,7 +9,7 @@ using static SabreTools.Data.Models.CFB.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class CFB : BaseBinaryDeserializer<Binary>
+    public class CFB : BaseBinaryReader<Binary>
     {
         /// <inheritdoc/>
         public override Binary? Deserialize(Stream? data)

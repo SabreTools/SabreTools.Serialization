@@ -8,7 +8,7 @@ using static SabreTools.Data.Models.BSP.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class BSP : BaseBinaryDeserializer<BspFile>
+    public class BSP : BaseBinaryReader<BspFile>
     {
         /// <inheritdoc/>
         public override BspFile? Deserialize(Stream? data)

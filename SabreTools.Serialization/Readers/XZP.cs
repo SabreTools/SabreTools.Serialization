@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.XZP.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class XZP : BaseBinaryDeserializer<Data.Models.XZP.File>
+    public class XZP : BaseBinaryReader<Data.Models.XZP.File>
     {
         /// <inheritdoc/>
         public override Data.Models.XZP.File? Deserialize(Stream? data)

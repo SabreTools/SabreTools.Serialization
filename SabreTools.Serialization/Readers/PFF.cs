@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.PFF.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PFF : BaseBinaryDeserializer<Archive>
+    public class PFF : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

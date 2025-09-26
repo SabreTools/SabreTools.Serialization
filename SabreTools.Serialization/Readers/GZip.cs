@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.GZIP.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class GZip : BaseBinaryDeserializer<Archive>
+    public class GZip : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.WiseInstaller.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class WiseSectionHeader : BaseBinaryDeserializer<SectionHeader>
+    public class WiseSectionHeader : BaseBinaryReader<SectionHeader>
     {
         /// <inheritdoc/>
         public override SectionHeader? Deserialize(Stream? data)

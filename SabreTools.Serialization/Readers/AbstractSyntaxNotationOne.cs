@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class AbstractSyntaxNotationOne : BaseBinaryDeserializer<TypeLengthValue[]>
+    public class AbstractSyntaxNotationOne : BaseBinaryReader<TypeLengthValue[]>
     {
         /// <inheritdoc/>
         public override TypeLengthValue[]? Deserialize(Stream? data)

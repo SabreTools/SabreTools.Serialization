@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class SGA : BaseBinaryDeserializer<Archive>
+    public class SGA : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

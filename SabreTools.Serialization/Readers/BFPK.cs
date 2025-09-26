@@ -6,7 +6,7 @@ using static SabreTools.Data.Models.BFPK.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class BFPK : BaseBinaryDeserializer<Archive>
+    public class BFPK : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

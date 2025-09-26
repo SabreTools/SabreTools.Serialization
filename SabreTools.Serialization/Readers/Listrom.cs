@@ -6,7 +6,7 @@ using SabreTools.Data.Models.Listrom;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class Listrom : BaseBinaryDeserializer<MetadataFile>
+    public class Listrom : BaseBinaryReader<MetadataFile>
     {
         /// <inheritdoc/>
         public override MetadataFile? Deserialize(Stream? data)

@@ -84,14 +84,14 @@ Below is a table representing the various conversion interfaces that are impleme
 
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
-| `IByteDeserializer` | `byte[]?` | Model |
+| `IByteReader` | `byte[]?` | Model |
 | `IByteSerializer` | Model | `byte[]?` |
-| `IFileDeserializer` | `string?` path | Model |
+| `IFileReader` | `string?` path | Model |
 | `IFileSerializer` | Model | `string?` path |
 | `IModelSerializer` | Model | Model |
-| `IStreamDeserializer` | `Stream?` | Model |
+| `IStreamReader` | `Stream?` | Model |
 | `IStreamSerializer` | Model | `Stream?` |
-| `IStringDeserializer` | `string?` representation | Model |
+| `IStringReader` | `string?` representation | Model |
 | `IStringSerializer` | Model | `string?` representation |
 
 Below is a table representing the various non-conversion interfaces that are implemented within this library.

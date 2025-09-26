@@ -7,7 +7,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class WiseScript : BaseBinaryDeserializer<ScriptFile>
+    public class WiseScript : BaseBinaryReader<ScriptFile>
     {
         /// <inheritdoc/>
         public override ScriptFile? Deserialize(Stream? data)

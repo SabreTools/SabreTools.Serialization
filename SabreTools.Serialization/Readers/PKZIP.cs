@@ -7,7 +7,7 @@ using static SabreTools.Data.Models.PKZIP.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PKZIP : BaseBinaryDeserializer<Archive>
+    public class PKZIP : BaseBinaryReader<Archive>
     {
         /// <inheritdoc/>
         public override Archive? Deserialize(Stream? data)

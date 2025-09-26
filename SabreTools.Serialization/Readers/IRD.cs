@@ -4,7 +4,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class IRD : BaseBinaryDeserializer<Data.Models.IRD.File>
+    public class IRD : BaseBinaryReader<Data.Models.IRD.File>
     {
         /// <inheritdoc/>
         public override Data.Models.IRD.File? Deserialize(Stream? data)

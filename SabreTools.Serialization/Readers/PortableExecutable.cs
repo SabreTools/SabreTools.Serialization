@@ -12,7 +12,7 @@ using static SabreTools.Data.Models.PortableExecutable.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PortableExecutable : BaseBinaryDeserializer<Executable>
+    public class PortableExecutable : BaseBinaryReader<Executable>
     {
         /// <inheritdoc/>
         public override Executable? Deserialize(Stream? data)

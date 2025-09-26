@@ -4,7 +4,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class PlayJPlaylist : BaseBinaryDeserializer<Playlist>
+    public class PlayJPlaylist : BaseBinaryReader<Playlist>
     {
         /// <inheritdoc/>
         public override Playlist? Deserialize(Stream? data)
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
                 #region Audio Files
 
                 // Create the audio file deserializer
-                var audioDeserializer = new PlayJAudio();
+                var audioReader = new PlayJAudio();
 
                 // Create the audio files array
                 playlist.AudioFiles = new AudioFile[playlistHeader.TrackCount];
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Readers
                 // Try to parse the audio files
                 for (int i = 0; i < playlist.AudioFiles.Length; i++)
                 {
-                    var entryHeader = audioDeserializer.Deserialize(data);
+                    var entryHeader = audioReader.Deserialize(data);
                     if (entryHeader == null)
                         continue;
 

@@ -5,7 +5,7 @@ using static SabreTools.Data.Models.PlayStation3.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
-    public class SFB : BaseBinaryDeserializer<Data.Models.PlayStation3.SFB>
+    public class SFB : BaseBinaryReader<Data.Models.PlayStation3.SFB>
     {
         /// <inheritdoc/>
         public override Data.Models.PlayStation3.SFB? Deserialize(Stream? data)
