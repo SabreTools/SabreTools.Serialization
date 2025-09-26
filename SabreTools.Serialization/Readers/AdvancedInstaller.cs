@@ -33,10 +33,13 @@ namespace SabreTools.Serialization.Readers
                 // Set the footer
                 sfx.Footer = footer;
 
-                // Seek to the entry table offset
+                // Get to the entry table offset
                 long tableOffset = initialOffset + footer.TablePointer;
                 if (tableOffset < initialOffset || tableOffset >= data.Length)
                     return null;
+
+                // Seek to the entry table
+                data.Seek(tableOffset, SeekOrigin.Begin);
 
                 // Try to parse the entry table
                 var table = ParseTable(data, footer.EntryCount);
@@ -72,6 +75,9 @@ namespace SabreTools.Serialization.Readers
             // Set a maximum of 10 iterations to find the signature
             int iterations = 10;
 
+            // Seek backward to the first point it could be
+            data.Seek(-10, SeekOrigin.Current);
+
             // Search backward for the signature
             bool signatureFound = false;
             do
@@ -85,6 +91,7 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 iterations--;
+                data.Seek(-11, SeekOrigin.Current);
 
             } while (iterations > 0);
 
