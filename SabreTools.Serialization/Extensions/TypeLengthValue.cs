@@ -1,8 +1,8 @@
 using System;
 using System.Numerics;
 using System.Text;
+using SabreTools.Data.ObjectIdentifier;
 using SabreTools.Serialization.Models.ASN1;
-using SabreTools.Serialization.ObjectIdentifier;
 
 namespace SabreTools.Serialization.Extensions
 {

@@ -4,7 +4,7 @@ using System.Text;
 #pragma warning disable CS0162 // Unreachable code detected
 #pragma warning disable CS0164 // This label has not been referenced
 
-namespace SabreTools.Serialization.ObjectIdentifier
+namespace SabreTools.Data.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID) and OID-IRI formatting
