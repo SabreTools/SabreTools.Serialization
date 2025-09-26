@@ -26,7 +26,7 @@ For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/S
 
 **InfoPrint** is a reference implementation for the deserialization and printing features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and display information about many supported file types, optionally both hashing the file and outputting the information to a JSON file (.NET Core 3.1 and above only).
 
-```
+```text
 InfoPrint <options> file|directory ...
 
 Options:
@@ -40,7 +40,7 @@ Options:
 
 **ExtractionTool** is a reference implementation for the extraction features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and extract many supported file types. See the table below for supported extraction functionality.
 
-```
+```text
 ExtractionTool.exe <options> file|directory ...
 
 Options:
