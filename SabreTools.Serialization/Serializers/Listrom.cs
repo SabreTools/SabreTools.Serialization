@@ -4,7 +4,7 @@ using SabreTools.Data.Models.Listrom;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class Listrom : BaseBinarySerializer<MetadataFile>
+    public class Listrom : BaseBinaryWriter<MetadataFile>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

@@ -6,7 +6,7 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class EverdriveSMDB : BaseBinarySerializer<MetadataFile>
+    public class EverdriveSMDB : BaseBinaryWriter<MetadataFile>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

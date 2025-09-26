@@ -8,9 +8,9 @@ namespace SabreTools.Serialization.Writers
     /// Base class for other JSON serializers
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class JsonFile<T> : BaseBinarySerializer<T>
+    public class JsonFile<T> : BaseBinaryWriter<T>
     {
-        #region IByteSerializer
+        #region IByteWriter
 
         /// <inheritdoc/>
         public override byte[]? SerializeArray(T? obj)
@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc/>
         public override bool SerializeFile(T? obj, string? path)
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc/>
         public override Stream? SerializeStream(T? obj)

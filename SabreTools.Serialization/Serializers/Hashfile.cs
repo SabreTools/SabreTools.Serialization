@@ -7,9 +7,9 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class Hashfile : BaseBinarySerializer<Data.Models.Hashfile.Hashfile>
+    public class Hashfile : BaseBinaryWriter<Data.Models.Hashfile.Hashfile>
     {
-        #region IByteSerializer
+        #region IByteWriter
 
         /// <inheritdoc/>
         public override byte[]? SerializeArray(Data.Models.Hashfile.Hashfile? obj)
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc/>
         public override bool SerializeFile(Data.Models.Hashfile.Hashfile? obj, string? path)
@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc/>
         public override Stream? SerializeStream(Data.Models.Hashfile.Hashfile? obj)

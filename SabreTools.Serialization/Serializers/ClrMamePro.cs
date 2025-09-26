@@ -5,9 +5,9 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class ClrMamePro : BaseBinarySerializer<MetadataFile>
+    public class ClrMamePro : BaseBinaryWriter<MetadataFile>
     {
-        #region IByteSerializer
+        #region IByteWriter
 
         /// <inheritdoc/>
         public override byte[]? SerializeArray(MetadataFile? obj)
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc/>
         public override bool SerializeFile(MetadataFile? obj, string? path)
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

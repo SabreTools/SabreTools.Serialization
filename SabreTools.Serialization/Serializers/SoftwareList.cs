@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?, string?)" />
         public override bool SerializeFile(Data.Models.SoftwareList.SoftwareList? obj, string? path)
@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
         public override Stream? SerializeStream(Data.Models.SoftwareList.SoftwareList? obj)

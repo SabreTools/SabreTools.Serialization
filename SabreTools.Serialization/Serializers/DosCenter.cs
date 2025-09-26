@@ -5,7 +5,7 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class DosCenter : BaseBinarySerializer<MetadataFile>
+    public class DosCenter : BaseBinaryWriter<MetadataFile>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

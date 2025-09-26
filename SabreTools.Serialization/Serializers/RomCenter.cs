@@ -5,7 +5,7 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class RomCenter : BaseBinarySerializer<MetadataFile>
+    public class RomCenter : BaseBinaryWriter<MetadataFile>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

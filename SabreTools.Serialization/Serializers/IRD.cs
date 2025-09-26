@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class IRD : BaseBinarySerializer<Data.Models.IRD.File>
+    public class IRD : BaseBinaryWriter<Data.Models.IRD.File>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(Data.Models.IRD.File? obj)

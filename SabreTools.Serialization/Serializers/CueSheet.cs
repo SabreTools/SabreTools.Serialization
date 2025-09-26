@@ -5,7 +5,7 @@ using SabreTools.Data.Models.CueSheets;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class CueSheet : BaseBinarySerializer<Data.Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinaryWriter<Data.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
         public override Stream? SerializeStream(Data.Models.CueSheets.CueSheet? obj)

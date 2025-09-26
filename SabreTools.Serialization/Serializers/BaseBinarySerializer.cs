@@ -8,15 +8,15 @@ namespace SabreTools.Serialization.Writers
     /// </summary>
     /// <typeparam name="TModel">Type of the model to serialize</typeparam>
     /// <remarks>
-    /// This class allows all inheriting types to only implement <see cref="IStreamSerializer<>"/>
-    /// and still implicitly implement <see cref="IByteSerializer<>"/>  and <see cref="IFileSerializer<>"/> 
+    /// This class allows all inheriting types to only implement <see cref="IStreamWriter<>"/>
+    /// and still implicitly implement <see cref="IByteWriter<>"/>  and <see cref="IFileWriter<>"/> 
     /// </remarks>
-    public abstract class BaseBinarySerializer<TModel> :
-        IByteSerializer<TModel>,
-        IFileSerializer<TModel>,
-        IStreamSerializer<TModel>
+    public abstract class BaseBinaryWriter<TModel> :
+        IByteWriter<TModel>,
+        IFileWriter<TModel>,
+        IStreamWriter<TModel>
     {
-        #region IByteSerializer
+        #region IByteWriter
 
         /// <inheritdoc/>
         public virtual byte[]? SerializeArray(TModel? obj)
@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc/>
         public virtual bool SerializeFile(TModel? obj, string? path)
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc/>
         public abstract Stream? SerializeStream(TModel? obj);

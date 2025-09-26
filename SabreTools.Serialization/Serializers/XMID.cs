@@ -3,9 +3,9 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Writers
 {
-    public partial class XMID : IStringSerializer<Data.Models.Xbox.XMID>
+    public partial class XMID : IStringWriter<Data.Models.Xbox.XMID>
     {
-        /// <inheritdoc cref="IStringSerializer.Serialize(T?)"/>
+        /// <inheritdoc cref="IStringWriter.Serialize(T?)"/>
         public static string? SerializeString(Data.Models.Xbox.XMID? obj)
         {
             var deserializer = new XMID();

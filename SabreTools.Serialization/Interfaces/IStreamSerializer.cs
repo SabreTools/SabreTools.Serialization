@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to Streams
+    /// Defines how to write to Streams
     /// </summary>
-    public interface IStreamSerializer<T>
+    public interface IStreamWriter<T>
     {
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a Stream

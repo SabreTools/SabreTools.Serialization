@@ -5,7 +5,7 @@ using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class AttractMode : BaseBinarySerializer<MetadataFile>
+    public class AttractMode : BaseBinaryWriter<MetadataFile>
     {
         #region Constants
 
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IByteSerializer
+        #region IByteWriter
 
         /// <inheritdoc/>
         public override byte[]? SerializeArray(MetadataFile? obj)
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IFileSerializer
+        #region IFileWriter
 
         /// <inheritdoc/>
         public override bool SerializeFile(MetadataFile? obj, string? path)
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IStreamSerializer
+        #region IStreamWriter
 
         /// <inheritdoc/>
         public override Stream? SerializeStream(MetadataFile? obj)

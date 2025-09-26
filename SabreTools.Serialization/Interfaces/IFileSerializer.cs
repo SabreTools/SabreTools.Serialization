@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to files
+    /// Defines how to write to files
     /// </summary>
-    public interface IFileSerializer<T>
+    public interface IFileWriter<T>
     {
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a file

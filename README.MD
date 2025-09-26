@@ -84,23 +84,23 @@ Below is a table representing the various conversion interfaces that are impleme
 
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
-| `IByteReader` | `byte[]?` | Model |
-| `IByteSerializer` | Model | `byte[]?` |
-| `IFileReader` | `string?` path | Model |
-| `IFileSerializer` | Model | `string?` path |
-| `IModelSerializer` | Model | Model |
-| `IStreamReader` | `Stream?` | Model |
-| `IStreamSerializer` | Model | `Stream?` |
-| `IStringReader` | `string?` representation | Model |
-| `IStringSerializer` | Model | `string?` representation |
+| `SabreTools.Serialization.Interfaces.IByteReader` | `byte[]?` | Model |
+| `SabreTools.Serialization.Interfaces.IByteWriter` | Model | `byte[]?` |
+| `SabreTools.Serialization.Interfaces.IFileReader` | `string?` path | Model |
+| `SabreTools.Serialization.Interfaces.IFileWriter` | Model | `string?` path |
+| `SabreTools.Serialization.Interfaces.IModelSerializer` | Model | Model |
+| `SabreTools.Serialization.Interfaces.IStreamReader` | `Stream?` | Model |
+| `SabreTools.Serialization.Interfaces.IStreamWriter` | Model | `Stream?` |
+| `SabreTools.Serialization.Interfaces.IStringReader` | `string?` representation | Model |
+| `SabreTools.Serialization.Interfaces.IStringWriter` | Model | `string?` representation |
 
 Below is a table representing the various non-conversion interfaces that are implemented within this library.
 
 | Interface Name | Purpose |
 | --- | --- |
-| `IExtractable` | Marks a wrapper as able to be extracted |
-| `IPrinter` | Provides a formatted output for a model |
-| `IWrapper` / `IWrapper<T>` | Wraps a model or set of models to provide additional functionality |
+| `SabreTools.Serialization.Interfaces.IExtractable` | Marks a wrapper as able to be extracted |
+| `SabreTools.Serialization.Interfaces.IPrinter` | Provides a formatted output for a model |
+| `SabreTools.Serialization.Interfaces.IWrapper` / `SabreTools.Serialization.Interfaces.IWrapper<T>` | Wraps a model or set of models to provide additional functionality |
 
 ## Namespaces
 

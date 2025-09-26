@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to byte arrays
+    /// Defines how to write to byte arrays
     /// </summary>
-    public interface IByteSerializer<T>
+    public interface IByteWriter<T>
     {
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a byte array

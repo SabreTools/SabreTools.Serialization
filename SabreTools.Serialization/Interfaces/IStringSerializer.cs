@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize from strings
+    /// Defines how to write to strings
     /// </summary>
-    public interface IStringSerializer<T>
+    public interface IStringWriter<T>
     {
         /// <summary>
         /// Serialize a <typeparamref name="T"/> into a string
