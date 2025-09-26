@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.LDSCRYPT;
+using SabreTools.Serialization.Models.LDSCRYPT;
 
 namespace SabreTools.Serialization.Wrappers
 {

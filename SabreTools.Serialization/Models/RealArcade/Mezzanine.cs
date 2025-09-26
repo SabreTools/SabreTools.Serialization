@@ -1,0 +1,10 @@
+namespace SabreTools.Serialization.Models.RealArcade
+{
+    /// <summary>
+    /// This is a placeholder model for future work
+    /// </summary>
+    public class Mezzanine
+    {
+
+    }
+}

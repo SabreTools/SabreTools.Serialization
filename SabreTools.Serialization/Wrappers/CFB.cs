@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.CFB;
+using SabreTools.Serialization.Models.CFB;
 
 namespace SabreTools.Serialization.Wrappers
 {

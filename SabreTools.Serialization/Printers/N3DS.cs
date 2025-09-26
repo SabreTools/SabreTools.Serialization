@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using SabreTools.Models.N3DS;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.N3DS;
 
 namespace SabreTools.Serialization.Printers
 {

@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PlayJPlaylist : WrapperBase<SabreTools.Models.PlayJ.Playlist>
+    public class PlayJPlaylist : WrapperBase<SabreTools.Serialization.Models.PlayJ.Playlist>
     {
         #region Descriptive Properties
 
@@ -14,22 +14,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, byte[] data) : base(model, data) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, byte[] data, int offset) : base(model, data, offset) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, Stream data) : base(model, data) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, Stream data, long offset) : base(model, data, offset) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PlayJPlaylist(SabreTools.Models.PlayJ.Playlist model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public PlayJPlaylist(SabreTools.Serialization.Models.PlayJ.Playlist model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

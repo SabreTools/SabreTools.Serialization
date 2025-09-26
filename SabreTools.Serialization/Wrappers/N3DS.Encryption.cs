@@ -1,5 +1,5 @@
 using System;
-using static SabreTools.Models.N3DS.Constants;
+using static SabreTools.Serialization.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {

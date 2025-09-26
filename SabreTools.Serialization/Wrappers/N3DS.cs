@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using SabreTools.Models.N3DS;
-using static SabreTools.Models.N3DS.Constants;
+using SabreTools.Serialization.Models.N3DS;
+using static SabreTools.Serialization.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {

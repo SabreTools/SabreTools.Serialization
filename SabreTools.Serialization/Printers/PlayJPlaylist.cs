@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Models.PlayJ;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.PlayJ;
 
 namespace SabreTools.Serialization.Printers
 {

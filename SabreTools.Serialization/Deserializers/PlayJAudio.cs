@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.PlayJ;
-using static SabreTools.Models.PlayJ.Constants;
+using SabreTools.Serialization.Models.PlayJ;
+using static SabreTools.Serialization.Models.PlayJ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.CHD;
+using SabreTools.Serialization.Models.CHD;
 
 namespace SabreTools.Serialization.Deserializers
 {

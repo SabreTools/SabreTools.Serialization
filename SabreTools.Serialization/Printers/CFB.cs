@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using SabreTools.Models.CFB;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.CFB;
 
 namespace SabreTools.Serialization.Printers
 {

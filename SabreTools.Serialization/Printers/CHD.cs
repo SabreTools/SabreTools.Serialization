@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SabreTools.Models.CHD;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.CHD;
 
 namespace SabreTools.Serialization.Printers
 {

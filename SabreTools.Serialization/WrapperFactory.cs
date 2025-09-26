@@ -201,7 +201,7 @@ namespace SabreTools.Serialization
 
             #region CFB
 
-            if (magic.StartsWith(SabreTools.Models.CFB.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.CFB.Constants.SignatureBytes))
                 return WrapperType.CFB;
 
             // Installer package
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization
 
             #region CHD
 
-            if (magic.StartsWith(SabreTools.Models.CHD.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.CHD.Constants.SignatureBytes))
                 return WrapperType.CHD;
 
             #endregion
@@ -332,7 +332,7 @@ namespace SabreTools.Serialization
 
             #region LDSCRYPT
 
-            if (magic.StartsWith(SabreTools.Models.LDSCRYPT.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.LDSCRYPT.Constants.SignatureBytes))
                 return WrapperType.LDSCRYPT;
 
             #endregion
@@ -563,7 +563,7 @@ namespace SabreTools.Serialization
             #region PLJ
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
-            if (magic.StartsWith(SabreTools.Models.PlayJ.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.PlayJ.Constants.SignatureBytes))
                 return WrapperType.PlayJAudioFile;
 
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
@@ -605,12 +605,12 @@ namespace SabreTools.Serialization
 
             // RASGI2.0
             // Found in the ".rgs files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith(SabreTools.Models.RealArcades.Constants.RgsSignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.RealArcade.Constants.RgsSignatureBytes))
                 return WrapperType.RealArcadeInstaller;
 
             // XZip2.0
             // Found in the ".mez" files in IA item "Nova_RealArcadeCD_USA".
-            if (magic.StartsWith(SabreTools.Models.RealArcades.Constants.MezzanineSignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.RealArcade.Constants.MezzanineSignatureBytes))
                 return WrapperType.RealArcadeMezzanine;
 
             #endregion
@@ -635,7 +635,7 @@ namespace SabreTools.Serialization
             #region SFFS
 
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
-            if (magic.StartsWith(SabreTools.Models.StarForce.Constants.SignatureBytes))
+            if (magic.StartsWith(SabreTools.Serialization.Models.StarForce.Constants.SignatureBytes))
                 return WrapperType.SFFS;
 
             #endregion 

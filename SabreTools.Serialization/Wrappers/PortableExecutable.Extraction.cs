@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "bz2";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Models.CFB.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.CFB.Constants.SignatureBytes))
                     {
                         // Assume embedded CFB files are MSI
                         extension = "msi";
@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "bz2";
                             break;
                         }
-                        else if (resourceSample.StartsWith(SabreTools.Models.CFB.Constants.SignatureBytes))
+                        else if (resourceSample.StartsWith(SabreTools.Serialization.Models.CFB.Constants.SignatureBytes))
                         {
                             // Assume embedded CFB files are MSI
                             extension = "msi";

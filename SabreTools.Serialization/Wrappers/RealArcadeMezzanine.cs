@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Models.RealArcade;
+using SabreTools.Serialization.Models.RealArcade;
 
 namespace SabreTools.Serialization.Wrappers
 {

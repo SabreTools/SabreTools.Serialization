@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.CFB;
 using SabreTools.Serialization.Interfaces;
+using SabreTools.Serialization.Models.CFB;
 
 namespace SabreTools.Serialization.Wrappers
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
-using SabreTools.Models.CFB;
 using SabreTools.Serialization.Extensions;
-using static SabreTools.Models.CFB.Constants;
+using SabreTools.Serialization.Models.CFB;
+using static SabreTools.Serialization.Models.CFB.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
