@@ -1,7 +1,7 @@
 using System.IO;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     /// <summary>
     /// Base class for all binary serializers

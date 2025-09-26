@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new DosCenter();
-            var serializer = new SabreTools.Serialization.Serializers.DosCenter();
+            var serializer = new SabreTools.Serialization.Writers.DosCenter();
 
             // Build the data
             Data.Models.DosCenter.MetadataFile mf = Build();

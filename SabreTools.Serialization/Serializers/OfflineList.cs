@@ -1,6 +1,6 @@
 using SabreTools.Data.Models.OfflineList;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class OfflineList : XmlFile<Dat>
     {

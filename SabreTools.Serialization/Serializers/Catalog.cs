@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class Catalog : JsonFile<Data.Models.Xbox.Catalog>
     {

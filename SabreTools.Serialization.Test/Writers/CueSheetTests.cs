@@ -1,15 +1,15 @@
 using System.IO;
-using SabreTools.Serialization.Serializers;
+using SabreTools.Serialization.Writers;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.Serializers
+namespace SabreTools.Serialization.Test.Writers
 {
-    public class SeparatedValueTests
+    public class CueSheetTests
     {
         [Fact]
         public void SerializeArray_Null_Null()
         {
-            var serializer = new SeparatedValue();
+            var serializer = new CueSheet();
             byte[]? actual = serializer.SerializeArray(null);
             Assert.Null(actual);
         }
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Test.Serializers
         [Fact]
         public void SerializeStream_Null_Null()
         {
-            var serializer = new SeparatedValue();
+            var serializer = new CueSheet();
             Stream? actual = serializer.SerializeStream(null);
             Assert.Null(actual);
         }

@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class SeparatedValue : BaseBinarySerializer<MetadataFile>
     {

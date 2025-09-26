@@ -3,7 +3,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     /// <summary>
     /// Base class for other XML serializers

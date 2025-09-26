@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.CRC32);
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD2);
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD4);
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD5);
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA1);
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA256);
@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA384);
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA512);
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Serializers.Hashfile();
+            var serializer = new SabreTools.Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SpamSum);

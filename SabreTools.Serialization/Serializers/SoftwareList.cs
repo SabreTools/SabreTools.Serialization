@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class SoftwareList : XmlFile<Data.Models.SoftwareList.SoftwareList>
     {

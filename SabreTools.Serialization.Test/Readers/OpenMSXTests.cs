@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new OpenMSX();
-            var serializer = new SabreTools.Serialization.Serializers.OpenMSX();
+            var serializer = new SabreTools.Serialization.Writers.OpenMSX();
 
             // Build the data
             Data.Models.OpenMSX.SoftwareDb sdb = Build();

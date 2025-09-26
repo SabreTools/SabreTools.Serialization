@@ -4,7 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.EverdriveSMDB;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class EverdriveSMDB : BaseBinarySerializer<MetadataFile>
     {

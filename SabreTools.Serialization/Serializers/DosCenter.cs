@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.DosCenter;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class DosCenter : BaseBinarySerializer<MetadataFile>
     {

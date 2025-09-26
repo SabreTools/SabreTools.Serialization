@@ -1,15 +1,15 @@
 using System.IO;
-using SabreTools.Serialization.Serializers;
+using SabreTools.Serialization.Writers;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.Serializers
+namespace SabreTools.Serialization.Test.Writers
 {
-    public class AttractModeTests
+    public class IRDTests
     {
         [Fact]
         public void SerializeArray_Null_Null()
         {
-            var serializer = new AttractMode();
+            var serializer = new IRD();
             byte[]? actual = serializer.SerializeArray(null);
             Assert.Null(actual);
         }
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Test.Serializers
         [Fact]
         public void SerializeStream_Null_Null()
         {
-            var serializer = new AttractMode();
+            var serializer = new IRD();
             Stream? actual = serializer.SerializeStream(null);
             Assert.Null(actual);
         }

@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new ArchiveDotOrg();
-            var serializer = new SabreTools.Serialization.Serializers.ArchiveDotOrg();
+            var serializer = new SabreTools.Serialization.Writers.ArchiveDotOrg();
 
             // Build the data
             Data.Models.ArchiveDotOrg.Files files = Build();

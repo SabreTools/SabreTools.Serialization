@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class ClrMamePro : BaseBinarySerializer<MetadataFile>
     {

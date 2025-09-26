@@ -5,7 +5,7 @@ using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class Hashfile : BaseBinarySerializer<Data.Models.Hashfile.Hashfile>
     {

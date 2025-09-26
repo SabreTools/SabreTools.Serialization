@@ -1,6 +1,6 @@
 using SabreTools.Data.Models.ArchiveDotOrg;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class ArchiveDotOrg : XmlFile<Files>
     {

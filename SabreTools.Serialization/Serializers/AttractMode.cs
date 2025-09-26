@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.AttractMode;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class AttractMode : BaseBinarySerializer<MetadataFile>
     {

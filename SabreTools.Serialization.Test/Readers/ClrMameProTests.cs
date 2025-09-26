@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new ClrMamePro();
-            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
+            var serializer = new SabreTools.Serialization.Writers.ClrMamePro();
 
             // Build the data
             Data.Models.ClrMamePro.MetadataFile mf = Build(game: true);
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new ClrMamePro();
-            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
+            var serializer = new SabreTools.Serialization.Writers.ClrMamePro();
 
             // Build the data
             Data.Models.ClrMamePro.MetadataFile mf = Build(game: true);
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new ClrMamePro();
-            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
+            var serializer = new SabreTools.Serialization.Writers.ClrMamePro();
 
             // Build the data
             Data.Models.ClrMamePro.MetadataFile mf = Build(game: false);
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new ClrMamePro();
-            var serializer = new SabreTools.Serialization.Serializers.ClrMamePro();
+            var serializer = new SabreTools.Serialization.Writers.ClrMamePro();
 
             // Build the data
             Data.Models.ClrMamePro.MetadataFile mf = Build(game: false);

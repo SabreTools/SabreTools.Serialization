@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class IRD : BaseBinarySerializer<Data.Models.IRD.File>
     {

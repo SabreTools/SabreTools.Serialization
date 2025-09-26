@@ -1,7 +1,7 @@
 using System.IO;
 using SabreTools.Data.Models.OpenMSX;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class OpenMSX : XmlFile<SoftwareDb>
     {

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class M1 : XmlFile<Data.Models.Listxml.M1>
     {

@@ -1,14 +1,14 @@
-using SabreTools.Serialization.Serializers;
+using SabreTools.Serialization.Writers;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.Serializers
+namespace SabreTools.Serialization.Test.Writers
 {
-    public class XeMIDTests
+    public class XMIDTests
     {
         [Fact]
         public void SerializeString_Null_Null()
         {
-            var serializer = new XeMID();
+            var serializer = new XMID();
             string? actual = serializer.Serialize(null);
             Assert.Null(actual);
         }

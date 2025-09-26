@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CueSheets;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class CueSheet : BaseBinarySerializer<Data.Models.CueSheets.CueSheet>
     {

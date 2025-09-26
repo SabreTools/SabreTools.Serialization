@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new SoftwareList();
-            var serializer = new SabreTools.Serialization.Serializers.SoftwareList();
+            var serializer = new SabreTools.Serialization.Writers.SoftwareList();
 
             // Build the data
             Data.Models.SoftwareList.SoftwareList sl = Build();

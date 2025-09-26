@@ -3,7 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.RomCenter;
 using SabreTools.IO.Writers;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class RomCenter : BaseBinarySerializer<MetadataFile>
     {

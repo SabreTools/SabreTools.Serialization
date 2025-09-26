@@ -1,7 +1,7 @@
 using System.Text;
 using SabreTools.Serialization.Interfaces;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public partial class XeMID : IStringSerializer<Data.Models.Xbox.XeMID>
     {

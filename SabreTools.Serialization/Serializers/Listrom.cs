@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Listrom;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class Listrom : BaseBinarySerializer<MetadataFile>
     {

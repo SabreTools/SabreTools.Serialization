@@ -1,7 +1,7 @@
 using System.IO;
 using SabreTools.Data.Models.Logiqx;
 
-namespace SabreTools.Serialization.Serializers
+namespace SabreTools.Serialization.Writers
 {
     public class Logiqx : XmlFile<Datafile>
     {
