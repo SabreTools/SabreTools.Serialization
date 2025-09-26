@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.Nitro;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.Nitro;
 
 namespace SabreTools.Serialization.Printers
 {

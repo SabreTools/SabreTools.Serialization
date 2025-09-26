@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.PFF;
+using SabreTools.Data.Models.PFF;
 
 namespace SabreTools.Serialization.Wrappers
 {

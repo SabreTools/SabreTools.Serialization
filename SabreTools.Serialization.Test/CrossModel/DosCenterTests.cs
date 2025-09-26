@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new DosCenter();
 
             // Build the data
-            Models.DosCenter.MetadataFile mf = Build();
+            Data.Models.DosCenter.MetadataFile mf = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.DosCenter.MetadataFile? newMf = serializer.Deserialize(metadata);
+            Data.Models.DosCenter.MetadataFile? newMf = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -32,9 +32,9 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.DosCenter.MetadataFile Build()
+        private static Data.Models.DosCenter.MetadataFile Build()
         {
-            var dc = new Models.DosCenter.DosCenter
+            var dc = new Data.Models.DosCenter.DosCenter
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Comment = "XXXXXX",
             };
 
-            var file = new Models.DosCenter.File
+            var file = new Data.Models.DosCenter.File
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -54,13 +54,13 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Date = "XXXXXX",
             };
 
-            var game = new Models.DosCenter.Game
+            var game = new Data.Models.DosCenter.Game
             {
                 Name = "XXXXXX",
                 File = [file],
             };
 
-            return new Models.DosCenter.MetadataFile
+            return new Data.Models.DosCenter.MetadataFile
             {
                 DosCenter = dc,
                 Game = [game],
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a DosCenter
         /// </summary>
-        private static void Validate(Models.DosCenter.DosCenter? cmp)
+        private static void Validate(Data.Models.DosCenter.DosCenter? cmp)
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Name);
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Game
         /// </summary>
-        private static void Validate(Models.DosCenter.Game? game)
+        private static void Validate(Data.Models.DosCenter.Game? game)
         {
             Assert.NotNull(game);
             Assert.Equal("XXXXXX", game.Name);
@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a File
         /// </summary>
-        private static void Validate(Models.DosCenter.File? rom)
+        private static void Validate(Data.Models.DosCenter.File? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);

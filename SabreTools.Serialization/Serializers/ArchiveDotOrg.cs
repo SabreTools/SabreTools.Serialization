@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.ArchiveDotOrg;
+using SabreTools.Data.Models.ArchiveDotOrg;
 
 namespace SabreTools.Serialization.Serializers
 {

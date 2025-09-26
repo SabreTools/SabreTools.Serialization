@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Export
+﻿namespace SabreTools.Data.Models.PortableExecutable.Export
 {
     /// <summary>
     /// The export name pointer table is an array of addresses (RVAs) into the export name table.

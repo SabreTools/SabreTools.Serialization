@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.AttributeCertificate
+﻿namespace SabreTools.Data.Models.PortableExecutable.AttributeCertificate
 {
     /// <summary>
     /// Attribute certificates can be associated with an image by adding an attribute

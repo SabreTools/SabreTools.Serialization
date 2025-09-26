@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The Dictionary packet represents all mappings between property identifiers and

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PKZIP
+namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// Special purpose data for ZIP64 extensible data field

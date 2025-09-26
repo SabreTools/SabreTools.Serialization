@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.NewExecutable
+﻿namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// A table of relocation records follows. The following is the format

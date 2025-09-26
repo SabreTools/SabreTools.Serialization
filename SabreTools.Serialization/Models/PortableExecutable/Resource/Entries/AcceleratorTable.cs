@@ -1,5 +1,5 @@
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Resource.Entries
+namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <summary>
     /// The ACCELTABLEENTRY structure is repeated for all accelerator table entries in the resource.

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// A table of resources for this type follows. The following is

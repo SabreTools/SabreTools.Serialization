@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.SafeDisc
+namespace SabreTools.Data.Models.SafeDisc
 {
     /// <see href="https://web.archive.org/web/20241008171855/http://blog.w4kfu.com/tag/safedisc"/>
     [StructLayout(LayoutKind.Sequential)]

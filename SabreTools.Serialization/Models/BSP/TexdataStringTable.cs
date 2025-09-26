@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The TexdataStringTable (Lump 44) is an array of integers which

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.Bitmap
+namespace SabreTools.Data.Models.Bitmap
 {
     /// <summary>
     /// The BITMAPFILEHEADER structure contains information about the type, size,

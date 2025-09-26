@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Xbox
+namespace SabreTools.Data.Models.Xbox
 {
     /// <summary>
     /// List of image files associated with a package in catalog.js

@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using static SabreTools.Serialization.Models.VPK.Constants;
+using static SabreTools.Data.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class VPK : WrapperBase<Models.VPK.File>
+    public partial class VPK : WrapperBase<Data.Models.VPK.File>
     {
         #region Descriptive Properties
 
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Models.VPK.File.DirectoryItems"/>
-        public Models.VPK.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
+        public Data.Models.VPK.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
 
         #endregion
 
@@ -87,22 +87,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, byte[] data) : base(model, data) { }
+        public VPK(Data.Models.VPK.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public VPK(Data.Models.VPK.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public VPK(Data.Models.VPK.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, Stream data) : base(model, data) { }
+        public VPK(Data.Models.VPK.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, Stream data, long offset) : base(model, data, offset) { }
+        public VPK(Data.Models.VPK.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public VPK(Models.VPK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public VPK(Data.Models.VPK.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

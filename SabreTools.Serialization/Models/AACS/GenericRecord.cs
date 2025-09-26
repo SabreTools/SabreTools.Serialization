@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// This represents any record that does not have a concrete model yet

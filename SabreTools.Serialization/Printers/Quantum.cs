@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.Quantum;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.Quantum;
 
 namespace SabreTools.Serialization.Printers
 {

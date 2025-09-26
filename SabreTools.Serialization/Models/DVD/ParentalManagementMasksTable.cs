@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     /// <summary>
     /// The VMG_PTL_MAIT is searched by country, and points to

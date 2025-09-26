@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Xbox
+namespace SabreTools.Data.Models.Xbox
 {
     /// <summary>
     /// Contains information specific to an XGD disc

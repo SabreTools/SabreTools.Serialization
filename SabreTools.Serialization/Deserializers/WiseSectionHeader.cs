@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.WiseInstaller;
-using static SabreTools.Serialization.Models.WiseInstaller.Constants;
+using static SabreTools.Data.Models.WiseInstaller.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

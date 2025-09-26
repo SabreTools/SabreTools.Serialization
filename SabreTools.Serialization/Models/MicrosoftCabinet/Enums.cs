@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SabreTools.Serialization.Models.MicrosoftCabinet
+namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     public enum CompressionType : ushort
     {

@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.MSDOS;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.MSDOS;
-using static SabreTools.Serialization.Models.MSDOS.Constants;
+using static SabreTools.Data.Models.MSDOS.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

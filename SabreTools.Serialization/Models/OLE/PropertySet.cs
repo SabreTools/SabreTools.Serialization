@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The PropertySet packet represents a property set.

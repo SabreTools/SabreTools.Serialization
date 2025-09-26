@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.StarForce;
+using SabreTools.Data.Models.StarForce;
 
 namespace SabreTools.Serialization.Wrappers
 {

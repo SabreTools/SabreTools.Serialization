@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PlayJ
+namespace SabreTools.Data.Models.PlayJ
 {
     /// <summary>
     /// PlayJ audio file / CDS entry

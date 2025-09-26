@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 /// <remarks>
 /// Information sourced from https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.PackageUnitEntry
 /// </remarks>
-namespace SabreTools.Serialization.Models.Delphi
+namespace SabreTools.Data.Models.Delphi
 {
     [StructLayout(LayoutKind.Sequential)]
     public class PackageUnitEntry

@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PlayJAudioFile : WrapperBase<Models.PlayJ.AudioFile>
+    public class PlayJAudioFile : WrapperBase<Data.Models.PlayJ.AudioFile>
     {
         #region Descriptive Properties
 
@@ -14,22 +14,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, byte[] data) : base(model, data) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, byte[] data, int offset) : base(model, data, offset) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, Stream data) : base(model, data) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, Stream data, long offset) : base(model, data, offset) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public PlayJAudioFile(Models.PlayJ.AudioFile model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public PlayJAudioFile(Data.Models.PlayJ.AudioFile model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// A Model, in the terminology of the BSP file format, is a collection

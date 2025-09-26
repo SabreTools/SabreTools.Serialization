@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.CFB;
+#if NETFRAMEWORK || NETSTANDARD
 using SabreTools.IO.Extensions;
+#endif
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.CFB;
 
 namespace SabreTools.Serialization.Wrappers
 {

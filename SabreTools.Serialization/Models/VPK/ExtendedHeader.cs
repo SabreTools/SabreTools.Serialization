@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.VPK
+namespace SabreTools.Data.Models.VPK
 {
     /// <summary>
     /// Added in version 2.

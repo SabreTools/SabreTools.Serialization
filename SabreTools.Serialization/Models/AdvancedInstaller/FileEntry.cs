@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AdvancedInstaller
+namespace SabreTools.Data.Models.AdvancedInstaller
 {
     /// <summary>
     /// Single entry in the file table

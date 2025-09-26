@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.MSDOS
+namespace SabreTools.Data.Models.MSDOS
 {
     /// <summary>
     /// MZ executables only consists of 2 structures: the header and the relocation table.

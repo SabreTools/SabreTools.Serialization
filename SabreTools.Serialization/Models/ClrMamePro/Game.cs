@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.ClrMamePro
+namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>game</remarks>
     public class Game : GameBase { }

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.DebugData
+namespace SabreTools.Data.Models.PortableExecutable.DebugData
 {
     /// <summary>
     /// PDB 2.0 files

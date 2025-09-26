@@ -1,22 +1,22 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.Hashfile;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class Hashfile : BaseBinarySerializer<Models.Hashfile.Hashfile>
+    public class Hashfile : BaseBinarySerializer<Data.Models.Hashfile.Hashfile>
     {
         #region IByteSerializer
 
         /// <inheritdoc/>
-        public override byte[]? SerializeArray(Models.Hashfile.Hashfile? obj)
+        public override byte[]? SerializeArray(Data.Models.Hashfile.Hashfile? obj)
             => SerializeArray(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public byte[]? SerializeArray(Models.Hashfile.Hashfile? obj, HashType hash)
+        public byte[]? SerializeArray(Data.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             using var stream = SerializeStream(obj, hash);
             if (stream == null)
@@ -32,11 +32,11 @@ namespace SabreTools.Serialization.Serializers
         #region IFileSerializer
 
         /// <inheritdoc/>
-        public override bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path)
+        public override bool SerializeFile(Data.Models.Hashfile.Hashfile? obj, string? path)
             => SerializeFile(obj, path, HashType.CRC32);
 
         /// <inheritdoc/>
-        public bool SerializeFile(Models.Hashfile.Hashfile? obj, string? path, HashType hash)
+        public bool SerializeFile(Data.Models.Hashfile.Hashfile? obj, string? path, HashType hash)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -57,11 +57,11 @@ namespace SabreTools.Serialization.Serializers
         #region IStreamSerializer
 
         /// <inheritdoc/>
-        public override Stream? SerializeStream(Models.Hashfile.Hashfile? obj)
+        public override Stream? SerializeStream(Data.Models.Hashfile.Hashfile? obj)
             => SerializeStream(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public Stream? SerializeStream(Models.Hashfile.Hashfile? obj, HashType hash)
+        public Stream? SerializeStream(Data.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             // If the metadata file is null
             if (obj == null)

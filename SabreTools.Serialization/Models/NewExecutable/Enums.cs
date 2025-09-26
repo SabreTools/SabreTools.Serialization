@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     [Flags]
     public enum FixedSegmentEntryFlag : byte

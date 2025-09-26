@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.StarForce
+namespace SabreTools.Data.Models.StarForce
 {
     /// <summary>
     /// Header

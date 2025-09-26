@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Data.Models.VPK;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.VPK;
-using static SabreTools.Serialization.Models.VPK.Constants;
+using static SabreTools.Data.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class VPK : BaseBinaryDeserializer<Models.VPK.File>
+    public class VPK : BaseBinaryDeserializer<Data.Models.VPK.File>
     {
         /// <inheritdoc/>
-        public override Models.VPK.File? Deserialize(Stream? data)
+        public override Data.Models.VPK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Valve Package to fill
-                var file = new Models.VPK.File();
+                var file = new Data.Models.VPK.File();
 
                 #region Header
 

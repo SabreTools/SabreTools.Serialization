@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.CHD
+namespace SabreTools.Data.Models.CHD
 {
     /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chdcodec.h"/> 
     public enum AVHuffCodec

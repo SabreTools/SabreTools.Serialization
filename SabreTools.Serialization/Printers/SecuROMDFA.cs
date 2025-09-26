@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.SecuROM;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Printers
 {

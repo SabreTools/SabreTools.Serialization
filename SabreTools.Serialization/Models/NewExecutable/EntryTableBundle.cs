@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.NewExecutable
+﻿namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The entry table follows the imported-name table. This table contains

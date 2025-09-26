@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.Quantum;
+using SabreTools.Data.Models.Quantum;
 
 namespace SabreTools.Serialization.Wrappers
 {

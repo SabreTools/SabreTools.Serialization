@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// Of interest is the gamelump which is used to store prop_static entities,

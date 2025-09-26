@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PIC
+﻿namespace SabreTools.Data.Models.PIC
 {
     /// <summary>
     /// Disc Information and Emergency Brake data shall be read from the PIC zone. DI units that

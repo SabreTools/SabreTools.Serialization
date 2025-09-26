@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.COFF
+namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// At the beginning of an object file, or immediately after the signature

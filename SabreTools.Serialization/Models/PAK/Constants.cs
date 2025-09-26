@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PAK
+namespace SabreTools.Data.Models.PAK
 {
     public static class Constants
     {

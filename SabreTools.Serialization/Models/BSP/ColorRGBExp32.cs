@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// 4-byte lightmap structure

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Resource.Entries
+﻿namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <summary>
     /// An extended dialog box template begins with a DLGTEMPLATEEX header that describes

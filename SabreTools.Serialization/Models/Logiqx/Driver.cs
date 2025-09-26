@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Logiqx
+namespace SabreTools.Data.Models.Logiqx
 {
     [XmlRoot("driver")]
     public class Driver

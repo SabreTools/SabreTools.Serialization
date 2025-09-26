@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.Listxml;
+using SabreTools.Data.Models.Listxml;
 
 namespace SabreTools.Serialization.Deserializers
 {

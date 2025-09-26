@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Serialization.Models.InstallShieldArchiveV3;
+using SabreTools.Data.Models.InstallShieldArchiveV3;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -26,10 +26,10 @@ namespace SabreTools.Serialization.Wrappers
         public ushort FileCount => Model.Header?.FileCount ?? 0;
 
         /// <inheritdoc cref="Archive.Directories"/>
-        public Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories ?? [];
+        public Data.Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories ?? [];
 
         /// <inheritdoc cref="Archive.Files"/>
-        public Models.InstallShieldArchiveV3.File[] Files => Model.Files ?? [];
+        public Data.Models.InstallShieldArchiveV3.File[] Files => Model.Files ?? [];
 
         /// <summary>
         /// Map of all files to their parent directories by index
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Map of all files found in the archive
         /// </summary>
-        public Dictionary<string, Models.InstallShieldArchiveV3.File> FileNameMap
+        public Dictionary<string, Data.Models.InstallShieldArchiveV3.File> FileNameMap
         {
             get
             {
@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Wrappers
                 return _fileNameMap;
             }
         }
-        private Dictionary<string, Models.InstallShieldArchiveV3.File>? _fileNameMap = null;
+        private Dictionary<string, Data.Models.InstallShieldArchiveV3.File>? _fileNameMap = null;
 
         /// <summary>
         /// Data offset for all archives

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Export
+namespace SabreTools.Data.Models.PortableExecutable.Export
 {
     /// <summary>
     /// The export address table contains the address of exported entry points

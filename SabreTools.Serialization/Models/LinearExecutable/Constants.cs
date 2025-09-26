@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.LinearExecutable
+namespace SabreTools.Data.Models.LinearExecutable
 {
     public static class Constants
     {

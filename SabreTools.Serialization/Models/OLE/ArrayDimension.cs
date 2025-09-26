@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The ArrayDimension packet represents the size and index offset of a dimension of an array

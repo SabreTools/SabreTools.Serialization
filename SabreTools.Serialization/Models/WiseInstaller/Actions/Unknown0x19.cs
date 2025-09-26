@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller.Actions
+namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
     public class Unknown0x19 : MachineStateData

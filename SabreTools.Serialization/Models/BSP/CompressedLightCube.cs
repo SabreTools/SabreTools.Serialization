@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The lighting data for each sample is represented by an array

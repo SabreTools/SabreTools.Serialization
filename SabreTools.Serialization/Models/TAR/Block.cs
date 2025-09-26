@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.TAR
+namespace SabreTools.Data.Models.TAR
 {
     public sealed class Block
     {

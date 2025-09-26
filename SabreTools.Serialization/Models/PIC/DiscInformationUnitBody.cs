@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PIC
+namespace SabreTools.Data.Models.PIC
 {
     /// <see href="https://www.t10.org/ftp/t10/document.05/05-206r0.pdf"/>
     /// <see href="https://github.com/aaru-dps/Aaru.Decoders/blob/devel/Bluray/DI.cs"/>

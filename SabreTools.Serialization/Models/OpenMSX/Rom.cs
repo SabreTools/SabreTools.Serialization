@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.OpenMSX
+namespace SabreTools.Data.Models.OpenMSX
 {
     [XmlRoot("rom")]
     public class Rom : RomBase { }

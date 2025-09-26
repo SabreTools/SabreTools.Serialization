@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.BaseRelocation
+﻿namespace SabreTools.Data.Models.PortableExecutable.BaseRelocation
 {
     /// <summary>
     /// Type or Offset field entry is a WORD (2 bytes).

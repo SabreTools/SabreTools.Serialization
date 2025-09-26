@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
+using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.Hashfile;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Hashfile : IModelSerializer<Models.Hashfile.Hashfile, Models.Metadata.MetadataFile>
+    public partial class Hashfile : IModelSerializer<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, HashType.CRC32);
+        public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, HashType.CRC32);
 
         /// <inheritdoc/>
-        public Models.Hashfile.Hashfile? Deserialize(Models.Metadata.MetadataFile? obj, HashType hash)
+        public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj, HashType hash)
         {
             if (obj == null)
                 return null;
 
-            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
             if (machines == null || machines.Length == 0)
                 return null;
 
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.CrossModel
                     spamsums.AddRange(hashfile.SpamSum);
             }
 
-            var hashfileItem = new Models.Hashfile.Hashfile();
+            var hashfileItem = new Data.Models.Hashfile.Hashfile();
 
             if (sfvs.Count > 0)
                 hashfileItem.SFV = [.. sfvs];
@@ -93,13 +93,13 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Models.Hashfile.Hashfile"/>
         /// </summary>
-        private static Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Models.Metadata.Machine item, HashType hash)
+        private static Data.Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item, HashType hash)
         {
-            var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
+            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
             if (roms == null)
-                return new Models.Hashfile.Hashfile();
+                return new Data.Models.Hashfile.Hashfile();
 
-            return new Models.Hashfile.Hashfile
+            return new Data.Models.Hashfile.Hashfile
             {
                 SFV = hash == HashType.CRC32
                     ? Array.ConvertAll(roms, ConvertToSFV)
@@ -140,12 +140,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="MD2"/>
         /// </summary>
-        private static MD2 ConvertToMD2(Models.Metadata.Rom item)
+        private static MD2 ConvertToMD2(Data.Models.Metadata.Rom item)
         {
             var md2 = new MD2
             {
-                Hash = item.ReadString(Models.Metadata.Rom.MD2Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.MD2Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return md2;
         }
@@ -153,12 +153,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="MD4"/>
         /// </summary>
-        private static MD4 ConvertToMD4(Models.Metadata.Rom item)
+        private static MD4 ConvertToMD4(Data.Models.Metadata.Rom item)
         {
             var md4 = new MD4
             {
-                Hash = item.ReadString(Models.Metadata.Rom.MD4Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.MD4Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return md4;
         }
@@ -166,12 +166,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="MD5"/>
         /// </summary>
-        private static MD5 ConvertToMD5(Models.Metadata.Rom item)
+        private static MD5 ConvertToMD5(Data.Models.Metadata.Rom item)
         {
             var md5 = new MD5
             {
-                Hash = item.ReadString(Models.Metadata.Rom.MD5Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.MD5Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return md5;
         }
@@ -179,12 +179,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="RIPEMD128"/>
         /// </summary>
-        private static RIPEMD128 ConvertToRIPEMD128(Models.Metadata.Rom item)
+        private static RIPEMD128 ConvertToRIPEMD128(Data.Models.Metadata.Rom item)
         {
             var ripemd128 = new RIPEMD128
             {
-                Hash = item.ReadString(Models.Metadata.Rom.RIPEMD128Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return ripemd128;
         }
@@ -192,12 +192,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="RIPEMD160"/>
         /// </summary>
-        private static RIPEMD160 ConvertToRIPEMD160(Models.Metadata.Rom item)
+        private static RIPEMD160 ConvertToRIPEMD160(Data.Models.Metadata.Rom item)
         {
             var ripemd160 = new RIPEMD160
             {
-                Hash = item.ReadString(Models.Metadata.Rom.RIPEMD160Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return ripemd160;
         }
@@ -205,12 +205,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SFV"/>
         /// </summary>
-        private static SFV ConvertToSFV(Models.Metadata.Rom item)
+        private static SFV ConvertToSFV(Data.Models.Metadata.Rom item)
         {
             var sfv = new SFV
             {
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
-                Hash = item.ReadString(Models.Metadata.Rom.CRCKey),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
             };
             return sfv;
         }
@@ -218,12 +218,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SHA1"/>
         /// </summary>
-        private static SHA1 ConvertToSHA1(Models.Metadata.Rom item)
+        private static SHA1 ConvertToSHA1(Data.Models.Metadata.Rom item)
         {
             var sha1 = new SHA1
             {
-                Hash = item.ReadString(Models.Metadata.Rom.SHA1Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return sha1;
         }
@@ -231,12 +231,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SHA256"/>
         /// </summary>
-        private static SHA256 ConvertToSHA256(Models.Metadata.Rom item)
+        private static SHA256 ConvertToSHA256(Data.Models.Metadata.Rom item)
         {
             var sha256 = new SHA256
             {
-                Hash = item.ReadString(Models.Metadata.Rom.SHA256Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA256Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return sha256;
         }
@@ -244,12 +244,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SHA384"/>
         /// </summary>
-        private static SHA384 ConvertToSHA384(Models.Metadata.Rom item)
+        private static SHA384 ConvertToSHA384(Data.Models.Metadata.Rom item)
         {
             var sha384 = new SHA384
             {
-                Hash = item.ReadString(Models.Metadata.Rom.SHA384Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA384Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return sha384;
         }
@@ -257,12 +257,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SHA512"/>
         /// </summary>
-        private static SHA512 ConvertToSHA512(Models.Metadata.Rom item)
+        private static SHA512 ConvertToSHA512(Data.Models.Metadata.Rom item)
         {
             var sha512 = new SHA512
             {
-                Hash = item.ReadString(Models.Metadata.Rom.SHA512Key),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.SHA512Key),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return sha512;
         }
@@ -270,12 +270,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SpamSum"/>
         /// </summary>
-        private static SpamSum ConvertToSpamSum(Models.Metadata.Rom item)
+        private static SpamSum ConvertToSpamSum(Data.Models.Metadata.Rom item)
         {
             var spamsum = new SpamSum
             {
-                Hash = item.ReadString(Models.Metadata.Rom.SpamSumKey),
-                File = item.ReadString(Models.Metadata.Rom.NameKey),
+                Hash = item.ReadString(Data.Models.Metadata.Rom.SpamSumKey),
+                File = item.ReadString(Data.Models.Metadata.Rom.NameKey),
             };
             return spamsum;
         }

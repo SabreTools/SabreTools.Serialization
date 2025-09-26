@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Resource
+﻿namespace SabreTools.Data.Models.PortableExecutable.Resource
 {
     /// <summary>
     /// The resource directory string area consists of Unicode strings, which

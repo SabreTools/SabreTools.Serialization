@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MicrosoftCabinet
+﻿namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     /// <summary>
     /// Each CFFOLDER structure contains information about one of the folders or partial folders stored in

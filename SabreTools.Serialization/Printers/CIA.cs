@@ -1,16 +1,16 @@
 using System.Text;
+using SabreTools.Data.Models.N3DS;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.N3DS;
 
 namespace SabreTools.Serialization.Printers
 {
-    public class CIA : IPrinter<Models.N3DS.CIA>
+    public class CIA : IPrinter<Data.Models.N3DS.CIA>
     {
         /// <inheritdoc/>
-        public void PrintInformation(StringBuilder builder, Models.N3DS.CIA model)
+        public void PrintInformation(StringBuilder builder, Data.Models.N3DS.CIA model)
             => Print(builder, model);
 
-        public static void Print(StringBuilder builder, Models.N3DS.CIA cia)
+        public static void Print(StringBuilder builder, Data.Models.N3DS.CIA cia)
         {
             builder.AppendLine("CIA Archive Information:");
             builder.AppendLine("-------------------------");

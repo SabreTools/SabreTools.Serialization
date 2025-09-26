@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.CFB
+namespace SabreTools.Data.Models.CFB
 {
     /// <see href="https://github.com/GNOME/msitools/blob/master/libmsi/libmsi-summary-info.c"/>
     public sealed class SummaryInformation

@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("archive"), XmlRoot("archive")]
     public class Archive : DatItem

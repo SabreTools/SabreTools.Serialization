@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.COFF
+﻿namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// Each row of the section table is, in effect, a section header. This table

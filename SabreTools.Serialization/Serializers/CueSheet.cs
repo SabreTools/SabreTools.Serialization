@@ -1,14 +1,14 @@
 using System;
 using System.IO;
 using System.Text;
-using SabreTools.Serialization.Models.CueSheets;
+using SabreTools.Data.Models.CueSheets;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class CueSheet : BaseBinarySerializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinarySerializer<Data.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-        public override Stream? SerializeStream(Models.CueSheets.CueSheet? obj)
+        public override Stream? SerializeStream(Data.Models.CueSheets.CueSheet? obj)
         {
             // If the cuesheet is null
             if (obj == null)
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="cueSheet">CueSheet to write</param>
         /// <param name="sw">StreamWriter to write to</param>
-        private static void WriteCueSheet(Models.CueSheets.CueSheet cueSheet, StreamWriter sw)
+        private static void WriteCueSheet(Data.Models.CueSheets.CueSheet cueSheet, StreamWriter sw)
         {
             // If we don't have any files, it's invalid
             if (cueSheet.Files == null)

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Resource.Entries
+namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <summary>
     /// Defines the header for an extended menu template. This structure definition is for

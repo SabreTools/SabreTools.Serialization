@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The DictionaryEntry packet represents a mapping between a property identifier and a

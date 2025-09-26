@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("analog"), XmlRoot("analog")]
     public class Analog : DatItem

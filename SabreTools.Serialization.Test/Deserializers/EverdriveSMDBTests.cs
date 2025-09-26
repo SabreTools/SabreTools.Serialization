@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.EverdriveSMDB();
 
             // Build the data
-            Models.EverdriveSMDB.MetadataFile mf = Build();
+            Data.Models.EverdriveSMDB.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.EverdriveSMDB.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.EverdriveSMDB.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -97,9 +97,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.EverdriveSMDB.MetadataFile Build()
+        private static Data.Models.EverdriveSMDB.MetadataFile Build()
         {
-            var row = new Models.EverdriveSMDB.Row
+            var row = new Data.Models.EverdriveSMDB.Row
             {
                 SHA256 = "XXXXXX",
                 Name = "XXXXXX",
@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Size = "XXXXXX",
             };
 
-            return new Models.EverdriveSMDB.MetadataFile
+            return new Data.Models.EverdriveSMDB.MetadataFile
             {
                 Row = [row],
             };
@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void Validate(Models.EverdriveSMDB.Row? row)
+        private static void Validate(Data.Models.EverdriveSMDB.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.SHA256);

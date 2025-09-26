@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PKZIP
+namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// In order to allow different programs and different types

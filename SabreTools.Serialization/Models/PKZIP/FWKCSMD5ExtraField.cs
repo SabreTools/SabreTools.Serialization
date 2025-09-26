@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PKZIP
+namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// The FWKCS Contents_Signature System, used in

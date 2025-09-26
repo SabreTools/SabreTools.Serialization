@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.LinearExecutable
+namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The Verify Record Directive Table is an optional table. It maintains a record

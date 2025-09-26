@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The NE header is a relatively large structure with multiple characteristics.

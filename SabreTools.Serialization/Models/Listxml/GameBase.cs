@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Listxml
+namespace SabreTools.Data.Models.Listxml
 {
     /// <summary>
     /// Base class to unify the various game-like types

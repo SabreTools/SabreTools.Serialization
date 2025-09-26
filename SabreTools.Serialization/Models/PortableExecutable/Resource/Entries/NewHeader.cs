@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Resource.Entries
+namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <summary>
     /// Contains the number of icon or cursor components in a resource group. The

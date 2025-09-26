@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.AttractMode
+namespace SabreTools.Data.Models.AttractMode
 {
     public class Row
     {

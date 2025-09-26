@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.RealArcade
+namespace SabreTools.Data.Models.RealArcade
 {
     /// <summary>
     /// This is a placeholder model for future work

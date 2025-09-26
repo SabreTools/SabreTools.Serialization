@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.LinearExecutable
+namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The resource table is an array of resource table entries. Each resource table

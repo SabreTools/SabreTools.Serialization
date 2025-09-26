@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.OfflineList
+namespace SabreTools.Data.Models.OfflineList
 {
     [XmlRoot("files")]
     public class Files

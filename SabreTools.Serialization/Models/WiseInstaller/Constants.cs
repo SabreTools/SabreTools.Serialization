@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.WiseInstaller
+namespace SabreTools.Data.Models.WiseInstaller
 {
     public static class Constants
     {

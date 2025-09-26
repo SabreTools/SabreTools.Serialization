@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.COFF.SymbolTableEntries
+namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// A standard record defines a symbol or name.

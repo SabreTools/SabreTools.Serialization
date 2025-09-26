@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.ClrMamePro;
 
 namespace SabreTools.Serialization.Serializers
 {
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="header">ClrMamePro representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteHeader(Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
+        private static void WriteHeader(Data.Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
             if (header == null)

@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.Logiqx
+namespace SabreTools.Data.Models.Logiqx
 {
     [XmlRoot("machine")]
     public class Machine : GameBase { }

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
+using SabreTools.Data.Models.BSP;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.BSP;
 
 namespace SabreTools.Serialization.Wrappers
 {

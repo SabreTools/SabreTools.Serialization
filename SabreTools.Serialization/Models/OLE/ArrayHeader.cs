@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The ArrayHeader packet represents the type and dimensions of an array property type.

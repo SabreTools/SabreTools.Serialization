@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.MSDOS
+namespace SabreTools.Data.Models.MSDOS
 {
     /// <summary>
     /// The MS-DOS EXE format, also known as MZ after its signature (the initials of Microsoft engineer Mark Zbykowski),

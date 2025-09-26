@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PKZIP
+namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// The following is the layout of the NTFS attributes

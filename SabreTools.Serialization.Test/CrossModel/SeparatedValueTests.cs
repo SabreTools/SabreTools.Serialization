@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new SeparatedValue();
 
             // Build the data
-            Models.SeparatedValue.MetadataFile mf = Build();
+            Data.Models.SeparatedValue.MetadataFile mf = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.SeparatedValue.MetadataFile? newMf = serializer.Deserialize(metadata);
+            Data.Models.SeparatedValue.MetadataFile? newMf = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -35,11 +35,11 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.SeparatedValue.MetadataFile Build()
+        private static Data.Models.SeparatedValue.MetadataFile Build()
         {
             string[] header = ["header"];
 
-            var disk = new Models.SeparatedValue.Row
+            var disk = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Status = "XXXXXX",
             };
 
-            var media = new Models.SeparatedValue.Row
+            var media = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 SpamSum = "XXXXXX",
             };
 
-            var rom = new Models.SeparatedValue.Row
+            var rom = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Status = "XXXXXX",
             };
 
-            return new Models.SeparatedValue.MetadataFile
+            return new Data.Models.SeparatedValue.MetadataFile
             {
                 Header = header,
                 Row = [disk, media, rom],
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateDisk(Models.SeparatedValue.Row? row)
+        private static void ValidateDisk(Data.Models.SeparatedValue.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateMedia(Models.SeparatedValue.Row? row)
+        private static void ValidateMedia(Data.Models.SeparatedValue.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateRom(Models.SeparatedValue.Row? row)
+        private static void ValidateRom(Data.Models.SeparatedValue.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);

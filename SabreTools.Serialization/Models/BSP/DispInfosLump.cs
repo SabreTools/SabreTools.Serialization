@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public sealed class DispInfosLump : Lump

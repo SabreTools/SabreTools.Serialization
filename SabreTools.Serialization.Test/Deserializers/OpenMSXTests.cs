@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.OpenMSX();
 
             // Build the data
-            Models.OpenMSX.SoftwareDb sdb = Build();
+            Data.Models.OpenMSX.SoftwareDb sdb = Build();
 
             // Serialize to stream
             Stream? metadata = serializer.Serialize(sdb);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.OpenMSX.SoftwareDb? newSdb = deserializer.Deserialize(metadata);
+            Data.Models.OpenMSX.SoftwareDb? newSdb = deserializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newSdb);
@@ -99,15 +99,15 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.OpenMSX.SoftwareDb Build()
+        private static Data.Models.OpenMSX.SoftwareDb Build()
         {
-            var original = new Models.OpenMSX.Original
+            var original = new Data.Models.OpenMSX.Original
             {
                 Value = "XXXXXX",
                 Content = "XXXXXX",
             };
 
-            var rom = new Models.OpenMSX.Rom
+            var rom = new Data.Models.OpenMSX.Rom
             {
                 Start = "XXXXXX",
                 Type = "XXXXXX",
@@ -115,13 +115,13 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Remark = "XXXXXX",
             };
 
-            var dump_rom = new Models.OpenMSX.Dump
+            var dump_rom = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
                 Rom = rom,
             };
 
-            var megarom = new Models.OpenMSX.MegaRom
+            var megarom = new Data.Models.OpenMSX.MegaRom
             {
                 Start = "XXXXXX",
                 Type = "XXXXXX",
@@ -129,13 +129,13 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Remark = "XXXXXX",
             };
 
-            var dump_megarom = new Models.OpenMSX.Dump
+            var dump_megarom = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
                 Rom = megarom,
             };
 
-            var sccpluscart = new Models.OpenMSX.SCCPlusCart
+            var sccpluscart = new Data.Models.OpenMSX.SCCPlusCart
             {
                 Start = "XXXXXX",
                 Type = "XXXXXX",
@@ -143,13 +143,13 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Remark = "XXXXXX",
             };
 
-            var dump_sccpluscart = new Models.OpenMSX.Dump
+            var dump_sccpluscart = new Data.Models.OpenMSX.Dump
             {
                 Original = original,
                 Rom = sccpluscart,
             };
 
-            var software = new Models.OpenMSX.Software
+            var software = new Data.Models.OpenMSX.Software
             {
                 Title = "XXXXXX",
                 GenMSXID = "XXXXXX",
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Dump = [dump_rom, dump_megarom, dump_sccpluscart],
             };
 
-            return new Models.OpenMSX.SoftwareDb
+            return new Data.Models.OpenMSX.SoftwareDb
             {
                 Timestamp = "XXXXXX",
                 Software = [software],
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Software
         /// </summary>
-        private static void Validate(Models.OpenMSX.Software? software)
+        private static void Validate(Data.Models.OpenMSX.Software? software)
         {
             Assert.NotNull(software);
             Assert.Equal("XXXXXX", software.Title);
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Dump
         /// </summary>
-        private static void Validate(Models.OpenMSX.Dump? dump)
+        private static void Validate(Data.Models.OpenMSX.Dump? dump)
         {
             Assert.NotNull(dump);
             Validate(dump.Original);
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Original
         /// </summary>
-        private static void Validate(Models.OpenMSX.Original? original)
+        private static void Validate(Data.Models.OpenMSX.Original? original)
         {
             Assert.NotNull(original);
             Assert.Equal("XXXXXX", original.Value);
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a RomBase
         /// </summary>
-        private static void Validate(Models.OpenMSX.RomBase? rombase)
+        private static void Validate(Data.Models.OpenMSX.RomBase? rombase)
         {
             Assert.NotNull(rombase);
             Assert.Equal("XXXXXX", rombase.Start);

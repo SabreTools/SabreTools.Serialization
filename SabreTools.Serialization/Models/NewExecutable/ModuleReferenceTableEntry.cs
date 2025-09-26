@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The module-reference table follows the resident-name table. Each entry

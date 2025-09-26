@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.OfflineList;
+using SabreTools.Data.Models.OfflineList;
 
 namespace SabreTools.Serialization.Deserializers
 {

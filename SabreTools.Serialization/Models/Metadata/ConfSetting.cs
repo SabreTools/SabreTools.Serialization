@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("confsetting"), XmlRoot("confsetting")]
     public class ConfSetting : DatItem

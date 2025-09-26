@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.SecuROM
+namespace SabreTools.Data.Models.SecuROM
 {
     /// <summary>
     /// Overlay data associated with SecuROM executables

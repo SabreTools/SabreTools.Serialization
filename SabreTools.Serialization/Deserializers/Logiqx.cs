@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.Logiqx;
+using SabreTools.Data.Models.Logiqx;
 
 namespace SabreTools.Serialization.Deserializers
 {

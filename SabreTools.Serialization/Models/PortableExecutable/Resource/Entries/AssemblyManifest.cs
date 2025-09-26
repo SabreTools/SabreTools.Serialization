@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Resource.Entries
+namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/sbscs/manifest-file-schema"/>
     [XmlRoot(ElementName = "assembly", Namespace = "urn:schemas-microsoft-com:asm.v1")]

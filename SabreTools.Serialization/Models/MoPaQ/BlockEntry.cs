@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.MoPaQ
+namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// Block table contains informations about file sizes and way of their storage within

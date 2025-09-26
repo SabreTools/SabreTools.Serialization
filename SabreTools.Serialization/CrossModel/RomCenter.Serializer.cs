@@ -1,25 +1,25 @@
 using System;
+using SabreTools.Data.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.RomCenter;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class RomCenter : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
+    public partial class RomCenter : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
+        public Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
+                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
             };
 
             if (obj?.Games?.Rom != null && obj.Games.Rom.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(obj.Games.Rom, ConvertMachineToInternalModel);
             }
 
@@ -29,36 +29,36 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="MetadataFile"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
-        private static Models.Metadata.Header ConvertHeaderToInternalModel(MetadataFile item)
+        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(MetadataFile item)
         {
-            var header = new Models.Metadata.Header();
+            var header = new Data.Models.Metadata.Header();
 
             if (item.Credits != null)
             {
-                header[Models.Metadata.Header.AuthorKey] = item.Credits.Author;
-                header[Models.Metadata.Header.VersionKey] = item.Credits.Version;
-                header[Models.Metadata.Header.EmailKey] = item.Credits.Email;
-                header[Models.Metadata.Header.HomepageKey] = item.Credits.Homepage;
-                header[Models.Metadata.Header.UrlKey] = item.Credits.Url;
-                header[Models.Metadata.Header.DateKey] = item.Credits.Date;
-                header[Models.Metadata.Header.CommentKey] = item.Credits.Comment;
+                header[Data.Models.Metadata.Header.AuthorKey] = item.Credits.Author;
+                header[Data.Models.Metadata.Header.VersionKey] = item.Credits.Version;
+                header[Data.Models.Metadata.Header.EmailKey] = item.Credits.Email;
+                header[Data.Models.Metadata.Header.HomepageKey] = item.Credits.Homepage;
+                header[Data.Models.Metadata.Header.UrlKey] = item.Credits.Url;
+                header[Data.Models.Metadata.Header.DateKey] = item.Credits.Date;
+                header[Data.Models.Metadata.Header.CommentKey] = item.Credits.Comment;
             }
 
             if (item.Dat != null)
             {
-                header[Models.Metadata.Header.DatVersionKey] = item.Dat.Version;
-                header[Models.Metadata.Header.PluginKey] = item.Dat.Plugin;
+                header[Data.Models.Metadata.Header.DatVersionKey] = item.Dat.Version;
+                header[Data.Models.Metadata.Header.PluginKey] = item.Dat.Plugin;
 
                 if (item.Dat.Split == "yes" || item.Dat.Split == "1")
-                    header[Models.Metadata.Header.ForceMergingKey] = "split";
+                    header[Data.Models.Metadata.Header.ForceMergingKey] = "split";
                 else if (item.Dat.Merge == "yes" || item.Dat.Merge == "1")
-                    header[Models.Metadata.Header.ForceMergingKey] = "merge";
+                    header[Data.Models.Metadata.Header.ForceMergingKey] = "merge";
             }
 
             if (item.Emulator != null)
             {
-                header[Models.Metadata.Header.RefNameKey] = item.Emulator.RefName;
-                header[Models.Metadata.Header.EmulatorVersionKey] = item.Emulator.Version;
+                header[Data.Models.Metadata.Header.RefNameKey] = item.Emulator.RefName;
+                header[Data.Models.Metadata.Header.EmulatorVersionKey] = item.Emulator.Version;
             }
 
             return header;
@@ -67,16 +67,16 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Game"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(Rom item)
+        private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(Rom item)
         {
-            var machine = new Models.Metadata.Machine
+            var machine = new Data.Models.Metadata.Machine
             {
-                [Models.Metadata.Machine.RomOfKey] = item.RomOf,
-                [Models.Metadata.Machine.CloneOfKey] = item.ParentName,
-                //[Models.Metadata.Machine.ParentDescriptionKey] = item.ParentDescription, // This is unmappable
-                [Models.Metadata.Machine.NameKey] = item.GameName,
-                [Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
-                [Models.Metadata.Machine.RomKey] = new Models.Metadata.Rom[] { ConvertToInternalModel(item) },
+                [Data.Models.Metadata.Machine.RomOfKey] = item.RomOf,
+                [Data.Models.Metadata.Machine.CloneOfKey] = item.ParentName,
+                //[Data.Models.Metadata.Machine.ParentDescriptionKey] = item.ParentDescription, // This is unmappable
+                [Data.Models.Metadata.Machine.NameKey] = item.GameName,
+                [Data.Models.Metadata.Machine.DescriptionKey] = item.GameDescription,
+                [Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { ConvertToInternalModel(item) },
             };
 
             return machine;
@@ -85,14 +85,14 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Rom"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
-        private static Models.Metadata.Rom ConvertToInternalModel(Rom item)
+        private static Data.Models.Metadata.Rom ConvertToInternalModel(Rom item)
         {
-            var rom = new Models.Metadata.Rom
+            var rom = new Data.Models.Metadata.Rom
             {
-                [Models.Metadata.Rom.NameKey] = item.RomName,
-                [Models.Metadata.Rom.CRCKey] = item.RomCRC,
-                [Models.Metadata.Rom.SizeKey] = item.RomSize,
-                [Models.Metadata.Rom.MergeKey] = item.MergeName,
+                [Data.Models.Metadata.Rom.NameKey] = item.RomName,
+                [Data.Models.Metadata.Rom.CRCKey] = item.RomCRC,
+                [Data.Models.Metadata.Rom.SizeKey] = item.RomSize,
+                [Data.Models.Metadata.Rom.MergeKey] = item.MergeName,
             };
             return rom;
         }

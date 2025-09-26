@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.Nitro
+namespace SabreTools.Data.Models.Nitro
 {
     /// <summary>
     /// Nintendo DS / DSi cartridge header

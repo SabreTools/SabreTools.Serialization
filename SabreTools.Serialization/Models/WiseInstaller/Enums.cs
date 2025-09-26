@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller
+namespace SabreTools.Data.Models.WiseInstaller
 {
     /// <summary>
     /// The CharacterSet Enumeration defines the possible sets of

@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.Charts
+namespace SabreTools.Data.Models.Charts
 {
     /// <see href="https://github.com/TheNathannator/GuitarGame_ChartFormats/tree/main/doc/FileFormats/song.ini"/> 
     /// <remarks>[song]/[Song]</remarks>

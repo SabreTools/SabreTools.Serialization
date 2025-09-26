@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.COFF
+namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// Object files contain COFF relocations, which specify how the section data

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PIC
+namespace SabreTools.Data.Models.PIC
 {
     /// <summary>
     /// BD-R/RE only

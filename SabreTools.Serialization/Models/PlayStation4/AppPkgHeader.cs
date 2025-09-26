@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PlayStation4
+namespace SabreTools.Data.Models.PlayStation4
 {
     /// <see href="https://www.psdevwiki.com/ps4/PKG_files"/>
     /// <remarks>All numeric values are big-endian</remarks>

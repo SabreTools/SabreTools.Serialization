@@ -1,6 +1,6 @@
 ﻿using System;
+using SabreTools.Data.Models.Nitro;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.Nitro;
 
 namespace SabreTools.Serialization.Wrappers
 {

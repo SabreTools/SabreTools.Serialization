@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.SecuROM
+namespace SabreTools.Data.Models.SecuROM
 {
     /// <remarks>
     /// Most DFA-protected files seem to also have additional encryption,

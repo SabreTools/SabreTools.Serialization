@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.SGA
+namespace SabreTools.Data.Models.SGA
 {
     public static class Constants
     {

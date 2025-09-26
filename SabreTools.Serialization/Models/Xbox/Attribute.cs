@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Xbox
+namespace SabreTools.Data.Models.Xbox
 {
     /// <summary>
     /// Extra attributes relating to package, in catalog.js

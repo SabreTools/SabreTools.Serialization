@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BFPK
+namespace SabreTools.Data.Models.BFPK
 {
     public static class Constants
     {

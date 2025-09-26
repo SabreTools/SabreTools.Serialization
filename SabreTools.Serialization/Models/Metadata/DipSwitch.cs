@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("dipswitch"), XmlRoot("dipswitch")]
     public class DipSwitch : DatItem

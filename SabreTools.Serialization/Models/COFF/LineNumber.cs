@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.COFF
+namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// COFF line numbers are no longer produced and, in the future, will

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller
+namespace SabreTools.Data.Models.WiseInstaller
 {
     /// <summary>
     /// Header for the Wise script

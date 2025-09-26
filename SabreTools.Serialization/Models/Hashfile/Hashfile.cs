@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Hashfile
+namespace SabreTools.Data.Models.Hashfile
 {
     /// <remarks>Hashfiles can only contain one type of hash at a time</remarks>
     public class Hashfile

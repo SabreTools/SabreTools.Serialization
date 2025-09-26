@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.SoftwareList
+namespace SabreTools.Data.Models.SoftwareList
 {
     [XmlRoot("rom")]
     public class Rom

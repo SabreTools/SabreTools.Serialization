@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.OpenMSX
+namespace SabreTools.Data.Models.OpenMSX
 {
     [XmlRoot("softwaredb")]
     public class SoftwareDb

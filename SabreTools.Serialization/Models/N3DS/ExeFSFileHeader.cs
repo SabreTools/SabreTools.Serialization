@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.N3DS
+namespace SabreTools.Data.Models.N3DS
 {
     /// <summary>
     /// There are a maximum of 10 file headers in the ExeFS format. (This maximum

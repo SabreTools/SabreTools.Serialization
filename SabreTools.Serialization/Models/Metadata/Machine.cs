@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
     /// Format-agnostic representation of game, machine, and set data

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.StarForce
+﻿namespace SabreTools.Data.Models.StarForce
 {
     /// <summary>
     /// SFFS consists of 2 major parts: the container files that contain the game

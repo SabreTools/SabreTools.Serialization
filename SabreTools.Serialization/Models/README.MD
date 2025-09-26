@@ -1,4 +1,4 @@
-# SabreTools.Serialization.Models
+# SabreTools.Data.Models
 
 This namespace comprises of models that represent either directly serializable or representative structures for all SabreTools projects. The majority of models will have deserializers and wrappers, with some also having both regular and cross-model serializers.
 

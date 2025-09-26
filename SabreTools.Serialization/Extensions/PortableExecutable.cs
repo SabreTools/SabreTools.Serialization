@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using SabreTools.Data.Models.COFF;
+using SabreTools.Data.Models.PortableExecutable;
+using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
+using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.COFF;
-using SabreTools.Serialization.Models.PortableExecutable;
-using SabreTools.Serialization.Models.PortableExecutable.Resource.Entries;
-using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Extensions
 {
@@ -110,9 +110,9 @@ namespace SabreTools.Serialization.Extensions
         /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled NB10ProgramDatabase on success, null on error</returns>
-        public static Models.PortableExecutable.DebugData.NB10ProgramDatabase? ParseNB10ProgramDatabase(this byte[] data, ref int offset)
+        public static Data.Models.PortableExecutable.DebugData.NB10ProgramDatabase? ParseNB10ProgramDatabase(this byte[] data, ref int offset)
         {
-            var obj = new Models.PortableExecutable.DebugData.NB10ProgramDatabase();
+            var obj = new Data.Models.PortableExecutable.DebugData.NB10ProgramDatabase();
 
             obj.Signature = data.ReadUInt32LittleEndian(ref offset);
             if (obj.Signature != 0x3031424E)
@@ -132,9 +132,9 @@ namespace SabreTools.Serialization.Extensions
         /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled RSDSProgramDatabase on success, null on error</returns>
-        public static Models.PortableExecutable.DebugData.RSDSProgramDatabase? ParseRSDSProgramDatabase(this byte[] data, ref int offset)
+        public static Data.Models.PortableExecutable.DebugData.RSDSProgramDatabase? ParseRSDSProgramDatabase(this byte[] data, ref int offset)
         {
-            var obj = new Models.PortableExecutable.DebugData.RSDSProgramDatabase();
+            var obj = new Data.Models.PortableExecutable.DebugData.RSDSProgramDatabase();
 
             obj.Signature = data.ReadUInt32LittleEndian(ref offset);
             if (obj.Signature != 0x53445352)
@@ -231,7 +231,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
         /// <returns>A filled accelerator table resource on success, null on error</returns>
-        public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have data that's invalid for this resource type, we can't do anything
             if (entry?.Data == null || entry.Data.Length % 8 != 0)
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
         /// <returns>A filled side-by-side assembly manifest on success, null on error</returns>
-        public static AssemblyManifest? AsAssemblyManifest(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static AssemblyManifest? AsAssemblyManifest(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -282,7 +282,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a dialog box</param>
         /// <returns>A filled dialog box on success, null on error</returns>
-        public static DialogBoxResource? AsDialogBox(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static DialogBoxResource? AsDialogBox(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -759,7 +759,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a font group</param>
         /// <returns>A filled font group on success, null on error</returns>
-        public static FontGroupHeader? AsFontGroup(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static FontGroupHeader? AsFontGroup(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -828,7 +828,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a menu</param>
         /// <returns>A filled menu on success, null on error</returns>
-        public static MenuResource? AsMenu(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static MenuResource? AsMenu(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -924,7 +924,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a message table resource</param>
         /// <returns>A filled message table resource on success, null on error</returns>
-        public static MessageResourceData? AsMessageResourceData(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static MessageResourceData? AsMessageResourceData(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1012,10 +1012,10 @@ namespace SabreTools.Serialization.Extensions
             // Align to the DWORD boundary if we're not at the end
             data.AlignToBoundary(ref offset, 4);
 
-            var stringFileInfoChildren = new List<Models.PortableExecutable.Resource.Entries.StringTable>();
+            var stringFileInfoChildren = new List<Data.Models.PortableExecutable.Resource.Entries.StringTable>();
             while ((offset - currentOffset) < stringFileInfo.Length)
             {
-                var stringTable = new Models.PortableExecutable.Resource.Entries.StringTable();
+                var stringTable = new Data.Models.PortableExecutable.Resource.Entries.StringTable();
 
                 stringTable.Length = data.ReadUInt16LittleEndian(ref offset);
                 stringTable.ValueLength = data.ReadUInt16LittleEndian(ref offset);
@@ -1069,7 +1069,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
         /// <returns>A filled string table resource on success, null on error</returns>
-        public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static Dictionary<int, string?>? AsStringTable(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1161,7 +1161,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
         /// <returns>A filled version info resource on success, null on error</returns>
-        public static VersionInfo? AsVersionInfo(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static VersionInfo? AsVersionInfo(this Data.Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
             if (entry?.Data == null)
@@ -1358,10 +1358,10 @@ namespace SabreTools.Serialization.Extensions
         /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled ResourceHeader on success, null on error</returns>
-        public static Models.PortableExecutable.Resource.ResourceHeader ParseResourceHeader(this byte[] data, ref int offset)
+        public static Data.Models.PortableExecutable.Resource.ResourceHeader ParseResourceHeader(this byte[] data, ref int offset)
         {
             // Read in the table
-            var obj = new Models.PortableExecutable.Resource.ResourceHeader();
+            var obj = new Data.Models.PortableExecutable.Resource.ResourceHeader();
 
             obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
             obj.HeaderSize = data.ReadUInt32LittleEndian(ref offset);

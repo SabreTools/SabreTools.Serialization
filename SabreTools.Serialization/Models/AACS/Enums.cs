@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     public enum MediaKeyBlockType : uint
     {

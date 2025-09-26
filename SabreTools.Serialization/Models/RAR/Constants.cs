@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.RAR
+namespace SabreTools.Data.Models.RAR
 {
     public static class Constants
     {

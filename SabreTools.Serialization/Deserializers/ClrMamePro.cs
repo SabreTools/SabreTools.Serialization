@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Readers;
-using SabreTools.Serialization.Models.ClrMamePro;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Deserializers
                         switch (reader.TopLevel)
                         {
                             case "clrmamepro":
-                                dat.ClrMamePro = new Models.ClrMamePro.ClrMamePro();
+                                dat.ClrMamePro = new Data.Models.ClrMamePro.ClrMamePro();
                                 break;
                             case "game":
                                 game = new Game();
@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Deserializers
                         && reader.RowType == CmpRowType.Standalone)
                     {
                         // Create the block if we haven't already
-                        dat.ClrMamePro ??= new Models.ClrMamePro.ClrMamePro();
+                        dat.ClrMamePro ??= new Data.Models.ClrMamePro.ClrMamePro();
 
                         switch (reader.Standalone?.Key?.ToLowerInvariant())
                         {

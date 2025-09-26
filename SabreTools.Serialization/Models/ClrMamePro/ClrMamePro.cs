@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.ClrMamePro
+namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>clrmamepro</remarks>
     public class ClrMamePro

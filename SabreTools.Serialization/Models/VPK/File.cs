@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.VPK
+namespace SabreTools.Data.Models.VPK
 {
     /// <summary>
     /// Valve Package File

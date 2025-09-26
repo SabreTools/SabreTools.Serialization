@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.PKZIP;
+using SabreTools.Data.Models.PKZIP;
 
 namespace SabreTools.Serialization.Wrappers
 {

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.COFF
+﻿namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// Immediately following the COFF symbol table is the COFF string table. The

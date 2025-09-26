@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.CFB
+namespace SabreTools.Data.Models.CFB
 {
     /// <see href="https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-CFB/%5bMS-CFB%5d.pdf"/>
     [StructLayout(LayoutKind.Sequential)]

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.DebugData
+namespace SabreTools.Data.Models.PortableExecutable.DebugData
 {
     /// <summary>
     /// Image files contain an optional debug directory that indicates what form

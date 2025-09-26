@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PlayJ
+namespace SabreTools.Data.Models.PlayJ
 {
     /// <see href="http://www.playj.com/static/genreindex_XX.html"/>
     public enum Genre

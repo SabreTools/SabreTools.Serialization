@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.TAR
+namespace SabreTools.Data.Models.TAR
 {
     [Flags]
     public enum Mode : ushort

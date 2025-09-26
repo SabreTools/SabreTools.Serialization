@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PlayStation3
+namespace SabreTools.Data.Models.PlayStation3
 {
     /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/> 
     [StructLayout(LayoutKind.Sequential)]

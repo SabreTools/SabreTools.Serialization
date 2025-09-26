@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.MSDOS
+namespace SabreTools.Data.Models.MSDOS
 {
     /// <summary>
     /// Each pointer in the relocation table looks as such

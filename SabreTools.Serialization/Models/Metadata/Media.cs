@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("media"), XmlRoot("media")]
     public class Media : DatItem

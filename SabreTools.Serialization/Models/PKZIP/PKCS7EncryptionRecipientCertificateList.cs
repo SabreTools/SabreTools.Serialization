@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PKZIP
+namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// This field MAY contain information about each of the certificates

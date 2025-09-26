@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.MoPaQ
+namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// The HET table is present if the HetTablePos64 member of MPQ header is

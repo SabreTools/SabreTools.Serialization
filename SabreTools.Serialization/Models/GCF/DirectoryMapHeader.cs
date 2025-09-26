@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.GCF
+namespace SabreTools.Data.Models.GCF
 {
     /// <remarks>
     /// Added in version 4 or version 5.

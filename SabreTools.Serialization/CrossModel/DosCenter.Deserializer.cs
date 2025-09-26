@@ -1,24 +1,24 @@
 using System;
+using SabreTools.Data.Models.DosCenter;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.DosCenter;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class DosCenter : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
+    public partial class DosCenter : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj)
+        public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
             var metadataFile = new MetadataFile();
 
-            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
             if (header != null)
                 metadataFile.DosCenter = ConvertHeaderFromInternalModel(header);
 
-            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
                 metadataFile.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -28,17 +28,17 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.DosCenter.DosCenter"/>
         /// </summary>
-        private static Models.DosCenter.DosCenter ConvertHeaderFromInternalModel(Models.Metadata.Header item)
+        private static Data.Models.DosCenter.DosCenter ConvertHeaderFromInternalModel(Data.Models.Metadata.Header item)
         {
-            var dosCenter = new Models.DosCenter.DosCenter
+            var dosCenter = new Data.Models.DosCenter.DosCenter
             {
-                Name = item.ReadString(Models.Metadata.Header.NameKey),
-                Description = item.ReadString(Models.Metadata.Header.DescriptionKey),
-                Version = item.ReadString(Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Models.Metadata.Header.AuthorKey),
-                Homepage = item.ReadString(Models.Metadata.Header.HomepageKey),
-                Comment = item.ReadString(Models.Metadata.Header.CommentKey),
+                Name = item.ReadString(Data.Models.Metadata.Header.NameKey),
+                Description = item.ReadString(Data.Models.Metadata.Header.DescriptionKey),
+                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
+                Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
+                Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
+                Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
+                Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
             };
             return dosCenter;
         }
@@ -46,14 +46,14 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Game"/>
         /// </summary>
-        private static Game ConvertMachineFromInternalModel(Models.Metadata.Machine item)
+        private static Game ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
             var game = new Game
             {
-                Name = item.ReadString(Models.Metadata.Machine.NameKey),
+                Name = item.ReadString(Data.Models.Metadata.Machine.NameKey),
             };
 
-            var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
+            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
                 game.File = Array.ConvertAll(roms, ConvertFromInternalModel);
 
@@ -63,15 +63,15 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="File"/>
         /// </summary>
-        private static File ConvertFromInternalModel(Models.Metadata.Rom item)
+        private static File ConvertFromInternalModel(Data.Models.Metadata.Rom item)
         {
             var file = new File
             {
-                Name = item.ReadString(Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Models.Metadata.Rom.CRCKey),
-                SHA1 = item.ReadString(Models.Metadata.Rom.SHA1Key),
-                Date = item.ReadString(Models.Metadata.Rom.DateKey),
+                Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                SHA1 = item.ReadString(Data.Models.Metadata.Rom.SHA1Key),
+                Date = item.ReadString(Data.Models.Metadata.Rom.DateKey),
             };
             return file;
         }

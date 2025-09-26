@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PFF
+namespace SabreTools.Data.Models.PFF
 {
     /// <see href="https://devilsclaws.net/download/file-pff-new-bz2"/>
     public static class Constants

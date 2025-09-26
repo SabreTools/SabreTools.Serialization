@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.OpenMSX;
+using SabreTools.Data.Models.OpenMSX;
 
 namespace SabreTools.Serialization.Serializers
 {

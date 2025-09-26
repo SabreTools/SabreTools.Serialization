@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PlayStation3
+namespace SabreTools.Data.Models.PlayStation3
 {
     /// <see href="https://psdevwiki.com/ps3/PS3_DISC.SFB"/> 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

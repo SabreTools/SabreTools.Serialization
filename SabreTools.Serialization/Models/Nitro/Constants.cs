@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Nitro
+namespace SabreTools.Data.Models.Nitro
 {
     public static class Constants
     {

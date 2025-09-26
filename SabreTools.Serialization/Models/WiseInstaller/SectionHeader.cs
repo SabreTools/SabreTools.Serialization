@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller
+namespace SabreTools.Data.Models.WiseInstaller
 {
     /// <summary>
     /// .WISE sections seem to be present in what virustotal calls "Self Extracting Wise Installer"s. These sections

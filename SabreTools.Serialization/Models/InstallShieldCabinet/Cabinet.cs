@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.InstallShieldCabinet
+namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     /// <see href="https://github.com/twogood/unshield/blob/main/lib/cabfile.h"/>
     /// <see href="https://github.com/twogood/unshield/blob/main/lib/internal.h"/>

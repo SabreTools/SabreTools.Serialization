@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.Quantum
+namespace SabreTools.Data.Models.Quantum
 {
     /// <summary>
     /// Quantum archive file header

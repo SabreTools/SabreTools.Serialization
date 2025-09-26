@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The DECIMAL (Packet Version) packet represents a DECIMAL as specified in [MS-OAUT] section

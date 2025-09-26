@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.Listrom();
 
             // Build the data
-            Models.Listrom.MetadataFile mf = Build();
+            Data.Models.Listrom.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.Listrom.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.Listrom.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -99,9 +99,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.Listrom.MetadataFile Build()
+        private static Data.Models.Listrom.MetadataFile Build()
         {
-            var romGood = new Models.Listrom.Row
+            var romGood = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Size = "12345",
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 NoGoodDumpKnown = false,
             };
 
-            var romBad = new Models.Listrom.Row
+            var romBad = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Size = "12345",
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 NoGoodDumpKnown = false,
             };
 
-            var diskGoodMd5 = new Models.Listrom.Row
+            var diskGoodMd5 = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Bad = false,
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 NoGoodDumpKnown = false,
             };
 
-            var diskGoodSha1 = new Models.Listrom.Row
+            var diskGoodSha1 = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Bad = false,
@@ -139,7 +139,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 NoGoodDumpKnown = false,
             };
 
-            var diskBad = new Models.Listrom.Row
+            var diskBad = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Bad = false,
@@ -148,19 +148,19 @@ namespace SabreTools.Serialization.Test.Deserializers
                 NoGoodDumpKnown = true,
             };
 
-            var device = new Models.Listrom.Set()
+            var device = new Data.Models.Listrom.Set()
             {
                 Device = "XXXXXX",
                 Row = [romGood, romBad],
             };
 
-            var driver = new Models.Listrom.Set()
+            var driver = new Data.Models.Listrom.Set()
             {
                 Driver = "XXXXXX",
                 Row = [diskGoodMd5, diskGoodSha1, diskBad],
             };
 
-            return new Models.Listrom.MetadataFile
+            return new Data.Models.Listrom.MetadataFile
             {
                 Set = [device, driver],
             };
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Set
         /// </summary>
-        private static void ValidateDevice(Models.Listrom.Set? set)
+        private static void ValidateDevice(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
             Assert.Equal("XXXXXX", set.Device);
@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Set
         /// </summary>
-        private static void ValidateDriver(Models.Listrom.Set? set)
+        private static void ValidateDriver(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
             Assert.Equal("XXXXXX", set.Driver);
@@ -200,7 +200,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateGoodRom(Models.Listrom.Row? row)
+        private static void ValidateGoodRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
@@ -214,7 +214,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateBadRom(Models.Listrom.Row? row)
+        private static void ValidateBadRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
@@ -228,7 +228,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateGoodMd5Disk(Models.Listrom.Row? row)
+        private static void ValidateGoodMd5Disk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
@@ -241,7 +241,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateGoodSha1Disk(Models.Listrom.Row? row)
+        private static void ValidateGoodSha1Disk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
@@ -254,7 +254,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateBadDisk(Models.Listrom.Row? row)
+        private static void ValidateBadDisk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);

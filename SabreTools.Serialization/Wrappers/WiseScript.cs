@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.WiseInstaller;
+using SabreTools.Data.Models.WiseInstaller.Actions;
 #if NETFRAMEWORK || NETSTANDARD
 using SabreTools.IO.Extensions;
 #endif
-using SabreTools.Serialization.Models.WiseInstaller;
-using SabreTools.Serialization.Models.WiseInstaller.Actions;
 
 namespace SabreTools.Serialization.Wrappers
 {

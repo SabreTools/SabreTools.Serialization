@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.N3DS
+namespace SabreTools.Data.Models.N3DS
 {
     /// <see href="https://www.3dbrew.org/wiki/NCCH/Extended_Header#ARM9_Access_Control"/>
     [StructLayout(LayoutKind.Sequential)]

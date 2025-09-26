@@ -1,9 +1,9 @@
 using System.IO;
-using SabreTools.Serialization.Models.N3DS;
+using SabreTools.Data.Models.N3DS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class CIA : WrapperBase<Models.N3DS.CIA>
+    public class CIA : WrapperBase<Data.Models.N3DS.CIA>
     {
         #region Descriptive Properties
 
@@ -15,22 +15,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, byte[] data) : base(model, data) { }
+        public CIA(Data.Models.N3DS.CIA model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, byte[] data, int offset) : base(model, data, offset) { }
+        public CIA(Data.Models.N3DS.CIA model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public CIA(Data.Models.N3DS.CIA model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, Stream data) : base(model, data) { }
+        public CIA(Data.Models.N3DS.CIA model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, Stream data, long offset) : base(model, data, offset) { }
+        public CIA(Data.Models.N3DS.CIA model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public CIA(Models.N3DS.CIA model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public CIA(Data.Models.N3DS.CIA model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

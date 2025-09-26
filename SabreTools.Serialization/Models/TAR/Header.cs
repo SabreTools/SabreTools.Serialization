@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.TAR
+namespace SabreTools.Data.Models.TAR
 {
     /// <see href="https://www.ibm.com/docs/en/aix/7.3?topic=files-tarh-file"/> 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

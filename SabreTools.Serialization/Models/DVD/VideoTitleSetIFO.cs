@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     /// <see href="https://dvd.sourceforge.net/dvdinfo/ifo.html"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

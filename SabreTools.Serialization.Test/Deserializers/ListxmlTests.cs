@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.Listxml();
 
             // Build the data
-            Models.Listxml.Mame mame = Build(game: true);
+            Data.Models.Listxml.Mame mame = Build(game: true);
 
             // Serialize to stream
             Stream? actual = serializer.Serialize(mame);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.Listxml.Mame? newMame = deserializer.Deserialize(actual);
+            Data.Models.Listxml.Mame? newMame = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMame);
@@ -106,14 +106,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.Listxml();
 
             // Build the data
-            Models.Listxml.Mame mame = Build(game: false);
+            Data.Models.Listxml.Mame mame = Build(game: false);
 
             // Serialize to stream
             Stream? actual = serializer.Serialize(mame);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.Listxml.Mame? newMame = deserializer.Deserialize(actual);
+            Data.Models.Listxml.Mame? newMame = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMame);
@@ -129,16 +129,16 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.Listxml.Mame Build(bool game)
+        private static Data.Models.Listxml.Mame Build(bool game)
         {
-            var biosset = new Models.Listxml.BiosSet
+            var biosset = new Data.Models.Listxml.BiosSet
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
                 Default = "XXXXXX",
             };
 
-            var rom = new Models.Listxml.Rom
+            var rom = new Data.Models.Listxml.Rom
             {
                 Name = "XXXXXX",
                 Bios = "XXXXXX",
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 SoundOnly = "XXXXXX",
             };
 
-            var disk = new Models.Listxml.Disk
+            var disk = new Data.Models.Listxml.Disk
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -167,17 +167,17 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Optional = "XXXXXX",
             };
 
-            var deviceref = new Models.Listxml.DeviceRef
+            var deviceref = new Data.Models.Listxml.DeviceRef
             {
                 Name = "XXXXXX",
             };
 
-            var sample = new Models.Listxml.Sample
+            var sample = new Data.Models.Listxml.Sample
             {
                 Name = "XXXXXX",
             };
 
-            var chip = new Models.Listxml.Chip
+            var chip = new Data.Models.Listxml.Chip
             {
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Clock = "XXXXXX",
             };
 
-            var display = new Models.Listxml.Display
+            var display = new Data.Models.Listxml.Display
             {
                 Tag = "XXXXXX",
                 Type = "XXXXXX",
@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 VBStart = "XXXXXX",
             };
 
-            var video = new Models.Listxml.Video
+            var video = new Data.Models.Listxml.Video
             {
                 Screen = "XXXXXX",
                 Orientation = "XXXXXX",
@@ -215,12 +215,12 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Refresh = "XXXXXX",
             };
 
-            var sound = new Models.Listxml.Sound
+            var sound = new Data.Models.Listxml.Sound
             {
                 Channels = "XXXXXX",
             };
 
-            var control = new Models.Listxml.Control
+            var control = new Data.Models.Listxml.Control
             {
                 Type = "XXXXXX",
                 Player = "XXXXXX",
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Ways3 = "XXXXXX",
             };
 
-            var input = new Models.Listxml.Input
+            var input = new Data.Models.Listxml.Input
             {
                 Service = "XXXXXX",
                 Tilt = "XXXXXX",
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Control = [control],
             };
 
-            var condition = new Models.Listxml.Condition
+            var condition = new Data.Models.Listxml.Condition
             {
                 Tag = "XXXXXX",
                 Mask = "XXXXXX",
@@ -255,14 +255,14 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Value = "XXXXXX",
             };
 
-            var diplocation = new Models.Listxml.DipLocation
+            var diplocation = new Data.Models.Listxml.DipLocation
             {
                 Name = "XXXXXX",
                 Number = "XXXXXX",
                 Inverted = "XXXXXX",
             };
 
-            var dipvalue = new Models.Listxml.DipValue
+            var dipvalue = new Data.Models.Listxml.DipValue
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Condition = condition,
             };
 
-            var dipswitch = new Models.Listxml.DipSwitch
+            var dipswitch = new Data.Models.Listxml.DipSwitch
             {
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
@@ -280,14 +280,14 @@ namespace SabreTools.Serialization.Test.Deserializers
                 DipValue = [dipvalue],
             };
 
-            var conflocation = new Models.Listxml.ConfLocation
+            var conflocation = new Data.Models.Listxml.ConfLocation
             {
                 Name = "XXXXXX",
                 Number = "XXXXXX",
                 Inverted = "XXXXXX",
             };
 
-            var confsetting = new Models.Listxml.ConfSetting
+            var confsetting = new Data.Models.Listxml.ConfSetting
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
@@ -295,7 +295,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Condition = condition,
             };
 
-            var configuration = new Models.Listxml.Configuration
+            var configuration = new Data.Models.Listxml.Configuration
             {
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
@@ -305,25 +305,25 @@ namespace SabreTools.Serialization.Test.Deserializers
                 ConfSetting = [confsetting],
             };
 
-            var analog = new Models.Listxml.Analog
+            var analog = new Data.Models.Listxml.Analog
             {
                 Mask = "XXXXXX",
             };
 
-            var port = new Models.Listxml.Port
+            var port = new Data.Models.Listxml.Port
             {
                 Tag = "XXXXXX",
                 Analog = [analog],
             };
 
-            var adjuster = new Models.Listxml.Adjuster
+            var adjuster = new Data.Models.Listxml.Adjuster
             {
                 Name = "XXXXXX",
                 Default = "XXXXXX",
                 Condition = condition,
             };
 
-            var driver = new Models.Listxml.Driver
+            var driver = new Data.Models.Listxml.Driver
             {
                 Status = "XXXXXX",
                 Color = "XXXXXX",
@@ -338,25 +338,25 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Incomplete = "XXXXXX",
             };
 
-            var feature = new Models.Listxml.Feature
+            var feature = new Data.Models.Listxml.Feature
             {
                 Type = "XXXXXX",
                 Status = "XXXXXX",
                 Overall = "XXXXXX",
             };
 
-            var instance = new Models.Listxml.Instance
+            var instance = new Data.Models.Listxml.Instance
             {
                 Name = "XXXXXX",
                 BriefName = "XXXXXX",
             };
 
-            var extension = new Models.Listxml.Extension
+            var extension = new Data.Models.Listxml.Extension
             {
                 Name = "XXXXXX",
             };
 
-            var device = new Models.Listxml.Device
+            var device = new Data.Models.Listxml.Device
             {
                 Type = "XXXXXX",
                 Tag = "XXXXXX",
@@ -367,20 +367,20 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Extension = [extension],
             };
 
-            var slotOption = new Models.Listxml.SlotOption
+            var slotOption = new Data.Models.Listxml.SlotOption
             {
                 Name = "XXXXXX",
                 DevName = "XXXXXX",
                 Default = "XXXXXX",
             };
 
-            var slot = new Models.Listxml.Slot
+            var slot = new Data.Models.Listxml.Slot
             {
                 Name = "XXXXXX",
                 SlotOption = [slotOption],
             };
 
-            var softwarelist = new Models.Listxml.SoftwareList
+            var softwarelist = new Data.Models.Listxml.SoftwareList
             {
                 Tag = "XXXXXX",
                 Name = "XXXXXX",
@@ -388,16 +388,16 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Filter = "XXXXXX",
             };
 
-            var ramoption = new Models.Listxml.RamOption
+            var ramoption = new Data.Models.Listxml.RamOption
             {
                 Name = "XXXXXX",
                 Default = "XXXXXX",
                 Content = "XXXXXX",
             };
 
-            Models.Listxml.GameBase gameBase = game
-                ? new Models.Listxml.Game()
-                : new Models.Listxml.Machine();
+            Data.Models.Listxml.GameBase gameBase = game
+                ? new Data.Models.Listxml.Game()
+                : new Data.Models.Listxml.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.SourceFile = "XXXXXX";
             gameBase.IsBios = "XXXXXX";
@@ -432,7 +432,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             gameBase.SoftwareList = [softwarelist];
             gameBase.RamOption = [ramoption];
 
-            return new Models.Listxml.Mame
+            return new Data.Models.Listxml.Mame
             {
                 Build = "XXXXXX",
                 Debug = "XXXXXX",
@@ -444,7 +444,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a GameBase
         /// </summary>
-        private static void Validate(Models.Listxml.GameBase? gb)
+        private static void Validate(Data.Models.Listxml.GameBase? gb)
         {
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
@@ -538,7 +538,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a BiosSet
         /// </summary>
-        private static void Validate(Models.Listxml.BiosSet? biosset)
+        private static void Validate(Data.Models.Listxml.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
@@ -549,7 +549,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Rom
         /// </summary>
-        private static void Validate(Models.Listxml.Rom? rom)
+        private static void Validate(Data.Models.Listxml.Rom? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);
@@ -569,7 +569,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Disk
         /// </summary>
-        private static void Validate(Models.Listxml.Disk? disk)
+        private static void Validate(Data.Models.Listxml.Disk? disk)
         {
             Assert.NotNull(disk);
             Assert.Equal("XXXXXX", disk.Name);
@@ -586,7 +586,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DeviceRef
         /// </summary>
-        private static void Validate(Models.Listxml.DeviceRef? deviceref)
+        private static void Validate(Data.Models.Listxml.DeviceRef? deviceref)
         {
             Assert.NotNull(deviceref);
             Assert.Equal("XXXXXX", deviceref.Name);
@@ -595,7 +595,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Sample
         /// </summary>
-        private static void Validate(Models.Listxml.Sample? sample)
+        private static void Validate(Data.Models.Listxml.Sample? sample)
         {
             Assert.NotNull(sample);
             Assert.Equal("XXXXXX", sample.Name);
@@ -604,7 +604,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Chip
         /// </summary>
-        private static void Validate(Models.Listxml.Chip? chip)
+        private static void Validate(Data.Models.Listxml.Chip? chip)
         {
             Assert.NotNull(chip);
             Assert.Equal("XXXXXX", chip.Name);
@@ -617,7 +617,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Display
         /// </summary>
-        private static void Validate(Models.Listxml.Display? display)
+        private static void Validate(Data.Models.Listxml.Display? display)
         {
             Assert.NotNull(display);
             Assert.Equal("XXXXXX", display.Tag);
@@ -639,7 +639,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Video
         /// </summary>
-        private static void Validate(Models.Listxml.Video? video)
+        private static void Validate(Data.Models.Listxml.Video? video)
         {
             Assert.NotNull(video);
             Assert.Equal("XXXXXX", video.Screen);
@@ -654,7 +654,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Sound
         /// </summary>
-        private static void Validate(Models.Listxml.Sound? sound)
+        private static void Validate(Data.Models.Listxml.Sound? sound)
         {
             Assert.NotNull(sound);
             Assert.Equal("XXXXXX", sound.Channels);
@@ -663,7 +663,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Input
         /// </summary>
-        private static void Validate(Models.Listxml.Input? input)
+        private static void Validate(Data.Models.Listxml.Input? input)
         {
             Assert.NotNull(input);
             Assert.Equal("XXXXXX", input.Service);
@@ -681,7 +681,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Control
         /// </summary>
-        private static void Validate(Models.Listxml.Control? control)
+        private static void Validate(Data.Models.Listxml.Control? control)
         {
             Assert.NotNull(control);
             Assert.Equal("XXXXXX", control.Type);
@@ -701,7 +701,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DipSwitch
         /// </summary>
-        private static void Validate(Models.Listxml.DipSwitch? dipswitch)
+        private static void Validate(Data.Models.Listxml.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
             Assert.Equal("XXXXXX", dipswitch.Name);
@@ -721,7 +721,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Condition
         /// </summary>
-        private static void Validate(Models.Listxml.Condition? condition)
+        private static void Validate(Data.Models.Listxml.Condition? condition)
         {
             Assert.NotNull(condition);
             Assert.Equal("XXXXXX", condition.Tag);
@@ -733,7 +733,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DipLocation
         /// </summary>
-        private static void Validate(Models.Listxml.DipLocation? diplocation)
+        private static void Validate(Data.Models.Listxml.DipLocation? diplocation)
         {
             Assert.NotNull(diplocation);
             Assert.Equal("XXXXXX", diplocation.Name);
@@ -744,7 +744,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DipValue
         /// </summary>
-        private static void Validate(Models.Listxml.DipValue? dipvalue)
+        private static void Validate(Data.Models.Listxml.DipValue? dipvalue)
         {
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);
@@ -756,7 +756,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Configuration
         /// </summary>
-        private static void Validate(Models.Listxml.Configuration? configuration)
+        private static void Validate(Data.Models.Listxml.Configuration? configuration)
         {
             Assert.NotNull(configuration);
             Assert.Equal("XXXXXX", configuration.Name);
@@ -776,7 +776,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a ConfLocation
         /// </summary>
-        private static void Validate(Models.Listxml.ConfLocation? conflocation)
+        private static void Validate(Data.Models.Listxml.ConfLocation? conflocation)
         {
             Assert.NotNull(conflocation);
             Assert.Equal("XXXXXX", conflocation.Name);
@@ -787,7 +787,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a ConfSetting
         /// </summary>
-        private static void Validate(Models.Listxml.ConfSetting? confsetting)
+        private static void Validate(Data.Models.Listxml.ConfSetting? confsetting)
         {
             Assert.NotNull(confsetting);
             Assert.Equal("XXXXXX", confsetting.Name);
@@ -799,7 +799,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Port
         /// </summary>
-        private static void Validate(Models.Listxml.Port? port)
+        private static void Validate(Data.Models.Listxml.Port? port)
         {
             Assert.NotNull(port);
             Assert.Equal("XXXXXX", port.Tag);
@@ -812,7 +812,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Analog
         /// </summary>
-        private static void Validate(Models.Listxml.Analog? analog)
+        private static void Validate(Data.Models.Listxml.Analog? analog)
         {
             Assert.NotNull(analog);
             Assert.Equal("XXXXXX", analog.Mask);
@@ -821,7 +821,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Adjuster
         /// </summary>
-        private static void Validate(Models.Listxml.Adjuster? adjuster)
+        private static void Validate(Data.Models.Listxml.Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
             Assert.Equal("XXXXXX", adjuster.Name);
@@ -832,7 +832,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Driver
         /// </summary>
-        private static void Validate(Models.Listxml.Driver? driver)
+        private static void Validate(Data.Models.Listxml.Driver? driver)
         {
             Assert.NotNull(driver);
             Assert.Equal("XXXXXX", driver.Status);
@@ -851,7 +851,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Feature
         /// </summary>
-        private static void Validate(Models.Listxml.Feature? feature)
+        private static void Validate(Data.Models.Listxml.Feature? feature)
         {
             Assert.NotNull(feature);
             Assert.Equal("XXXXXX", feature.Type);
@@ -862,7 +862,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Device
         /// </summary>
-        private static void Validate(Models.Listxml.Device? device)
+        private static void Validate(Data.Models.Listxml.Device? device)
         {
             Assert.NotNull(device);
             Assert.Equal("XXXXXX", device.Type);
@@ -880,7 +880,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Instance
         /// </summary>
-        private static void Validate(Models.Listxml.Instance? instance)
+        private static void Validate(Data.Models.Listxml.Instance? instance)
         {
             Assert.NotNull(instance);
             Assert.Equal("XXXXXX", instance.Name);
@@ -890,7 +890,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Extension
         /// </summary>
-        private static void Validate(Models.Listxml.Extension? extension)
+        private static void Validate(Data.Models.Listxml.Extension? extension)
         {
             Assert.NotNull(extension);
             Assert.Equal("XXXXXX", extension.Name);
@@ -899,7 +899,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Slot
         /// </summary>
-        private static void Validate(Models.Listxml.Slot? slot)
+        private static void Validate(Data.Models.Listxml.Slot? slot)
         {
             Assert.NotNull(slot);
             Assert.Equal("XXXXXX", slot.Name);
@@ -912,7 +912,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a SlotOption
         /// </summary>
-        private static void Validate(Models.Listxml.SlotOption? slotoption)
+        private static void Validate(Data.Models.Listxml.SlotOption? slotoption)
         {
             Assert.NotNull(slotoption);
             Assert.Equal("XXXXXX", slotoption.Name);
@@ -923,7 +923,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a SoftwareList
         /// </summary>
-        private static void Validate(Models.Listxml.SoftwareList? softwarelist)
+        private static void Validate(Data.Models.Listxml.SoftwareList? softwarelist)
         {
             Assert.NotNull(softwarelist);
             Assert.Equal("XXXXXX", softwarelist.Tag);
@@ -935,7 +935,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a RamOption
         /// </summary>
-        private static void Validate(Models.Listxml.RamOption? ramoption)
+        private static void Validate(Data.Models.Listxml.RamOption? ramoption)
         {
             Assert.NotNull(ramoption);
             Assert.Equal("XXXXXX", ramoption.Name);

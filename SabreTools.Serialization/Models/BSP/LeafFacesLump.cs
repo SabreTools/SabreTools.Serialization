@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The leafface lump (Lump 16) is an array of unsigned shorts which are

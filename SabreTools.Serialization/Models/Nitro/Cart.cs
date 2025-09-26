@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Nitro
+namespace SabreTools.Data.Models.Nitro
 {
     /// <summary>
     /// Represents a DS/DSi cart image

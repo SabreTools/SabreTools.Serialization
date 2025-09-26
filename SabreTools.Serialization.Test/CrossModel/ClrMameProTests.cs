@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new ClrMamePro();
 
             // Build the data
-            Models.ClrMamePro.MetadataFile mf = Build(game: true);
+            Data.Models.ClrMamePro.MetadataFile mf = Build(game: true);
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.ClrMamePro.MetadataFile? newMf = serializer.Deserialize(metadata, game: true);
+            Data.Models.ClrMamePro.MetadataFile? newMf = serializer.Deserialize(metadata, game: true);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -36,14 +36,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new ClrMamePro();
 
             // Build the data
-            Models.ClrMamePro.MetadataFile mf = Build(game: false);
+            Data.Models.ClrMamePro.MetadataFile mf = Build(game: false);
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.ClrMamePro.MetadataFile? newMf = serializer.Deserialize(metadata, game: false);
+            Data.Models.ClrMamePro.MetadataFile? newMf = serializer.Deserialize(metadata, game: false);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -56,9 +56,9 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.ClrMamePro.MetadataFile Build(bool game)
+        private static Data.Models.ClrMamePro.MetadataFile Build(bool game)
         {
-            var cmp = new Models.ClrMamePro.ClrMamePro
+            var cmp = new Data.Models.ClrMamePro.ClrMamePro
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 ForcePacking = "XXXXXX",
             };
 
-            var release = new Models.ClrMamePro.Release
+            var release = new Data.Models.ClrMamePro.Release
             {
                 Name = "XXXXXX",
                 Region = "XXXXXX",
@@ -86,14 +86,14 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Default = "XXXXXX",
             };
 
-            var biosset = new Models.ClrMamePro.BiosSet
+            var biosset = new Data.Models.ClrMamePro.BiosSet
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
                 Default = "XXXXXX",
             };
 
-            var rom = new Models.ClrMamePro.Rom
+            var rom = new Data.Models.ClrMamePro.Rom
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 MIA = "XXXXXX",
             };
 
-            var disk = new Models.ClrMamePro.Disk
+            var disk = new Data.Models.ClrMamePro.Disk
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -132,17 +132,17 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Flags = "XXXXXX",
             };
 
-            var sample = new Models.ClrMamePro.Sample
+            var sample = new Data.Models.ClrMamePro.Sample
             {
                 Name = "XXXXXX",
             };
 
-            var archive = new Models.ClrMamePro.Archive
+            var archive = new Data.Models.ClrMamePro.Archive
             {
                 Name = "XXXXXX",
             };
 
-            var media = new Models.ClrMamePro.Media
+            var media = new Data.Models.ClrMamePro.Media
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 SpamSum = "XXXXXX",
             };
 
-            var chip = new Models.ClrMamePro.Chip
+            var chip = new Data.Models.ClrMamePro.Chip
             {
                 Type = "XXXXXX",
                 Name = "XXXXXX",
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Clock = "XXXXXX",
             };
 
-            var video = new Models.ClrMamePro.Video
+            var video = new Data.Models.ClrMamePro.Video
             {
                 Screen = "XXXXXX",
                 Orientation = "XXXXXX",
@@ -170,12 +170,12 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Freq = "XXXXXX",
             };
 
-            var sound = new Models.ClrMamePro.Sound
+            var sound = new Data.Models.ClrMamePro.Sound
             {
                 Channels = "XXXXXX",
             };
 
-            var input = new Models.ClrMamePro.Input
+            var input = new Data.Models.ClrMamePro.Input
             {
                 Players = "XXXXXX",
                 Control = "XXXXXX",
@@ -185,14 +185,14 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Service = "XXXXXX",
             };
 
-            var dipswitch = new Models.ClrMamePro.DipSwitch
+            var dipswitch = new Data.Models.ClrMamePro.DipSwitch
             {
                 Name = "XXXXXX",
                 Entry = ["XXXXXX"],
                 Default = "XXXXXX",
             };
 
-            var driver = new Models.ClrMamePro.Driver
+            var driver = new Data.Models.ClrMamePro.Driver
             {
                 Status = "XXXXXX",
                 Color = "XXXXXX",
@@ -202,9 +202,9 @@ namespace SabreTools.Serialization.Test.CrossModel
             };
 
             // TODO: This omits Set, should that have a separate case?
-            Models.ClrMamePro.GameBase gameBase = game
-                ? new Models.ClrMamePro.Game()
-                : new Models.ClrMamePro.Machine();
+            Data.Models.ClrMamePro.GameBase gameBase = game
+                ? new Data.Models.ClrMamePro.Game()
+                : new Data.Models.ClrMamePro.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.Description = "XXXXXX";
             gameBase.Year = "XXXXXX";
@@ -227,7 +227,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             gameBase.DipSwitch = [dipswitch];
             gameBase.Driver = driver;
 
-            return new Models.ClrMamePro.MetadataFile
+            return new Data.Models.ClrMamePro.MetadataFile
             {
                 ClrMamePro = cmp,
                 Game = [gameBase],
@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a ClrMamePro
         /// </summary>
-        private static void Validate(Models.ClrMamePro.ClrMamePro? cmp)
+        private static void Validate(Data.Models.ClrMamePro.ClrMamePro? cmp)
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Name);
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a GameBase
         /// </summary>
-        private static void Validate(Models.ClrMamePro.GameBase? gb)
+        private static void Validate(Data.Models.ClrMamePro.GameBase? gb)
         {
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
@@ -321,7 +321,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Release
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Release? release)
+        private static void Validate(Data.Models.ClrMamePro.Release? release)
         {
             Assert.NotNull(release);
             Assert.Equal("XXXXXX", release.Name);
@@ -334,7 +334,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a BiosSet
         /// </summary>
-        private static void Validate(Models.ClrMamePro.BiosSet? biosset)
+        private static void Validate(Data.Models.ClrMamePro.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
@@ -345,7 +345,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Rom
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Rom? rom)
+        private static void Validate(Data.Models.ClrMamePro.Rom? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);
@@ -378,7 +378,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Disk
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Disk? disk)
+        private static void Validate(Data.Models.ClrMamePro.Disk? disk)
         {
             Assert.NotNull(disk);
             Assert.Equal("XXXXXX", disk.Name);
@@ -392,7 +392,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Sample
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Sample? sample)
+        private static void Validate(Data.Models.ClrMamePro.Sample? sample)
         {
             Assert.NotNull(sample);
             Assert.Equal("XXXXXX", sample.Name);
@@ -401,7 +401,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Archive
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Archive? archive)
+        private static void Validate(Data.Models.ClrMamePro.Archive? archive)
         {
             Assert.NotNull(archive);
             Assert.Equal("XXXXXX", archive.Name);
@@ -410,7 +410,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Media
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Media? media)
+        private static void Validate(Data.Models.ClrMamePro.Media? media)
         {
             Assert.NotNull(media);
             Assert.Equal("XXXXXX", media.Name);
@@ -423,7 +423,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Chip
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Chip? chip)
+        private static void Validate(Data.Models.ClrMamePro.Chip? chip)
         {
             Assert.NotNull(chip);
             Assert.Equal("XXXXXX", chip.Type);
@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Video
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Video? video)
+        private static void Validate(Data.Models.ClrMamePro.Video? video)
         {
             Assert.NotNull(video);
             Assert.Equal("XXXXXX", video.Screen);
@@ -450,7 +450,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Sound
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Sound? sound)
+        private static void Validate(Data.Models.ClrMamePro.Sound? sound)
         {
             Assert.NotNull(sound);
             Assert.Equal("XXXXXX", sound.Channels);
@@ -459,7 +459,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Input
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Input? input)
+        private static void Validate(Data.Models.ClrMamePro.Input? input)
         {
             Assert.NotNull(input);
             Assert.Equal("XXXXXX", input.Players);
@@ -473,7 +473,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a DipSwitch
         /// </summary>
-        private static void Validate(Models.ClrMamePro.DipSwitch? dipswitch)
+        private static void Validate(Data.Models.ClrMamePro.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
             Assert.Equal("XXXXXX", dipswitch.Name);
@@ -488,7 +488,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Driver
         /// </summary>
-        private static void Validate(Models.ClrMamePro.Driver? driver)
+        private static void Validate(Data.Models.ClrMamePro.Driver? driver)
         {
             Assert.NotNull(driver);
             Assert.Equal("XXXXXX", driver.Status);

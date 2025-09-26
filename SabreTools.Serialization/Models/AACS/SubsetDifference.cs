@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <see href="https://aacsla.com/wp-content/uploads/2019/02/AACS_Spec_Common_Final_0953.pdf"/>
     [StructLayout(LayoutKind.Sequential)]

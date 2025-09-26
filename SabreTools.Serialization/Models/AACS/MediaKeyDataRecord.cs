@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// This record gives the associated encrypted media key data for the

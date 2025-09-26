@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.ArchiveDotOrg();
 
             // Build the data
-            Models.ArchiveDotOrg.Files files = Build();
+            Data.Models.ArchiveDotOrg.Files files = Build();
 
             // Serialize to stream
             Stream? actual = serializer.Serialize(files);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.ArchiveDotOrg.Files? newFiles = deserializer.Deserialize(actual);
+            Data.Models.ArchiveDotOrg.Files? newFiles = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newFiles);
@@ -97,9 +97,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.ArchiveDotOrg.Files Build()
+        private static Data.Models.ArchiveDotOrg.Files Build()
         {
-            var file = new Models.ArchiveDotOrg.File
+            var file = new Data.Models.ArchiveDotOrg.File
             {
                 Name = "XXXXXX",
                 Source = "XXXXXX",
@@ -163,7 +163,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Width = "XXXXXX",
             };
 
-            return new Models.ArchiveDotOrg.Files
+            return new Data.Models.ArchiveDotOrg.Files
             {
                 File = [file]
             };
@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a File
         /// </summary>
-        private static void Validate(Models.ArchiveDotOrg.File? file)
+        private static void Validate(Data.Models.ArchiveDotOrg.File? file)
         {
             Assert.NotNull(file);
             Assert.Equal("XXXXXX", file.Name);

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Nitro
+namespace SabreTools.Data.Models.Nitro
 {
     /// <summary>
     /// The name list holds the names of the folders, and their contents

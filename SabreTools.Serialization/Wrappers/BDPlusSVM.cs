@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.BDPlus;
+using SabreTools.Data.Models.BDPlus;
 
 namespace SabreTools.Serialization.Wrappers
 {

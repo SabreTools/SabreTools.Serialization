@@ -79,14 +79,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.SeparatedValue();
 
             // Build the data
-            Models.SeparatedValue.MetadataFile mf = Build();
+            Data.Models.SeparatedValue.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf, ',', longHeader: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.SeparatedValue.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.SeparatedValue.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -107,14 +107,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.SeparatedValue();
 
             // Build the data
-            Models.SeparatedValue.MetadataFile mf = Build();
+            Data.Models.SeparatedValue.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf, ',', longHeader: true);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.SeparatedValue.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.SeparatedValue.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -130,11 +130,11 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.SeparatedValue.MetadataFile Build()
+        private static Data.Models.SeparatedValue.MetadataFile Build()
         {
             string[] header = ["header"];
 
-            var disk = new Models.SeparatedValue.Row
+            var disk = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Status = "XXXXXX",
             };
 
-            var media = new Models.SeparatedValue.Row
+            var media = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -163,7 +163,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 SpamSum = "XXXXXX",
             };
 
-            var rom = new Models.SeparatedValue.Row
+            var rom = new Data.Models.SeparatedValue.Row
             {
                 FileName = "XXXXXX",
                 InternalName = "XXXXXX",
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Status = "XXXXXX",
             };
 
-            return new Models.SeparatedValue.MetadataFile
+            return new Data.Models.SeparatedValue.MetadataFile
             {
                 Header = header,
                 Row = [disk, media, rom],
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateDisk(Models.SeparatedValue.Row? row, bool longHeader)
+        private static void ValidateDisk(Data.Models.SeparatedValue.Row? row, bool longHeader)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
@@ -239,7 +239,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateMedia(Models.SeparatedValue.Row? row, bool longHeader)
+        private static void ValidateMedia(Data.Models.SeparatedValue.Row? row, bool longHeader)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);
@@ -273,7 +273,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateRom(Models.SeparatedValue.Row? row, bool longHeader)
+        private static void ValidateRom(Data.Models.SeparatedValue.Row? row, bool longHeader)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.FileName);

@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.InstallShieldCabinet;
+using SabreTools.Data.Models.InstallShieldCabinet;
 
 namespace SabreTools.Serialization.Extensions
 {

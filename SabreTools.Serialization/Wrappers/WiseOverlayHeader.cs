@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.WiseInstaller;
+using SabreTools.Data.Models.WiseInstaller;
 
 namespace SabreTools.Serialization.Wrappers
 {

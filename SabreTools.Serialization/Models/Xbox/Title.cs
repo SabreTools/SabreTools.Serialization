@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Xbox
+namespace SabreTools.Data.Models.Xbox
 {
     /// <summary>
     /// Package Title for each locale, for catalog.js

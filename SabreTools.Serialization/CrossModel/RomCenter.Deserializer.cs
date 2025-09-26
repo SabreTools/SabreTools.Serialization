@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
+using SabreTools.Data.Models.RomCenter;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.RomCenter;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class RomCenter : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
+    public partial class RomCenter : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj)
+        public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
-            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
             var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
-            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
             var items = new List<Rom>();
             foreach (var machine in machines ?? [])
             {
@@ -30,50 +30,50 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="MetadataFile"/>
         /// </summary>
-        private static MetadataFile ConvertHeaderFromInternalModel(Models.Metadata.Header item)
+        private static MetadataFile ConvertHeaderFromInternalModel(Data.Models.Metadata.Header item)
         {
             var metadataFile = new MetadataFile();
 
-            if (item.ContainsKey(Models.Metadata.Header.AuthorKey)
-                || item.ContainsKey(Models.Metadata.Header.VersionKey)
-                || item.ContainsKey(Models.Metadata.Header.EmailKey)
-                || item.ContainsKey(Models.Metadata.Header.HomepageKey)
-                || item.ContainsKey(Models.Metadata.Header.UrlKey)
-                || item.ContainsKey(Models.Metadata.Header.DateKey)
-                || item.ContainsKey(Models.Metadata.Header.CommentKey))
+            if (item.ContainsKey(Data.Models.Metadata.Header.AuthorKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.VersionKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.EmailKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.HomepageKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.UrlKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.DateKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.CommentKey))
             {
                 metadataFile.Credits = new Credits
                 {
-                    Author = item.ReadString(Models.Metadata.Header.AuthorKey),
-                    Version = item.ReadString(Models.Metadata.Header.VersionKey),
-                    Email = item.ReadString(Models.Metadata.Header.EmailKey),
-                    Homepage = item.ReadString(Models.Metadata.Header.HomepageKey),
-                    Url = item.ReadString(Models.Metadata.Header.UrlKey),
-                    Date = item.ReadString(Models.Metadata.Header.DateKey),
-                    Comment = item.ReadString(Models.Metadata.Header.CommentKey),
+                    Author = item.ReadString(Data.Models.Metadata.Header.AuthorKey),
+                    Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
+                    Email = item.ReadString(Data.Models.Metadata.Header.EmailKey),
+                    Homepage = item.ReadString(Data.Models.Metadata.Header.HomepageKey),
+                    Url = item.ReadString(Data.Models.Metadata.Header.UrlKey),
+                    Date = item.ReadString(Data.Models.Metadata.Header.DateKey),
+                    Comment = item.ReadString(Data.Models.Metadata.Header.CommentKey),
                 };
             }
 
-            if (item.ContainsKey(Models.Metadata.Header.DatVersionKey)
-                || item.ContainsKey(Models.Metadata.Header.PluginKey)
-                || item.ContainsKey(Models.Metadata.Header.ForceMergingKey))
+            if (item.ContainsKey(Data.Models.Metadata.Header.DatVersionKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.PluginKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.ForceMergingKey))
             {
                 metadataFile.Dat = new Dat
                 {
-                    Version = item.ReadString(Models.Metadata.Header.DatVersionKey),
-                    Plugin = item.ReadString(Models.Metadata.Header.PluginKey),
-                    Split = item.ReadString(Models.Metadata.Header.ForceMergingKey) == "split" ? "yes" : "no",
-                    Merge = item.ReadString(Models.Metadata.Header.ForceMergingKey) == "merge" ? "yes" : "no",
+                    Version = item.ReadString(Data.Models.Metadata.Header.DatVersionKey),
+                    Plugin = item.ReadString(Data.Models.Metadata.Header.PluginKey),
+                    Split = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "split" ? "yes" : "no",
+                    Merge = item.ReadString(Data.Models.Metadata.Header.ForceMergingKey) == "merge" ? "yes" : "no",
                 };
             }
 
-            if (item.ContainsKey(Models.Metadata.Header.RefNameKey)
-                || item.ContainsKey(Models.Metadata.Header.EmulatorVersionKey))
+            if (item.ContainsKey(Data.Models.Metadata.Header.RefNameKey)
+                || item.ContainsKey(Data.Models.Metadata.Header.EmulatorVersionKey))
             {
                 metadataFile.Emulator = new Emulator
                 {
-                    RefName = item.ReadString(Models.Metadata.Header.RefNameKey),
-                    Version = item.ReadString(Models.Metadata.Header.EmulatorVersionKey),
+                    RefName = item.ReadString(Data.Models.Metadata.Header.RefNameKey),
+                    Version = item.ReadString(Data.Models.Metadata.Header.EmulatorVersionKey),
                 };
             }
 
@@ -83,9 +83,9 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Machine"/> to an array of <see cref="Rom"/>
         /// </summary>
-        private static Rom[] ConvertMachineFromInternalModel(Models.Metadata.Machine item)
+        private static Rom[] ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item)
         {
-            var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
+            var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
             if (roms == null)
                 return [];
 
@@ -95,19 +95,19 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Rom"/>
         /// </summary>
-        private static Rom ConvertFromInternalModel(Models.Metadata.Rom item, Models.Metadata.Machine parent)
+        private static Rom ConvertFromInternalModel(Data.Models.Metadata.Rom item, Data.Models.Metadata.Machine parent)
         {
             var row = new Rom
             {
-                ParentName = parent.ReadString(Models.Metadata.Machine.CloneOfKey),
-                //ParentDescription = parent.ReadString(Models.Metadata.Machine.ParentDescriptionKey), // This is unmappable
-                GameName = parent.ReadString(Models.Metadata.Machine.NameKey),
-                GameDescription = parent.ReadString(Models.Metadata.Machine.DescriptionKey),
-                RomName = item.ReadString(Models.Metadata.Rom.NameKey),
-                RomCRC = item.ReadString(Models.Metadata.Rom.CRCKey),
-                RomSize = item.ReadString(Models.Metadata.Rom.SizeKey),
-                RomOf = parent.ReadString(Models.Metadata.Machine.RomOfKey),
-                MergeName = item.ReadString(Models.Metadata.Rom.MergeKey),
+                ParentName = parent.ReadString(Data.Models.Metadata.Machine.CloneOfKey),
+                //ParentDescription = parent.ReadString(Data.Models.Metadata.Machine.ParentDescriptionKey), // This is unmappable
+                GameName = parent.ReadString(Data.Models.Metadata.Machine.NameKey),
+                GameDescription = parent.ReadString(Data.Models.Metadata.Machine.DescriptionKey),
+                RomName = item.ReadString(Data.Models.Metadata.Rom.NameKey),
+                RomCRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                RomSize = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                RomOf = parent.ReadString(Data.Models.Metadata.Machine.RomOfKey),
+                MergeName = item.ReadString(Data.Models.Metadata.Rom.MergeKey),
             };
             return row;
         }

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.COFF
+namespace SabreTools.Data.Models.COFF
 {
     public static class Constants
     {

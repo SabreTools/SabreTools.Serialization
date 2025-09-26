@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// A properly formatted type 3 or type 4 Media Key Block contains exactly

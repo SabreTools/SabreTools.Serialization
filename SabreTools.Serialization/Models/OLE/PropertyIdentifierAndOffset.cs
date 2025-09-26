@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The PropertyIdentifierAndOffset packet is used in the PropertySet packet to represent a

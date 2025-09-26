@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.NewExecutable
+﻿namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The resident-name table follows the resource table, and contains this

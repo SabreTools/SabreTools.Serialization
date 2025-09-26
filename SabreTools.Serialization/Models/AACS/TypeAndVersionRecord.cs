@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// Devices, except for recording devices which are writing Media Key Block

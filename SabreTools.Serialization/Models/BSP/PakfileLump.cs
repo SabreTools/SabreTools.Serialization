@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The Pakfile lump (Lump 40) is a special lump that can contains

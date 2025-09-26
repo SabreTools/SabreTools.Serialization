@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Resource
+﻿namespace SabreTools.Data.Models.PortableExecutable.Resource
 {
     /// <summary>
     /// Each directory table is followed by a series of directory entries that

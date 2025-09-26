@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using SabreTools.Serialization.Models.MoPaQ;
+using SabreTools.Data.Models.MoPaQ;
 
 namespace SabreTools.Serialization.Wrappers
 {

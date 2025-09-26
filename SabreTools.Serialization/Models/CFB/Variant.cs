@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.CFB
+namespace SabreTools.Data.Models.CFB
 {
     /// <summary>
     /// VARIANT is a container for a union that can hold many types of data.

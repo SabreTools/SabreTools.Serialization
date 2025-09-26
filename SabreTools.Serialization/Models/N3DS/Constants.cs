@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.N3DS
+﻿namespace SabreTools.Data.Models.N3DS
 {
     public static class Constants
     {

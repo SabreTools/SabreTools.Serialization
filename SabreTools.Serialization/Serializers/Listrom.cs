@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text;
-using SabreTools.Serialization.Models.Listrom;
+using SabreTools.Data.Models.Listrom;
 
 namespace SabreTools.Serialization.Serializers
 {

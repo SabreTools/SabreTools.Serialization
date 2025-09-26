@@ -1,15 +1,15 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.XZP;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.XZP;
-using static SabreTools.Serialization.Models.XZP.Constants;
+using static SabreTools.Data.Models.XZP.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class XZP : BaseBinaryDeserializer<Models.XZP.File>
+    public class XZP : BaseBinaryDeserializer<Data.Models.XZP.File>
     {
         /// <inheritdoc/>
-        public override Models.XZP.File? Deserialize(Stream? data)
+        public override Data.Models.XZP.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new XBox Package File to fill
-                var file = new Models.XZP.File();
+                var file = new Data.Models.XZP.File();
 
                 #region Header
 

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.LDSCRYPT
+namespace SabreTools.Data.Models.LDSCRYPT
 {
     public static class Constants
     {

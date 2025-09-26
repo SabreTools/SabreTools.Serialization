@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.CHD;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.CHD;
 
 namespace SabreTools.Serialization.Deserializers
 {

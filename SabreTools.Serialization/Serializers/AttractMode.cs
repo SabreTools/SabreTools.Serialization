@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.AttractMode;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.AttractMode;
 
 namespace SabreTools.Serialization.Serializers
 {

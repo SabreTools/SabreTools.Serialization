@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MoPaQ
+﻿namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// MoPaQ archive header

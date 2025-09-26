@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.EverdriveSMDB;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.EverdriveSMDB;
 
 namespace SabreTools.Serialization.Serializers
 {

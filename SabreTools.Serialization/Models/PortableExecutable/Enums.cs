@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SabreTools.Serialization.Models.PortableExecutable
+namespace SabreTools.Data.Models.PortableExecutable
 {
     [Flags]
     public enum AcceleratorTableFlags : ushort

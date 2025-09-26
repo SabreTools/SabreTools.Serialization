@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.LZ
+namespace SabreTools.Data.Models.LZ
 {
     /// <summary>
     /// LZ variant with variable compression

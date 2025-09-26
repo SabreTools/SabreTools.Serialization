@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.Listxml
+namespace SabreTools.Data.Models.Listxml
 {
     [XmlRoot("mess")]
     public class Mess

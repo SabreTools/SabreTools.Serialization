@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.SecuROM;
-using static SabreTools.Serialization.Models.SecuROM.Constants;
+using static SabreTools.Data.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

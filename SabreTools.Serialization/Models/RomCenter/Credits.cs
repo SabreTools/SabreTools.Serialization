@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.RomCenter
+namespace SabreTools.Data.Models.RomCenter
 {
     /// <remarks>[credits]</remarks>
     public class Credits

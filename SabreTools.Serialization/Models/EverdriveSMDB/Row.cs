@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.EverdriveSMDB
+namespace SabreTools.Data.Models.EverdriveSMDB
 {
     /// <summary>
     /// SHA-256 \t Machine Name/Filename \t SHA-1 \t MD5 \t CRC32 \t Size (Optional)

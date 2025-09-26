@@ -1,7 +1,7 @@
 /// <remarks>
 /// Information sourced from https://stackoverflow.com/questions/18720045/what-are-the-list-of-all-possible-values-for-dvclal
 /// </remarks>
-namespace SabreTools.Serialization.Models.Delphi
+namespace SabreTools.Data.Models.Delphi
 {
     public static class Constants
     {

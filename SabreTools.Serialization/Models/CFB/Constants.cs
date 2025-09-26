@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.CFB
+namespace SabreTools.Data.Models.CFB
 {
     public static class Constants
     {

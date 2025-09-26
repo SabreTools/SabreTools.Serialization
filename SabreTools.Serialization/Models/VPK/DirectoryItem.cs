@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.VPK
+namespace SabreTools.Data.Models.VPK
 {
     /// <see href="https://github.com/RavuAlHemio/hllib/blob/master/HLLib/VPKFile.h"/>
     /// <see href="https://developer.valvesoftware.com/wiki/VPK_(file_format)"/>

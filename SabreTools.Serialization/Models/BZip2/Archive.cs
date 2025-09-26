@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BZip2
+namespace SabreTools.Data.Models.BZip2
 {
     /// <summary>
     /// This is a placeholder model for future work

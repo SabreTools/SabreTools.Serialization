@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.LinearExecutable
+﻿namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The entry table contains object and offset information that is used to resolve

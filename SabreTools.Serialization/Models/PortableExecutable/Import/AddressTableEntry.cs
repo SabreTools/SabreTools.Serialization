@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Import
+﻿namespace SabreTools.Data.Models.PortableExecutable.Import
 {
     /// <summary>
     /// The structure and content of the import address table are identical to those of

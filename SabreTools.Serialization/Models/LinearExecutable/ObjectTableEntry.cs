@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.LinearExecutable
+namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The object table contains information that describes each segment in

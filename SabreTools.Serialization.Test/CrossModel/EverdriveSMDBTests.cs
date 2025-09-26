@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new EverdriveSMDB();
 
             // Build the data
-            Models.EverdriveSMDB.MetadataFile mf = Build();
+            Data.Models.EverdriveSMDB.MetadataFile mf = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.EverdriveSMDB.MetadataFile? newMf = serializer.Deserialize(metadata);
+            Data.Models.EverdriveSMDB.MetadataFile? newMf = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -31,9 +31,9 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.EverdriveSMDB.MetadataFile Build()
+        private static Data.Models.EverdriveSMDB.MetadataFile Build()
         {
-            var row = new Models.EverdriveSMDB.Row
+            var row = new Data.Models.EverdriveSMDB.Row
             {
                 SHA256 = "XXXXXX",
                 Name = "XXXXXX",
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Size = "XXXXXX",
             };
 
-            return new Models.EverdriveSMDB.MetadataFile
+            return new Data.Models.EverdriveSMDB.MetadataFile
             {
                 Row = [row],
             };
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void Validate(Models.EverdriveSMDB.Row? row)
+        private static void Validate(Data.Models.EverdriveSMDB.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.SHA256);

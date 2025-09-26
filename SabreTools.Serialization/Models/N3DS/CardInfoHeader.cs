@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.N3DS
+namespace SabreTools.Data.Models.N3DS
 {
     /// <see href="https://www.3dbrew.org/wiki/NCSD#Card_Info_Header"/>
     [StructLayout(LayoutKind.Sequential)]

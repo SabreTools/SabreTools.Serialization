@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.BFPK;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.BFPK;
 
 namespace SabreTools.Serialization.Printers
 {

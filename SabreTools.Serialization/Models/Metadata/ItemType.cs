@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
     /// Determine what type of file an item is

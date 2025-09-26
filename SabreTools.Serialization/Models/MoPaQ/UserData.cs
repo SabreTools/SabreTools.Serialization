@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.MoPaQ
+namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// MPQ User Data are optional, and is commonly used in custom maps for

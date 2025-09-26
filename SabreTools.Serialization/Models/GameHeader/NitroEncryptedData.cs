@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.GameHeader
+namespace SabreTools.Data.Models.GameHeader
 {
     /// <summary>
     /// Encrypted Data section for an NDS cart image

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PlayJ
+namespace SabreTools.Data.Models.PlayJ
 {
     public static class Constants
     {

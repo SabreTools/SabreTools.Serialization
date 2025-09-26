@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     /// <summary>
     /// Specialized dictionary base for item types

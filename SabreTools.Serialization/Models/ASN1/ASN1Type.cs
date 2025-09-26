@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SabreTools.Serialization.Models.ASN1
+namespace SabreTools.Data.Models.ASN1
 {
     /// <summary>
     /// ASN.1 type indicators

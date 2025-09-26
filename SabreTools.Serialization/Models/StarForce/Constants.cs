@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.StarForce
+namespace SabreTools.Data.Models.StarForce
 {
     public static class Constants
     {

@@ -1,6 +1,6 @@
 using System.IO;
+using SabreTools.Data.Models.PlayJ;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.PlayJ;
 
 namespace SabreTools.Serialization.Deserializers
 {

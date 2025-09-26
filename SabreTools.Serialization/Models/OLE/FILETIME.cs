@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The FILETIME (Packet Version) packet represents a FILETIME structure ([MS-DTYP] section 2.3.3

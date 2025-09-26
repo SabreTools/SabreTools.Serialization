@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.AACS;
+using SabreTools.Data.Models.AACS;
 
 namespace SabreTools.Serialization.Wrappers
 {

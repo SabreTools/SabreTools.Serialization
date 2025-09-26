@@ -1,7 +1,7 @@
 /// <remarks>
 /// Information sourced from https://docwiki.embarcadero.com/Libraries/Sydney/en/System.TPackageTypeInfo
 /// </remarks>
-namespace SabreTools.Serialization.Models.Delphi
+namespace SabreTools.Data.Models.Delphi
 {
     public class PackageTypeInfo
     {

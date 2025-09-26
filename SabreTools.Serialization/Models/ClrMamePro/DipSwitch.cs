@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.ClrMamePro
+namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>dipswitch</remarks>
     public class DipSwitch

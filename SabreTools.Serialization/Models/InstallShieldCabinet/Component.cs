@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.InstallShieldCabinet
+namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     /// <see href="https://github.com/twogood/unshield/blob/main/lib/libunshield.h"/>
     public sealed class Component

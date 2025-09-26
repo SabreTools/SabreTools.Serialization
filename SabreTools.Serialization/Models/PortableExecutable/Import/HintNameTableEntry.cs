@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Import
+namespace SabreTools.Data.Models.PortableExecutable.Import
 {
     /// <summary>
     /// One hint/name table suffices for the entire import section.

@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Hashing;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.InstallShieldCabinet;
-using static SabreTools.Serialization.Models.InstallShieldCabinet.Constants;
+using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {

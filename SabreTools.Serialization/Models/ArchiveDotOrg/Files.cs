@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.ArchiveDotOrg
+namespace SabreTools.Data.Models.ArchiveDotOrg
 {
     [XmlRoot("files")]
     public class Files

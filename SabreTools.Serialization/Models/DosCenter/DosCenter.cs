@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.DosCenter
+namespace SabreTools.Data.Models.DosCenter
 {
     /// <remarks>doscenter</remarks>
     public class DosCenter

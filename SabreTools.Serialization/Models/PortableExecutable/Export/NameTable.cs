@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Export
+﻿namespace SabreTools.Data.Models.PortableExecutable.Export
 {
     /// <summary>
     /// The export name table contains the actual string data that was pointed to by the export

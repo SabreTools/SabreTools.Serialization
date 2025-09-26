@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.BSP
+namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The entity lump is basically a pure ASCII text section.

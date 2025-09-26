@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AdvancedInstaller
+namespace SabreTools.Data.Models.AdvancedInstaller
 {
     /// <summary>
     /// Represents the structure at the end of a Caphyon

@@ -79,14 +79,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.AttractMode();
 
             // Build the data
-            Models.AttractMode.MetadataFile mf = Build();
+            Data.Models.AttractMode.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf, longHeader: false);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -104,14 +104,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.AttractMode();
 
             // Build the data
-            Models.AttractMode.MetadataFile mf = Build();
+            Data.Models.AttractMode.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? actual = serializer.SerializeStream(mf, longHeader: true);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
+            Data.Models.AttractMode.MetadataFile? newMf = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -124,11 +124,11 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.AttractMode.MetadataFile Build()
+        private static Data.Models.AttractMode.MetadataFile Build()
         {
             string[] header = ["header"];
 
-            var row = new Models.AttractMode.Row
+            var row = new Data.Models.AttractMode.Row
             {
                 Name = "XXXXXX",
                 Title = "XXXXXX",
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 FileIsAvailable = "XXXXXX",
             };
 
-            return new Models.AttractMode.MetadataFile
+            return new Data.Models.AttractMode.MetadataFile
             {
                 Header = header,
                 Row = [row],
@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void Validate(Models.AttractMode.Row? row, bool longHeader)
+        private static void Validate(Data.Models.AttractMode.Row? row, bool longHeader)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.WAD3
+namespace SabreTools.Data.Models.WAD3
 {
     /// <see href="https://github.com/RavuAlHemio/hllib/blob/master/HLLib/WADFile.h"/>
     /// <see href="https://twhl.info/wiki/page/Specification:_WAD3"/>

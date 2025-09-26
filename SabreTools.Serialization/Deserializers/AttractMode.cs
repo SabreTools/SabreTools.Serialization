@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.AttractMode;
 using SabreTools.IO.Readers;
-using SabreTools.Serialization.Models.AttractMode;
 
 namespace SabreTools.Serialization.Deserializers
 {

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Export
+﻿namespace SabreTools.Data.Models.PortableExecutable.Export
 {
     /// <summary>
     /// The export ordinal table is an array of 16-bit unbiased indexes into the export address table.

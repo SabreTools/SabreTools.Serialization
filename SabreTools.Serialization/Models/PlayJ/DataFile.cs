@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PlayJ
+namespace SabreTools.Data.Models.PlayJ
 {
     /// <summary>
     /// Embedded data file (V2 only?)

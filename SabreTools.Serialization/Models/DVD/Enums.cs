@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     [Flags]
     public enum ProgramChainCategory : byte

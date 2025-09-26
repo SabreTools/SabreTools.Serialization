@@ -1,26 +1,26 @@
 using System;
 using System.Collections.Generic;
+using SabreTools.Data.Models.Listrom;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.Listrom;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Listrom : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
+    public partial class Listrom : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
+        public Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
+                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
             };
 
             if (obj?.Set != null && obj.Set.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(obj.Set, ConvertMachineToInternalModel);
             }
 
@@ -30,11 +30,11 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="MetadataFile"/> to <see cref="Header"/>
         /// </summary>
-        private static Models.Metadata.Header ConvertHeaderToInternalModel()
+        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel()
         {
-            var header = new Models.Metadata.Header
+            var header = new Data.Models.Metadata.Header
             {
-                [Models.Metadata.Header.NameKey] = "MAME Listrom",
+                [Data.Models.Metadata.Header.NameKey] = "MAME Listrom",
             };
             return header;
         }
@@ -42,34 +42,34 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Set"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(Set item)
+        private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(Set item)
         {
-            var machine = new Models.Metadata.Machine();
+            var machine = new Data.Models.Metadata.Machine();
             if (!string.IsNullOrEmpty(item.Device))
             {
-                machine[Models.Metadata.Machine.NameKey] = item.Device;
-                machine[Models.Metadata.Machine.IsDeviceKey] = "yes";
+                machine[Data.Models.Metadata.Machine.NameKey] = item.Device;
+                machine[Data.Models.Metadata.Machine.IsDeviceKey] = "yes";
             }
             else
             {
-                machine[Models.Metadata.Machine.NameKey] = item.Driver;
+                machine[Data.Models.Metadata.Machine.NameKey] = item.Driver;
             }
 
             if (item.Row != null && item.Row.Length > 0)
             {
-                var disks = new List<Models.Metadata.Disk>();
-                var roms = new List<Models.Metadata.Rom>();
+                var disks = new List<Data.Models.Metadata.Disk>();
+                var roms = new List<Data.Models.Metadata.Rom>();
                 foreach (var file in item.Row)
                 {
                     var datItem = ConvertToInternalModel(file);
-                    if (datItem is Models.Metadata.Disk disk)
+                    if (datItem is Data.Models.Metadata.Disk disk)
                         disks.Add(disk);
-                    else if (datItem is Models.Metadata.Rom rom)
+                    else if (datItem is Data.Models.Metadata.Rom rom)
                         roms.Add(rom);
                 }
 
-                machine[Models.Metadata.Machine.DiskKey] = disks.ToArray();
-                machine[Models.Metadata.Machine.RomKey] = roms.ToArray();
+                machine[Data.Models.Metadata.Machine.DiskKey] = disks.ToArray();
+                machine[Data.Models.Metadata.Machine.RomKey] = roms.ToArray();
             }
 
             return machine;
@@ -78,40 +78,40 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Row"/> to <see cref="Models.Metadata.DatItem"/>
         /// </summary>
-        private static Models.Metadata.DatItem ConvertToInternalModel(Row item)
+        private static Data.Models.Metadata.DatItem ConvertToInternalModel(Row item)
         {
             if (item.Size == null)
             {
-                var disk = new Models.Metadata.Disk
+                var disk = new Data.Models.Metadata.Disk
                 {
-                    [Models.Metadata.DatItem.TypeKey] = "disk",
-                    [Models.Metadata.Disk.NameKey] = item.Name,
-                    [Models.Metadata.Disk.MD5Key] = item.MD5,
-                    [Models.Metadata.Disk.SHA1Key] = item.SHA1,
+                    [Data.Models.Metadata.DatItem.TypeKey] = "disk",
+                    [Data.Models.Metadata.Disk.NameKey] = item.Name,
+                    [Data.Models.Metadata.Disk.MD5Key] = item.MD5,
+                    [Data.Models.Metadata.Disk.SHA1Key] = item.SHA1,
                 };
 
                 if (item.NoGoodDumpKnown)
-                    disk[Models.Metadata.Disk.StatusKey] = "nodump";
+                    disk[Data.Models.Metadata.Disk.StatusKey] = "nodump";
                 else if (item.Bad)
-                    disk[Models.Metadata.Disk.StatusKey] = "baddump";
+                    disk[Data.Models.Metadata.Disk.StatusKey] = "baddump";
 
                 return disk;
             }
             else
             {
-                var rom = new Models.Metadata.Rom
+                var rom = new Data.Models.Metadata.Rom
                 {
-                    [Models.Metadata.DatItem.TypeKey] = "rom",
-                    [Models.Metadata.Rom.NameKey] = item.Name,
-                    [Models.Metadata.Rom.SizeKey] = item.Size,
-                    [Models.Metadata.Rom.CRCKey] = item.CRC,
-                    [Models.Metadata.Rom.SHA1Key] = item.SHA1,
+                    [Data.Models.Metadata.DatItem.TypeKey] = "rom",
+                    [Data.Models.Metadata.Rom.NameKey] = item.Name,
+                    [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                    [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
+                    [Data.Models.Metadata.Rom.SHA1Key] = item.SHA1,
                 };
 
                 if (item.NoGoodDumpKnown)
-                    rom[Models.Metadata.Rom.StatusKey] = "nodump";
+                    rom[Data.Models.Metadata.Rom.StatusKey] = "nodump";
                 else if (item.Bad)
-                    rom[Models.Metadata.Rom.StatusKey] = "baddump";
+                    rom[Data.Models.Metadata.Rom.StatusKey] = "baddump";
 
                 return rom;
             }

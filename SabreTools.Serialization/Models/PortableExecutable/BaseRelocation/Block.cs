@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.BaseRelocation
+﻿namespace SabreTools.Data.Models.PortableExecutable.BaseRelocation
 {
     /// <summary>
     /// The base relocation table contains entries for all base relocations in

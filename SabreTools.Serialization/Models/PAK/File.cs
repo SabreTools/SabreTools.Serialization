@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PAK
+namespace SabreTools.Data.Models.PAK
 {
     /// <summary>
     /// Half-Life Package File

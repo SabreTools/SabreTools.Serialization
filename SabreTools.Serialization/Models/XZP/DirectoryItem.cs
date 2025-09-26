@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.XZP
+namespace SabreTools.Data.Models.XZP
 {
     /// <see href="https://github.com/RavuAlHemio/hllib/blob/master/HLLib/XZPFile.h"/>
     public sealed class DirectoryItem

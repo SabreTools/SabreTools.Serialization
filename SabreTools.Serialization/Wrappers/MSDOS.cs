@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using SabreTools.Serialization.Models.MSDOS;
+using SabreTools.Data.Models.MSDOS;
 
 namespace SabreTools.Serialization.Wrappers
 {

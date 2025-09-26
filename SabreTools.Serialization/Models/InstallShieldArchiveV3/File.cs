@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 
 #pragma warning disable CS0618 // 'UnmanagedType.AnsiBStr' is obsolete
-namespace SabreTools.Serialization.Models.InstallShieldArchiveV3
+namespace SabreTools.Data.Models.InstallShieldArchiveV3
 {
     /// <see href="https://github.com/wfr/unshieldv3/blob/master/ISArchiveV3.h"/>
     [StructLayout(LayoutKind.Sequential)]

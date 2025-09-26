@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.DebugData
+﻿namespace SabreTools.Data.Models.PortableExecutable.DebugData
 {
     /// <summary>
     /// The .debug section is used in object files to contain compiler-generated debug

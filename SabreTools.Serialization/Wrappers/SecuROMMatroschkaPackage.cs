@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.SecuROM;
+using SabreTools.Data.Models.SecuROM;
 
 namespace SabreTools.Serialization.Wrappers
 {

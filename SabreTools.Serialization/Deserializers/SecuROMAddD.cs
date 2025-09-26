@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.SecuROM;
 
 namespace SabreTools.Serialization.Deserializers
 {

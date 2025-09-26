@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.N3DS
+namespace SabreTools.Data.Models.N3DS
 {
     /// <summary>
     /// A format used to store information about a title (installed title, DLC, etc.)

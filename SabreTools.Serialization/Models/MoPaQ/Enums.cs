@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SabreTools.Serialization.Models.MoPaQ
+namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// Compression types for multiple compressions

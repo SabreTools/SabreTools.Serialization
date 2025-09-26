@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.LinearExecutable
+namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The `LINEAR` executable-file header contains information that the loader requires for

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.LinearExecutable
+﻿namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The debug information is defined by the debugger and is not controlled by

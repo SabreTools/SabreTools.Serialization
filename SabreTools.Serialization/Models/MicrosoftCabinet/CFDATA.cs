@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MicrosoftCabinet
+﻿namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     /// <summary>
     /// Each CFDATA structure describes some amount of compressed data, as shown in the following

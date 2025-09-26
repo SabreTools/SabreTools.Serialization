@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.Logiqx
+namespace SabreTools.Data.Models.Logiqx
 {
     [XmlRoot("clrmamepro")]
     public class ClrMamePro

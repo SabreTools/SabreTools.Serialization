@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.OfflineList();
 
             // Build the data
-            Models.OfflineList.Dat dat = Build();
+            Data.Models.OfflineList.Dat dat = Build();
 
             // Serialize to stream
             Stream? metadata = serializer.Serialize(dat);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.OfflineList.Dat? newDat = deserializer.Deserialize(metadata);
+            Data.Models.OfflineList.Dat? newDat = deserializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newDat);
@@ -98,89 +98,89 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.OfflineList.Dat Build()
+        private static Data.Models.OfflineList.Dat Build()
         {
-            var infos = new Models.OfflineList.Infos
+            var infos = new Data.Models.OfflineList.Infos
             {
-                Title = new Models.OfflineList.Title
+                Title = new Data.Models.OfflineList.Title
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Location = new Models.OfflineList.Location
+                Location = new Data.Models.OfflineList.Location
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Publisher = new Models.OfflineList.Publisher
+                Publisher = new Data.Models.OfflineList.Publisher
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                SourceRom = new Models.OfflineList.SourceRom
+                SourceRom = new Data.Models.OfflineList.SourceRom
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                SaveType = new Models.OfflineList.SaveType
+                SaveType = new Data.Models.OfflineList.SaveType
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                RomSize = new Models.OfflineList.RomSize
+                RomSize = new Data.Models.OfflineList.RomSize
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                ReleaseNumber = new Models.OfflineList.ReleaseNumber
+                ReleaseNumber = new Data.Models.OfflineList.ReleaseNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                ImageNumber = new Models.OfflineList.ImageNumber
+                ImageNumber = new Data.Models.OfflineList.ImageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                LanguageNumber = new Models.OfflineList.LanguageNumber
+                LanguageNumber = new Data.Models.OfflineList.LanguageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Comment = new Models.OfflineList.Comment
+                Comment = new Data.Models.OfflineList.Comment
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                RomCRC = new Models.OfflineList.RomCRC
+                RomCRC = new Data.Models.OfflineList.RomCRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Im1CRC = new Models.OfflineList.Im1CRC
+                Im1CRC = new Data.Models.OfflineList.Im1CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Im2CRC = new Models.OfflineList.Im2CRC
+                Im2CRC = new Data.Models.OfflineList.Im2CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
                     Default = "XXXXXX",
                 },
-                Languages = new Models.OfflineList.Languages
+                Languages = new Data.Models.OfflineList.Languages
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
@@ -188,32 +188,32 @@ namespace SabreTools.Serialization.Test.Deserializers
                 },
             };
 
-            var canopen = new Models.OfflineList.CanOpen
+            var canopen = new Data.Models.OfflineList.CanOpen
             {
                 Extension = ["XXXXXX"],
             };
 
-            var daturl = new Models.OfflineList.DatUrl
+            var daturl = new Data.Models.OfflineList.DatUrl
             {
                 FileName = "XXXXXX",
                 Content = "XXXXXX",
             };
 
-            var newdat = new Models.OfflineList.NewDat
+            var newdat = new Data.Models.OfflineList.NewDat
             {
                 DatVersionUrl = "XXXXXX",
                 DatUrl = daturl,
                 ImUrl = "XXXXXX",
             };
 
-            var find = new Models.OfflineList.Find
+            var find = new Data.Models.OfflineList.Find
             {
                 Operation = "XXXXXX",
                 Value = "XXXXXX",
                 Content = "XXXXXX",
             };
 
-            var to = new Models.OfflineList.To
+            var to = new Data.Models.OfflineList.To
             {
                 Value = "XXXXXX",
                 Default = "XXXXXX",
@@ -221,12 +221,12 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Find = [find],
             };
 
-            var search = new Models.OfflineList.Search
+            var search = new Data.Models.OfflineList.Search
             {
                 To = [to],
             };
 
-            var configuration = new Models.OfflineList.Configuration
+            var configuration = new Data.Models.OfflineList.Configuration
             {
                 DatName = "XXXXXX",
                 ImFolder = "XXXXXX",
@@ -241,18 +241,18 @@ namespace SabreTools.Serialization.Test.Deserializers
                 RomTitle = "XXXXXX",
             };
 
-            var fileromcrc = new Models.OfflineList.FileRomCRC
+            var fileromcrc = new Data.Models.OfflineList.FileRomCRC
             {
                 Extension = "XXXXXX",
                 Content = "XXXXXX",
             };
 
-            var files = new Models.OfflineList.Files
+            var files = new Data.Models.OfflineList.Files
             {
                 RomCRC = [fileromcrc],
             };
 
-            var game = new Models.OfflineList.Game
+            var game = new Data.Models.OfflineList.Game
             {
                 ImageNumber = "XXXXXX",
                 ReleaseNumber = "XXXXXX",
@@ -270,12 +270,12 @@ namespace SabreTools.Serialization.Test.Deserializers
                 DuplicateID = "XXXXXX",
             };
 
-            var games = new Models.OfflineList.Games
+            var games = new Data.Models.OfflineList.Games
             {
                 Game = [game],
             };
 
-            var image = new Models.OfflineList.Image
+            var image = new Data.Models.OfflineList.Image
             {
                 X = "XXXXXX",
                 Y = "XXXXXX",
@@ -283,19 +283,19 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Height = "XXXXXX",
             };
 
-            var images = new Models.OfflineList.Images
+            var images = new Data.Models.OfflineList.Images
             {
                 Width = "XXXXXX",
                 Height = "XXXXXX",
                 Image = [image],
             };
 
-            var gui = new Models.OfflineList.GUI
+            var gui = new Data.Models.OfflineList.GUI
             {
                 Images = images,
             };
 
-            return new Models.OfflineList.Dat
+            return new Data.Models.OfflineList.Dat
             {
                 NoNamespaceSchemaLocation = "XXXXXX",
                 Configuration = configuration,
@@ -307,7 +307,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Configuration
         /// </summary>
-        private static void Validate(Models.OfflineList.Configuration? configuration)
+        private static void Validate(Data.Models.OfflineList.Configuration? configuration)
         {
             Assert.NotNull(configuration);
             Assert.Equal("XXXXXX", configuration.DatName);
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Infos
         /// </summary>
-        private static void Validate(Models.OfflineList.Infos? infos)
+        private static void Validate(Data.Models.OfflineList.Infos? infos)
         {
             Assert.NotNull(infos);
             Validate(infos.Title);
@@ -348,7 +348,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a InfoBase
         /// </summary>
-        private static void Validate(Models.OfflineList.InfoBase? info)
+        private static void Validate(Data.Models.OfflineList.InfoBase? info)
         {
             Assert.NotNull(info);
             Assert.Equal("XXXXXX", info.Visible);
@@ -359,7 +359,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a CanOpen
         /// </summary>
-        private static void Validate(Models.OfflineList.CanOpen? canopen)
+        private static void Validate(Data.Models.OfflineList.CanOpen? canopen)
         {
             Assert.NotNull(canopen);
             Assert.NotNull(canopen.Extension);
@@ -370,7 +370,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a NewDat
         /// </summary>
-        private static void Validate(Models.OfflineList.NewDat? newdat)
+        private static void Validate(Data.Models.OfflineList.NewDat? newdat)
         {
             Assert.NotNull(newdat);
             Assert.Equal("XXXXXX", newdat.DatVersionUrl);
@@ -381,7 +381,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DatUrl
         /// </summary>
-        private static void Validate(Models.OfflineList.DatUrl? daturl)
+        private static void Validate(Data.Models.OfflineList.DatUrl? daturl)
         {
             Assert.NotNull(daturl);
             Assert.Equal("XXXXXX", daturl.FileName);
@@ -391,7 +391,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Search
         /// </summary>
-        private static void Validate(Models.OfflineList.Search? search)
+        private static void Validate(Data.Models.OfflineList.Search? search)
         {
             Assert.NotNull(search);
             Assert.NotNull(search.To);
@@ -402,7 +402,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a To
         /// </summary>
-        private static void Validate(Models.OfflineList.To? to)
+        private static void Validate(Data.Models.OfflineList.To? to)
         {
             Assert.NotNull(to);
             Assert.Equal("XXXXXX", to.Value);
@@ -417,7 +417,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Find
         /// </summary>
-        private static void Validate(Models.OfflineList.Find? find)
+        private static void Validate(Data.Models.OfflineList.Find? find)
         {
             Assert.NotNull(find);
             Assert.Equal("XXXXXX", find.Operation);
@@ -428,7 +428,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Games
         /// </summary>
-        private static void Validate(Models.OfflineList.Games? games)
+        private static void Validate(Data.Models.OfflineList.Games? games)
         {
             Assert.NotNull(games);
             Assert.NotNull(games.Game);
@@ -439,7 +439,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Game
         /// </summary>
-        private static void Validate(Models.OfflineList.Game? game)
+        private static void Validate(Data.Models.OfflineList.Game? game)
         {
             Assert.NotNull(game);
             Assert.Equal("XXXXXX", game.ImageNumber);
@@ -461,7 +461,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Files
         /// </summary>
-        private static void Validate(Models.OfflineList.Files? files)
+        private static void Validate(Data.Models.OfflineList.Files? files)
         {
             Assert.NotNull(files);
             Assert.NotNull(files.RomCRC);
@@ -472,7 +472,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a FileRomCRC
         /// </summary>
-        private static void Validate(Models.OfflineList.FileRomCRC? fileromcrc)
+        private static void Validate(Data.Models.OfflineList.FileRomCRC? fileromcrc)
         {
             Assert.NotNull(fileromcrc);
             Assert.Equal("XXXXXX", fileromcrc.Extension);
@@ -482,7 +482,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a GUI
         /// </summary>
-        private static void Validate(Models.OfflineList.GUI? gui)
+        private static void Validate(Data.Models.OfflineList.GUI? gui)
         {
             Assert.NotNull(gui);
             Validate(gui.Images);
@@ -491,7 +491,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Images
         /// </summary>
-        private static void Validate(Models.OfflineList.Images? images)
+        private static void Validate(Data.Models.OfflineList.Images? images)
         {
             Assert.NotNull(images);
             Assert.Equal("XXXXXX", images.Width);
@@ -505,7 +505,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Image
         /// </summary>
-        private static void Validate(Models.OfflineList.Image? image)
+        private static void Validate(Data.Models.OfflineList.Image? image)
         {
             Assert.NotNull(image);
             Assert.Equal("XXXXXX", image.X);

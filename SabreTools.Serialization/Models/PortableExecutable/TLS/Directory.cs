@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.TLS
+﻿namespace SabreTools.Data.Models.PortableExecutable.TLS
 {
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format"/>
     public sealed class Directory

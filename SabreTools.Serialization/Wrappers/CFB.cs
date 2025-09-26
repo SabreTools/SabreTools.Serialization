@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Data.Models.CFB;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.CFB;
 
 namespace SabreTools.Serialization.Wrappers
 {

@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.RomCenter();
 
             // Build the data
-            Models.RomCenter.MetadataFile mf = Build();
+            Data.Models.RomCenter.MetadataFile mf = Build();
 
             // Serialize to stream
             Stream? metadata = serializer.SerializeStream(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.RomCenter.MetadataFile? newMf = deserializer.Deserialize(metadata);
+            Data.Models.RomCenter.MetadataFile? newMf = deserializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -98,9 +98,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.RomCenter.MetadataFile Build()
+        private static Data.Models.RomCenter.MetadataFile Build()
         {
-            var credits = new Models.RomCenter.Credits
+            var credits = new Data.Models.RomCenter.Credits
             {
                 Author = "XXXXXX",
                 Version = "XXXXXX",
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Comment = "XXXXXX",
             };
 
-            var dat = new Models.RomCenter.Dat
+            var dat = new Data.Models.RomCenter.Dat
             {
                 Version = "XXXXXX",
                 Plugin = "XXXXXX",
@@ -119,13 +119,13 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Merge = "XXXXXX",
             };
 
-            var emulator = new Models.RomCenter.Emulator
+            var emulator = new Data.Models.RomCenter.Emulator
             {
                 RefName = "XXXXXX",
                 Version = "XXXXXX",
             };
 
-            var rom = new Models.RomCenter.Rom
+            var rom = new Data.Models.RomCenter.Rom
             {
                 ParentName = "XXXXXX",
                 ParentDescription = "XXXXXX",
@@ -138,12 +138,12 @@ namespace SabreTools.Serialization.Test.Deserializers
                 MergeName = "XXXXXX",
             };
 
-            var games = new Models.RomCenter.Games
+            var games = new Data.Models.RomCenter.Games
             {
                 Rom = [rom],
             };
 
-            return new Models.RomCenter.MetadataFile
+            return new Data.Models.RomCenter.MetadataFile
             {
                 Credits = credits,
                 Dat = dat,
@@ -155,7 +155,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Credits
         /// </summary>
-        private static void Validate(Models.RomCenter.Credits? credits)
+        private static void Validate(Data.Models.RomCenter.Credits? credits)
         {
             Assert.NotNull(credits);
             Assert.Equal("XXXXXX", credits.Author);
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Dat
         /// </summary>
-        private static void Validate(Models.RomCenter.Dat? dat)
+        private static void Validate(Data.Models.RomCenter.Dat? dat)
         {
             Assert.NotNull(dat);
             Assert.Equal("XXXXXX", dat.Version);
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Emulator
         /// </summary>
-        private static void Validate(Models.RomCenter.Emulator? emulator)
+        private static void Validate(Data.Models.RomCenter.Emulator? emulator)
         {
             Assert.NotNull(emulator);
             Assert.Equal("XXXXXX", emulator.RefName);
@@ -192,7 +192,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Games
         /// </summary>
-        private static void Validate(Models.RomCenter.Games? games)
+        private static void Validate(Data.Models.RomCenter.Games? games)
         {
             Assert.NotNull(games);
             Assert.NotNull(games.Rom);
@@ -203,7 +203,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Rom
         /// </summary>
-        private static void Validate(Models.RomCenter.Rom? rom)
+        private static void Validate(Data.Models.RomCenter.Rom? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.ParentName);

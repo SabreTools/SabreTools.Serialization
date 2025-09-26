@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.Listrom
+namespace SabreTools.Data.Models.Listrom
 {
     public class MetadataFile
     {

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.GZIP
+namespace SabreTools.Data.Models.GZIP
 {
     /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
     public sealed class Header

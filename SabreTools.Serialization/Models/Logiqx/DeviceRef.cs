@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Logiqx
+namespace SabreTools.Data.Models.Logiqx
 {
     [XmlRoot("device_ref")]
     public class DeviceRef

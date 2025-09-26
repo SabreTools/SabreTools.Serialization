@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MoPaQ
+﻿namespace SabreTools.Data.Models.MoPaQ
 {
     /// <summary>
     /// Each incremental patch file in a patch MPQ starts with a header. It is supposed

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable
+﻿namespace SabreTools.Data.Models.PortableExecutable
 {
     /// <summary>
     /// Every image file has an optional header that provides information to the loader.

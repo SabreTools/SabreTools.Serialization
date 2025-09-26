@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller.Actions
+namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Self-Register OCXs/DLLs

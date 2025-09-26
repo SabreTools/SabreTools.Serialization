@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.SevenZip
+namespace SabreTools.Data.Models.SevenZip
 {
     public static class Constants
     {

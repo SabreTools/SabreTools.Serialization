@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.SGA;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.SGA;
-using static SabreTools.Serialization.Models.SGA.Constants;
+using static SabreTools.Data.Models.SGA.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Deserializers
         /// <param name="data">Stream to parse</param>
         /// <param name="majorVersion">SGA major version</param>
         /// <returns>Filled SGA directory on success, null on error</returns>
-        private static Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
+        private static Data.Models.SGA.Directory? ParseDirectory(Stream data, ushort majorVersion)
         {
             return majorVersion switch
             {

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.RomCenter
+namespace SabreTools.Data.Models.RomCenter
 {
     public class MetadataFile
     {

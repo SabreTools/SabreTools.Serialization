@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.PFF;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.PFF;
-using static SabreTools.Serialization.Models.PFF.Constants;
+using static SabreTools.Data.Models.PFF.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

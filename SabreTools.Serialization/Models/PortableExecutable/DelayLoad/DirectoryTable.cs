@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.DelayLoad
+namespace SabreTools.Data.Models.PortableExecutable.DelayLoad
 {
     /// <summary>
     /// The delay-load directory table is the counterpart to the import directory

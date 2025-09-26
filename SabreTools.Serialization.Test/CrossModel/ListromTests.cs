@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new Listrom();
 
             // Build the data
-            Models.Listrom.MetadataFile mf = Build();
+            Data.Models.Listrom.MetadataFile mf = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.Listrom.MetadataFile? newMf = serializer.Deserialize(metadata);
+            Data.Models.Listrom.MetadataFile? newMf = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -33,9 +33,9 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.Listrom.MetadataFile Build()
+        private static Data.Models.Listrom.MetadataFile Build()
         {
-            var rom = new Models.Listrom.Row
+            var rom = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 NoGoodDumpKnown = false,
             };
 
-            var disk = new Models.Listrom.Row
+            var disk = new Data.Models.Listrom.Row
             {
                 Name = "XXXXXX",
                 Bad = false,
@@ -54,19 +54,19 @@ namespace SabreTools.Serialization.Test.CrossModel
                 NoGoodDumpKnown = true,
             };
 
-            var device = new Models.Listrom.Set()
+            var device = new Data.Models.Listrom.Set()
             {
                 Device = "XXXXXX",
                 Row = [rom],
             };
 
-            var driver = new Models.Listrom.Set()
+            var driver = new Data.Models.Listrom.Set()
             {
                 Driver = "XXXXXX",
                 Row = [disk],
             };
 
-            return new Models.Listrom.MetadataFile
+            return new Data.Models.Listrom.MetadataFile
             {
                 Set = [device, driver],
             };
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Set
         /// </summary>
-        private static void ValidateDevice(Models.Listrom.Set? set)
+        private static void ValidateDevice(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
             Assert.Equal("XXXXXX", set.Device);
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Set
         /// </summary>
-        private static void ValidateDriver(Models.Listrom.Set? set)
+        private static void ValidateDriver(Data.Models.Listrom.Set? set)
         {
             Assert.NotNull(set);
             Assert.Equal("XXXXXX", set.Driver);
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateRom(Models.Listrom.Row? row)
+        private static void ValidateRom(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void ValidateDisk(Models.Listrom.Row? row)
+        private static void ValidateDisk(Data.Models.Listrom.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.InstallShieldCabinet
+namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     /// <see href="https://github.com/twogood/unshield/blob/main/lib/cabfile.h"/>
     /// TODO: Should standard and high values be combined?

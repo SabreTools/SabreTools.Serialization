@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The segmented EXE header contains general information about the EXE

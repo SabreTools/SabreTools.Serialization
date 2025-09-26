@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.LinearExecutable
+﻿namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The Fixup Record Table contains entries for all fixups in the linear EXE module.

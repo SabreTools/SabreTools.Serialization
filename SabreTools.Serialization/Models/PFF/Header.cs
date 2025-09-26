@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PFF
+namespace SabreTools.Data.Models.PFF
 {
     /// <summary>
     /// PFF archive header

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.Resource
+namespace SabreTools.Data.Models.PortableExecutable.Resource
 {
     /// <summary>
     /// Contains information about the resource header itself and the data specific to

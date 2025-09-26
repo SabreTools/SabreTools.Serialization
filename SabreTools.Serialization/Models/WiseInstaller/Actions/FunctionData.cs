@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WiseInstaller.Actions
+namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Base class for all function call data types

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.NewExecutable
+﻿namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// A table of resource type information blocks follows. The following

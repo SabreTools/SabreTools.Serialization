@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The DATE (Packet Version) packet represents a DATE as specified in [MS-OAUT]

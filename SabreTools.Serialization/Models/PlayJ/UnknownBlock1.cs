@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PlayJ
+namespace SabreTools.Data.Models.PlayJ
 {
     /// <summary>
     /// Data referred to by <see cref="AudioHeaderV1.UnknownOffset1"/> or <see cref="AudioHeaderV2.UnknownOffset1"/>

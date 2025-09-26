@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.LinearExecutable
+﻿namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The import module name table defines the module name strings imported through

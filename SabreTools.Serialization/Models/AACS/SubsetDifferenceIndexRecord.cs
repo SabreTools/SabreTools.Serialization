@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AACS
+namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// This is a speed-up record which can be ignored by devices not wishing to

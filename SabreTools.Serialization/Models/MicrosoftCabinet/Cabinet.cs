@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MicrosoftCabinet
+﻿namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     /// <summary>
     /// Cabinet files are compressed packages containing a

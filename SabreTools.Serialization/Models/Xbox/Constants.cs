@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.Xbox
+namespace SabreTools.Data.Models.Xbox
 {
     /// <see href="https://xboxdevwiki.net/Xbe"/> 
     /// <see href="http://wiki.redump.org/index.php?title=Xbox_Title_IDs"/> 

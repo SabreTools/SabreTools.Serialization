@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.COFF
+namespace SabreTools.Data.Models.COFF
 {
     /// <summary>
     /// Every image file has an optional header that provides information to the loader.

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.VPK
+namespace SabreTools.Data.Models.VPK
 {
     public static class Constants
     {

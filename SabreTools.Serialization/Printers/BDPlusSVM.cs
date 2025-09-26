@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.BDPlus;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.BDPlus;
 
 namespace SabreTools.Serialization.Printers
 {

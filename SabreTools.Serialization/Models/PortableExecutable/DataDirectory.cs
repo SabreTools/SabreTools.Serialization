@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable
+namespace SabreTools.Data.Models.PortableExecutable
 {
     /// <summary>
     /// Each data directory gives the address and size of a table or string that Windows uses.

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.InstallShieldCabinet
+namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     public static class Constants
     {

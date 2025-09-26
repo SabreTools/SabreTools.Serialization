@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.VPK
+namespace SabreTools.Data.Models.VPK
 {
     /// <see href="https://developer.valvesoftware.com/wiki/VPK_(file_format)"/>
     [StructLayout(LayoutKind.Sequential)]

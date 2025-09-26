@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace SabreTools.Serialization.Models.Metadata
+namespace SabreTools.Data.Models.Metadata
 {
     [JsonObject("disk"), XmlRoot(elementName: "disk")]
     public class Disk : DatItem

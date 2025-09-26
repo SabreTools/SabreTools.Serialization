@@ -1,5 +1,5 @@
 using System.IO;
-using SabreTools.Serialization.Models.CHD;
+using SabreTools.Data.Models.CHD;
 
 namespace SabreTools.Serialization.Wrappers
 {

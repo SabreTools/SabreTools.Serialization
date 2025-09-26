@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.InstallShieldCabinet
+namespace SabreTools.Data.Models.InstallShieldCabinet
 {
     /// <remarks>i6comp02</remarks>
     [Flags]

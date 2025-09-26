@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     /// <see href="https://dvd.sourceforge.net/dvdinfo/ifo.html"/>
     public sealed class CellAddressTable

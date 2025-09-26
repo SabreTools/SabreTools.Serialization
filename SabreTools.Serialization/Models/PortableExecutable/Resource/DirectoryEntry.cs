@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Resource
+﻿namespace SabreTools.Data.Models.PortableExecutable.Resource
 {
     /// <summary>
     /// A leaf's Type, Name, and Language IDs are determined by the path that is

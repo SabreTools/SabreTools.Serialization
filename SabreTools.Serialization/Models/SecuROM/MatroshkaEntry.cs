@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.SecuROM
+namespace SabreTools.Data.Models.SecuROM
 {
     public class MatroshkaEntry
     {

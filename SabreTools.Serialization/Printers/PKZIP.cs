@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.PKZIP;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.PKZIP;
 
 namespace SabreTools.Serialization.Printers
 {

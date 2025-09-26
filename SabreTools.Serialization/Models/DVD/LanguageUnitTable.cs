@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     /// <see href="https://dvd.sourceforge.net/dvdinfo/ifo_vmg.html"/>
     public sealed class LanguageUnitTable

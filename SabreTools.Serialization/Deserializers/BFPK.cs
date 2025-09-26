@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.BFPK;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.BFPK;
-using static SabreTools.Serialization.Models.BFPK.Constants;
+using static SabreTools.Data.Models.BFPK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

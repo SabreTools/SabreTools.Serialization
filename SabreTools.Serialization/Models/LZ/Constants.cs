@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.LZ
+namespace SabreTools.Data.Models.LZ
 {
     public static class Constants
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.PortableExecutable.DebugData
+namespace SabreTools.Data.Models.PortableExecutable.DebugData
 {
     /// <summary>
     /// This file describes the format of the pdb (Program Database) files of the "RSDS"

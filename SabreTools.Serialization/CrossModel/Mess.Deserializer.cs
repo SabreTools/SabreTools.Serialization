@@ -3,18 +3,18 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Mess : IModelSerializer<Models.Listxml.Mess, Models.Metadata.MetadataFile>
+    public partial class Mess : IModelSerializer<Data.Models.Listxml.Mess, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Listxml.Mess? Deserialize(Models.Metadata.MetadataFile? obj)
+        public Data.Models.Listxml.Mess? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
-            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
-            var m1 = header != null ? ConvertMessFromInternalModel(header) : new Models.Listxml.Mess();
+            var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
+            var m1 = header != null ? ConvertMessFromInternalModel(header) : new Data.Models.Listxml.Mess();
 
-            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
                 m1.Game = Array.ConvertAll(machines, Listxml.ConvertMachineFromInternalModel);
 
@@ -24,11 +24,11 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.Listxml.Mess"/>
         /// </summary>
-        private static Models.Listxml.Mess ConvertMessFromInternalModel(Models.Metadata.Header item)
+        private static Data.Models.Listxml.Mess ConvertMessFromInternalModel(Data.Models.Metadata.Header item)
         {
-            var m1 = new Models.Listxml.Mess
+            var m1 = new Data.Models.Listxml.Mess
             {
-                Version = item.ReadString(Models.Metadata.Header.VersionKey),
+                Version = item.ReadString(Data.Models.Metadata.Header.VersionKey),
             };
             return m1;
         }

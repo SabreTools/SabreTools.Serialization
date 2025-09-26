@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using SabreTools.Serialization.Models.Nitro;
+using SabreTools.Data.Models.Nitro;
 
 namespace SabreTools.Serialization.Wrappers
 {

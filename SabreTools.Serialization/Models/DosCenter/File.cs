@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.DosCenter
+namespace SabreTools.Data.Models.DosCenter
 {
     /// <remarks>file</remarks>
     public class File

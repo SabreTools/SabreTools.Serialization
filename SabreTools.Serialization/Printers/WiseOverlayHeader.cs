@@ -1,6 +1,6 @@
 using System.Text;
+using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.WiseInstaller;
 
 namespace SabreTools.Serialization.Printers
 {

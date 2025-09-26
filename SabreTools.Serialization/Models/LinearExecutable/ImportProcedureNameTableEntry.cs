@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.LinearExecutable
+﻿namespace SabreTools.Data.Models.LinearExecutable
 {
     /// <summary>
     /// The import procedure name table defines the procedure name strings imported

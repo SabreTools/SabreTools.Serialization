@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.GCF
+namespace SabreTools.Data.Models.GCF
 {
     public static class Constants
     {

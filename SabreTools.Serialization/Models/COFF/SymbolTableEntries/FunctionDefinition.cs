@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.COFF.SymbolTableEntries
+namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// Auxiliary Format 1: Function Definitions

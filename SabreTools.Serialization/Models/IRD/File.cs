@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.IRD
+namespace SabreTools.Data.Models.IRD
 {
     /// <see href="https://psdevwiki.com/ps3/Bluray_disc#IRD_file"/> 
     /// <see href="https://github.com/SabreTools/MPF/files/13062347/IRD.File.Format.pdf"/> 

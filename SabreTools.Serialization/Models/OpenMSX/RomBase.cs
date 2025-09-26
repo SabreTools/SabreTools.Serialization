@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SabreTools.Serialization.Models.OpenMSX
+namespace SabreTools.Data.Models.OpenMSX
 {
     /// <summary>
     /// Base class to unify the various rom types

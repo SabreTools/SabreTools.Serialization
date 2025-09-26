@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.LoadConfiguration
+﻿namespace SabreTools.Data.Models.PortableExecutable.LoadConfiguration
 {
     /// <summary>
     /// The data directory entry for a pre-reserved SEH load configuration

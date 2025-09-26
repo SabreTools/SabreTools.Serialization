@@ -1,4 +1,4 @@
-using SabreTools.Serialization.Models.OpenMSX;
+using SabreTools.Data.Models.OpenMSX;
 
 namespace SabreTools.Serialization.Deserializers
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.GCF
+namespace SabreTools.Data.Models.GCF
 {
     [Flags]
     public enum HL_GCF_FLAG : uint

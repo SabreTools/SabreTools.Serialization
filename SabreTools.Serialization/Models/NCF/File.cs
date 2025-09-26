@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.NCF
+namespace SabreTools.Data.Models.NCF
 {
     /// <summary>
     /// Half-Life No Cache File

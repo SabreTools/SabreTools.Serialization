@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.WAD3
+namespace SabreTools.Data.Models.WAD3
 {
     /// <see href="https://twhl.info/wiki/page/Specification:_WAD3"/>
     public sealed class QpicImage : FileEntry

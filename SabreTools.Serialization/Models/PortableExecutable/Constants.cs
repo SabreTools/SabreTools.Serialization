@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.PortableExecutable
+namespace SabreTools.Data.Models.PortableExecutable
 {
     // TODO: Add more constants around sizes
     // - Debug Directory entry size is a constant value of 28 (0x1C)

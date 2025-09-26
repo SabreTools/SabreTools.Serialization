@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.InstallShieldArchiveV3
+﻿namespace SabreTools.Data.Models.InstallShieldArchiveV3
 {
     public enum Attributes : byte
     {

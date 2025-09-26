@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.RAR
+namespace SabreTools.Data.Models.RAR
 {
     /// <summary>
     /// This is a placeholder model for future work

@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.SoftwareList();
 
             // Build the data
-            Models.SoftwareList.SoftwareList sl = Build();
+            Data.Models.SoftwareList.SoftwareList sl = Build();
 
             // Serialize to stream
             Stream? actual = serializer.Serialize(sl);
             Assert.NotNull(actual);
 
             // Serialize back to original model
-            Models.SoftwareList.SoftwareList? newSl = deserializer.Deserialize(actual);
+            Data.Models.SoftwareList.SoftwareList? newSl = deserializer.Deserialize(actual);
 
             // Validate the data
             Assert.NotNull(newSl);
@@ -101,27 +101,27 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.SoftwareList.SoftwareList Build()
+        private static Data.Models.SoftwareList.SoftwareList Build()
         {
-            var info = new Models.SoftwareList.Info
+            var info = new Data.Models.SoftwareList.Info
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
             };
 
-            var sharedfeat = new Models.SoftwareList.SharedFeat
+            var sharedfeat = new Data.Models.SoftwareList.SharedFeat
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
             };
 
-            var feature = new Models.SoftwareList.Feature
+            var feature = new Data.Models.SoftwareList.Feature
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
             };
 
-            var rom = new Models.SoftwareList.Rom
+            var rom = new Data.Models.SoftwareList.Rom
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 LoadFlag = "XXXXXX",
             };
 
-            var dataarea = new Models.SoftwareList.DataArea
+            var dataarea = new Data.Models.SoftwareList.DataArea
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -143,7 +143,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Rom = [rom],
             };
 
-            var disk = new Models.SoftwareList.Disk
+            var disk = new Data.Models.SoftwareList.Disk
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -152,20 +152,20 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Writeable = "XXXXXX",
             };
 
-            var diskarea = new Models.SoftwareList.DiskArea
+            var diskarea = new Data.Models.SoftwareList.DiskArea
             {
                 Name = "XXXXXX",
                 Disk = [disk],
             };
 
-            var dipvalue = new Models.SoftwareList.DipValue
+            var dipvalue = new Data.Models.SoftwareList.DipValue
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
                 Default = "XXXXXX",
             };
 
-            var dipswitch = new Models.SoftwareList.DipSwitch
+            var dipswitch = new Data.Models.SoftwareList.DipSwitch
             {
                 Name = "XXXXXX",
                 Tag = "XXXXXX",
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 DipValue = [dipvalue],
             };
 
-            var part = new Models.SoftwareList.Part
+            var part = new Data.Models.SoftwareList.Part
             {
                 Name = "XXXXXX",
                 Interface = "XXXXXX",
@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 DipSwitch = [dipswitch],
             };
 
-            var software = new Models.SoftwareList.Software
+            var software = new Data.Models.SoftwareList.Software
             {
                 Name = "XXXXXX",
                 CloneOf = "XXXXXX",
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Part = [part],
             };
 
-            return new Models.SoftwareList.SoftwareList
+            return new Data.Models.SoftwareList.SoftwareList
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
@@ -209,7 +209,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Software
         /// </summary>
-        private static void Validate(Models.SoftwareList.Software? software)
+        private static void Validate(Data.Models.SoftwareList.Software? software)
         {
             Assert.NotNull(software);
             Assert.Equal("XXXXXX", software.Name);
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Info
         /// </summary>
-        private static void Validate(Models.SoftwareList.Info? info)
+        private static void Validate(Data.Models.SoftwareList.Info? info)
         {
             Assert.NotNull(info);
             Assert.Equal("XXXXXX", info.Name);
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a SharedFeat
         /// </summary>
-        private static void Validate(Models.SoftwareList.SharedFeat? sharedfeat)
+        private static void Validate(Data.Models.SoftwareList.SharedFeat? sharedfeat)
         {
             Assert.NotNull(sharedfeat);
             Assert.Equal("XXXXXX", sharedfeat.Name);
@@ -256,7 +256,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Part
         /// </summary>
-        private static void Validate(Models.SoftwareList.Part? part)
+        private static void Validate(Data.Models.SoftwareList.Part? part)
         {
             Assert.NotNull(part);
             Assert.Equal("XXXXXX", part.Name);
@@ -282,7 +282,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Feature
         /// </summary>
-        private static void Validate(Models.SoftwareList.Feature? feature)
+        private static void Validate(Data.Models.SoftwareList.Feature? feature)
         {
             Assert.NotNull(feature);
             Assert.Equal("XXXXXX", feature.Name);
@@ -292,7 +292,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DataArea
         /// </summary>
-        private static void Validate(Models.SoftwareList.DataArea? dataarea)
+        private static void Validate(Data.Models.SoftwareList.DataArea? dataarea)
         {
             Assert.NotNull(dataarea);
             Assert.Equal("XXXXXX", dataarea.Name);
@@ -308,7 +308,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Rom
         /// </summary>
-        private static void Validate(Models.SoftwareList.Rom? rom)
+        private static void Validate(Data.Models.SoftwareList.Rom? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);
@@ -325,7 +325,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DiskArea
         /// </summary>
-        private static void Validate(Models.SoftwareList.DiskArea? diskarea)
+        private static void Validate(Data.Models.SoftwareList.DiskArea? diskarea)
         {
             Assert.NotNull(diskarea);
             Assert.Equal("XXXXXX", diskarea.Name);
@@ -338,7 +338,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Disk
         /// </summary>
-        private static void Validate(Models.SoftwareList.Disk? disk)
+        private static void Validate(Data.Models.SoftwareList.Disk? disk)
         {
             Assert.NotNull(disk);
             Assert.Equal("XXXXXX", disk.Name);
@@ -351,7 +351,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DipSwitch
         /// </summary>
-        private static void Validate(Models.SoftwareList.DipSwitch? dipswitch)
+        private static void Validate(Data.Models.SoftwareList.DipSwitch? dipswitch)
         {
             Assert.NotNull(dipswitch);
             Assert.Equal("XXXXXX", dipswitch.Name);
@@ -366,7 +366,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DipValue
         /// </summary>
-        private static void Validate(Models.SoftwareList.DipValue? dipvalue)
+        private static void Validate(Data.Models.SoftwareList.DipValue? dipvalue)
         {
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);

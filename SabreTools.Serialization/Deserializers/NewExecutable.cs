@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.NewExecutable;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Extensions;
-using SabreTools.Serialization.Models.NewExecutable;
-using static SabreTools.Serialization.Models.NewExecutable.Constants;
+using static SabreTools.Data.Models.NewExecutable.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -253,7 +253,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.MovableEntriesCount = data.ReadUInt16LittleEndian();
             obj.SegmentAlignmentShiftCount = data.ReadUInt16LittleEndian();
             obj.ResourceEntriesCount = data.ReadUInt16LittleEndian();
-            obj.TargetOperatingSystem = (Models.NewExecutable.OperatingSystem)data.ReadByteValue();
+            obj.TargetOperatingSystem = (Data.Models.NewExecutable.OperatingSystem)data.ReadByteValue();
             obj.AdditionalFlags = (OS2Flag)data.ReadByteValue();
             obj.ReturnThunkOffset = data.ReadUInt16LittleEndian();
             obj.SegmentReferenceThunkOffset = data.ReadUInt16LittleEndian();

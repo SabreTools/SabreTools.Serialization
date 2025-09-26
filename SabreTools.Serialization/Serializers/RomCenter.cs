@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.RomCenter;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.RomCenter;
 
 namespace SabreTools.Serialization.Serializers
 {

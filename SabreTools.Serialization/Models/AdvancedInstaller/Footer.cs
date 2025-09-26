@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.AdvancedInstaller
+namespace SabreTools.Data.Models.AdvancedInstaller
 {
     /// <summary>
     /// Structure similar to the end of central directory

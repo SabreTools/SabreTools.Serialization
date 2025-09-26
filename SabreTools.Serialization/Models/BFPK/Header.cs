@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace SabreTools.Serialization.Models.BFPK
+namespace SabreTools.Data.Models.BFPK
 {
     /// <summary>
     /// Header

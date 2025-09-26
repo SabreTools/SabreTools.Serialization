@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.MicrosoftCabinet;
 
 namespace SabreTools.Serialization.Wrappers
 {

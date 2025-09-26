@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.DVD
+namespace SabreTools.Data.Models.DVD
 {
     public static class Constants
     {

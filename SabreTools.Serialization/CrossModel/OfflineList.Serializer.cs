@@ -1,25 +1,25 @@
 using System;
+using SabreTools.Data.Models.OfflineList;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.OfflineList;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class OfflineList : IModelSerializer<Dat, Models.Metadata.MetadataFile>
+    public partial class OfflineList : IModelSerializer<Dat, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(Dat? item)
+        public Data.Models.Metadata.MetadataFile? Serialize(Dat? item)
         {
             if (item == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Games?.Game != null && item.Games.Game.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
             }
 
@@ -29,31 +29,31 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Dat"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
-        private static Models.Metadata.Header ConvertHeaderToInternalModel(Dat item)
+        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(Dat item)
         {
-            var header = new Models.Metadata.Header
+            var header = new Data.Models.Metadata.Header
             {
-                [Models.Metadata.Header.SchemaLocationKey] = item.NoNamespaceSchemaLocation,
+                [Data.Models.Metadata.Header.SchemaLocationKey] = item.NoNamespaceSchemaLocation,
             };
 
             if (item.Configuration != null)
             {
-                header[Models.Metadata.Header.NameKey] = item.Configuration.DatName;
-                header[Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
-                header[Models.Metadata.Header.DatVersionKey] = item.Configuration.DatVersion;
-                header[Models.Metadata.Header.SystemKey] = item.Configuration.System;
-                header[Models.Metadata.Header.ScreenshotsWidthKey] = item.Configuration.ScreenshotsWidth;
-                header[Models.Metadata.Header.ScreenshotsHeightKey] = item.Configuration.ScreenshotsHeight;
-                header[Models.Metadata.Header.InfosKey] = item.Configuration.Infos;
-                header[Models.Metadata.Header.CanOpenKey] = item.Configuration.CanOpen;
-                header[Models.Metadata.Header.NewDatKey] = item.Configuration.NewDat;
-                header[Models.Metadata.Header.SearchKey] = item.Configuration.Search;
-                header[Models.Metadata.Header.RomTitleKey] = item.Configuration.RomTitle;
+                header[Data.Models.Metadata.Header.NameKey] = item.Configuration.DatName;
+                header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
+                header[Data.Models.Metadata.Header.DatVersionKey] = item.Configuration.DatVersion;
+                header[Data.Models.Metadata.Header.SystemKey] = item.Configuration.System;
+                header[Data.Models.Metadata.Header.ScreenshotsWidthKey] = item.Configuration.ScreenshotsWidth;
+                header[Data.Models.Metadata.Header.ScreenshotsHeightKey] = item.Configuration.ScreenshotsHeight;
+                header[Data.Models.Metadata.Header.InfosKey] = item.Configuration.Infos;
+                header[Data.Models.Metadata.Header.CanOpenKey] = item.Configuration.CanOpen;
+                header[Data.Models.Metadata.Header.NewDatKey] = item.Configuration.NewDat;
+                header[Data.Models.Metadata.Header.SearchKey] = item.Configuration.Search;
+                header[Data.Models.Metadata.Header.RomTitleKey] = item.Configuration.RomTitle;
             }
 
             if (item.GUI != null)
             {
-                header[Models.Metadata.Header.ImagesKey] = item.GUI.Images;
+                header[Data.Models.Metadata.Header.ImagesKey] = item.GUI.Images;
             }
 
             return header;
@@ -62,31 +62,31 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Game"/> to <see cref="Models.Metadata.Machine"/>
         /// </summary>
-        private static Models.Metadata.Machine ConvertMachineToInternalModel(Game item)
+        private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(Game item)
         {
-            var machine = new Models.Metadata.Machine
+            var machine = new Data.Models.Metadata.Machine
             {
-                [Models.Metadata.Machine.ImageNumberKey] = item.ImageNumber,
-                [Models.Metadata.Machine.ReleaseNumberKey] = item.ReleaseNumber,
-                [Models.Metadata.Machine.NameKey] = item.Title,
-                [Models.Metadata.Machine.SaveTypeKey] = item.SaveType,
-                [Models.Metadata.Machine.PublisherKey] = item.Publisher,
-                [Models.Metadata.Machine.LocationKey] = item.Location,
-                [Models.Metadata.Machine.SourceRomKey] = item.SourceRom,
-                [Models.Metadata.Machine.LanguageKey] = item.Language,
-                [Models.Metadata.Machine.Im1CRCKey] = item.Im1CRC,
-                [Models.Metadata.Machine.Im2CRCKey] = item.Im2CRC,
-                [Models.Metadata.Machine.CommentKey] = item.Comment,
-                [Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
+                [Data.Models.Metadata.Machine.ImageNumberKey] = item.ImageNumber,
+                [Data.Models.Metadata.Machine.ReleaseNumberKey] = item.ReleaseNumber,
+                [Data.Models.Metadata.Machine.NameKey] = item.Title,
+                [Data.Models.Metadata.Machine.SaveTypeKey] = item.SaveType,
+                [Data.Models.Metadata.Machine.PublisherKey] = item.Publisher,
+                [Data.Models.Metadata.Machine.LocationKey] = item.Location,
+                [Data.Models.Metadata.Machine.SourceRomKey] = item.SourceRom,
+                [Data.Models.Metadata.Machine.LanguageKey] = item.Language,
+                [Data.Models.Metadata.Machine.Im1CRCKey] = item.Im1CRC,
+                [Data.Models.Metadata.Machine.Im2CRCKey] = item.Im2CRC,
+                [Data.Models.Metadata.Machine.CommentKey] = item.Comment,
+                [Data.Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
             };
 
             if (item.Files?.RomCRC != null && item.Files.RomCRC.Length > 0)
             {
-                machine[Models.Metadata.Machine.RomKey]
+                machine[Data.Models.Metadata.Machine.RomKey]
                     = Array.ConvertAll(item.Files.RomCRC, romCRC =>
                         {
                             var rom = ConvertToInternalModel(romCRC);
-                            rom[Models.Metadata.Rom.SizeKey] = item.RomSize;
+                            rom[Data.Models.Metadata.Rom.SizeKey] = item.RomSize;
                             return rom;
                         });
             }
@@ -97,12 +97,12 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="FileRomCRC"/> to <see cref="Models.Metadata.Rom"/>
         /// </summary>
-        private static Models.Metadata.Rom ConvertToInternalModel(FileRomCRC item)
+        private static Data.Models.Metadata.Rom ConvertToInternalModel(FileRomCRC item)
         {
-            var rom = new Models.Metadata.Rom
+            var rom = new Data.Models.Metadata.Rom
             {
-                [Models.Metadata.Rom.ExtensionKey] = item.Extension,
-                [Models.Metadata.Rom.CRCKey] = item.Content,
+                [Data.Models.Metadata.Rom.ExtensionKey] = item.Extension,
+                [Data.Models.Metadata.Rom.CRCKey] = item.Content,
             };
             return rom;
         }

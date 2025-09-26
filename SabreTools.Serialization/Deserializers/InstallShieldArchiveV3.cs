@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.InstallShieldArchiveV3;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.InstallShieldArchiveV3;
 
 namespace SabreTools.Serialization.Deserializers
 {
@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Deserializers
                 data.Seek(directoriesOffset, SeekOrigin.Begin);
 
                 // Try to parse the directories
-                var directories = new List<Models.InstallShieldArchiveV3.Directory>();
+                var directories = new List<Data.Models.InstallShieldArchiveV3.Directory>();
                 for (int i = 0; i < header.DirCount; i++)
                 {
                     var directory = ParseDirectory(data);
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Deserializers
                 #region Files
 
                 // Try to parse the files
-                var files = new List<Models.InstallShieldArchiveV3.File>();
+                var files = new List<Data.Models.InstallShieldArchiveV3.File>();
                 for (int i = 0; i < archive.Directories.Length; i++)
                 {
                     var directory = archive.Directories[i];
@@ -94,9 +94,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Directory on success, null on error</returns>
-        public static Models.InstallShieldArchiveV3.Directory ParseDirectory(Stream data)
+        public static Data.Models.InstallShieldArchiveV3.Directory ParseDirectory(Stream data)
         {
-            var obj = new Models.InstallShieldArchiveV3.Directory();
+            var obj = new Data.Models.InstallShieldArchiveV3.Directory();
 
             obj.FileCount = data.ReadUInt16LittleEndian();
             obj.ChunkSize = data.ReadUInt16LittleEndian();
@@ -113,9 +113,9 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled File on success, null on error</returns>
-        public static Models.InstallShieldArchiveV3.File ParseFile(Stream data)
+        public static Data.Models.InstallShieldArchiveV3.File ParseFile(Stream data)
         {
-            var obj = new Models.InstallShieldArchiveV3.File();
+            var obj = new Data.Models.InstallShieldArchiveV3.File();
 
             obj.VolumeEnd = data.ReadByteValue();
             obj.Index = data.ReadUInt16LittleEndian();
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.DateTime = data.ReadUInt32LittleEndian();
             obj.Reserved0 = data.ReadUInt32LittleEndian();
             obj.ChunkSize = data.ReadUInt16LittleEndian();
-            obj.Attrib = (Models.InstallShieldArchiveV3.Attributes)data.ReadByteValue();
+            obj.Attrib = (Data.Models.InstallShieldArchiveV3.Attributes)data.ReadByteValue();
             obj.IsSplit = data.ReadByteValue();
             obj.Reserved1 = data.ReadByteValue();
             obj.VolumeStart = data.ReadByteValue();
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.Deserializers
 
             return obj;
         }
-    
+
         /// <summary>
         /// Parse a Stream into a Header
         /// </summary>

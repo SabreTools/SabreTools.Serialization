@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.NewExecutable
+namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The resource table follows the segment table and contains entries for

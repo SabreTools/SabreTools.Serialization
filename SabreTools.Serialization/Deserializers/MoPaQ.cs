@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.MoPaQ;
 using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.MoPaQ;
-using static SabreTools.Serialization.Models.MoPaQ.Constants;
+using static SabreTools.Data.Models.MoPaQ.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

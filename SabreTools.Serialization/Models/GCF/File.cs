@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.GCF
+namespace SabreTools.Data.Models.GCF
 {
     /// <summary>
     /// Half-Life Game Cache File

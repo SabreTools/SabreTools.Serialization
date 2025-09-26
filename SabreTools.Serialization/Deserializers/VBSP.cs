@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.BSP;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.BSP;
-using static SabreTools.Serialization.Models.BSP.Constants;
+using static SabreTools.Data.Models.BSP.Constants;
 
 // TODO: Finish replacing ReadType
 namespace SabreTools.Serialization.Deserializers

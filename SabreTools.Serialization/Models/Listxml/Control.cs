@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Listxml
+namespace SabreTools.Data.Models.Listxml
 {
     [XmlRoot("control")]
     public class Control

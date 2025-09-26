@@ -1,6 +1,6 @@
-using SabreTools.Serialization.Models.WiseInstaller.Actions;
+using SabreTools.Data.Models.WiseInstaller.Actions;
 
-namespace SabreTools.Serialization.Models.WiseInstaller
+namespace SabreTools.Data.Models.WiseInstaller
 {
     /// <summary>
     /// Represents a single step in the state machine defined

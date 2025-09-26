@@ -1,7 +1,7 @@
 /// <remarks>
 /// Information sourced from https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.PackageInfoTable
 /// </remarks>
-namespace SabreTools.Serialization.Models.Delphi
+namespace SabreTools.Data.Models.Delphi
 {
     public class PackageInfoTable
     {

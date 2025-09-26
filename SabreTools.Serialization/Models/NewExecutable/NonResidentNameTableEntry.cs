@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.NewExecutable
+﻿namespace SabreTools.Data.Models.NewExecutable
 {
     /// <summary>
     /// The nonresident-name table follows the entry table, and contains a

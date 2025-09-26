@@ -1,10 +1,10 @@
 using System.IO;
 using System.Text;
-using static SabreTools.Serialization.Models.Xbox.Constants;
+using static SabreTools.Data.Models.Xbox.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class XeMID : WrapperBase<Models.Xbox.XeMID>
+    public class XeMID : WrapperBase<Data.Models.Xbox.XeMID>
     {
         #region Descriptive Properties
 
@@ -78,22 +78,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, byte[] data) : base(model, data) { }
+        public XeMID(Data.Models.Xbox.XeMID model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, byte[] data, int offset) : base(model, data, offset) { }
+        public XeMID(Data.Models.Xbox.XeMID model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public XeMID(Data.Models.Xbox.XeMID model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, Stream data) : base(model, data) { }
+        public XeMID(Data.Models.Xbox.XeMID model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, Stream data, long offset) : base(model, data, offset) { }
+        public XeMID(Data.Models.Xbox.XeMID model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public XeMID(Models.Xbox.XeMID model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public XeMID(Data.Models.Xbox.XeMID model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MicrosoftCabinet
+﻿namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     /// <summary>
     /// The CFHEADER structure shown in the following packet diagram provides information about this

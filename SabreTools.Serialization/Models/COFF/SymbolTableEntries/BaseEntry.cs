@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.COFF.SymbolTableEntries
+﻿namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// The symbol table in this section is inherited from the traditional

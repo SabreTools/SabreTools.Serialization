@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.N3DS
+namespace SabreTools.Data.Models.N3DS
 {
     /// <summary>
     /// CIA stands for CTR Importable Archive. This format allows the installation of

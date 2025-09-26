@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.IO.Writers;
-using SabreTools.Serialization.Models.SeparatedValue;
 
 namespace SabreTools.Serialization.Serializers
 {

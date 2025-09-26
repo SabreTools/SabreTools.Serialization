@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.SafeDisc
+﻿namespace SabreTools.Data.Models.SafeDisc
 {
     public static class Constants
     {

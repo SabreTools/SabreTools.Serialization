@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Export
+﻿namespace SabreTools.Data.Models.PortableExecutable.Export
 {
     /// <summary>
     /// The export symbol information begins with the export directory table,

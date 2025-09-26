@@ -1,15 +1,15 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.PAK;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.PAK;
-using static SabreTools.Serialization.Models.PAK.Constants;
+using static SabreTools.Data.Models.PAK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class PAK : BaseBinaryDeserializer<Models.PAK.File>
+    public class PAK : BaseBinaryDeserializer<Data.Models.PAK.File>
     {
         /// <inheritdoc/>
-        public override Models.PAK.File? Deserialize(Stream? data)
+        public override Data.Models.PAK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life Package to fill
-                var file = new Models.PAK.File();
+                var file = new Data.Models.PAK.File();
 
                 #region Header
 

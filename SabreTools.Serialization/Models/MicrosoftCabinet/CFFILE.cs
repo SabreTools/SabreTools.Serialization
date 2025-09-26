@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.MicrosoftCabinet
+﻿namespace SabreTools.Data.Models.MicrosoftCabinet
 {
     /// <summary>
     /// Each CFFILE structure contains information about one of the files stored (or at least partially

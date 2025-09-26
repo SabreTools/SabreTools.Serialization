@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.OLE
+namespace SabreTools.Data.Models.OLE
 {
     /// <summary>
     /// The CURRENCY (Packet Version) packet represents a CURRENCY as specified in [MS-OAUT]

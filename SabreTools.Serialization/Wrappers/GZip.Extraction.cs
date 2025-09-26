@@ -1,8 +1,8 @@
 using System;
 using System.IO;
+using SabreTools.Data.Models.GZIP;
 using SabreTools.IO.Compression.Deflate;
 using SabreTools.Serialization.Interfaces;
-using SabreTools.Serialization.Models.GZIP;
 
 namespace SabreTools.Serialization.Wrappers
 {

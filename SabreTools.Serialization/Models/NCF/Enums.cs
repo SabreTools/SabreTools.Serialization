@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Serialization.Models.NCF
+namespace SabreTools.Data.Models.NCF
 {
     [Flags]
     public enum HL_NCF_FLAG : uint

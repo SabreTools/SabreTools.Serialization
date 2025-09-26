@@ -78,14 +78,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.Logiqx();
 
             // Build the data
-            Models.Logiqx.Datafile df = Build(game: true);
+            Data.Models.Logiqx.Datafile df = Build(game: true);
 
             // Serialize to stream
             Stream? metadata = serializer.Serialize(df);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.Logiqx.Datafile? newDf = deserializer.Deserialize(metadata);
+            Data.Models.Logiqx.Datafile? newDf = deserializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newDf);
@@ -110,14 +110,14 @@ namespace SabreTools.Serialization.Test.Deserializers
             var serializer = new SabreTools.Serialization.Serializers.Logiqx();
 
             // Build the data
-            Models.Logiqx.Datafile df = Build(game: false);
+            Data.Models.Logiqx.Datafile df = Build(game: false);
 
             // Serialize to stream
             Stream? metadata = serializer.Serialize(df);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.Logiqx.Datafile? newDf = deserializer.Deserialize(metadata);
+            Data.Models.Logiqx.Datafile? newDf = deserializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newDf);
@@ -137,9 +137,9 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.Logiqx.Datafile Build(bool game)
+        private static Data.Models.Logiqx.Datafile Build(bool game)
         {
-            var clrmamepro = new Models.Logiqx.ClrMamePro
+            var clrmamepro = new Data.Models.Logiqx.ClrMamePro
             {
                 Header = "XXXXXX",
                 ForceMerging = "XXXXXX",
@@ -147,7 +147,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 ForcePacking = "XXXXXX",
             };
 
-            var romcenter = new Models.Logiqx.RomCenter
+            var romcenter = new Data.Models.Logiqx.RomCenter
             {
                 Plugin = "XXXXXX",
                 RomMode = "XXXXXX",
@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 LockSampleMode = "XXXXXX",
             };
 
-            var header = new Models.Logiqx.Header
+            var header = new Data.Models.Logiqx.Header
             {
                 Id = "XXXXXX",
                 Name = "XXXXXX",
@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 RomCenter = romcenter,
             };
 
-            var trurip = new Models.Logiqx.Trurip
+            var trurip = new Data.Models.Logiqx.Trurip
             {
                 TitleID = "XXXXXX",
                 Publisher = "XXXXXX",
@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 RelatedTo = "XXXXXX",
             };
 
-            var release = new Models.Logiqx.Release
+            var release = new Data.Models.Logiqx.Release
             {
                 Name = "XXXXXX",
                 Region = "XXXXXX",
@@ -204,14 +204,14 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Default = "XXXXXX",
             };
 
-            var biosset = new Models.Logiqx.BiosSet
+            var biosset = new Data.Models.Logiqx.BiosSet
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
                 Default = "XXXXXX",
             };
 
-            var rom = new Models.Logiqx.Rom
+            var rom = new Data.Models.Logiqx.Rom
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 MIA = "XXXXXX",
             };
 
-            var disk = new Models.Logiqx.Disk
+            var disk = new Data.Models.Logiqx.Disk
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Region = "XXXXXX",
             };
 
-            var media = new Models.Logiqx.Media
+            var media = new Data.Models.Logiqx.Media
             {
                 Name = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -256,22 +256,22 @@ namespace SabreTools.Serialization.Test.Deserializers
                 SpamSum = "XXXXXX",
             };
 
-            var deviceRef = new Models.Logiqx.DeviceRef
+            var deviceRef = new Data.Models.Logiqx.DeviceRef
             {
                 Name = "XXXXXX",
             };
 
-            var sample = new Models.Logiqx.Sample
+            var sample = new Data.Models.Logiqx.Sample
             {
                 Name = "XXXXXX",
             };
 
-            var archive = new Models.Logiqx.Archive
+            var archive = new Data.Models.Logiqx.Archive
             {
                 Name = "XXXXXX",
             };
 
-            var driver = new Models.Logiqx.Driver
+            var driver = new Data.Models.Logiqx.Driver
             {
                 Status = "XXXXXX",
                 Emulation = "XXXXXX",
@@ -283,7 +283,7 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Incomplete = "XXXXXX",
             };
 
-            var softwarelist = new Models.Logiqx.SoftwareList
+            var softwarelist = new Data.Models.Logiqx.SoftwareList
             {
                 Tag = "XXXXXX",
                 Name = "XXXXXX",
@@ -291,9 +291,9 @@ namespace SabreTools.Serialization.Test.Deserializers
                 Filter = "XXXXXX",
             };
 
-            Models.Logiqx.GameBase gameBase = game
-                ? new Models.Logiqx.Game()
-                : new Models.Logiqx.Machine();
+            Data.Models.Logiqx.GameBase gameBase = game
+                ? new Data.Models.Logiqx.Game()
+                : new Data.Models.Logiqx.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.SourceFile = "XXXXXX";
             gameBase.IsBios = "XXXXXX";
@@ -325,7 +325,7 @@ namespace SabreTools.Serialization.Test.Deserializers
             gameBase.Driver = driver;
             gameBase.SoftwareList = [softwarelist];
 
-            return new Models.Logiqx.Datafile
+            return new Data.Models.Logiqx.Datafile
             {
                 Build = "XXXXXX",
                 Debug = "XXXXXX",
@@ -339,7 +339,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Header
         /// </summary>
-        private static void Validate(Models.Logiqx.Header? header)
+        private static void Validate(Data.Models.Logiqx.Header? header)
         {
             Assert.NotNull(header);
             Assert.Equal("XXXXXX", header.Id);
@@ -362,7 +362,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a ClrMamePro
         /// </summary>
-        private static void Validate(Models.Logiqx.ClrMamePro? cmp)
+        private static void Validate(Data.Models.Logiqx.ClrMamePro? cmp)
         {
             Assert.NotNull(cmp);
             Assert.Equal("XXXXXX", cmp.Header);
@@ -374,7 +374,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a RomCenter
         /// </summary>
-        private static void Validate(Models.Logiqx.RomCenter? rc)
+        private static void Validate(Data.Models.Logiqx.RomCenter? rc)
         {
             Assert.NotNull(rc);
             Assert.Equal("XXXXXX", rc.Plugin);
@@ -389,7 +389,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a GameBase
         /// </summary>
-        private static void Validate(Models.Logiqx.GameBase? gb)
+        private static void Validate(Data.Models.Logiqx.GameBase? gb)
         {
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
@@ -463,7 +463,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Trurip
         /// </summary>
-        private static void Validate(Models.Logiqx.Trurip? trurip)
+        private static void Validate(Data.Models.Logiqx.Trurip? trurip)
         {
             Assert.NotNull(trurip);
             Assert.Equal("XXXXXX", trurip.TitleID);
@@ -485,7 +485,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Release
         /// </summary>
-        private static void Validate(Models.Logiqx.Release? release)
+        private static void Validate(Data.Models.Logiqx.Release? release)
         {
             Assert.NotNull(release);
             Assert.Equal("XXXXXX", release.Name);
@@ -498,7 +498,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a BiosSet
         /// </summary>
-        private static void Validate(Models.Logiqx.BiosSet? biosset)
+        private static void Validate(Data.Models.Logiqx.BiosSet? biosset)
         {
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Rom
         /// </summary>
-        private static void Validate(Models.Logiqx.Rom? rom)
+        private static void Validate(Data.Models.Logiqx.Rom? rom)
         {
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);
@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Disk
         /// </summary>
-        private static void Validate(Models.Logiqx.Disk? disk)
+        private static void Validate(Data.Models.Logiqx.Disk? disk)
         {
             Assert.NotNull(disk);
             Assert.Equal("XXXXXX", disk.Name);
@@ -553,7 +553,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Media
         /// </summary>
-        private static void Validate(Models.Logiqx.Media? media)
+        private static void Validate(Data.Models.Logiqx.Media? media)
         {
             Assert.NotNull(media);
             Assert.Equal("XXXXXX", media.Name);
@@ -566,7 +566,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a DeviceRef
         /// </summary>
-        private static void Validate(Models.Logiqx.DeviceRef? deviceref)
+        private static void Validate(Data.Models.Logiqx.DeviceRef? deviceref)
         {
             Assert.NotNull(deviceref);
             Assert.Equal("XXXXXX", deviceref.Name);
@@ -575,7 +575,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Sample
         /// </summary>
-        private static void Validate(Models.Logiqx.Sample? sample)
+        private static void Validate(Data.Models.Logiqx.Sample? sample)
         {
             Assert.NotNull(sample);
             Assert.Equal("XXXXXX", sample.Name);
@@ -584,7 +584,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Archive
         /// </summary>
-        private static void Validate(Models.Logiqx.Archive? archive)
+        private static void Validate(Data.Models.Logiqx.Archive? archive)
         {
             Assert.NotNull(archive);
             Assert.Equal("XXXXXX", archive.Name);
@@ -593,7 +593,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a Driver
         /// </summary>
-        private static void Validate(Models.Logiqx.Driver? driver)
+        private static void Validate(Data.Models.Logiqx.Driver? driver)
         {
             Assert.NotNull(driver);
             Assert.Equal("XXXXXX", driver.Status);
@@ -609,7 +609,7 @@ namespace SabreTools.Serialization.Test.Deserializers
         /// <summary>
         /// Validate a SoftwareList
         /// </summary>
-        private static void Validate(Models.Logiqx.SoftwareList? softwarelist)
+        private static void Validate(Data.Models.Logiqx.SoftwareList? softwarelist)
         {
             Assert.NotNull(softwarelist);
             Assert.Equal("XXXXXX", softwarelist.Tag);

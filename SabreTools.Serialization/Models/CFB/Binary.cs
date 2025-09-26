@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.CFB
+namespace SabreTools.Data.Models.CFB
 {
     /// <summary>
     /// Microsoft Compound File Binary (CFB) file format, also known as the

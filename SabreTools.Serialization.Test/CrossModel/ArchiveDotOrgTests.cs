@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new ArchiveDotOrg();
 
             // Build the data
-            Models.ArchiveDotOrg.Files files = Build();
+            Data.Models.ArchiveDotOrg.Files files = Build();
 
             // Serialize to generic model
-            SabreTools.Serialization.Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
+            SabreTools.Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.ArchiveDotOrg.Files? newFiles = serializer.Deserialize(metadata);
+            Data.Models.ArchiveDotOrg.Files? newFiles = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newFiles);
@@ -31,9 +31,9 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.ArchiveDotOrg.Files Build()
+        private static Data.Models.ArchiveDotOrg.Files Build()
         {
-            var file = new Models.ArchiveDotOrg.File
+            var file = new Data.Models.ArchiveDotOrg.File
             {
                 Name = "XXXXXX",
                 Source = "XXXXXX",
@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Width = "XXXXXX",
             };
 
-            return new Models.ArchiveDotOrg.Files
+            return new Data.Models.ArchiveDotOrg.Files
             {
                 File = [file]
             };
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a File
         /// </summary>
-        private static void Validate(Models.ArchiveDotOrg.File? file)
+        private static void Validate(Data.Models.ArchiveDotOrg.File? file)
         {
             Assert.NotNull(file);
             Assert.Equal("XXXXXX", file.Name);

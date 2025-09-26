@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Import
+﻿namespace SabreTools.Data.Models.PortableExecutable.Import
 {
     /// <summary>
     /// The import information begins with the import directory table, which

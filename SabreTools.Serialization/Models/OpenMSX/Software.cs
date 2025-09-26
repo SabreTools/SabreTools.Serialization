@@ -2,7 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.OpenMSX
+namespace SabreTools.Data.Models.OpenMSX
 {
     [XmlRoot("software")]
     public class Software

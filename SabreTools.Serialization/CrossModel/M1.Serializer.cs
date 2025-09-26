@@ -3,22 +3,22 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class M1 : IModelSerializer<Models.Listxml.M1, Models.Metadata.MetadataFile>
+    public partial class M1 : IModelSerializer<Data.Models.Listxml.M1, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public Models.Metadata.MetadataFile? Serialize(Models.Listxml.M1? item)
+        public Data.Models.Metadata.MetadataFile? Serialize(Data.Models.Listxml.M1? item)
         {
             if (item == null)
                 return null;
 
-            var metadataFile = new Models.Metadata.MetadataFile
+            var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
             if (item?.Game != null && item.Game.Length > 0)
             {
-                metadataFile[Models.Metadata.MetadataFile.MachineKey]
+                metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Game, Listxml.ConvertMachineToInternalModel);
             }
 
@@ -28,11 +28,11 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Models.Listxml.M1"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
-        private static Models.Metadata.Header ConvertHeaderToInternalModel(Models.Listxml.M1 item)
+        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(Data.Models.Listxml.M1 item)
         {
-            var header = new Models.Metadata.Header
+            var header = new Data.Models.Metadata.Header
             {
-                [Models.Metadata.Header.VersionKey] = item.Version,
+                [Data.Models.Metadata.Header.VersionKey] = item.Version,
             };
             return header;
         }

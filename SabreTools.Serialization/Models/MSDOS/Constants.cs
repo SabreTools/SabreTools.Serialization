@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.MSDOS
+namespace SabreTools.Data.Models.MSDOS
 {
     public static class Constants
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SabreTools.Serialization.Models.PortableExecutable
+namespace SabreTools.Data.Models.PortableExecutable
 {
     /// <summary>
     /// The following list describes the Microsoft PE executable format, with the

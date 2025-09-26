@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.EverdriveSMDB
+namespace SabreTools.Data.Models.EverdriveSMDB
 {
     public class MetadataFile
     {

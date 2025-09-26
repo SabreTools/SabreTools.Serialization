@@ -1,4 +1,4 @@
-﻿namespace SabreTools.Serialization.Models.PortableExecutable.Import
+﻿namespace SabreTools.Data.Models.PortableExecutable.Import
 {
     /// <summary>
     /// An import lookup table is an array of 32-bit numbers for PE32 or an array of

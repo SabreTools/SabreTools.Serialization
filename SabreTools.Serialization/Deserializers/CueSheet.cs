@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using SabreTools.Serialization.Models.CueSheets;
+using SabreTools.Data.Models.CueSheets;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CueSheet : BaseBinaryDeserializer<Models.CueSheets.CueSheet>
+    public class CueSheet : BaseBinaryDeserializer<Data.Models.CueSheets.CueSheet>
     {
         /// <inheritdoc/>
-        public override Models.CueSheets.CueSheet? Deserialize(Stream? data)
+        public override Data.Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
             {
                 // Setup the reader and output
                 var reader = new StreamReader(data, Encoding.UTF8);
-                var cueSheet = new Models.CueSheets.CueSheet();
+                var cueSheet = new Data.Models.CueSheets.CueSheet();
                 var cueFiles = new List<CueFile>();
 
                 // Read the next line from the input

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BDPlus
+namespace SabreTools.Data.Models.BDPlus
 {
     public static class Constants
     {

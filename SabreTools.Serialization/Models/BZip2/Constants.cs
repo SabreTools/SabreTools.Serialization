@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Models.BZip2
+namespace SabreTools.Data.Models.BZip2
 {
     public static class Constants
     {

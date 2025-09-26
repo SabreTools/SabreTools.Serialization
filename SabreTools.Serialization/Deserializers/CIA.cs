@@ -1,14 +1,14 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.N3DS;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.N3DS;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class CIA : BaseBinaryDeserializer<Models.N3DS.CIA>
+    public class CIA : BaseBinaryDeserializer<Data.Models.N3DS.CIA>
     {
         /// <inheritdoc/>
-        public override Models.N3DS.CIA? Deserialize(Stream? data)
+        public override Data.Models.N3DS.CIA? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Deserializers
             try
             {
                 // Create a new CIA archive to fill
-                var cia = new Models.N3DS.CIA();
+                var cia = new Data.Models.N3DS.CIA();
 
                 #region CIA Header
 

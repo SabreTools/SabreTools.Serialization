@@ -1,7 +1,7 @@
 ﻿/// <remarks>
 /// Information sourced from http://web.archive.org/web/20070221154246/http://www.goldenhawk.com/download/cdrwin.pdf
 /// </remarks>
-namespace SabreTools.Serialization.Models.CueSheets
+namespace SabreTools.Data.Models.CueSheets
 {
     /// <summary>
     /// Represents a single cuesheet

@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Models.N3DS;
 using SabreTools.IO.Extensions;
-using SabreTools.Serialization.Models.N3DS;
-using static SabreTools.Serialization.Models.N3DS.Constants;
+using static SabreTools.Data.Models.N3DS.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {

@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.SeparatedValue
+namespace SabreTools.Data.Models.SeparatedValue
 {
     /// <summary>
     /// Standardized variant of a row

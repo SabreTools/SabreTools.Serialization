@@ -1,6 +1,6 @@
 using SabreTools.Data.Attributes;
 
-namespace SabreTools.Serialization.Models.Hashfile
+namespace SabreTools.Data.Models.Hashfile
 {
     /// <summary>
     /// SpamSum File

@@ -12,14 +12,14 @@ namespace SabreTools.Serialization.Test.CrossModel
             var serializer = new AttractMode();
 
             // Build the data
-            Models.AttractMode.MetadataFile mf = Build();
+            Data.Models.AttractMode.MetadataFile mf = Build();
 
             // Serialize to generic model
-            Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(mf);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
-            Models.AttractMode.MetadataFile? newMf = serializer.Deserialize(metadata);
+            Data.Models.AttractMode.MetadataFile? newMf = serializer.Deserialize(metadata);
 
             // Validate the data
             Assert.NotNull(newMf);
@@ -32,11 +32,11 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Build model for serialization and deserialization
         /// </summary>
-        private static Models.AttractMode.MetadataFile Build()
+        private static Data.Models.AttractMode.MetadataFile Build()
         {
             string[] header = ["header"];
 
-            var row = new Models.AttractMode.Row
+            var row = new Data.Models.AttractMode.Row
             {
                 Name = "XXXXXX",
                 Title = "XXXXXX",
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 FileIsAvailable = "XXXXXX",
             };
 
-            return new Models.AttractMode.MetadataFile
+            return new Data.Models.AttractMode.MetadataFile
             {
                 Header = header,
                 Row = [row],
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// <summary>
         /// Validate a Row
         /// </summary>
-        private static void Validate(Models.AttractMode.Row? row)
+        private static void Validate(Data.Models.AttractMode.Row? row)
         {
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
