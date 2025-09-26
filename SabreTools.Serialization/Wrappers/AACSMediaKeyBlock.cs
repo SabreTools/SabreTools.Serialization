@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SabreTools.Data.Models.AACS;
 
@@ -18,6 +19,21 @@ namespace SabreTools.Serialization.Wrappers
         /// Media key block records
         /// </summary>
         public Record[] Records => Model.Records ?? [];
+
+        /// <summary>
+        /// Reported version of the media key block
+        /// </summary>
+        public string? Version
+        {
+            get
+            {
+                var record = Array.Find(Records, r => r.RecordType == RecordType.TypeAndVersion);
+                if (record is TypeAndVersionRecord tavr)
+                    return tavr.VersionNumber.ToString();
+
+                return null;
+            }
+        }
 
         #endregion
 
