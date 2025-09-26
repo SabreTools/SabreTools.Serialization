@@ -3,12 +3,12 @@ using System.Text;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Catalog : JsonFile<SabreTools.Serialization.Models.Xbox.Catalog>
+    public class Catalog : JsonFile<Models.Xbox.Catalog>
     {
         #region IByteDeserializer
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
-        public override SabreTools.Serialization.Models.Xbox.Catalog? Deserialize(byte[]? data, int offset)
+        public override Models.Xbox.Catalog? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, new UnicodeEncoding());
 
         #endregion
@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IFileDeserializer
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
-        public override SabreTools.Serialization.Models.Xbox.Catalog? Deserialize(string? path)
+        public override Models.Xbox.Catalog? Deserialize(string? path)
             => Deserialize(path, new UnicodeEncoding());
 
         #endregion
@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Deserializers
         #region IStreamDeserializer
 
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
-        public override SabreTools.Serialization.Models.Xbox.Catalog? Deserialize(Stream? data)
+        public override Models.Xbox.Catalog? Deserialize(Stream? data)
             => Deserialize(data, new UnicodeEncoding());
 
         #endregion

@@ -3,10 +3,10 @@ using System.Text;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public class Catalog : JsonFile<SabreTools.Serialization.Models.Xbox.Catalog>
+    public class Catalog : JsonFile<Models.Xbox.Catalog>
     {
         /// <remarks>Catalog.js file is encoded as UTF-16 LE</remarks>
-        public override Stream? SerializeStream(SabreTools.Serialization.Models.Xbox.Catalog? obj)
+        public override Stream? SerializeStream(Models.Xbox.Catalog? obj)
             => Serialize(obj, new UnicodeEncoding());
     }
 }

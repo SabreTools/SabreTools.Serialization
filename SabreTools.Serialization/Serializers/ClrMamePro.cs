@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="header">ClrMamePro representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteHeader(SabreTools.Serialization.Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
+        private static void WriteHeader(Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
             if (header == null)

@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="header">DosCenter representing the header information</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteHeader(SabreTools.Serialization.Models.DosCenter.DosCenter? header, ClrMameProWriter writer)
+        private static void WriteHeader(Models.DosCenter.DosCenter? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
             if (header == null)
@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Serializers
         /// </summary>
         /// <param name="files">Array of File objects to write</param>
         /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteFiles(SabreTools.Serialization.Models.DosCenter.File[]? files, ClrMameProWriter writer)
+        private static void WriteFiles(Models.DosCenter.File[]? files, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
             if (files == null)

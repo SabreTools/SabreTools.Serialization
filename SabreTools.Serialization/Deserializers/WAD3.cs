@@ -6,10 +6,10 @@ using static SabreTools.Serialization.Models.WAD3.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class WAD3 : BaseBinaryDeserializer<SabreTools.Serialization.Models.WAD3.File>
+    public class WAD3 : BaseBinaryDeserializer<Models.WAD3.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.WAD3.File? Deserialize(Stream? data)
+        public override Models.WAD3.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life Texture Package to fill
-                var file = new SabreTools.Serialization.Models.WAD3.File();
+                var file = new Models.WAD3.File();
 
                 #region Header
 

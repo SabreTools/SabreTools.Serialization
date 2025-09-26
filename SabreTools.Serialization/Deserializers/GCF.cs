@@ -5,10 +5,10 @@ using SabreTools.Serialization.Models.GCF;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class GCF : BaseBinaryDeserializer<SabreTools.Serialization.Models.GCF.File>
+    public class GCF : BaseBinaryDeserializer<Models.GCF.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.GCF.File? Deserialize(Stream? data)
+        public override Models.GCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life Game Cache to fill
-                var file = new SabreTools.Serialization.Models.GCF.File();
+                var file = new Models.GCF.File();
 
                 #region Header
 

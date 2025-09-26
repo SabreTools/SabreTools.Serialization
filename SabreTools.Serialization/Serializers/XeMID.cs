@@ -3,17 +3,17 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Serializers
 {
-    public partial class XeMID : IStringSerializer<SabreTools.Serialization.Models.Xbox.XeMID>
+    public partial class XeMID : IStringSerializer<Models.Xbox.XeMID>
     {
         /// <inheritdoc cref="IStringSerializer.Serialize(T?)"/>
-        public static string? SerializeString(SabreTools.Serialization.Models.Xbox.XeMID? obj)
+        public static string? SerializeString(Models.Xbox.XeMID? obj)
         {
             var deserializer = new XeMID();
             return deserializer.Serialize(obj);
         }
 
         /// <inheritdoc/>
-        public string? Serialize(SabreTools.Serialization.Models.Xbox.XeMID? obj)
+        public string? Serialize(Models.Xbox.XeMID? obj)
         {
             if (obj == null)
                 return null;

@@ -6,10 +6,10 @@ using SabreTools.Serialization.Models.NCF;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class NCF : BaseBinaryDeserializer<SabreTools.Serialization.Models.NCF.File>
+    public class NCF : BaseBinaryDeserializer<Models.NCF.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.NCF.File? Deserialize(Stream? data)
+        public override Models.NCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Half-Life No Cache to fill
-                var file = new SabreTools.Serialization.Models.NCF.File();
+                var file = new Models.NCF.File();
 
                 #region Header
 

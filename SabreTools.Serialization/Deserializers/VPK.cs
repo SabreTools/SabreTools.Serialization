@@ -6,10 +6,10 @@ using static SabreTools.Serialization.Models.VPK.Constants;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class VPK : BaseBinaryDeserializer<SabreTools.Serialization.Models.VPK.File>
+    public class VPK : BaseBinaryDeserializer<Models.VPK.File>
     {
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.VPK.File? Deserialize(Stream? data)
+        public override Models.VPK.File? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Deserializers
                 long initialOffset = data.Position;
 
                 // Create a new Valve Package to fill
-                var file = new SabreTools.Serialization.Models.VPK.File();
+                var file = new Models.VPK.File();
 
                 #region Header
 

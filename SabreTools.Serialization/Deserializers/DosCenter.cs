@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 Game? game = null;
                 var games = new List<Game>();
-                var files = new List<SabreTools.Serialization.Models.DosCenter.File>();
+                var files = new List<Models.DosCenter.File>();
 
                 while (!reader.EndOfStream)
                 {
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Deserializers
                         switch (reader.TopLevel)
                         {
                             case "doscenter":
-                                dat.DosCenter = new SabreTools.Serialization.Models.DosCenter.DosCenter();
+                                dat.DosCenter = new Models.DosCenter.DosCenter();
                                 break;
                             case "game":
                                 game = new Game();
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Deserializers
                     else if (reader.TopLevel == "doscenter" && reader.RowType == CmpRowType.Standalone)
                     {
                         // Create the block if we haven't already
-                        dat.DosCenter ??= new SabreTools.Serialization.Models.DosCenter.DosCenter();
+                        dat.DosCenter ??= new Models.DosCenter.DosCenter();
 
                         switch (reader.Standalone?.Key?.ToLowerInvariant())
                         {
@@ -153,12 +153,12 @@ namespace SabreTools.Serialization.Deserializers
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>File object created from the reader context</returns>
-        private static SabreTools.Serialization.Models.DosCenter.File? CreateFile(ClrMameProReader reader)
+        private static Models.DosCenter.File? CreateFile(ClrMameProReader reader)
         {
             if (reader.Internal == null)
                 return null;
 
-            var file = new SabreTools.Serialization.Models.DosCenter.File();
+            var file = new Models.DosCenter.File();
             foreach (var kvp in reader.Internal)
             {
                 switch (kvp.Key?.ToLowerInvariant())

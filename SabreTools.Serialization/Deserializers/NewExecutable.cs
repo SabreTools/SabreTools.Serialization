@@ -253,7 +253,7 @@ namespace SabreTools.Serialization.Deserializers
             obj.MovableEntriesCount = data.ReadUInt16LittleEndian();
             obj.SegmentAlignmentShiftCount = data.ReadUInt16LittleEndian();
             obj.ResourceEntriesCount = data.ReadUInt16LittleEndian();
-            obj.TargetOperatingSystem = (SabreTools.Serialization.Models.NewExecutable.OperatingSystem)data.ReadByteValue();
+            obj.TargetOperatingSystem = (Models.NewExecutable.OperatingSystem)data.ReadByteValue();
             obj.AdditionalFlags = (OS2Flag)data.ReadByteValue();
             obj.ReturnThunkOffset = data.ReadUInt16LittleEndian();
             obj.SegmentReferenceThunkOffset = data.ReadUInt16LittleEndian();

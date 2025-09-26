@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Wrappers
                     int temp = overlayOffset;
                     byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
 
-                    if (overlaySample.StartsWith(SabreTools.Serialization.Models.SevenZip.Constants.SignatureBytes))
+                    if (overlaySample.StartsWith(Models.SevenZip.Constants.SignatureBytes))
                     {
                         extension = "7z";
                         break;
@@ -62,12 +62,12 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "7z";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.BZip2.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.BZip2.Constants.SignatureBytes))
                     {
                         extension = "bz2";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.CFB.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.CFB.Constants.SignatureBytes))
                     {
                         // Assume embedded CFB files are MSI
                         extension = "msi";
@@ -78,37 +78,37 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "gz";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.MicrosoftCabinet.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
                     {
                         extension = "cab";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
                     {
                         extension = "zip";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
                     {
                         extension = "zip";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
                     {
                         extension = "zip";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.PKZIP.Constants.DataDescriptorSignatureBytes))
+                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
                     {
                         extension = "zip";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.RAR.Constants.OldSignatureBytes))
+                    else if (overlaySample.StartsWith(Models.RAR.Constants.OldSignatureBytes))
                     {
                         extension = "rar";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.RAR.Constants.NewSignatureBytes))
+                    else if (overlaySample.StartsWith(Models.RAR.Constants.NewSignatureBytes))
                     {
                         extension = "rar";
                         break;
@@ -133,12 +133,12 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "xml";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.XZ.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.XZ.Constants.SignatureBytes))
                     {
                         extension = "xz";
                         break;
                     }
-                    else if (overlaySample.StartsWith(SabreTools.Serialization.Models.MSDOS.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
                     {
                         extension = "bin"; // exe/dll
                         break;

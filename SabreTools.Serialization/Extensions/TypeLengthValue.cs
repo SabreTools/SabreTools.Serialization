@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Extensions
         /// </summary>
         /// <param name="paddingLevel">Padding level of the item when formatting</param>
         /// <returns>String representing the TypeLengthValue, if possible</returns>
-        public static string Format(this SabreTools.Serialization.Models.ASN1.TypeLengthValue tlv, int paddingLevel = 0)
+        public static string Format(this Models.ASN1.TypeLengthValue tlv, int paddingLevel = 0)
         {
             // Create the left-padding string
             string padding = new(' ', paddingLevel);

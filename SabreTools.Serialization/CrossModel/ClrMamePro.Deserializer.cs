@@ -4,24 +4,24 @@ using SabreTools.Serialization.Models.ClrMamePro;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class ClrMamePro : IModelSerializer<MetadataFile, Serialization.Models.Metadata.MetadataFile>
+    public partial class ClrMamePro : IModelSerializer<MetadataFile, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public MetadataFile? Deserialize(Serialization.Models.Metadata.MetadataFile? obj) => Deserialize(obj, true);
+        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj) => Deserialize(obj, true);
 
-        /// <inheritdoc cref="Deserialize(Serialization.Models.Metadata.MetadataFile)"/>
-        public MetadataFile? Deserialize(Serialization.Models.Metadata.MetadataFile? obj, bool game)
+        /// <inheritdoc cref="Deserialize(Models.Metadata.MetadataFile)"/>
+        public MetadataFile? Deserialize(Models.Metadata.MetadataFile? obj, bool game)
         {
             if (obj == null)
                 return null;
 
             var metadataFile = new MetadataFile();
 
-            var header = obj.Read<Serialization.Models.Metadata.Header>(Serialization.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
             if (header != null)
                 metadataFile.ClrMamePro = ConvertHeaderFromInternalModel(header);
 
-            var machines = obj.Read<Serialization.Models.Metadata.Machine[]>(Serialization.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
             {
                 metadataFile.Game
@@ -32,96 +32,96 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Header"/> to <see cref="Models.ClrMamePro.ClrMamePro"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="Models.ClrMamePro.ClrMamePro"/>
         /// </summary>
-        private static SabreTools.Serialization.Models.ClrMamePro.ClrMamePro ConvertHeaderFromInternalModel(Serialization.Models.Metadata.Header item)
+        private static Models.ClrMamePro.ClrMamePro ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
-            var clrMamePro = new SabreTools.Serialization.Models.ClrMamePro.ClrMamePro
+            var clrMamePro = new Models.ClrMamePro.ClrMamePro
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Header.NameKey),
-                Description = item.ReadString(Serialization.Models.Metadata.Header.DescriptionKey),
-                RootDir = item.ReadString(Serialization.Models.Metadata.Header.RootDirKey),
-                Category = item.ReadString(Serialization.Models.Metadata.Header.CategoryKey),
-                Version = item.ReadString(Serialization.Models.Metadata.Header.VersionKey),
-                Date = item.ReadString(Serialization.Models.Metadata.Header.DateKey),
-                Author = item.ReadString(Serialization.Models.Metadata.Header.AuthorKey),
-                Homepage = item.ReadString(Serialization.Models.Metadata.Header.HomepageKey),
-                Url = item.ReadString(Serialization.Models.Metadata.Header.UrlKey),
-                Comment = item.ReadString(Serialization.Models.Metadata.Header.CommentKey),
-                Header = item.ReadString(Serialization.Models.Metadata.Header.HeaderKey),
-                Type = item.ReadString(Serialization.Models.Metadata.Header.TypeKey),
-                ForceMerging = item.ReadString(Serialization.Models.Metadata.Header.ForceMergingKey),
-                ForceZipping = item.ReadString(Serialization.Models.Metadata.Header.ForceZippingKey),
-                ForcePacking = item.ReadString(Serialization.Models.Metadata.Header.ForcePackingKey),
+                Name = item.ReadString(Models.Metadata.Header.NameKey),
+                Description = item.ReadString(Models.Metadata.Header.DescriptionKey),
+                RootDir = item.ReadString(Models.Metadata.Header.RootDirKey),
+                Category = item.ReadString(Models.Metadata.Header.CategoryKey),
+                Version = item.ReadString(Models.Metadata.Header.VersionKey),
+                Date = item.ReadString(Models.Metadata.Header.DateKey),
+                Author = item.ReadString(Models.Metadata.Header.AuthorKey),
+                Homepage = item.ReadString(Models.Metadata.Header.HomepageKey),
+                Url = item.ReadString(Models.Metadata.Header.UrlKey),
+                Comment = item.ReadString(Models.Metadata.Header.CommentKey),
+                Header = item.ReadString(Models.Metadata.Header.HeaderKey),
+                Type = item.ReadString(Models.Metadata.Header.TypeKey),
+                ForceMerging = item.ReadString(Models.Metadata.Header.ForceMergingKey),
+                ForceZipping = item.ReadString(Models.Metadata.Header.ForceZippingKey),
+                ForcePacking = item.ReadString(Models.Metadata.Header.ForcePackingKey),
             };
             return clrMamePro;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Archive"/> to <see cref="Machine"/>
+        /// Convert from <see cref="Models.Metadata.Archive"/> to <see cref="Machine"/>
         /// </summary>
-        private static GameBase ConvertMachineFromInternalModel(Serialization.Models.Metadata.Machine item, bool game)
+        private static GameBase ConvertMachineFromInternalModel(Models.Metadata.Machine item, bool game)
         {
             GameBase gameBase = game ? new Game() : new Machine();
 
-            gameBase.Name = item.ReadString(Serialization.Models.Metadata.Machine.NameKey);
-            gameBase.Description = item.ReadString(Serialization.Models.Metadata.Machine.DescriptionKey);
-            gameBase.Year = item.ReadString(Serialization.Models.Metadata.Machine.YearKey);
-            gameBase.Manufacturer = item.ReadString(Serialization.Models.Metadata.Machine.ManufacturerKey);
-            gameBase.Category = item.ReadString(Serialization.Models.Metadata.Machine.CategoryKey);
-            gameBase.CloneOf = item.ReadString(Serialization.Models.Metadata.Machine.CloneOfKey);
-            gameBase.RomOf = item.ReadString(Serialization.Models.Metadata.Machine.RomOfKey);
-            gameBase.SampleOf = item.ReadString(Serialization.Models.Metadata.Machine.SampleOfKey);
+            gameBase.Name = item.ReadString(Models.Metadata.Machine.NameKey);
+            gameBase.Description = item.ReadString(Models.Metadata.Machine.DescriptionKey);
+            gameBase.Year = item.ReadString(Models.Metadata.Machine.YearKey);
+            gameBase.Manufacturer = item.ReadString(Models.Metadata.Machine.ManufacturerKey);
+            gameBase.Category = item.ReadString(Models.Metadata.Machine.CategoryKey);
+            gameBase.CloneOf = item.ReadString(Models.Metadata.Machine.CloneOfKey);
+            gameBase.RomOf = item.ReadString(Models.Metadata.Machine.RomOfKey);
+            gameBase.SampleOf = item.ReadString(Models.Metadata.Machine.SampleOfKey);
 
-            var releases = item.Read<Serialization.Models.Metadata.Release[]>(Serialization.Models.Metadata.Machine.ReleaseKey);
+            var releases = item.Read<Models.Metadata.Release[]>(Models.Metadata.Machine.ReleaseKey);
             if (releases != null && releases.Length > 0)
                 gameBase.Release = Array.ConvertAll(releases, ConvertFromInternalModel);
 
-            var biosSets = item.Read<Serialization.Models.Metadata.BiosSet[]>(Serialization.Models.Metadata.Machine.BiosSetKey);
+            var biosSets = item.Read<Models.Metadata.BiosSet[]>(Models.Metadata.Machine.BiosSetKey);
             if (biosSets != null && biosSets.Length > 0)
                 gameBase.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
-            var roms = item.Read<Serialization.Models.Metadata.Rom[]>(Serialization.Models.Metadata.Machine.RomKey);
+            var roms = item.Read<Models.Metadata.Rom[]>(Models.Metadata.Machine.RomKey);
             if (roms != null && roms.Length > 0)
                 gameBase.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
-            var disks = item.Read<Serialization.Models.Metadata.Disk[]>(Serialization.Models.Metadata.Machine.DiskKey);
+            var disks = item.Read<Models.Metadata.Disk[]>(Models.Metadata.Machine.DiskKey);
             if (disks != null && disks.Length > 0)
                 gameBase.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
-            var medias = item.Read<Serialization.Models.Metadata.Media[]>(Serialization.Models.Metadata.Machine.MediaKey);
+            var medias = item.Read<Models.Metadata.Media[]>(Models.Metadata.Machine.MediaKey);
             if (medias != null && medias.Length > 0)
                 gameBase.Media = Array.ConvertAll(medias, ConvertFromInternalModel);
 
-            var samples = item.Read<Serialization.Models.Metadata.Sample[]>(Serialization.Models.Metadata.Machine.SampleKey);
+            var samples = item.Read<Models.Metadata.Sample[]>(Models.Metadata.Machine.SampleKey);
             if (samples != null && samples.Length > 0)
                 gameBase.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
-            var archives = item.Read<Serialization.Models.Metadata.Archive[]>(Serialization.Models.Metadata.Machine.ArchiveKey);
+            var archives = item.Read<Models.Metadata.Archive[]>(Models.Metadata.Machine.ArchiveKey);
             if (archives != null && archives.Length > 0)
                 gameBase.Archive = Array.ConvertAll(archives, ConvertFromInternalModel);
 
-            var chips = item.Read<Serialization.Models.Metadata.Chip[]>(Serialization.Models.Metadata.Machine.ChipKey);
+            var chips = item.Read<Models.Metadata.Chip[]>(Models.Metadata.Machine.ChipKey);
             if (chips != null && chips.Length > 0)
                 gameBase.Chip = Array.ConvertAll(chips, ConvertFromInternalModel);
 
-            var videos = item.Read<Serialization.Models.Metadata.Video[]>(Serialization.Models.Metadata.Machine.VideoKey);
+            var videos = item.Read<Models.Metadata.Video[]>(Models.Metadata.Machine.VideoKey);
             if (videos != null && videos.Length > 0)
                 gameBase.Video = Array.ConvertAll(videos, ConvertFromInternalModel);
 
-            var sound = item.Read<Serialization.Models.Metadata.Sound>(Serialization.Models.Metadata.Machine.SoundKey);
+            var sound = item.Read<Models.Metadata.Sound>(Models.Metadata.Machine.SoundKey);
             if (sound != null)
                 gameBase.Sound = ConvertFromInternalModel(sound);
 
-            var input = item.Read<Serialization.Models.Metadata.Input>(Serialization.Models.Metadata.Machine.InputKey);
+            var input = item.Read<Models.Metadata.Input>(Models.Metadata.Machine.InputKey);
             if (input != null)
                 gameBase.Input = ConvertFromInternalModel(input);
 
-            var dipSwitches = item.Read<Serialization.Models.Metadata.DipSwitch[]>(Serialization.Models.Metadata.Machine.DipSwitchKey);
+            var dipSwitches = item.Read<Models.Metadata.DipSwitch[]>(Models.Metadata.Machine.DipSwitchKey);
             if (dipSwitches != null && dipSwitches.Length > 0)
                 gameBase.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
-            var driver = item.Read<Serialization.Models.Metadata.Driver>(Serialization.Models.Metadata.Machine.DriverKey);
+            var driver = item.Read<Models.Metadata.Driver>(Models.Metadata.Machine.DriverKey);
             if (driver != null)
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
@@ -129,216 +129,216 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Archive"/> to <see cref="Archive"/>
+        /// Convert from <see cref="Models.Metadata.Archive"/> to <see cref="Archive"/>
         /// </summary>
-        private static Archive ConvertFromInternalModel(Serialization.Models.Metadata.Archive item)
+        private static Archive ConvertFromInternalModel(Models.Metadata.Archive item)
         {
             var archive = new Archive
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Archive.NameKey),
+                Name = item.ReadString(Models.Metadata.Archive.NameKey),
             };
             return archive;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.BiosSet"/> to <see cref="BiosSet"/>
+        /// Convert from <see cref="Models.Metadata.BiosSet"/> to <see cref="BiosSet"/>
         /// </summary>
-        private static BiosSet ConvertFromInternalModel(Serialization.Models.Metadata.BiosSet item)
+        private static BiosSet ConvertFromInternalModel(Models.Metadata.BiosSet item)
         {
             var biosset = new BiosSet
             {
-                Name = item.ReadString(Serialization.Models.Metadata.BiosSet.NameKey),
-                Description = item.ReadString(Serialization.Models.Metadata.BiosSet.DescriptionKey),
-                Default = item.ReadString(Serialization.Models.Metadata.BiosSet.DefaultKey),
+                Name = item.ReadString(Models.Metadata.BiosSet.NameKey),
+                Description = item.ReadString(Models.Metadata.BiosSet.DescriptionKey),
+                Default = item.ReadString(Models.Metadata.BiosSet.DefaultKey),
             };
             return biosset;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Chip"/> to <see cref="Chip"/>
+        /// Convert from <see cref="Models.Metadata.Chip"/> to <see cref="Chip"/>
         /// </summary>
-        private static Chip ConvertFromInternalModel(Serialization.Models.Metadata.Chip item)
+        private static Chip ConvertFromInternalModel(Models.Metadata.Chip item)
         {
             var chip = new Chip
             {
-                Type = item.ReadString(Serialization.Models.Metadata.Chip.ChipTypeKey),
-                Name = item.ReadString(Serialization.Models.Metadata.Chip.NameKey),
-                Flags = item.ReadString(Serialization.Models.Metadata.Chip.FlagsKey),
-                Clock = item.ReadString(Serialization.Models.Metadata.Chip.ClockKey),
+                Type = item.ReadString(Models.Metadata.Chip.ChipTypeKey),
+                Name = item.ReadString(Models.Metadata.Chip.NameKey),
+                Flags = item.ReadString(Models.Metadata.Chip.FlagsKey),
+                Clock = item.ReadString(Models.Metadata.Chip.ClockKey),
             };
             return chip;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.DipSwitch"/> to <see cref="DipSwitch"/>
+        /// Convert from <see cref="Models.Metadata.DipSwitch"/> to <see cref="DipSwitch"/>
         /// </summary>
-        private static DipSwitch ConvertFromInternalModel(Serialization.Models.Metadata.DipSwitch item)
+        private static DipSwitch ConvertFromInternalModel(Models.Metadata.DipSwitch item)
         {
             var dipswitch = new DipSwitch
             {
-                Name = item.ReadString(Serialization.Models.Metadata.DipSwitch.NameKey),
-                Entry = item[Serialization.Models.Metadata.DipSwitch.EntryKey] as string[],
-                Default = item.ReadString(Serialization.Models.Metadata.DipSwitch.DefaultKey),
+                Name = item.ReadString(Models.Metadata.DipSwitch.NameKey),
+                Entry = item[Models.Metadata.DipSwitch.EntryKey] as string[],
+                Default = item.ReadString(Models.Metadata.DipSwitch.DefaultKey),
             };
             return dipswitch;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Disk"/> to <see cref="Disk"/>
+        /// Convert from <see cref="Models.Metadata.Disk"/> to <see cref="Disk"/>
         /// </summary>
-        private static Disk ConvertFromInternalModel(Serialization.Models.Metadata.Disk item)
+        private static Disk ConvertFromInternalModel(Models.Metadata.Disk item)
         {
             var disk = new Disk
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Disk.NameKey),
-                MD5 = item.ReadString(Serialization.Models.Metadata.Disk.MD5Key),
-                SHA1 = item.ReadString(Serialization.Models.Metadata.Disk.SHA1Key),
-                Merge = item.ReadString(Serialization.Models.Metadata.Disk.MergeKey),
-                Status = item.ReadString(Serialization.Models.Metadata.Disk.StatusKey),
-                Flags = item.ReadString(Serialization.Models.Metadata.Disk.FlagsKey),
+                Name = item.ReadString(Models.Metadata.Disk.NameKey),
+                MD5 = item.ReadString(Models.Metadata.Disk.MD5Key),
+                SHA1 = item.ReadString(Models.Metadata.Disk.SHA1Key),
+                Merge = item.ReadString(Models.Metadata.Disk.MergeKey),
+                Status = item.ReadString(Models.Metadata.Disk.StatusKey),
+                Flags = item.ReadString(Models.Metadata.Disk.FlagsKey),
             };
             return disk;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Driver"/> to <see cref="Driver"/>
+        /// Convert from <see cref="Models.Metadata.Driver"/> to <see cref="Driver"/>
         /// </summary>
-        private static Driver ConvertFromInternalModel(Serialization.Models.Metadata.Driver item)
+        private static Driver ConvertFromInternalModel(Models.Metadata.Driver item)
         {
             var driver = new Driver
             {
-                Status = item.ReadString(Serialization.Models.Metadata.Driver.StatusKey),
-                Color = item.ReadString(Serialization.Models.Metadata.Driver.ColorKey),
-                Sound = item.ReadString(Serialization.Models.Metadata.Driver.SoundKey),
-                PaletteSize = item.ReadString(Serialization.Models.Metadata.Driver.PaletteSizeKey),
-                Blit = item.ReadString(Serialization.Models.Metadata.Driver.BlitKey),
+                Status = item.ReadString(Models.Metadata.Driver.StatusKey),
+                Color = item.ReadString(Models.Metadata.Driver.ColorKey),
+                Sound = item.ReadString(Models.Metadata.Driver.SoundKey),
+                PaletteSize = item.ReadString(Models.Metadata.Driver.PaletteSizeKey),
+                Blit = item.ReadString(Models.Metadata.Driver.BlitKey),
             };
             return driver;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Input"/> to <see cref="Input"/>
+        /// Convert from <see cref="Models.Metadata.Input"/> to <see cref="Input"/>
         /// </summary>
-        private static Input ConvertFromInternalModel(Serialization.Models.Metadata.Input item)
+        private static Input ConvertFromInternalModel(Models.Metadata.Input item)
         {
             var input = new Input
             {
-                Players = item.ReadString(Serialization.Models.Metadata.Input.PlayersKey),
-                Control = item.ReadString(Serialization.Models.Metadata.Input.ControlKey),
-                Buttons = item.ReadString(Serialization.Models.Metadata.Input.ButtonsKey),
-                Coins = item.ReadString(Serialization.Models.Metadata.Input.CoinsKey),
-                Tilt = item.ReadString(Serialization.Models.Metadata.Input.TiltKey),
-                Service = item.ReadString(Serialization.Models.Metadata.Input.ServiceKey),
+                Players = item.ReadString(Models.Metadata.Input.PlayersKey),
+                Control = item.ReadString(Models.Metadata.Input.ControlKey),
+                Buttons = item.ReadString(Models.Metadata.Input.ButtonsKey),
+                Coins = item.ReadString(Models.Metadata.Input.CoinsKey),
+                Tilt = item.ReadString(Models.Metadata.Input.TiltKey),
+                Service = item.ReadString(Models.Metadata.Input.ServiceKey),
             };
             return input;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Media"/> to <see cref="Media"/>
+        /// Convert from <see cref="Models.Metadata.Media"/> to <see cref="Media"/>
         /// </summary>
-        private static Media ConvertFromInternalModel(Serialization.Models.Metadata.Media item)
+        private static Media ConvertFromInternalModel(Models.Metadata.Media item)
         {
             var media = new Media
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Media.NameKey),
-                MD5 = item.ReadString(Serialization.Models.Metadata.Media.MD5Key),
-                SHA1 = item.ReadString(Serialization.Models.Metadata.Media.SHA1Key),
-                SHA256 = item.ReadString(Serialization.Models.Metadata.Media.SHA256Key),
-                SpamSum = item.ReadString(Serialization.Models.Metadata.Media.SpamSumKey),
+                Name = item.ReadString(Models.Metadata.Media.NameKey),
+                MD5 = item.ReadString(Models.Metadata.Media.MD5Key),
+                SHA1 = item.ReadString(Models.Metadata.Media.SHA1Key),
+                SHA256 = item.ReadString(Models.Metadata.Media.SHA256Key),
+                SpamSum = item.ReadString(Models.Metadata.Media.SpamSumKey),
             };
             return media;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Release"/> to <see cref="Release"/>
+        /// Convert from <see cref="Models.Metadata.Release"/> to <see cref="Release"/>
         /// </summary>
-        private static Release ConvertFromInternalModel(Serialization.Models.Metadata.Release item)
+        private static Release ConvertFromInternalModel(Models.Metadata.Release item)
         {
             var release = new Release
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Release.NameKey),
-                Region = item.ReadString(Serialization.Models.Metadata.Release.RegionKey),
-                Language = item.ReadString(Serialization.Models.Metadata.Release.LanguageKey),
-                Date = item.ReadString(Serialization.Models.Metadata.Release.DateKey),
-                Default = item.ReadString(Serialization.Models.Metadata.Release.DefaultKey),
+                Name = item.ReadString(Models.Metadata.Release.NameKey),
+                Region = item.ReadString(Models.Metadata.Release.RegionKey),
+                Language = item.ReadString(Models.Metadata.Release.LanguageKey),
+                Date = item.ReadString(Models.Metadata.Release.DateKey),
+                Default = item.ReadString(Models.Metadata.Release.DefaultKey),
             };
             return release;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Rom"/> to <see cref="Rom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Rom"/>
         /// </summary>
-        private static Rom ConvertFromInternalModel(Serialization.Models.Metadata.Rom item)
+        private static Rom ConvertFromInternalModel(Models.Metadata.Rom item)
         {
             var rom = new Rom
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Rom.NameKey),
-                Size = item.ReadString(Serialization.Models.Metadata.Rom.SizeKey),
-                CRC = item.ReadString(Serialization.Models.Metadata.Rom.CRCKey),
-                MD2 = item.ReadString(Serialization.Models.Metadata.Rom.MD2Key),
-                MD4 = item.ReadString(Serialization.Models.Metadata.Rom.MD4Key),
-                MD5 = item.ReadString(Serialization.Models.Metadata.Rom.MD5Key),
-                RIPEMD128 = item.ReadString(Serialization.Models.Metadata.Rom.RIPEMD128Key),
-                RIPEMD160 = item.ReadString(Serialization.Models.Metadata.Rom.RIPEMD160Key),
-                SHA1 = item.ReadString(Serialization.Models.Metadata.Rom.SHA1Key),
-                SHA256 = item.ReadString(Serialization.Models.Metadata.Rom.SHA256Key),
-                SHA384 = item.ReadString(Serialization.Models.Metadata.Rom.SHA384Key),
-                SHA512 = item.ReadString(Serialization.Models.Metadata.Rom.SHA512Key),
-                SpamSum = item.ReadString(Serialization.Models.Metadata.Rom.SpamSumKey),
-                xxHash364 = item.ReadString(Serialization.Models.Metadata.Rom.xxHash364Key),
-                xxHash3128 = item.ReadString(Serialization.Models.Metadata.Rom.xxHash3128Key),
-                Merge = item.ReadString(Serialization.Models.Metadata.Rom.MergeKey),
-                Status = item.ReadString(Serialization.Models.Metadata.Rom.StatusKey),
-                Region = item.ReadString(Serialization.Models.Metadata.Rom.RegionKey),
-                Flags = item.ReadString(Serialization.Models.Metadata.Rom.FlagsKey),
-                Offs = item.ReadString(Serialization.Models.Metadata.Rom.OffsetKey),
-                Serial = item.ReadString(Serialization.Models.Metadata.Rom.SerialKey),
-                Header = item.ReadString(Serialization.Models.Metadata.Rom.HeaderKey),
-                Date = item.ReadString(Serialization.Models.Metadata.Rom.DateKey),
-                Inverted = item.ReadString(Serialization.Models.Metadata.Rom.InvertedKey),
-                MIA = item.ReadString(Serialization.Models.Metadata.Rom.MIAKey),
+                Name = item.ReadString(Models.Metadata.Rom.NameKey),
+                Size = item.ReadString(Models.Metadata.Rom.SizeKey),
+                CRC = item.ReadString(Models.Metadata.Rom.CRCKey),
+                MD2 = item.ReadString(Models.Metadata.Rom.MD2Key),
+                MD4 = item.ReadString(Models.Metadata.Rom.MD4Key),
+                MD5 = item.ReadString(Models.Metadata.Rom.MD5Key),
+                RIPEMD128 = item.ReadString(Models.Metadata.Rom.RIPEMD128Key),
+                RIPEMD160 = item.ReadString(Models.Metadata.Rom.RIPEMD160Key),
+                SHA1 = item.ReadString(Models.Metadata.Rom.SHA1Key),
+                SHA256 = item.ReadString(Models.Metadata.Rom.SHA256Key),
+                SHA384 = item.ReadString(Models.Metadata.Rom.SHA384Key),
+                SHA512 = item.ReadString(Models.Metadata.Rom.SHA512Key),
+                SpamSum = item.ReadString(Models.Metadata.Rom.SpamSumKey),
+                xxHash364 = item.ReadString(Models.Metadata.Rom.xxHash364Key),
+                xxHash3128 = item.ReadString(Models.Metadata.Rom.xxHash3128Key),
+                Merge = item.ReadString(Models.Metadata.Rom.MergeKey),
+                Status = item.ReadString(Models.Metadata.Rom.StatusKey),
+                Region = item.ReadString(Models.Metadata.Rom.RegionKey),
+                Flags = item.ReadString(Models.Metadata.Rom.FlagsKey),
+                Offs = item.ReadString(Models.Metadata.Rom.OffsetKey),
+                Serial = item.ReadString(Models.Metadata.Rom.SerialKey),
+                Header = item.ReadString(Models.Metadata.Rom.HeaderKey),
+                Date = item.ReadString(Models.Metadata.Rom.DateKey),
+                Inverted = item.ReadString(Models.Metadata.Rom.InvertedKey),
+                MIA = item.ReadString(Models.Metadata.Rom.MIAKey),
             };
             return rom;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Sample"/> to <see cref="Sample"/>
+        /// Convert from <see cref="Models.Metadata.Sample"/> to <see cref="Sample"/>
         /// </summary>
-        private static Sample ConvertFromInternalModel(Serialization.Models.Metadata.Sample item)
+        private static Sample ConvertFromInternalModel(Models.Metadata.Sample item)
         {
             var sample = new Sample
             {
-                Name = item.ReadString(Serialization.Models.Metadata.Sample.NameKey),
+                Name = item.ReadString(Models.Metadata.Sample.NameKey),
             };
             return sample;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Sound"/> to <see cref="Sound"/>
+        /// Convert from <see cref="Models.Metadata.Sound"/> to <see cref="Sound"/>
         /// </summary>
-        private static Sound ConvertFromInternalModel(Serialization.Models.Metadata.Sound item)
+        private static Sound ConvertFromInternalModel(Models.Metadata.Sound item)
         {
             var sound = new Sound
             {
-                Channels = item.ReadString(Serialization.Models.Metadata.Sound.ChannelsKey),
+                Channels = item.ReadString(Models.Metadata.Sound.ChannelsKey),
             };
             return sound;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Video"/> to <see cref="Video"/>
+        /// Convert from <see cref="Models.Metadata.Video"/> to <see cref="Video"/>
         /// </summary>
-        private static Video ConvertFromInternalModel(Serialization.Models.Metadata.Video item)
+        private static Video ConvertFromInternalModel(Models.Metadata.Video item)
         {
             var video = new Video
             {
-                Screen = item.ReadString(Serialization.Models.Metadata.Video.ScreenKey),
-                Orientation = item.ReadString(Serialization.Models.Metadata.Video.OrientationKey),
-                X = item.ReadString(Serialization.Models.Metadata.Video.WidthKey),
-                Y = item.ReadString(Serialization.Models.Metadata.Video.HeightKey),
-                AspectX = item.ReadString(Serialization.Models.Metadata.Video.AspectXKey),
-                AspectY = item.ReadString(Serialization.Models.Metadata.Video.AspectYKey),
-                Freq = item.ReadString(Serialization.Models.Metadata.Video.RefreshKey),
+                Screen = item.ReadString(Models.Metadata.Video.ScreenKey),
+                Orientation = item.ReadString(Models.Metadata.Video.OrientationKey),
+                X = item.ReadString(Models.Metadata.Video.WidthKey),
+                Y = item.ReadString(Models.Metadata.Video.HeightKey),
+                AspectX = item.ReadString(Models.Metadata.Video.AspectXKey),
+                AspectY = item.ReadString(Models.Metadata.Video.AspectYKey),
+                Freq = item.ReadString(Models.Metadata.Video.RefreshKey),
             };
             return video;
         }

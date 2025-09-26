@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class GCF : WrapperBase<SabreTools.Serialization.Models.GCF.File>
+    public partial class GCF : WrapperBase<Models.GCF.File>
     {
         #region Descriptive Properties
 
@@ -39,9 +39,9 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If we have a directory, skip for now
 #if NET20 || NET35
-                    if ((directoryEntry.DirectoryFlags & SabreTools.Serialization.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE) == 0)
+                    if ((directoryEntry.DirectoryFlags & Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE) == 0)
 #else
-                    if (!directoryEntry.DirectoryFlags.HasFlag(SabreTools.Serialization.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE))
+                    if (!directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE))
 #endif
                         continue;
 
@@ -50,13 +50,13 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Size = directoryEntry.ItemSize,
 #if NET20 || NET35
-                        Encrypted = (directoryEntry.DirectoryFlags & SabreTools.Serialization.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED) != 0,
+                        Encrypted = (directoryEntry.DirectoryFlags & Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED) != 0,
 #else
-                        Encrypted = directoryEntry.DirectoryFlags.HasFlag(SabreTools.Serialization.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
+                        Encrypted = directoryEntry.DirectoryFlags.HasFlag(Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
 #endif
                     };
                     var pathParts = new List<string> { Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
-                    var blockEntries = new List<SabreTools.Serialization.Models.GCF.BlockEntry>();
+                    var blockEntries = new List<Models.GCF.BlockEntry>();
 
                     // Traverse the parent tree
                     uint index = directoryEntry.ParentIndex;
@@ -164,22 +164,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, byte[] data) : base(model, data) { }
+        public GCF(Models.GCF.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public GCF(Models.GCF.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public GCF(Models.GCF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, Stream data) : base(model, data) { }
+        public GCF(Models.GCF.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, Stream data, long offset) : base(model, data, offset) { }
+        public GCF(Models.GCF.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public GCF(SabreTools.Serialization.Models.GCF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public GCF(Models.GCF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 
@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Array of block entries
             /// </summary>
-            public SabreTools.Serialization.Models.GCF.BlockEntry[]? BlockEntries;
+            public Models.GCF.BlockEntry[]? BlockEntries;
         }
 
         #endregion

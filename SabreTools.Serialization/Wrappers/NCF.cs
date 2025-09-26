@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class NCF : WrapperBase<SabreTools.Serialization.Models.NCF.File>
+    public class NCF : WrapperBase<Models.NCF.File>
     {
         #region Descriptive Properties
 
@@ -14,22 +14,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, byte[] data) : base(model, data) { }
+        public NCF(Models.NCF.File model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public NCF(Models.NCF.File model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public NCF(Models.NCF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, Stream data) : base(model, data) { }
+        public NCF(Models.NCF.File model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, Stream data, long offset) : base(model, data, offset) { }
+        public NCF(Models.NCF.File model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public NCF(SabreTools.Serialization.Models.NCF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public NCF(Models.NCF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

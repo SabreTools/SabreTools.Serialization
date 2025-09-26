@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Directory data
         /// </summary>
-        public SabreTools.Serialization.Models.SGA.Directory? Directory => Model.Directory;
+        public Models.SGA.Directory? Directory => Model.Directory;
 
         /// <summary>
         /// Number of files in the directory
@@ -164,7 +164,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get a file header from the archive
         /// </summary>
-        public SabreTools.Serialization.Models.SGA.File? GetFile(int index)
+        public Models.SGA.File? GetFile(int index)
         {
             // If the index is invalid
             if (index < 0 || index >= FileCount)

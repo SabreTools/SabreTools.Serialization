@@ -6,16 +6,16 @@ using SabreTools.Serialization.Models.Hashfile;
 
 namespace SabreTools.Serialization.Deserializers
 {
-    public class Hashfile : BaseBinaryDeserializer<SabreTools.Serialization.Models.Hashfile.Hashfile>
+    public class Hashfile : BaseBinaryDeserializer<Models.Hashfile.Hashfile>
     {
         #region IByteDeserializer
 
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
+        public override Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset)
             => Deserialize(data, offset, HashType.CRC32);
 
         /// <inheritdoc cref="Deserialize(byte[], int)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
+        public Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
         {
             // If the data is invalid
             if (data == null || data.Length == 0)
@@ -35,11 +35,11 @@ namespace SabreTools.Serialization.Deserializers
         #region IFileDeserializer
 
         /// <inheritdoc/>
-        public override SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(string? path)
+        public override Models.Hashfile.Hashfile? Deserialize(string? path)
             => Deserialize(path, HashType.CRC32);
 
         /// <inheritdoc cref="Deserialize(string?)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(string? path, HashType hash)
+        public Models.Hashfile.Hashfile? Deserialize(string? path, HashType hash)
         {
             try
             {
@@ -62,11 +62,11 @@ namespace SabreTools.Serialization.Deserializers
 
         #region IStreamDeserializer
 
-        public override SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(Stream? data)
+        public override Models.Hashfile.Hashfile? Deserialize(Stream? data)
             => Deserialize(data, HashType.CRC32);
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? Deserialize(Stream? data, HashType hash)
+        public Models.Hashfile.Hashfile? Deserialize(Stream? data, HashType hash)
         {
             return hash switch
             {
@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSFV(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSFV(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (sfvList.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SFV = [.. sfvList] };
+                    return new Models.Hashfile.Hashfile { SFV = [.. sfvList] };
 
                 return null;
             }
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeMD2(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeMD2(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -162,7 +162,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (md2List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { MD2 = [.. md2List] };
+                    return new Models.Hashfile.Hashfile { MD2 = [.. md2List] };
 
                 return null;
             }
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeMD4(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeMD4(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -206,7 +206,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (md4List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { MD4 = [.. md4List] };
+                    return new Models.Hashfile.Hashfile { MD4 = [.. md4List] };
 
                 return null;
             }
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeMD5(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeMD5(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -248,13 +248,13 @@ namespace SabreTools.Serialization.Deserializers
 
             // Assign the hashes to the hashfile and return
             if (md5List.Count > 0)
-                return new SabreTools.Serialization.Models.Hashfile.Hashfile { MD5 = [.. md5List] };
+                return new Models.Hashfile.Hashfile { MD5 = [.. md5List] };
 
             return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeRIPEMD128(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeRIPEMD128(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -284,13 +284,13 @@ namespace SabreTools.Serialization.Deserializers
 
             // Assign the hashes to the hashfile and return
             if (ripemd128List.Count > 0)
-                return new SabreTools.Serialization.Models.Hashfile.Hashfile { RIPEMD128 = [.. ripemd128List] };
+                return new Models.Hashfile.Hashfile { RIPEMD128 = [.. ripemd128List] };
 
             return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeRIPEMD160(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeRIPEMD160(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -320,13 +320,13 @@ namespace SabreTools.Serialization.Deserializers
 
             // Assign the hashes to the hashfile and return
             if (ripemd160List.Count > 0)
-                return new SabreTools.Serialization.Models.Hashfile.Hashfile { RIPEMD160 = [.. ripemd160List] };
+                return new Models.Hashfile.Hashfile { RIPEMD160 = [.. ripemd160List] };
 
             return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSHA1(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSHA1(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -358,7 +358,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (sha1List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SHA1 = [.. sha1List] };
+                    return new Models.Hashfile.Hashfile { SHA1 = [.. sha1List] };
 
                 return null;
             }
@@ -370,7 +370,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSHA256(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSHA256(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -402,7 +402,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (sha256List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SHA256 = [.. sha256List] };
+                    return new Models.Hashfile.Hashfile { SHA256 = [.. sha256List] };
 
                 return null;
             }
@@ -414,7 +414,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSHA384(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSHA384(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -446,7 +446,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (sha384List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SHA384 = [.. sha384List] };
+                    return new Models.Hashfile.Hashfile { SHA384 = [.. sha384List] };
 
                 return null;
             }
@@ -458,7 +458,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSHA512(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSHA512(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -490,7 +490,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (sha512List.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SHA512 = [.. sha512List] };
+                    return new Models.Hashfile.Hashfile { SHA512 = [.. sha512List] };
 
                 return null;
             }
@@ -502,7 +502,7 @@ namespace SabreTools.Serialization.Deserializers
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>
-        public SabreTools.Serialization.Models.Hashfile.Hashfile? DeserializeSpamSum(Stream? data)
+        public Models.Hashfile.Hashfile? DeserializeSpamSum(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -534,7 +534,7 @@ namespace SabreTools.Serialization.Deserializers
 
                 // Assign the hashes to the hashfile and return
                 if (spamsumList.Count > 0)
-                    return new SabreTools.Serialization.Models.Hashfile.Hashfile { SpamSum = [.. spamsumList] };
+                    return new Models.Hashfile.Hashfile { SpamSum = [.. spamsumList] };
 
                 return null;
             }

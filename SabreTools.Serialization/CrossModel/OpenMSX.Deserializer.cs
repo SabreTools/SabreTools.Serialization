@@ -4,18 +4,18 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class OpenMSX : IModelSerializer<SoftwareDb, Serialization.Models.Metadata.MetadataFile>
+    public partial class OpenMSX : IModelSerializer<SoftwareDb, Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
-        public SoftwareDb? Deserialize(Serialization.Models.Metadata.MetadataFile? obj)
+        public SoftwareDb? Deserialize(Models.Metadata.MetadataFile? obj)
         {
             if (obj == null)
                 return null;
 
-            var header = obj.Read<Serialization.Models.Metadata.Header>(Serialization.Models.Metadata.MetadataFile.HeaderKey);
+            var header = obj.Read<Models.Metadata.Header>(Models.Metadata.MetadataFile.HeaderKey);
             var softwareDb = header != null ? ConvertHeaderFromInternalModel(header) : new SoftwareDb();
 
-            var machines = obj.Read<Serialization.Models.Metadata.Machine[]>(Serialization.Models.Metadata.MetadataFile.MachineKey);
+            var machines = obj.Read<Models.Metadata.Machine[]>(Models.Metadata.MetadataFile.MachineKey);
             if (machines != null && machines.Length > 0)
                 softwareDb.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
@@ -23,33 +23,33 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Header"/> to <see cref="SoftwareDb"/>
+        /// Convert from <see cref="Models.Metadata.Header"/> to <see cref="SoftwareDb"/>
         /// </summary>
-        private static SoftwareDb ConvertHeaderFromInternalModel(Serialization.Models.Metadata.Header item)
+        private static SoftwareDb ConvertHeaderFromInternalModel(Models.Metadata.Header item)
         {
             var softwareDb = new SoftwareDb
             {
-                Timestamp = item.ReadString(Serialization.Models.Metadata.Header.TimestampKey),
+                Timestamp = item.ReadString(Models.Metadata.Header.TimestampKey),
             };
             return softwareDb;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Machine"/> to <see cref="Software"/>
+        /// Convert from <see cref="Models.Metadata.Machine"/> to <see cref="Software"/>
         /// </summary>
-        private static Software ConvertMachineFromInternalModel(Serialization.Models.Metadata.Machine item)
+        private static Software ConvertMachineFromInternalModel(Models.Metadata.Machine item)
         {
             var game = new Software
             {
-                Title = item.ReadString(Serialization.Models.Metadata.Machine.NameKey),
-                GenMSXID = item.ReadString(Serialization.Models.Metadata.Machine.GenMSXIDKey),
-                System = item.ReadString(Serialization.Models.Metadata.Machine.SystemKey),
-                Company = item.ReadString(Serialization.Models.Metadata.Machine.CompanyKey),
-                Year = item.ReadString(Serialization.Models.Metadata.Machine.YearKey),
-                Country = item.ReadString(Serialization.Models.Metadata.Machine.CountryKey),
+                Title = item.ReadString(Models.Metadata.Machine.NameKey),
+                GenMSXID = item.ReadString(Models.Metadata.Machine.GenMSXIDKey),
+                System = item.ReadString(Models.Metadata.Machine.SystemKey),
+                Company = item.ReadString(Models.Metadata.Machine.CompanyKey),
+                Year = item.ReadString(Models.Metadata.Machine.YearKey),
+                Country = item.ReadString(Models.Metadata.Machine.CountryKey),
             };
 
-            var dumps = item.Read<Serialization.Models.Metadata.Dump[]>(Serialization.Models.Metadata.Machine.DumpKey);
+            var dumps = item.Read<Models.Metadata.Dump[]>(Models.Metadata.Machine.DumpKey);
             if (dumps != null && dumps.Length > 0)
                 game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
 
@@ -57,25 +57,25 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Dump"/> to <see cref="Dump"/>
+        /// Convert from <see cref="Models.Metadata.Dump"/> to <see cref="Dump"/>
         /// </summary>
-        private static Dump ConvertFromInternalModel(Serialization.Models.Metadata.Dump item)
+        private static Dump ConvertFromInternalModel(Models.Metadata.Dump item)
         {
             var dump = new Dump();
 
-            var original = item.Read<Serialization.Models.Metadata.Original>(Serialization.Models.Metadata.Dump.OriginalKey);
+            var original = item.Read<Models.Metadata.Original>(Models.Metadata.Dump.OriginalKey);
             if (original != null)
                 dump.Original = ConvertFromInternalModel(original);
 
-            var rom = item.Read<Serialization.Models.Metadata.Rom>(Serialization.Models.Metadata.Dump.RomKey);
+            var rom = item.Read<Models.Metadata.Rom>(Models.Metadata.Dump.RomKey);
             if (rom != null)
                 dump.Rom = ConvertRomFromInternalModel(rom);
 
-            var megaRom = item.Read<Serialization.Models.Metadata.Rom>(Serialization.Models.Metadata.Dump.MegaRomKey);
+            var megaRom = item.Read<Models.Metadata.Rom>(Models.Metadata.Dump.MegaRomKey);
             if (megaRom != null)
                 dump.Rom = ConvertMegaRomFromInternalModel(megaRom);
 
-            var sccPlusCart = item.Read<Serialization.Models.Metadata.Rom>(Serialization.Models.Metadata.Dump.SCCPlusCartKey);
+            var sccPlusCart = item.Read<Models.Metadata.Rom>(Models.Metadata.Dump.SCCPlusCartKey);
             if (sccPlusCart != null)
                 dump.Rom = ConvertSCCPlusCartFromInternalModel(sccPlusCart);
 
@@ -83,59 +83,59 @@ namespace SabreTools.Serialization.CrossModel
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Rom"/> to <see cref="MegaRom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="MegaRom"/>
         /// </summary>
-        private static MegaRom ConvertMegaRomFromInternalModel(Serialization.Models.Metadata.Rom item)
+        private static MegaRom ConvertMegaRomFromInternalModel(Models.Metadata.Rom item)
         {
             var megaRom = new MegaRom
             {
-                Start = item.ReadString(Serialization.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Serialization.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Serialization.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Serialization.Models.Metadata.Rom.RemarkKey),
+                Start = item.ReadString(Models.Metadata.Rom.StartKey),
+                Type = item.ReadString(Models.Metadata.Rom.OpenMSXType),
+                Hash = item.ReadString(Models.Metadata.Rom.SHA1Key),
+                Remark = item.ReadString(Models.Metadata.Rom.RemarkKey),
             };
             return megaRom;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Original"/> to <see cref="Original"/>
+        /// Convert from <see cref="Models.Metadata.Original"/> to <see cref="Original"/>
         /// </summary>
-        private static Original ConvertFromInternalModel(Serialization.Models.Metadata.Original item)
+        private static Original ConvertFromInternalModel(Models.Metadata.Original item)
         {
             var original = new Original
             {
-                Value = item.ReadString(Serialization.Models.Metadata.Original.ValueKey),
-                Content = item.ReadString(Serialization.Models.Metadata.Original.ContentKey),
+                Value = item.ReadString(Models.Metadata.Original.ValueKey),
+                Content = item.ReadString(Models.Metadata.Original.ContentKey),
             };
             return original;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Rom"/> to <see cref="Rom"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="Rom"/>
         /// </summary>
-        private static Rom ConvertRomFromInternalModel(Serialization.Models.Metadata.Rom item)
+        private static Rom ConvertRomFromInternalModel(Models.Metadata.Rom item)
         {
             var rom = new Rom
             {
-                Start = item.ReadString(Serialization.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Serialization.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Serialization.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Serialization.Models.Metadata.Rom.RemarkKey),
+                Start = item.ReadString(Models.Metadata.Rom.StartKey),
+                Type = item.ReadString(Models.Metadata.Rom.OpenMSXType),
+                Hash = item.ReadString(Models.Metadata.Rom.SHA1Key),
+                Remark = item.ReadString(Models.Metadata.Rom.RemarkKey),
             };
             return rom;
         }
 
         /// <summary>
-        /// Convert from <see cref="Serialization.Models.Metadata.Rom"/> to <see cref="SCCPlusCart"/>
+        /// Convert from <see cref="Models.Metadata.Rom"/> to <see cref="SCCPlusCart"/>
         /// </summary>
-        private static SCCPlusCart ConvertSCCPlusCartFromInternalModel(Serialization.Models.Metadata.Rom item)
+        private static SCCPlusCart ConvertSCCPlusCartFromInternalModel(Models.Metadata.Rom item)
         {
             var sccPlusCart = new SCCPlusCart
             {
-                Start = item.ReadString(Serialization.Models.Metadata.Rom.StartKey),
-                Type = item.ReadString(Serialization.Models.Metadata.Rom.OpenMSXType),
-                Hash = item.ReadString(Serialization.Models.Metadata.Rom.SHA1Key),
-                Remark = item.ReadString(Serialization.Models.Metadata.Rom.RemarkKey),
+                Start = item.ReadString(Models.Metadata.Rom.StartKey),
+                Type = item.ReadString(Models.Metadata.Rom.OpenMSXType),
+                Hash = item.ReadString(Models.Metadata.Rom.SHA1Key),
+                Remark = item.ReadString(Models.Metadata.Rom.RemarkKey),
             };
             return sccPlusCart;
         }
