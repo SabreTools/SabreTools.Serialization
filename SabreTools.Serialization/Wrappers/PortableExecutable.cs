@@ -312,43 +312,30 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If the section table is missing
-                    if (SectionTable == null)
+                    if (OptionalHeader == null || SectionTable == null)
                     {
                         _overlayAddress = -1;
                         return _overlayAddress.Value;
                     }
 
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
                             dataLength = certificateTableAddress;
                     }
 
                     // Search through all sections and find the furthest a section goes
-                    int endOfSectionData = -1;
+                    long endOfSectionData = OptionalHeader.SizeOfHeaders;
                     foreach (var section in SectionTable)
                     {
                         // If we have an invalid section
                         if (section == null)
                             continue;
 
-                        // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (sectionAddress == 0)
-                            continue;
-
-                        // If we have an invalid section size
-                        if (section.SizeOfRawData == 0 && section.VirtualSize == 0)
-                            continue;
-
-                        // Get the real section size
-                        int sectionSize = (int)section.SizeOfRawData;
-
-                        // Compare and set the end of section data
-                        if (sectionAddress + sectionSize > endOfSectionData)
-                            endOfSectionData = sectionAddress + sectionSize;
+                        // Add the raw data size
+                        endOfSectionData += section.SizeOfRawData;
                     }
 
                     // If we didn't find the end of section data
@@ -392,7 +379,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we have certificate data, use that as the end
                     if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
                             dataLength = certificateTableAddress;
                     }
@@ -456,7 +443,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we have certificate data, use that as the end
                     if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
                             dataLength = certificateTableAddress;
                     }
@@ -980,7 +967,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Address of the overlay, if it exists
         /// </summary>
-        private int? _overlayAddress = null;
+        private long? _overlayAddress = null;
 
         /// <summary>
         /// Lock object for <see cref="_overlayAddress"/> 
