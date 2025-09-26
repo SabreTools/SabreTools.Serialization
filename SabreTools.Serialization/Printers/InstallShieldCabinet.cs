@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using SabreTools.Data.Models.InstallShieldCabinet;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Data.Printers
 {

@@ -1,6 +1,5 @@
 using System.Text;
 using SabreTools.Data.Models.MicrosoftCabinet;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Data.Printers
 {

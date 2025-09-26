@@ -98,8 +98,8 @@ Below is a table representing the various non-conversion interfaces that are imp
 
 | Interface Name | Purpose |
 | --- | --- |
+| `SabreTools.Data.Printers.IPrinter` | Provides a formatted output for a model |
 | `SabreTools.Serialization.Interfaces.IExtractable` | Marks a wrapper as able to be extracted |
-| `SabreTools.Serialization.Interfaces.IPrinter` | Provides a formatted output for a model |
 | `SabreTools.Serialization.Interfaces.IWrapper` / `SabreTools.Serialization.Interfaces.IWrapper<T>` | Wraps a model or set of models to provide additional functionality |
 
 ## Namespaces

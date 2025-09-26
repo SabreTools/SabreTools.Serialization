@@ -1,6 +1,5 @@
 using System.Text;
 using SabreTools.Data.Models.InstallShieldArchiveV3;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Data.Printers
 {
