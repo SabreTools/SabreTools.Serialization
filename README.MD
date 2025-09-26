@@ -108,6 +108,7 @@ Below is a table of all namespaces within the library and what they represent
 
 | Namespace | Description |
 | --- | --- |
+| `SabreTools.Data.Attributes` | Common attributes for data marking and manipulation |
 | `SabreTools.Data.ObjectIdentifier` | Object Identifier (OID) parsing |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
 | `SabreTools.Serialization.Deserializers` | Convert from external sources to models |

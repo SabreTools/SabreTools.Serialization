@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization
+namespace SabreTools.Data.Attributes
 {
     /// <summary>
     /// Marks a property as required on write
