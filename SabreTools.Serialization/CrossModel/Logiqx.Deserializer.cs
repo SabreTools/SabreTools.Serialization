@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Logiqx : IModelSerializer<Datafile, Data.Models.Metadata.MetadataFile>
+    public partial class Logiqx : ICrossModel<Datafile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Datafile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, false);

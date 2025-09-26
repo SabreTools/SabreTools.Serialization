@@ -6,7 +6,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Hashfile : IModelSerializer<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
+    public partial class Hashfile : ICrossModel<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj) => Deserialize(obj, HashType.CRC32);

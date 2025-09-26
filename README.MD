@@ -86,9 +86,9 @@ Below is a table representing the various conversion interfaces that are impleme
 | --- | --- | --- |
 | `SabreTools.Serialization.Interfaces.IByteReader<TModel>` | `byte[]?` | `TModel` |
 | `SabreTools.Serialization.Interfaces.IByteWriter<TModel>` | `TModel` | `byte[]?` |
+| `SabreTools.Serialization.Interfaces.ICrossModel<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
 | `SabreTools.Serialization.Interfaces.IFileReader<TModel>` | `string?` path | `TModel` |
 | `SabreTools.Serialization.Interfaces.IFileWriter<TModel>` | `TModel` | `string?` path |
-| `SabreTools.Serialization.Interfaces.IModelSerializer<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
 | `SabreTools.Serialization.Interfaces.IStreamReader<TModel>` | `Stream?` | `TModel` |
 | `SabreTools.Serialization.Interfaces.IStreamWriter<TModel>` | `TModel` | `Stream?` |
 | `SabreTools.Serialization.Interfaces.IStringReader<TModel>` | `string?` representation | `TModel` |

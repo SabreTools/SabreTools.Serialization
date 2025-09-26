@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class DosCenter : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class DosCenter : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)

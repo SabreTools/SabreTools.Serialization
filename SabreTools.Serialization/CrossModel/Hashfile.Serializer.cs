@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Hashfile : IModelSerializer<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
+    public partial class Hashfile : ICrossModel<Data.Models.Hashfile.Hashfile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Data.Models.Metadata.MetadataFile? Serialize(Data.Models.Hashfile.Hashfile? obj)

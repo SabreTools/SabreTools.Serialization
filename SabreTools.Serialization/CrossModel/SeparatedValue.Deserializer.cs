@@ -5,7 +5,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class SeparatedValue : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class SeparatedValue : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)

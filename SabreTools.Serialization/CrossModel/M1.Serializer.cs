@@ -3,7 +3,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class M1 : IModelSerializer<Data.Models.Listxml.M1, Data.Models.Metadata.MetadataFile>
+    public partial class M1 : ICrossModel<Data.Models.Listxml.M1, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Data.Models.Metadata.MetadataFile? Serialize(Data.Models.Listxml.M1? item)

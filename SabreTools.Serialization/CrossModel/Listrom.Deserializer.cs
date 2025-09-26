@@ -5,7 +5,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class Listrom : IModelSerializer<MetadataFile, Data.Models.Metadata.MetadataFile>
+    public partial class Listrom : ICrossModel<MetadataFile, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj)

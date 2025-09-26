@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class ArchiveDotOrg : IModelSerializer<Files, Data.Models.Metadata.MetadataFile>
+    public partial class ArchiveDotOrg : ICrossModel<Files, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Data.Models.Metadata.MetadataFile? Serialize(Files? item)

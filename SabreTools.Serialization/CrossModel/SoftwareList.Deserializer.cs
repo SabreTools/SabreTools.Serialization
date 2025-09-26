@@ -4,7 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
-    public partial class SoftwareList : IModelSerializer<Data.Models.SoftwareList.SoftwareList, Data.Models.Metadata.MetadataFile>
+    public partial class SoftwareList : ICrossModel<Data.Models.SoftwareList.SoftwareList, Data.Models.Metadata.MetadataFile>
     {
         /// <inheritdoc/>
         public Data.Models.SoftwareList.SoftwareList? Deserialize(Data.Models.Metadata.MetadataFile? obj)

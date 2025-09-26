@@ -1,9 +1,9 @@
 namespace SabreTools.Serialization.Interfaces
 {
     /// <summary>
-    /// Defines how to serialize to and from models
+    /// Defines how to convert between two model types
     /// </summary>
-    public interface IModelSerializer<TSource, TDest>
+    public interface ICrossModel<TSource, TDest>
     {
         /// <summary>
         /// Deserialize a <typeparamref name="TDest"/> into <typeparamref name="TSource"/>
