@@ -14,7 +14,13 @@ namespace SabreTools.Serialization.Wrappers
         /// - Archives and executables in resource data
         /// - CExe-compressed resource data
         /// - SecuROM Matroschka package sections
-        /// - SFX archives (7z, Advanced Installer, MS-CAB, PKZIP, RAR)
+        /// - SFX archives
+        ///     + 7z
+        ///     + Advanced Installer
+        ///     + MS-CAB
+        ///     + PKZIP
+        ///     + RAR
+        ///     + Spoon Installer
         /// - Wise installers
         /// </remarks>
         public bool Extract(string outputDirectory, bool includeDebug)
@@ -23,10 +29,12 @@ namespace SabreTools.Serialization.Wrappers
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
+            bool spoon = ExtractSpoonInstaller(outputDirectory, includeDebug);
             bool wise = ExtractWise(outputDirectory, includeDebug);
 
             // Overlay can be skipped in some situations
-            bool overlay = cai || ExtractFromOverlay(outputDirectory, includeDebug);
+            bool overlay = cai || spoon
+                || ExtractFromOverlay(outputDirectory, includeDebug);
 
             return cai || cexe || matroschka || overlay || resources || wise;
         }
@@ -520,6 +528,66 @@ namespace SabreTools.Serialization.Wrappers
 
             // Attempt to extract package
             return MatroschkaPackage.Extract(outputDirectory, includeDebug);
+        }
+
+        /// <summary>
+        /// Extract a Spoon Installer SFX overlay
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractSpoonInstaller(string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                // Try to deserialize the source data
+                var deserializer = new Readers.SpoonInstaller();
+                var sfx = deserializer.Deserialize(_dataSource);
+                if (sfx?.Entries == null)
+                    return false;
+
+                // Loop through the entries and extract
+                for (int i = 0; i < sfx.Entries.Length; i++)
+                {
+                    var entry = sfx.Entries[i];
+
+                    // Get the offset and compressed size
+                    long offset = entry.FileOffset;
+                    int size = (int)entry.CompressedSize;
+
+                    // Try to read the file data
+                    byte[] data = ReadRangeFromSource(offset, size);
+                    if (data.Length == 0)
+                        continue;
+
+                    // TODO: Create a BZ2 extraction stream from this
+
+                    // Ensure directory separators are consistent
+                    string filename = entry.Filename ?? $"FILE_{i}";
+                    if (Path.DirectorySeparatorChar == '\\')
+                        filename = filename.Replace('/', '\\');
+                    else if (Path.DirectorySeparatorChar == '/')
+                        filename = filename.Replace('\\', '/');
+
+                    // Ensure the full output directory exists
+                    filename = Path.Combine(outputDirectory, filename);
+                    var directoryName = Path.GetDirectoryName(filename);
+                    if (directoryName != null && !Directory.Exists(directoryName))
+                        Directory.CreateDirectory(directoryName);
+
+                    // Write the output file
+                    var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                    fs.Write(data, 0, data.Length);
+                    fs.Flush();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
         }
 
         /// <summary>
