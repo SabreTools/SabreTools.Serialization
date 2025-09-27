@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SabreTools.IO.Compression.BZip2;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 
@@ -560,7 +561,9 @@ namespace SabreTools.Serialization.Wrappers
                     if (data.Length == 0)
                         continue;
 
-                    // TODO: Create a BZ2 extraction stream from this
+                    // Try opening the stream
+                    using var ms = new MemoryStream(data);
+                    using var bz2File = new BZip2InputStream(ms, true);
 
                     // Ensure directory separators are consistent
                     string filename = entry.Filename ?? $"FILE_{i}";
@@ -577,7 +580,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Write the output file
                     var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                    fs.Write(data, 0, data.Length);
+                    bz2File.CopyTo(fs);
                     fs.Flush();
                 }
 
