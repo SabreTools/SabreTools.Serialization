@@ -87,7 +87,10 @@ namespace SabreTools.Serialization.Wrappers
                     }
                 }
 
-                if (isSolid)
+                // Still check SharpCompress's archive-level isSolid flag. Based on the way the check works on their
+                // end, it's possible that a multi-block solid archive might have the second (or more files) file not
+                // solid? It doesn't hurt to check either way.
+                if (isSolid || rarFile.IsSolid)
                     return ExtractSolid(rarFile, outputDirectory, includeDebug);
                 else
                     return ExtractNonSolid(rarFile, outputDirectory, includeDebug);
