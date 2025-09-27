@@ -48,9 +48,45 @@ namespace SabreTools.Serialization.Wrappers
                         sevenZip = SevenZipArchive.Open(parts, readerOptions);
                 }
 
-                // Currently doesn't flag solid 7z archives with only 1 solid block as solid, but practically speaking
-                // this is not much of a concern.
-                if (sevenZip.IsSolid)
+                // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether  
+                // a RAR or 7Z archive is solid or not, you must check the second file in the archive, as the first 
+                // file is always marked non-solid even for solid archives. This iteration is necessary since things
+                // like directories aren't marked solid either.
+                // This is only temporary, as solid detection has been fixed in upstream SolidCompress, but they likely
+                // won't make a new release for a while, and this is too big an issue to leave unfixed.
+                bool firstFile = true;
+                bool isSolid = false;
+                foreach (var entry in sevenZip.Entries)
+                {
+                    try
+                    {
+                        // If the entry is a directory
+                        if (entry.IsDirectory)
+                            continue;
+
+                        // If the entry has an invalid key
+                        if (entry.Key == null)
+                            continue;
+
+                        // If we have a partial entry due to an incomplete multi-part archive, skip it
+                        if (!entry.IsComplete)
+                            continue;
+
+                        if (firstFile)
+                            firstFile = false;
+                        else
+                        {
+                            isSolid = entry.IsSolid;
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (includeDebug) Console.WriteLine(ex);
+                    }
+                }
+                
+                if (isSolid)
                     return ExtractSolid(sevenZip, outputDirectory, includeDebug);
                 else
                     return ExtractNonSolid(sevenZip, outputDirectory, includeDebug);
