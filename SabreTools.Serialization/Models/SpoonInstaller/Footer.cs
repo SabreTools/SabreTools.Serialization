@@ -10,8 +10,10 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// Unknown
         /// </summary>
         /// <remarks>
+        /// Theorized to be a checksum?
+        /// 
         /// Observed values:
-        /// - 81 83 DA 2F
+        /// - 81 83 DA 2F (802849665)
         /// </remarks>
         public uint Unknown0 { get; set; }
 
@@ -20,7 +22,7 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// </summary>
         /// <remarks>
         /// Observed values:
-        /// - 6A 00 00 00
+        /// - 6A 00 00 00 (106)
         /// </remarks>
         public uint Unknown1 { get; set; }
 
@@ -38,8 +40,10 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// Unknown
         /// </summary>
         /// <remarks>
+        /// Could also be part of the signature?
+        /// 
         /// Observed values:
-        /// - 83 52 34 03
+        /// - 83 52 34 03 (53760643)
         /// </remarks>
         public uint Unknown2 { get; set; }
 
@@ -48,7 +52,7 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// </summary>
         /// <remarks>
         /// Observed values:
-        /// - 43 F3 FF 0E
+        /// - 43 F3 FF 0E (251654979)
         /// </remarks>
         public uint Unknown3 { get; set; }
     }
