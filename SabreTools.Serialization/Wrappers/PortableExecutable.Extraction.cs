@@ -31,13 +31,17 @@ namespace SabreTools.Serialization.Wrappers
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool spoon = ExtractSpoonInstaller(outputDirectory, includeDebug);
-            bool wise = ExtractWise(outputDirectory, includeDebug);
+
+            // Skip Wise section extraction if the overlay succeeded
+            bool wiseOverlay = ExtractWiseOverlay(outputDirectory, includeDebug);
+            bool wiseSection = wiseOverlay || ExtractWiseSection(outputDirectory, includeDebug);
 
             // Overlay can be skipped in some situations
-            bool overlay = cai || spoon
+            bool overlay = cai || spoon || wiseOverlay
                 || ExtractFromOverlay(outputDirectory, includeDebug);
 
-            return cai || cexe || matroschka || overlay || resources || wise;
+            return cai || cexe || matroschka || overlay || resources || spoon
+                || wiseOverlay || wiseSection;
         }
 
         /// <summary>
@@ -609,7 +613,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractWise(string outputDirectory, bool includeDebug)
+        public bool ExtractWiseOverlay(string outputDirectory, bool includeDebug)
         {
             // Get the source data for reading
             Stream source = _dataSource;
@@ -622,15 +626,62 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to find the overlay header
             long offset = FindWiseOverlayHeader();
-            if (offset > 0 && offset < Length)
-                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
+            if (offset <= 0 || offset > Length)
+                return false;
 
-            // Try to find the section header
-            if (WiseSection != null)
-                return ExtractWiseSection(outputDirectory, includeDebug);
+            // Seek to the overlay and parse
+            source.Seek(offset, SeekOrigin.Begin);
+            var header = WiseOverlayHeader.Create(source);
+            if (header == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
+                return false;
+            }
 
-            // Everything else could not extract
-            return false;
+            // Extract the header-defined files
+            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
+            if (!extracted)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
+                return false;
+            }
+
+            // Open the script file from the output directory
+            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
+            var script = WiseScript.Create(scriptStream);
+            if (script == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
+                return false;
+            }
+
+            // Get the source directory
+            string? sourceDirectory = null;
+            if (Filename != null)
+                sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
+
+            // Process the state machine
+            return script.ProcessStateMachine(header, sourceDirectory, outputDirectory, includeDebug);
+        }
+
+        /// <summary>
+        /// Extract using Wise section
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractWiseSection(string outputDirectory, bool includeDebug)
+        {
+            // Get the section header
+            var header = WiseSection;
+            if (header == null)
+            {
+                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
+                return false;
+            }
+
+            // Attempt to extract section
+            return header.Extract(outputDirectory, includeDebug);
         }
 
         /// <summary>
@@ -700,71 +751,6 @@ namespace SabreTools.Serialization.Wrappers
                 // Reset the data
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Extract using Wise overlay
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="offset">Offset to the start of the overlay header</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
-        {
-            // Seek to the overlay and parse
-            source.Seek(offset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(source);
-            if (header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return false;
-            }
-
-            // Extract the header-defined files
-            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
-            if (!extracted)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
-                return false;
-            }
-
-            // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
-            var script = WiseScript.Create(scriptStream);
-            if (script == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
-                return false;
-            }
-
-            // Get the source directory
-            string? sourceDirectory = null;
-            if (Filename != null)
-                sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
-
-            // Process the state machine
-            return script.ProcessStateMachine(header, sourceDirectory, outputDirectory, includeDebug);
-        }
-
-        /// <summary>
-        /// Extract using Wise section
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseSection(string outputDirectory, bool includeDebug)
-        {
-            // Get the section header
-            var header = WiseSection;
-            if (header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
-                return false;
-            }
-
-            // Attempt to extract section
-            return header.Extract(outputDirectory, includeDebug);
         }
     }
 }
