@@ -9,7 +9,7 @@ Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTo
 The following non-project libraries (or ports thereof) are used for file handling:
 
 - [SharpCompress](https://github.com/adamhathcock/sharpcompress) - Common archive format extraction
-- [StormLibSharp](https://github.com/robpaveza/stormlibsharp) - MoPaQ extraction [Unused in .NET Framework 2.0/3.5/4.0, non-Windows, and non-x86 builds due to Windows-specific libraries]
+- [StormLibSharp](https://github.com/robpaveza/stormlibsharp) - MoPaQ extraction [Unused in .NET Framework 2.0/3.5/4.0 and non-Windows builds due to Windows-specific libraries]
 
 The following projects have influenced this library:
 
