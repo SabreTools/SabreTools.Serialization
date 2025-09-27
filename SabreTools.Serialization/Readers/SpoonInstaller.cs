@@ -62,11 +62,8 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled Footer on success, null on error</returns>
         public static Footer ParseFooter(Stream data)
         {
-            // Seek to the end of the end of the data
-            data.Seek(0, SeekOrigin.End);
-
-            // Seek backward to the theoretical starts
-            data.Seek(-24, SeekOrigin.Current);
+            // Seek from the end (24 bytes has to use -23)
+            data.Seek(-23, SeekOrigin.End);
 
             var obj = new Footer();
 

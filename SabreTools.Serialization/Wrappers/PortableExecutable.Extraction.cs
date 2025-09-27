@@ -50,6 +50,9 @@ namespace SabreTools.Serialization.Wrappers
         {
             try
             {
+                // Ensure the stream is starting at the beginning
+                _dataSource.Seek(0, SeekOrigin.Begin);
+
                 // Try to deserialize the source data
                 var deserializer = new Readers.AdvancedInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
@@ -541,6 +544,9 @@ namespace SabreTools.Serialization.Wrappers
         {
             try
             {
+                // Ensure the stream is starting at the beginning
+                _dataSource.Seek(0, SeekOrigin.Begin);
+
                 // Try to deserialize the source data
                 var deserializer = new Readers.SpoonInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
@@ -554,19 +560,23 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Get the offset and compressed size
                     long offset = entry.FileOffset;
-                    int size = (int)entry.CompressedSize;
+                    int compressed = (int)entry.CompressedSize;
+                    int extracted = (int)entry.UncompressedSize;
 
                     // Try to read the file data
-                    byte[] data = ReadRangeFromSource(offset, size);
-                    if (data.Length == 0)
+                    byte[] bz2Data = ReadRangeFromSource(offset, compressed);
+                    if (bz2Data.Length == 0)
                         continue;
 
                     // Try opening the stream
-                    using var ms = new MemoryStream(data);
-                    using var bz2File = new BZip2InputStream(ms, true);
+                    using var ms = new MemoryStream(bz2Data);
+                    using var bz2File = new BZip2InputStream(ms, false);
+
+                    // Try to read the decompressed data
+                    byte[] data = bz2File.ReadBytes(extracted);
 
                     // Ensure directory separators are consistent
-                    string filename = entry.Filename ?? $"FILE_{i}";
+                    string filename = entry.Filename?.TrimEnd('\0') ?? $"FILE_{i}";
                     if (Path.DirectorySeparatorChar == '\\')
                         filename = filename.Replace('/', '\\');
                     else if (Path.DirectorySeparatorChar == '/')
@@ -580,7 +590,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Write the output file
                     var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                    bz2File.CopyTo(fs);
+                    fs.Write(data, 0, data.Length);
                     fs.Flush();
                 }
 
