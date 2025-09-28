@@ -16,6 +16,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// Physical offset of the embedded file
         /// </summary>
+        /// <remarks>Relative to the start of the file</remarks>
         public uint PhysicalOffset;
 
         /// <summary>
