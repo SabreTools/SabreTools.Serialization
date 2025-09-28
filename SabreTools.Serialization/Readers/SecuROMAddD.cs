@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Readers
                 // Cache the current offset
                 long initialOffset = data.Position;
 
-                var addD = ParseSecuROMAddD(data);
+                var addD = ParseAddD(data);
                 if (addD.Signature != 0x44646441)
                     return null;
 
@@ -33,11 +33,11 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into an SecuROMAddD
+        /// Parse a Stream into an AddD
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled SecuROMAddD on success, null on error</returns>
-        private static AddD ParseSecuROMAddD(Stream data)
+        /// <returns>Filled AddD on success, null on error</returns>
+        private static AddD ParseAddD(Stream data)
         {
             var obj = new AddD();
 
@@ -45,14 +45,15 @@ namespace SabreTools.Serialization.Readers
             obj.EntryCount = data.ReadUInt32LittleEndian();
             obj.Version = data.ReadNullTerminatedAnsiString();
             byte[] buildBytes = data.ReadBytes(4);
-            string buildStr = Encoding.ASCII.GetString(buildBytes);
-            obj.Build = buildStr.ToCharArray();
-            obj.Unknown14h = data.ReadBytes(1); // TODO: Figure out how to determine how many bytes are here consistently
+            obj.Build = Encoding.ASCII.GetString(buildBytes);
+
+            // TODO: Figure out how to determine how many bytes are here consistently
+            obj.Unknown = data.ReadBytes(1);
 
             obj.Entries = new AddDEntry[obj.EntryCount];
             for (int i = 0; i < obj.Entries.Length; i++)
             {
-                var entry = ParseSecuROMAddDEntry(data);
+                var entry = ParseAddDEntry(data);
                 obj.Entries[i] = entry;
             }
 
@@ -60,11 +61,11 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into an SecuROMAddDEntry
+        /// Parse a Stream into an AddDEntry
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled SecuROMAddDEntry on success, null on error</returns>
-        private static AddDEntry ParseSecuROMAddDEntry(Stream data)
+        /// <returns>Filled AddDEntry on success, null on error</returns>
+        private static AddDEntry ParseAddDEntry(Stream data)
         {
             var obj = new AddDEntry();
 
