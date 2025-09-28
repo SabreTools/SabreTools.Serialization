@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
+using static SabreTools.Data.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -20,7 +21,7 @@ namespace SabreTools.Serialization.Readers
                 long initialOffset = data.Position;
 
                 var addD = ParseAddD(data);
-                if (addD.Signature != 0x44646441)
+                if (addD.Signature != AddDMagicString)
                     return null;
 
                 return addD;
@@ -41,7 +42,8 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new AddD();
 
-            obj.Signature = data.ReadUInt32LittleEndian();
+            byte[] signatureBytes = data.ReadBytes(4);
+            obj.Signature = Encoding.ASCII.GetString(signatureBytes);
             obj.EntryCount = data.ReadUInt32LittleEndian();
             obj.Version = data.ReadNullTerminatedAnsiString();
             byte[] buildBytes = data.ReadBytes(4);

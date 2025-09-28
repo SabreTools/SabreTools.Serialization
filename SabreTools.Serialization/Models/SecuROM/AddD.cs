@@ -11,9 +11,9 @@
     public sealed class AddD
     {
         /// <summary>
-        /// "AddD", Identifier?
+        /// "AddD"
         /// </summary>
-        public uint Signature { get; set; }
+        public string? Signature { get; set; }
 
         /// <summary>s
         /// Unknown (Entry count?)
