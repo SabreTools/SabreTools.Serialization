@@ -16,12 +16,8 @@
         public string? Signature { get; set; }
 
         /// <summary>s
-        /// Unknown (Entry count?)
+        /// Entry count
         /// </summary>
-        /// <remarks>
-        /// 3 in EXPUNGED, 3.17.00.0017, 3.17.00.0019
-        /// 3 in 4.47.00.0039, 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
-        /// </remarks>
         public uint EntryCount { get; set; }
 
         /// <summary>
