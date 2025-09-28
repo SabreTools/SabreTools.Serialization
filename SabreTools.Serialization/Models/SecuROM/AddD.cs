@@ -37,19 +37,26 @@
         public string? Build { get; set; }
 
         /// <summary>
-        /// Unknown (0x14h), Variable number of bytes before entry table
+        /// Unknown
+        /// </summary>
+        /// <remarks>44 bytes</remarks>
+        public byte[]? Unknown1 { get; set; }
+
+        /// <summary>
+        /// Product ID?
         /// </summary>
         /// <remarks>
-        /// 44 bytes in EXPUNGED, 3.17.00.0017, 3.17.00.0019, 4.47.00.0039
-        /// 112 bytes in 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
-        /// 112 byte range contains a fixed-length string at 0x2C, possibly a product ID?
-        ///     "801400-001" in 4.84.00.0054
-        ///     "594130-001" in 4.84.69.0037
-        ///     "554900-001" in 4.84.76.7966
-        ///     "554900-001" in 4.84.76.7968
-        ///     "548520-001" in 4.85.07.0009
+        /// 10 bytes, only present in 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
         /// </remarks>
-        public byte[]? Unknown { get; set; }
+        public string? ProductId { get; set; }
+
+        /// <summary>
+        /// Unknown
+        /// </summary>
+        /// <remarks>
+        /// 58 bytes, only present in 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
+        /// </remarks>
+        public byte[]? Unknown2 { get; set; }
 
         /// <summary>
         /// Entry table

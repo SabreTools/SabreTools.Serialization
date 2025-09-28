@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.SecuROM.Constants;
@@ -48,9 +49,21 @@ namespace SabreTools.Serialization.Readers
             obj.Version = data.ReadNullTerminatedAnsiString();
             byte[] buildBytes = data.ReadBytes(4);
             obj.Build = Encoding.ASCII.GetString(buildBytes);
+            obj.Unknown1 = data.ReadBytes(44);
 
-            // TODO: Figure out how to determine how many bytes are here consistently
-            obj.Unknown = data.ReadBytes(1);
+            // Peek at the next 10 bytes
+            long currentOffset = data.Position;
+            byte[] temp = data.ReadBytes(10);
+            string tempString = Encoding.ASCII.GetString(temp);
+            data.Seek(currentOffset, SeekOrigin.Begin);
+
+            // If the temp string is a regex match for an ID
+            if (Regex.IsMatch(tempString, @"[0-9]{6}-[0-9]{3}"))
+            {
+                byte[] productIdBytes = data.ReadBytes(10);
+                obj.ProductId = Encoding.ASCII.GetString(productIdBytes);
+                obj.Unknown2 = data.ReadBytes(58);
+            }
 
             obj.Entries = new AddDEntry[obj.EntryCount];
             for (int i = 0; i < obj.Entries.Length; i++)
