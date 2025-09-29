@@ -33,6 +33,7 @@ Options:
 -?, -h, --help           Display this help text and quit
 -d, --debug              Enable debug mode
 -c, --hash               Output file hashes
+-f, --file               Print to file only
 -j, --json               Print info as JSON
 ```
 
