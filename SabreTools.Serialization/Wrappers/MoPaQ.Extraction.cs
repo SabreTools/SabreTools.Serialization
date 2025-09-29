@@ -1,5 +1,5 @@
 ﻿using System;
-#if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
+#if NET452_OR_GREATER || NETCOREAPP
 using System.IO;
 using StormLibSharp;
 #endif
@@ -11,9 +11,16 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-#if (NET452_OR_GREATER || NETCOREAPP) && (WINX86 || WINX64)
+#if NET452_OR_GREATER || NETCOREAPP
             try
             {
+                // Limit use to Windows only
+                if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+                {
+                    Console.WriteLine("Extraction is not supported for this operating system!");
+                    return false;
+                }
+
                 if (Filename == null || !File.Exists(Filename))
                     return false;
 
