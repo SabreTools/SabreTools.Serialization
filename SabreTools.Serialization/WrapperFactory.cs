@@ -788,7 +788,7 @@ namespace SabreTools.Serialization
 
             #region XZ
 
-            if (magic.StartsWith(Data.Models.XZ.Constants.SignatureBytes))
+            if (magic.StartsWith(Data.Models.XZ.Constants.HeaderSignatureBytes))
                 return WrapperType.XZ;
 
             if (extension.Equals("xz", StringComparison.OrdinalIgnoreCase))

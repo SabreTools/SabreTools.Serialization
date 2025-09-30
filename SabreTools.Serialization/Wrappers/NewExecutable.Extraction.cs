@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "xml";
                         break;
                     }
-                    else if (overlaySample.StartsWith(Data.Models.XZ.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Data.Models.XZ.Constants.HeaderSignatureBytes))
                     {
                         extension = "xz";
                         break;

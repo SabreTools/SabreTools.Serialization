@@ -271,7 +271,7 @@ namespace SabreTools.Serialization.Wrappers
                         extension = "xml";
                         break;
                     }
-                    else if (overlaySample.StartsWith(Data.Models.XZ.Constants.SignatureBytes))
+                    else if (overlaySample.StartsWith(Data.Models.XZ.Constants.HeaderSignatureBytes))
                     {
                         extension = "xz";
                         break;
@@ -474,7 +474,7 @@ namespace SabreTools.Serialization.Wrappers
                             extension = "xml";
                             break;
                         }
-                        else if (resourceSample.StartsWith(Data.Models.XZ.Constants.SignatureBytes))
+                        else if (resourceSample.StartsWith(Data.Models.XZ.Constants.HeaderSignatureBytes))
                         {
                             extension = "xz";
                             break;

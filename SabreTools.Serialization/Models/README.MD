@@ -45,6 +45,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [Technical Committee T10](https://www.t10.org/) | PIC |
 | [The Go tools for Windows + Assembler](https://www.godevtool.com/) | PortableExecutable |
 | [The Whole Half-Life](https://twhl.info/wiki/page/Specification:_WAD3) | WAD3 |
+| [Tukaani](https://tukaani.org/xz/format.html) | XZ |
 | [Unshield](https://github.com/twogood/unshield) | InstallShieldCabinet |
 | [unshieldv3](https://github.com/wfr/unshieldv3) | InstallShieldArchiveV3 |
 | [Valve Developer Community](https://developer.valvesoftware.com/wiki/Main_Page) | BSP, VPK |
