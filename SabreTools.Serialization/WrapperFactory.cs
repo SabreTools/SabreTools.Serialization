@@ -295,7 +295,7 @@ namespace SabreTools.Serialization
 
             #region GZip
 
-            if (magic.StartsWith(new byte[] { Data.Models.GZIP.Constants.ID1, Data.Models.GZIP.Constants.ID2 }))
+            if (magic.StartsWith(Data.Models.GZIP.Constants.SignatureBytes))
                 return WrapperType.GZip;
 
             if (extension.Equals("gz", StringComparison.OrdinalIgnoreCase))
