@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SabreTools.Data.Extensions
 {
     public static class XZ
@@ -17,15 +19,15 @@ namespace SabreTools.Data.Extensions
             if (maxSize > 9)
                 maxSize = 9;
 
-            ulong output = value[0] & 0x7F;
+            ulong output = (ulong)(value[0] & 0x7F);
             int i = 0;
 
-            while (value[i++] & 0x80 != 0)
+            while ((value[i++] & 0x80) != 0)
             {
                 if (i >= maxSize || value[i] == 0x00)
                     return 0;
 
-                output |= (value[i] & 0x7F) << (i * 7);
+                output |= (ulong)(value[i] & 0x7F) << (i * 7);
             }
 
             return output;
@@ -44,10 +46,9 @@ namespace SabreTools.Data.Extensions
 
             var output = new List<byte>();
 
-            int i = 0;
             while (value >= 0x80)
             {
-                output.Add((byte)value | 0x80);
+                output.Add((byte)(value | 0x80));
                 value >>= 7;
             }
 
