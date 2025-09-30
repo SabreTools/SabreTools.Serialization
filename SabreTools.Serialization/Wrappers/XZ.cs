@@ -73,7 +73,21 @@ namespace SabreTools.Serialization.Wrappers
             if (data == null || !data.CanRead)
                 return null;
 
-            return new XZ(new Archive(), data);
+            try
+            {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
+                var model = new Readers.XZ().Deserialize(data);
+                if (model == null)
+                    return null;
+
+                return new XZ(model, data, currentOffset);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         #endregion
