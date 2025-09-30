@@ -85,6 +85,10 @@ namespace SabreTools.Serialization.Readers
                 // Cache the current position
                 long currentPosition = data.Position;
 
+                // Read the raw data first
+                obj.ExtraFieldBytes = data.ReadBytes(obj.ExtraLength);
+                data.Seek(currentPosition, SeekOrigin.Begin);
+
                 List<ExtraFieldData> extraFields = [];
                 while (data.Position < currentPosition + obj.ExtraLength)
                 {

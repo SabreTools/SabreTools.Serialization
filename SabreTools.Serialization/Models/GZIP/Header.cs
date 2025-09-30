@@ -66,6 +66,17 @@ namespace SabreTools.Data.Models.GZIP
         /// the header, with total length XLEN bytes.  It consists of a
         /// series of subfields, each of the form <see cref="ExtraFieldData"/>.
         /// </summary>
+        /// <remarks>This is the raw version of <see cref="ExtraField"/></remarks>
+        public byte[] ExtraFieldBytes { get; set; }
+
+        /// <summary>
+        /// Extra field
+        /// 
+        /// If the FLG.FEXTRA bit is set, an "extra field" is present in
+        /// the header, with total length XLEN bytes.  It consists of a
+        /// series of subfields, each of the form <see cref="ExtraFieldData"/>.
+        /// </summary>
+        /// <remarks>This is the processed version of <see cref="ExtraFieldBytes"/></remarks>
         public ExtraFieldData[]? ExtraField { get; set; }
 
         /// <summary>
