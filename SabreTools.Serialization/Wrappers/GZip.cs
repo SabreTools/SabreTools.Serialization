@@ -1,5 +1,6 @@
 using System.IO;
 using SabreTools.Data.Models.GZIP;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -13,6 +14,60 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Extension Properties
+
+        /// <summary>
+        /// Content CRC-32 as stored in the extra field
+        /// </summary>
+        /// <remarks>Only guaranteed for Torrent GZip format</remarks>
+        public byte[]? ContentCrc32
+        {
+            get
+            {
+                // Only valid for Torrent GZip
+                if (Header == null || !IsTorrentGZip)
+                    return null;
+
+                // CRC-32 is the second packed field
+                int extraIndex = 0x10;
+                return Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x04);
+            }
+        }
+
+        /// <summary>
+        /// Content MD5 as stored in the extra field
+        /// </summary>
+        /// <remarks>Only guaranteed for Torrent GZip format</remarks>
+        public byte[]? ContentMd5
+        {
+            get
+            {
+                // Only valid for Torrent GZip
+                if (Header == null || !IsTorrentGZip)
+                    return null;
+
+                // MD5 is the first packed field
+                int extraIndex = 0x00;
+                return Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x10);
+            }
+        }
+
+        /// <summary>
+        /// Content size as stored in the extra field
+        /// </summary>
+        /// <remarks>Only guaranteed for Torrent GZip format</remarks>
+        public ulong ContentSize
+        {
+            get
+            {
+                // Only valid for Torrent GZip
+                if (Header == null || !IsTorrentGZip)
+                    return 0;
+
+                // MD5 is the first packed field
+                int extraIndex = 0x00;
+                return Header.ExtraFieldBytes.ReadUInt64LittleEndian(ref extraIndex);
+            }
+        }
 
         /// <summary>
         /// Offset to the compressed data
@@ -53,6 +108,51 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Archive.Header"/>
         public Header? Header => Model.Header;
+
+        /// <summary>
+        /// Indicates if the archive is in the standard
+        /// "Torrent GZip" format. This format is used by
+        /// some programs to store extended hashes in the
+        /// header while maintaining the format otherwise.
+        /// </summary>
+        public bool IsTorrentGZip
+        {
+            get
+            {
+                // If the header is invalid
+                if (Header == null)
+                    return false;
+
+                // Torrent GZip uses normal deflate, not GZIP deflate
+                if (Header.CompressionMethod != CompressionMethod.Deflate)
+                    return false;
+
+                // Only the extra field should be present
+                if (Header.Flags != Flags.FEXTRA)
+                    return false;
+
+                // The modification should be 0x00000000, but some implementations
+                // do not set this correctly, so it is skipped.
+
+                // No extra flags are set
+                if (Header.ExtraFlags != 0x00)
+                    return false;
+
+                // The OS should be FAT, regardless of the original platform, but
+                // some implementations do not set this correctly, so it is skipped.
+
+                // The extra field is non-standard, using the following format:
+                // - 0x00-0x0F - MD5 hash of the internal file
+                // - 0x10-0x13 - CRC-32 checksum of the internal file
+                // - 0x14-0x1B - Little-endian file size of the internal file
+                if (Header.ExtraLength != 0x1C)
+                    return false;
+                if (Header.ExtraFieldBytes == null || Header.ExtraFieldBytes.Length != 0x1C)
+                    return false;
+
+                return true;
+            }
+        }
 
         /// <inheritdoc cref="Archive.Trailer"/>
         public Trailer? Trailer => Model.Trailer;
