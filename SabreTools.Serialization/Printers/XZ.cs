@@ -61,7 +61,10 @@ namespace SabreTools.Data.Printers
                 // TODO: Print filter flags
                 builder.AppendLine(block.HeaderPadding, "    Header padding");
                 builder.AppendLine(block.Crc32, "    CRC-32");
-                // TODO: Print the actual compressed data length
+                if (block.CompressedData == null)
+                    builder.AppendLine("    Compressed data length: [NULL]");
+                else
+                    builder.AppendLine(block.CompressedData.Length, "    Compressed data length");
                 builder.AppendLine(block.BlockPadding, "    Block padding");
                 builder.AppendLine(block.Check, "    Check");
             }
@@ -82,10 +85,31 @@ namespace SabreTools.Data.Printers
 
             builder.AppendLine(index.IndexIndicator, "  Index indicator");
             builder.AppendLine(index.NumberOfRecords, "  Number of records");
-            // TODO: Print records
+            Print(builder, index.Records);
             builder.AppendLine(index.Padding, "  Padding");
             builder.AppendLine(index.Crc32, "  CRC-32");
             builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Record[]? records)
+        {
+            builder.AppendLine("  Records Information:");
+            builder.AppendLine("  -------------------------");
+            if (records == null || records.Length == 0)
+            {
+                builder.AppendLine("  No records");
+                builder.AppendLine();
+                return;
+            }
+
+            for (int i = 0; i < records.Length; i++)
+            {
+                var record = records[i];
+
+                builder.AppendLine($"  Block {i}:");
+                builder.AppendLine(record.UnpaddedSize, "    Unpadded size");
+                builder.AppendLine(record.UncompressedSize, "    Uncompressed size");
+            }
         }
 
         private static void Print(StringBuilder builder, Footer? footer)
