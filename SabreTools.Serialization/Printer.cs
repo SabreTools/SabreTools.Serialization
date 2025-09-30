@@ -75,6 +75,7 @@ namespace SabreTools.Serialization
                 Wrapper.WiseSectionHeader item => item.PrettyPrint(),
                 Wrapper.XeMID item => item.PrettyPrint(),
                 Wrapper.XMID item => item.PrettyPrint(),
+                Wrapper.XZ item => item.PrettyPrint(),
                 Wrapper.XZP item => item.PrettyPrint(),
                 _ => null,
             };
@@ -130,6 +131,7 @@ namespace SabreTools.Serialization
                 Wrapper.WiseSectionHeader item => item.ExportJSON(),
                 Wrapper.XeMID item => item.ExportJSON(),
                 Wrapper.XMID item => item.ExportJSON(),
+                Wrapper.XZ item => item.ExportJSON(),
                 Wrapper.XZP item => item.ExportJSON(),
                 _ => string.Empty,
             };
@@ -555,6 +557,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             XMID.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.XZ item)
+        {
+            var builder = new StringBuilder();
+            XZ.Print(builder, item.Model);
             return builder;
         }
 
