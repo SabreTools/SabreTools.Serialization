@@ -26,6 +26,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [IBM Documentation](https://www.ibm.com/docs/en) | TAR |
 | [IETF](https://www.ietf.org/) | GZIP |
 | [Independent Commodore Library](https://petlibrary.tripod.com/) | PKZIP |
+| [Joe Tsai](https://github.com/dsnet/compress/blob/master/doc/bzip2-format.pdf) | BZip2 |
 | [Ladislav Zezula](http://zezula.net/en/tools/main.html) | MoPaQ |
 | [libaacs](https://code.videolan.org/videolan/libaacs/) | AACS |
 | [libbdplus](https://github.com/mwgoldsmith/bdplus) | BD+ |
