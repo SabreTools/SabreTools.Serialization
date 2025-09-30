@@ -12,6 +12,6 @@ namespace SabreTools.Data.Models.XZ
         /// Uncompressed size of the block
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public ulong NumberOfRecords { get; set; }
+        public ulong UncompressedSize { get; set; }
     }
 }
