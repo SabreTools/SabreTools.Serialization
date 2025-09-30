@@ -9,7 +9,8 @@ namespace SabreTools.Data.Models.CHD
         /// <summary>
         /// Which custom compressors are used?
         /// </summary>
-        public CodecType[] Compressors { get; set; } = new CodecType[4];
+        /// <remarks>There should be 4 entries</remarks>
+        public CodecType[] Compressors { get; set; }
 
         /// <summary>
         /// Logical size of the data (in bytes)
