@@ -149,19 +149,20 @@ namespace SabreTools.Serialization.Readers
                 obj.FilterFlags[i] = ParseFilterFlag(data);
             }
 
-            // Parse the padding as needed
-            int paddingLength = realHeaderSize - (int)(data.Position - currentOffset);
+            // Parse the padding as needed, adjusting for CRC size
+            int paddingLength = realHeaderSize - (int)(data.Position - currentOffset) - 4;
             if (paddingLength >= 0)
                 obj.HeaderPadding = data.ReadBytes(paddingLength);
 
             obj.Crc32 = data.ReadUInt32LittleEndian();
 
             // TODO: How to handle large blocks?
-            if ((int)obj.UncompressedSize >= 0)
+            // TODO: Handle unset compressed sizes
+            if ((int)obj.CompressedSize > 0)
                 obj.CompressedData = data.ReadBytes((int)obj.UncompressedSize);
 
             // Parse the padding as needed
-            paddingLength = (int)obj.UncompressedSize % 4;
+            paddingLength = (int)obj.CompressedSize % 4;
             if (paddingLength >= 0)
                 obj.BlockPadding = data.ReadBytes(paddingLength);
 
