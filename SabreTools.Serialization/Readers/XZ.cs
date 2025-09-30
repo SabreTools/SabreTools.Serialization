@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XZ;
@@ -34,7 +33,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the stream header
                 archive.Header = header;
-                
+
                 // Cache the current offset
                 long endOfHeader = data.Position;
 
@@ -68,37 +67,32 @@ namespace SabreTools.Serialization.Readers
                 var index = ParseIndex(data);
                 if (index.IndexIndicator != 0x00)
                     return null;
+                if (index.Records == null)
+                    return null;
 
                 // Set the index
                 archive.Index = index;
 
                 #endregion
 
-                #region Blocks and Index
+                #region Blocks
+
+                // Seek to the start of the blocks
+                data.Seek(endOfHeader, SeekOrigin.Begin);
 
                 // Create the block array
-                var blocks = new List<Block>();
+                int blockCount = index.Records.Length;
+                archive.Blocks = new Block[blockCount];
 
                 // Try to parse the blocks
-                while (data.Position < data.Length)
+                for (int i = 0; i < archive.Blocks.Length; i++)
                 {
-                    // Peek at the first byte in the block
-                    byte peek = data.ReadByteValue();
-                    data.Seek(-1, SeekOrigin.Current);
-
-                    // Blocks have values from 0x01-0x0F, index is 0x00
-                    if (peek == 0x00)
-                        break;
+                    // Get the record for this block
+                    var record = index.Records[i];
 
                     // Try to parse the block
-                    var block = ParseBlock(data, header.Flags);
-                    blocks.Add(block);
+                    archive.Blocks[i] = ParseBlock(data, header.Flags, record.UnpaddedSize);
                 }
-
-                // Set the blocks
-                archive.Blocks = [.. blocks];
-
-                
 
                 #endregion
 
@@ -132,11 +126,21 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="headerFlags">HeaderFlags to for determining the check value</param>
+        /// <param name="unpaddedSize">Unpadded data size from the index</param>
         /// <returns>Filled Block on success, null on error</returns>
-        public static Block ParseBlock(Stream data, HeaderFlags headerFlags)
+        public static Block ParseBlock(Stream data, HeaderFlags headerFlags, ulong unpaddedSize)
         {
             // Cache the current offset
             long currentOffset = data.Position;
+
+            // Determine the size of the check field
+            int checkSize = 0;
+            if (headerFlags == HeaderFlags.Crc32)
+                checkSize = 4;
+            else if (headerFlags == HeaderFlags.Crc64)
+                checkSize = 8;
+            else if (headerFlags == HeaderFlags.Sha256)
+                checkSize = 32;
 
             var obj = new Block();
 
@@ -175,23 +179,22 @@ namespace SabreTools.Serialization.Readers
 
             obj.Crc32 = data.ReadUInt32LittleEndian();
 
+            // Determine the compressed size
+            ulong compressedSize = obj.CompressedSize != 0
+                ? obj.CompressedSize
+                : unpaddedSize - (ulong)(realHeaderSize + checkSize);
+
             // TODO: How to handle large blocks?
-            // TODO: Handle unset compressed sizes
-            if ((int)obj.CompressedSize > 0)
-                obj.CompressedData = data.ReadBytes((int)obj.UncompressedSize);
+            if ((int)compressedSize > 0)
+                obj.CompressedData = data.ReadBytes((int)compressedSize);
 
             // Parse the padding as needed
-            paddingLength = (int)obj.CompressedSize % 4;
+            paddingLength = 4 - (int)(unpaddedSize % 4);
             if (paddingLength >= 0)
                 obj.BlockPadding = data.ReadBytes(paddingLength);
 
             // Read the Check as needed
-            if (headerFlags == HeaderFlags.Crc32)
-                obj.Check = data.ReadBytes(4);
-            else if (headerFlags == HeaderFlags.Crc64)
-                obj.Check = data.ReadBytes(8);
-            else if (headerFlags == HeaderFlags.Sha256)
-                obj.Check = data.ReadBytes(32);
+            obj.Check = data.ReadBytes(checkSize);
 
             return obj;
         }
@@ -234,7 +237,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Parse the padding as needed
-            int paddingLength = (int)(data.Position - currentOffset) % 4;
+            int paddingLength = 4 - (int)(data.Position - currentOffset) % 4;
             if (paddingLength >= 0)
                 obj.Padding = data.ReadBytes(paddingLength);
 
