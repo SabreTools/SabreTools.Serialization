@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.XZ
         /// Stream
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public byte[]? NumberOfRecords { get; set; }
+        public ulong NumberOfRecords { get; set; }
 
         /// <summary>
         /// One record per block

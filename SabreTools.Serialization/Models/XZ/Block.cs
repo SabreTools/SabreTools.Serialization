@@ -24,14 +24,14 @@ namespace SabreTools.Data.Models.XZ
         /// Present if <see cref="BlockFlags.CompressedSize"/> is set. 
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public byte[]? CompressedSize { get; set; }
+        public ulong CompressedSize { get; set; }
 
         /// <summary>
         /// Size of the block after decompression
         /// Present if <see cref="BlockFlags.UncompressedSize"/> is set. 
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public byte[]? UncompressedSize { get; set; }
+        public ulong UncompressedSize { get; set; }
 
         /// <summary>
         /// List of filter flags

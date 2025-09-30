@@ -6,13 +6,13 @@ namespace SabreTools.Data.Models.XZ
         /// Filter ID
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public byte[]? FilterID { get; set; }
+        public ulong FilterID { get; set; }
 
         /// <summary>
         /// Filter ID
         /// </summary>
         /// <remarks>Stored as a variable-length integer</remarks>
-        public byte[]? SizeOfProperties { get; set; }
+        public ulong SizeOfProperties { get; set; }
 
         /// <summary>
         /// Properties of the filter whose length is given by
