@@ -34,6 +34,43 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the stream header
                 archive.Header = header;
+                
+                // Cache the current offset
+                long endOfHeader = data.Position;
+
+                #endregion
+
+                #region Footer
+
+                // Seek to the start of the footer
+                data.Seek(-12, SeekOrigin.End);
+
+                // Cache the current offset
+                long startOfFooter = data.Position;
+
+                // Try to parse the footer
+                var footer = ParseFooter(data);
+                if (!footer.Signature.EqualsExactly(FooterSignatureBytes))
+                    return null;
+
+                // Set the footer
+                archive.Footer = footer;
+
+                #endregion
+
+                #region Index
+
+                // Seek to the start of the index
+                long indexOffset = startOfFooter - ((footer.BackwardSize + 1) * 4);
+                data.Seek(indexOffset, SeekOrigin.Begin);
+
+                // Try to parse the index
+                var index = ParseIndex(data);
+                if (index.IndexIndicator != 0x00)
+                    return null;
+
+                // Set the index
+                archive.Index = index;
 
                 #endregion
 
@@ -61,25 +98,7 @@ namespace SabreTools.Serialization.Readers
                 // Set the blocks
                 archive.Blocks = [.. blocks];
 
-                // Try to parse the index
-                var index = ParseIndex(data);
-                if (index.IndexIndicator != 0x00)
-                    return null;
-
-                // Set the index
-                archive.Index = index;
-
-                #endregion
-
-                #region Footer
-
-                // Try to parse the footer
-                var footer = ParseFooter(data);
-                if (!footer.Signature.EqualsExactly(FooterSignatureBytes))
-                    return null;
-
-                // Set the footer
-                archive.Footer = footer;
+                
 
                 #endregion
 
@@ -250,7 +269,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Crc32 = data.ReadUInt32LittleEndian();
             obj.BackwardSize = data.ReadUInt32LittleEndian();
-            obj.Flags = (HeaderFlags)data.ReadByteValue();
+            obj.Flags = (HeaderFlags)data.ReadUInt16LittleEndian();
             obj.Signature = data.ReadBytes(2);
 
             return obj;
