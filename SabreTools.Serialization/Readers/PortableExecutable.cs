@@ -1587,8 +1587,8 @@ namespace SabreTools.Serialization.Readers
                 // Read the name from the offset, if needed
                 if (nameEntry && obj.Entries[i].NameOffset > 0 && obj.Entries[i].NameOffset < tableData.Length)
                 {
-                    offset = (int)obj.Entries[i].NameOffset;
-                    obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref offset);
+                    int nameOffset = (int)obj.Entries[i].NameOffset;
+                    obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref nameOffset);
                 }
             }
 
