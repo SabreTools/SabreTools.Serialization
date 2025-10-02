@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If the entry point matches with the start of a section, use that
                     int entryPointSection = FindEntryPointSectionIndex();
-                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection]?.VirtualAddress)
+                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection].VirtualAddress)
                     {
                         _entryPointData = GetSectionData(entryPointSection) ?? [];
                         return _entryPointData;
@@ -143,15 +143,15 @@ namespace SabreTools.Serialization.Wrappers
                     // Populate the raw header padding data based on the source
                     uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
                     uint firstSectionAddress = uint.MaxValue;
-                    foreach (var s in SectionTable)
+                    foreach (var section in SectionTable)
                     {
-                        if (s == null || s.PointerToRawData == 0)
+                        if (section.PointerToRawData == 0)
                             continue;
-                        if (s.PointerToRawData < headerStartAddress)
+                        if (section.PointerToRawData < headerStartAddress)
                             continue;
 
-                        if (s.PointerToRawData < firstSectionAddress)
-                            firstSectionAddress = s.PointerToRawData;
+                        if (section.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = section.PointerToRawData;
                     }
 
                     // Check if the header length is more than 0 before reading data
@@ -328,15 +328,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Search through all sections and find the furthest a section goes
                     long endOfSectionData = OptionalHeader.SizeOfHeaders;
-                    foreach (var section in SectionTable)
-                    {
-                        // If we have an invalid section
-                        if (section == null)
-                            continue;
-
-                        // Add the raw data size
-                        endOfSectionData += section.SizeOfRawData;
-                    }
+                    Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
 
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
@@ -527,11 +519,8 @@ namespace SabreTools.Serialization.Wrappers
                     _sectionNames = new string[SectionTable.Length];
                     for (int i = 0; i < _sectionNames.Length; i++)
                     {
-                        var section = SectionTable[i];
-                        if (section == null)
-                            continue;
-
                         // TODO: Handle long section names with leading `/`
+                        var section = SectionTable[i];
                         byte[]? sectionNameBytes = section.Name;
                         if (sectionNameBytes != null)
                         {
@@ -2046,9 +2035,6 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the section data from the table
             var section = SectionTable[index];
-            if (section == null)
-                return null;
-
             uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
             if (address == 0)
                 return null;

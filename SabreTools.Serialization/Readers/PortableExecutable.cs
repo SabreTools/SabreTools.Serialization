@@ -106,6 +106,10 @@ namespace SabreTools.Serialization.Readers
 
                 #endregion
 
+                // Cache the overlay offset
+                long endOfSectionData = optionalHeader?.SizeOfHeaders ?? 0;
+                Array.ForEach(pex.SectionTable, s => endOfSectionData += s.SizeOfRawData);
+
                 #region Symbol Table and String Table
 
                 offset = initialOffset + fileHeader.PointerToSymbolTable;
