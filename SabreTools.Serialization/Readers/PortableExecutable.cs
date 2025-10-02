@@ -330,7 +330,9 @@ namespace SabreTools.Serialization.Readers
                         #region Hidden Resources
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
-                        if (pex.ResourceDirectoryTable?.Entries != null && tableOffset < tableSize)
+                        if (pex.ResourceDirectoryTable?.Entries != null
+                            && tableOffset < tableSize
+                            && (offset + tableOffset) != endOfSectionData)
                         {
                             // Resize the entry array to accomodate one more
                             var localEntries = pex.ResourceDirectoryTable.Entries;
