@@ -30,7 +30,7 @@ For the latest WIP build here: [Rolling Release](https://github.com/SabreTools/S
 InfoPrint <options> file|directory ...
 
 Options:
--?, -h, --help           Display this help text and quit
+-?, -h, --help           Display this help text
 -d, --debug              Enable debug mode
 -c, --hash               Output file hashes
 -f, --file               Print to file only
@@ -42,10 +42,10 @@ Options:
 **ExtractionTool** is a reference implementation for the extraction features of the library, packaged as a standalone executable for all supported platforms. It will attempt to detect and extract many supported file types. See the table below for supported extraction functionality.
 
 ```text
-ExtractionTool.exe <options> file|directory ...
+ExtractionTool <options> file|directory ...
 
 Options:
--?, -h, --help           Display this help text and quit
+-?, -h, --help           Display this help text
 -d, --debug              Enable debug mode
 -o, --outdir [PATH]      Set output path for extraction (required)
 ```

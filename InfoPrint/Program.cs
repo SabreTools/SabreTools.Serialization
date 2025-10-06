@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.CommandLine;
+using SabreTools.CommandLine.Inputs;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
@@ -10,23 +13,92 @@ namespace InfoPrint
 {
     public static class Program
     {
+        #region Constants
+
+        private const string _debugName = "debug";
+        private const string _fileOnlyName = "file-only";
+        private const string _hashName = "hash";
+        private const string _helpName = "help";
+#if NETCOREAPP
+        private const string _jsonName = "json";
+#endif
+
+        #endregion
+
         public static void Main(string[] args)
         {
-            // Get the options from the arguments
-            var options = Options.ParseOptions(args);
+            // Create the command set
+            var commandSet = CreateCommands();
 
-            // If we have an invalid state
-            if (options == null)
+            // If we have no args, show the help and quit
+            if (args == null || args.Length == 0)
             {
-                Options.DisplayHelp();
+                commandSet.OutputAllHelp();
                 return;
             }
 
-            // Loop through the input paths
-            foreach (string inputPath in options.InputPaths)
+            // Loop through and process the options
+            int firstFileIndex = 0;
+            for (; firstFileIndex < args.Length; firstFileIndex++)
             {
-                PrintPathInfo(inputPath, options);
+                string arg = args[firstFileIndex];
+
+                var input = commandSet.GetTopLevel(arg);
+                if (input == null)
+                    break;
+
+                input.ProcessInput(args, ref firstFileIndex);
             }
+
+            // If help was specified
+            if (commandSet.GetBoolean(_helpName))
+            {
+                commandSet.OutputAllHelp();
+                return;
+            }
+
+            // Get the options from the arguments
+            var options = new Options
+            {
+                Debug = commandSet.GetBoolean(_debugName),
+                Hash = commandSet.GetBoolean(_hashName),
+                FileOnly = commandSet.GetBoolean(_fileOnlyName),
+#if NETCOREAPP
+                Json = commandSet.GetBoolean(_jsonName),
+#endif
+            };
+
+            // Loop through the input paths
+            for (int i = firstFileIndex; i < args.Length; i++)
+            {
+                string arg = args[i];
+                PrintPathInfo(arg, options);
+            }
+        }
+
+        /// <summary>
+        /// Create the command set for the program
+        /// </summary>
+        private static CommandSet CreateCommands()
+        {
+            List<string> header = [
+                "Information Printing Program",
+                string.Empty,
+                "InfoPrint <options> file|directory ...",
+                string.Empty,
+            ];
+
+            var commandSet = new CommandSet(header);
+
+            commandSet.Add(new FlagInput(_helpName, ["-?", "-h", "--help"], "Display this help text"));
+            commandSet.Add(new FlagInput(_debugName, ["-d", "--debug"], "Enable debug mode"));
+            commandSet.Add(new FlagInput(_hashName, ["-c", "--hash"], "Output file hashes"));
+            commandSet.Add(new FlagInput(_fileOnlyName, ["-f", "--file"], "Print to file only"));
+#if NETCOREAPP
+            commandSet.Add(new FlagInput(_jsonName, ["-j", "--json"], "Print info as JSON"));
+#endif
+
+            return commandSet;
         }
 
         /// <summary>
