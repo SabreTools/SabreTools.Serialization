@@ -8,7 +8,7 @@ namespace ExtractionTool
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
 #if NET462_OR_GREATER || NETCOREAPP
             // Register the codepages
