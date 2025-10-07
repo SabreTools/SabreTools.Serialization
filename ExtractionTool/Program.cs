@@ -8,14 +8,6 @@ namespace ExtractionTool
 {
     class Program
     {
-        #region Constants
-
-        private const string _debugName = "debug";
-        private const string _helpName = "help";
-        private const string _outputPathName = "output-path";
-
-        #endregion
-
         static void Main(string[] args)
         {
 #if NET462_OR_GREATER || NETCOREAPP
