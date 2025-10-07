@@ -6,7 +6,7 @@ using SabreTools.CommandLine.Features;
 
 namespace ExtractionTool
 {
-    class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
