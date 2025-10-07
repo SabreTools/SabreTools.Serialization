@@ -37,12 +37,12 @@ namespace ExtractionTool.Features
         /// <summary>
         /// Enable debug output for relevant operations
         /// </summary>
-        public bool Debug { get; set; }
+        public bool Debug { get; private set; }
 
         /// <summary>
         /// Output path for archive extraction
         /// </summary>
-        public string OutputPath { get; set; } = string.Empty;
+        public string OutputPath { get; private set; } = string.Empty;
 
         #endregion
 
