@@ -634,7 +634,7 @@ namespace SabreTools.Serialization.Wrappers
             var header = WiseOverlayHeader.Create(source);
             if (header == null)
             {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
+                if (includeDebug) Console.Error.WriteLine("Could not parse a Wise overlay header");
                 return false;
             }
 
@@ -642,7 +642,7 @@ namespace SabreTools.Serialization.Wrappers
             bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
             if (!extracted)
             {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
+                if (includeDebug) Console.Error.WriteLine("Could not extract Wise overlay header-defined files");
                 return false;
             }
 
@@ -676,7 +676,7 @@ namespace SabreTools.Serialization.Wrappers
             var header = WiseSection;
             if (header == null)
             {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
+                if (includeDebug) Console.Error.WriteLine("Could not parse a Wise section header");
                 return false;
             }
 
