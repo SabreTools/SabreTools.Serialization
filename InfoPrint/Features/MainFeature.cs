@@ -203,7 +203,7 @@ namespace InfoPrint.Features
                 }
 
                 // Only print to console if enabled
-                if (FileOnly)
+                if (!FileOnly)
                     Console.WriteLine(builder);
 
                 using var sw = new StreamWriter(File.OpenWrite($"{filenameBase}.txt"));
