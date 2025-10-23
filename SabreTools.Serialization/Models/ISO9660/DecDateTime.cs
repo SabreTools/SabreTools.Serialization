@@ -1,10 +1,12 @@
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
-    /// Datetime format used in the Base (Primary/Supplementary/Enhanced) Volume Descriptor
+    /// Datetime format represented by decimal ASCII
+    /// - Base (Primary/Supplementary/Enhanced) Volume Descriptor
+    /// - Extended Attribute Record
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
-    public sealed class VolumeDescriptorDateTime
+    public sealed class DecDateTime
     {
         /// <summary>
         /// 4-byte ASCII digits
@@ -39,7 +41,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] HundredthSecond { get; set; }
+        public byte[] Centisecond { get; set; }
 
         /// <summary>
         /// Time zone offset (from GMT = UTC 0), represented by a single byte

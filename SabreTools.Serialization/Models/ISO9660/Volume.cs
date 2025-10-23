@@ -30,6 +30,11 @@ namespace SabreTools.Data.Models.ISO9660
         /// </summary>
         public VolumeDescriptor[] VolumeDescriptorSet { get; set; }
 
+        /// <summary>
+        /// Root directory extent
+        /// </summary>
+        public DirectoryExtent RootDirectoryExtent { get; set; }
+
         #endregion
     }
 }

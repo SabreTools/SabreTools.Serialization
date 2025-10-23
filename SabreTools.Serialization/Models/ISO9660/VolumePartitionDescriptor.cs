@@ -22,12 +22,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Logical block number of the first logical block allocated to this volume partition
         /// </summary>
-        public int VolumePartitionLocation { get; set; }
+        public BothEndianInt32 VolumePartitionLocation { get; set; }
 
         /// <summary>
         /// Number of logical blocks allocated to this volume partition
         /// </summary>
-        public int VolumePartitionSize { get; set; }
+        public BothEndianInt32 VolumePartitionSize { get; set; }
 
         /// <summary>
         /// 1960 bytes for System Use, contents not defined by ISO9660

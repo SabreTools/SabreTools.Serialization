@@ -7,6 +7,50 @@ namespace SabreTools.Data.Models.ISO9660
     public sealed class DirectoryRecord
     {
         /// <summary>
+        /// Datetime format used by DirectoryRecord
+        /// </summary>
+        public sealed class DirectoryRecordDateTime
+        {
+            /// <summary>
+            /// Number of years since 1900
+            /// </summary>
+            public byte YearsSince1990 { get; set; }
+
+            /// <summary>
+            /// Month of the year, 1-12
+            /// </summary>
+            public byte Month { get; set; }
+
+            /// <summary>
+            /// Day of the month, 1-31
+            /// </summary>
+            public byte Day { get; set; }
+
+            /// <summary>
+            /// Hour of the day, 0-23
+            /// </summary>
+            public byte Hour { get; set; }
+
+            /// <summary>
+            /// Minute of the hour, 0-59
+            /// </summary>
+            public byte Minute { get; set; }
+
+            /// <summary>
+            /// Second of the minute, 0-59
+            /// </summary>
+            public byte Second { get; set; }
+
+            /// <summary>
+            /// Time zone offset (from GMT = UTC 0), represented by a single byte
+            /// Unit = 15min offset
+            /// 0 = offset of -12 hours (UTC-12)
+            /// 100 = offset of +13 hours (UTC+13)
+            /// </summary>
+            public byte TimezoneOffset { get; set; }
+        }
+
+        /// <summary>
         /// Length of Directory Record
         /// </summary>
         public byte DirectoryRecordLength { get; set; }
@@ -19,15 +63,13 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Logical block number of the first logical block allocated to this extent
-        /// Stored as int32-LSB followed by int32-MSB
         /// </summary>
-        public int ExtentLocation { get; set; }
+        public BothEndianInt32 ExtentLocation { get; set; }
 
         /// <summary>
         /// Number of logical blocks allocated to this extent
-        /// Stored as int32-LSB followed by int32-MSB
         /// </summary>
-        public int ExtentLength { get; set; }
+        public BothEndianInt32 ExtentLength { get; set; }
 
         /// <summary>
         /// Datetime of recording for the Directory Record
@@ -63,7 +105,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Volume sequence ordinal number of the volume in the volume set on which the record extent is recorded
         /// </summary>
-        public int VolumeSequenceNumber { get; set; }
+        public BothEndianInt16 VolumeSequenceNumber { get; set; }
 
         /// <summary>
         /// Length of the FileIdentifier field in bytes
@@ -87,6 +129,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Optional bytes at the end of a directory record for system use
         /// Must be an even number of bytes long (pad with a single 0x00 to make it even)
+        /// Note: This is where SUSP extensions are located, including Rock Ridge
         /// </summary>
         public byte[]? SystemUse { get; set; }
     }
