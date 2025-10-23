@@ -182,13 +182,14 @@ namespace SabreTools.Serialization.Wrappers
 
                 var streamLength = _dataSource.Length;
                 const int chunkSize = 65536;
-
+                var deserializer = new Readers.InstallShieldExecutableFile();
+                
                 while (_dataSource.Position < streamLength)
                 {
                     lock (_dataSourceLock)
                     {
                         // Try to deserialize the source data
-                        var deserializer = new Readers.InstallShieldExecutableFile();
+                        
                         var entry = deserializer.Deserialize(_dataSource);
                         if (entry == null)
                             return false;
