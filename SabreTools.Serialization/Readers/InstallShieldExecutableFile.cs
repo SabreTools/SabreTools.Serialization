@@ -53,10 +53,10 @@ namespace SabreTools.Serialization.Readers
                 return null;
         
             var versionString = data.ReadNullTerminatedAnsiString();
-            if (versionString == null || !int.TryParse(versionString, out int foundVersion))
+            if (versionString == null || !ulong.TryParse(versionString, out var foundVersion))
                 return null;
         
-            obj.Length = (uint)foundVersion;
+            obj.Length = foundVersion;
             if (obj.Name == null)
                 return null;
         

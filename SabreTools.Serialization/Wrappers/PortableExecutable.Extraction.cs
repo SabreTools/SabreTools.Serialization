@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.Wrappers
                             return false;
                     
                         // Get the length, and make sure it won't EOF
-                        var length = entry.Length;
+                        var length = (long)entry.Length;
                         var position = _dataSource.Position;
                     
                         if (length > streamLength - position)
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.Wrappers
                             var buffer = _dataSource.ReadBytes(bytesToRead);
                             fs.Write(buffer, 0, bytesToRead);
                             fs.Flush();
-                            length = (uint)(length - bytesToRead);
+                            length -= bytesToRead;
                         }
                     }
                 }
