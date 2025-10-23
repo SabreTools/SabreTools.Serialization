@@ -12,6 +12,11 @@
         public Header? Header { get; set; }
 
         /// <summary>
+        /// Header
+        /// </summary>
+        public Header? Header { get; set; }
+
+        /// <summary>
         /// Files
         /// </summary>
         public FileEntry[]? Files { get; set; }
