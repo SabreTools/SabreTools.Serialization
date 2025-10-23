@@ -180,10 +180,9 @@ namespace SabreTools.Serialization.Wrappers
                 // Ensure the stream is starting at the overlay address
                 _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
 
-                var extracting = true;
                 var streamLength = _dataSource.Length;
                 
-                while (extracting)
+                while (_dataSource.Position < streamLength)
                 {
                     lock (_dataSourceLock)
                     {
@@ -198,10 +197,7 @@ namespace SabreTools.Serialization.Wrappers
                         var position = _dataSource.Position;
                     
                         if (length > streamLength - position)
-                        {
-                            extracting = false;
                             break;
-                        }
 
                         // Ensure directory separators are consistent
                         // Path is used instead of Name because Path contains the filename anyways.
