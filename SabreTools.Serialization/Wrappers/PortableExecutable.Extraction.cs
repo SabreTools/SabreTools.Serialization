@@ -42,8 +42,8 @@ namespace SabreTools.Serialization.Wrappers
             bool overlay = cai || issexe || spoon || wiseOverlay
                 || ExtractFromOverlay(outputDirectory, includeDebug);
 
-            return cai || cexe || issexe || matroschka || overlay || resources || spoon
-                || wiseOverlay || wiseSection;
+            return cai || cexe || issexe || matroschka || overlay || resources
+                || spoon || wiseOverlay || wiseSection;
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Extract data from an InstallShield Executable
         /// </summary>
@@ -171,37 +171,32 @@ namespace SabreTools.Serialization.Wrappers
         {
             try
             {
-                long overlayAddress = OverlayAddress;
-                
                 // Return if overlay doesn't exist.
-                if (overlayAddress == -1) 
+                long overlayAddress = OverlayAddress;
+                if (overlayAddress < 0)
                     return false;
-                
-                // Ensure the stream is starting at the overlay address
-                _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
 
-                var streamLength = _dataSource.Length;
-                const int chunkSize = 65536;
-                var deserializer = new Readers.InstallShieldExecutableFile();
-                
-                while (_dataSource.Position < streamLength)
+                const int chunkSize = 64 * 1024;
+                var reader = new Readers.InstallShieldExecutableFile();
+
+                lock (_dataSourceLock)
                 {
-                    lock (_dataSourceLock)
+                    // Ensure the stream is starting at the overlay address
+                    _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
+
+                    while (_dataSource.Position < _dataSource.Length)
                     {
                         // Try to deserialize the source data
-                        
-                        var entry = deserializer.Deserialize(_dataSource);
+                        var entry = reader.Deserialize(_dataSource);
                         if (entry?.Path == null)
                             return false;
-                    
+
                         // Get the length, and make sure it won't EOF
-                        var length = (long)entry.Length;
-                        if (length > streamLength - _dataSource.Position)
+                        long length = (long)entry.Length;
+                        if (length > _dataSource.Length - _dataSource.Position)
                             break;
 
                         // Ensure directory separators are consistent
-                        // Path is used instead of Name because Path contains the filename anyways.
-                    
                         var filename = entry.Path.TrimEnd('\0');
                         if (Path.DirectorySeparatorChar == '\\')
                             filename = filename.Replace('/', '\\');
@@ -216,21 +211,19 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Write the output file
                         using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        Console.WriteLine($"Attempting to extract {entry.Name} from potential InstallShield Executable");
-
-                        // Read from file in chunks in order to save memory, since some extracted files will be large
-                        // Chunk size is purely arbitrary and can be adjusted as needed.
-                        // Read file from InstallShield Executable and write it as an output file.
                         while (length > 0)
                         {
-                            var bytesToRead = (int)Math.Min(length, chunkSize);
-                            var buffer = _dataSource.ReadBytes(bytesToRead);
+                            int bytesToRead = (int)Math.Min(length, chunkSize);
+
+                            byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                             fs.Write(buffer, 0, bytesToRead);
                             fs.Flush();
+
                             length -= bytesToRead;
                         }
                     }
                 }
+
                 return true;
             }
             catch (Exception ex)

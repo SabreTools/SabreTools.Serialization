@@ -1,20 +1,23 @@
 namespace SabreTools.Data.Models.InstallShieldExecutable
 {
-    public class ExtractableFile
+    public class FileEntry
     {
         /// <summary>
-        /// Name of the file, only ASCII characters(?)
+        /// Name of the file
         /// </summary>
+        /// <remarks>May only contain ASCII (7-bit) characters</remarks>
         public string? Name { get; set; }
 
         /// <summary>
-        /// Path of the file, only ASCII characters(?), seems to usually use \ filepaths
+        /// Path of the file, seems to usually use \ filepaths
         /// </summary>
-        public string? Path  { get; set; }
+        /// <remarks>May only contain ASCII (7-bit) characters</remarks>
+        public string? Path { get; set; }
 
         /// <summary>
         /// Version of the file
         /// </summary>
+        /// <remarks>May only contain ASCII (7-bit) characters</remarks>
         public string? Version { get; set; }
 
         /// <summary>
