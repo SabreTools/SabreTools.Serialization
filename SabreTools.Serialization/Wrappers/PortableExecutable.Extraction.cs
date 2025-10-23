@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Wrappers
                         // Try to deserialize the source data
                         
                         var entry = deserializer.Deserialize(_dataSource);
-                        if (entry == null)
+                        if (entry?.Path == null)
                             return false;
                     
                         // Get the length, and make sure it won't EOF
@@ -203,8 +203,6 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Ensure directory separators are consistent
                         // Path is used instead of Name because Path contains the filename anyways.
-                        if (entry.Path == null)
-                            return false;
                     
                         var filename = entry.Path.TrimEnd('\0');
                         if (Path.DirectorySeparatorChar == '\\')
