@@ -18,6 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         /// - SFX archives
         ///     + 7z
         ///     + Advanced Installer
+        ///     + InstallShield Executables
         ///     + MS-CAB
         ///     + PKZIP
         ///     + RAR
@@ -28,6 +29,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             bool cai = ExtractAdvancedInstaller(outputDirectory, includeDebug);
             bool cexe = ExtractCExe(outputDirectory, includeDebug);
+            bool issexe = ExtractInstallShieldExecutable(outputDirectory, includeDebug);
             bool matroschka = ExtractMatroschka(outputDirectory, includeDebug);
             bool resources = ExtractFromResources(outputDirectory, includeDebug);
             bool spoon = ExtractSpoonInstaller(outputDirectory, includeDebug);
@@ -37,10 +39,10 @@ namespace SabreTools.Serialization.Wrappers
             bool wiseSection = wiseOverlay || ExtractWiseSection(outputDirectory, includeDebug);
 
             // Overlay can be skipped in some situations
-            bool overlay = cai || spoon || wiseOverlay
+            bool overlay = cai || issexe || spoon || wiseOverlay
                 || ExtractFromOverlay(outputDirectory, includeDebug);
 
-            return cai || cexe || matroschka || overlay || resources || spoon
+            return cai || cexe || issexe || matroschka || overlay || resources || spoon
                 || wiseOverlay || wiseSection;
         }
 
@@ -150,6 +152,85 @@ namespace SabreTools.Serialization.Wrappers
                 tempStream.Write(data, 0, data.Length);
                 tempStream.Flush();
 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Extract data from an InstallShield Executable
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractInstallShieldExecutable(string outputDirectory, bool includeDebug)
+        {
+            try
+            {
+                long overlayAddress = OverlayAddress;
+                
+                // Return if overlay doesn't exist.
+                if (overlayAddress == -1) 
+                    return false;
+                
+                // Ensure the stream is starting at the overlay address
+                _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
+
+                var streamLength = _dataSource.Length;
+                const int chunkSize = 65536;
+                var deserializer = new Readers.InstallShieldExecutableFile();
+                
+                while (_dataSource.Position < streamLength)
+                {
+                    lock (_dataSourceLock)
+                    {
+                        // Try to deserialize the source data
+                        
+                        var entry = deserializer.Deserialize(_dataSource);
+                        if (entry?.Path == null)
+                            return false;
+                    
+                        // Get the length, and make sure it won't EOF
+                        var length = (long)entry.Length;
+                        if (length > streamLength - _dataSource.Position)
+                            break;
+
+                        // Ensure directory separators are consistent
+                        // Path is used instead of Name because Path contains the filename anyways.
+                    
+                        var filename = entry.Path.TrimEnd('\0');
+                        if (Path.DirectorySeparatorChar == '\\')
+                            filename = filename.Replace('/', '\\');
+                        else if (Path.DirectorySeparatorChar == '/')
+                            filename = filename.Replace('\\', '/');
+
+                        // Ensure the full output directory exists
+                        filename = Path.Combine(outputDirectory, filename);
+                        var directoryName = Path.GetDirectoryName(filename);
+                        if (directoryName != null && !Directory.Exists(directoryName))
+                            Directory.CreateDirectory(directoryName);
+
+                        // Write the output file
+                        using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        Console.WriteLine($"Attempting to extract {entry.Name} from potential InstallShield Executable");
+
+                        // Read from file in chunks in order to save memory, since some extracted files will be large
+                        // Chunk size is purely arbitrary and can be adjusted as needed.
+                        // Read file from InstallShield Executable and write it as an output file.
+                        while (length > 0)
+                        {
+                            var bytesToRead = (int)Math.Min(length, chunkSize);
+                            var buffer = _dataSource.ReadBytes(bytesToRead);
+                            fs.Write(buffer, 0, bytesToRead);
+                            fs.Flush();
+                            length -= bytesToRead;
+                        }
+                    }
+                }
                 return true;
             }
             catch (Exception ex)
