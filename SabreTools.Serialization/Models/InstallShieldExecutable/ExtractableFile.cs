@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.InstallShieldExecutable
 {
-public class ExtractableFile
+    public class ExtractableFile
     {
         /// <summary>
         /// Name of the file, only ASCII characters(?)
