@@ -172,7 +172,9 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 var overlayAddress = (int)OverlayAddress;
-                if (overlayAddress == -1) // Overlay doesn't exist
+                
+                // Return if overlay doesn't exist
+                if (overlayAddress == -1) 
                     return false;
                 
                 // Ensure the stream is starting at the overlay address
