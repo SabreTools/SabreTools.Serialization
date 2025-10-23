@@ -8,7 +8,6 @@ namespace SabreTools.Data.Models.ISO9660
     {
         /// <summary>
         /// 32-byte name of the intended system
-        /// Only subset of ASCII, padded to the right with spaces
         /// Primary: a-characters only, padded to the right with spaces
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
@@ -17,7 +16,6 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// 32-byte name of the volume
-        /// Only subset of ASCII, padded to the right with spaces
         /// Primary: d-characters only, padded to the right with spaces
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler

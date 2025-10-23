@@ -1,45 +1,40 @@
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
-    /// Datetime format used in the Base (Primary/Supplementary/Enhanced) Volume Descriptor
+    /// Datetime for a Directory Record
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
-    public sealed class VolumeDescriptorDateTime
+    public sealed class DirectoryRecordDateTime
     {
         /// <summary>
-        /// 4-byte ASCII digits
+        /// Number of years since 1900
         /// </summary>
-        public byte[] Year { get; set; }
+        public byte YearsSince1990 { get; set; }
 
         /// <summary>
-        /// 2-byte ASCII digits
+        /// Month of the year, 1-12
         /// </summary>
-        public byte[] Month { get; set; }
+        public byte Month { get; set; }
 
         /// <summary>
-        /// 2-byte ASCII digits
+        /// Day of the month, 1-31
         /// </summary>
-        public byte[] Day { get; set; }
+        public byte Day { get; set; }
 
         /// <summary>
-        /// 2-byte ASCII digits
+        /// Hour of the day, 0-23
         /// </summary>
-        public byte[] Hour { get; set; }
+        public byte Hour { get; set; }
 
         /// <summary>
-        /// 2-byte ASCII digits
+        /// Minute of the hour, 0-59
         /// </summary>
-        public byte[] Minute { get; set; }
+        public byte Minute { get; set; }
 
         /// <summary>
-        /// 2-byte ASCII digits
+        /// Second of the minute, 0-59
         /// </summary>
-        public byte[] Second { get; set; }
-
-        /// <summary>
-        /// 2-byte ASCII digits
-        /// </summary>
-        public byte[] HundredthSecond { get; set; }
+        public byte Second { get; set; }
 
         /// <summary>
         /// Time zone offset (from GMT = UTC 0), represented by a single byte

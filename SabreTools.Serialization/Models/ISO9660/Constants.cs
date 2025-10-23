@@ -23,6 +23,16 @@ namespace SabreTools.Data.Models.ISO9660
         /// </summary>
         public const byte VolumeDescriptorVersion = 0x01;
 
+        /// <summary>
+        /// Value of the current directory
+        /// </summary>
+        public const byte CurrentDirectory = 0x00;
+
+        /// <summary>
+        /// Value of the parent directory
+        /// </summary>
+        public const byte ParentDirectory = 0x01;
+
         #endregion
 
         #region CD-i Constants
