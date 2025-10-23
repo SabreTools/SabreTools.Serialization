@@ -31,7 +31,12 @@ namespace SabreTools.Serialization.Readers
             }        
         }
         
-        private static ExtractableFile? ParseExtractableFileHeader(Stream? data)
+        /// <summary>
+        /// Parse a Stream into an InstallShield Executable file header
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled InstallShield Executable file header on success, null on error</returns>
+        public static ExtractableFile? ParseExtractableFileHeader(Stream? data)
         {
             var obj = new ExtractableFile();
             obj.Name = data.ReadNullTerminatedAnsiString();
