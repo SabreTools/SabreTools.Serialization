@@ -196,9 +196,7 @@ namespace SabreTools.Serialization.Wrappers
                     
                         // Get the length, and make sure it won't EOF
                         var length = (long)entry.Length;
-                        var position = _dataSource.Position;
-                    
-                        if (length > streamLength - position)
+                        if (length > streamLength - _dataSource.Position)
                             break;
 
                         // Ensure directory separators are consistent
