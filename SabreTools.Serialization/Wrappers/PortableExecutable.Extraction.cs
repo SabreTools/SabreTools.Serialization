@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Wrappers
                             Directory.CreateDirectory(directoryName);
 
                         // Write the output file
-                        var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                         Console.WriteLine($"Attempting to extract {entry.Name} from potential InstallShield Executable");
 
                         // Read from file in chunks in order to save memory, since some extracted files will be large
