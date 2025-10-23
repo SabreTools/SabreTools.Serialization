@@ -39,6 +39,7 @@ namespace SabreTools.Serialization.Readers
         public static ExtractableFile? ParseExtractableFileHeader(Stream? data)
         {
             var obj = new ExtractableFile();
+            
             obj.Name = data.ReadNullTerminatedAnsiString();
             if (obj.Name == null)
                 return null;
