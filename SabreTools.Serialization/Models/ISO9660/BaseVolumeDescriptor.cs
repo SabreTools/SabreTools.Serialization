@@ -36,11 +36,6 @@ namespace SabreTools.Data.Models.ISO9660
         public int VolumeSpaceSize { get; set; }
 
         /// <summary>
-        /// 32 unused bytes, should be all 0x00
-        /// </summary>
-        public byte[] Unused32Bytes { get; set; }
-
-        /// <summary>
         /// Number of "disks" in this volume
         /// Stored as int16-LSB followed by int16-MSB
         /// </summary>
