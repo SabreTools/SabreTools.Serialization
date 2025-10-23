@@ -231,6 +231,7 @@ namespace SabreTools.Serialization.Wrappers
                         {
                             readCount += _dataSource.Read(buffer, 0, buffer.Length);
                             fs.Write(buffer, 0, chunkSize);
+                            fs.Flush();
                         }
                         
                         var finalBufferSize = (int)(length - readCount);
