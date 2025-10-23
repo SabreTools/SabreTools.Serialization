@@ -222,7 +222,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Read from file in chunks in order to save memory, since some extracted files will be large
                         // Chunk size is purely arbitrary and can be adjusted as needed.
-                        var chunkSize = 65536;
+                        int chunkSize = 65536;
                         var readCount = 0;
                         var buffer = new byte[chunkSize];
                     
