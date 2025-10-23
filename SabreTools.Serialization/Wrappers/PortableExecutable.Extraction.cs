@@ -223,21 +223,17 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Read from file in chunks in order to save memory, since some extracted files will be large
                         // Chunk size is purely arbitrary and can be adjusted as needed.
-                        var readCount = 0;
                         var buffer = new byte[chunkSize];
-                    
+
                         // Read file from InstallShield Executable and write it as an output file.
-                        while ((readCount + chunkSize) < length)
+                        while (length > 0)
                         {
-                            readCount += _dataSource.Read(buffer, 0, buffer.Length);
-                            fs.Write(buffer, 0, chunkSize);
+                            var bytesToRead = (int)Math.Min(length, chunkSize);
+                            buffer = _dataSource.ReadBytes(bytesToRead);
+                            fs.Write(buffer, 0, bytesToRead);
                             fs.Flush();
+                            length = (uint)(length - bytesToRead);
                         }
-                        
-                        var finalBufferSize = (int)(length - readCount);
-                        buffer = _dataSource.ReadBytes(finalBufferSize);
-                        fs.Write(buffer, 0, finalBufferSize);
-                        fs.Flush();
                     }
                 }
                 return true;
