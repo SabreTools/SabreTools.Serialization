@@ -171,7 +171,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             try
             {
-                var overlayAddress = (int)OverlayAddress;
+                long overlayAddress = OverlayAddress;
                 
                 // Return if overlay doesn't exist.
                 if (overlayAddress == -1) 
