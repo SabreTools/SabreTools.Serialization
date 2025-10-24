@@ -1,3 +1,5 @@
+using System;
+
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
@@ -107,7 +109,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// </summary>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     [Flags]
-    public enum FileFlags : byte
+    public enum VolumeFlags : byte
     {
         /// <summary>
         /// Flag 1 (Bit 0, LSB):
