@@ -34,22 +34,22 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Datetime of when the file content was created
         /// </summary>
-        public DecDateTime FileCreationDateTime
+        public DecDateTime FileCreationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content was last modified
         /// </summary>
-        public DecDateTime FileModificationDateTime
+        public DecDateTime FileModificationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content expires
         /// </summary>
-        public DecDateTime FileExpirationDateTime
+        public DecDateTime FileExpirationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content is effective from
         /// </summary>
-        public DecDateTime FileEffectiveDateTime
+        public DecDateTime FileEffectiveDateTime { get; set; }
 
         /// <summary>
         /// Record type
