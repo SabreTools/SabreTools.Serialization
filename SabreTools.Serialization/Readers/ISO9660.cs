@@ -119,7 +119,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Unknown Volume Descriptor
                 _ => ParseGenericVolumeDescriptor(data, sectorLength, type),
-            }
+            };
         }
 
         /// <summary>
