@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Readers
             baseVolumeDescriptor.PathTableLocationBE = data.ReadInt32BigEndian();
             baseVolumeDescriptor.PathTableLocationBEOptional = data.ReadInt32BigEndian();
 
-            baseVolumeDescriptor.RootDirectory = ParseDirectoryRecord(data);
+            baseVolumeDescriptor.RootDirectory = ParseDirectoryRecord(data, true);
 
             baseVolumeDescriptor.VolumeSetIdentifier = data.ReadBytes(128);
             baseVolumeDescriptor.PublisherIdentifier = data.ReadBytes(128);
@@ -421,7 +421,7 @@ namespace SabreTools.Serialization.Readers
 
             // Root directory within the volume descriptor has a single byte file identifier
             if (root)
-                directoryRecord.FileIdentifier = data.ReadByteValue();
+                directoryRecord.FileIdentifier = [data.ReadByteValue()];
             else if (directoryRecord.FileIdentifierLength > 0)
                 directoryRecord.FileIdentifier = data.ReadBytes(directoryRecord.FileIdentifierLength);
 
@@ -464,3 +464,4 @@ namespace SabreTools.Serialization.Readers
         }
     }
 }
+
