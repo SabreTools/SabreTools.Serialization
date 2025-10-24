@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// Volume Descriptor with contents not defined by ISO9660
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
-    public sealed class GenericDescriptorSetTerminator : VolumeDescriptor
+    public sealed class GenericVolumeDescriptor : VolumeDescriptor
     {
         /// <summary>
         /// 2041 bytes

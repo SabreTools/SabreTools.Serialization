@@ -91,7 +91,6 @@ namespace SabreTools.Serialization.Readers
                 if (!setTerminated && volumeDescriptor.Type == VolumeDescriptorType.VolumeDescriptorSetTerminator)
                     setTerminated = true;
             }
-
         }
 
         /// <summary>
@@ -393,7 +392,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="volumeDescriptorSet"></param>
         /// <returns>Filled DirectoryExtent on success, null on error</returns>
-        public static RootDirectoryExtent? ParseDirectoryExtent(Stream data, uint sectorLength)
+        public static DirectoryExtent? ParseDirectoryExtent(Stream data, uint sectorLength)
         {
             return null;
         }
