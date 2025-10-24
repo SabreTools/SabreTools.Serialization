@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of logical sectors in the System Area
         /// </summary>
-        public const uint SystemAreaSectors = 16;
+        public const int SystemAreaSectors = 16;
 
         /// <summary>
         /// Identifier used for ISO9660, "CD001"

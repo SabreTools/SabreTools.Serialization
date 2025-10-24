@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Readers
         public static PrimaryVolumeDescriptor? ParsePrimaryVolumeDescriptor(Stream data, int sectorLength)
         {
             var primaryVolumeDescriptor = new PrimaryVolumeDescriptor();
-            baseVolumeDescriptor.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            primaryVolumeDescriptor.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
             return (PrimaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, primaryVolumeDescriptor);
         }
 
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Readers
         public static SupplementaryVolumeDescriptor? ParseSupplementaryVolumeDescriptor(Stream data, int sectorLength)
         {
             var supplementaryVolumeDescriptor = new SupplementaryVolumeDescriptor();
-            baseVolumeDescriptor.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
+            supplementaryVolumeDescriptor.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
             return (SupplementaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, supplementaryVolumeDescriptor);
         }
 
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.Readers
             if (sectorLength > 2048)
                 data.Position += sectorLength - 2048;
 
-            return primaryVolumeDescriptor;
+            return baseVolumeDescriptor;
         }
 
         /// <summary>
