@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Set of volumes (disc images) that make up an ISO9660 file system
         /// </summary>
-        public Volume[] VolumeSet { get; set; }
+        public Volume[]? VolumeSet { get; set; }
     }
 }

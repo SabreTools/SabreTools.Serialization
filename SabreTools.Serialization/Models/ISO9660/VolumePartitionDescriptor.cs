@@ -11,27 +11,27 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32-byte name of the intended system that can use this record
         /// a-characters only
         /// </summary>
-        public byte[] SystemIdentifier { get; set; }
+        public byte[]? SystemIdentifier { get; set; }
 
         /// <summary>
         /// 32-byte name of this volume partition
         /// d-characters only
         /// </summary>
-        public byte[] VolumePartitionIdentifier { get; set; }
+        public byte[]? VolumePartitionIdentifier { get; set; }
 
         /// <summary>
         /// Logical block number of the first logical block allocated to this volume partition
         /// </summary>
-        public BothEndianInt32 VolumePartitionLocation { get; set; }
+        public BothEndianInt32? VolumePartitionLocation { get; set; }
 
         /// <summary>
         /// Number of logical blocks allocated to this volume partition
         /// </summary>
-        public BothEndianInt32 VolumePartitionSize { get; set; }
+        public BothEndianInt32? VolumePartitionSize { get; set; }
 
         /// <summary>
         /// 1960 bytes for System Use, contents not defined by ISO9660
         /// </summary>
-        public byte[] SystemUse { get; set; }
+        public byte[]? SystemUse { get; set; }
     }
 }

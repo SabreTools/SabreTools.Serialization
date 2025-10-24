@@ -9,10 +9,11 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Associated directory records within a directory extent
         /// </summary>
-        public DirectoryRecord[] DirectoryRecords { get; set; }
+        public DirectoryRecord[]? DirectoryRecords { get; set; }
 
         /// <summary>
         /// Zero or more file extents pointed to by the directory records in DirectoryRecords
+        /// Optional field
         /// </summary>
         public FileExtent[]? FileExtents { get; set; }
     }

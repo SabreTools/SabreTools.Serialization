@@ -11,37 +11,37 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 4-byte ASCII digits
         /// </summary>
-        public byte[] Year { get; set; }
+        public byte[]? Year { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Month { get; set; }
+        public byte[]? Month { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Day { get; set; }
+        public byte[]? Day { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Hour { get; set; }
+        public byte[]? Hour { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Minute { get; set; }
+        public byte[]? Minute { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Second { get; set; }
+        public byte[]? Second { get; set; }
 
         /// <summary>
         /// 2-byte ASCII digits
         /// </summary>
-        public byte[] Centisecond { get; set; }
+        public byte[]? Centisecond { get; set; }
 
         /// <summary>
         /// Time zone offset (from GMT = UTC 0), represented by a single byte

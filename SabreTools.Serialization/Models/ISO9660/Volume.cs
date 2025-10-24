@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32,768 bytes, assuming logical block size of 2048 bytes
         /// ISO9660 does not specify the content of the System Area
         /// </summary>
-        public byte[] SystemArea { get; set; }
+        public byte[]? SystemArea { get; set; }
 
         #region Data Area
 
@@ -28,12 +28,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// - Zero or more Boot Volume Descriptors (Type = 0)
         /// - At least one Volume Descriptor Set Terminator (Type = 255), as the final element(s) in the set
         /// </summary>
-        public VolumeDescriptor[] VolumeDescriptorSet { get; set; }
+        public VolumeDescriptor[]? VolumeDescriptorSet { get; set; }
 
         /// <summary>
-        /// Root directory extent
+        /// Root directory extent, containing tree of all directory and file extents
         /// </summary>
-        public DirectoryExtent RootDirectoryExtent { get; set; }
+        public DirectoryExtent? RootDirectoryExtent { get; set; }
 
         #endregion
     }

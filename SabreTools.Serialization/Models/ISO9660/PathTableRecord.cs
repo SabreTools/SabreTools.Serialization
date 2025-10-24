@@ -36,6 +36,7 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// If DirectoryIdentifierLength is odd, the DirectoryIdentifier is followed by a single padding byte (0x00)
+        /// Optional field
         /// </summary>
         public byte? PaddingField { get; set; }
     }

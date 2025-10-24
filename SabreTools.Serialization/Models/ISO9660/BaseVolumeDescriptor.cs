@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] SystemIdentifier { get; set; }
+        public byte[]? SystemIdentifier { get; set; }
 
         /// <summary>
         /// 32-byte name of the volume
@@ -20,37 +20,37 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] VolumeIdentifier { get; set; }
+        public byte[]? VolumeIdentifier { get; set; }
 
         /// <summary>
         /// 8 unused bytes at offset 72, should be all 0x00
         /// </summary>
-        public byte[] Unused8Bytes { get; set; }
+        public byte[]? Unused8Bytes { get; set; }
 
         /// <summary>
         /// Number of logical blocks in this volume
         /// </summary>
-        public BothEndianInt32 VolumeSpaceSize { get; set; }
+        public BothEndianInt32? VolumeSpaceSize { get; set; }
 
         /// <summary>
         /// Number of Volumes (discs) in this VolumeSet
         /// </summary>
-        public BothEndianInt16 VolumeSetSize { get; set; }
+        public BothEndianInt16? VolumeSetSize { get; set; }
 
         /// <summary>
         /// "Disk" number in this volume set
         /// </summary>
-        public BothEndianInt16 VolumeSequenceNumber { get; set; }
+        public BothEndianInt16? VolumeSequenceNumber { get; set; }
 
         /// <summary>
         /// Number of bytes per logical sector, usually 2048
         /// </summary>
-        public BothEndianInt16 LogicalBlockSize { get; set; }
+        public BothEndianInt16? LogicalBlockSize { get; set; }
 
         /// <summary>
         /// Number of bytes in the path table
         /// </summary>
-        public BothEndianInt32 PathTableSize { get; set; }
+        public BothEndianInt32? PathTableSize { get; set; }
 
         /// <summary>
         /// Sector number of the start of the little-endian path table
@@ -82,7 +82,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Root directory entry, 34 bytes
         /// DirectoryIdentifier = 0x00
         /// </summary>
-        public DirectoryRecord RootDirectory { get; set; }
+        public DirectoryRecord? RootDirectory { get; set; }
 
         /// <summary>
         /// 128-byte name of the volume set
@@ -91,7 +91,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] VolumeSetIdentifier { get; set; }
+        public byte[]? VolumeSetIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the publisher
@@ -101,7 +101,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] PublisherIdentifier { get; set; }
+        public byte[]? PublisherIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the data preparer
@@ -111,7 +111,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] DataPreparerIdentifier { get; set; }
+        public byte[]? DataPreparerIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the application
@@ -121,7 +121,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] ApplicationIdentifier { get; set; }
+        public byte[]? ApplicationIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Copyright file
@@ -131,7 +131,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] CopyrightFileIdentifier { get; set; }
+        public byte[]? CopyrightFileIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Abstract file
@@ -141,7 +141,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] AbstractFileIdentifier { get; set; }
+        public byte[]? AbstractFileIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Bibliographic file
@@ -151,30 +151,31 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[] BibliographicFileIdentifier { get; set; }
+        public byte[]? BibliographicFileIdentifier { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Creation date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeCreationDateTime { get; set; }
+        public DecDateTime? VolumeCreationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Modification date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeModificationDateTime { get; set; }
+        public DecDateTime? VolumeModificationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Expiration date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeExpirationDateTime { get; set; }
+        public DecDateTime? VolumeExpirationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Effective date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeEffectiveDateTime { get; set; }
+        public DecDateTime? VolumeEffectiveDateTime { get; set; }
 
         /// <summary>
-        /// Version number of the Records / Path Table format, always 0x01
+        /// Version number of the Records / Path Table format
+        /// ISO9660 sets this always to Constants.FileStructureVersion (0x01)
         /// </summary>
         public byte FileStructureVersion { get; set; }
 
@@ -186,11 +187,11 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 512 bytes for Application Use, contents not defined by ISO9660
         /// </summary>
-        public byte[] ApplicationUse { get; set; }
+        public byte[]? ApplicationUse { get; set; }
 
         /// <summary>
         /// 653 reserved bytes, should be all 0x00
         /// </summary>
-        public byte[] Reserved653Bytes { get; set; }
+        public byte[]? Reserved653Bytes { get; set; }
     }
 }
