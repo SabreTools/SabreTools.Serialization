@@ -395,6 +395,7 @@ namespace SabreTools.Serialization.Readers
         public static DirectoryRecord? ParseDirectoryRecord(Stream data, bool root)
         {
             var directoryRecord = new DirectoryRecord();
+
             directoryRecord.DirectoryRecordLength = data.ReadByteValue();
             directoryRecord.ExtendedAttributeRecordLength = data.ReadByteValue();
             directoryRecord.ExtentLocation = new BothEndianInt32();
@@ -403,14 +404,9 @@ namespace SabreTools.Serialization.Readers
             directoryRecord.ExtentLength = new BothEndianInt32();
             directoryRecord.ExtentLength.LSB = data.ReadInt32LittleEndian();
             directoryRecord.ExtentLength.MSB = data.ReadInt32BigEndian();
-            directoryRecord.RecordingDateTime = new DirectoryRecordDateTime();
-            directoryRecord.RecordingDateTime.YearsSince1990 = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.Month = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.Day = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.Hour = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.Minute = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.Second = data.ReadByteValue();
-            directoryRecord.RecordingDateTime.TimezoneOffset = data.ReadByteValue();
+
+            directoryRecord.RecordingDateTime = ParseDirectoryRecordDateTime(data);
+
             directoryRecord.FileFlags = (FileFlags)data.ReadByteValue();
             directoryRecord.FileUnitSize = data.ReadByteValue();
             directoryRecord.InterleaveGapSize = data.ReadByteValue();
@@ -450,6 +446,23 @@ namespace SabreTools.Serialization.Readers
             directoryRecord.SystemUse = data.ReadBytes(systemUseLength);
 
             return directoryRecord;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryRecordDateTime
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryRecordDateTime on success, null on error</returns>
+        public static DirectoryRecordDateTime? ParseDirectoryRecordDateTime(Stream data)
+        {
+            directoryRecordDateTime = new DirectoryRecordDateTime();
+            directoryRecordDateTime.YearsSince1990 = data.ReadByteValue();
+            directoryRecordDateTime.Month = data.ReadByteValue();
+            directoryRecordDateTime.Day = data.ReadByteValue();
+            directoryRecordDateTime.Hour = data.ReadByteValue();
+            directoryRecordDateTime.Minute = data.ReadByteValue();
+            directoryRecordDateTime.Second = data.ReadByteValue();
+            directoryRecordDateTime.TimezoneOffset = data.ReadByteValue();
         }
 
         /// <summary>

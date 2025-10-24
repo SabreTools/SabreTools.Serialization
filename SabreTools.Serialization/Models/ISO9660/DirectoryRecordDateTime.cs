@@ -1,8 +1,9 @@
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
-    /// Datetime format used by DirectoryRecord
+    /// Datetime format used by ISO9660 DirectoryRecord
     /// </summary>
+    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class DirectoryRecordDateTime
     {
         /// <summary>
