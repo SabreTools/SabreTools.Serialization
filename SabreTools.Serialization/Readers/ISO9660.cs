@@ -81,6 +81,8 @@ namespace SabreTools.Serialization.Readers
                 if (!setTerminated && volumeDescriptor.Type == VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
                     setTerminated = true;
             }
+
+            return obj;
         }
 
         /// <summary>
