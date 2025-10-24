@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.ISO9660
     public class BothEndianInt16
     {
         public short LSB { get; set; }
-        public int MSB { get; set; }
+        public short MSB { get; set; }
     }
 
     /// <summary>

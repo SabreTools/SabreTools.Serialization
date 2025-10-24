@@ -6,6 +6,10 @@ namespace SabreTools.Data.Models.ISO9660
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public abstract class BaseVolumeDescriptor : VolumeDescriptor
     {
+        // Virtual variable of 1 byte goes here
+        // PrimaryVolumeDescriptor: UnusedByte
+        // SupplementaryVolumeDescriptor: VolumeFlags
+
         /// <summary>
         /// 32-byte name of the intended system
         /// Primary: a-characters only, padded to the right with spaces
@@ -32,13 +36,17 @@ namespace SabreTools.Data.Models.ISO9660
         /// </summary>
         public BothEndianInt32? VolumeSpaceSize { get; set; }
 
+        // Virtual variable of 32 bytes goes here:
+        // PrimaryVolumeDescriptor: Unused32Bytes
+        // SupplementaryVolumeDescriptor: EscapeSequences
+
         /// <summary>
         /// Number of Volumes (discs) in this VolumeSet
         /// </summary>
         public BothEndianInt16? VolumeSetSize { get; set; }
 
         /// <summary>
-        /// "Disk" number in this volume set
+        /// Volume (disc) number in this volume set
         /// </summary>
         public BothEndianInt16? VolumeSequenceNumber { get; set; }
 
@@ -60,7 +68,7 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Sector number of the start of the optional little-endian path table
-        /// Optional: Does not exist if value is 0
+        /// The "optional path table" does not exist if this value is 0
         /// Stored as int32-LSB
         /// </summary>
         public int PathTableLocationLEOptional { get; set; }
@@ -73,7 +81,7 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Sector number of the start of the optional big-endian path table
-        /// Optional: Does not exist if value is 0
+        /// The "optional path table" Does not exist if this value is 0
         /// Stored as int32-MSB
         /// </summary>
         public int PathTableLocationBEOptional { get; set; }
