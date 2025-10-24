@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Readers
                     setTerminated = true;
             }
 
-            return obj;
+            return [.. obj];
         }
 
         /// <summary>
