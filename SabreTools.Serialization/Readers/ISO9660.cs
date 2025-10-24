@@ -374,17 +374,82 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled DecDateTime on success, null on error</returns>
         public static DecDateTime? ParseDecDateTime(Stream data)
         {
-            return null;
+            var decDateTime = new DecDateTime();
+            decDateTime.Year = data.ReadBytes(4);
+            decDateTime.Month = data.ReadBytes(2);
+            decDateTime.Day = data.ReadBytes(2);
+            decDateTime.Hour = data.ReadBytes(2);
+            decDateTime.Minute = data.ReadBytes(2);
+            decDateTime.Second = data.ReadBytes(2);
+            decDateTime.Centisecond = data.ReadBytes(2);
+            decDateTime.TimezoneOffset = data.ReadByteValue();
+            return decDateTime;
         }
 
         /// <summary>
         /// Parse a Stream into a DirectoryRecord
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="root">true if root directory record, false otherwise</param>
         /// <returns>Filled DirectoryRecord on success, null on error</returns>
-        public static DirectoryRecord? ParseDirectoryRecord(Stream data)
+        public static DirectoryRecord? ParseDirectoryRecord(Stream data, bool root)
         {
-            return null;
+            var directoryRecord = new DirectoryRecord();
+            directoryRecord.DirectoryRecordLength = data.ReadByteValue();
+            directoryRecord.ExtendedAttributeRecordLength = data.ReadByteValue();
+            directoryRecord.ExtentLocation = new BothEndianInt32();
+            directoryRecord.ExtentLocation.LSB = data.ReadInt32LittleEndian();
+            directoryRecord.ExtentLocation.MSB = data.ReadInt32BigEndian();
+            directoryRecord.ExtentLength = new BothEndianInt32();
+            directoryRecord.ExtentLength.LSB = data.ReadInt32LittleEndian();
+            directoryRecord.ExtentLength.MSB = data.ReadInt32BigEndian();
+            directoryRecord.RecordingDateTime = new DirectoryRecordDateTime();
+            directoryRecord.RecordingDateTime.YearsSince1990 = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.Month = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.Day = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.Hour = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.Minute = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.Second = data.ReadByteValue();
+            directoryRecord.RecordingDateTime.TimezoneOffset = data.ReadByteValue();
+            directoryRecord.FileFlags = (FileFlags)data.ReadByteValue();
+            directoryRecord.FileUnitSize = data.ReadByteValue();
+            directoryRecord.InterleaveGapSize = data.ReadByteValue();
+            directoryRecord.VolumeSequenceNumber = new BothEndianInt16();
+            directoryRecord.VolumeSequenceNumber.LSB = data.ReadInt16LittleEndian();
+            directoryRecord.VolumeSequenceNumber.MSB = data.ReadInt16BigEndian();
+            directoryRecord.FileIdentifierLength = data.ReadByteValue();
+
+            // Root directory within the volume descriptor has a single byte file identifier
+            if (root)
+                directoryRecord.FileIdentifier = data.ReadByteValue();
+            else if (directoryRecord.FileIdentifierLength > 0)
+                directoryRecord.FileIdentifier = data.ReadBytes(directoryRecord.FileIdentifierLength);
+
+            if (directoryRecord.FileIdentifierLength % 2 != 0)
+                directoryRecord.PaddingField = data.ReadByteValue();
+
+            // Root directory within the volume descriptor has no system use bytes
+            if (root)
+                return directoryRecord;
+
+            // Calculate the size of the system use section
+            int systemUseLength = directoryRecord.DirectoryRecordLength - 33 - directoryRecord.FileIdentifierLength;
+            // Account for padding field
+            if (directoryRecord.FileIdentifierLength % 2 != 0)
+                systemUseLength -= 1;
+
+            // If the system use is empty, return
+            if (systemUseLength < 1)
+                return directoryRecord;
+
+            // System use field must be even size
+            if (systemUseLength % 2 != 0)
+                systemUseLength += 1;
+
+            // Read system use field 
+            directoryRecord.SystemUse = data.ReadBytes(systemUseLength);
+
+            return directoryRecord;
         }
 
         /// <summary>
