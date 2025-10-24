@@ -50,6 +50,8 @@ namespace SabreTools.Serialization.Readers
             }
         }
 
+        #region Volume Descriptor Parsing
+
         /// <summary>
         /// Parse a Stream into a list of VolumeDescriptor objects
         /// </summary>
@@ -72,7 +74,11 @@ namespace SabreTools.Serialization.Readers
                 // If the set has already been terminated and the returned volume descriptor is not another terminator,
                 // assume the read volume descriptor is not a valid volume descriptor and return the current set
                 if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
+                {
+                    // Reset stream to before the just-read volume descriptor
+                    data.Position -= sectorLength;
                     return [.. obj];
+                }
                 
                 // Add the valid read volume descriptor to the set
                 obj.Add(volumeDescriptor);
@@ -336,6 +342,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="type">Type </param>
         /// <returns>Filled GenericVolumeDescriptor on success, null on error</returns>
         public static GenericVolumeDescriptor? ParseGenericVolumeDescriptor(Stream data, int sectorLength, VolumeDescriptorType type)
         {
@@ -361,6 +368,8 @@ namespace SabreTools.Serialization.Readers
             return obj;
         }
 
+        #endregion
+
         /// <summary>
         /// Parse a Stream into a DecDateTime
         /// </summary>
@@ -381,6 +390,8 @@ namespace SabreTools.Serialization.Readers
 
             return obj;
         }
+
+        #region Directory Parsing
 
         /// <summary>
         /// Parse a Stream into a DirectoryRecord
@@ -468,11 +479,13 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a DirectoryExtent
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="volumeDescriptorSet"></param>
+        /// <param name="sectorLength"></param>
         /// <returns>Filled DirectoryExtent on success, null on error</returns>
         public static DirectoryExtent? ParseDirectoryExtent(Stream data, int sectorLength)
         {
             return null;
         }
+
+        #endregion
     }
 }
