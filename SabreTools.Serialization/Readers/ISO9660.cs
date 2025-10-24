@@ -9,11 +9,11 @@ namespace SabreTools.Serialization.Readers
     public class ISO9660 : BaseBinaryReader<Volume>
     {
         /// <inheritdoc/>
-        public override Volume? Deserialize(Stream? data) => Deserialize(Stream, 2048);
+        public override Volume? Deserialize(Stream? data) => Deserialize(data, 2048);
 
         /// <inheritdoc cref="Deserialize(Stream?)" />
         /// <param name="sectorLength">Size of the logical sector used in the volume</param>
-        public Volume? Deserialize(Stream? data, uint sectorLength)
+        public Volume? Deserialize(Stream? data, int sectorLength)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -32,14 +32,14 @@ namespace SabreTools.Serialization.Readers
                 // Create a new Volume to fill
                 var volume = new Volume();
 
-                // Read the initial System Area
+                // Read the System Area
                 volume.SystemArea = ParseSystemArea(data, sectorLength);
 
                 // Read the set of Volume Descriptors
                 volume.VolumeDescriptorSet = ParseVolumeDescriptorSet(data, sectorLength);
 
                 // Read the remainder of the Data Area
-                volume.RootDirectoryExtent = ParseDirectoryExtent(volume, volume.VolumeDescriptorSet);
+                volume.RootDirectoryExtent = ParseDirectoryExtent(data, sectorLength);
 
                 return volume;
             }
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled byte array on success, null on error</returns>
-        public static byte[]? ParseSystemArea(Stream data, uint sectorLength)
+        public static byte[]? ParseSystemArea(Stream data, int sectorLength)
         {
             return data.ReadBytes(Constants.SystemAreaSectors * sectorLength);
         }
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumeDescriptor[] on success, null on error</returns>
-        public static VolumeDescriptor[]? ParseVolumeDescriptorSet(Stream data, uint sectorLength)
+        public static VolumeDescriptor[]? ParseVolumeDescriptorSet(Stream data, int sectorLength)
         {
             var volumeDescriptorSet = new List<VolumeDescriptor>();
             bool setTerminated = false;
@@ -81,14 +81,14 @@ namespace SabreTools.Serialization.Readers
                 
                 // If the set has already been terminated and the returned volume descriptor is not another terminator,
                 // assume the read volume descriptor is not a valid volume descriptor and return the current set
-                if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VolumeDescriptorSetTerminator)
+                if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
                     return volumeDescriptorSet.ToArray();
                 
                 // Add the valid read volume descriptor to the set
                 volumeDescriptorSet.Add(volumeDescriptor);
 
                 // If the set terminator was read, set the set terminated flag (further set terminators may be present)
-                if (!setTerminated && volumeDescriptor.Type == VolumeDescriptorType.VolumeDescriptorSetTerminator)
+                if (!setTerminated && volumeDescriptor.Type == VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
                     setTerminated = true;
             }
         }
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumeDescriptor on success, null on error</returns>
-        public static VolumeDescriptor? ParseVolumeDescriptor(Stream data, uint sectorLength)
+        public static VolumeDescriptor? ParseVolumeDescriptor(Stream data, int sectorLength)
         {
             // Read the first byte of the volume descriptor
             byte? type = data.ReadByteValue();
@@ -127,14 +127,14 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled BootRecordVolumeDescriptor on success, null on error</returns>
-        public static BootRecordVolumeDescriptor? ParseBootRecordVolumeDescriptor(Stream data, uint sectorLength)
+        public static BootRecordVolumeDescriptor? ParseBootRecordVolumeDescriptor(Stream data, int sectorLength)
         {
             var bootRecordVolumeDescriptor = new BootRecordVolumeDescriptor();
             bootRecordVolumeDescriptor.Type = VolumeDescriptorType.VOLUME_PARTITION_DESCRIPTOR;
             bootRecordVolumeDescriptor.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
-            if (false)
+            if (!bootRecordVolumeDescriptor.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
                 data.Position -= 6;
                 return null;
@@ -158,10 +158,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled PrimaryVolumeDescriptor on success, null on error</returns>
-        public static PrimaryVolumeDescriptor? ParsePrimaryVolumeDescriptor(Stream data, uint sectorLength)
+        public static PrimaryVolumeDescriptor? ParsePrimaryVolumeDescriptor(Stream data, int sectorLength)
         {
             var primaryVolumeDescriptor = new PrimaryVolumeDescriptor();
-            return ParseBaseVolumeDescriptor(data, sectorLength, primaryVolumeDescriptor);
+            baseVolumeDescriptor.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
+            return (PrimaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, primaryVolumeDescriptor);
         }
 
         /// <summary>
@@ -170,10 +171,11 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled SupplementaryVolumeDescriptor on success, null on error</returns>
-        public static SupplementaryVolumeDescriptor? ParseSupplementaryVolumeDescriptor(Stream data, uint sectorLength)
+        public static SupplementaryVolumeDescriptor? ParseSupplementaryVolumeDescriptor(Stream data, int sectorLength)
         {
             var supplementaryVolumeDescriptor = new SupplementaryVolumeDescriptor();
-            return ParseBaseVolumeDescriptor(data, sectorLength, supplementaryVolumeDescriptor);
+            baseVolumeDescriptor.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
+            return (SupplementaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, supplementaryVolumeDescriptor);
         }
 
         /// <summary>
@@ -182,13 +184,12 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled BaseVolumeDescriptor on success, null on error</returns>
-        public static BaseVolumeDescriptor? ParseBaseVolumeDescriptor(Stream data, uint sectorLength, BaseVolumeDescriptor baseVolumeDescriptor)
+        public static BaseVolumeDescriptor? ParseBaseVolumeDescriptor(Stream data, int sectorLength, BaseVolumeDescriptor baseVolumeDescriptor)
         {
-            baseVolumeDescriptor.Type = type;
             baseVolumeDescriptor.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
-            if (false)
+            if (!baseVolumeDescriptor.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
                 data.Position -= 6;
                 return null;
@@ -200,7 +201,7 @@ namespace SabreTools.Serialization.Readers
             if (baseVolumeDescriptor is PrimaryVolumeDescriptor primaryVolumeDescriptor)
                 primaryVolumeDescriptor.UnusedByte = data.ReadByteValue();
             else if (baseVolumeDescriptor is SupplementaryVolumeDescriptor supplementaryVolumeDescriptor)
-                supplementaryVolumeDescriptor.VolumeFlags = data.ReadByteValue();
+                supplementaryVolumeDescriptor.VolumeFlags = (VolumeFlags?)data.ReadByteValue();
             else
             {
                 // Rewind and return for unknown descriptor
@@ -209,17 +210,17 @@ namespace SabreTools.Serialization.Readers
             }
 
             baseVolumeDescriptor.SystemIdentifier = data.ReadBytes(32);
-            baseVolumeDescriptor.VolumePartitionIdentifier = data.ReadBytes(32);
+            baseVolumeDescriptor.VolumeIdentifier = data.ReadBytes(32);
             baseVolumeDescriptor.Unused8Bytes = data.ReadBytes(8);
-            baseVolumeDescriptor.VolumeSpaceSize = new Types.BothEndianInt32();
+            baseVolumeDescriptor.VolumeSpaceSize = new BothEndianInt32();
             baseVolumeDescriptor.VolumeSpaceSize.LSB = data.ReadInt32LittleEndian();
             baseVolumeDescriptor.VolumeSpaceSize.MSB = data.ReadInt32BigEndian();
 
             // Read the child-specific field
-            if (baseVolumeDescriptor is PrimaryVolumeDescriptor primaryVolumeDescriptor)
-                primaryVolumeDescriptor.Unused32Bytes = data.ReadBytes(32);
-            else if (baseVolumeDescriptor is SupplementaryVolumeDescriptor supplementaryVolumeDescriptor)
-                supplementaryVolumeDescriptor.VolEscapeSequencesumeFlags = data.ReadBytes(32);
+            if (baseVolumeDescriptor is PrimaryVolumeDescriptor primaryVolumeDescriptor2)
+                primaryVolumeDescriptor2.Unused32Bytes = data.ReadBytes(32);
+            else if (baseVolumeDescriptor is SupplementaryVolumeDescriptor supplementaryVolumeDescriptor2)
+                supplementaryVolumeDescriptor2.EscapeSequences = data.ReadBytes(32);
             else
             {
                 // Rewind and return for unknown descriptor
@@ -227,16 +228,16 @@ namespace SabreTools.Serialization.Readers
                 return null;
             }
 
-            baseVolumeDescriptor.VolumeSetSize = new Types.BothEndianInt16();
+            baseVolumeDescriptor.VolumeSetSize = new BothEndianInt16();
             baseVolumeDescriptor.VolumeSetSize.LSB = data.ReadInt16LittleEndian();
             baseVolumeDescriptor.VolumeSetSize.MSB = data.ReadInt16BigEndian();
-            baseVolumeDescriptor.VolumeSequenceNumber = new Types.BothEndianInt16();
+            baseVolumeDescriptor.VolumeSequenceNumber = new BothEndianInt16();
             baseVolumeDescriptor.VolumeSequenceNumber.LSB = data.ReadInt16LittleEndian();
             baseVolumeDescriptor.VolumeSequenceNumber.MSB = data.ReadInt16BigEndian();
-            baseVolumeDescriptor.LogicalBlockSize = new Types.BothEndianInt16();
+            baseVolumeDescriptor.LogicalBlockSize = new BothEndianInt16();
             baseVolumeDescriptor.LogicalBlockSize.LSB = data.ReadInt16LittleEndian();
             baseVolumeDescriptor.LogicalBlockSize.MSB = data.ReadInt16BigEndian();
-            baseVolumeDescriptor.PathTableSize = new Types.BothEndianInt32();
+            baseVolumeDescriptor.PathTableSize = new BothEndianInt32();
             baseVolumeDescriptor.PathTableSize.LSB = data.ReadInt32LittleEndian();
             baseVolumeDescriptor.PathTableSize.MSB = data.ReadInt32BigEndian();
             baseVolumeDescriptor.PathTableLocationLE = data.ReadInt32LittleEndian();
@@ -277,29 +278,29 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumePartitionDescriptor on success, null on error</returns>
-        public static VolumePartitionDescriptor? ParseVolumePartitionDescriptor(Stream data, uint sectorLength)
+        public static VolumePartitionDescriptor? ParseVolumePartitionDescriptor(Stream data, int sectorLength)
         {
             var volumePartitionDescriptor = new VolumePartitionDescriptor();
             volumePartitionDescriptor.Type = VolumeDescriptorType.VOLUME_PARTITION_DESCRIPTOR;
             volumePartitionDescriptor.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
-            if (false)
+            if (!volumePartitionDescriptor.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
                 data.Position -= 6;
                 return null;
             }
 
             volumePartitionDescriptor.Version = data.ReadByteValue();
-            bootRecordVolumeDescriptor.SystemIdentifier = data.ReadBytes(32);
-            bootRecordVolumeDescriptor.VolumePartitionIdentifier = data.ReadBytes(32);
-            bootRecordVolumeDescriptor.VolumePartitionLocation = new Types.BothEndianInt32();
-            bootRecordVolumeDescriptor.VolumePartitionLocation.LSB = data.ReadInt32LittleEndian();
-            bootRecordVolumeDescriptor.VolumePartitionLocation.MSB = data.ReadInt32BigEndian();
-            bootRecordVolumeDescriptor.VolumePartitionSize = new Types.BothEndianInt32();
-            bootRecordVolumeDescriptor.VolumePartitionSize.LSB = data.ReadInt32LittleEndian();
-            bootRecordVolumeDescriptor.VolumePartitionSize.MSB = data.ReadInt32BigEndian();
-            bootRecordVolumeDescriptor.SystemUse = data.ReadBytes(1960);
+            volumePartitionDescriptor.SystemIdentifier = data.ReadBytes(32);
+            volumePartitionDescriptor.VolumePartitionIdentifier = data.ReadBytes(32);
+            volumePartitionDescriptor.VolumePartitionLocation = new BothEndianInt32();
+            volumePartitionDescriptor.VolumePartitionLocation.LSB = data.ReadInt32LittleEndian();
+            volumePartitionDescriptor.VolumePartitionLocation.MSB = data.ReadInt32BigEndian();
+            volumePartitionDescriptor.VolumePartitionSize = new BothEndianInt32();
+            volumePartitionDescriptor.VolumePartitionSize.LSB = data.ReadInt32LittleEndian();
+            volumePartitionDescriptor.VolumePartitionSize.MSB = data.ReadInt32BigEndian();
+            volumePartitionDescriptor.SystemUse = data.ReadBytes(1960);
 
             // Skip remainder of the logical sector
             if (sectorLength > 2048)
@@ -314,14 +315,14 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumeDescriptorSetTerminator on success, null on error</returns>
-        public static VolumeDescriptorSetTerminator? ParseVolumeDescriptorSetTerminator(Stream data, uint sectorLength)
+        public static VolumeDescriptorSetTerminator? ParseVolumeDescriptorSetTerminator(Stream data, int sectorLength)
         {
             var volumeDescriptorSetTerminator = new VolumeDescriptorSetTerminator();
             volumeDescriptorSetTerminator.Type = VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR;
             volumeDescriptorSetTerminator.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
-            if (false)
+            if (!volumeDescriptorSetTerminator.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
                 data.Position -= 6;
                 return null;
@@ -343,14 +344,14 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled GenericVolumeDescriptor on success, null on error</returns>
-        public static GenericVolumeDescriptor? ParseGenericVolumeDescriptor(Stream data, uint sectorLength, byte type)
+        public static GenericVolumeDescriptor? ParseGenericVolumeDescriptor(Stream data, int sectorLength, byte? type)
         {
             var genericVolumeDescriptor = new GenericVolumeDescriptor();
-            genericVolumeDescriptor.Type = type;
+            genericVolumeDescriptor.Type = (VolumeDescriptorType?)type;
             genericVolumeDescriptor.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
-            if (false)
+            if (!genericVolumeDescriptor.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
                 data.Position -= 6;
                 return null;
@@ -392,7 +393,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="volumeDescriptorSet"></param>
         /// <returns>Filled DirectoryExtent on success, null on error</returns>
-        public static DirectoryExtent? ParseDirectoryExtent(Stream data, uint sectorLength)
+        public static DirectoryExtent? ParseDirectoryExtent(Stream data, int sectorLength)
         {
             return null;
         }
