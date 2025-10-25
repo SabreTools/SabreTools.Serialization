@@ -49,16 +49,10 @@ namespace SabreTools.Data.Printers
             }
         }
 
-        private static void Print(StringBuilder builder, BootRecordVolumeDescriptor? vd)
+        private static void Print(StringBuilder builder, BootRecordVolumeDescriptor vd)
         {
             builder.AppendLine("    Boot Record Volume Descriptor:");
             builder.AppendLine("    -------------------------");
-            if (vd == null)
-            {
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
 
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
@@ -69,20 +63,11 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BaseVolumeDescriptor? vd)
+        private static void Print(StringBuilder builder, BaseVolumeDescriptor vd)
         {
-            if (vd == null)
-            {
-                builder.AppendLine("    Base Volume Descriptor:");
-                builder.AppendLine("    -------------------------");
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
-
             var type = (byte?)vd.Type;
             
-            // TOOD: Determine encoding based on type, EscapeSequence, and manual detection
+            // TOOD: Determine encoding based on vd-type, EscapeSequence, and manual detection
 
             if (type == 0x01)
                 builder.AppendLine("    Primary Volume Descriptor:");
@@ -176,16 +161,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VolumePartitionDescriptor? vd)
+        private static void Print(StringBuilder builder, VolumePartitionDescriptor vd)
         {
             builder.AppendLine("    Volume Partition Descriptor:");
             builder.AppendLine("    -------------------------");
-            if (vd == null)
-            {
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
 
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumePartitionIdentifier, "    Volume Partition Identifier");
@@ -200,16 +179,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VolumeDescriptorSetTerminator? vd)
+        private static void Print(StringBuilder builder, VolumeDescriptorSetTerminator vd)
         {
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
-            if (vd == null)
-            {
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
 
             // TODO: Check for non-zero contents
             builder.AppendLine("Unchecked", "    Reserved Bytes");
@@ -217,16 +190,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, GenericVolumeDescriptor? vd)
+        private static void Print(StringBuilder builder, GenericVolumeDescriptor vd)
         {
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
-            if (vd == null)
-            {
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
 
             // TODO: Check for non-zero contents
             builder.AppendLine("Unchecked", "    Contents");

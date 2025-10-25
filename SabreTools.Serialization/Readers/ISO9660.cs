@@ -428,28 +428,40 @@ namespace SabreTools.Serialization.Readers
             else if (obj.FileIdentifierLength > 0)
                 obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
 
-            if (obj.FileIdentifierLength % 2 != 0)
+            // If file identifier length is even, there is a padding field byte
+            if (obj.FileIdentifierLength % 2 == 0)
                 obj.PaddingField = data.ReadByteValue();
 
-            // Root directory within the volume descriptor has no system use bytes
+            // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
             if (root)
                 return obj;
 
-            // Calculate the size of the system use section
+            // Calculate actual size of record
+            int totalBytes = 33 + obj.FileIdentifierLength + systemUseLength;
+            // Calculate the size of the system use section (remaining allocated bytes)
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
-            // Account for padding field
-            if (obj.FileIdentifierLength % 2 != 0)
+            // Account for padding field after file identifier
+            if (obj.FileIdentifierLength % 2 == 0)
+            {
+                totalBytes += 1;
                 systemUseLength -= 1;
+            }
 
-            // If the system use is empty, return
+            // If System Use is empty, or if DirectoryRecordLength is bad, return early
             if (systemUseLength < 1)
-                return obj;
+            {
+                // Total record size must be even, read a padding byte
+                if (totalBytes % 2 != 0)
+                    obj.SystemUse = data.ReadBytes(1);
 
-            // System use field must be even size
-            if (systemUseLength % 2 != 0)
+                return obj;
+            }
+
+            // Total used bytes must be even, read a padding byte
+            if (totalBytes % 2 != 0)
                 systemUseLength += 1;
 
-            // Read system use field 
+            // Read system use field
             obj.SystemUse = data.ReadBytes(systemUseLength);
 
             return obj;
