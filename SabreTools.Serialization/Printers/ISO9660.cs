@@ -36,7 +36,16 @@ namespace SabreTools.Data.Printers
 
             foreach (var vd in vdSet)
             {
-                Print(builder, vd);
+                if (vd is BootRecordVolumeDescriptor brvd)
+                    Print(builder, brvd);
+                else if (vd is BasePrimaryVolumeDescriptor bvd)
+                    Print(builder, bvd);
+                else if (vd is VolumePartitionDescriptor vpd)GenericVolumeDescriptor
+                    Print(builder, vpd);
+                else if (vd is VolumeDescriptorSetTerminator vdst)
+                    Print(builder, vdst);
+                else if (vd is GenericVolumeDescriptor gvd)
+                    Print(builder, gvd);
             }
         }
 
@@ -62,6 +71,15 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, BaseVolumeDescriptor? vd)
         {
+            if (vd == null)
+            {
+                builder.AppendLine("    Base Volume Descriptor:");
+                builder.AppendLine("    -------------------------");
+                builder.AppendLine("    null");
+                builder.AppendLine();
+                return;
+            }
+
             int type = (byte)vd.Type;
             
             // TOOD: Determine encoding based on type, EscapeSequence, and manual detection
@@ -73,15 +91,9 @@ namespace SabreTools.Data.Printers
             else
                 builder.AppendLine("    Unidentified Base Volume Descriptor:");
             builder.AppendLine("    -------------------------");
-            if (vd == null)
-            {
-                builder.AppendLine("    null");
-                builder.AppendLine();
-                return;
-            }
 
             // TODO: Check Unused byte
-            if (type == 0x02)
+            if (vd is SupplementaryVolumeDescriptor svd)
             {
                 builder.AppendLine("    File Flags:");
                 // TODO: Check file flags
@@ -110,10 +122,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.VolumeSpaceSize.LSB, "    Volume Space Size");
 
             // TODO: Check for non-zero contents
-            if (type == 0x02)
+            if (vd is SupplementaryVolumeDescriptor svd2)
             {
                 // TODO: Trim trailing 0x00 and split array into characters (multi-byte encoding detection)
-                builder.AppendLine(vd.EscapeSequences, "    Escape Sequences");
+                builder.AppendLine(svd2.EscapeSequences, "    Escape Sequences");
             }
             else
             {
