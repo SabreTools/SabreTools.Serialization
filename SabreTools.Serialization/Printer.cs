@@ -268,7 +268,7 @@ namespace SabreTools.Serialization
         private static StringBuilder PrettyPrint(this Wrapper.ISO9660 item)
         {
             var builder = new StringBuilder();
-            IRD.Print(builder, item.Model);
+            ISO9660.Print(builder, item.Model);
             return builder;
         }
 
