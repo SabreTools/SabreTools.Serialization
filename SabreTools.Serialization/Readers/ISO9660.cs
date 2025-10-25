@@ -437,8 +437,8 @@ namespace SabreTools.Serialization.Readers
                 return obj;
 
             // Calculate actual size of record
-            int totalBytes = 33 + obj.FileIdentifierLength + systemUseLength;
             // Calculate the size of the system use section (remaining allocated bytes)
+            int totalBytes = 33 + obj.FileIdentifierLength;
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
             // Account for padding field after file identifier
             if (obj.FileIdentifierLength % 2 == 0)
@@ -458,6 +458,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Total used bytes must be even, read a padding byte
+            totalBytes += systemUseLength;
             if (totalBytes % 2 != 0)
                 systemUseLength += 1;
 
