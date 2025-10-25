@@ -51,8 +51,8 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier";)
-            builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier";)
+            builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
+            builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
 
             // TODO: Check for non-zero contents
             builder.AppendLine("Unchecked", "    System Use");
