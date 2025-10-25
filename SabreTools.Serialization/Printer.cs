@@ -265,6 +265,16 @@ namespace SabreTools.Serialization
         /// <summary>
         /// Export the item information as pretty-printed text
         /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.ISO9660 item)
+        {
+            var builder = new StringBuilder();
+            IRD.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
         private static StringBuilder PrettyPrint(this Wrapper.LinearExecutable item)
         {
             var builder = new StringBuilder();
