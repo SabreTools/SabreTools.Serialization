@@ -40,7 +40,7 @@ namespace SabreTools.Data.Printers
                     Print(builder, brvd);
                 else if (vd is BasePrimaryVolumeDescriptor bvd)
                     Print(builder, bvd);
-                else if (vd is VolumePartitionDescriptor vpd)GenericVolumeDescriptor
+                else if (vd is VolumePartitionDescriptor vpd)
                     Print(builder, vpd);
                 else if (vd is VolumeDescriptorSetTerminator vdst)
                     Print(builder, vdst);
