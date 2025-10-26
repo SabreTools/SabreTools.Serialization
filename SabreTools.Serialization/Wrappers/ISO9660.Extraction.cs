@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no root directory
-            if (Volume?.RootDirectoryExtent == null)
+            if (RootDirectoryExtent == null)
                 return false;
 
             bool allExtracted = true;

@@ -20,6 +20,11 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
 
+        /// <summary>
+        /// Root Directory Extent
+        /// </summary>
+        public DirectoryExtent RootDirectoryExtent => Model.RootDirectoryExtent ?? new DirectoryExtent();
+
         #endregion
 
         #region Constructors
