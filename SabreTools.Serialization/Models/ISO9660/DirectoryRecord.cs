@@ -34,7 +34,7 @@ namespace SabreTools.Data.Models.ISO9660
         public DirectoryRecordDateTime? RecordingDateTime { get; set; }
 
         /// <summary>
-        /// Flags for indicating attribytes of the directory record
+        /// Flags for indicating attributes of the directory record
         /// </summary>
         public FileFlags? FileFlags { get; set; }
 

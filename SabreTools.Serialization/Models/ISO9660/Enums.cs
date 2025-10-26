@@ -12,17 +12,17 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Primary Volume Descriptor
         /// </summary>
-        BOOT_RECORD_VOLUME_DESCRIPTOR = 0,
+        BOOT_RECORD_VOLUME_DESCRIPTOR = 0x00,
 
         /// <summary>
         /// Primary Volume Descriptor
         /// </summary>
-        PRIMARY_VOLUME_DESCRIPTOR = 1,
+        PRIMARY_VOLUME_DESCRIPTOR = 0x01,
 
         /// <summary>
         /// Supplementary Volume Descriptor
         /// </summary>
-        SUPPLEMENTARY_VOLUME_DESCRIPTOR = 2,
+        SUPPLEMENTARY_VOLUME_DESCRIPTOR = 0x02,
 
         /// <summary>
         /// Enhanced Volume Descriptor (including Joliet extensions)
@@ -32,12 +32,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Volume Partition Descriptor
         /// </summary>
-        VOLUME_PARTITION_DESCRIPTOR = 3,
+        VOLUME_PARTITION_DESCRIPTOR = 0x03,
 
         /// <summary>
         /// Volume Descriptor Set Terminator
         /// </summary>
-        VOLUME_DESCRIPTOR_SET_TERMINATOR = 255,
+        VOLUME_DESCRIPTOR_SET_TERMINATOR = 0xFF,
     }
 
     /// <summary>

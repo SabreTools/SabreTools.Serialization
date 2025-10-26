@@ -9,13 +9,13 @@ namespace SabreTools.Data.Models.ISO9660
     {
         /// <summary>
         /// 32-byte name of the intended system that can use this record
-        /// a-characters only, padded to the right with spaces
+        /// a-characters only
         /// </summary>
         public byte[]? BootSystemIdentifier { get; set; }
 
         /// <summary>
         /// 32-byte name of this boot system
-        /// a-characters only, padded to the right with spaces
+        /// a-characters only
         /// </summary>
         public byte[]? BootIdentifier { get; set; }
 

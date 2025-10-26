@@ -198,12 +198,12 @@ namespace SabreTools.Serialization.Readers
             if (obj is PrimaryVolumeDescriptor objPVD)
                 objPVD.UnusedByte = data.ReadByteValue();
             else if (obj is SupplementaryVolumeDescriptor objSVD)
-                objSVD.VolumeFlags = (VolumeFlags?)data.ReadByteValue();
+                objSVD.VolumeFlags = (VolumeFlags)data.ReadByteValue();
             else
             {
                 // Rewind and return for unknown descriptor
                 data.Position -= 8;
-                return null;
+                return obj;
             }
 
             obj.SystemIdentifier = data.ReadBytes(32);
