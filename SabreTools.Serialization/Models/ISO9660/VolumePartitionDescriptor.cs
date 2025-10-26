@@ -8,6 +8,11 @@ namespace SabreTools.Data.Models.ISO9660
     public sealed class VolumePartitionDescriptor : VolumeDescriptor
     {
         /// <summary>
+        /// 1 unused byte at offset 7, should be 0x00
+        /// </summary>
+        public byte UnusedByte { get; set; }
+
+        /// <summary>
         /// 32-byte name of the intended system that can use this record
         /// a-characters only
         /// </summary>
