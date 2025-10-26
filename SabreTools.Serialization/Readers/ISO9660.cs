@@ -172,6 +172,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new SupplementaryVolumeDescriptor();
 
             obj.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
+            Console.WriteLine("1");
             return (SupplementaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, obj);
         }
 
@@ -183,6 +184,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled BaseVolumeDescriptor on success, null on error</returns>
         public static BaseVolumeDescriptor? ParseBaseVolumeDescriptor(Stream data, int sectorLength, BaseVolumeDescriptor obj)
         {
+            Console.WriteLine("2");
             obj.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
@@ -202,9 +204,11 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
+                Console.WriteLine("3");
                 data.Position -= 8;
-                return obj;
+                return null;
             }
+            Console.WriteLine("4");
 
             obj.SystemIdentifier = data.ReadBytes(32);
             obj.VolumeIdentifier = data.ReadBytes(32);
@@ -221,9 +225,11 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
+                Console.WriteLine("5");
                 data.Position -= 120;
                 return null;
             }
+            Console.WriteLine("6");
 
             obj.VolumeSetSize = new BothEndianInt16();
             obj.VolumeSetSize.LSB = data.ReadInt16LittleEndian();
@@ -242,7 +248,9 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationBE = data.ReadInt32BigEndian();
             obj.PathTableLocationBEOptional = data.ReadInt32BigEndian();
 
+            Console.WriteLine("7");
             obj.RootDirectory = ParseDirectoryRecord(data, true);
+            Console.WriteLine("8");
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -266,6 +274,7 @@ namespace SabreTools.Serialization.Readers
             if (sectorLength > 2048)
                 data.Position += sectorLength - 2048;
 
+            Console.WriteLine("9");
             return obj;
         }
 
