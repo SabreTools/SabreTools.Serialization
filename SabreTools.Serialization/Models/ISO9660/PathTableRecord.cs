@@ -2,8 +2,7 @@ namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
     /// ISO9660 Path Table Record
-    /// Each directory on the filesystem (except root) contains a Path Table Record which identifies the directory, its parent, and its location.
-    /// Each path table is numbered (starting from 1), which corresponds to the ordinal number of the corresponding directory
+    /// Each path table record is numbered (starting from 1), which corresponds to the ordinal number of the corresponding directory
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class PathTableRecord

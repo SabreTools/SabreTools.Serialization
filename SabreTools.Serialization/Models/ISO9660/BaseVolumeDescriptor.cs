@@ -61,30 +61,30 @@ namespace SabreTools.Data.Models.ISO9660
         public BothEndianInt32? PathTableSize { get; set; }
 
         /// <summary>
-        /// Sector number of the start of the little-endian path table
+        /// Sector number of the start of the little-endian path table, type L
         /// Stored as int32-LSB
         /// </summary>
-        public int PathTableLocationLE { get; set; }
+        public int PathTableLocationL { get; set; }
 
         /// <summary>
-        /// Sector number of the start of the optional little-endian path table
+        /// Sector number of the start of the optional little-endian path table, type L
         /// The "optional path table" does not exist if this value is 0
         /// Stored as int32-LSB
         /// </summary>
-        public int PathTableLocationLEOptional { get; set; }
+        public int OptionalPathTableLocationL { get; set; }
 
         /// <summary>
-        /// Sector number of the start of the big-endian path table
+        /// Sector number of the start of the big-endian path table, type M
         /// Stored as int32-MSB
         /// </summary>
-        public int PathTableLocationBE { get; set; }
+        public int PathTableLocationM { get; set; }
 
         /// <summary>
-        /// Sector number of the start of the optional big-endian path table
+        /// Sector number of the start of the optional big-endian path table, type M
         /// The "optional path table" Does not exist if this value is 0
         /// Stored as int32-MSB
         /// </summary>
-        public int PathTableLocationBEOptional { get; set; }
+        public int OptionalPathTableLocationM { get; set; }
 
         /// <summary>
         /// Root directory entry, 34 bytes
@@ -183,7 +183,8 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Version number of the Records / Path Table format
-        /// ISO9660 sets this always to Constants.FileStructureVersion (0x01)
+        /// For Primary/Supplementary, this is 0x01
+        /// For Enhanced, this is 0x02
         /// </summary>
         public byte FileStructureVersion { get; set; }
 

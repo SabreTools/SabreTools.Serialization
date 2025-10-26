@@ -38,8 +38,12 @@ namespace SabreTools.Serialization.Readers
                 // Read the set of Volume Descriptors
                 volume.VolumeDescriptorSet = ParseVolumeDescriptorSet(data, sectorLength);
 
-                // Read the remainder of the Data Area
-                volume.RootDirectoryExtent = ParseDirectoryExtent(data, sectorLength);
+                // Parse the path tables and root directories for each base volume descriptor
+                foreach (BaseVolumeDescriptor vd in volume.VolumeDescriptorSet)
+                {
+                    volume.PathTables = ParsePathTables(data, sectorLength, vd);
+                    volume.RootDirectory = ParseRootDirectory(data, sectorLength, vd.RootDirectory);
+                }
 
                 return volume;
             }
@@ -237,10 +241,10 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableSize = new BothEndianInt32();
             obj.PathTableSize.LSB = data.ReadInt32LittleEndian();
             obj.PathTableSize.MSB = data.ReadInt32BigEndian();
-            obj.PathTableLocationLE = data.ReadInt32LittleEndian();
-            obj.PathTableLocationLEOptional = data.ReadInt32LittleEndian();
-            obj.PathTableLocationBE = data.ReadInt32BigEndian();
-            obj.PathTableLocationBEOptional = data.ReadInt32BigEndian();
+            obj.PathTableLocationL = data.ReadInt32LittleEndian();
+            obj.OptionalPathTableLocationL = data.ReadInt32LittleEndian();
+            obj.PathTableLocationM = data.ReadInt32BigEndian();
+            obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
             obj.RootDirectory = ParseDirectoryRecord(data, true);
 
@@ -490,13 +494,29 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a DirectoryExtent
+        /// Parse a Stream into PathTables
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength"></param>
-        /// <returns>Filled DirectoryExtent on success, null on error</returns>
-        public static DirectoryExtent? ParseDirectoryExtent(Stream data, int sectorLength)
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
+        /// <returns>Filled PathTables on success, null on error</returns>
+        public static PathTables? ParsePathTables(Stream data, int sectorLength, BaseVolumeDescriptor vd)
         {
+            return null;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a root Directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Root directory record pointing to the directory extent</param>
+        /// <returns>Filled Directory on success, null on error</returns>
+        public static Directory? ParseRootDirectory(Stream data, int sectorLength, DirectoryRecord? dr)
+        {
+            if (dr == null)
+                return null;
+
             return null;
         }
 

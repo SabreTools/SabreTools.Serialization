@@ -31,9 +31,15 @@ namespace SabreTools.Data.Models.ISO9660
         public VolumeDescriptor[]? VolumeDescriptorSet { get; set; }
 
         /// <summary>
-        /// Root directory extent, containing tree of all directory and file extents
+        /// List of path table records for each directory on the volume
+        /// One set of path tables is provided for each Base Volume Descriptor
         /// </summary>
-        public DirectoryExtent? RootDirectoryExtent { get; set; }
+        public PathTables[]? PathTables { get; set; }
+
+        /// <summary>
+        /// The root directory(ies) pointed to by the Volume Descriptors' root directory records
+        /// </summary>
+        public Directory[]? RootDirectory { get; set; }
 
         #endregion
     }
