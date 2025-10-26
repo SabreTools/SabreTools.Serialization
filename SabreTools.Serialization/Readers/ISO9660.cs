@@ -503,13 +503,13 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into PathTables
+        /// Parse a Stream into a PathTableGroup
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
-        /// <returns>Filled PathTables on success, null on error</returns>
-        public static PathTables? ParsePathTables(Stream data, int sectorLength, BaseVolumeDescriptor vd)
+        /// <returns>Filled PathTableGroup on success, null on error</returns>
+        public static PathTableGroup? ParsePathTableGroup(Stream data, int sectorLength, BaseVolumeDescriptor vd)
         {
             return null;
         }

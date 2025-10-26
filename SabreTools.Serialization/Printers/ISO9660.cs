@@ -260,7 +260,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory? dd)
+        private static void Print(StringBuilder builder, DirectoryDescriptor? dd)
         {
             builder.AppendLine("    Root Directory Descriptor Information:");
             builder.AppendLine("    -------------------------");
