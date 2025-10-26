@@ -34,12 +34,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// List of path table records for each directory on the volume
         /// One set of path tables is provided for each Base Volume Descriptor
         /// </summary>
-        public PathTables[]? PathTables { get; set; }
+        public PathTableGroup[]? PathTableGroups { get; set; }
 
         /// <summary>
         /// The root directory(ies) pointed to by the Volume Descriptors' root directory records
         /// </summary>
-        public Directory[]? RootDirectory { get; set; }
+        public Directory[]? RootDirectories { get; set; }
 
         #endregion
     }

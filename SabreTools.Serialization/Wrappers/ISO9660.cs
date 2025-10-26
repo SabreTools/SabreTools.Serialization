@@ -23,12 +23,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Path Tables
         /// </summary>
-        public PathTables[] PathTables => Model.PathTables ?? new PathTables();
+        public PathTableGroup[] PathTableGroups => Model.PathTables ?? [];
 
         /// <summary>
-        /// Root Directory
+        /// Root Directory(ies)
         /// </summary>
-        public Directory RootDirectory => Model.RootDirectory ?? new Directory();
+        public Directory[] RootDirectories => Model.RootDirectories ?? [];
 
         #endregion
 

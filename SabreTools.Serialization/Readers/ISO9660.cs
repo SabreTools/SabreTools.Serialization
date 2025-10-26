@@ -38,12 +38,21 @@ namespace SabreTools.Serialization.Readers
                 // Read the set of Volume Descriptors
                 volume.VolumeDescriptorSet = ParseVolumeDescriptorSet(data, sectorLength);
 
-                // Parse the path tables and root directories for each base volume descriptor
+                // Parse the path table groups and root directories for each base volume descriptor
+                var pathTableGroups = new List<PathTableGroup>();
+                var rootDirectories = new List<Directory>();
                 foreach (BaseVolumeDescriptor vd in volume.VolumeDescriptorSet)
                 {
-                    volume.PathTables = ParsePathTables(data, sectorLength, vd);
-                    volume.RootDirectory = ParseRootDirectory(data, sectorLength, vd.RootDirectory);
+                    var pathTableGroup = ParsePathTableGroup(data, sectorLength, vd);
+                    if (pathTableGroup != null)
+                        pathTableGroups.Add(pathTableGroup);
+                    var rootDirectory = ParseRootDirectory(data, sectorLength, vd.RootDirectory);
+                    if (rootDirectory != null)
+                        rootDirectories.Add(rootDirectory);
                 }
+
+                volume.PathTableGroups = [.. pathTableGroups];
+                volume.RootDirectories = [.. rootDirectories];
 
                 return volume;
             }

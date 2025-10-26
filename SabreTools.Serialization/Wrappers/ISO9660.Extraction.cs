@@ -9,12 +9,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // If we have no root directory
-            if (RootDirectory == null)
+            // If we have no root directories
+            if (RootDirectories == null || RootDirectories.Length == 0)
                 return false;
 
-            // If we have no path tables
-            if (PathTables == null || PathTables.Length == 0)
+            // If we have no path table groups
+            if (PathTableGroups == null || PathTableGroups.Length == 0)
                 return false;
 
             bool allExtracted = true;

@@ -20,8 +20,11 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
 
             Print(builder, volume.VolumeDescriptorSet);
-            Print(builder, volume.RootDirectoryExtent);
+            Print(builder, volume.PathTableGroups);
+            Print(builder, volume.RootDirectories);
         }
+
+        #region Volume Descriptors
 
         private static void Print(StringBuilder builder, VolumeDescriptor[]? vdSet)
         {
@@ -201,18 +204,76 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryExtent? de)
+        #endregion
+
+        #region Directories/Paths
+
+        private static void Print(StringBuilder builder, PathTableGroup[]? ptgs)
         {
-            builder.AppendLine("  Directory Information:");
+            builder.AppendLine("  Path Table Groups:");
             builder.AppendLine("  -------------------------");
-            if (de == null)
+            if (ptgs == null)
             {
-                builder.AppendLine("  No root directory");
+                builder.AppendLine("  No path table groups");
+                builder.AppendLine();
+                return;
+            }
+
+            foreach(var ptg in ptgs)
+            {
+                Print(builder, ptg);
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, PathTableGroup? ptg)
+        {
+            builder.AppendLine("    Path Table Group:");
+            builder.AppendLine("    -------------------------");
+            if (ptg == null)
+            {
+                builder.AppendLine("    No path table group");
                 builder.AppendLine();
                 return;
             }
 
             builder.AppendLine();
         }
+
+        private static void Print(StringBuilder builder, Directory[]? dirs)
+        {
+            builder.AppendLine("  Root Directories Information:");
+            builder.AppendLine("  -------------------------");
+            if (dirs == null)
+            {
+                builder.AppendLine("  No root directories");
+                builder.AppendLine();
+                return;
+            }
+
+            foreach(var dir in dirs)
+            {
+                Print(builder, dir);
+            }
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, Directory? dir)
+        {
+            builder.AppendLine("    Root Directory Information:");
+            builder.AppendLine("    -------------------------");
+            if (dir == null)
+            {
+                builder.AppendLine("    No root directory");
+                builder.AppendLine();
+                return;
+            }
+
+            builder.AppendLine();
+        }
+
+        #endregion
     }
 }
