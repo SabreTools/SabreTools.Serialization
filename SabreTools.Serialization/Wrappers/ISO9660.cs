@@ -4,7 +4,7 @@ using SabreTools.Data.Models.ISO9660;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class ISO9660 : WrapperBase<Volume>
+    public partial class ISO9660 : WrapperBase<Volume>
     {
         #region Descriptive Properties
 
