@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (overlayAddress < 0)
                     return false;
 
-                const int chunkSize = 2048 * 1024; //Arbitrary buffer size
+                const int chunkSize = 2048 * 1024;
                 var reader = new Readers.InstallShieldExecutableFile();
 
                 lock (_dataSourceLock)
