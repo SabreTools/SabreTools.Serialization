@@ -40,19 +40,19 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the path table groups and root directories for each base volume descriptor
                 var pathTableGroups = new List<PathTableGroup>();
-                var rootDirectories = new List<Directory>();
+                var rootDirectoryDescriptors = new List<DirectoryDescriptor>();
                 foreach (BaseVolumeDescriptor vd in volume.VolumeDescriptorSet)
                 {
                     var pathTableGroup = ParsePathTableGroup(data, sectorLength, vd);
                     if (pathTableGroup != null)
                         pathTableGroups.Add(pathTableGroup);
-                    var rootDirectory = ParseRootDirectory(data, sectorLength, vd.RootDirectory);
-                    if (rootDirectory != null)
-                        rootDirectories.Add(rootDirectory);
+                    var rootDirectoryDescriptor = ParseRootDirectoryDescriptors(data, sectorLength, vd.RootDirectory);
+                    if (rootDirectoryDescriptor != null)
+                        rootDirectoryDescriptors.Add(rootDirectoryDescriptor);
                 }
 
                 volume.PathTableGroups = [.. pathTableGroups];
-                volume.RootDirectories = [.. rootDirectories];
+                volume.RootDirectoryDescriptors = [.. rootDirectoryDescriptors];
 
                 return volume;
             }
@@ -519,9 +519,9 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="vd">Root directory record pointing to the directory extent</param>
+        /// <param name="dr">Root directory record pointing to the directory extent</param>
         /// <returns>Filled Directory on success, null on error</returns>
-        public static Directory? ParseRootDirectory(Stream data, int sectorLength, DirectoryRecord? dr)
+        public static Directory? ParseRootDirectoryDescriptors(Stream data, int sectorLength, DirectoryRecord? dr)
         {
             if (dr == null)
                 return null;

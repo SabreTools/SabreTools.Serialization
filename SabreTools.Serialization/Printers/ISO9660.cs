@@ -241,32 +241,32 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory[]? dirs)
+        private static void Print(StringBuilder builder, DirectoryDescriptor[]? dds)
         {
-            builder.AppendLine("  Root Directories Information:");
+            builder.AppendLine("  Root Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
-            if (dirs == null)
+            if (dds == null)
             {
-                builder.AppendLine("  No root directories");
+                builder.AppendLine("  No root directory descriptors");
                 builder.AppendLine();
                 return;
             }
 
-            foreach(var dir in dirs)
+            foreach(var dd in dds)
             {
-                Print(builder, dir);
+                Print(builder, dd);
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory? dir)
+        private static void Print(StringBuilder builder, Directory? dd)
         {
-            builder.AppendLine("    Root Directory Information:");
+            builder.AppendLine("    Root Directory Descriptor Information:");
             builder.AppendLine("    -------------------------");
-            if (dir == null)
+            if (dd == null)
             {
-                builder.AppendLine("    No root directory");
+                builder.AppendLine("    No root directory descriptor");
                 builder.AppendLine();
                 return;
             }

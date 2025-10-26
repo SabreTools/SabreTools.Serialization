@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Root Directory(ies)
         /// </summary>
-        public Directory[] RootDirectories => Model.RootDirectories ?? [];
+        public DirectoryDescriptor[] RootDirectoryDescriptors => Model.RootDirectoryDescriptors ?? [];
 
         #endregion
 

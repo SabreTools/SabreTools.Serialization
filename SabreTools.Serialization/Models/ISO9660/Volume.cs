@@ -39,7 +39,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// The root directory(ies) pointed to by the Volume Descriptors' root directory records
         /// </summary>
-        public Directory[]? RootDirectories { get; set; }
+        public DirectoryDescriptor[]? RootDirectoryDescriptors { get; set; }
 
         #endregion
     }
