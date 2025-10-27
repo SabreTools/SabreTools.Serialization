@@ -210,7 +210,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, PathTableGroup[]? ptgs)
         {
-            builder.AppendLine("  Path Table Groups:");
+            builder.AppendLine("  Path Table Group(s):");
             builder.AppendLine("  -------------------------");
             if (ptgs == null)
             {
@@ -221,21 +221,70 @@ namespace SabreTools.Data.Printers
 
             foreach(var ptg in ptgs)
             {
-                Print(builder, ptg);
+                if (ptg.PathTableL != null)
+                {
+                    builder.AppendLine("    Type-L Path Table:");
+                    Print(builder, ptg.PathTableL);
+                }
+                else
+                {
+                    builder.AppendLine("    No Type-L Path Table");
+                    builder.AppendLine();
+                }
+                if (ptg.OptionalPathTableL != null)
+                {
+                    builder.AppendLine("    Optional Type-L Path Table:");
+                    Print(builder, ptg.OptionalPathTableL);
+                }
+                else
+                {
+                    builder.AppendLine("    No Optional Type-L Path Table");
+                    builder.AppendLine();
+                }
+                if (ptg.PathTableM != null)
+                {
+                    builder.AppendLine("    Type-M Path Table:");
+                    Print(builder, ptg.PathTableM);
+                }
+                else
+                {
+                    builder.AppendLine("    No Type-M Path Table");
+                    builder.AppendLine();
+                }
+                if (ptg.OptionalPathTableM != null)
+                {
+                    builder.AppendLine("    Optional Type-M Path Table:");
+                    Print(builder, ptg.OptionalPathTableM);
+                }
+                else
+                {
+                    builder.AppendLine("    No Optional Type-M Path Table");
+                    builder.AppendLine();
+                }
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, PathTableGroup? ptg)
+        private static void Print(StringBuilder builder, PathTableRecord[] records)
         {
-            builder.AppendLine("    Path Table Group:");
+            builder.AppendLine("    Path Table Records:");
             builder.AppendLine("    -------------------------");
-            if (ptg == null)
+            if (records.Length == 0)
             {
-                builder.AppendLine("    No path table group");
+                builder.AppendLine("    No records");
                 builder.AppendLine();
                 return;
+            }
+
+            foreach (var record in records)
+            {
+                builder.AppendLine(record.DirectoryIdentifierLength, "    Directory Identifier Length");
+                builder.AppendLine(record.ExtendedAttributeRecordLength, "    Extended Attribute Record Length");
+                builder.AppendLine(record.ExtentLocation, "    Extent Location");
+                builder.AppendLine(record.DirectoryIdentifier, "    Directory Identifier");
+                if (record.PaddingField != null)
+                    builder.AppendLine(record.PaddingField, "    Padding Field");
             }
 
             builder.AppendLine();
@@ -243,7 +292,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, DirectoryDescriptor[]? dds)
         {
-            builder.AppendLine("  Root Directory Descriptors Information:");
+            builder.AppendLine("  Root Directory Descriptor(s) Information:");
             builder.AppendLine("  -------------------------");
             if (dds == null)
             {
@@ -262,11 +311,11 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, DirectoryDescriptor? dd)
         {
-            builder.AppendLine("    Root Directory Descriptor Information:");
+            builder.AppendLine("    Directory Descriptor Information:");
             builder.AppendLine("    -------------------------");
             if (dd == null)
             {
-                builder.AppendLine("    No root directory descriptor");
+                builder.AppendLine("    No directory descriptor");
                 builder.AppendLine();
                 return;
             }
