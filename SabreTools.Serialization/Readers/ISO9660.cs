@@ -570,9 +570,139 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled list of PathTableGroup on success, null on error</returns>
         public static List<PathTableGroup>? ParsePathTableGroup(Stream data, int sectorLength, VolumeDescriptor vd)
         {
-            // TODO: Check both potential path table sizes
+            var groups = new List<PathTableGroup>();
 
-            return null;
+            var sizeL = vd.PathTableSize.LSB;
+            var sizeB = vd.PathTableSize.MSB;
+            var locationL = vd.PathTableLocationL;
+            var locationL2 = vd.OptionalPathTableLocationL;
+            var locationM = vd.PathTableLocationM;
+            var locationM2 = vd.OptionalPathTableLocationM;
+            var blockLength = vd.LogicalBlockSize;
+
+            // Validate logical block length, if invalid default to logical sector length
+            if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
+                blockLength = sectorLength;
+
+            var groupL = new PathTableGroup();
+            if (((locationL * blockLength) + sizeL) < data.Length)
+            {
+                data.Position = locationL * blockLength;
+                groupL.PathTableL = ParsePathTable(data, sectorLength, sizeL, true);
+            }
+            if (((locationL2 * blockLength) + sizeL) < data.Length)
+            {
+                data.Position = locationL2 * blockLength;
+                groupL.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeL, true);
+            }
+            if (((locationM * blockLength) + sizeL) < data.Length)
+            {
+                data.Position = locationM * blockLength;
+                groupL.PathTableM = ParsePathTable(data, sectorLength, sizeL, false);
+            }
+            if (((locationM2 * blockLength) + sizeL) < data.Length)
+            {
+                data.Position = locationM2 * blockLength;
+                groupL.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeL, false);
+            }
+
+            // If no valid path tables were found, don't add the table group
+            if (groupL.PathTableL != null || groupL.OptionalPathTableL != null || groupL.PathTableM != null || groupL.OptionalPathTableM != null)
+                groups.Add(groupL);
+
+            // If the both-endian path table size value is consistent, return the single path table group
+            if (sizeL == sizeB)
+                return groups;
+            
+            // Get the other-sized path table group
+            var groupB = new PathTableGroup();
+            if (((locationL * blockLength) + sizeB) < data.Length)
+            {
+                data.Position = locationL * blockLength;
+                groupB.PathTableL = ParsePathTable(data, sectorLength, sizeB, true);
+            }
+            if (((locationL2 * blockLength) + sizeB) < data.Length)
+            {
+                data.Position = locationL2 * blockLength;
+                groupB.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeB, true);
+            }
+            if (((locationM * blockLength) + sizeB) < data.Length)
+            {
+                data.Position = locationM * blockLength;
+                groupB.PathTableM = ParsePathTable(data, sectorLength, sizeB, false);
+            }
+            if (((locationM2 * blockLength) + sizeB) < data.Length)
+            {
+                data.Position = locationM2 * blockLength;
+                groupB.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeB, false);
+            }
+
+            // If no valid path tables were found, don't add the table group
+            if (groupB.PathTableL != null || groupB.OptionalPathTableL != null || groupB.PathTableM != null || groupB.OptionalPathTableM != null)
+                groups.Add(groupB);
+
+            return groups;
+        }
+
+        /// <summary>
+        /// Parse a Stream into an array of path table records
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="tableSize">Size of the path table</param>
+        /// <param name="littleEndian">True if path table is little endian, false if big endian</param>
+        /// <returns>Filled array of path table records on success, null on error</returns>
+        public static PathTableRecord[]? ParsePathTable(Stream data, int sectorLength, int tableSize, bool littleEndian)
+        {
+            PathTableRecord[] pathTable = [];
+
+            // TODO: Better deal with invalid path table sizes < 10 (manually detect valid records to determine size)
+            int pos = 0;
+            while (pos < tableSize)
+            {
+                var record = new PathTableRecord();
+                record.DirectoryIdentifierLength = data.ReadByteValue();
+
+                // Check that the current record can fit within the current path table size
+                pos += 8 + record.DirectoryIdentifierLength;
+                if (record.DirectoryIdentifierLength % 2 != 0)
+                    pos += 1;
+                if (pos > tableSize)
+                {
+                    // Rewind invalid record byte
+                    data.Position -= 1;
+                    break;
+                }
+
+                record.ExtendedAttributeRecordLength = data.ReadByteValue();
+
+                // Read numerics with correct endianness
+                if (littleEndian)
+                {
+                    record.ExtentLocation = data.ReadInt32LittleEndian();
+                    record.ParentDirectoryNumber = data.ReadInt16LittleEndian();
+                }
+                else
+                {
+                    record.ExtentLocation = data.ReadInt32BigEndian();
+                    record.ParentDirectoryNumber = data.ReadInt16BigEndian();
+                }
+
+                // Read the directory identifier
+                record.DirectoryIdentifier = data.ReadBytes(record.DirectoryIdentifierLength);
+
+                // Padding field is present is directory identifier length is odd
+                if (record.DirectoryIdentifierLength % 2 != 0)
+                    record.PaddingField = data.ReadByteValue();
+
+                pathTable.Add(record);
+            }
+
+            // Return error (null) if no valid path table records were found
+            if (pathTable.Count == 0)
+                return null;
+
+            return [.. pathTable];
         }
 
         #endregion

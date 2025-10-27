@@ -21,7 +21,9 @@ namespace SabreTools.Data.Models.ISO9660
         public byte[]? Identifier { get; set; }
 
         /// <summary>
-        /// The Volume Descriptor version number, fixed at Constants.VolumeDescriptorVersion (0x01)
+        /// The Volume Descriptor version number
+        /// 1 for all specific Volume Descriptors other than Enhanced Volume Descriptor
+        /// 2 for Enhanced Volume Descriptor (including Joliet)
         /// </summary>
         public byte Version { get; set; }
     }

@@ -51,7 +51,8 @@ namespace SabreTools.Data.Models.ISO9660
         public BothEndianInt16? VolumeSequenceNumber { get; set; }
 
         /// <summary>
-        /// Number of bytes per logical sector, usually 2048
+        /// Number of bytes per logical block, usually 2048
+        /// Must be a power of 2, minimum 2^9, and not greater than the logical sector size
         /// </summary>
         public BothEndianInt16? LogicalBlockSize { get; set; }
 

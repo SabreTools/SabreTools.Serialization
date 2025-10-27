@@ -19,11 +19,6 @@ namespace SabreTools.Data.Models.ISO9660
         public static readonly byte[] StandardIdentifier = [0x43, 0x44, 0x30, 0x30, 0x31];
 
         /// <summary>
-        /// Expected version of the ISO9660 Volume Descriptors
-        /// </summary>
-        public const byte VolumeDescriptorVersion = 0x01;
-
-        /// <summary>
         /// Value of the current directory
         /// </summary>
         public const byte CurrentDirectory = 0x00;
