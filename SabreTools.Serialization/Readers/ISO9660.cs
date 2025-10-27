@@ -510,7 +510,7 @@ namespace SabreTools.Serialization.Readers
             {
                 if (vd is BaseVolumeDescriptor bvd)
                 {
-                    // Parse the directory descriptors pointed to from the volume descriptor's root directory record
+                    // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
                     var descriptors = ParseDirectoryDescriptors(data, sectorLength, bvd.RootDirectoryRecord);
                     if (descriptors != null && descriptors.Count > 0)
                         rootDescriptors.AddRange(descriptors);
@@ -549,12 +549,15 @@ namespace SabreTools.Serialization.Readers
         public static PathTableGroup[]? ParsePathTableGroups(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
             var groups = new List<PathTableGroup>();
-            foreach (BaseVolumeDescriptor vd in vdSet)
+            foreach (VolumeDescriptor vd in vdSet)
             {
-                // Parse the path table group in the volume descriptor
-                var pathTableGroups = ParsePathTableGroup(data, sectorLength, vd);
-                if (pathTableGroups != null && pathTableGroups.Count > 0)
-                    groups.AddRange(pathTableGroups);
+                if (vd is BaseVolumeDescriptor bvd)
+                {
+                    // Parse the path table group in the base volume descriptor
+                    var pathTableGroups = ParsePathTableGroup(data, sectorLength, bvd);
+                    if (pathTableGroups != null && pathTableGroups.Count > 0)
+                        groups.AddRange(pathTableGroups);
+                }
             }
 
             // Return error (null) if no valid path table groups were found 
