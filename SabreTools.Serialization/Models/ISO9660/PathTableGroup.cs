@@ -1,8 +1,8 @@
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
-    /// ISO9660 Path Table Group, list of path table records for each directory on the volume
-    /// Each path table is intended to point to the same set of directories
+    /// ISO9660 Path Table Group, lists of path table records for each directory on the volume
+    /// Each path table is intended to point to the same set of directories. All four fields should be identical!
     /// For each directory on the filesystem (except root), the Path Table contains a record which identifies the directory, its parent, and its location.
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>

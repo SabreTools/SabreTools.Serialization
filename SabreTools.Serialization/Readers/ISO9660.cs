@@ -510,12 +510,12 @@ namespace SabreTools.Serialization.Readers
             {
                 // Parse the directory descriptors pointed to from the volume descriptor's root directory record
                 var descriptors = ParseDirectoryDescriptors(data, sectorLength, vd.RootDirectoryRecord);
-                if (descriptors != null && descriptors.Length > 0)
+                if (descriptors != null && descriptors.Count > 0)
                     rootDescriptors.AddRange(descriptors);
             }
 
             // Return error (null) if no valid directory descriptors were found 
-            if (rootDescriptors.Length == 0)
+            if (rootDescriptors.Count == 0)
                 return null;
 
             return [.. rootDescriptors];
@@ -550,12 +550,12 @@ namespace SabreTools.Serialization.Readers
             {
                 // Parse the path table group in the volume descriptor
                 var pathTableGroups = ParsePathTableGroup(data, sectorLength, vd);
-                if (pathTableGroups != null && pathTableGroups.Length > 0)
+                if (pathTableGroups != null && pathTableGroups.Count > 0)
                     groups.AddRange(pathTableGroups);
             }
 
             // Return error (null) if no valid path table groups were found 
-            if (groups.Length == 0)
+            if (groups.Count == 0)
                 return null;
 
             return [.. groups];
