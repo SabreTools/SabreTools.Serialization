@@ -568,7 +568,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
         /// <returns>Filled list of PathTableGroup on success, null on error</returns>
-        public static List<PathTableGroup>? ParsePathTableGroup(Stream data, int sectorLength, VolumeDescriptor vd)
+        public static List<PathTableGroup>? ParsePathTableGroup(Stream data, int sectorLength, BaseVolumeDescriptor vd)
         {
             var groups = new List<PathTableGroup>();
 
