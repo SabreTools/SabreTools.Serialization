@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 
@@ -15,8 +16,11 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            // TODO: Check for non-zero contents in System Area
-            builder.AppendLine("Unchecked", "System Area");
+            // TODO: Better check
+            if (volume.SystemArea.AsSpan().SequenceEqual(new byte[volume.SystemArea.Length]))
+                builder.AppendLine("Zeroed", "  System Area");
+            else
+                builder.AppendLine("Not Zeroed", "  System Area");
             builder.AppendLine();
 
             Print(builder, volume.VolumeDescriptorSet);
@@ -60,8 +64,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
 
-            // TODO: Check for non-zero contents in vd.SystemUse
-            builder.AppendLine("Unchecked", "    System Use");
+            if (vd.SystemUse == null || vd.SystemUse.Length == 0)
+                builder.AppendLine(vd.SystemUse, "    System Use");
+            elseif (vd.SystemUse.AsSpan().SequenceEqual(new byte[vd.SystemUse.Length]))
+                builder.AppendLine("Zeroed", "    System Use");
+            else
+                builder.AppendLine("Not Zeroed", "    System Use");
 
             builder.AppendLine();
         }
@@ -80,45 +88,48 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine("    Unidentified Base Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            // TODO: Check Unused byte
-            if (vd is SupplementaryVolumeDescriptor svd)
+            if (vd is PrimaryVolumeDescriptor pvd)
+            {
+                builder.AppendLine(vd.UnusedByte, "    Unused Byte");
+            }
+            else if (vd is SupplementaryVolumeDescriptor svd)
             {
                 builder.AppendLine("    File Flags:");
-                // TODO: Check file flags
-                builder.AppendLine("Unchecked", "      Existence");
-                builder.AppendLine("Unchecked", "      Directory");
-                builder.AppendLine("Unchecked", "      Associated File");
-                builder.AppendLine("Unchecked", "      Record");
-                builder.AppendLine("Unchecked", "      Protection");
-                builder.AppendLine("Unchecked", "      Reserved Flag 1");
-                builder.AppendLine("Unchecked", "      Reserved Flag 2");
-                builder.AppendLine("Unchecked", "      Multi-Extent");
-            }
-            else
-            {
-                // TODO: Check for non-zero unusued byte
-                builder.AppendLine("Unchecked", "    Unused Byte");
+                builder.AppendLine(svd.FileFlags & FileFlags.EXISTENCE, "      Existence");
+                builder.AppendLine(svd.FileFlags & FileFlags.DIRECTORY, "      Directory");
+                builder.AppendLine(svd.FileFlags & FileFlags.ASSOCIATED_FILE, "      Associated File");
+                builder.AppendLine(svd.FileFlags & FileFlags.RECORD, "      Record");
+                builder.AppendLine(svd.FileFlags & FileFlags.PROTECTION, "      Protection");
+                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT5, "      Reserved Flag (Bit 5)");
+                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT6, "      Reserved Flag (Bit 6)");
+                builder.AppendLine(svd.FileFlags & FileFlags.MULTI_EXTENT, "      Multi-Extent");
             }
 
             // TODO: Decode all byte arrays into strings (based on encoding above)
 
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
-            // TODO: Check for non-zero vd.Unused8Bytes
-            builder.AppendLine("Unchecked", "    Unused 8 Bytes");
+
+            
+            if (vd.Unused8Bytes.AsSpan().SequenceEqual(new byte[vd.Unused8Bytes.Length]))
+                builder.AppendLine("Zeroed", "  Unused 8 Bytes");
+            else
+                builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
+
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumeSpaceSize?.LSB, "    Volume Space Size");
 
-            // TODO: Check for non-zero contents
+            if (vd is PrimaryVolumeDescriptor pvd2)
+            {
+                if (pvd2.Unused32Bytes.AsSpan().SequenceEqual(new byte[pvd2.Unused32Bytes.Length]))
+                    builder.AppendLine("Zeroed", "  Unused 32 Bytes");
+                else
+                    builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
+            }
             if (vd is SupplementaryVolumeDescriptor svd2)
             {
                 // TODO: Trim trailing 0x00 and split array into characters (multi-byte encoding detection)
                 builder.AppendLine(svd2.EscapeSequences, "    Escape Sequences");
-            }
-            else
-            {
-                // TODO: Check for non-zero unusued byte
-                builder.AppendLine("Unchecked", "    Unused Bytes");
             }
 
             // TODO: Check that MSB/LSB match
@@ -134,7 +145,6 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
-            // TODO: Print info on vd.RootDirectoryRecord using ParseDirectoryRecord
             Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
@@ -145,21 +155,28 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
             
-            Print(builder, vd.VolumeCreationDateTime, "    Volume Creation Date Time");
-            Print(builder, vd.VolumeModificationDateTime, "    Volume Modification Date Time");
-            Print(builder, vd.VolumeExpirationDateTime, "    Volume Expiration Date Time");
-            Print(builder, vd.VolumeEffectiveDateTime, "    Volume Effective Date Time");
+            builder.AppendLine("    Volume Creation Date Time");
+            Print(builder, vd.VolumeCreationDateTime);
+            builder.AppendLine("    Volume Modification Date Time");
+            Print(builder, vd.VolumeModificationDateTime);
+            builder.AppendLine("    Volume Expiration Date Time");
+            Print(builder, vd.VolumeExpirationDateTime);
+            builder.AppendLine("    Volume Effective Date Time");
+            Print(builder, vd.VolumeEffectiveDateTime);
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
 
-            // TODO: Check for non-zero reserved byte
-            builder.AppendLine("Unchecked", "    Reserved Byte");
+            builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
 
-            // TODO: Check for non-zero contents in vd.ApplicationUse
-            builder.AppendLine("Unchecked", "    Application Use");
+            if (vd.ApplicationUse.AsSpan().SequenceEqual(new byte[vd.ApplicationUse.Length]))
+                builder.AppendLine("Zeroed", "  Application Use");
+            else
+                builder.AppendLine("Not Zeroed", "  Application Use");
 
-            // TODO: Check for non-zero reserved bytes
-            builder.AppendLine("Unchecked", "    Reserved Bytes");
+            if (vd.Reserved653Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved653Bytes.Length]))
+                builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
+            else
+                builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
 
             builder.AppendLine();
         }
@@ -176,8 +193,10 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            // TODO: Check for non-zero contents in vd.SystemUse
-            builder.AppendLine("Unchecked", "    System Use");
+            if (vd.Reserved653Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved653Bytes.Length]))
+                builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
+            else
+                builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
 
             builder.AppendLine();
         }
@@ -187,8 +206,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            // TODO: Check for non-zero contents
-            builder.AppendLine("Unchecked", "    Reserved Bytes");
+            if (vd.Reserved2041Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved2041Bytes.Length]))
+                builder.AppendLine("Zeroed", "  Reserved Bytes");
+            else
+                builder.AppendLine("Not Zeroed", "  Reserved Bytes");
 
             builder.AppendLine();
         }
@@ -197,9 +218,11 @@ namespace SabreTools.Data.Printers
         {
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
-
-            // TODO: Check for non-zero contents
-            builder.AppendLine("Unchecked", "    Contents");
+s
+            if (vd.Data.AsSpan().SequenceEqual(new byte[vd.Data.Length]))
+                builder.AppendLine("Zeroed", "  Data");
+            else
+                builder.AppendLine("Not Zeroed", "  Data");
 
             builder.AppendLine();
         }
@@ -345,16 +368,28 @@ namespace SabreTools.Data.Printers
 
         #endregion
 
-        private static void Print(StringBuilder builder, DecDateTime? dt, string prefixString)
+        private static void Print(StringBuilder builder, DecDateTime? dt)
         {
             if (dt == null)
             {
-                builder.AppendLine("null", prefixString);
+                builder.AppendLine("      Null");
                 return;
             }
 
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Year), "      Year");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Month), "      Month");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Day), "      Day");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Hour), "      Hour");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Minute), "      Minute");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Second), "      Second");
+            builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
+            string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00}";
+            builder.AppendLine(tz, "      Timezone Offset");
+
             // TODO: Decode DecDateTime into a string
-            string datetime = "";
+            string datetime = $"{Encoding.ASCII.GetString(dt.Year)}-{Encoding.ASCII.GetString(dt.Month)}-" +
+                {Encoding.ASCII.GetString(dt.Day)}T{Encoding.ASCII.GetString(dt.Hour)}:" +
+                {Encoding.ASCII.GetString(dt.Minute)}:{Encoding.ASCII.GetString(dt.Second)}";
             builder.AppendLine(datetime, prefixString);
         }
     }

@@ -378,28 +378,50 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
+        #region Directory Descriptor Parsing
+
         /// <summary>
-        /// Parse a Stream into a DecDateTime
+        /// Parse a Stream into an array of DirectoryDescriptor for root directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled DecDateTime on success, null on error</returns>
-        public static DecDateTime? ParseDecDateTime(Stream data)
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Set of volume descriptors for a volume</param>
+        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
+        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
-            var obj = new DecDateTime();
+            var rootDescriptors = new List<DirectoryDescriptor>();
+            foreach (VolumeDescriptor vd in vdSet)
+            {
+                if (vd is BaseVolumeDescriptor bvd)
+                {
+                    // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
+                    var descriptors = ParseDirectoryDescriptors(data, sectorLength, bvd.RootDirectoryRecord);
+                    if (descriptors != null && descriptors.Count > 0)
+                        rootDescriptors.AddRange(descriptors);
+                }
+            }
 
-            obj.Year = data.ReadBytes(4);
-            obj.Month = data.ReadBytes(2);
-            obj.Day = data.ReadBytes(2);
-            obj.Hour = data.ReadBytes(2);
-            obj.Minute = data.ReadBytes(2);
-            obj.Second = data.ReadBytes(2);
-            obj.Centisecond = data.ReadBytes(2);
-            obj.TimezoneOffset = data.ReadByteValue();
+            // Return error (null) if no valid directory descriptors were found 
+            if (rootDescriptors.Count == 0)
+                return null;
 
-            return obj;
+            return [.. rootDescriptors];
         }
 
-        #region Directory Parsing
+        /// <summary>
+        /// Parse a Stream into a list of DirectoryDescriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="dr">Root directory record pointing to the root directory extent</param>
+        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
+        public static List<DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, short sectorLength, DirectoryRecord? dr)
+        {
+            if (dr == null)
+                return null;
+
+            return null;
+        }
 
         /// <summary>
         /// Parse a Stream into a DirectoryRecord
@@ -496,48 +518,9 @@ namespace SabreTools.Serialization.Readers
             return obj;
         }
 
-        /// <summary>
-        /// Parse a Stream into an array of DirectoryDescriptor for root directory
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="vd">Set of volume descriptors for a volume</param>
-        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
-        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
-        {
-            var rootDescriptors = new List<DirectoryDescriptor>();
-            foreach (VolumeDescriptor vd in vdSet)
-            {
-                if (vd is BaseVolumeDescriptor bvd)
-                {
-                    // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
-                    var descriptors = ParseDirectoryDescriptors(data, sectorLength, bvd.RootDirectoryRecord);
-                    if (descriptors != null && descriptors.Count > 0)
-                        rootDescriptors.AddRange(descriptors);
-                }
-            }
+        #endregion
 
-            // Return error (null) if no valid directory descriptors were found 
-            if (rootDescriptors.Count == 0)
-                return null;
-
-            return [.. rootDescriptors];
-        }
-
-        /// <summary>
-        /// Parse a Stream into a list of DirectoryDescriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="dr">Root directory record pointing to the root directory extent</param>
-        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
-        public static List<DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, short sectorLength, DirectoryRecord? dr)
-        {
-            if (dr == null)
-                return null;
-
-            return null;
-        }
+        #region Path Table Parsing
 
         /// <summary>
         /// Parse a Stream into an array of PathTableGroup
@@ -713,5 +696,26 @@ namespace SabreTools.Serialization.Readers
         }
 
         #endregion
+
+        /// <summary>
+        /// Parse a Stream into a DecDateTime
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DecDateTime on success, null on error</returns>
+        public static DecDateTime? ParseDecDateTime(Stream data)
+        {
+            var obj = new DecDateTime();
+
+            obj.Year = data.ReadBytes(4);
+            obj.Month = data.ReadBytes(2);
+            obj.Day = data.ReadBytes(2);
+            obj.Hour = data.ReadBytes(2);
+            obj.Minute = data.ReadBytes(2);
+            obj.Second = data.ReadBytes(2);
+            obj.Centisecond = data.ReadBytes(2);
+            obj.TimezoneOffset = data.ReadByteValue();
+
+            return obj;
+        }
     }
 }
