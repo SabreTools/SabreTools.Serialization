@@ -85,14 +85,14 @@ namespace SabreTools.Data.Printers
             {
                 builder.AppendLine("    File Flags:");
                 // TODO: Check file flags
-                builder.AppendLine("Unchecked", "      Existence:");
-                builder.AppendLine("Unchecked", "      Directory:");
-                builder.AppendLine("Unchecked", "      Associated File:");
-                builder.AppendLine("Unchecked", "      Record:");
-                builder.AppendLine("Unchecked", "      Protection:");
-                builder.AppendLine("Unchecked", "      Reserved Flag 1:");
-                builder.AppendLine("Unchecked", "      Reserved Flag 2:");
-                builder.AppendLine("Unchecked", "      Multi-Extent:");
+                builder.AppendLine("Unchecked", "      Existence");
+                builder.AppendLine("Unchecked", "      Directory");
+                builder.AppendLine("Unchecked", "      Associated File");
+                builder.AppendLine("Unchecked", "      Record");
+                builder.AppendLine("Unchecked", "      Protection");
+                builder.AppendLine("Unchecked", "      Reserved Flag 1");
+                builder.AppendLine("Unchecked", "      Reserved Flag 2");
+                builder.AppendLine("Unchecked", "      Multi-Extent");
             }
             else
             {
@@ -135,6 +135,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
             // TODO: Print info on vd.RootDirectoryRecord using ParseDirectoryRecord
+            Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
             builder.AppendLine(vd.PublisherIdentifier, "    Publisher Identifier");
@@ -144,11 +145,10 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
             
-            // TODO: Complete Print DecDateTime function using ParseDecDateTime
-            builder.AppendLine(vd.VolumeCreationDateTime?.Year, "    Volume Creation Date Time");
-            builder.AppendLine(vd.VolumeModificationDateTime?.Year, "    Volume Modification Date Time");
-            builder.AppendLine(vd.VolumeExpirationDateTime?.Year, "    Volume Expiration Date Time");
-            builder.AppendLine(vd.VolumeEffectiveDateTime?.Year, "    Volume Effective Date Time");
+            Print(builder, vd.VolumeCreationDateTime, "    Volume Creation Date Time");
+            Print(builder, vd.VolumeModificationDateTime, "    Volume Modification Date Time");
+            Print(builder, vd.VolumeExpirationDateTime, "    Volume Expiration Date Time");
+            Print(builder, vd.VolumeEffectiveDateTime, "    Volume Effective Date Time");
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
 
@@ -322,9 +322,40 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
+            // TODO: Implement
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, DirectoryRecord? dr)
+        {
+            builder.AppendLine("    Directory Record:");
+            builder.AppendLine("    -------------------------");
+            if (dr == null)
+            {
+                builder.AppendLine("    No directory record");
+                builder.AppendLine();
+                return;
+            }
+
+            // TODO: Implement
+
             builder.AppendLine();
         }
 
         #endregion
+
+        private static void Print(StringBuilder builder, DecDateTime? dt, string prefixString)
+        {
+            if (dt == null)
+            {
+                builder.AppendLine("null", prefixString);
+                return;
+            }
+
+            // TODO: Decode DecDateTime into a string
+            string datetime = "";
+            builder.AppendLine(datetime, prefixString);
+        }
     }
 }
