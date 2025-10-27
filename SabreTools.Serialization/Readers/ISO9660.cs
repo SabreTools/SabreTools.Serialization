@@ -40,19 +40,19 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the path table groups and root directories for each base volume descriptor
                 var pathTableGroups = new List<PathTableGroup>();
-                var rootDirectoryDescriptors = new List<DirectoryDescriptor>();
+                var roots = new List<DirectoryDescriptor>();
                 foreach (BaseVolumeDescriptor vd in volume.VolumeDescriptorSet)
                 {
                     var pathTableGroup = ParsePathTableGroup(data, sectorLength, vd);
                     if (pathTableGroup != null)
                         pathTableGroups.Add(pathTableGroup);
-                    var rootDirectoryDescriptor = ParseRootDirectoryDescriptors(data, sectorLength, vd.RootDirectory);
-                    if (rootDirectoryDescriptor != null)
-                        rootDirectoryDescriptors.Add(rootDirectoryDescriptor);
+                    var descriptors = ParseRootDirectoryDescriptors(data, sectorLength, vd.RootDirectory);
+                    if (descriptors != null)
+                        roots.Add(descriptors);
                 }
 
                 volume.PathTableGroups = [.. pathTableGroups];
-                volume.RootDirectoryDescriptors = [.. rootDirectoryDescriptors];
+                volume.RootDirectoryDescriptors = [.. roots];
 
                 return volume;
             }
@@ -515,13 +515,13 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a root Directory
+        /// Parse a Stream into a list of DirectoryDescriptors
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="dr">Root directory record pointing to the directory extent</param>
-        /// <returns>Filled Directory on success, null on error</returns>
-        public static Directory? ParseRootDirectoryDescriptors(Stream data, int sectorLength, DirectoryRecord? dr)
+        /// <param name="dr">Root directory record pointing to the root directory extent</param>
+        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
+        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, int sectorLength, DirectoryRecord? dr)
         {
             if (dr == null)
                 return null;
