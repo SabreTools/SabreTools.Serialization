@@ -27,8 +27,8 @@ namespace SabreTools.Serialization.Readers
             if (sectorLength * (Constants.SystemAreaSectors + 2) > data.Length - data.Position)
                 return null;
 
-            try
-            {
+            //try
+            //{
                 // Create a new Volume to fill
                 var volume = new Volume();
 
@@ -49,12 +49,12 @@ namespace SabreTools.Serialization.Readers
                 volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
 
                 return volume;
-            }
-            catch
-            {
-                // Ignore the actual error
-                return null;
-            }
+            //}
+            //catch
+            //{
+            //    // Ignore the actual error
+            //    return null;
+            //}
         }
 
         #region Volume Descriptor Parsing
