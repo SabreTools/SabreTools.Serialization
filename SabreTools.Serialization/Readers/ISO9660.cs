@@ -511,6 +511,9 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled PathTableGroup on success, null on error</returns>
         public static PathTableGroup? ParsePathTableGroup(Stream data, int sectorLength, BaseVolumeDescriptor vd)
         {
+            if (vd == null)
+                return null;
+
             return null;
         }
 

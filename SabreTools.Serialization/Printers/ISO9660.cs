@@ -21,7 +21,7 @@ namespace SabreTools.Data.Printers
 
             Print(builder, volume.VolumeDescriptorSet);
             Print(builder, volume.PathTableGroups);
-            Print(builder, volume.RootDirectories);
+            Print(builder, volume.RootDirectoryDescriptors);
         }
 
         #region Volume Descriptors
@@ -60,7 +60,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
 
-            // TODO: Check for non-zero contents
+            // TODO: Check for non-zero contents in vd.SystemUse
             builder.AppendLine("Unchecked", "    System Use");
 
             builder.AppendLine();
@@ -70,7 +70,7 @@ namespace SabreTools.Data.Printers
         {
             var type = (byte?)vd.Type;
             
-            // TOOD: Determine encoding based on vd-type, EscapeSequence, and manual detection
+            // TOOD: Determine encoding based on vd.Type, svd.EscapeSequence (and manual detection?)
 
             if (type == 0x01)
                 builder.AppendLine("    Primary Volume Descriptor:");
@@ -100,7 +100,7 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine("Unchecked", "    Unused Byte");
             }
 
-            // TODO: Decode all byte arrays into strings ()
+            // TODO: Decode all byte arrays into strings (based on encoding above)
 
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
@@ -129,12 +129,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.LogicalBlockSize?.LSB, "    Logical Block Size");
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.PathTableSize?.LSB, "    Path Table Size");
-            // TODO: Check that LE and BE match
-            builder.AppendLine(vd.PathTableLocationLE, "    Path Table Location");
-            // TODO: Check that LE and BE match
-            builder.AppendLine(vd.PathTableLocationLEOptional, "    Optional Path Table Location");
+            builder.AppendLine(vd.PathTableLocationL, "    Type-L Path Table Location");
+            builder.AppendLine(vd.OptionalPathTableLocationL, "    Optional Type-L Path Table Location");
+            builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
+            builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
-            // TODO: Print info on vd.RootDirectory
+            // TODO: Print info on vd.RootDirectory using ParseDirectoryRecord
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
             builder.AppendLine(vd.PublisherIdentifier, "    Publisher Identifier");
@@ -144,7 +144,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
             
-            // TODO: Full Print DecDateTime function
+            // TODO: Full Print DecDateTime function using ParseDecDateTime
             builder.AppendLine(vd.VolumeCreationDateTime?.Year, "    Volume Creation Date Time");
             builder.AppendLine(vd.VolumeModificationDateTime?.Year, "    Volume Modification Date Time");
             builder.AppendLine(vd.VolumeExpirationDateTime?.Year, "    Volume Expiration Date Time");
@@ -155,7 +155,7 @@ namespace SabreTools.Data.Printers
             // TODO: Check for non-zero reserved byte
             builder.AppendLine("Unchecked", "    Reserved Byte");
 
-            // TODO: Check for non-zero contents
+            // TODO: Check for non-zero contents in vd.ApplicationUse
             builder.AppendLine("Unchecked", "    Application Use");
 
             // TODO: Check for non-zero reserved bytes
@@ -176,7 +176,7 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            // TODO: Check for non-zero contents
+            // TODO: Check for non-zero contents in vd.SystemUse
             builder.AppendLine("Unchecked", "    System Use");
 
             builder.AppendLine();
