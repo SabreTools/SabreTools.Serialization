@@ -38,28 +38,15 @@ namespace SabreTools.Serialization.Readers
                 // Read the set of Volume Descriptors
                 volume.VolumeDescriptorSet = ParseVolumeDescriptorSet(data, sectorLength);
 
-                // If no volume descriptors were found, return
+                // If no volume descriptors were found, stream is not a valid ISO9660 volume
                 if (volume.VolumeDescriptorSet == null || volume.VolumeDescriptorSet.Length == 0)
-                    return volume;
+                    return null;
 
-                // Parse the path table groups and root directories for each base volume descriptor
-                var pathTableGroups = new List<PathTableGroup>();
-                var roots = new List<DirectoryDescriptor>();
-                foreach (BaseVolumeDescriptor vd in volume.VolumeDescriptorSet)
-                {
-                    var pathTableGroup = ParsePathTableGroup(data, sectorLength, vd);
-                    if (pathTableGroup != null)
-                        pathTableGroups.Add(pathTableGroup);
-                    var descriptors = ParseRootDirectoryDescriptors(data, sectorLength, vd.RootDirectory);
-                    if (descriptors != null)
-                    {
-                        foreach (var descriptor in descriptors)
-                            roots.Add(descriptor);
-                    }
-                }
+                // Parse the root directory descriptor(s) for each base volume descriptor
+                volume.RootDirectoryDescriptors = ParseRootDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
 
-                volume.PathTableGroups = [.. pathTableGroups];
-                volume.RootDirectoryDescriptors = [.. roots];
+                // Parse the path table group(s) for each base volume descriptor
+                volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
 
                 return volume;
             }
@@ -73,7 +60,7 @@ namespace SabreTools.Serialization.Readers
         #region Volume Descriptor Parsing
 
         /// <summary>
-        /// Parse a Stream into a list of VolumeDescriptor objects
+        /// Parse a Stream into an array of VolumeDescriptor objects
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
@@ -262,7 +249,7 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            obj.RootDirectory = ParseDirectoryRecord(data, true);
+            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -458,8 +445,8 @@ namespace SabreTools.Serialization.Readers
                 return obj;
 
             // Calculate actual size of record
-            // Calculate the size of the system use section (remaining allocated bytes)
             int totalBytes = 33 + obj.FileIdentifierLength;
+            // Calculate the size of the system use section (remaining allocated bytes)
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
             // Account for padding field after file identifier
             if (obj.FileIdentifierLength % 2 == 0)
@@ -510,31 +497,80 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a PathTableGroup
+        /// Parse a Stream into an array of DirectoryDescriptor for root directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
-        /// <returns>Filled PathTableGroup on success, null on error</returns>
-        public static PathTableGroup? ParsePathTableGroup(Stream data, int sectorLength, BaseVolumeDescriptor vd)
+        /// <param name="vd">Set of volume descriptors for a volume</param>
+        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
+        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, int sectorLength, VolumeDescriptor[] vdSet)
         {
-            if (vd == null)
+            var rootDescriptors = new List<DirectoryDescriptor>();
+            foreach (BaseVolumeDescriptor vd in vdSet)
+            {
+                // Parse the directory descriptors pointed to from the volume descriptor's root directory record
+                var descriptors = ParseDirectoryDescriptors(data, sectorLength, vd.RootDirectoryRecord);
+                if (descriptors != null && descriptors.Length > 0)
+                    rootDescriptors.AddRange(descriptors);
+            }
+
+            // Return error (null) if no valid directory descriptors were found 
+            if (rootDescriptors.Length == 0)
+                return null;
+
+            return [.. rootDescriptors];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a list of DirectoryDescriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="dr">Root directory record pointing to the root directory extent</param>
+        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
+        public static List<DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, int sectorLength, DirectoryRecord? dr)
+        {
+            if (dr == null)
                 return null;
 
             return null;
         }
 
         /// <summary>
-        /// Parse a Stream into a list of DirectoryDescriptors
+        /// Parse a Stream into an array of PathTableGroup
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="dr">Root directory record pointing to the root directory extent</param>
-        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
-        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, int sectorLength, DirectoryRecord? dr)
+        /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
+        /// <returns>Filled PathTableGroup[] on success, null on error</returns>
+        public static PathTableGroup[]? ParsePathTableGroups(Stream data, int sectorLength, VolumeDescriptor[] vdSet)
         {
-            if (dr == null)
+            var groups = new List<PathTableGroup>();
+            foreach (BaseVolumeDescriptor vd in vdSet)
+            {
+                // Parse the path table group in the volume descriptor
+                var pathTableGroups = ParsePathTableGroup(data, sectorLength, vd);
+                if (pathTableGroups != null && pathTableGroups.Length > 0)
+                    groups.AddRange(pathTableGroups);
+            }
+
+            // Return error (null) if no valid path table groups were found 
+            if (groups.Length == 0)
                 return null;
+
+            return [.. groups];
+        }
+
+        /// <summary>
+        /// Parse a Stream into a list of PathTableGroup
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
+        /// <returns>Filled list of PathTableGroup on success, null on error</returns>
+        public static List<PathTableGroup>? ParsePathTableGroup(Stream data, int sectorLength, VolumeDescriptor vd)
+        {
+            // TODO: Check both potential path table sizes
 
             return null;
         }

@@ -90,7 +90,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Root directory entry, 34 bytes
         /// DirectoryIdentifier = 0x00
         /// </summary>
-        public DirectoryRecord? RootDirectory { get; set; }
+        public DirectoryRecord? RootDirectoryRecord { get; set; }
 
         /// <summary>
         /// 128-byte name of the volume set

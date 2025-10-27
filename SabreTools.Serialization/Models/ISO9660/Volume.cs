@@ -31,15 +31,15 @@ namespace SabreTools.Data.Models.ISO9660
         public VolumeDescriptor[]? VolumeDescriptorSet { get; set; }
 
         /// <summary>
+        /// The root directory(ies) pointed to by the Volume Descriptors' root directory records
+        /// </summary>
+        public DirectoryDescriptor[]? RootDirectoryDescriptors { get; set; }
+
+        /// <summary>
         /// List of path table records for each directory on the volume
         /// One set of path tables is provided for each Base Volume Descriptor
         /// </summary>
         public PathTableGroup[]? PathTableGroups { get; set; }
-
-        /// <summary>
-        /// The root directory(ies) pointed to by the Volume Descriptors' root directory records
-        /// </summary>
-        public DirectoryDescriptor[]? RootDirectoryDescriptors { get; set; }
 
         #endregion
     }

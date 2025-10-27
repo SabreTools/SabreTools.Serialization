@@ -134,7 +134,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
-            // TODO: Print info on vd.RootDirectory using ParseDirectoryRecord
+            // TODO: Print info on vd.RootDirectoryRecord using ParseDirectoryRecord
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
             builder.AppendLine(vd.PublisherIdentifier, "    Publisher Identifier");
@@ -144,7 +144,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
             
-            // TODO: Full Print DecDateTime function using ParseDecDateTime
+            // TODO: Complete Print DecDateTime function using ParseDecDateTime
             builder.AppendLine(vd.VolumeCreationDateTime?.Year, "    Volume Creation Date Time");
             builder.AppendLine(vd.VolumeModificationDateTime?.Year, "    Volume Modification Date Time");
             builder.AppendLine(vd.VolumeExpirationDateTime?.Year, "    Volume Expiration Date Time");
