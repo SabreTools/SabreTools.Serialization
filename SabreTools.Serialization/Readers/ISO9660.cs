@@ -578,7 +578,8 @@ namespace SabreTools.Serialization.Readers
             var locationL2 = vd.OptionalPathTableLocationL;
             var locationM = vd.PathTableLocationM;
             var locationM2 = vd.OptionalPathTableLocationM;
-            var blockLength = vd.LogicalBlockSize;
+            // TODO: Deal with mismatching LSB/MSB logical block size
+            var blockLength = vd.LogicalBlockSize.LSB;
 
             // Validate logical block length, if invalid default to logical sector length
             if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
