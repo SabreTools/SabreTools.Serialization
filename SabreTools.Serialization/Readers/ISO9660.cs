@@ -572,14 +572,14 @@ namespace SabreTools.Serialization.Readers
         {
             var groups = new List<PathTableGroup>();
 
-            var sizeL = vd.PathTableSize?.LSB ?? 0;
-            var sizeB = vd.PathTableSize.MSB ?? 0;
-            var locationL = vd.PathTableLocationL ?? int.MaxValue;
-            var locationL2 = vd.OptionalPathTableLocationL ?? int.MaxValue;
-            var locationM = vd.PathTableLocationM ?? int.MaxValue;
-            var locationM2 = vd.OptionalPathTableLocationM ?? int.MaxValue;
+            int sizeL = vd.PathTableSize?.LSB ?? 0;
+            int sizeB = vd.PathTableSize?.MSB ?? 0;
+            int locationL = vd.PathTableLocationL;
+            int locationL2 = vd.OptionalPathTableLocationL;
+            int locationM = vd.PathTableLocationM;
+            int locationM2 = vd.OptionalPathTableLocationM;
             // TODO: Deal with mismatching LSB/MSB logical block size
-            var blockLength = vd.LogicalBlockSize?.LSB ?? 0;
+            short blockLength = vd.LogicalBlockSize?.LSB ?? 0;
 
             // Validate logical block length, if invalid default to logical sector length
             if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
@@ -655,7 +655,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled array of path table records on success, null on error</returns>
         public static PathTableRecord[]? ParsePathTable(Stream data, short sectorLength, int tableSize, bool littleEndian)
         {
-            var pathTable = List<PathTableRecord>();
+            var pathTable = new List<PathTableRecord>();
 
             // TODO: Better deal with invalid path table sizes < 10 (manually detect valid records to determine size)
             int pos = 0;
