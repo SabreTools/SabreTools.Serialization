@@ -27,8 +27,8 @@ namespace SabreTools.Serialization.Readers
             if (sectorLength * (Constants.SystemAreaSectors + 2) > data.Length - data.Position)
                 return null;
 
-            //try
-            //{
+            try
+            {
                 // Create a new Volume to fill
                 var volume = new Volume();
 
@@ -49,12 +49,12 @@ namespace SabreTools.Serialization.Readers
                 volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
 
                 return volume;
-            //}
-            //catch
-            //{
-            //    // Ignore the actual error
-            //    return null;
-            //}
+            }
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         #region Volume Descriptor Parsing
@@ -506,12 +506,15 @@ namespace SabreTools.Serialization.Readers
         public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
             var rootDescriptors = new List<DirectoryDescriptor>();
-            foreach (BaseVolumeDescriptor vd in vdSet)
+            foreach (VolumeDescriptor vd in vdSet)
             {
-                // Parse the directory descriptors pointed to from the volume descriptor's root directory record
-                var descriptors = ParseDirectoryDescriptors(data, sectorLength, vd.RootDirectoryRecord);
-                if (descriptors != null && descriptors.Count > 0)
-                    rootDescriptors.AddRange(descriptors);
+                if (vd is BaseVolumeDescriptor bvd)
+                {
+                    // Parse the directory descriptors pointed to from the volume descriptor's root directory record
+                    var descriptors = ParseDirectoryDescriptors(data, sectorLength, bvd.RootDirectoryRecord);
+                    if (descriptors != null && descriptors.Count > 0)
+                        rootDescriptors.AddRange(descriptors);
+                }
             }
 
             // Return error (null) if no valid directory descriptors were found 
