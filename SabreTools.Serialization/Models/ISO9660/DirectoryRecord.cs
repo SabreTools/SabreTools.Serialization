@@ -70,7 +70,7 @@ namespace SabreTools.Data.Models.ISO9660
         public byte[]? FileIdentifier { get; set; }
 
         /// <summary>
-        /// If FileIdentifierLength is odd, the FileIdentifier is followed by a single padding byte (0x00)
+        /// If record length prior to this is odd, the FileIdentifier is followed by a single padding byte (0x00)
         /// Optional field
         /// </summary>
         public byte? PaddingField { get; set; }
@@ -78,7 +78,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Optional bytes at the end of a directory record for system use
         /// Must be an even number of bytes long (pad with a single 0x00 to make it even)
-        /// Note: This is where SUSP extensions are located, including Rock Ridge
+        /// Note: This is where SUSP contents are located, including Rock Ridge extension
         /// Optional field
         /// </summary>
         public byte[]? SystemUse { get; set; }

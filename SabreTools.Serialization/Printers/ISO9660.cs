@@ -219,46 +219,48 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
+            int tableNum = 0;
             foreach(var ptg in ptgs)
             {
+                tableNum++;
                 if (ptg.PathTableL != null)
                 {
-                    builder.AppendLine("    Type-L Path Table:");
+                    builder.AppendLine("    Type-L Path Table {}", tableNum);
                     Print(builder, ptg.PathTableL);
                 }
                 else
                 {
-                    builder.AppendLine("    No Type-L Path Table");
+                    builder.AppendLine("    No Type-L Path Table {}", tableNum);
                     builder.AppendLine();
                 }
                 if (ptg.OptionalPathTableL != null)
                 {
-                    builder.AppendLine("    Optional Type-L Path Table:");
+                    builder.AppendLine("    Optional Type-L Path Table {}", tableNum);
                     Print(builder, ptg.OptionalPathTableL);
                 }
                 else
                 {
-                    builder.AppendLine("    No Optional Type-L Path Table");
+                    builder.AppendLine("    No Optional Type-L Path Table {}", tableNum);
                     builder.AppendLine();
                 }
                 if (ptg.PathTableM != null)
                 {
-                    builder.AppendLine("    Type-M Path Table:");
+                    builder.AppendLine("    Type-M Path Table {}", tableNum);
                     Print(builder, ptg.PathTableM);
                 }
                 else
                 {
-                    builder.AppendLine("    No Type-M Path Table");
+                    builder.AppendLine("    No Type-M Path Table {}", tableNum);
                     builder.AppendLine();
                 }
                 if (ptg.OptionalPathTableM != null)
                 {
-                    builder.AppendLine("    Optional Type-M Path Table:");
+                    builder.AppendLine("    Optional Type-M Path Table {}", tableNum);
                     Print(builder, ptg.OptionalPathTableM);
                 }
                 else
                 {
-                    builder.AppendLine("    No Optional Type-M Path Table");
+                    builder.AppendLine("    No Optional Type-M Path Table {}", tableNum);
                     builder.AppendLine();
                 }
             }
