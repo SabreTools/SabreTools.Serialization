@@ -592,22 +592,22 @@ namespace SabreTools.Serialization.Readers
                 blockLength = sectorLength;
 
             var groupL = new PathTableGroup();
-            if (((locationL * blockLength) + sizeL) < data.Length)
+            if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
             {
                 data.Position = locationL * blockLength;
                 groupL.PathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
-            if (((locationL2 * blockLength) + sizeL) < data.Length)
+            if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
                 data.Position = locationL2 * blockLength;
                 groupL.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
-            if (((locationM * blockLength) + sizeL) < data.Length)
+            if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
                 data.Position = locationM * blockLength;
                 groupL.PathTableM = ParsePathTable(data, sectorLength, sizeL, false);
             }
-            if (((locationM2 * blockLength) + sizeL) < data.Length)
+            if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
                 data.Position = locationM2 * blockLength;
                 groupL.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeL, false);
@@ -623,22 +623,22 @@ namespace SabreTools.Serialization.Readers
             
             // Get the other-sized path table group
             var groupB = new PathTableGroup();
-            if (((locationL * blockLength) + sizeB) < data.Length)
+            if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
             {
                 data.Position = locationL * blockLength;
                 groupB.PathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
-            if (((locationL2 * blockLength) + sizeB) < data.Length)
+            if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
                 data.Position = locationL2 * blockLength;
                 groupB.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
-            if (((locationM * blockLength) + sizeB) < data.Length)
+            if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
                 data.Position = locationM * blockLength;
                 groupB.PathTableM = ParsePathTable(data, sectorLength, sizeB, false);
             }
-            if (((locationM2 * blockLength) + sizeB) < data.Length)
+            if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
                 data.Position = locationM2 * blockLength;
                 groupB.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeB, false);
