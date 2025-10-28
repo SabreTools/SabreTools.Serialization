@@ -43,10 +43,13 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
+                Console.WriteLine("1");
                 volume.RootDirectoryDescriptors = ParseRootDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
 
                 // Parse the path table group(s) for each base volume descriptor
+                Console.WriteLine("2");
                 volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
+                Console.WriteLine("3");
 
                 return volume;
             }
@@ -392,6 +395,7 @@ namespace SabreTools.Serialization.Readers
             var rootDescriptors = new List<DirectoryDescriptor>();
             foreach (VolumeDescriptor vd in vdSet)
             {
+                Console.WriteLine("1.1");
                 if (vd is BaseVolumeDescriptor bvd)
                 {
                     // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
@@ -534,6 +538,7 @@ namespace SabreTools.Serialization.Readers
             var groups = new List<PathTableGroup>();
             foreach (VolumeDescriptor vd in vdSet)
             {
+                Console.WriteLine("2.1");
                 if (vd is BaseVolumeDescriptor bvd)
                 {
                     // Parse the path table group in the base volume descriptor
