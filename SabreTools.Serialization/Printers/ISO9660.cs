@@ -123,7 +123,7 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine(vd.Unused8Bytes, "    Unused 8 Bytes");
 
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumeSpaceSize?.LSB, "    Volume Space Size");
+            builder.AppendLine(vd.VolumeSpaceSize?.LittleEndian, "    Volume Space Size");
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
@@ -139,13 +139,13 @@ namespace SabreTools.Data.Printers
             }
 
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumeSetSize?.LSB, "    Volume Set Size");
+            builder.AppendLine(vd.VolumeSetSize?.LittleEndian, "    Volume Set Size");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumeSequenceNumber?.LSB, "    Volume Sequence Number");
+            builder.AppendLine(vd.VolumeSequenceNumber?.LittleEndian, "    Volume Sequence Number");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.LogicalBlockSize?.LSB, "    Logical Block Size");
+            builder.AppendLine(vd.LogicalBlockSize?.LittleEndian, "    Logical Block Size");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.PathTableSize?.LSB, "    Path Table Size");
+            builder.AppendLine(vd.PathTableSize?.LittleEndian, "    Path Table Size");
             builder.AppendLine(vd.PathTableLocationL, "    Type-L Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationL, "    Optional Type-L Path Table Location");
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
@@ -203,9 +203,9 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumePartitionIdentifier, "    Volume Partition Identifier");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumePartitionLocation?.LSB, "    Volume Partition Location");
+            builder.AppendLine(vd.VolumePartitionLocation?.LittleEndian, "    Volume Partition Location");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
+            builder.AppendLine(vd.VolumePartitionSize?.LittleEndian, "    Volume Partition Size");
 
             if (vd.SystemUse == null || vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -216,9 +217,7 @@ namespace SabreTools.Serialization.Readers
             obj.SystemIdentifier = data.ReadBytes(32);
             obj.VolumeIdentifier = data.ReadBytes(32);
             obj.Unused8Bytes = data.ReadBytes(8);
-            obj.VolumeSpaceSize = new BothEndianInt32();
-            obj.VolumeSpaceSize.LSB = data.ReadInt32LittleEndian();
-            obj.VolumeSpaceSize.MSB = data.ReadInt32BigEndian();
+            obj.VolumeSpaceSize = data.ReadInt32BothEndian();
 
             // Read the child-specific field
             if (obj is PrimaryVolumeDescriptor objPVD2)
@@ -232,18 +231,10 @@ namespace SabreTools.Serialization.Readers
                 return null;
             }
 
-            obj.VolumeSetSize = new BothEndianInt16();
-            obj.VolumeSetSize.LSB = data.ReadInt16LittleEndian();
-            obj.VolumeSetSize.MSB = data.ReadInt16BigEndian();
-            obj.VolumeSequenceNumber = new BothEndianInt16();
-            obj.VolumeSequenceNumber.LSB = data.ReadInt16LittleEndian();
-            obj.VolumeSequenceNumber.MSB = data.ReadInt16BigEndian();
-            obj.LogicalBlockSize = new BothEndianInt16();
-            obj.LogicalBlockSize.LSB = data.ReadInt16LittleEndian();
-            obj.LogicalBlockSize.MSB = data.ReadInt16BigEndian();
-            obj.PathTableSize = new BothEndianInt32();
-            obj.PathTableSize.LSB = data.ReadInt32LittleEndian();
-            obj.PathTableSize.MSB = data.ReadInt32BigEndian();
+            obj.VolumeSetSize = data.ReadInt16BothEndian();
+            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
+            obj.LogicalBlockSize = data.ReadInt16BothEndian();
+            obj.PathTableSize = data.ReadInt32BothEndian();
             obj.PathTableLocationL = data.ReadInt32LittleEndian();
             obj.OptionalPathTableLocationL = data.ReadInt32LittleEndian();
             obj.PathTableLocationM = data.ReadInt32BigEndian();
@@ -300,12 +291,8 @@ namespace SabreTools.Serialization.Readers
             obj.UnusedByte = data.ReadByteValue();
             obj.SystemIdentifier = data.ReadBytes(32);
             obj.VolumePartitionIdentifier = data.ReadBytes(32);
-            obj.VolumePartitionLocation = new BothEndianInt32();
-            obj.VolumePartitionLocation.LSB = data.ReadInt32LittleEndian();
-            obj.VolumePartitionLocation.MSB = data.ReadInt32BigEndian();
-            obj.VolumePartitionSize = new BothEndianInt32();
-            obj.VolumePartitionSize.LSB = data.ReadInt32LittleEndian();
-            obj.VolumePartitionSize.MSB = data.ReadInt32BigEndian();
+            obj.VolumePartitionLocation = data.ReadInt32BothEndian();
+            obj.VolumePartitionSize = data.ReadInt32BothEndian();
             obj.SystemUse = data.ReadBytes(1960);
 
             // Skip remainder of the logical sector
@@ -435,21 +422,15 @@ namespace SabreTools.Serialization.Readers
 
             obj.DirectoryRecordLength = data.ReadByteValue();
             obj.ExtendedAttributeRecordLength = data.ReadByteValue();
-            obj.ExtentLocation = new BothEndianInt32();
-            obj.ExtentLocation.LSB = data.ReadInt32LittleEndian();
-            obj.ExtentLocation.MSB = data.ReadInt32BigEndian();
-            obj.ExtentLength = new BothEndianInt32();
-            obj.ExtentLength.LSB = data.ReadInt32LittleEndian();
-            obj.ExtentLength.MSB = data.ReadInt32BigEndian();
+            obj.ExtentLocation = data.ReadInt32BothEndian();
+            obj.ExtentLength = data.ReadInt32BothEndian();
 
             obj.RecordingDateTime = ParseDirectoryRecordDateTime(data);
 
             obj.FileFlags = (FileFlags)data.ReadByteValue();
             obj.FileUnitSize = data.ReadByteValue();
             obj.InterleaveGapSize = data.ReadByteValue();
-            obj.VolumeSequenceNumber = new BothEndianInt16();
-            obj.VolumeSequenceNumber.LSB = data.ReadInt16LittleEndian();
-            obj.VolumeSequenceNumber.MSB = data.ReadInt16BigEndian();
+            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
             obj.FileIdentifierLength = data.ReadByteValue();
 
             // Root directory within the volume descriptor has a single byte file identifier
@@ -561,14 +542,15 @@ namespace SabreTools.Serialization.Readers
         {
             var groups = new List<PathTableGroup>();
 
-            int sizeL = vd.PathTableSize?.LSB ?? 0;
-            int sizeB = vd.PathTableSize?.MSB ?? 0;
+            int sizeL = vd.PathTableSize?.LittleEndian ?? 0;
+            int sizeB = vd.PathTableSize?.BigEndian ?? 0;
             int locationL = vd.PathTableLocationL;
             int locationL2 = vd.OptionalPathTableLocationL;
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
-            // TODO: Deal with mismatching LSB/MSB logical block size
-            short blockLength = vd.LogicalBlockSize?.LSB ?? 0;
+            // TODO: Deal with invalid logical block size (validity check on both LittleEndian and BigEndian, discard one invalid, if both valid choose 2048 if one is 2048)
+            //if (vd.LogicalBlockSize?.IsValid != true)
+            short blockLength = vd.LogicalBlockSize?.LittleEndian ?? 0;
 
             // Validate logical block length, if invalid default to logical sector length
             if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)

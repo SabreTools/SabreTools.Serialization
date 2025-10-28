@@ -34,7 +34,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of logical blocks in this volume
         /// </summary>
-        public BothEndianInt32? VolumeSpaceSize { get; set; }
+        public BothInt32? VolumeSpaceSize { get; set; }
 
         // Virtual variable of 32 bytes goes here:
         // PrimaryVolumeDescriptor: Unused32Bytes
@@ -43,23 +43,23 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of Volumes (discs) in this VolumeSet
         /// </summary>
-        public BothEndianInt16? VolumeSetSize { get; set; }
+        public BothInt16? VolumeSetSize { get; set; }
 
         /// <summary>
         /// Volume (disc) number in this volume set
         /// </summary>
-        public BothEndianInt16? VolumeSequenceNumber { get; set; }
+        public BothInt16? VolumeSequenceNumber { get; set; }
 
         /// <summary>
         /// Number of bytes per logical block, usually 2048
         /// Must be a power of 2, minimum 2^9, and not greater than the logical sector size
         /// </summary>
-        public BothEndianInt16? LogicalBlockSize { get; set; }
+        public BothInt16? LogicalBlockSize { get; set; }
 
         /// <summary>
         /// Number of bytes in the path table
         /// </summary>
-        public BothEndianInt32? PathTableSize { get; set; }
+        public BothInt32? PathTableSize { get; set; }
 
         /// <summary>
         /// Sector number of the start of the little-endian path table, type L
