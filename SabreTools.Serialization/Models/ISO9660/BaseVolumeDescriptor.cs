@@ -167,22 +167,22 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// PVD-style DateTime format for the Creation date/time of the Volume
         /// </summary>
-        public DecDateTime? VolumeCreationDateTime { get; set; }
+        public DecDateTime VolumeCreationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Modification date/time of the Volume
         /// </summary>
-        public DecDateTime? VolumeModificationDateTime { get; set; }
+        public DecDateTime VolumeModificationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Expiration date/time of the Volume
         /// </summary>
-        public DecDateTime? VolumeExpirationDateTime { get; set; }
+        public DecDateTime VolumeExpirationDateTime { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Effective date/time of the Volume
         /// </summary>
-        public DecDateTime? VolumeEffectiveDateTime { get; set; }
+        public DecDateTime VolumeEffectiveDateTime { get; set; }
 
         /// <summary>
         /// Version number of the Records / Path Table format

@@ -29,33 +29,33 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Datetime of when the file content was created
         /// </summary>
-        public DecDateTime? FileCreationDateTime { get; set; }
+        public DecDateTime FileCreationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content was last modified
         /// </summary>
-        public DecDateTime? FileModificationDateTime { get; set; }
+        public DecDateTime FileModificationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content expires
         /// </summary>
-        public DecDateTime? FileExpirationDateTime { get; set; }
+        public DecDateTime FileExpirationDateTime { get; set; }
 
         /// <summary>
         /// Datetime of when the file content is effective from
         /// </summary>
-        public DecDateTime? FileEffectiveDateTime { get; set; }
+        public DecDateTime FileEffectiveDateTime { get; set; }
 
         /// <summary>
         /// Record format type
         /// </summary>
-        public RecordFormat? RecordFormat { get; set; }
+        public RecordFormat RecordFormat { get; set; }
 
         /// <summary>
         /// Record attributes
         /// Note: If RecordType is zero, this field is ignored by readers 
         /// </summary>
-        public RecordAttributes? RecordAttributes { get; set; }
+        public RecordAttributes RecordAttributes { get; set; }
 
         /// <summary>
         /// Record Length
