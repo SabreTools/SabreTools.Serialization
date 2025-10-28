@@ -15,6 +15,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// File's extended attribute record
         /// Optional field
         /// </summary>
-        public ExtendedAttributeRecord ExtendedAttributeRecord { get; set; }
+        public ExtendedAttributeRecord? ExtendedAttributeRecord { get; set; }
     }
 }

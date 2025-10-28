@@ -122,13 +122,7 @@ namespace SabreTools.Data.Printers
             else
                 builder.AppendLine(vd.Unused8Bytes, "    Unused 8 Bytes");
 
-            if (vd.VolumeSpaceSize.IsValid)
-                builder.AppendLine(vd.VolumeSpaceSize, "    Volume Space Size");
-            else
-            {
-                builder.AppendLine(vd.VolumeSpaceSize.LittleEndian, "    Volume Space Size (Little Endian)");
-                builder.AppendLine(vd.VolumeSpaceSize.BigEndian, "    Volume Space Size (Big Endian)");
-            }
+            builder.AppendLineBothEndian(vd.VolumeSpaceSize, "    Volume Space Size");
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
@@ -143,34 +137,10 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine(svd2.EscapeSequences, "    Escape Sequences");
             }
 
-            if (vd.VolumeSetSize.IsValid)
-                builder.AppendLine(vd.VolumeSetSize, "    Volume Set Size");
-            else
-            {
-                builder.AppendLine(vd.VolumeSetSize.LittleEndian, "    Volume Set Size (Little Endian)");
-                builder.AppendLine(vd.VolumeSetSize.BigEndian, "    Volume Set Size (Big Endian)");
-            }
-            if (vd.VolumeSequenceNumber.IsValid)
-                builder.AppendLine(vd.VolumeSequenceNumber, "    Volume Sequence Number");
-            else
-            {
-                builder.AppendLine(vd.VolumeSequenceNumber.LittleEndian, "    Volume Sequence Number (Little Endian)");
-                builder.AppendLine(vd.VolumeSequenceNumber.BigEndian, "    Volume Sequence Number (Big Endian)");
-            }
-            if (vd.LogicalBlockSize.IsValid)
-                builder.AppendLine(vd.LogicalBlockSize, "    Logical Block Size");
-            else
-            {
-                builder.AppendLine(vd.LogicalBlockSize.LittleEndian, "    Logical Block Size (Little Endian)");
-                builder.AppendLine(vd.LogicalBlockSize.BigEndian, "    Logical Block Size (Big Endian)");
-            }
-            if (vd.PathTableSize.IsValid)
-                builder.AppendLine(vd.PathTableSize.LittleEndian, "    Path Table Size");
-            else
-            {
-                builder.AppendLine(vd.PathTableSize.LittleEndian, "    Path Table Size (Little Endian)");
-                builder.AppendLine(vd.PathTableSize.BigEndian, "    Path Table Size (Big Endian)");
-            }
+            builder.AppendLineBothEndian(vd.VolumeSetSize, "    Volume Set Size");
+            builder.AppendLineBothEndian(vd.VolumeSequenceNumber, "    Volume Sequence Number");
+            builder.AppendLineBothEndian(vd.LogicalBlockSize, "    Logical Block Size");
+            builder.AppendLineBothEndian(vd.PathTableSize.LittleEndian, "    Path Table Size");
             builder.AppendLine(vd.PathTableLocationL, "    Type-L Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationL, "    Optional Type-L Path Table Location");
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
@@ -227,20 +197,8 @@ namespace SabreTools.Data.Printers
 
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumePartitionIdentifier, "    Volume Partition Identifier");
-            if (vd.VolumePartitionLocation.IsValid)
-                builder.AppendLine(vd.VolumePartitionLocation, "    Volume Partition Location");
-            else
-            {
-                builder.AppendLine(vd.VolumePartitionLocation.LittleEndian, "    Volume Partition Location (Little Endian)");
-                builder.AppendLine(vd.VolumePartitionLocation.BigEndian, "    Volume Partition Location (Big Endian)");
-            }
-            if (vd.VolumePartitionSize.IsValid)
-                builder.AppendLine(vd.VolumePartitionSize, "    Volume Partition Size");
-            else
-            {
-                builder.AppendLine(vd.VolumePartitionSize.LittleEndian, "    Volume Partition Size (Little Endian)");
-                builder.AppendLine(vd.VolumePartitionSize.BigEndian, "    Volume Partition Size (Big Endian)");
-            }
+            builder.AppendLineBothEndian(vd.VolumePartitionLocation, "    Volume Partition Location");
+            builder.AppendLineBothEndian(vd.VolumePartitionSize, "    Volume Partition Size");
 
             if (vd.SystemUse == null || vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");
@@ -427,20 +385,8 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(dr.DirectoryRecordLength, "      Directory Record Length");
             builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
 
-            if (dr.ExtentLocation.IsValid)
-                builder.AppendLine(dr.ExtentLocation, "      Extent Location");
-            else
-            {
-                builder.AppendLine(dr.ExtentLocation.LittleEndian, "      Extent Location (Little Endian)");
-                builder.AppendLine(dr.ExtentLocation.BigEndian, "      Extent Location (Big Endian)");
-            }
-            if (dr.ExtentLength.IsValid)
-                builder.AppendLine(dr.ExtentLength, "      Extent Length");
-            else
-            {
-                builder.AppendLine(dr.ExtentLength.LittleEndian, "      Extent Length (Little Endian)");
-                builder.AppendLine(dr.ExtentLength.BigEndian, "      Extent Length (Big Endian)");
-            }
+            builder.AppendLineBothEndian(dr.ExtentLocation, "      Extent Location");
+            builder.AppendLineBothEndian(dr.ExtentLength, "      Extent Length");
 
             Print(builder, dr.RecordingDateTime);
             
@@ -459,13 +405,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(dr.FileUnitSize, "      File Unit Size");
             builder.AppendLine(dr.InterleaveGapSize, "      Interleave Gap Size");
 
-            if (dr.VolumeSequenceNumber.IsValid)
-                builder.AppendLine(dr.VolumeSequenceNumber, "      Volume Sequence Number");
-            else
-            {
-                builder.AppendLine(dr.VolumeSequenceNumber.LittleEndian, "      Volume Sequence Number (Little Endian)");
-                builder.AppendLine(dr.VolumeSequenceNumber.BigEndian, "      Volume Sequence Number (Big Endian)");
-            }
+            builder.AppendLineBothEndian(dr.VolumeSequenceNumber, "      Volume Sequence Number");
 
             builder.AppendLine(dr.FileIdentifierLength, "      File Identifier Length");
             builder.AppendLine(dr.FileIdentifier, "      File Identifier");
