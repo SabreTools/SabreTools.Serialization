@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Hashing;
 using SabreTools.IO.Compression.zlib;
+using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
 namespace SabreTools.Serialization.Wrappers
@@ -823,7 +824,7 @@ namespace SabreTools.Serialization.Wrappers
                 else
                     _volumeBytesLeft = volumeBytesLeftExpanded;
 
-                _volumeFile.Seek((long)_dataOffset, SeekOrigin.Begin);
+                _volumeFile.SeekIfPossible((long)_dataOffset, SeekOrigin.Begin);
                 _volumeId = volume;
 
                 return true;

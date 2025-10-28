@@ -82,9 +82,9 @@ namespace SabreTools.Serialization.Readers
             if (fileEntry.Offset > 0)
             {
                 long currentOffset = data.Position;
-                data.Seek(initialOffset + fileEntry.Offset, SeekOrigin.Begin);
+                data.SeekIfPossible(initialOffset + fileEntry.Offset, SeekOrigin.Begin);
                 fileEntry.CompressedSize = data.ReadInt32LittleEndian();
-                data.Seek(currentOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
             }
 
             return fileEntry;

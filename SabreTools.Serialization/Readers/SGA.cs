@@ -168,7 +168,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the sections
-            data.Seek(sectionOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
             // Create the sections array
             directory.Sections = new Section4[directoryHeader.SectionCount];
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the folders
-            data.Seek(folderOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(folderOffset, SeekOrigin.Begin);
 
             // Create the folders array
             directory.Folders = new Folder4[directoryHeader.FolderCount];
@@ -214,7 +214,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the files
-            data.Seek(fileOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
             // Get the file count
             uint fileCount = directoryHeader.FileCount;
@@ -240,7 +240,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the string table
-            data.Seek(stringTableOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(stringTableOffset, SeekOrigin.Begin);
 
             // TODO: Are these strings actually indexed by number and not position?
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
@@ -317,7 +317,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the sections
-            data.Seek(sectionOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
             // Create the sections array
             directory.Sections = new Section5[directoryHeader.SectionCount];
@@ -340,7 +340,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the folders
-            data.Seek(folderOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(folderOffset, SeekOrigin.Begin);
 
             // Create the folders array
             directory.Folders = new Folder5[directoryHeader.FolderCount];
@@ -363,7 +363,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the files
-            data.Seek(fileOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
             // Create the files array
             directory.Files = new File4[directoryHeader.FileCount];
@@ -386,7 +386,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the string table
-            data.Seek(stringTableOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(stringTableOffset, SeekOrigin.Begin);
 
             // TODO: Are these strings actually indexed by number and not position?
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
@@ -463,7 +463,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the sections
-            data.Seek(sectionOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
             // Create the sections array
             directory.Sections = new Section5[directoryHeader.SectionCount];
@@ -486,7 +486,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the folders
-            data.Seek(folderOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(folderOffset, SeekOrigin.Begin);
 
             // Create the folders array
             directory.Folders = new Folder5[directoryHeader.FolderCount];
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the files
-            data.Seek(fileOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
             // Create the files array
             directory.Files = new File6[directoryHeader.FileCount];
@@ -532,7 +532,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the string table
-            data.Seek(stringTableOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(stringTableOffset, SeekOrigin.Begin);
 
             // TODO: Are these strings actually indexed by number and not position?
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
@@ -609,7 +609,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the sections
-            data.Seek(sectionOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
             // Create the sections array
             directory.Sections = new Section5[directoryHeader.SectionCount];
@@ -632,7 +632,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the folders
-            data.Seek(folderOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(folderOffset, SeekOrigin.Begin);
 
             // Create the folders array
             directory.Folders = new Folder5[directoryHeader.FolderCount];
@@ -655,7 +655,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the files
-            data.Seek(fileOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
             // Create the files array
             directory.Files = new File7[directoryHeader.FileCount];
@@ -678,7 +678,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the string table
-            data.Seek(stringTableOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(stringTableOffset, SeekOrigin.Begin);
 
             // TODO: Are these strings actually indexed by number and not position?
             // TODO: If indexed by position, I think it needs to be adjusted by start of table

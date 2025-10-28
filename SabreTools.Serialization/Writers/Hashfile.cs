@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
+using SabreTools.IO.Extensions;
 using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
@@ -117,7 +118,7 @@ namespace SabreTools.Serialization.Writers
             }
 
             // Return the stream
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 

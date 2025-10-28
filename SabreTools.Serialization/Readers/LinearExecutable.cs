@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.Readers
                 #region Information Block
 
                 // Try to parse the executable header
-                data.Seek(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+                data.SeekIfPossible(initialOffset + stub.Header.NewExeHeaderAddr, SeekOrigin.Begin);
                 var informationBlock = ParseInformationBlock(data);
                 if (informationBlock.Signature != LESignatureString && informationBlock.Signature != LXSignatureString)
                     return null;
@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the object table
                     executable.ObjectTable = new ObjectTableEntry[informationBlock.ObjectTableCount];
@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object page map
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the object page map
                     executable.ObjectPageMap = new ObjectPageMapEntry[informationBlock.ObjectTableCount];
@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the object page map
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // TODO: Implement when model found
                     // No model has been found in the documentation about what
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the resource table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the resource table
                     executable.ResourceTable = new ResourceTableEntry[informationBlock.ResourceTableCount];
@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the resident names table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the resident names table
                     var residentNamesTable = new List<ResidentNamesTableEntry>();
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the entry table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the entry table
                     var entryTable = new List<EntryTableBundle>();
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the module format directives table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the module format directives table
                     executable.ModuleFormatDirectivesTable = new ModuleFormatDirectivesTableEntry[informationBlock.ModuleDirectivesCount];
@@ -238,7 +238,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the fix-up page table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the fix-up page table
                     executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the fix-up record table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the fix-up record table
                     executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the imported module name table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the imported module name table
                     executable.ImportModuleNameTable = new ImportModuleNameTableEntry[informationBlock.ImportedModulesCount];
@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the imported module procedure name table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Get the size of the imported module procedure name table
                     long tableSize = informationBlock.FixupPageTableOffset
@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the per-page checksum name table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the per-page checksum name table
                     executable.PerPageChecksumTable = new PerPageChecksumTableEntry[informationBlock.ModuleNumberPages];
@@ -366,7 +366,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the non-resident names table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the non-resident names table
                     var nonResidentNamesTable = new List<NonResidentNamesTableEntry>();
@@ -397,7 +397,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset + stub.Header.NewExeHeaderAddr && offset < data.Length)
                 {
                     // Seek to the debug information
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Try to parse the debug information
                     var debugInformation = ParseDebugInformation(data, informationBlock.DebugInformationLength);

@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Ensure the stream is starting at the beginning
-                _dataSource.Seek(0, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(0, SeekOrigin.Begin);
 
                 // Try to deserialize the source data
                 var deserializer = new Readers.AdvancedInstaller();
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_dataSourceLock)
                 {
                     // Ensure the stream is starting at the overlay address
-                    _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(overlayAddress, SeekOrigin.Begin);
 
                     while (_dataSource.Position < _dataSource.Length)
                     {
@@ -623,7 +623,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Ensure the stream is starting at the beginning
-                _dataSource.Seek(0, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(0, SeekOrigin.Begin);
 
                 // Try to deserialize the source data
                 var deserializer = new Readers.SpoonInstaller();
@@ -704,7 +704,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Seek to the overlay and parse
-            source.Seek(offset, SeekOrigin.Begin);
+            source.SeekIfPossible(offset, SeekOrigin.Begin);
             var header = WiseOverlayHeader.Create(source);
             if (header == null)
             {

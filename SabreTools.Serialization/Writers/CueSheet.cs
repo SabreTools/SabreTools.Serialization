@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CueSheets;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -32,7 +33,7 @@ namespace SabreTools.Serialization.Writers
             WriteCueSheet(obj, writer);
 
             // Return the stream
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 

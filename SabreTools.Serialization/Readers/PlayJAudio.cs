@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the unknown block 1
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
                 }
 
                 // Try to parse the unknown block 1
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Readers
                             return null;
 
                         // Seek to the unknown value 2
-                        data.Seek(offset, SeekOrigin.Begin);
+                        data.SeekIfPossible(offset, SeekOrigin.Begin);
                     }
 
                     // Set the unknown value 2
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Readers
                             return null;
 
                         // Seek to the unknown block 3
-                        data.Seek(offset, SeekOrigin.Begin);
+                        data.SeekIfPossible(offset, SeekOrigin.Begin);
                     }
 
                     // Try to parse the unknown block 3

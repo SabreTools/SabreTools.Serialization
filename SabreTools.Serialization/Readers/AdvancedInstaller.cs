@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the entry table
-                data.Seek(tableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(tableOffset, SeekOrigin.Begin);
 
                 // Try to parse the entry table
                 var table = ParseTable(data, footer.EntryCount);
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
         public static Footer? ParseFooter(Stream data, long initialOffset)
         {
             // Seek to the end of the end of the data
-            data.Seek(0, SeekOrigin.End);
+            data.SeekIfPossible(0, SeekOrigin.End);
 
             // Cache the current offset
             long endOffset = data.Position;
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Readers
             int iterations = 10;
 
             // Seek backward to the first point it could be
-            data.Seek(-10, SeekOrigin.Current);
+            data.SeekIfPossible(-10, SeekOrigin.Current);
 
             // Search backward for the signature
             bool signatureFound = false;
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 iterations--;
-                data.Seek(-11, SeekOrigin.Current);
+                data.SeekIfPossible(-11, SeekOrigin.Current);
 
             } while (iterations > 0);
 
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Seek to the first footer offset field
-            data.Seek(-70, SeekOrigin.Current);
+            data.SeekIfPossible(-70, SeekOrigin.Current);
 
             // Find the actual offset of the start of the footer
             uint footerStart = data.ReadUInt32LittleEndian();
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Readers
             bool shortFooter = footerStart == data.Position - 8;
 
             // Seek to the start of the footer
-            data.Seek(initialOffset + footerStart, SeekOrigin.Begin);
+            data.SeekIfPossible(initialOffset + footerStart, SeekOrigin.Begin);
 
             var obj = new Footer();
 

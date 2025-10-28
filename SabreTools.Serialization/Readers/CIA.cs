@@ -335,13 +335,13 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Seek to the content index size
-            data.Seek(4, SeekOrigin.Current);
+            data.SeekIfPossible(4, SeekOrigin.Current);
 
             // Read the size (big-endian)
             obj.ContentIndexSize = data.ReadUInt32BigEndian();
 
             // Seek back to the start of the content index
-            data.Seek(-8, SeekOrigin.Current);
+            data.SeekIfPossible(-8, SeekOrigin.Current);
 
             obj.ContentIndex = data.ReadBytes((int)obj.ContentIndexSize);
 

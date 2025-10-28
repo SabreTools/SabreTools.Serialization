@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the secure area
-                data.Seek(secureAreaOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(secureAreaOffset, SeekOrigin.Begin);
 
                 // Read the secure area without processing
                 cart.SecureArea = data.ReadBytes(0x800);
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the name table
-                data.Seek(nameTableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(nameTableOffset, SeekOrigin.Begin);
 
                 // Set the name table
                 cart.NameTable = ParseNameTable(data);
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the file allocation table
-                data.Seek(fileAllocationTableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(fileAllocationTableOffset, SeekOrigin.Begin);
 
                 // Create the file allocation table
                 var fileAllocationTable = new List<FileAllocationTableEntry>();

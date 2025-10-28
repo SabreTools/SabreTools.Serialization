@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the next sector
-                    data.Seek(sectorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(sectorOffset, SeekOrigin.Begin);
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
@@ -116,7 +116,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the next sector
-                    data.Seek(sectorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(sectorOffset, SeekOrigin.Begin);
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the next sector
-                    data.Seek(sectorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(sectorOffset, SeekOrigin.Begin);
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the next sector
-                    data.Seek(sectorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(sectorOffset, SeekOrigin.Begin);
 
                     // Try to parse the sectors
                     var directoryEntries = ParseDirectoryEntries(data, fileHeader.SectorShift, fileHeader.MajorVersion);

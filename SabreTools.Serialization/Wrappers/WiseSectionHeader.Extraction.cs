@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_dataSourceLock)
             {
                 // Seek to the compressed data offset
-                _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(CompressedDataOffset, SeekOrigin.Begin);
                 bool successful = true;
 
                 // Extract first executable, if it exists
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     // Fallback- seek to the position that's the length of the MSI file entry from the end, then try and
                     // extract from there.
-                    _dataSource.Seek(-MsiFileEntryLength + 1, SeekOrigin.End);
+                    _dataSource.SeekIfPossible(-MsiFileEntryLength + 1, SeekOrigin.End);
                     if (ExtractFile("ExtractedMsi.msi", outputDirectory, MsiFileEntryLength, includeDebug) != ExtractionStatus.GOOD)
                         return false; // The fallback also failed.
                 }

@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the lump offset
-                    data.Seek(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
 
                     // Read according to the lump type
                     switch ((LumpType)l)

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -95,7 +96,7 @@ namespace SabreTools.Serialization.Writers
 
             // Perform the deserialization and return
             serializer.Serialize(jsonWriter, obj);
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 

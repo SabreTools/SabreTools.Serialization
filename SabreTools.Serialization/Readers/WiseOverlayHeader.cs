@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.DibDeflatedSize > data.Length)
             {
                 obj.DibDeflatedSize = 0;
-                data.Seek(-4, SeekOrigin.Current);
+                data.SeekIfPossible(-4, SeekOrigin.Current);
                 return obj;
             }
 
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Readers
 
             // Peek at the next 2 bytes
             ushort peek = data.ReadUInt16LittleEndian();
-            data.Seek(-2, SeekOrigin.Current);
+            data.SeekIfPossible(-2, SeekOrigin.Current);
 
             // If the next value is a known Endianness
             if (Enum.IsDefined(typeof(Endianness), peek))

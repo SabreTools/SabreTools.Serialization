@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Listrom;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -21,7 +22,7 @@ namespace SabreTools.Serialization.Writers
             WriteSets(obj.Set, writer);
 
             // Return the stream
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 

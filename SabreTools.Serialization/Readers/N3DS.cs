@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the start of the partition
-                    data.Seek(partitionOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(partitionOffset, SeekOrigin.Begin);
 
                     // Handle the normal header
                     var partition = ParseNCCHHeader(data);
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Readers
                     if (partition.ExeFSSizeInMediaUnits > 0)
                     {
                         long offset = partition.ExeFSOffsetInMediaUnits * mediaUnitSize;
-                        data.Seek(partitionOffset + offset, SeekOrigin.Begin);
+                        data.SeekIfPossible(partitionOffset + offset, SeekOrigin.Begin);
 
                         var exeFsHeader = ParseExeFSHeader(data);
                         if (exeFsHeader == null)
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Readers
                     if (partition.RomFSSizeInMediaUnits > 0)
                     {
                         long offset = partition.RomFSOffsetInMediaUnits * mediaUnitSize;
-                        data.Seek(partitionOffset + offset, SeekOrigin.Begin);
+                        data.SeekIfPossible(partitionOffset + offset, SeekOrigin.Begin);
 
                         var romFsHeader = ParseRomFSHeader(data);
                         if (romFsHeader.MagicString != RomFSMagicNumber)

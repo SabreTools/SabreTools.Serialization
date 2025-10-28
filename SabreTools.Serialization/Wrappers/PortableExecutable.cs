@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Entry point data, if it exists
         /// </summary>
-        /// <remarks>Caches up to 128 bytes</remarks> 
+        /// <remarks>Caches up to 128 bytes</remarks>
         public byte[] EntryPointData
         {
             get
@@ -348,7 +348,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
-        /// <remarks>Caches up to 0x10000 bytes</remarks> 
+        /// <remarks>Caches up to 0x10000 bytes</remarks>
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
         public byte[] OverlayData
         {
@@ -904,7 +904,7 @@ namespace SabreTools.Serialization.Wrappers
         private readonly Dictionary<int, object> _debugData = [];
 
         /// <summary>
-        /// Lock object for <see cref="_debugData"/> 
+        /// Lock object for <see cref="_debugData"/>
         /// </summary>
         private readonly object _debugDataLock = new();
 
@@ -914,7 +914,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _entryPointData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_entryPointData"/> 
+        /// Lock object for <see cref="_entryPointData"/>
         /// </summary>
         private readonly object _entryPointDataLock = new();
 
@@ -924,7 +924,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _headerPaddingData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_headerPaddingData"/> 
+        /// Lock object for <see cref="_headerPaddingData"/>
         /// </summary>
         private readonly object _headerPaddingDataLock = new();
 
@@ -934,7 +934,7 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>? _headerPaddingStrings = null;
 
         /// <summary>
-        /// Lock object for <see cref="_headerPaddingStrings"/> 
+        /// Lock object for <see cref="_headerPaddingStrings"/>
         /// </summary>
         private readonly object _headerPaddingStringsLock = new();
 
@@ -944,12 +944,12 @@ namespace SabreTools.Serialization.Wrappers
         private SecuROMMatroschkaPackage? _matroschkaPackage = null;
 
         /// <summary>
-        /// Lock object for <see cref="_matroschkaPackage"/> 
+        /// Lock object for <see cref="_matroschkaPackage"/>
         /// </summary>
         private readonly object _matroschkaPackageLock = new();
 
         /// <summary>
-        /// Cached attempt at creation for <see cref="_matroschkaPackage"/> 
+        /// Cached attempt at creation for <see cref="_matroschkaPackage"/>
         /// </summary>
         private bool _matroschkaPackageFailed = false;
 
@@ -959,7 +959,7 @@ namespace SabreTools.Serialization.Wrappers
         private long? _overlayAddress = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayAddress"/> 
+        /// Lock object for <see cref="_overlayAddress"/>
         /// </summary>
         private readonly object _overlayAddressLock = new();
 
@@ -969,7 +969,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _overlayData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayData"/> 
+        /// Lock object for <see cref="_overlayData"/>
         /// </summary>
         private readonly object _overlayDataLock = new();
 
@@ -979,7 +979,7 @@ namespace SabreTools.Serialization.Wrappers
         private long _overlaySize = -1;
 
         /// <summary>
-        /// Lock object for <see cref="_overlaySize"/> 
+        /// Lock object for <see cref="_overlaySize"/>
         /// </summary>
         private readonly object _overlaySizeLock = new();
 
@@ -989,7 +989,7 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>? _overlayStrings = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayStrings"/> 
+        /// Lock object for <see cref="_overlayStrings"/>
         /// </summary>
         private readonly object _overlayStringsLock = new();
 
@@ -999,7 +999,7 @@ namespace SabreTools.Serialization.Wrappers
         private readonly Dictionary<string, object?> _resourceData = [];
 
         /// <summary>
-        /// Lock object for <see cref="_resourceData"/> 
+        /// Lock object for <see cref="_resourceData"/>
         /// </summary>
         private readonly object _resourceDataLock = new();
 
@@ -1009,7 +1009,7 @@ namespace SabreTools.Serialization.Wrappers
         private string[]? _sectionNames = null;
 
         /// <summary>
-        /// Lock object for <see cref="_sectionNames"/> 
+        /// Lock object for <see cref="_sectionNames"/>
         /// </summary>
         private readonly object _sectionNamesLock = new();
 
@@ -1024,7 +1024,7 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>?[]? _sectionStringData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_sectionStringData"/> 
+        /// Lock object for <see cref="_sectionStringData"/>
         /// </summary>
         private readonly object _sectionStringDataLock = new();
 
@@ -1034,7 +1034,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _sectionTableTrailerData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_sectionTableTrailerData"/> 
+        /// Lock object for <see cref="_sectionTableTrailerData"/>
         /// </summary>
         private readonly object _sectionTableTrailerDataLock = new();
 
@@ -1044,7 +1044,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _stubExecutableData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_stubExecutableData"/> 
+        /// Lock object for <see cref="_stubExecutableData"/>
         /// </summary>
         private readonly object _stubExecutableDataLock = new();
 
@@ -1064,12 +1064,12 @@ namespace SabreTools.Serialization.Wrappers
         private WiseSectionHeader? _wiseSectionHeader = null;
 
         /// <summary>
-        /// Lock object for <see cref="_wiseSectionHeader"/> 
+        /// Lock object for <see cref="_wiseSectionHeader"/>
         /// </summary>
         private readonly object _wiseSectionHeaderLock = new();
 
         /// <summary>
-        /// Indicates if <see cref="_wiseSectionHeader"/> cannot be found 
+        /// Indicates if <see cref="_wiseSectionHeader"/> cannot be found
         /// </summary>
         private bool _wiseSectionHeaderMissing = false;
 
@@ -1606,7 +1606,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Attempt to get the overlay header
                 if (overlayOffset >= 0 && overlayOffset < Length)
                 {
-                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                     var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
                         return overlayOffset;
@@ -1617,7 +1617,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
                     long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                    _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
                     var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
@@ -1628,14 +1628,14 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         // Data immediately following
                         long afterResourceOffset = sectionOffset + section.SizeOfRawData;
-                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+                        _dataSource.SeekIfPossible(afterResourceOffset, SeekOrigin.Begin);
 
                         header = WiseOverlayHeader.Create(_dataSource);
                         if (header != null)
                             return afterResourceOffset;
 
                         // Data following padding data
-                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+                        _dataSource.SeekIfPossible(afterResourceOffset, SeekOrigin.Begin);
                         _ = _dataSource.ReadNullTerminatedAnsiString();
 
                         afterResourceOffset = _dataSource.Position;
@@ -1681,7 +1681,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Search the resource table data for the offset
                 long resourceOffset = -1;
-                _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(resourceTableOffset, SeekOrigin.Begin);
                 while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
                 {
                     ushort possibleSignature = _dataSource.ReadUInt16();
@@ -1691,7 +1691,7 @@ namespace SabreTools.Serialization.Wrappers
                         break;
                     }
 
-                    _dataSource.Seek(-1, SeekOrigin.Current);
+                    _dataSource.SeekIfPossible(-1, SeekOrigin.Current);
                 }
 
                 // If there was no valid offset, somehow
@@ -1699,7 +1699,7 @@ namespace SabreTools.Serialization.Wrappers
                     return -1;
 
                 // Parse the executable and recurse
-                _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(resourceOffset, SeekOrigin.Begin);
                 var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
                 if (resourceExe is not PortableExecutable resourcePex)
                     return -1;

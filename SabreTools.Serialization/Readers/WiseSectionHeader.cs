@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Readers
             // Find offset of "WIS", determine header length, read presumed version value
             foreach (int offset in WisOffsets)
             {
-                data.Seek(initialOffset + offset, 0);
+                data.SeekIfPossible(initialOffset + offset, 0);
                 byte[] checkBytes = data.ReadBytes(3);
                 if (!checkBytes.EqualsExactly(WisString))
                     continue;
@@ -74,14 +74,14 @@ namespace SabreTools.Serialization.Readers
                 headerLength = WiseSectionHeaderLengthDictionary[offset];
                 int versionOffset = WiseSectionVersionOffsetDictionary[offset];
 
-                data.Seek(initialOffset + offset - versionOffset, 0);
+                data.SeekIfPossible(initialOffset + offset - versionOffset, 0);
                 obj.Version = data.ReadBytes(versionOffset);
                 wisOffset = offset;
                 break;
             }
 
             //Seek back to the beginning of the section
-            data.Seek(initialOffset, 0);
+            data.SeekIfPossible(initialOffset, 0);
 
             // Read common values
             obj.UnknownDataSize = data.ReadUInt32LittleEndian();
@@ -154,7 +154,7 @@ namespace SabreTools.Serialization.Readers
 
             // Not sure what this data is. Might be a wisescript?
             if (obj.UnknownDataSize != 0)
-                data.Seek(obj.UnknownDataSize, SeekOrigin.Current);
+                data.SeekIfPossible(obj.UnknownDataSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.Readers
                                 checkForZero = data.ReadByteValue();
                             } while (checkForZero == 0x00);
 
-                            data.Seek(-1, SeekOrigin.Current);
+                            data.SeekIfPossible(-1, SeekOrigin.Current);
                             endNow = true;
                             break;
                         }
@@ -295,7 +295,7 @@ namespace SabreTools.Serialization.Readers
                                 checkForZero = data.ReadByteValue();
                             } while (checkForZero == 0x00);
 
-                            data.Seek(-1, SeekOrigin.Current);
+                            data.SeekIfPossible(-1, SeekOrigin.Current);
                             break;
                         }
                         else

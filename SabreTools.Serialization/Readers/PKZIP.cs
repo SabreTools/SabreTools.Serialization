@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
                     // Read the signature
                     long beforeSignature = data.Position;
                     uint signature = data.ReadUInt32LittleEndian();
-                    data.Seek(beforeSignature, SeekOrigin.Begin);
+                    data.SeekIfPossible(beforeSignature, SeekOrigin.Begin);
 
                     // Switch based on the signature found
                     bool validBlock = false;
@@ -252,9 +252,9 @@ namespace SabreTools.Serialization.Readers
             }
             else
             {
-                data.Seek(12, SeekOrigin.Current);
+                data.SeekIfPossible(12, SeekOrigin.Current);
                 byte[] nextBlock = data.ReadBytes(2);
-                data.Seek(currentPosition, SeekOrigin.Begin);
+                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
                 if (nextBlock.EqualsExactly([0x50, 0x4B]))
                     isShort = true;
             }
@@ -294,9 +294,9 @@ namespace SabreTools.Serialization.Readers
             }
             else
             {
-                data.Seek(20, SeekOrigin.Current);
+                data.SeekIfPossible(20, SeekOrigin.Current);
                 byte[] nextBlock = data.ReadBytes(2);
-                data.Seek(currentPosition, SeekOrigin.Begin);
+                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
                 if (nextBlock.EqualsExactly([0x50, 0x4B]))
                     isShort = true;
             }
@@ -328,7 +328,7 @@ namespace SabreTools.Serialization.Readers
             // Signatures are expected but not required
             obj.Signature = data.ReadUInt32LittleEndian();
             if (obj.Signature != EndOfCentralDirectoryLocator64Signature)
-                data.Seek(-4, SeekOrigin.Current);
+                data.SeekIfPossible(-4, SeekOrigin.Current);
 
             obj.StartDiskNumber = data.ReadUInt32LittleEndian();
             obj.CentralDirectoryOffset = data.ReadUInt64LittleEndian();
@@ -487,7 +487,7 @@ namespace SabreTools.Serialization.Readers
             // Read the signature
             long beforeSignature = data.Position;
             uint signature = data.ReadUInt32LittleEndian();
-            data.Seek(beforeSignature, SeekOrigin.Begin);
+            data.SeekIfPossible(beforeSignature, SeekOrigin.Begin);
 
             // Don't fail if descriptor is missing
             if (signature != DataDescriptorSignature)
@@ -1451,16 +1451,16 @@ namespace SabreTools.Serialization.Readers
             long currentPosition = data.Position;
 
             // Short 32-bit
-            data.Seek(12, SeekOrigin.Current);
+            data.SeekIfPossible(12, SeekOrigin.Current);
             byte[] nextBlock = data.ReadBytes(2);
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
             if (nextBlock.EqualsExactly([0x50, 0x4B]))
                 return false;
 
             // Long 32-bit
-            data.Seek(16, SeekOrigin.Current);
+            data.SeekIfPossible(16, SeekOrigin.Current);
             nextBlock = data.ReadBytes(2);
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
             if (nextBlock.EqualsExactly([0x50, 0x4B]))
                 return false;
 

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using SabreTools.Data.Models.GZIP;
 using SabreTools.IO.Compression.Deflate;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -27,7 +28,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Seek to the start of the compressed data
-                long offset = _dataSource.Seek(DataOffset, SeekOrigin.Begin);
+                long offset = _dataSource.SeekIfPossible(DataOffset, SeekOrigin.Begin);
                 if (offset != DataOffset)
                 {
                     if (includeDebug) Console.Error.WriteLine($"Could not seek to compressed data at {DataOffset}");

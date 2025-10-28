@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the lump offset
-                data.Seek(dirOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(dirOffset, SeekOrigin.Begin);
 
                 // Create the lump array
                 file.DirEntries = new DirEntry[header.NumDirs];
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the file entry offset
-                    data.Seek(fileEntryOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(fileEntryOffset, SeekOrigin.Begin);
 
                     // Try to parse the file entry
                     var fileEntry = ParseFileEntry(data, dirEntry.Type);

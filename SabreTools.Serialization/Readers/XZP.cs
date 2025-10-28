@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Readers
                         return null;
 
                     // Seek to the directory items
-                    data.Seek(directoryItemOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(directoryItemOffset, SeekOrigin.Begin);
 
                     // Create the directory item array
                     file.DirectoryItems = new DirectoryItem[header.DirectoryItemCount];
@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Readers
                 #region Footer
 
                 // Seek to the footer
-                data.Seek(-8, SeekOrigin.End);
+                data.SeekIfPossible(-8, SeekOrigin.End);
 
                 // Try to parse the footer
                 var footer = ParseFooter(data);
@@ -164,13 +164,13 @@ namespace SabreTools.Serialization.Readers
             long currentPosition = data.Position;
 
             // Seek to the name offset
-            data.Seek(initialOffset + obj.NameOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(initialOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the name
             obj.Name = data.ReadNullTerminatedAnsiString();
 
             // Seek back to the right position
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
 
             return obj;
         }

@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the offset
-                data.Seek(filesOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(filesOffset, SeekOrigin.Begin);
 
                 // Set the file array
                 cabinet.Files = new CFFILE[cabinetHeader.FileCount];
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.Readers
             if (folder.CabStartOffset > 0)
             {
                 long currentPosition = data.Position;
-                data.Seek(folder.CabStartOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
 
                 folder.DataBlocks = new CFDATA[folder.DataCount];
                 for (int i = 0; i < folder.DataCount; i++)
@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Readers
                     folder.DataBlocks[i] = dataBlock;
                 }
 
-                data.Seek(currentPosition, SeekOrigin.Begin);
+                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
             }
 
             return folder;

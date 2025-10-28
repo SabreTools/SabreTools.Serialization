@@ -164,13 +164,13 @@ namespace SabreTools.Serialization.Readers
                 long currentOffset = data.Position;
 
                 // Seek to the preload data offset
-                data.Seek(preloadDataPointer, SeekOrigin.Begin);
+                data.SeekIfPossible(preloadDataPointer, SeekOrigin.Begin);
 
                 // Read the preload data
                 preloadData = data.ReadBytes(preloadDataLength);
 
                 // Seek back to the original offset
-                data.Seek(currentOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
             }
 
             // Set the preload data

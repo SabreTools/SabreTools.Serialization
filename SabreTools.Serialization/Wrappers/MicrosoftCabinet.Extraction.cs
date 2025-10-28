@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             try
             {
-                blockStream.Seek(file.FolderStartOffset, SeekOrigin.Begin);
+                blockStream.SeekIfPossible(file.FolderStartOffset, SeekOrigin.Begin);
                 byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
 
                 // Ensure directory separators are consistent

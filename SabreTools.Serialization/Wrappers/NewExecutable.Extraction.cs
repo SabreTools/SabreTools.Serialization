@@ -235,7 +235,7 @@ namespace SabreTools.Serialization.Wrappers
         private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
         {
             // Seek to the overlay and parse
-            source.Seek(offset, SeekOrigin.Begin);
+            source.SeekIfPossible(offset, SeekOrigin.Begin);
             var header = WiseOverlayHeader.Create(source);
             if (header == null)
             {

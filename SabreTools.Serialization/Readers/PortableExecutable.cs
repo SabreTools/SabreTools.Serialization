@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Try to parse the executable header
-                data.Seek(newExeOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(newExeOffset, SeekOrigin.Begin);
                 byte[] signature = data.ReadBytes(4);
                 pex.Signature = Encoding.ASCII.GetString(signature);
                 if (pex.Signature != SignatureString)
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the section table
-                data.Seek(offset, SeekOrigin.Begin);
+                data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                 // Set the section table
                 pex.SectionTable = new SectionHeader[fileHeader.NumberOfSections];
@@ -116,7 +116,7 @@ namespace SabreTools.Serialization.Readers
                 if (offset > initialOffset && offset < data.Length)
                 {
                     // Seek to the symbol table
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Set the symbol and string tables
                     pex.SymbolTable = ParseSymbolTable(data, fileHeader.NumberOfSymbols);
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Readers
                             offset = initialOffset + exportDirectoryTable.NameRVA.ConvertVirtualAddress(pex.SectionTable);
                             if (offset > initialOffset && offset < data.Length)
                             {
-                                data.Seek(offset, SeekOrigin.Begin);
+                                data.SeekIfPossible(offset, SeekOrigin.Begin);
                                 exportDirectoryTable.Name = data.ReadNullTerminatedAnsiString();
                             }
 
@@ -169,7 +169,7 @@ namespace SabreTools.Serialization.Readers
                                 && offset > initialOffset
                                 && offset < data.Length)
                             {
-                                data.Seek(offset, SeekOrigin.Begin);
+                                data.SeekIfPossible(offset, SeekOrigin.Begin);
                                 pex.ExportAddressTable = ParseExportAddressTable(data, exportDirectoryTable.AddressTableEntries);
                             }
 
@@ -179,7 +179,7 @@ namespace SabreTools.Serialization.Readers
                                 && offset > initialOffset
                                 && offset < data.Length)
                             {
-                                data.Seek(offset, SeekOrigin.Begin);
+                                data.SeekIfPossible(offset, SeekOrigin.Begin);
                                 pex.NamePointerTable = ParseExportNamePointerTable(data, exportDirectoryTable.NumberOfNamePointers);
                             }
 
@@ -189,7 +189,7 @@ namespace SabreTools.Serialization.Readers
                                 && offset > initialOffset
                                 && offset < data.Length)
                             {
-                                data.Seek(offset, SeekOrigin.Begin);
+                                data.SeekIfPossible(offset, SeekOrigin.Begin);
                                 pex.OrdinalTable = ParseExportOrdinalTable(data, exportDirectoryTable.NumberOfNamePointers);
                             }
 
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Readers
                                 // If the name RVA is non-zero
                                 if (nameOffset != initialOffset)
                                 {
-                                    data.Seek(nameOffset, SeekOrigin.Begin);
+                                    data.SeekIfPossible(nameOffset, SeekOrigin.Begin);
                                     entry.Name = data.ReadNullTerminatedAnsiString();
                                 }
                             }
@@ -813,7 +813,7 @@ namespace SabreTools.Serialization.Readers
                 long address = initialOffset + pointers[i].ConvertVirtualAddress(sections);
                 if (address > initialOffset && address < data.Length)
                 {
-                    data.Seek(address, SeekOrigin.Begin);
+                    data.SeekIfPossible(address, SeekOrigin.Begin);
 
                     string? str = data.ReadNullTerminatedAnsiString();
                     obj.Strings[i] = str ?? string.Empty;
@@ -995,7 +995,7 @@ namespace SabreTools.Serialization.Readers
 
                     if (hintNameTableEntryAddress > initialOffset && hintNameTableEntryAddress < data.Length)
                     {
-                        data.Seek(hintNameTableEntryAddress, SeekOrigin.Begin);
+                        data.SeekIfPossible(hintNameTableEntryAddress, SeekOrigin.Begin);
 
                         var hintNameTableEntry = ParseHintNameTableEntry(data);
                         importHintNameTable.Add(hintNameTableEntry);
@@ -1075,7 +1075,7 @@ namespace SabreTools.Serialization.Readers
 
                 if (tableAddress > initialOffset && tableAddress < data.Length)
                 {
-                    data.Seek(tableAddress, SeekOrigin.Begin);
+                    data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
                     obj[i] = ParseImportAddressTable(data, magic);
                 }
             }
@@ -1217,7 +1217,7 @@ namespace SabreTools.Serialization.Readers
 
                 if (tableAddress > initialOffset && tableAddress < data.Length)
                 {
-                    data.Seek(tableAddress, SeekOrigin.Begin);
+                    data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
                     obj[i] = ParseImportLookupTable(data, magic);
                 }
             }

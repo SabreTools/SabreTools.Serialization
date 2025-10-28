@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the directories
-                data.Seek(directoriesOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(directoriesOffset, SeekOrigin.Begin);
 
                 // Try to parse the directories
                 var directories = new List<Data.Models.InstallShieldArchiveV3.Directory>();
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     var directory = ParseDirectory(data);
                     directories.Add(directory);
-                    data.Seek(directory.ChunkSize - directory.Name!.Length - 6, SeekOrigin.Current);
+                    data.SeekIfPossible(directory.ChunkSize - directory.Name!.Length - 6, SeekOrigin.Current);
                 }
 
                 // Set the directories
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Readers
                     {
                         var file = ParseFile(data);
                         files.Add(file);
-                        data.Seek(file.ChunkSize - file.Name!.Length - 30, SeekOrigin.Current);
+                        data.SeekIfPossible(file.ChunkSize - file.Name!.Length - 30, SeekOrigin.Current);
                     }
                 }
 

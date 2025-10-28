@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.DosCenter;
+using SabreTools.IO.Extensions;
 using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
@@ -28,7 +29,7 @@ namespace SabreTools.Serialization.Writers
             WriteGames(obj.Game, writer);
 
             // Return the stream
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 

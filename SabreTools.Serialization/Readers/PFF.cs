@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the segments
-                data.Seek(offset, SeekOrigin.Begin);
+                data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                 // Create the segments array
                 archive.Segments = new Segment[header.NumberOfFiles];
@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the footer
-                data.Seek(offset, SeekOrigin.Begin);
+                data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                 // Set the archive footer
                 archive.Footer = ParseFooter(data);
