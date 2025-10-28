@@ -235,6 +235,9 @@ namespace SabreTools.Data.Printers
         public static StringBuilder AppendLine(this StringBuilder sb, string? value, string prefixString)
         {
             string valueString = value ?? "[NULL]";
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -254,6 +257,9 @@ namespace SabreTools.Data.Printers
         public static StringBuilder AppendLine(this StringBuilder sb, byte[]? value, string prefixString)
         {
             string valueString = (value == null ? "[NULL]" : BitConverter.ToString(value).Replace('-', ' '));
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -263,6 +269,9 @@ namespace SabreTools.Data.Printers
         public static StringBuilder AppendLine(this StringBuilder sb, byte[]? value, string prefixString, Encoding encoding)
         {
             string valueString = (value == null ? "[NULL]" : encoding.GetString(value).Replace("\0", string.Empty));
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -277,6 +286,9 @@ namespace SabreTools.Data.Printers
                 var valueArr = Array.ConvertAll(value, c => c.ToString());
                 valueString = string.Join(", ", valueArr);
             }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
 
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
@@ -293,6 +305,9 @@ namespace SabreTools.Data.Printers
                 valueString = string.Join(", ", valueArr);
             }
 
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -307,6 +322,9 @@ namespace SabreTools.Data.Printers
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
             }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
 
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
@@ -323,6 +341,9 @@ namespace SabreTools.Data.Printers
                 valueString = string.Join(", ", valueArr);
             }
 
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -337,6 +358,9 @@ namespace SabreTools.Data.Printers
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
             }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
 
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
@@ -353,6 +377,9 @@ namespace SabreTools.Data.Printers
                 valueString = string.Join(", ", valueArr);
             }
 
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -367,6 +394,9 @@ namespace SabreTools.Data.Printers
                 var valueArr = Array.ConvertAll(value, l => l.ToString());
                 valueString = string.Join(", ", valueArr);
             }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
 
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
@@ -383,6 +413,9 @@ namespace SabreTools.Data.Printers
                 valueString = string.Join(", ", valueArr);
             }
 
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -398,6 +431,9 @@ namespace SabreTools.Data.Printers
                 valueString = string.Join(", ", valueArr);
             }
 
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -412,6 +448,9 @@ namespace SabreTools.Data.Printers
                 var valueArr = Array.ConvertAll(value, g => g.ToString());
                 valueString = string.Join(", ", valueArr);
             }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
 
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
