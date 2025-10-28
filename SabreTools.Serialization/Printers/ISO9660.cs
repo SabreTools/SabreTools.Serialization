@@ -66,7 +66,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.SystemUse == null || vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");
-            elseif (vd.SystemUse.AsSpan().SequenceEqual(new byte[vd.SystemUse.Length]))
+            else if (vd.SystemUse.AsSpan().SequenceEqual(new byte[vd.SystemUse.Length]))
                 builder.AppendLine("Zeroed", "    System Use");
             else
                 builder.AppendLine("Not Zeroed", "    System Use");
