@@ -94,8 +94,11 @@ namespace SabreTools.Data.Printers
             else if (vd is SupplementaryVolumeDescriptor svd)
             {
                 builder.AppendLine("    Volume Flags:");
-                builder.AppendLine((bool)(svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "      Unregistered Escape Sequences");
-                builder.AppendLine((bool)(svd.VolumeFlags & (~VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES)), "      Reserved Flags");
+                builder.AppendLine(svd.VolumeFlags.HasFlag(VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "      Unregistered Escape Sequences");
+                if (svd.VolumeFlags > 1)
+                    builder.AppendLine("Not Zeroed", "      Reserved Flags");
+                else
+                    builder.AppendLine("Zeroed", "      Reserved Flags");
             }
 
             // TODO: Decode all byte arrays into strings (based on encoding above)
@@ -356,15 +359,15 @@ namespace SabreTools.Data.Printers
 
             // TODO: Implement
             
-                builder.AppendLine("    File Flags:");
-                builder.AppendLine(svd.FileFlags & FileFlags.EXISTENCE, "      Existence");
-                builder.AppendLine(svd.FileFlags & FileFlags.DIRECTORY, "      Directory");
-                builder.AppendLine(svd.FileFlags & FileFlags.ASSOCIATED_FILE, "      Associated File");
-                builder.AppendLine(svd.FileFlags & FileFlags.RECORD, "      Record");
-                builder.AppendLine(svd.FileFlags & FileFlags.PROTECTION, "      Protection");
-                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT5, "      Reserved Flag (Bit 5)");
-                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT6, "      Reserved Flag (Bit 6)");
-                builder.AppendLine(svd.FileFlags & FileFlags.MULTI_EXTENT, "      Multi-Extent");
+            //builder.AppendLine("    File Flags:");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.EXISTENCE), "      Existence");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.DIRECTORY), "      Directory");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.ASSOCIATED_FILE), "      Associated File");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RECORD), "      Record");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.PROTECTION), "      Protection");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RESERVED_BIT5), "      Reserved Flag (Bit 5)");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RESERVED_BIT6), "      Reserved Flag (Bit 6)");
+            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.MULTI_EXTENT), "      Multi-Extent");
 
             builder.AppendLine();
         }
@@ -402,3 +405,4 @@ namespace SabreTools.Data.Printers
         }
     }
 }
+
