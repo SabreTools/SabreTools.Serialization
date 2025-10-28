@@ -68,7 +68,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.BootSystemUse == null || vd.BootSystemUse.Length == 0)
                 builder.AppendLine(vd.BootSystemUse, "    Boot System Use");
-            else if (Array.TrueForAll(vd.BootSystemUse, b => b == 0)))
+            else if (Array.TrueForAll(vd.BootSystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    Boot System Use");
             else
                 builder.AppendLine("Not Zeroed", "    Boot System Use");
@@ -117,7 +117,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
 
             
-            if (vd.Unused8Bytes != null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0)))
+            if (vd.Unused8Bytes != null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "  Unused 8 Bytes");
             else
                 builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
@@ -127,7 +127,7 @@ namespace SabreTools.Data.Printers
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
-                if (pvd2.Unused32Bytes != null && Array.TrueForAll(pvd2.Unused32Bytes, b => b == 0)))
+                if (pvd2.Unused32Bytes != null && Array.TrueForAll(pvd2.Unused32Bytes, b => b == 0))
                     builder.AppendLine("Zeroed", "  Unused 32 Bytes");
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
@@ -176,14 +176,14 @@ namespace SabreTools.Data.Printers
 
             if (vd.ApplicationUse == null || vd.ApplicationUse.Length == 0)
                 builder.AppendLine(vd.ApplicationUse, "  Application Use");
-            else if (Array.TrueForAll(vd.ApplicationUse, b => b == 0)))
+            else if (Array.TrueForAll(vd.ApplicationUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    Application Use");
             else
                 builder.AppendLine("Not Zeroed", "    Application Use");
 
             if (vd.Reserved653Bytes == null || vd.Reserved653Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved653Bytes, "    Reserved 653 Bytes");
-            else if (Array.TrueFroAll(vd.Reserved653Bytes, b => b == 0)))
+            else if (Array.TrueFroAll(vd.Reserved653Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved 653 Bytes");
             else
                 builder.AppendLine("Not Zeroed", "    Reserved 653 Bytes");
@@ -205,7 +205,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.SystemUse == null || vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");
-            else if (Array.TrueFroAll(vd.SystemUse, b => b == 0)))
+            else if (Array.TrueFroAll(vd.SystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    System Use");
             else
                 builder.AppendLine("Not Zeroed", "  System Use");
@@ -220,7 +220,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.Reserved2041Bytes == null || vd.Reserved2041Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved2041Bytes, "    Reserved Bytes");
-            else if (Array.TrueForAll(vd.Reserved2041Bytes, b => b == 0)))
+            else if (Array.TrueForAll(vd.Reserved2041Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved Bytes");
             else
                 builder.AppendLine("Not Zeroed", "    Reserved Bytes");
@@ -235,7 +235,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.Data == null || vd.Data.Length == 0)
                 builder.AppendLine(vd.Data, "    Data");
-            else if (Array.TrueForAll(vd.Data, b => b == 0)))
+            else if (Array.TrueForAll(vd.Data, b => b == 0))
                 builder.AppendLine("Zeroed", "    Data");
             else
                 builder.AppendLine("Not Zeroed", "    Data");
@@ -415,6 +415,7 @@ namespace SabreTools.Data.Printers
         }
     }
 }
+
 
 
 
