@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
 

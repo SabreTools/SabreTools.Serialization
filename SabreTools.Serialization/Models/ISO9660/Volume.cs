@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
@@ -38,8 +40,8 @@ namespace SabreTools.Data.Models.ISO9660
         public PathTableGroup[] PathTableGroups { get; set; }
 
         /// <summary>
-        /// Map of sector numbers and the directory descriptor at that sector number
-        /// Each DirectoryDescriptor contains directory records and 
+        /// Map of sector numbers and the directory at that sector number
+        /// Each Directory contains child directory and file descriptors
         /// </summary>
         public Dictionary<int, Directory> DirectoryDescriptors { get; set; }
 

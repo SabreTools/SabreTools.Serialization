@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// ISO9660 Directory containing file and directory descriptors parsed from the file extent into directory records
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
-    public sealed class DirectoryDescriptor
+    public sealed class Directory
     {
         /// <summary>
         /// Directory records (each a descritor of a directory or a file)
