@@ -17,7 +17,9 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
 
             // TODO: Better check
-            if (IsAllZero(volume.SystemArea))
+            if (volume.SystemArea == null || volume.SystemArea.Length == 0)
+                builder.AppendLine(volume.SystemArea, "  System Area");
+            else if (IsAllZero(volume.SystemArea))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
@@ -115,7 +117,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
 
             
-            if (IsAllZero(vd.Unused8Bytes))
+            if (vd.Unused8Bytes != null && IsAllZero(vd.Unused8Bytes))
                 builder.AppendLine("Zeroed", "  Unused 8 Bytes");
             else
                 builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
@@ -125,7 +127,7 @@ namespace SabreTools.Data.Printers
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
-                if (IsAllZero(pvd2.Unused32Bytes))
+                if (pvd2.Unused32Bytes != null && IsAllZero(pvd2.Unused32Bytes))
                     builder.AppendLine("Zeroed", "  Unused 32 Bytes");
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
@@ -150,7 +152,6 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
             Print(builder, vd.RootDirectoryRecord);
-            Console.WriteLine("after");
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
             builder.AppendLine(vd.PublisherIdentifier, "    Publisher Identifier");
@@ -159,7 +160,8 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.CopyrightFileIdentifier, "    Copyright Identifier");
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
-            
+
+            Console.WriteLine("1");
             builder.AppendLine("    Volume Creation Date Time");
             Print(builder, vd.VolumeCreationDateTime);
             builder.AppendLine("    Volume Modification Date Time");
@@ -168,22 +170,29 @@ namespace SabreTools.Data.Printers
             Print(builder, vd.VolumeExpirationDateTime);
             builder.AppendLine("    Volume Effective Date Time");
             Print(builder, vd.VolumeEffectiveDateTime);
+            Console.WriteLine("2");
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
 
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
+            Console.WriteLine("3");
 
-            if (IsAllZero(vd.ApplicationUse))
-                builder.AppendLine("Zeroed", "  Application Use");
+            if (volume.ApplicationUse == null || volume.ApplicationUse.Length == 0)
+                builder.AppendLine(volume.ApplicationUse, "  Application Use");
+            else if (IsAllZero(vd.ApplicationUse))
+                builder.AppendLine("Zeroed", "    Application Use");
             else
-                builder.AppendLine("Not Zeroed", "  Application Use");
+                builder.AppendLine("Not Zeroed", "    Application Use");
 
-            if (IsAllZero(vd.Reserved653Bytes))
-                builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
+            Console.WriteLine("4");
+            if (volume.Reserved653Bytes == null || volume.Reserved653Bytes.Length == 0)
+                builder.AppendLine(volume.Reserved653Bytes, "    Reserved 653 Bytes");
+            else if (IsAllZero(vd.Reserved653Bytes))
+                builder.AppendLine("Zeroed", "    Reserved 653 Bytes");
             else
-                builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
-            Console.WriteLine("after2");
+                builder.AppendLine("Not Zeroed", "    Reserved 653 Bytes");
 
+            Console.WriteLine("5");
             builder.AppendLine();
         }
 
@@ -199,8 +208,10 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            if (IsAllZero(vd.SystemUse))
-                builder.AppendLine("Zeroed", "  System Use");
+            if (volume.SystemUse == null || volume.SystemUse.Length == 0)
+                builder.AppendLine(volume.SystemUse, "    System Use");
+            else if (IsAllZero(vd.SystemUse))
+                builder.AppendLine("Zeroed", "    System Use");
             else
                 builder.AppendLine("Not Zeroed", "  System Use");
 
@@ -212,10 +223,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            if (IsAllZero(vd.Reserved2041Bytes))
-                builder.AppendLine("Zeroed", "  Reserved Bytes");
+            if (volume.Reserved2041Bytes == null || volume.Reserved2041Bytes.Length == 0)
+                builder.AppendLine(volume.Reserved2041Bytes, "    Reserved Bytes");
+            else if (IsAllZero(vd.Reserved2041Bytes))
+                builder.AppendLine("Zeroed", "    Reserved Bytes");
             else
-                builder.AppendLine("Not Zeroed", "  Reserved Bytes");
+                builder.AppendLine("Not Zeroed", "    Reserved Bytes");
 
             builder.AppendLine();
         }
@@ -225,10 +238,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            if (IsAllZero(vd.Data))
-                builder.AppendLine("Zeroed", "  Data");
+            if (volume.Data == null || volume.Data.Length == 0)
+                builder.AppendLine(volume.Data, "    Data");
+            else if (IsAllZero(vd.Data))
+                builder.AppendLine("Zeroed", "    Data");
             else
-                builder.AppendLine("Not Zeroed", "  Data");
+                builder.AppendLine("Not Zeroed", "    Data");
 
             builder.AppendLine();
         }
@@ -358,17 +373,14 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, DirectoryRecord? dr)
         {
-            Console.WriteLine("1");
             builder.AppendLine("    Directory Record:");
             builder.AppendLine("    -------------------------");
             if (dr == null)
             {
-                Console.WriteLine("1.2");
                 builder.AppendLine("    No directory record");
                 builder.AppendLine();
                 return;
             }
-            Console.WriteLine("2");
 
             // TODO: Implement
             
@@ -383,7 +395,6 @@ namespace SabreTools.Data.Printers
             //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.MULTI_EXTENT), "      Multi-Extent");
 
             builder.AppendLine();
-            Console.WriteLine("3");
         }
 
         #endregion
