@@ -14,17 +14,21 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("ISO 9660 Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
-
+            Console.WriteLine("1");
             // TODO: Better check
             if (IsAllZero(volume.SystemArea))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
             builder.AppendLine();
+            Console.WriteLine("2");
 
             Print(builder, volume.VolumeDescriptorSet);
+            Console.WriteLine("3");
             Print(builder, volume.PathTableGroups);
+            Console.WriteLine("4");
             Print(builder, volume.RootDirectoryDescriptors);
+            Console.WriteLine("5");
         }
 
         #region Volume Descriptors
