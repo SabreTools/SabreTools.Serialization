@@ -364,7 +364,7 @@ namespace SabreTools.Data.Printers
 
             for (int recordNum = 0; recordNum < records.Length; recordNum++)
             {
-                builder.AppendLine($"    Record {recordNum}")
+                builder.AppendLine($"    Record {recordNum}");
                 builder.AppendLine(records[recordNum].DirectoryIdentifierLength, "      Directory Identifier Length");
                 builder.AppendLine(records[recordNum].ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
                 builder.AppendLine(records[recordNum].ExtentLocation, "      Extent Location");
