@@ -400,7 +400,7 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            foreach (var dr in dd)
+            foreach (var dr in dd.DirectoryRecords)
             {
                 Print(builder, dr);
             }
