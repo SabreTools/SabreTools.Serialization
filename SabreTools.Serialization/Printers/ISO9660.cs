@@ -399,6 +399,12 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine();
                 return;
             }
+            if (dd.DirectoryRecords == null)
+            {
+                builder.AppendLine("    No directory records");
+                builder.AppendLine();
+                return;
+            }
 
             foreach (var dr in dd.DirectoryRecords)
             {
