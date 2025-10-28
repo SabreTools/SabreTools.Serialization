@@ -161,7 +161,6 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
 
-            Console.WriteLine("1");
             builder.AppendLine("    Volume Creation Date Time");
             Print(builder, vd.VolumeCreationDateTime);
             builder.AppendLine("    Volume Modification Date Time");
@@ -170,12 +169,10 @@ namespace SabreTools.Data.Printers
             Print(builder, vd.VolumeExpirationDateTime);
             builder.AppendLine("    Volume Effective Date Time");
             Print(builder, vd.VolumeEffectiveDateTime);
-            Console.WriteLine("2");
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
 
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
-            Console.WriteLine("3");
 
             if (vd.ApplicationUse == null || vd.ApplicationUse.Length == 0)
                 builder.AppendLine(vd.ApplicationUse, "  Application Use");
@@ -184,7 +181,6 @@ namespace SabreTools.Data.Printers
             else
                 builder.AppendLine("Not Zeroed", "    Application Use");
 
-            Console.WriteLine("4");
             if (vd.Reserved653Bytes == null || vd.Reserved653Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved653Bytes, "    Reserved 653 Bytes");
             else if (IsAllZero(vd.Reserved653Bytes))
@@ -192,7 +188,6 @@ namespace SabreTools.Data.Printers
             else
                 builder.AppendLine("Not Zeroed", "    Reserved 653 Bytes");
 
-            Console.WriteLine("5");
             builder.AppendLine();
         }
 
@@ -421,11 +416,13 @@ namespace SabreTools.Data.Printers
 
         private static bool IsAllZero(byte[] array)
         {
+            Console.WriteLine($"checking {array.Length}");
             for (byte i = 0; i < array.Length; i++)
             {
                 if (array[i] != 0)
                     return false;
             }
+            Console.WriteLine("done checking");
             return true;
         }
     }
