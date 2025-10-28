@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 
