@@ -19,7 +19,7 @@ namespace SabreTools.Data.Printers
             // TODO: Better check
             if (volume.SystemArea == null || volume.SystemArea.Length == 0)
                 builder.AppendLine(volume.SystemArea, "  System Area");
-            else if (TrueForAll(volume.SystemArea, b => b == 0))
+            else if (Array.TrueForAll(volume.SystemArea, b => b == 0))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
@@ -183,7 +183,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.Reserved653Bytes == null || vd.Reserved653Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved653Bytes, "    Reserved 653 Bytes");
-            else if (Array.TrueFroAll(vd.Reserved653Bytes, b => b == 0))
+            else if (Array.TrueForAll(vd.Reserved653Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved 653 Bytes");
             else
                 builder.AppendLine("Not Zeroed", "    Reserved 653 Bytes");
@@ -205,7 +205,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.SystemUse == null || vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");
-            else if (Array.TrueFroAll(vd.SystemUse, b => b == 0))
+            else if (Array.TrueForAll(vd.SystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    System Use");
             else
                 builder.AppendLine("Not Zeroed", "  System Use");
@@ -415,6 +415,7 @@ namespace SabreTools.Data.Printers
         }
     }
 }
+
 
 
 
