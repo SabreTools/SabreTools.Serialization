@@ -64,12 +64,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
 
-            if (vd.SystemUse == null || vd.SystemUse.Length == 0)
-                builder.AppendLine(vd.SystemUse, "    System Use");
-            else if (vd.SystemUse.AsSpan().SequenceEqual(new byte[vd.SystemUse.Length]))
-                builder.AppendLine("Zeroed", "    System Use");
+            if (vd.BootSystemUse == null || vd.BootSystemUse.Length == 0)
+                builder.AppendLine(vd.BootSystemUse, "    Boot System Use");
+            else if (vd.BootSystemUse.AsSpan().SequenceEqual(new byte[vd.BootSystemUse.Length]))
+                builder.AppendLine("Zeroed", "    Boot System Use");
             else
-                builder.AppendLine("Not Zeroed", "    System Use");
+                builder.AppendLine("Not Zeroed", "    Boot System Use");
 
             builder.AppendLine();
         }
@@ -218,7 +218,7 @@ namespace SabreTools.Data.Printers
         {
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
-s
+
             if (vd.Data.AsSpan().SequenceEqual(new byte[vd.Data.Length]))
                 builder.AppendLine("Zeroed", "  Data");
             else
