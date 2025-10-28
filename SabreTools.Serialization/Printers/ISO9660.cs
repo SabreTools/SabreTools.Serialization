@@ -118,9 +118,9 @@ namespace SabreTools.Data.Printers
 
             
             if (vd.Unused8Bytes != null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
-                builder.AppendLine("Zeroed", "  Unused 8 Bytes");
+                builder.AppendLine("Zeroed", "    Unused 8 Bytes");
             else
-                builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
+                builder.AppendLine(vd.Unused8Bytes, "    Unused 8 Bytes");
 
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumeSpaceSize?.LSB, "    Volume Space Size");
@@ -128,9 +128,9 @@ namespace SabreTools.Data.Printers
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
                 if (pvd2.Unused32Bytes != null && Array.TrueForAll(pvd2.Unused32Bytes, b => b == 0))
-                    builder.AppendLine("Zeroed", "  Unused 32 Bytes");
+                    builder.AppendLine("Zeroed", "    Unused 32 Bytes");
                 else
-                    builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
+                    builder.AppendLine(pvd2.Unused32Bytes, "    Unused 32 Bytes");
             }
             if (vd is SupplementaryVolumeDescriptor svd2)
             {
@@ -161,13 +161,17 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
 
-            builder.AppendLine("    Volume Creation Date Time");
+            builder.AppendLine("    Volume Creation Date Time:");
+            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeCreationDateTime);
-            builder.AppendLine("    Volume Modification Date Time");
+            builder.AppendLine("    Volume Modification Date Time:");
+            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeModificationDateTime);
-            builder.AppendLine("    Volume Expiration Date Time");
+            builder.AppendLine("    Volume Expiration Date Time:");
+            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeExpirationDateTime);
-            builder.AppendLine("    Volume Effective Date Time");
+            builder.AppendLine("    Volume Effective Date Time:");
+            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeEffectiveDateTime);
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
@@ -175,7 +179,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
 
             if (vd.ApplicationUse == null || vd.ApplicationUse.Length == 0)
-                builder.AppendLine(vd.ApplicationUse, "  Application Use");
+                builder.AppendLine(vd.ApplicationUse, "    Application Use");
             else if (Array.TrueForAll(vd.ApplicationUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    Application Use");
             else
@@ -409,12 +413,13 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(Encoding.ASCII.GetString(dt.Minute), "      Minute");
             builder.AppendLine(Encoding.ASCII.GetString(dt.Second), "      Second");
             builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
-            string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00}";
+            string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00} (0x{dt.TimeZoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "      Timezone Offset");
             builder.AppendLine();
         }
     }
 }
+
 
 
 
