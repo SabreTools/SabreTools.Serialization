@@ -385,12 +385,7 @@ s
             builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
             string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00}";
             builder.AppendLine(tz, "      Timezone Offset");
-
-            // TODO: Decode DecDateTime into a string
-            string datetime = $"{Encoding.ASCII.GetString(dt.Year)}-{Encoding.ASCII.GetString(dt.Month)}-" +
-                {Encoding.ASCII.GetString(dt.Day)}T{Encoding.ASCII.GetString(dt.Hour)}:" +
-                {Encoding.ASCII.GetString(dt.Minute)}:{Encoding.ASCII.GetString(dt.Second)}";
-            builder.AppendLine(datetime, prefixString);
+            builder.AppendLine();
         }
     }
 }
