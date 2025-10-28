@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                     return executable;
 
                 // Try to parse the relocation table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the relocation table
                 executable.RelocationTable = new RelocationEntry[executableHeader.RelocationItems];

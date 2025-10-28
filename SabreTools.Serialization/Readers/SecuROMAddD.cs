@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Readers
             long currentOffset = data.Position;
             byte[] temp = data.ReadBytes(10);
             string tempString = Encoding.ASCII.GetString(temp);
-            data.Seek(currentOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
 
             // If the temp string is a regex match for an ID
             if (Regex.IsMatch(tempString, @"[0-9]{6}-[0-9]{3}"))

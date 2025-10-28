@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the directory items
-                data.Seek(directoryItemsOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(directoryItemsOffset, SeekOrigin.Begin);
 
                 // Create the directory item array
                 file.DirectoryItems = new DirectoryItem[header.DirectoryLength / 64];

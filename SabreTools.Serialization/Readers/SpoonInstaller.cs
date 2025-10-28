@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the entry table
-                data.Seek(tableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(tableOffset, SeekOrigin.Begin);
 
                 // Try to parse the entry table
                 var table = ParseTable(data, footer.EntryCount);
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Readers
         public static Footer ParseFooter(Stream data)
         {
             // Seek from the end (24 bytes has to use -23)
-            data.Seek(-23, SeekOrigin.End);
+            data.SeekIfPossible(-23, SeekOrigin.End);
 
             var obj = new Footer();
 

@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to the end to read the trailer
-                data.Seek(-8, SeekOrigin.End);
+                data.SeekIfPossible(-8, SeekOrigin.End);
 
                 #region Trailer
 
@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the raw data first
                 obj.ExtraFieldBytes = data.ReadBytes(obj.ExtraLength);
-                data.Seek(currentPosition, SeekOrigin.Begin);
+                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
 
                 List<ExtraFieldData> extraFields = [];
                 while (data.Position < currentPosition + obj.ExtraLength)

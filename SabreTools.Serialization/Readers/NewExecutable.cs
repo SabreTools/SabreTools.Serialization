@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Try to parse the executable header
-                data.Seek(newExeOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(newExeOffset, SeekOrigin.Begin);
                 var header = ParseExecutableHeader(data);
                 if (header.Magic != SignatureString)
                     return null;
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the segment table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the segment table
                 nex.SegmentTable = new SegmentTableEntry[header.FileSegmentCount];
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the resource table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the resource table
                 nex.ResourceTable = ParseResourceTable(data, header.ResourceEntriesCount);
@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the resident-name table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the resident-name table
                 nex.ResidentNameTable = ParseResidentNameTable(data, endOffset);
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the module-reference table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the module-reference table
                 nex.ModuleReferenceTable = new ModuleReferenceTableEntry[header.ModuleReferenceTableSize];
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the imported-name table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the imported-name table
                 nex.ImportedNameTable = ParseImportedNameTable(data, endOffset);
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the imported-name table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the entry table
                 nex.EntryTable = ParseEntryTable(data, endOffset);
@@ -165,7 +165,7 @@ namespace SabreTools.Serialization.Readers
                     return nex;
 
                 // Seek to the nonresident-name table
-                data.Seek(tableAddress, SeekOrigin.Begin);
+                data.SeekIfPossible(tableAddress, SeekOrigin.Begin);
 
                 // Set the nonresident-name table
                 nex.NonResidentNameTable = ParseNonResidentNameTable(data, endOffset);
@@ -571,7 +571,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < stringOffsets.Count; i++)
             {
                 int stringOffset = (int)(stringOffsets[i] + initialOffset);
-                data.Seek(stringOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(stringOffset, SeekOrigin.Begin);
 
                 var str = ParseResourceTypeAndNameString(data);
                 resourceTable.TypeAndNameStrings[stringOffsets[i]] = str;
@@ -663,7 +663,7 @@ namespace SabreTools.Serialization.Readers
             long currentOffset = data.Position;
 
             // Seek to the data offset and read
-            data.Seek(obj.Offset + initialOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(obj.Offset + initialOffset, SeekOrigin.Begin);
             obj.Data = data.ReadBytes(obj.Length);
 
 
@@ -677,7 +677,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Seek back to the end of the entry
-            data.Seek(currentOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
 
             return obj;
         }

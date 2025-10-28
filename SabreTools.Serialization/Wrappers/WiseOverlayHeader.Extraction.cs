@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using SabreTools.Data.Models.WiseInstaller.Actions;
 using SabreTools.IO.Compression.Deflate;
+using SabreTools.IO.Extensions;
 using SabreTools.IO.Streams;
 
 namespace SabreTools.Serialization.Wrappers
@@ -20,7 +21,7 @@ namespace SabreTools.Serialization.Wrappers
             lock (_dataSourceLock)
             {
                 // Seek to the compressed data offset
-                _dataSource.Seek(CompressedDataOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(CompressedDataOffset, SeekOrigin.Begin);
                 if (includeDebug) Console.WriteLine($"Beginning of header-defined files: {CompressedDataOffset}");
 
                 // Extract WiseColors.dib, if it exists
@@ -102,7 +103,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks>
         public ExtractionStatus ExtractFile(InstallFile obj, int index, string outputDirectory, bool includeDebug)
         {
             // Get expected values
@@ -119,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
 
             lock (_dataSourceLock)
             {
-                _dataSource.Seek(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
                 return InflateWrapper.ExtractFile(_dataSource,
                     filename,
                     outputDirectory,
@@ -136,7 +137,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks>
         public ExtractionStatus ExtractFile(DisplayBillboard obj, string outputDirectory, bool includeDebug)
         {
             // Get the generated base name
@@ -168,7 +169,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 lock (_dataSourceLock)
                 {
-                    _dataSource.Seek(InstallerDataOffset + info.DeflateStart, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(InstallerDataOffset + info.DeflateStart, SeekOrigin.Begin);
                     _ = InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
                 }
             }
@@ -184,7 +185,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted successfully, false otherwise</returns>
-        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks> 
+        /// <remarks>Requires <see cref="InstallerDataOffset"/> to be set</remarks>
         public ExtractionStatus ExtractFile(CustomDialogSet obj, string outputDirectory, bool includeDebug)
         {
             // Get expected values
@@ -201,7 +202,7 @@ namespace SabreTools.Serialization.Wrappers
 
             lock (_dataSourceLock)
             {
-                _dataSource.Seek(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(InstallerDataOffset + obj.DeflateStart, SeekOrigin.Begin);
                 return InflateWrapper.ExtractFile(_dataSource, filename, outputDirectory, expected, IsPKZIP, includeDebug);
             }
         }

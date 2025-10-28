@@ -124,7 +124,7 @@ namespace ExtractionTool.Features
             try
             {
                 int read = stream.Read(magic, 0, 16);
-                stream.Seek(0, SeekOrigin.Begin);
+                stream.SeekIfPossible(0, SeekOrigin.Begin);
             }
             catch (Exception ex)
             {

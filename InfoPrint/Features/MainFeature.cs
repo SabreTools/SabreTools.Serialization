@@ -160,7 +160,7 @@ namespace InfoPrint.Features
 
                 // Read the first 8 bytes
                 byte[]? magic = stream.ReadBytes(8);
-                stream.Seek(0, SeekOrigin.Begin);
+                stream.SeekIfPossible(0, SeekOrigin.Begin);
 
                 // Get the file type
                 string extension = Path.GetExtension(file).TrimStart('.');

@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Wrappers
                         {
                             lock (_dataSourceLock)
                             {
-                                _dataSource.Seek(offset, SeekOrigin.Begin);
+                                _dataSource.SeekIfPossible(offset, SeekOrigin.Begin);
                                 var relocationData = Readers.NewExecutable.ParsePerSegmentData(_dataSource);
 
                                 offset = _dataSource.Position;
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay data, if it exists
         /// </summary>
-        /// <remarks>Caches up to 0x10000 bytes</remarks> 
+        /// <remarks>Caches up to 0x10000 bytes</remarks>
         /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
         public byte[] OverlayData
         {
@@ -303,7 +303,7 @@ namespace SabreTools.Serialization.Wrappers
         private long? _overlayAddress = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayAddress"/> 
+        /// Lock object for <see cref="_overlayAddress"/>
         /// </summary>
         private readonly object _overlayAddressLock = new();
 
@@ -313,7 +313,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _overlayData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayData"/> 
+        /// Lock object for <see cref="_overlayData"/>
         /// </summary>
         private readonly object _overlayDataLock = new();
 
@@ -323,7 +323,7 @@ namespace SabreTools.Serialization.Wrappers
         private long _overlaySize = -1;
 
         /// <summary>
-        /// Lock object for <see cref="_overlaySize"/> 
+        /// Lock object for <see cref="_overlaySize"/>
         /// </summary>
         private readonly object _overlaySizeLock = new();
 
@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>? _overlayStrings = null;
 
         /// <summary>
-        /// Lock object for <see cref="_overlayStrings"/> 
+        /// Lock object for <see cref="_overlayStrings"/>
         /// </summary>
         private readonly object _overlayStringsLock = new();
 
@@ -343,7 +343,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _stubExecutableData = null;
 
         /// <summary>
-        /// Lock object for <see cref="_stubExecutableData"/> 
+        /// Lock object for <see cref="_stubExecutableData"/>
         /// </summary>
         private readonly object _stubExecutableDataLock = new();
 
@@ -441,18 +441,18 @@ namespace SabreTools.Serialization.Wrappers
             lock (_dataSourceLock)
             {
                 // Attempt to get the overlay header
-                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                 var header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return overlayOffset;
 
                 // Align and loop to see if it can be found
-                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                 _dataSource.AlignToBoundary(0x10);
                 overlayOffset = _dataSource.Position;
                 while (_dataSource.Position < Length)
                 {
-                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                     header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
                         return overlayOffset;

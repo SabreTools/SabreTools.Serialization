@@ -31,8 +31,7 @@ namespace SabreTools.Serialization.Readers
                 #region User Data
 
                 // Check for User Data
-                uint possibleSignature = data.ReadUInt32LittleEndian();
-                data.Seek(-4, SeekOrigin.Current);
+                uint possibleSignature = data.PeekUInt32LittleEndian();
                 if (possibleSignature == UserDataSignatureUInt32)
                 {
                     // Deserialize the user data, returning null if invalid
@@ -44,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                     archive.UserData = userData;
 
                     // Set the starting position according to the header offset
-                    data.Seek(initialOffset + archive.UserData.HeaderOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(initialOffset + archive.UserData.HeaderOffset, SeekOrigin.Begin);
                 }
 
                 #endregion
@@ -340,7 +339,7 @@ namespace SabreTools.Serialization.Readers
             ulong entryCount = header.HiBlockTableSize >> 1;
 
             // Seek to the offset
-            data.Seek(offset, SeekOrigin.Begin);
+            data.SeekIfPossible(offset, SeekOrigin.Begin);
 
             // Read in the hi-block table
             var hiBlockTable = new short[entryCount];

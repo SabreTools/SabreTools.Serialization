@@ -88,7 +88,7 @@ namespace SabreTools.Serialization
                 return wrapper;
 
             // Try to read the executable info
-            stream.Seek(initialOffset + msdos.Model.Header.NewExeHeaderAddr, SeekOrigin.Begin);
+            stream.SeekIfPossible(initialOffset + msdos.Model.Header.NewExeHeaderAddr, SeekOrigin.Begin);
             var magic = stream.ReadBytes(4);
 
             // If we didn't get valid data at the offset
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization
             // New Executable
             else if (magic.StartsWith(Data.Models.NewExecutable.Constants.SignatureBytes))
             {
-                stream.Seek(initialOffset, SeekOrigin.Begin);
+                stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
                 return NewExecutable.Create(stream);
             }
 
@@ -108,14 +108,14 @@ namespace SabreTools.Serialization
             else if (magic.StartsWith(Data.Models.LinearExecutable.Constants.LESignatureBytes)
                 || magic.StartsWith(Data.Models.LinearExecutable.Constants.LXSignatureBytes))
             {
-                stream.Seek(initialOffset, SeekOrigin.Begin);
+                stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
                 return LinearExecutable.Create(stream);
             }
 
             // Portable Executable
             else if (magic.StartsWith(Data.Models.PortableExecutable.Constants.SignatureBytes))
             {
-                stream.Seek(initialOffset, SeekOrigin.Begin);
+                stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
                 return PortableExecutable.Create(stream);
             }
 
@@ -656,7 +656,7 @@ namespace SabreTools.Serialization
             if (magic.StartsWith(Data.Models.StarForce.Constants.SignatureBytes))
                 return WrapperType.SFFS;
 
-            #endregion 
+            #endregion
 
             #region SGA
 
@@ -711,7 +711,7 @@ namespace SabreTools.Serialization
             if (magic.StartsWith([0x3F, 0x5F, 0x03, 0x00]))
                 return WrapperType.Textfile;
 
-            // XML 
+            // XML
             // "<?xml"
             if (magic.StartsWith([0x3C, 0x3F, 0x78, 0x6D, 0x6C]))
                 return WrapperType.Textfile;

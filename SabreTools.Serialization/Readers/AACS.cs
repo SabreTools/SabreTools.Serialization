@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
             // The first 4 bytes are the type and length
             RecordType type = (RecordType)data.ReadByteValue();
             uint recordLength = data.ReadUInt24LittleEndian();
-            data.Seek(-4, SeekOrigin.Current);
+            data.SeekIfPossible(-4, SeekOrigin.Current);
 
             // Create a record based on the type
             return type switch

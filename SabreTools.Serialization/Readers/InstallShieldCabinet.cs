@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the descriptor
-                data.Seek(descriptorOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset, SeekOrigin.Begin);
 
                 // Set the descriptor
                 cabinet.Descriptor = ParseDescriptor(data);
@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Seek to the file table
-                data.Seek(fileTableOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(fileTableOffset, SeekOrigin.Begin);
 
                 // Get the number of file table items
                 uint fileTableItems;
@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the file descriptor offset
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create and add the file descriptor
                     string? directoryName = ParseDirectoryName(data, majorVersion);
@@ -146,7 +146,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the file descriptor offset
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create and add the file descriptor
                     cabinet.FileDescriptors[i] = ParseFileDescriptor(data,
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the file group offset
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
                     OffsetList offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.Readers
                         long internalOffset = descriptorOffset + nextOffset;
 
                         // Seek to the file group offset
-                        data.Seek(internalOffset, SeekOrigin.Begin);
+                        data.SeekIfPossible(internalOffset, SeekOrigin.Begin);
 
                         // Create and add the offset
                         offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Readers
                     }
 
                     /// Seek to the file group
-                    data.Seek(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
 
                     // Add the file group
                     cabinet.FileGroups[fileGroupId++] = ParseFileGroup(data, majorVersion, descriptorOffset);
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Seek to the component offset
-                    data.Seek(offset, SeekOrigin.Begin);
+                    data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create and add the offset
                     OffsetList offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.Readers
                         long internalOffset = descriptorOffset + nextOffset;
 
                         // Seek to the file group offset
-                        data.Seek(internalOffset, SeekOrigin.Begin);
+                        data.SeekIfPossible(internalOffset, SeekOrigin.Begin);
 
                         // Create and add the offset
                         offsetList = ParseOffsetList(data, majorVersion, descriptorOffset);
@@ -302,7 +302,7 @@ namespace SabreTools.Serialization.Readers
                     }
 
                     // Seek to the component
-                    data.Seek(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(descriptorOffset + list.DescriptorOffset, SeekOrigin.Begin);
 
                     // Add the component
                     cabinet.Components[componentId++] = ParseComponent(data, majorVersion, descriptorOffset);
@@ -391,7 +391,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.IdentifierOffset != 0)
             {
                 // Seek to the identifier
-                data.Seek(descriptorOffset + obj.IdentifierOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.IdentifierOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -404,7 +404,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.DisplayNameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(descriptorOffset + obj.DisplayNameOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.DisplayNameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -417,7 +417,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -430,7 +430,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.CLSIDOffset != 0)
             {
                 // Seek to the CLSID
-                data.Seek(descriptorOffset + obj.CLSIDOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.CLSIDOffset, SeekOrigin.Begin);
 
                 // Read the GUID
                 obj.CLSID = data.ReadGuid();
@@ -440,7 +440,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.FileGroupCount != 0 && obj.FileGroupNamesOffset != 0)
             {
                 // Seek to the file group table offset
-                data.Seek(descriptorOffset + obj.FileGroupNamesOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.FileGroupNamesOffset, SeekOrigin.Begin);
 
                 // Read the file group names table
                 obj.FileGroupNames = new string[obj.FileGroupCount];
@@ -453,7 +453,7 @@ namespace SabreTools.Serialization.Readers
                     long preNameOffset = data.Position;
 
                     // Seek to the name offset
-                    data.Seek(descriptorOffset + nameOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(descriptorOffset + nameOffset, SeekOrigin.Begin);
 
                     if (majorVersion >= 17)
                         obj.FileGroupNames[j] = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
@@ -461,12 +461,12 @@ namespace SabreTools.Serialization.Readers
                         obj.FileGroupNames[j] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
                     // Seek back to the original position
-                    data.Seek(preNameOffset, SeekOrigin.Begin);
+                    data.SeekIfPossible(preNameOffset, SeekOrigin.Begin);
                 }
             }
 
             // Seek back to the correct offset
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
 
             return obj;
         }
@@ -580,7 +580,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -590,7 +590,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Seek back to the correct offset
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
 
             return obj;
         }
@@ -613,7 +613,7 @@ namespace SabreTools.Serialization.Readers
 
             // TODO: Figure out what data lives in this area for V5 and below
             if (majorVersion <= 5)
-                data.Seek(0x36, SeekOrigin.Current);
+                data.SeekIfPossible(0x36, SeekOrigin.Current);
 
             obj.FirstFile = data.ReadUInt32LittleEndian();
             obj.LastFile = data.ReadUInt32LittleEndian();
@@ -638,7 +638,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.NameOffset != 0)
             {
                 // Seek to the name
-                data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
                 // Read the string
                 if (majorVersion >= 17)
@@ -648,7 +648,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Seek back to the correct offset
-            data.Seek(currentPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
 
             return obj;
         }
@@ -672,7 +672,7 @@ namespace SabreTools.Serialization.Readers
             long currentOffset = data.Position;
 
             // Seek to the name offset
-            data.Seek(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(descriptorOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the string
             if (majorVersion >= 17)
@@ -681,7 +681,7 @@ namespace SabreTools.Serialization.Readers
                 obj.Name = data.ReadNullTerminatedAnsiString();
 
             // Seek back to the correct offset
-            data.Seek(currentOffset, SeekOrigin.Begin);
+            data.SeekIfPossible(currentOffset, SeekOrigin.Begin);
 
             return obj;
         }

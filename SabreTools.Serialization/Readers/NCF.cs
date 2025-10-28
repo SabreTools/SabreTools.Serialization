@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Readers
                         string? directoryName = data.ReadNullTerminatedAnsiString();
                         if (data.Position > directoryNamesEnd)
                         {
-                            data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);
+                            data.SeekIfPossible(-directoryName?.Length ?? 0, SeekOrigin.Current);
                             byte[] endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
                             directoryName = Encoding.ASCII.GetString(endingData);
                         }
@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of directory section, just in case
-                data.Seek(afterHeaderPosition + directoryHeader.DirectorySize, SeekOrigin.Begin);
+                data.SeekIfPossible(afterHeaderPosition + directoryHeader.DirectorySize, SeekOrigin.Begin);
 
                 #region Unknown Header
 
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.Seek(afterHeaderPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.SeekIfPossible(afterHeaderPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 return file;
             }

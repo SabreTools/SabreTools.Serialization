@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Readers
             // (NecroVisioN.exe from the GamersGate patch NecroVisioN_Patch1.2_GG.exe) isn't RC and still has it.
             long tempPosition = data.Position;
             uint tempValue = data.ReadUInt32LittleEndian();
-            data.Seek(tempPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(tempPosition, SeekOrigin.Begin);
 
             // Only 0 or 1 have been observed for long sections
             if (tempValue < 2)
@@ -93,9 +93,9 @@ namespace SabreTools.Serialization.Readers
 
             // Determine if file path size is 256 or 512 bytes
             long tempPosition = data.Position;
-            data.Seek(data.Position + 256, SeekOrigin.Begin);
+            data.SeekIfPossible(data.Position + 256, SeekOrigin.Begin);
             var tempValue = data.ReadUInt32LittleEndian();
-            data.Seek(tempPosition, SeekOrigin.Begin);
+            data.SeekIfPossible(tempPosition, SeekOrigin.Begin);
             int pathSize = tempValue == 0 ? 512 : 256;
 
             // Set default value for unknown value checking
@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     tempPosition = data.Position;
                     tempValue = data.ReadUInt32LittleEndian();
-                    data.Seek(tempPosition, SeekOrigin.Begin);
+                    data.SeekIfPossible(tempPosition, SeekOrigin.Begin);
                     hasUnknown = tempValue == 0;
                 }
 

@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Readers
                 #region Footer
 
                 // Seek to the start of the footer
-                data.Seek(-12, SeekOrigin.End);
+                data.SeekIfPossible(-12, SeekOrigin.End);
 
                 // Cache the current offset
                 long startOfFooter = data.Position;
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Seek to the start of the index
                 long indexOffset = startOfFooter - ((footer.BackwardSize + 1) * 4);
-                data.Seek(indexOffset, SeekOrigin.Begin);
+                data.SeekIfPossible(indexOffset, SeekOrigin.Begin);
 
                 // Try to parse the index
                 var index = ParseIndex(data);
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Readers
                 #region Blocks
 
                 // Seek to the start of the blocks
-                data.Seek(endOfHeader, SeekOrigin.Begin);
+                data.SeekIfPossible(endOfHeader, SeekOrigin.Begin);
 
                 // Create the block array
                 int blockCount = index.Records.Length;
@@ -296,7 +296,7 @@ namespace SabreTools.Serialization.Readers
             ulong output = encoded.DecodeVariableLength(byteCount, out int length);
 
             // Seek the actual length processed and return
-            data.Seek(currentOffset + length, SeekOrigin.Begin);
+            data.SeekIfPossible(currentOffset + length, SeekOrigin.Begin);
             return output;
         }
     }

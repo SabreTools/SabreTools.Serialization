@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Wrappers
                     archiveStream = File.Open(archiveFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
                     // Seek to the data
-                    archiveStream.Seek(directoryItem.DirectoryEntry.EntryOffset, SeekOrigin.Begin);
+                    archiveStream.SeekIfPossible(directoryItem.DirectoryEntry.EntryOffset, SeekOrigin.Begin);
 
                     // Read the directory item bytes
                     data = archiveStream.ReadBytes((int)directoryItem.DirectoryEntry.EntryLength);

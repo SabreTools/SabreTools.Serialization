@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Readers
                         string? directoryName = data.ReadNullTerminatedAnsiString();
                         if (data.Position > directoryNamesEnd)
                         {
-                            data.Seek(-directoryName?.Length ?? 0, SeekOrigin.Current);
+                            data.SeekIfPossible(-directoryName?.Length ?? 0, SeekOrigin.Current);
                             byte[] endingData = data.ReadBytes((int)(directoryNamesEnd - data.Position));
                             directoryName = Encoding.ASCII.GetString(endingData);
                         }
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of directory section, just in case
-                data.Seek(afterMapPosition + file.DirectoryHeader.DirectorySize, SeekOrigin.Begin);
+                data.SeekIfPossible(afterMapPosition + file.DirectoryHeader.DirectorySize, SeekOrigin.Begin);
 
                 #region Directory Map Header
 
@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.Seek(afterMapPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.SeekIfPossible(afterMapPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 #region Data Block Header
 

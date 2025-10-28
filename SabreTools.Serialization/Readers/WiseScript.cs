@@ -62,11 +62,11 @@ namespace SabreTools.Serialization.Readers
             var header = new ScriptHeader();
 
             // Attempt to read strings at 0x12 (Short)
-            data.Seek(current + 0x12, SeekOrigin.Begin);
+            data.SeekIfPossible(current + 0x12, SeekOrigin.Begin);
             string? ftpUrl = data.ReadNullTerminatedAnsiString();
             string? logPath = data.ReadNullTerminatedAnsiString();
             string? messageFont = data.ReadNullTerminatedAnsiString();
-            data.Seek(current, SeekOrigin.Begin);
+            data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
             if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
@@ -85,11 +85,11 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Attempt to read strings at 0x26 (Middle)
-            data.Seek(current + 0x26, SeekOrigin.Begin);
+            data.SeekIfPossible(current + 0x26, SeekOrigin.Begin);
             ftpUrl = data.ReadNullTerminatedAnsiString();
             logPath = data.ReadNullTerminatedAnsiString();
             messageFont = data.ReadNullTerminatedAnsiString();
-            data.Seek(current, SeekOrigin.Begin);
+            data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
             if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
@@ -110,11 +110,11 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Attempt to read strings at 0x34 (Long)
-            data.Seek(current + 0x34, SeekOrigin.Begin);
+            data.SeekIfPossible(current + 0x34, SeekOrigin.Begin);
             ftpUrl = data.ReadNullTerminatedAnsiString();
             logPath = data.ReadNullTerminatedAnsiString();
             messageFont = data.ReadNullTerminatedAnsiString();
-            data.Seek(current, SeekOrigin.Begin);
+            data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
             if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
@@ -162,7 +162,7 @@ namespace SabreTools.Serialization.Readers
                 // Try to handle invalid string lengths
                 if (str.Length > 0 && IsTypicalControlCode(str, strict: false))
                 {
-                    data.Seek(-str.Length - 1, SeekOrigin.Current);
+                    data.SeekIfPossible(-str.Length - 1, SeekOrigin.Current);
                     break;
                 }
 
@@ -170,7 +170,7 @@ namespace SabreTools.Serialization.Readers
                 long original = data.Position;
                 if (str.Length == 0)
                 {
-                    data.Seek(-1, SeekOrigin.Current);
+                    data.SeekIfPossible(-1, SeekOrigin.Current);
 
                     // Try to read the next block as an install file call
                     var maybeInstall = ParseInstallFile(data, header.LanguageCount);
@@ -178,12 +178,12 @@ namespace SabreTools.Serialization.Readers
                         && (maybeInstall.DeflateEnd - maybeInstall.DeflateStart) < data.Length
                         && (maybeInstall.DeflateEnd - maybeInstall.DeflateStart) < maybeInstall.InflatedSize)
                     {
-                        data.Seek(original - 1, SeekOrigin.Begin);
+                        data.SeekIfPossible(original - 1, SeekOrigin.Begin);
                         break;
                     }
 
                     // Otherwise, seek back to reading
-                    data.Seek(original, SeekOrigin.Begin);
+                    data.SeekIfPossible(original, SeekOrigin.Begin);
                 }
 
                 headerStrings.Add(str);
@@ -285,7 +285,7 @@ namespace SabreTools.Serialization.Readers
                     states.Clear();
 
                     // Seek to the start of the machine and try again
-                    data.Seek(machineStart, SeekOrigin.Begin);
+                    data.SeekIfPossible(machineStart, SeekOrigin.Begin);
                     continue;
                 }
 
@@ -422,7 +422,7 @@ namespace SabreTools.Serialization.Readers
             if (obj.Terminator != 0x00)
             {
                 obj.Terminator = 0x00;
-                data.Seek(-1, SeekOrigin.Current);
+                data.SeekIfPossible(-1, SeekOrigin.Current);
             }
 
             return obj;
@@ -561,8 +561,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Check for an empty registry call
-            uint possiblyEmpty = data.ReadUInt32LittleEndian();
-            data.Seek(-4, SeekOrigin.Current);
+            uint possiblyEmpty = data.PeekUInt32LittleEndian();
             if (possiblyEmpty == 0x00000000)
             {
                 obj.DataType = data.ReadByteValue();
@@ -588,7 +587,7 @@ namespace SabreTools.Serialization.Readers
                 && obj.Key != null && obj.Key.Length == 0
                 && obj.NewValue != null && obj.NewValue.Length == 0)
             {
-                data.Seek(-(obj.ValueName?.Length ?? 0) - 1, SeekOrigin.Current);
+                data.SeekIfPossible(-(obj.ValueName?.Length ?? 0) - 1, SeekOrigin.Current);
                 obj.ValueName = obj.NewValue;
                 obj.NewValue = obj.Key;
                 obj.Key = obj.UnknownFsllib;
@@ -599,7 +598,7 @@ namespace SabreTools.Serialization.Readers
             // If the last value is a control
             else if (obj.ValueName != null && IsTypicalControlCode(obj.ValueName, strict: true))
             {
-                data.Seek(-obj.ValueName.Length - 1, SeekOrigin.Current);
+                data.SeekIfPossible(-obj.ValueName.Length - 1, SeekOrigin.Current);
                 obj.ValueName = obj.NewValue;
                 obj.NewValue = obj.Key;
                 obj.Key = obj.UnknownFsllib;
@@ -794,14 +793,14 @@ namespace SabreTools.Serialization.Readers
             {
                 long current = data.Position;
                 byte nextByte = data.ReadByteValue();
-                data.Seek(current, SeekOrigin.Begin);
+                data.SeekIfPossible(current, SeekOrigin.Begin);
 
                 op0x18skip = nextByte == 0 || nextByte == 0xFF ? 6 : 0;
                 if (nextByte == 0x09)
                 {
                     var possible = ParseCallDllFunction(data, languageCount, shortDllCall);
                     op0x18skip = (possible.FunctionName == null || possible.FunctionName.Length == 0) ? 6 : 0;
-                    data.Seek(current, SeekOrigin.Begin);
+                    data.SeekIfPossible(current, SeekOrigin.Begin);
                 }
             }
 
@@ -864,7 +863,7 @@ namespace SabreTools.Serialization.Readers
 
             // Rewind if one was found
             if (data.Position < data.Length)
-                data.Seek(-1, SeekOrigin.Current);
+                data.SeekIfPossible(-1, SeekOrigin.Current);
 
             return obj;
         }

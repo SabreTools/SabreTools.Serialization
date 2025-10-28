@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.SeparatedValue;
+using SabreTools.IO.Extensions;
 using SabreTools.IO.Writers;
 
 namespace SabreTools.Serialization.Writers
@@ -123,7 +124,7 @@ namespace SabreTools.Serialization.Writers
             WriteRows(obj.Row, writer, longHeader);
 
             // Return the stream
-            stream.Seek(0, SeekOrigin.Begin);
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
         }
 
