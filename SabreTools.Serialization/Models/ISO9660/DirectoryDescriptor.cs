@@ -9,6 +9,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Associated directory records (each pointing to a directory or a file extents)
         /// </summary>
-        public DirectoryRecord[]? DirectoryRecords { get; set; }
+        public DirectoryRecord[] DirectoryRecords { get; set; }
     }
 }

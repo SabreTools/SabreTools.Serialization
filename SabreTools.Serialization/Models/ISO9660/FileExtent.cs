@@ -9,12 +9,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Byte array of data within the file extent
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// File's extended attribute record
         /// Optional field
         /// </summary>
-        public ExtendedAttributeRecord? ExtendedAttributeRecord { get; set; }
+        public ExtendedAttributeRecord ExtendedAttributeRecord { get; set; }
     }
 }

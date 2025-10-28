@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// 16-bit flag variable with 8 flags where every other bit is set to 1
         /// i.e. minimum value of 0b1010101010101010 (0xAAAA)
         /// </summary>
-        public Permissions? Permissions { get; set; }
+        public Permissions Permissions { get; set; }
 
         /// <summary>
         /// Datetime of when the file content was created
@@ -69,12 +69,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32-byte name of the intended system
         /// Primary: a-characters or a1-characters only, padded to the right with spaces
         /// </summary>
-        public byte[]? SystemIdentifier { get; set; }
+        public byte[] SystemIdentifier { get; set; }
 
         /// <summary>
         /// 64-bytes for system use
         /// </summary>
-        public byte[]? SystemUse { get; set; }
+        public byte[] SystemUse { get; set; }
 
         /// <summary>
         /// Extended Attribyte Record Version
@@ -90,7 +90,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 64-bytes reserved (0x00)
         /// </summary>
-        public byte[]? Reserved64Bytes { get; set; }
+        public byte[] Reserved64Bytes { get; set; }
 
         /// <summary>
         /// Length of the Application use field
@@ -100,7 +100,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// ApplicationLength-bytes for application use
         /// </summary>
-        public byte[]? ApplicationUse { get; set; }
+        public byte[] ApplicationUse { get; set; }
 
         /// <summary>
         /// EscapeSequencesLength-bytes list of escape sequences to interpret this file

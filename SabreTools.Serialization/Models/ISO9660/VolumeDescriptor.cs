@@ -11,14 +11,14 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// The type of VolumeDescriptor
         /// </summary>
-        public VolumeDescriptorType? Type { get; set; }
+        public VolumeDescriptorType Type { get; set; }
 
         /// <summary>
         /// 5-byte magic
         /// Set to Constants.StandardIdentifier ("CD001")
         /// On non-ISO9660 CD-i discs, set to Constants.StandardIdentifierCDI ("CD-I ")
         /// </summary>
-        public byte[]? Identifier { get; set; }
+        public byte[] Identifier { get; set; }
 
         /// <summary>
         /// The Volume Descriptor version number

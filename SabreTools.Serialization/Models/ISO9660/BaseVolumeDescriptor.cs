@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? SystemIdentifier { get; set; }
+        public byte[] SystemIdentifier { get; set; }
 
         /// <summary>
         /// 32-byte name of the volume
@@ -26,12 +26,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? VolumeIdentifier { get; set; }
+        public byte[] VolumeIdentifier { get; set; }
 
         /// <summary>
         /// 8 unused bytes at offset 72, should be all 0x00
         /// </summary>
-        public byte[]? Unused8Bytes { get; set; }
+        public byte[] Unused8Bytes { get; set; }
 
         /// <summary>
         /// Number of logical blocks in this volume
@@ -93,7 +93,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Root directory entry, 34 bytes
         /// DirectoryIdentifier = 0x00
         /// </summary>
-        public DirectoryRecord? RootDirectoryRecord { get; set; }
+        public DirectoryRecord RootDirectoryRecord { get; set; }
 
         /// <summary>
         /// 128-byte name of the volume set
@@ -102,7 +102,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? VolumeSetIdentifier { get; set; }
+        public byte[] VolumeSetIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the publisher
@@ -112,7 +112,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? PublisherIdentifier { get; set; }
+        public byte[] PublisherIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the data preparer
@@ -122,7 +122,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? DataPreparerIdentifier { get; set; }
+        public byte[] DataPreparerIdentifier { get; set; }
 
         /// <summary>
         /// 128-byte name of the application
@@ -132,7 +132,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: a1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? ApplicationIdentifier { get; set; }
+        public byte[] ApplicationIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Copyright file
@@ -142,7 +142,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? CopyrightFileIdentifier { get; set; }
+        public byte[] CopyrightFileIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Abstract file
@@ -152,7 +152,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? AbstractFileIdentifier { get; set; }
+        public byte[] AbstractFileIdentifier { get; set; }
 
         /// <summary>
         /// 37-byte filename of the Bibliographic file
@@ -162,7 +162,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Supplementary: d1-characters only, padded to the right with spaces
         /// Enhanced: Some other agreed upon character encoding, padded to the right with filler
         /// </summary>
-        public byte[]? BibliographicFileIdentifier { get; set; }
+        public byte[] BibliographicFileIdentifier { get; set; }
 
         /// <summary>
         /// PVD-style DateTime format for the Creation date/time of the Volume
@@ -199,11 +199,11 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 512 bytes for Application Use, contents not defined by ISO9660
         /// </summary>
-        public byte[]? ApplicationUse { get; set; }
+        public byte[] ApplicationUse { get; set; }
 
         /// <summary>
         /// 653 reserved bytes, should be all 0x00
         /// </summary>
-        public byte[]? Reserved653Bytes { get; set; }
+        public byte[] Reserved653Bytes { get; set; }
     }
 }

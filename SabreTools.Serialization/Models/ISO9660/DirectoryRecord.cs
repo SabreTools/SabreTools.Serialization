@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Datetime of recording for the Directory Record
         /// If not specified, all values are 0x00
         /// </summary>
-        public DirectoryRecordDateTime? RecordingDateTime { get; set; }
+        public DirectoryRecordDateTime RecordingDateTime { get; set; }
 
         /// <summary>
         /// Flags for indicating attributes of the directory record
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Directory: Uses either d-characters or d1-characters, or:
         ///            Is exactly Constants.CurrentDirectory (0x00) or Constants.ParentDirectory (0x01)
         /// </summary>
-        public byte[]? FileIdentifier { get; set; }
+        public byte[] FileIdentifier { get; set; }
 
         /// <summary>
         /// If record length prior to this is odd, the FileIdentifier is followed by a single padding byte (0x00)

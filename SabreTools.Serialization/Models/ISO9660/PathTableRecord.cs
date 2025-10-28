@@ -31,7 +31,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Directory name
         /// Either d-characters or d1-characters, or a single 0x00 byte
         /// </summary>
-        public byte[]? DirectoryIdentifier { get; set; }
+        public byte[] DirectoryIdentifier { get; set; }
 
         /// <summary>
         /// If DirectoryIdentifierLength is odd, the DirectoryIdentifier is followed by a single padding byte (0x00)

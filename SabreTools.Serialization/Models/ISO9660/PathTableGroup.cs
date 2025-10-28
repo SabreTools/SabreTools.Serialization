@@ -11,21 +11,21 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Type-L Path Table (Little Endian)
         /// </summary>
-        public PathTableRecord[]? PathTableL { get; set; }
+        public PathTableRecord[] PathTableL { get; set; }
 
         /// <summary>
         /// Optional Type-L Path Table (Little Endian)
         /// </summary>
-        public PathTableRecord[]? OptionalPathTableL { get; set; }
+        public PathTableRecord[] OptionalPathTableL { get; set; }
 
         /// <summary>
         /// Type-M Path Table (Big Endian)
         /// </summary>
-        public PathTableRecord[]? PathTableM { get; set; }
+        public PathTableRecord[] PathTableM { get; set; }
 
         /// <summary>
         /// Optional Type-M Path Table (Big Endian)
         /// </summary>
-        public PathTableRecord[]? OptionalPathTableM { get; set; }
+        public PathTableRecord[] OptionalPathTableM { get; set; }
     }
 }
