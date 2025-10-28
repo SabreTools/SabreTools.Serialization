@@ -55,6 +55,11 @@ namespace SabreTools.Data.Printers
                     Print(builder, vdst);
                 else if (vd is GenericVolumeDescriptor gvd)
                     Print(builder, gvd);
+                else
+                {
+                    builder.AppendLine("  Unknown Volume Descriptor");
+                    builder.AppendLine();
+                }
             }
         }
 
@@ -77,14 +82,12 @@ namespace SabreTools.Data.Printers
         }
 
         private static void Print(StringBuilder builder, BaseVolumeDescriptor vd)
-        {
-            var type = (byte?)vd.Type;
-            
+        {            
             // TOOD: Determine encoding based on vd.Type, svd.EscapeSequence (and manual detection?)
 
-            if (type == 0x01)
+            if (vd.Type == VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR)
                 builder.AppendLine("    Primary Volume Descriptor:");
-            else if (type == 0x02)
+            else if (vd.Type == VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR)
                 builder.AppendLine("    Supplementary Volume Descriptor:");
             else
                 builder.AppendLine("    Unidentified Base Volume Descriptor:");
@@ -96,14 +99,18 @@ namespace SabreTools.Data.Printers
             }
             else if (vd is SupplementaryVolumeDescriptor svd)
             {
-                builder.AppendLine("    Volume Flags:");
                 if (svd.VolumeFlags == null)
                 {
-                    builder.AppendLine("      Null");
+                    builder.AppendLine(svd.VolumeFlags, "    Volume Flags:");
                 }
                 else
                 {
-                    builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) == VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES, "      Unregistered Escape Sequences");
+                    builder.AppendLine("    Volume Flags:");
+#if NET20 || NET35
+                    builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) != 0, " Unregistered Escape Sequences");
+#else
+                    builder.AppendLine(svd.VolumeFlags.HasFlag(VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), " Unregistered Escape Sequences");
+#endif
                     if ((byte)svd.VolumeFlags > 1)
                         builder.AppendLine("Not Zeroed", "      Reserved Flags");
                     else
@@ -247,7 +254,7 @@ namespace SabreTools.Data.Printers
             else if (Array.TrueForAll(vd.SystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    System Use");
             else
-                builder.AppendLine("Not Zeroed", "  System Use");
+                builder.AppendLine("Not Zeroed", "    System Use");
 
             builder.AppendLine();
         }
@@ -297,10 +304,8 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            int tableNum = 0;
-            foreach(var ptg in ptgs)
+            for (int tableNum = 0; tableNum < ptgs.Length; tableNum++)
             {
-                tableNum++;
                 if (ptg.PathTableL != null)
                 {
                     builder.AppendLine($"    Type-L Path Table {tableNum}");
@@ -357,14 +362,15 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            foreach (var record in records)
+            for (int recordNum = 0; recordNum < records.Length; recordNum++)
             {
-                builder.AppendLine(record.DirectoryIdentifierLength, "    Directory Identifier Length");
-                builder.AppendLine(record.ExtendedAttributeRecordLength, "    Extended Attribute Record Length");
-                builder.AppendLine(record.ExtentLocation, "    Extent Location");
-                builder.AppendLine(record.DirectoryIdentifier, "    Directory Identifier");
-                if (record.PaddingField != null)
-                    builder.AppendLine(record.PaddingField, "    Padding Field");
+                builder.AppendLine($"    Record {recordNum}")
+                builder.AppendLine(records[recordNum].DirectoryIdentifierLength, "      Directory Identifier Length");
+                builder.AppendLine(records[recordNum].ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
+                builder.AppendLine(records[recordNum].ExtentLocation, "      Extent Location");
+                builder.AppendLine(records[recordNum].DirectoryIdentifier, "      Directory Identifier");
+                if (records[recordNum].PaddingField != null)
+                    builder.AppendLine(records[recordNum].PaddingField, "      Padding Field");
             }
 
             builder.AppendLine();
@@ -488,7 +494,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("      -------------------------");
             if (drdt == null)
             {
-                builder.AppendLine("      Null");
+                builder.AppendLine("      [NULL]");
                 return;
             }
 
@@ -510,7 +516,7 @@ namespace SabreTools.Data.Printers
         {
             if (dt == null)
             {
-                builder.AppendLine("      Null");
+                builder.AppendLine("      [NULL]");
                 return;
             }
 
