@@ -177,16 +177,16 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
             Console.WriteLine("3");
 
-            if (volume.ApplicationUse == null || volume.ApplicationUse.Length == 0)
-                builder.AppendLine(volume.ApplicationUse, "  Application Use");
+            if (vd.ApplicationUse == null || vd.ApplicationUse.Length == 0)
+                builder.AppendLine(vd.ApplicationUse, "  Application Use");
             else if (IsAllZero(vd.ApplicationUse))
                 builder.AppendLine("Zeroed", "    Application Use");
             else
                 builder.AppendLine("Not Zeroed", "    Application Use");
 
             Console.WriteLine("4");
-            if (volume.Reserved653Bytes == null || volume.Reserved653Bytes.Length == 0)
-                builder.AppendLine(volume.Reserved653Bytes, "    Reserved 653 Bytes");
+            if (vd.Reserved653Bytes == null || vd.Reserved653Bytes.Length == 0)
+                builder.AppendLine(vd.Reserved653Bytes, "    Reserved 653 Bytes");
             else if (IsAllZero(vd.Reserved653Bytes))
                 builder.AppendLine("Zeroed", "    Reserved 653 Bytes");
             else
@@ -208,8 +208,8 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            if (volume.SystemUse == null || volume.SystemUse.Length == 0)
-                builder.AppendLine(volume.SystemUse, "    System Use");
+            if (vd.SystemUse == null || vd.SystemUse.Length == 0)
+                builder.AppendLine(vd.SystemUse, "    System Use");
             else if (IsAllZero(vd.SystemUse))
                 builder.AppendLine("Zeroed", "    System Use");
             else
@@ -223,8 +223,8 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            if (volume.Reserved2041Bytes == null || volume.Reserved2041Bytes.Length == 0)
-                builder.AppendLine(volume.Reserved2041Bytes, "    Reserved Bytes");
+            if (vd.Reserved2041Bytes == null || vd.Reserved2041Bytes.Length == 0)
+                builder.AppendLine(vd.Reserved2041Bytes, "    Reserved Bytes");
             else if (IsAllZero(vd.Reserved2041Bytes))
                 builder.AppendLine("Zeroed", "    Reserved Bytes");
             else
@@ -238,8 +238,8 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            if (volume.Data == null || volume.Data.Length == 0)
-                builder.AppendLine(volume.Data, "    Data");
+            if (vd.Data == null || vd.Data.Length == 0)
+                builder.AppendLine(vd.Data, "    Data");
             else if (IsAllZero(vd.Data))
                 builder.AppendLine("Zeroed", "    Data");
             else
