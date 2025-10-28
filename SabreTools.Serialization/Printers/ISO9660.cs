@@ -162,7 +162,7 @@ namespace SabreTools.Data.Printers
             else
             {
                 builder.AppendLine(vd.LogicalBlockSize.LittleEndian, "    Logical Block Size (Little Endian)");
-                builder.AppendLine(vd.LogicalBlockSize.BIgEndian, "    Logical Block Size (Big Endian)");
+                builder.AppendLine(vd.LogicalBlockSize.BigEndian, "    Logical Block Size (Big Endian)");
             }
             if (vd.PathTableSize.IsValid)
                 builder.AppendLine(vd.PathTableSize.LittleEndian, "    Path Table Size");
