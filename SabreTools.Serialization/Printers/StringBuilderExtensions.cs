@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using SabreTools.Numerics;
 
 namespace SabreTools.Data.Printers
 {
@@ -35,6 +36,19 @@ namespace SabreTools.Data.Printers
         }
 
         /// <summary>
+        /// Append a line containing a potentially both-endian Int8 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothInt8? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
+        }
+
+        /// <summary>
         /// Append a line containing a UInt8 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, byte? value, string prefixString)
@@ -42,6 +56,19 @@ namespace SabreTools.Data.Printers
             value ??= 0;
             string valueString = $"{value} (0x{value:X2})";
             return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a potentially both-endian UInt8 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothUInt8? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
         }
 
         /// <summary>
@@ -55,6 +82,19 @@ namespace SabreTools.Data.Printers
         }
 
         /// <summary>
+        /// Append a line containing a potentially both-endian Int16 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothInt16? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
+        }
+
+        /// <summary>
         /// Append a line containing a UInt16 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ushort? value, string prefixString)
@@ -62,6 +102,19 @@ namespace SabreTools.Data.Printers
             value ??= 0;
             string valueString = $"{value} (0x{value:X4})";
             return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a potentially both-endian UInt16 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothUInt16? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
         }
 
         /// <summary>
@@ -75,6 +128,19 @@ namespace SabreTools.Data.Printers
         }
 
         /// <summary>
+        /// Append a line containing a potentially both-endian Int32 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothInt32? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
+        }
+
+        /// <summary>
         /// Append a line containing a UInt32 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, uint? value, string prefixString)
@@ -82,6 +148,19 @@ namespace SabreTools.Data.Printers
             value ??= 0;
             string valueString = $"{value} (0x{value:X8})";
             return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a potentially both-endian UInt32 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothUInt32? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
         }
 
         /// <summary>
@@ -105,6 +184,19 @@ namespace SabreTools.Data.Printers
         }
 
         /// <summary>
+        /// Append a line containing a potentially both-endian Int64 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothInt64? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
+        }
+
+        /// <summary>
         /// Append a line containing a UInt64 to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, ulong? value, string prefixString)
@@ -112,6 +204,19 @@ namespace SabreTools.Data.Printers
             value ??= 0;
             string valueString = $"{value} (0x{value:X16})";
             return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
+        /// Append a line containing a potentially both-endian UInt64 to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLineBothEndian(this StringBuilder sb, BothUInt64? value, string prefixString)
+        {
+            value ??= 0;
+            if (value.IsValid)
+                return sb.AppendLine(value, prefixString);
+
+            sb = sb.AppendLine(value.LittleEndian, $"{prefixString} (Little-Endian)");
+            return sb.AppendLine(value.BigEndian, $"{prefixString} (Big-Endian)");
         }
 
         /// <summary>
