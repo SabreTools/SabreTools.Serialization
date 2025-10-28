@@ -94,11 +94,18 @@ namespace SabreTools.Data.Printers
             else if (vd is SupplementaryVolumeDescriptor svd)
             {
                 builder.AppendLine("    Volume Flags:");
-                builder.AppendLine(svd.VolumeFlags?.HasFlag(VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "      Unregistered Escape Sequences");
-                if ((byte)svd.VolumeFlags > 1)
-                    builder.AppendLine("Not Zeroed", "      Reserved Flags");
+                if (svd.VolumeFlags == null)
+                {
+                    builder.AppendLine("      Null");
+                }
                 else
-                    builder.AppendLine("Zeroed", "      Reserved Flags");
+                {
+                    builder.AppendLine(svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES == VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "      Unregistered Escape Sequences");
+                    if ((byte)svd.VolumeFlags > 1)
+                        builder.AppendLine("Not Zeroed", "      Reserved Flags");
+                    else
+                        builder.AppendLine("Zeroed", "      Reserved Flags");
+                }
             }
 
             // TODO: Decode all byte arrays into strings (based on encoding above)
@@ -405,5 +412,6 @@ namespace SabreTools.Data.Printers
         }
     }
 }
+
 
 
