@@ -38,7 +38,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Flags for indicating attributes of the directory record
         /// </summary>
-        public FileFlags? FileFlags { get; set; }
+        public FileFlags FileFlags { get; set; }
 
         /// <summary>
         /// Assigned file unit size for the file section (interleaved mode)

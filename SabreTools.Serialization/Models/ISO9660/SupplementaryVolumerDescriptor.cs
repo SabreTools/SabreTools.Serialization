@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Remaining bits are reserved (set to 0)
         /// Note: Joliet Extension implies Constants.JolietVolumeFlags (0x00)
         /// </summary>
-        public VolumeFlags? VolumeFlags { get; set; }
+        public VolumeFlags VolumeFlags { get; set; }
 
         /// <summary>
         /// List of escape sequences to use, up to 32 bytes, padded with 0x00 to the right
