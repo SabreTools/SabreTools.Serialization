@@ -26,7 +26,7 @@ jobs:
       run: dotnet test
       
     - name: Run publish script
-      run: ./publish-nix.sh -d
+      run: ./publish-nix.sh
 
     - name: Update rolling tag
       run: |

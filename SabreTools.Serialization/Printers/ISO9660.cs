@@ -15,21 +15,17 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("ISO 9660 Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
-            Console.WriteLine("1");
+
             // TODO: Better check
             if (IsAllZero(volume.SystemArea))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
             builder.AppendLine();
-            Console.WriteLine("2");
 
             Print(builder, volume.VolumeDescriptorSet);
-            Console.WriteLine("3");
             Print(builder, volume.PathTableGroups);
-            Console.WriteLine("4");
             Print(builder, volume.RootDirectoryDescriptors);
-            Console.WriteLine("5");
         }
 
         #region Volume Descriptors
@@ -47,6 +43,7 @@ namespace SabreTools.Data.Printers
 
             foreach (var vd in vdSet)
             {
+                Console.WriteLine("0");
                 if (vd is BootRecordVolumeDescriptor brvd)
                     Print(builder, brvd);
                 else if (vd is BaseVolumeDescriptor bvd)
@@ -62,6 +59,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, BootRecordVolumeDescriptor vd)
         {
+            Console.WriteLine("1");
             builder.AppendLine("    Boot Record Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
@@ -80,6 +78,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, BaseVolumeDescriptor vd)
         {
+            Console.WriteLine("2");
             var type = (byte?)vd.Type;
             
             // TOOD: Determine encoding based on vd.Type, svd.EscapeSequence (and manual detection?)
@@ -105,12 +104,14 @@ namespace SabreTools.Data.Printers
                 }
                 else
                 {
+                    Console.WriteLine("a");
                     builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) == VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES, "      Unregistered Escape Sequences");
                     if ((byte)svd.VolumeFlags > 1)
                         builder.AppendLine("Not Zeroed", "      Reserved Flags");
                     else
                         builder.AppendLine("Zeroed", "      Reserved Flags");
                 }
+                    Console.WriteLine("b");
             }
 
             // TODO: Decode all byte arrays into strings (based on encoding above)
@@ -118,6 +119,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
 
+            Console.WriteLine("c");
             
             if (IsAllZero(vd.Unused8Bytes))
                 builder.AppendLine("Zeroed", "  Unused 8 Bytes");
@@ -153,6 +155,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
+            Console.WriteLine("d");
             Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
@@ -191,6 +194,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, VolumePartitionDescriptor vd)
         {
+            Console.WriteLine("3");
             builder.AppendLine("    Volume Partition Descriptor:");
             builder.AppendLine("    -------------------------");
 
@@ -211,6 +215,7 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, VolumeDescriptorSetTerminator vd)
         {
+            Console.WriteLine("4");
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
