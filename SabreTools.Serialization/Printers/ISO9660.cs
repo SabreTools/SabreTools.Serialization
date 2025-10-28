@@ -142,7 +142,7 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumeSetSize?.LittleEndian, "    Volume Set Size");
             // TODO: Check that MSB/LSB match
-            builder.AppendLine(vd.VolumeSequenceNumber?.LittleEndian, "    Volume Sequence Number");
+            builder.AppendLine(vd.VolumeSequenceNumber.LittleEndian, "    Volume Sequence Number");
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.LogicalBlockSize?.LittleEndian, "    Logical Block Size");
             // TODO: Check that MSB/LSB match

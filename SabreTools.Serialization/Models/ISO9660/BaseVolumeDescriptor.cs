@@ -50,7 +50,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Volume (disc) number in this volume set
         /// </summary>
-        public BothInt16? VolumeSequenceNumber { get; set; }
+        public BothInt16 VolumeSequenceNumber { get; set; }
 
         /// <summary>
         /// Number of bytes per logical block, usually 2048
