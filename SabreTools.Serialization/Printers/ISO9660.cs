@@ -332,7 +332,7 @@ namespace SabreTools.Data.Printers
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
-            if (dds == null)
+            if (dirs == null)
             {
                 builder.AppendLine("  No directory descriptors");
                 builder.AppendLine();

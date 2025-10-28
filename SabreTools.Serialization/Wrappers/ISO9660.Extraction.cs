@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // If we have no directory descriptors
-            if (DirectoryDescriptors == null || DirectoryDescriptors.Length == 0)
+            if (DirectoryDescriptors == null || DirectoryDescriptors.Count == 0)
                 return false;
 
             bool allExtracted = true;

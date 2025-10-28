@@ -583,7 +583,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Parse the root directory pointed to from the base volume descriptor
                     var descriptors = ParseDirectory(data, sectorLength, bvd.RootDirectoryRecord);
-                    if (descriptors == null && descriptors.Count == 0)
+                    if (descriptors == null || descriptors.Count == 0)
                         continue;
                     // Merge dictionaries
                     foreach (var kvp in descriptors)
