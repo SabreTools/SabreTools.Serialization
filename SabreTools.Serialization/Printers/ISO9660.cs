@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.Numerics;
 
 namespace SabreTools.Data.Printers
 {
