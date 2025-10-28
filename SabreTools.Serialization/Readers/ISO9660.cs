@@ -574,9 +574,9 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
         /// <returns>Filled Dictionary of int to DirectoryDescriptor on success, null on error</returns>
-        public static Dictionary<int, Directory>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
+        public static Dictionary<int, ISO9660.Directory>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
-            var directories = new Dictionary<int, Directory>();
+            var directories = new Dictionary<int, ISO9660.Directory>();
             foreach (VolumeDescriptor vd in vdSet)
             {
                 if (vd is BaseVolumeDescriptor bvd)
@@ -608,7 +608,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="dr">Root directory record pointing to the root directory extent</param>
         /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
-        public static Dictionary<int, Directory>? ParseDirectory(Stream data, short sectorLength, DirectoryRecord? dr)
+        public static Dictionary<int, ISO9660.Directory>? ParseDirectory(Stream data, short sectorLength, DirectoryRecord? dr)
         {
             if (dr == null)
                 return null;
