@@ -31,16 +31,17 @@ namespace SabreTools.Data.Models.ISO9660
         public VolumeDescriptor[] VolumeDescriptorSet { get; set; }
 
         /// <summary>
-        /// The flattened directory descriptor tree rooted at the Volume Descriptors' root directory record
-        /// </summary>
-        public DirectoryDescriptor[] DirectoryDescriptors { get; set; }
-
-        /// <summary>
         /// List of path table records for each directory on the volume
         /// One (or two) Path Table Groups is provided for each Base Volume Descriptor
         /// Note: If a Base Volume Descriptor's Path Table Size field is ambiguous, two Path Table Groups may be given
         /// </summary>
         public PathTableGroup[] PathTableGroups { get; set; }
+
+        /// <summary>
+        /// Map of sector numbers and the directory descriptor at that sector number
+        /// Each DirectoryDescriptor contains directory records and 
+        /// </summary>
+        public Dictionary<int, Directory> DirectoryDescriptors { get; set; }
 
         #endregion
     }

@@ -3,7 +3,7 @@ using SabreTools.Numerics;
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>
-    /// ISO9660 Directory Record (represents either a directory or a file in the filesystem)
+    /// ISO9660 Directory Record, a directory descriptor that points to an extent representing a file or directory
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class DirectoryRecord

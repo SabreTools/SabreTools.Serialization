@@ -9,12 +9,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // If we have no directory descriptors
-            if (DirectoryDescriptors == null || DirectoryDescriptors.Length == 0)
-                return false;
-
             // If we have no path table groups
             if (PathTableGroups == null || PathTableGroups.Length == 0)
+                return false;
+
+            // If we have no directory descriptors
+            if (DirectoryDescriptors == null || DirectoryDescriptors.Length == 0)
                 return false;
 
             bool allExtracted = true;

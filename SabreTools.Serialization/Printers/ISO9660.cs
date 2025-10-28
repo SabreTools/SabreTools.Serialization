@@ -18,11 +18,11 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
 
             if (volume.SystemArea == null || volume.SystemArea.Length == 0)
-                builder.AppendLine(volume.SystemArea, "  System Area");
+                builder.AppendLine(volume.SystemArea, "System Area");
             else if (Array.TrueForAll(volume.SystemArea, b => b == 0))
-                builder.AppendLine("Zeroed", "  System Area");
+                builder.AppendLine("Zeroed", "System Area");
             else
-                builder.AppendLine("Not Zeroed", "  System Area");
+                builder.AppendLine("Not Zeroed", "System Area");
             builder.AppendLine();
 
             Print(builder, volume.VolumeDescriptorSet);
@@ -101,9 +101,9 @@ namespace SabreTools.Data.Printers
             {
                 builder.AppendLine("    Volume Flags:");
 #if NET20 || NET35
-                builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) != 0, " Unregistered Escape Sequences");
+                builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) != 0, "    Unregistered Escape Sequences");
 #else
-                builder.AppendLine(svd.VolumeFlags.HasFlag(VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), " Unregistered Escape Sequences");
+                builder.AppendLine(svd.VolumeFlags.HasFlag(VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "    Unregistered Escape Sequences");
 #endif
                 if ((byte)svd.VolumeFlags > 1)
                     builder.AppendLine("Not Zeroed", "      Reserved Flags");
@@ -327,7 +327,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryDescriptor[]? dds)
+        private static void Print(StringBuilder builder, Dictionary<int, Directory>? dirs)
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
@@ -338,32 +338,32 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            foreach(var dd in dds)
+            foreach(var kvp in dirs)
             {
-                Print(builder, dd);
+                builder.AppendLine($"    Directory at Sector {kvp.Key}");
+                builder.AppendLine("    -------------------------");
+                Print(builder, kvp.Value);
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryDescriptor? dd)
+        private static void Print(StringBuilder builder, Directory? dir)
         {
-            builder.AppendLine("    Directory Descriptor Information:");
-            builder.AppendLine("    -------------------------");
-            if (dd == null)
+            if (dir == null)
             {
                 builder.AppendLine("    No directory descriptor");
                 builder.AppendLine();
                 return;
             }
-            if (dd.DirectoryRecords == null)
+            if (dir.DirectoryRecords == null)
             {
                 builder.AppendLine("    No directory records");
                 builder.AppendLine();
                 return;
             }
 
-            foreach (var dr in dd.DirectoryRecords)
+            foreach (var dr in dir.DirectoryRecords)
             {
                 Print(builder, dr);
             }

@@ -43,11 +43,11 @@ namespace SabreTools.Serialization.Readers
                 if (volume.VolumeDescriptorSet == null || volume.VolumeDescriptorSet.Length == 0)
                     return null;
 
-                // Parse the root directory descriptor(s) for each base volume descriptor
-                volume.DirectoryDescriptors = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
-
                 // Parse the path table group(s) for each base volume descriptor
                 volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
+
+                // Parse the root directory descriptor(s) for each base volume descriptor
+                volume.DirectoryDescriptors = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
 
                 return volume;
             }
@@ -365,144 +365,6 @@ namespace SabreTools.Serialization.Readers
 
         #endregion
 
-        #region Directory Descriptor Parsing
-
-        /// <summary>
-        /// Parse a Stream into an array of DirectoryDescriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="vd">Set of volume descriptors for a volume</param>
-        /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
-        public static DirectoryDescriptor[]? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
-        {
-            var rootDescriptors = new List<DirectoryDescriptor>();
-            foreach (VolumeDescriptor vd in vdSet)
-            {
-                if (vd is BaseVolumeDescriptor bvd)
-                {
-                    // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
-                    var descriptors = ParseDirectoryDescriptor(data, sectorLength, bvd.RootDirectoryRecord);
-                    if (descriptors != null && descriptors.Count > 0)
-                        rootDescriptors.AddRange(descriptors);
-                }
-            }
-
-            // Return error (null) if no valid directory descriptors were found 
-            if (rootDescriptors.Count == 0)
-                return null;
-
-            return [.. rootDescriptors];
-        }
-
-        /// <summary>
-        /// Parse a Stream into a list of DirectoryDescriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="dr">Root directory record pointing to the root directory extent</param>
-        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
-        public static List<DirectoryDescriptor>? ParseDirectoryDescriptor(Stream data, short sectorLength, DirectoryRecord? dr)
-        {
-            if (dr == null)
-                return null;
-
-            // Read Directory Descriptors from the extent pointed to by a Directory Record
-
-            return null;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a DirectoryRecord
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="root">true if root directory record, false otherwise</param>
-        /// <returns>Filled DirectoryRecord on success, null on error</returns>
-        public static DirectoryRecord? ParseDirectoryRecord(Stream data, bool root)
-        {
-            var obj = new DirectoryRecord();
-
-            obj.DirectoryRecordLength = data.ReadByteValue();
-            obj.ExtendedAttributeRecordLength = data.ReadByteValue();
-            obj.ExtentLocation = data.ReadInt32BothEndian();
-            obj.ExtentLength = data.ReadInt32BothEndian();
-
-            obj.RecordingDateTime = ParseDirectoryRecordDateTime(data);
-
-            obj.FileFlags = (FileFlags)data.ReadByteValue();
-            obj.FileUnitSize = data.ReadByteValue();
-            obj.InterleaveGapSize = data.ReadByteValue();
-            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
-            obj.FileIdentifierLength = data.ReadByteValue();
-
-            // Root directory within the volume descriptor has a single byte file identifier
-            if (root)
-                obj.FileIdentifier = data.ReadBytes(1);
-            else if (obj.FileIdentifierLength > 0)
-                obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
-
-            // If file identifier length is even, there is a padding field byte
-            if (obj.FileIdentifierLength % 2 == 0)
-                obj.PaddingField = data.ReadByteValue();
-
-            // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
-            if (root)
-                return obj;
-
-            // Calculate actual size of record
-            int totalBytes = 33 + obj.FileIdentifierLength;
-            // Calculate the size of the system use section (remaining allocated bytes)
-            int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
-            // Account for padding field after file identifier
-            if (obj.FileIdentifierLength % 2 == 0)
-            {
-                totalBytes += 1;
-                systemUseLength -= 1;
-            }
-
-            // If System Use is empty, or if DirectoryRecordLength is bad, return early
-            if (systemUseLength < 1)
-            {
-                // Total record size must be even, read a padding byte
-                if (totalBytes % 2 != 0)
-                    obj.SystemUse = data.ReadBytes(1);
-
-                return obj;
-            }
-
-            // Total used bytes must be even, read a padding byte
-            totalBytes += systemUseLength;
-            if (totalBytes % 2 != 0)
-                systemUseLength += 1;
-
-            // Read system use field
-            obj.SystemUse = data.ReadBytes(systemUseLength);
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Parse a Stream into a DirectoryRecordDateTime
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <returns>Filled DirectoryRecordDateTime on success, null on error</returns>
-        public static DirectoryRecordDateTime? ParseDirectoryRecordDateTime(Stream data)
-        {
-            var obj = new DirectoryRecordDateTime();
-
-            obj.YearsSince1990 = data.ReadByteValue();
-            obj.Month = data.ReadByteValue();
-            obj.Day = data.ReadByteValue();
-            obj.Hour = data.ReadByteValue();
-            obj.Minute = data.ReadByteValue();
-            obj.Second = data.ReadByteValue();
-            obj.TimezoneOffset = data.ReadByteValue();
-
-            return obj;
-        }
-
-        #endregion
-
         #region Path Table Parsing
 
         /// <summary>
@@ -699,6 +561,150 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             return [.. pathTable];
+        }
+
+        #endregion
+
+        #region Directory Descriptor Parsing
+
+        /// <summary>
+        /// Parse a Stream into a map of sector numbers to Directory
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="vd">Set of volume descriptors for a volume</param>
+        /// <returns>Filled Dictionary of int to DirectoryDescriptor on success, null on error</returns>
+        public static Dictionary<int, Directory>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
+        {
+            var directories = new Dictionary<int, Directory>();
+            foreach (VolumeDescriptor vd in vdSet)
+            {
+                if (vd is BaseVolumeDescriptor bvd)
+                {
+                    // Parse the root directory pointed to from the base volume descriptor
+                    var descriptors = ParseDirectory(data, sectorLength, bvd.RootDirectoryRecord);
+                    if (descriptors == null && descriptors.Count == 0)
+                        continue;
+                    // Merge dictionaries
+                    foreach (var kvp in descriptors)
+                    {
+                        if (!directories.ContainsKey(kvp.Key))
+                            directories.Add(kvp.Key, kvp.Value);
+                    }
+                }
+            }
+
+            // Return error (null) if no valid directory descriptors were found 
+            if (directories.Count == 0)
+                return null;
+
+            return directories;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a list of DirectoryDescriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <param name="dr">Root directory record pointing to the root directory extent</param>
+        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
+        public static Dictionary<int, Directory>? ParseDirectory(Stream data, short sectorLength, DirectoryRecord? dr)
+        {
+            if (dr == null)
+                return null;
+
+            // Read Directory Descriptors from the extent pointed to by a Directory Record
+
+            return null;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="root">true if root directory record, false otherwise</param>
+        /// <returns>Filled DirectoryRecord on success, null on error</returns>
+        public static DirectoryRecord? ParseDirectoryRecord(Stream data, bool root)
+        {
+            var obj = new DirectoryRecord();
+
+            obj.DirectoryRecordLength = data.ReadByteValue();
+            obj.ExtendedAttributeRecordLength = data.ReadByteValue();
+            obj.ExtentLocation = data.ReadInt32BothEndian();
+            obj.ExtentLength = data.ReadInt32BothEndian();
+
+            obj.RecordingDateTime = ParseDirectoryRecordDateTime(data);
+
+            obj.FileFlags = (FileFlags)data.ReadByteValue();
+            obj.FileUnitSize = data.ReadByteValue();
+            obj.InterleaveGapSize = data.ReadByteValue();
+            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
+            obj.FileIdentifierLength = data.ReadByteValue();
+
+            // Root directory within the volume descriptor has a single byte file identifier
+            if (root)
+                obj.FileIdentifier = data.ReadBytes(1);
+            else if (obj.FileIdentifierLength > 0)
+                obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
+
+            // If file identifier length is even, there is a padding field byte
+            if (obj.FileIdentifierLength % 2 == 0)
+                obj.PaddingField = data.ReadByteValue();
+
+            // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
+            if (root)
+                return obj;
+
+            // Calculate actual size of record
+            int totalBytes = 33 + obj.FileIdentifierLength;
+            // Calculate the size of the system use section (remaining allocated bytes)
+            int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
+            // Account for padding field after file identifier
+            if (obj.FileIdentifierLength % 2 == 0)
+            {
+                totalBytes += 1;
+                systemUseLength -= 1;
+            }
+
+            // If System Use is empty, or if DirectoryRecordLength is bad, return early
+            if (systemUseLength < 1)
+            {
+                // Total record size must be even, read a padding byte
+                if (totalBytes % 2 != 0)
+                    obj.SystemUse = data.ReadBytes(1);
+
+                return obj;
+            }
+
+            // Total used bytes must be even, read a padding byte
+            totalBytes += systemUseLength;
+            if (totalBytes % 2 != 0)
+                systemUseLength += 1;
+
+            // Read system use field
+            obj.SystemUse = data.ReadBytes(systemUseLength);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryRecordDateTime
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryRecordDateTime on success, null on error</returns>
+        public static DirectoryRecordDateTime? ParseDirectoryRecordDateTime(Stream data)
+        {
+            var obj = new DirectoryRecordDateTime();
+
+            obj.YearsSince1990 = data.ReadByteValue();
+            obj.Month = data.ReadByteValue();
+            obj.Day = data.ReadByteValue();
+            obj.Hour = data.ReadByteValue();
+            obj.Minute = data.ReadByteValue();
+            obj.Second = data.ReadByteValue();
+            obj.TimezoneOffset = data.ReadByteValue();
+
+            return obj;
         }
 
         #endregion

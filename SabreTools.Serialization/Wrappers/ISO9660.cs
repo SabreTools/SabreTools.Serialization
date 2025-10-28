@@ -21,14 +21,14 @@ namespace SabreTools.Serialization.Wrappers
         public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
 
         /// <summary>
-        /// Directory Descriptors
-        /// </summary>
-        public DirectoryDescriptor[] DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
-
-        /// <summary>
         /// Path Tables
         /// </summary>
         public PathTableGroup[] PathTableGroups => Model.PathTableGroups ?? [];
+
+        /// <summary>
+        /// Directory Descriptors
+        /// </summary>
+        public Dictionary<int, Directory> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion
 
