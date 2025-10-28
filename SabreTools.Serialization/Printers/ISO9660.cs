@@ -100,7 +100,7 @@ namespace SabreTools.Data.Printers
                 }
                 else
                 {
-                    builder.AppendLine(svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES == VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES), "      Unregistered Escape Sequences");
+                    builder.AppendLine(svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES == VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES, "      Unregistered Escape Sequences");
                     if ((byte)svd.VolumeFlags > 1)
                         builder.AppendLine("Not Zeroed", "      Reserved Flags");
                     else
@@ -412,6 +412,7 @@ namespace SabreTools.Data.Printers
         }
     }
 }
+
 
 
 
