@@ -542,8 +542,8 @@ namespace SabreTools.Serialization.Readers
         {
             var groups = new List<PathTableGroup>();
 
-            int sizeL = vd.PathTableSize?.LittleEndian ?? 0;
-            int sizeB = vd.PathTableSize?.BigEndian ?? 0;
+            int sizeL = vd.PathTableSize.LittleEndian;
+            int sizeB = vd.PathTableSize.BigEndian;
             int locationL = vd.PathTableLocationL;
             int locationL2 = vd.OptionalPathTableLocationL;
             int locationM = vd.PathTableLocationM;

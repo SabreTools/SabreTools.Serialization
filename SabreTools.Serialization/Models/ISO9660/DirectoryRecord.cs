@@ -22,12 +22,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Logical block number of the first logical block allocated to this extent
         /// </summary>
-        public BothInt32? ExtentLocation { get; set; }
+        public BothInt32 ExtentLocation { get; set; }
 
         /// <summary>
         /// Number of logical blocks allocated to this extent
         /// </summary>
-        public BothInt32? ExtentLength { get; set; }
+        public BothInt32 ExtentLength { get; set; }
 
         /// <summary>
         /// Datetime of recording for the Directory Record
@@ -55,7 +55,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Volume sequence ordinal number of the volume in the volume set on which the record extent is recorded
         /// </summary>
-        public BothInt16? VolumeSequenceNumber { get; set; }
+        public BothInt16 VolumeSequenceNumber { get; set; }
 
         /// <summary>
         /// Length of the FileIdentifier field in bytes
