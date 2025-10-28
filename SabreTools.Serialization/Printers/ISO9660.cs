@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 
@@ -17,7 +18,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
 
             // TODO: Better check
-            if (volume.SystemArea.AsSpan().SequenceEqual(new byte[volume.SystemArea.Length]))
+            if (volume.SystemArea.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
@@ -66,7 +67,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.BootSystemUse == null || vd.BootSystemUse.Length == 0)
                 builder.AppendLine(vd.BootSystemUse, "    Boot System Use");
-            else if (vd.BootSystemUse.AsSpan().SequenceEqual(new byte[vd.BootSystemUse.Length]))
+            else if (vd.BootSystemUse.All(b => b == 0))
                 builder.AppendLine("Zeroed", "    Boot System Use");
             else
                 builder.AppendLine("Not Zeroed", "    Boot System Use");
@@ -111,7 +112,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
 
             
-            if (vd.Unused8Bytes.AsSpan().SequenceEqual(new byte[vd.Unused8Bytes.Length]))
+            if (vd.Unused8Bytes.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Unused 8 Bytes");
             else
                 builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
@@ -121,7 +122,7 @@ namespace SabreTools.Data.Printers
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
-                if (pvd2.Unused32Bytes.AsSpan().SequenceEqual(new byte[pvd2.Unused32Bytes.Length]))
+                if (pvd2.Unused32Bytes.All(b => b == 0))
                     builder.AppendLine("Zeroed", "  Unused 32 Bytes");
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
@@ -168,12 +169,12 @@ namespace SabreTools.Data.Printers
 
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
 
-            if (vd.ApplicationUse.AsSpan().SequenceEqual(new byte[vd.ApplicationUse.Length]))
+            if (vd.ApplicationUse.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Application Use");
             else
                 builder.AppendLine("Not Zeroed", "  Application Use");
 
-            if (vd.Reserved653Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved653Bytes.Length]))
+            if (vd.Reserved653Bytes.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
             else
                 builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
@@ -193,7 +194,7 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            if (vd.Reserved653Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved653Bytes.Length]))
+            if (vd.Reserved653Bytes.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
             else
                 builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
@@ -206,7 +207,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Reserved2041Bytes.AsSpan().SequenceEqual(new byte[vd.Reserved2041Bytes.Length]))
+            if (vd.Reserved2041Bytes.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Reserved Bytes");
             else
                 builder.AppendLine("Not Zeroed", "  Reserved Bytes");
@@ -219,7 +220,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Data.AsSpan().SequenceEqual(new byte[vd.Data.Length]))
+            if (vd.Data.All(b => b == 0))
                 builder.AppendLine("Zeroed", "  Data");
             else
                 builder.AppendLine("Not Zeroed", "  Data");
