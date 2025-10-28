@@ -140,7 +140,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLineBothEndian(vd.VolumeSetSize, "    Volume Set Size");
             builder.AppendLineBothEndian(vd.VolumeSequenceNumber, "    Volume Sequence Number");
             builder.AppendLineBothEndian(vd.LogicalBlockSize, "    Logical Block Size");
-            builder.AppendLineBothEndian(vd.PathTableSize.LittleEndian, "    Path Table Size");
+            builder.AppendLineBothEndian(vd.PathTableSize, "    Path Table Size");
             builder.AppendLine(vd.PathTableLocationL, "    Type-L Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationL, "    Optional Type-L Path Table Location");
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
