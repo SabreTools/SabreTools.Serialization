@@ -400,33 +400,98 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            // TODO: Implement
+            foreach (var dr in dd)
+            {
+                Print(builder, dr);
+            }
 
             builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, DirectoryRecord? dr)
         {
-            builder.AppendLine("    Directory Record:");
-            builder.AppendLine("    -------------------------");
+            builder.AppendLine("      Directory Record:");
+            builder.AppendLine("      -------------------------");
             if (dr == null)
             {
-                builder.AppendLine("    No directory record");
+                builder.AppendLine("      No directory record");
                 builder.AppendLine();
                 return;
             }
 
-            // TODO: Implement
+            builder.AppendLine(dr.DirectoryRecordLength, "      Directory Record Length");
+            builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
+
+            if (dr.ExtentLocation.IsValid)
+                builder.AppendLine(dr.ExtentLocation, "    Extent Location");
+            else
+            {
+                builder.AppendLine(dr.ExtentLocation.LittleEndian, "    Extent Location (Little Endian)");
+                builder.AppendLine(dr.ExtentLocation.BigEndian, "    Extent Location (Big Endian)");
+            }
+            if (dr.ExtentLength.IsValid)
+                builder.AppendLine(dr.ExtentLength, "    Extent Length");
+            else
+            {
+                builder.AppendLine(dr.ExtentLength.LittleEndian, "    Extent Length (Little Endian)");
+                builder.AppendLine(dr.ExtentLength.BigEndian, "    Extent Length (Big Endian)");
+            }
+
+            Print(builder, dr.RecordingDateTime);
             
-            //builder.AppendLine("    File Flags:");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.EXISTENCE), "      Existence");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.DIRECTORY), "      Directory");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.ASSOCIATED_FILE), "      Associated File");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RECORD), "      Record");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.PROTECTION), "      Protection");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RESERVED_BIT5), "      Reserved Flag (Bit 5)");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.RESERVED_BIT6), "      Reserved Flag (Bit 6)");
-            //builder.AppendLine(dr.FileFlags.HasFlag(FileFlags.MULTI_EXTENT), "      Multi-Extent");
+            builder.AppendLine("      File Flags:");
+            builder.AppendLine((dr.FileFlags & FileFlags.EXISTENCE) == FileFlags.EXISTENCE, "        Existence");
+            builder.AppendLine((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY, "        Directory");
+            builder.AppendLine((dr.FileFlags & FileFlags.ASSOCIATED_FILE) == FileFlags.ASSOCIATED_FILE, "        Associated File");
+            builder.AppendLine((dr.FileFlags & FileFlags.RECORD) == FileFlags.RECORD, "        Record");
+            builder.AppendLine((dr.FileFlags & FileFlags.PROTECTION) == FileFlags.PROTECTION, "        Protection");
+            builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT5) == FileFlags.RESERVED_BIT5, "        Reserved Flag (Bit 5)");
+            builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT6) == FileFlags.RESERVED_BIT6, "        Reserved Flag (Bit 6)");
+            builder.AppendLine((dr.FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT, "        Multi-Extent");
+
+            builder.AppendLine(dr.FileUnitSize, "      File Unit Size");
+            builder.AppendLine(dr.InterleaveGapSize, "      Interleave Gap Size");
+
+            if (dr.VolumeSequenceNumber.IsValid)
+                builder.AppendLine(dr.VolumeSequenceNumber, "    Volume Sequence Number");
+            else
+            {
+                builder.AppendLine(dr.VolumeSequenceNumber.LittleEndian, "    Volume Sequence Number (Little Endian)");
+                builder.AppendLine(dr.VolumeSequenceNumber.BigEndian, "    Volume Sequence Number (Big Endian)");
+            }
+
+            builder.AppendLine(dr.FileIdentifierLength, "      File Identifier Length");
+            builder.AppendLine(dr.FileIdentifier, "      File Identifier");
+            builder.AppendLine(dr.PaddingField, "      Padding Field");
+            
+            if (dr.SystemUse == null || dr.SystemUse.Length == 0)
+                builder.AppendLine(dr.SystemUse, "      System Use");
+            else if (Array.TrueForAll(dr.SystemUse, b => b == 0))
+                builder.AppendLine($"Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
+            else
+                builder.AppendLine($"Not Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
+
+            builder.AppendLine();
+        }
+
+        private static void Print(StringBuilder builder, DirectoryRecordDateTime? drdt)
+        {
+            builder.AppendLine("      Directory Record Date Time:");
+            builder.AppendLine("      -------------------------");
+            if (drdt == null)
+            {
+                builder.AppendLine("      Null");
+                return;
+            }
+
+            builder.AppendLine(drdt.YearsSince1990, "        Years Since 1990");
+            builder.AppendLine(drdt.Month, "        Month");
+            builder.AppendLine(drdt.Day, "        Day");
+            builder.AppendLine(drdt.Hour, "        Hour");
+            builder.AppendLine(drdt.Minute, "        Minute");
+            builder.AppendLine(drdt.Second, "        Second");
+            string tz = $"{((drdt.TimezoneOffset-48)*15/60):+0;-0}:{((drdt.TimezoneOffset-48)*15%60+60)%60:00} (0x{drdt.TimezoneOffset.ToString("X2")})";
+            builder.AppendLine(tz, "        TimezoneOffset");
 
             builder.AppendLine();
         }
@@ -450,6 +515,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
             string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00} (0x{dt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "      Timezone Offset");
+
             builder.AppendLine();
         }
     }
