@@ -18,7 +18,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
 
             // TODO: Better check
-            if (volume.SystemArea.All(b => b == 0))
+            if (IsAllZero(volume.SystemArea))
                 builder.AppendLine("Zeroed", "  System Area");
             else
                 builder.AppendLine("Not Zeroed", "  System Area");
@@ -67,7 +67,7 @@ namespace SabreTools.Data.Printers
 
             if (vd.BootSystemUse == null || vd.BootSystemUse.Length == 0)
                 builder.AppendLine(vd.BootSystemUse, "    Boot System Use");
-            else if (vd.BootSystemUse.All(b => b == 0))
+            else if (IsAllZero(vd.BootSystemUse))
                 builder.AppendLine("Zeroed", "    Boot System Use");
             else
                 builder.AppendLine("Not Zeroed", "    Boot System Use");
@@ -91,19 +91,13 @@ namespace SabreTools.Data.Printers
 
             if (vd is PrimaryVolumeDescriptor pvd)
             {
-                builder.AppendLine(vd.UnusedByte, "    Unused Byte");
+                builder.AppendLine(pvd.UnusedByte, "    Unused Byte");
             }
             else if (vd is SupplementaryVolumeDescriptor svd)
             {
-                builder.AppendLine("    File Flags:");
-                builder.AppendLine(svd.FileFlags & FileFlags.EXISTENCE, "      Existence");
-                builder.AppendLine(svd.FileFlags & FileFlags.DIRECTORY, "      Directory");
-                builder.AppendLine(svd.FileFlags & FileFlags.ASSOCIATED_FILE, "      Associated File");
-                builder.AppendLine(svd.FileFlags & FileFlags.RECORD, "      Record");
-                builder.AppendLine(svd.FileFlags & FileFlags.PROTECTION, "      Protection");
-                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT5, "      Reserved Flag (Bit 5)");
-                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT6, "      Reserved Flag (Bit 6)");
-                builder.AppendLine(svd.FileFlags & FileFlags.MULTI_EXTENT, "      Multi-Extent");
+                builder.AppendLine("    Volume Flags:");
+                builder.AppendLine(svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES, "      Unregistered Escape Sequences");
+                builder.AppendLine(svd.VolumeFlags & ~VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES, "      Reserved Flags");
             }
 
             // TODO: Decode all byte arrays into strings (based on encoding above)
@@ -112,7 +106,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
 
             
-            if (vd.Unused8Bytes.All(b => b == 0))
+            if (IsAllZero(vd.Unused8Bytes))
                 builder.AppendLine("Zeroed", "  Unused 8 Bytes");
             else
                 builder.AppendLine(vd.Unused8Bytes, "  Unused 8 Bytes");
@@ -122,7 +116,7 @@ namespace SabreTools.Data.Printers
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
-                if (pvd2.Unused32Bytes.All(b => b == 0))
+                if (IsAllZero(pvd2.Unused32Bytes))
                     builder.AppendLine("Zeroed", "  Unused 32 Bytes");
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "  Unused 32 Bytes");
@@ -169,12 +163,12 @@ namespace SabreTools.Data.Printers
 
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
 
-            if (vd.ApplicationUse.All(b => b == 0))
+            if (IsAllZero(vd.ApplicationUse))
                 builder.AppendLine("Zeroed", "  Application Use");
             else
                 builder.AppendLine("Not Zeroed", "  Application Use");
 
-            if (vd.Reserved653Bytes.All(b => b == 0))
+            if (IsAllZero(vd.Reserved653Bytes))
                 builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
             else
                 builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
@@ -194,10 +188,10 @@ namespace SabreTools.Data.Printers
             // TODO: Check that MSB/LSB match
             builder.AppendLine(vd.VolumePartitionSize?.LSB, "    Volume Partition Size");
 
-            if (vd.Reserved653Bytes.All(b => b == 0))
-                builder.AppendLine("Zeroed", "  Reserved 653 Bytes");
+            if (IsAllZero(vd.SystemUse))
+                builder.AppendLine("Zeroed", "  System Use");
             else
-                builder.AppendLine("Not Zeroed", "  Reserved 653 Bytes");
+                builder.AppendLine("Not Zeroed", "  System Use");
 
             builder.AppendLine();
         }
@@ -207,7 +201,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Reserved2041Bytes.All(b => b == 0))
+            if (IsAllZero(vd.Reserved2041Bytes))
                 builder.AppendLine("Zeroed", "  Reserved Bytes");
             else
                 builder.AppendLine("Not Zeroed", "  Reserved Bytes");
@@ -220,7 +214,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Data.All(b => b == 0))
+            if (IsAllZero(vd.Data))
                 builder.AppendLine("Zeroed", "  Data");
             else
                 builder.AppendLine("Not Zeroed", "  Data");
@@ -363,6 +357,16 @@ namespace SabreTools.Data.Printers
             }
 
             // TODO: Implement
+            
+                builder.AppendLine("    File Flags:");
+                builder.AppendLine(svd.FileFlags & FileFlags.EXISTENCE, "      Existence");
+                builder.AppendLine(svd.FileFlags & FileFlags.DIRECTORY, "      Directory");
+                builder.AppendLine(svd.FileFlags & FileFlags.ASSOCIATED_FILE, "      Associated File");
+                builder.AppendLine(svd.FileFlags & FileFlags.RECORD, "      Record");
+                builder.AppendLine(svd.FileFlags & FileFlags.PROTECTION, "      Protection");
+                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT5, "      Reserved Flag (Bit 5)");
+                builder.AppendLine(svd.FileFlags & FileFlags.RESERVED_BIT6, "      Reserved Flag (Bit 6)");
+                builder.AppendLine(svd.FileFlags & FileFlags.MULTI_EXTENT, "      Multi-Extent");
 
             builder.AppendLine();
         }
@@ -387,6 +391,16 @@ namespace SabreTools.Data.Printers
             string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00}";
             builder.AppendLine(tz, "      Timezone Offset");
             builder.AppendLine();
+        }
+
+        private bool IsAllZero(byte[] array)
+        {
+            for (byte i = 0; i < array.Length; i++)
+            {
+                if (array[i] != 0)
+                    return false;
+            }
+            return true;
         }
     }
 }
