@@ -548,13 +548,34 @@ namespace SabreTools.Serialization.Readers
             int locationL2 = vd.OptionalPathTableLocationL;
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
-            // TODO: Deal with invalid logical block size (validity check on both LittleEndian and BigEndian, discard one invalid, if both valid choose 2048 if one is 2048)
-            //if (vd.LogicalBlockSize?.IsValid != true)
-            short blockLength = vd.LogicalBlockSize?.LittleEndian ?? 0;
+            
+            short blockLength;
+            if (vd.LogicalBlockSize.IsValid)
+            {
+                blockLength = vd.LogicalBlockSize;
 
-            // Validate logical block length, if invalid default to logical sector length
-            if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
-                blockLength = sectorLength;
+                // Validate logical block length, if invalid default to logical sector length
+                if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
+                    blockLength = sectorLength;
+            }
+            else
+            {
+                // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
+                short le = vd.LogicalBlockSize.LittleEndian;
+                short be = vd.LogicalBlockSize.LittleEndian;
+                bool le_valid = true;
+                bool be_valid = true;
+                if (le < 512 || le > sectorLength || (le & (le - 1)) != 0)
+                    le_valid = false;
+                if (be < 512 || be > sectorLength || (be & (be - 1)) != 0)
+                    be_valid = false;
+                if (le_valid && !be_valid)
+                    blockLength = le;
+                else if (be_valid && !le_valid)
+                    blockLength = be;
+                else
+                    blockLength = sectorLength;
+            }
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
@@ -629,6 +650,7 @@ namespace SabreTools.Serialization.Readers
             var pathTable = new List<PathTableRecord>();
 
             // TODO: Better deal with invalid path table sizes < 10 (manually detect valid records to determine size)
+            // Current status: Trusting path table length field (tableSize)
             int pos = 0;
             while (pos < tableSize)
             {
