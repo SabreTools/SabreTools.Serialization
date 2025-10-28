@@ -124,8 +124,7 @@ namespace SabreTools.Serialization.Readers
             obj.DibInflatedSize = data.ReadUInt32LittleEndian();
 
             // Peek at the next 2 bytes
-            ushort peek = data.ReadUInt16LittleEndian();
-            data.SeekIfPossible(-2, SeekOrigin.Current);
+            ushort peek = data.PeekUInt16LittleEndian();
 
             // If the next value is a known Endianness
             if (Enum.IsDefined(typeof(Endianness), peek))

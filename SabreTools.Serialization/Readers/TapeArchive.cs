@@ -133,9 +133,8 @@ namespace SabreTools.Serialization.Readers
                 return obj;
 
             // Peek at the next 5 bytes
-            byte[] temp = data.ReadBytes(5);
+            byte[] temp = data.PeekBytes(5);
             string tempString = Encoding.ASCII.GetString(temp);
-            data.SeekIfPossible(-5, SeekOrigin.Current);
             if (tempString != "ustar")
                 return obj;
 

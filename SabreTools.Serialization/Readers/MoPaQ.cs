@@ -31,8 +31,7 @@ namespace SabreTools.Serialization.Readers
                 #region User Data
 
                 // Check for User Data
-                uint possibleSignature = data.ReadUInt32LittleEndian();
-                data.SeekIfPossible(-4, SeekOrigin.Current);
+                uint possibleSignature = data.PeekUInt32LittleEndian();
                 if (possibleSignature == UserDataSignatureUInt32)
                 {
                     // Deserialize the user data, returning null if invalid

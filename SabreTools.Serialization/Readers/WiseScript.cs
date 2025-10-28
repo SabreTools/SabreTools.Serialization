@@ -561,8 +561,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Check for an empty registry call
-            uint possiblyEmpty = data.ReadUInt32LittleEndian();
-            data.SeekIfPossible(-4, SeekOrigin.Current);
+            uint possiblyEmpty = data.PeekUInt32LittleEndian();
             if (possiblyEmpty == 0x00000000)
             {
                 obj.DataType = data.ReadByteValue();
