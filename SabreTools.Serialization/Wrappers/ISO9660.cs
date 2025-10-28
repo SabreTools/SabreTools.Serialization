@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Directory Descriptors
         /// </summary>
-        public Dictionary<int, ISO9660.Directory> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
+        public Dictionary<int, SabreTools.Data.Models.ISO9660.Directory> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion
 
