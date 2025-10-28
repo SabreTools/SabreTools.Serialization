@@ -9,8 +9,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // If we have no root directories
-            if (RootDirectoryDescriptors == null || RootDirectoryDescriptors.Length == 0)
+            // If we have no directory descriptors
+            if (DirectoryDescriptors == null || DirectoryDescriptors.Length == 0)
                 return false;
 
             // If we have no path table groups

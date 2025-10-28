@@ -27,7 +27,7 @@ namespace SabreTools.Data.Printers
 
             Print(builder, volume.VolumeDescriptorSet);
             Print(builder, volume.PathTableGroups);
-            Print(builder, volume.RootDirectoryDescriptors);
+            Print(builder, volume.DirectoryDescriptors);
         }
 
         #region Volume Descriptors
@@ -372,11 +372,11 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, DirectoryDescriptor[]? dds)
         {
-            builder.AppendLine("  Root Directory Descriptor(s) Information:");
+            builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
             if (dds == null)
             {
-                builder.AppendLine("  No root directory descriptors");
+                builder.AppendLine("  No directory descriptors");
                 builder.AppendLine();
                 return;
             }
@@ -429,23 +429,24 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
 
             if (dr.ExtentLocation.IsValid)
-                builder.AppendLine(dr.ExtentLocation, "    Extent Location");
+                builder.AppendLine(dr.ExtentLocation, "      Extent Location");
             else
             {
-                builder.AppendLine(dr.ExtentLocation.LittleEndian, "    Extent Location (Little Endian)");
-                builder.AppendLine(dr.ExtentLocation.BigEndian, "    Extent Location (Big Endian)");
+                builder.AppendLine(dr.ExtentLocation.LittleEndian, "      Extent Location (Little Endian)");
+                builder.AppendLine(dr.ExtentLocation.BigEndian, "      Extent Location (Big Endian)");
             }
             if (dr.ExtentLength.IsValid)
-                builder.AppendLine(dr.ExtentLength, "    Extent Length");
+                builder.AppendLine(dr.ExtentLength, "      Extent Length");
             else
             {
-                builder.AppendLine(dr.ExtentLength.LittleEndian, "    Extent Length (Little Endian)");
-                builder.AppendLine(dr.ExtentLength.BigEndian, "    Extent Length (Big Endian)");
+                builder.AppendLine(dr.ExtentLength.LittleEndian, "      Extent Length (Little Endian)");
+                builder.AppendLine(dr.ExtentLength.BigEndian, "      Extent Length (Big Endian)");
             }
 
             Print(builder, dr.RecordingDateTime);
             
             builder.AppendLine("      File Flags:");
+            builder.AppendLine("      -------------------------");
             builder.AppendLine((dr.FileFlags & FileFlags.EXISTENCE) == FileFlags.EXISTENCE, "        Existence");
             builder.AppendLine((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY, "        Directory");
             builder.AppendLine((dr.FileFlags & FileFlags.ASSOCIATED_FILE) == FileFlags.ASSOCIATED_FILE, "        Associated File");
@@ -454,16 +455,17 @@ namespace SabreTools.Data.Printers
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT5) == FileFlags.RESERVED_BIT5, "        Reserved Flag (Bit 5)");
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT6) == FileFlags.RESERVED_BIT6, "        Reserved Flag (Bit 6)");
             builder.AppendLine((dr.FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT, "        Multi-Extent");
+            builder.AppendLine();
 
             builder.AppendLine(dr.FileUnitSize, "      File Unit Size");
             builder.AppendLine(dr.InterleaveGapSize, "      Interleave Gap Size");
 
             if (dr.VolumeSequenceNumber.IsValid)
-                builder.AppendLine(dr.VolumeSequenceNumber, "    Volume Sequence Number");
+                builder.AppendLine(dr.VolumeSequenceNumber, "      Volume Sequence Number");
             else
             {
-                builder.AppendLine(dr.VolumeSequenceNumber.LittleEndian, "    Volume Sequence Number (Little Endian)");
-                builder.AppendLine(dr.VolumeSequenceNumber.BigEndian, "    Volume Sequence Number (Big Endian)");
+                builder.AppendLine(dr.VolumeSequenceNumber.LittleEndian, "      Volume Sequence Number (Little Endian)");
+                builder.AppendLine(dr.VolumeSequenceNumber.BigEndian, "      Volume Sequence Number (Big Endian)");
             }
 
             builder.AppendLine(dr.FileIdentifierLength, "      File Identifier Length");
@@ -490,14 +492,14 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            builder.AppendLine(drdt.YearsSince1990, "        Years Since 1990");
+            builder.AppendLine(drdt.YearsSince1990, "        Years Since 1900");
             builder.AppendLine(drdt.Month, "        Month");
             builder.AppendLine(drdt.Day, "        Day");
             builder.AppendLine(drdt.Hour, "        Hour");
             builder.AppendLine(drdt.Minute, "        Minute");
             builder.AppendLine(drdt.Second, "        Second");
             string tz = $"{((drdt.TimezoneOffset-48)*15/60):+0;-0}:{((drdt.TimezoneOffset-48)*15%60+60)%60:00} (0x{drdt.TimezoneOffset.ToString("X2")})";
-            builder.AppendLine(tz, "        TimezoneOffset");
+            builder.AppendLine(tz, "        Timezone Offset");
 
             builder.AppendLine();
         }
@@ -526,11 +528,3 @@ namespace SabreTools.Data.Printers
         }
     }
 }
-
-
-
-
-
-
-
-

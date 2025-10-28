@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
-                volume.RootDirectoryDescriptors = ParseRootDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
+                volume.DirectoryDescriptors = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
 
                 // Parse the path table group(s) for each base volume descriptor
                 volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
@@ -368,13 +368,13 @@ namespace SabreTools.Serialization.Readers
         #region Directory Descriptor Parsing
 
         /// <summary>
-        /// Parse a Stream into an array of DirectoryDescriptor for root directory
+        /// Parse a Stream into an array of DirectoryDescriptor
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
         /// <returns>Filled DirectoryDescriptor[] on success, null on error</returns>
-        public static DirectoryDescriptor[]? ParseRootDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
+        public static DirectoryDescriptor[]? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
             var rootDescriptors = new List<DirectoryDescriptor>();
             foreach (VolumeDescriptor vd in vdSet)
@@ -382,7 +382,7 @@ namespace SabreTools.Serialization.Readers
                 if (vd is BaseVolumeDescriptor bvd)
                 {
                     // Parse the directory descriptors pointed to from the base volume descriptor's root directory record
-                    var descriptors = ParseDirectoryDescriptors(data, sectorLength, bvd.RootDirectoryRecord);
+                    var descriptors = ParseDirectoryDescriptor(data, sectorLength, bvd.RootDirectoryRecord);
                     if (descriptors != null && descriptors.Count > 0)
                         rootDescriptors.AddRange(descriptors);
                 }
@@ -402,10 +402,12 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="dr">Root directory record pointing to the root directory extent</param>
         /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
-        public static List<DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, short sectorLength, DirectoryRecord? dr)
+        public static List<DirectoryDescriptor>? ParseDirectoryDescriptor(Stream data, short sectorLength, DirectoryRecord? dr)
         {
             if (dr == null)
                 return null;
+
+            // Read Directory Descriptors from the extent pointed to by a Directory Record
 
             return null;
         }
