@@ -413,7 +413,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(Encoding.ASCII.GetString(dt.Minute), "      Minute");
             builder.AppendLine(Encoding.ASCII.GetString(dt.Second), "      Second");
             builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
-            string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00} (0x{dt.TimeZoneOffset.ToString("X2")})";
+            string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00} (0x{dt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "      Timezone Offset");
             builder.AppendLine();
         }
