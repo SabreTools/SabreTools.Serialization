@@ -147,7 +147,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
-            builder.AppendLine("    Root Directory Record:")
+            builder.AppendLine("    Root Directory Record:");
             Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
