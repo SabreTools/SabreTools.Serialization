@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
-using SabreTools.IO;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics;
 
@@ -621,7 +620,7 @@ namespace SabreTools.Serialization.Readers
             while (pos < dr.ExtentLength)
             {
                 // Peek next byte to check whether the next record length is not greater than the end of the dir extent
-                var recordLength = PeekByteValue();
+                var recordLength = data.PeekByteValue();
                 if (pos + recordLength > dr.ExtentLength)
                     break;
 
