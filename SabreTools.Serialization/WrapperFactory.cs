@@ -60,6 +60,7 @@ namespace SabreTools.Serialization
                 WrapperType.WAD => WAD3.Create(data),
                 WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
+                WrapperType.ZSTD => ZSTD.Create(data),
                 _ => null,
             };
         }
@@ -822,6 +823,13 @@ namespace SabreTools.Serialization
 
             if (extension.Equals("xzp", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.XZP;
+
+            #endregion
+            
+            #region ZSTD
+
+            if (magic.StartsWith([null, 0xB5, 0x2F, 0xFD]))
+                return WrapperType.ZSTD;
 
             #endregion
 
