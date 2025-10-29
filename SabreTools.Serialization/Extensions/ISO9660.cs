@@ -1,3 +1,4 @@
+using System;
 using SabreTools.Data.Models.ISO9660;
 
 namespace SabreTools.Data.Extensions
@@ -40,5 +41,12 @@ namespace SabreTools.Data.Extensions
 
             return blockLength;
         }
+
+        /// <summary>
+        /// Indicates if an array contains all ASCII numeric digits
+        /// </summary>
+        /// TODO: Move to IO as an array extension
+        public static bool IsNumericArray(this byte[] arr)
+            => Array.TrueForAll(arr, b => b >= 0x30 && b <= 0x39);
     }
 }

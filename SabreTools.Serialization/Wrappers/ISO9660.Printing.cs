@@ -453,46 +453,43 @@ namespace SabreTools.Serialization.Wrappers
                 return;
             }
 
-            if (IsDigits(dt.Year))
+            if (dt.Year.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Year), "      Year");
             else
                 builder.AppendLine(dt.Year, "      Year");
-            if (IsDigits(dt.Month))
+
+            if (dt.Month.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Month), "      Month");
             else
                 builder.AppendLine(dt.Month, "      Month");
-            if (IsDigits(dt.Day))
+
+            if (dt.Day.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Day), "      Day");
             else
                 builder.AppendLine(dt.Day, "      Day");
-            if (IsDigits(dt.Hour))
+
+            if (dt.Hour.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Hour), "      Hour");
             else
                 builder.AppendLine(dt.Hour, "      Hour");
-            if (IsDigits(dt.Minute))
+
+            if (dt.Minute.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Minute), "      Minute");
             else
                 builder.AppendLine(dt.Minute, "      Minute");
-            if (IsDigits(dt.Second))
+            if (dt.Second.IsNumericArray())
+
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Second), "      Second");
             else
                 builder.AppendLine(dt.Second, "      Second");
-            if (IsDigits(dt.Centisecond))
+
+            if (dt.Centisecond.IsNumericArray())
                 builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
             else
                 builder.AppendLine(dt.Centisecond, "      Centisecond");
+
             string tz = $"{((dt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((dt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{dt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "      Timezone Offset");
-        }
-
-        private static bool IsDigits(byte[] arr)
-        {
-            foreach (byte b in arr)
-            {
-                if (b < 48 || b > 57)
-                    return false;
-            }
-            return true;
         }
     }
 }
