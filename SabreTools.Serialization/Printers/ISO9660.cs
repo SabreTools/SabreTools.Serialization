@@ -366,7 +366,7 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            for (int recordNum = 0; recordNum < records.Length; recordNum++)
+            for (int recordNum = 0; recordNum < dir.DirectoryRecords.Length; recordNum++)
             {
                 builder.AppendLine($"      Directory Record {recordNum}:");
                 builder.AppendLine("      -------------------------");
