@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Readers
                 if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
                 {
                     // Reset stream to before the just-read volume descriptor
-                    data.Seek(-sectorLength, SeekOrigin.Current);
+                    data.SeekIfPossible(-sectorLength, SeekOrigin.Current);
                     return [.. obj];
                 }
 
@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Seek(-6, SeekOrigin.Current);
+                data.SeekIfPossible(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -155,7 +155,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Seek(-6, SeekOrigin.Current);
+                data.SeekIfPossible(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
-                data.Seek(-8, SeekOrigin.Current);
+                data.SeekIfPossible(-8, SeekOrigin.Current);
                 return null;
             }
 
@@ -232,7 +232,7 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
-                data.Seek(-120, SeekOrigin.Current);
+                data.SeekIfPossible(-120, SeekOrigin.Current);
                 return null;
             }
 
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Seek(-6, SeekOrigin.Current);
+                data.SeekIfPossible(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -305,7 +305,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Seek(-6, SeekOrigin.Current);
+                data.SeekIfPossible(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -335,7 +335,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Seek(-6, SeekOrigin.Current);
+                data.SeekIfPossible(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -366,7 +366,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -426,22 +426,22 @@ namespace SabreTools.Serialization.Readers
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
             {
-                data.Seek(locationL * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
                 groupL.PathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
-                data.Seek(locationL2 * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
                 groupL.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
-                data.Seek(locationM * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
                 groupL.PathTableM = ParsePathTable(data, sectorLength, sizeL, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
-                data.Seek(locationM2 * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
                 groupL.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeL, false);
             }
 
@@ -457,22 +457,22 @@ namespace SabreTools.Serialization.Readers
             var groupB = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
             {
-                data.Seek(locationL * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
                 groupB.PathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
-                data.Seek(locationL2 * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
                 groupB.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
-                data.Seek(locationM * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
                 groupB.PathTableM = ParsePathTable(data, sectorLength, sizeB, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
-                data.Seek(locationM2 * blockLength, SeekOrigin.Begin);
+                data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
                 groupB.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeB, false);
             }
 
@@ -620,7 +620,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Move stream to directory location
-            data.Seek(extentLocation * blockLength, SeekOrigin.Begin);
+            data.SeekIfPossible(extentLocation * blockLength, SeekOrigin.Begin);
 
             // Read all directory records in this directory
             var records = new List<DirectoryRecord>();
