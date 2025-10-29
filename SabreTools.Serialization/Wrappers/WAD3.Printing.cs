@@ -13,17 +13,14 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("WAD Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.DirEntries);
-            Print(builder, file.FileEntries);
+            Print(builder, Model.Header);
+            Print(builder, Model.DirEntries);
+            Print(builder, Model.FileEntries);
         }
 
         private static void Print(StringBuilder builder, Header? header)

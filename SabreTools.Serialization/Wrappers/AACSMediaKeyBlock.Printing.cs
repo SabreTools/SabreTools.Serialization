@@ -13,15 +13,12 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, MediaKeyBlock mediaKeyBlock)
         {
             builder.AppendLine("AACS Media Key Block Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, mediaKeyBlock.Records);
+            Print(builder, Model.Records);
         }
 
         private static void Print(StringBuilder builder, Record[]? records)

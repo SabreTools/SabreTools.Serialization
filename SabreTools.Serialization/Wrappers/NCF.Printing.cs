@@ -14,33 +14,30 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("NCF Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Header
-            Print(builder, file.Header);
+            Print(builder, Model.Header);
 
             // Directory and Directory Maps
-            Print(builder, file.DirectoryHeader);
-            Print(builder, file.DirectoryEntries, file.DirectoryNames);
+            Print(builder, Model.DirectoryHeader);
+            Print(builder, Model.DirectoryEntries, Model.DirectoryNames);
             // TODO: Should we print out the entire string table?
-            Print(builder, file.DirectoryInfo1Entries);
-            Print(builder, file.DirectoryInfo2Entries);
-            Print(builder, file.DirectoryCopyEntries);
-            Print(builder, file.DirectoryLocalEntries);
-            Print(builder, file.UnknownHeader);
-            Print(builder, file.UnknownEntries);
+            Print(builder, Model.DirectoryInfo1Entries);
+            Print(builder, Model.DirectoryInfo2Entries);
+            Print(builder, Model.DirectoryCopyEntries);
+            Print(builder, Model.DirectoryLocalEntries);
+            Print(builder, Model.UnknownHeader);
+            Print(builder, Model.UnknownEntries);
 
             // Checksums and Checksum Maps
-            Print(builder, file.ChecksumHeader);
-            Print(builder, file.ChecksumMapHeader);
-            Print(builder, file.ChecksumMapEntries);
-            Print(builder, file.ChecksumEntries);
+            Print(builder, Model.ChecksumHeader);
+            Print(builder, Model.ChecksumMapHeader);
+            Print(builder, Model.ChecksumMapEntries);
+            Print(builder, Model.ChecksumEntries);
         }
 
         private static void Print(StringBuilder builder, Header? header)

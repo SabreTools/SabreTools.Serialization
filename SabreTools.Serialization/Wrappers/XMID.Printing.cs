@@ -13,20 +13,17 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Data.Models.Xbox.XMID xmid)
         {
             builder.AppendLine("Xbox Media Identifier Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(xmid.PublisherIdentifier, "Publisher identifier");
-            if (!string.IsNullOrEmpty(xmid.PublisherIdentifier) && Publishers.ContainsKey(xmid.PublisherIdentifier ?? string.Empty))
-                builder.AppendLine(Publishers[xmid.PublisherIdentifier ?? string.Empty], "Publisher");
-            builder.AppendLine(xmid.GameID, "Game ID");
-            builder.AppendLine(xmid.VersionNumber, "Version number");
-            builder.AppendLine(xmid.RegionIdentifier, "Region identifier");
-            if (Regions.ContainsKey(xmid.RegionIdentifier))
-                builder.AppendLine(Regions[xmid.RegionIdentifier], "Region");
+            builder.AppendLine(Model.PublisherIdentifier, "Publisher identifier");
+            if (!string.IsNullOrEmpty(Model.PublisherIdentifier) && Publishers.ContainsKey(Model.PublisherIdentifier ?? string.Empty))
+                builder.AppendLine(Publishers[Model.PublisherIdentifier ?? string.Empty], "Publisher");
+            builder.AppendLine(Model.GameID, "Game ID");
+            builder.AppendLine(Model.VersionNumber, "Version number");
+            builder.AppendLine(Model.RegionIdentifier, "Region identifier");
+            if (Regions.ContainsKey(Model.RegionIdentifier))
+                builder.AppendLine(Regions[Model.RegionIdentifier], "Region");
             builder.AppendLine();
         }
     }

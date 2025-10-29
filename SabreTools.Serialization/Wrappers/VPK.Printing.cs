@@ -13,18 +13,15 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("VPK Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.ExtendedHeader);
-            Print(builder, file.ArchiveHashes);
-            Print(builder, file.DirectoryItems);
+            Print(builder, Model.Header);
+            Print(builder, Model.ExtendedHeader);
+            Print(builder, Model.ArchiveHashes);
+            Print(builder, Model.DirectoryItems);
         }
 
         private static void Print(StringBuilder builder, Header? header)

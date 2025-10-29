@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Executable executable)
         {
             builder.AppendLine("MS-DOS Executable Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, executable.Header);
-            Print(builder, executable.RelocationTable);
+            Print(builder, Model.Header);
+            Print(builder, Model.RelocationTable);
         }
 
         private static void Print(StringBuilder builder, ExecutableHeader? header)

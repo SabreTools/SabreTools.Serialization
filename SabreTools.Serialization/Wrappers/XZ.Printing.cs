@@ -13,18 +13,15 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("xz Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.Header);
-            Print(builder, archive.Blocks);
-            Print(builder, archive.Index);
-            Print(builder, archive.Footer);
+            Print(builder, Model.Header);
+            Print(builder, Model.Blocks);
+            Print(builder, Model.Index);
+            Print(builder, Model.Footer);
         }
 
         private static void Print(StringBuilder builder, Header? header)

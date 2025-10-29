@@ -13,15 +13,12 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, QBasicFile file)
         {
             builder.AppendLine("LZ-compressed File, QBasic Variant Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
+            Print(builder, Model.Header);
         }
 
         private static void Print(StringBuilder builder, QBasicHeader? header)

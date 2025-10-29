@@ -13,50 +13,47 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, OverlayHeader overlayHeader)
         {
 #if NET20 || NET35
-            bool pkzip = (overlayHeader.Flags & OverlayHeaderFlags.WISE_FLAG_PK_ZIP) != 0;
+            bool pkzip = (Model.Flags & OverlayHeaderFlags.WISE_FLAG_PK_ZIP) != 0;
 #else
-            bool pkzip = overlayHeader.Flags.HasFlag(OverlayHeaderFlags.WISE_FLAG_PK_ZIP);
+            bool pkzip = Model.Flags.HasFlag(OverlayHeaderFlags.WISE_FLAG_PK_ZIP);
 #endif
 
             builder.AppendLine("Wise Installer Overlay Header Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(overlayHeader.DllNameLen, "DLL name length");
-            builder.AppendLine(overlayHeader.DllName, "DLL name");
-            builder.AppendLine(overlayHeader.DllSize, "DLL size");
-            builder.AppendLine($"Flags: {overlayHeader.Flags} (0x{(uint)overlayHeader.Flags:X8})");
+            builder.AppendLine(Model.DllNameLen, "DLL name length");
+            builder.AppendLine(Model.DllName, "DLL name");
+            builder.AppendLine(Model.DllSize, "DLL size");
+            builder.AppendLine($"Flags: {Model.Flags} (0x{(uint)Model.Flags:X8})");
             builder.AppendLine(pkzip, "  Uses PKZIP containers");
-            builder.AppendLine(overlayHeader.GraphicsData, "Graphics data");
-            builder.AppendLine(overlayHeader.WiseScriptExitEventOffset, "Wise script exit event offset");
-            builder.AppendLine(overlayHeader.WiseScriptCancelEventOffset, "Wise script cancel event offset");
-            builder.AppendLine(overlayHeader.WiseScriptInflatedSize, "Wise script inflated size");
-            builder.AppendLine(overlayHeader.WiseScriptDeflatedSize, "Wise script deflated size");
-            builder.AppendLine(overlayHeader.WiseDllDeflatedSize, "Wise DLL deflated size");
-            builder.AppendLine(overlayHeader.Ctl3d32DeflatedSize, "CTL3D32.DLL deflated size");
-            builder.AppendLine(overlayHeader.SomeData4DeflatedSize, "FILE0004 deflated size");
-            builder.AppendLine(overlayHeader.RegToolDeflatedSize, "Ocxreg32.EXE deflated size");
-            builder.AppendLine(overlayHeader.ProgressDllDeflatedSize, "PROGRESS.DLL deflated size");
-            builder.AppendLine(overlayHeader.SomeData7DeflatedSize, "FILE0007 deflated size");
-            builder.AppendLine(overlayHeader.SomeData8DeflatedSize, "FILE0008 deflated size");
-            builder.AppendLine(overlayHeader.SomeData9DeflatedSize, "FILE0009 deflated size");
-            builder.AppendLine(overlayHeader.SomeData10DeflatedSize, "FILE000A deflated size");
-            builder.AppendLine(overlayHeader.FinalFileDeflatedSize, "FILE000{n}.DAT deflated size");
-            builder.AppendLine(overlayHeader.FinalFileInflatedSize, "FILE000{n}.DAT inflated size");
-            builder.AppendLine(overlayHeader.EOF, "EOF");
-            builder.AppendLine(overlayHeader.DibDeflatedSize, "DIB deflated size");
-            builder.AppendLine(overlayHeader.DibInflatedSize, "DIB inflated size");
-            builder.AppendLine(overlayHeader.InstallScriptDeflatedSize, "Install script deflated size");
-            if (overlayHeader.CharacterSet != null)
-                builder.AppendLine($"Character set: {overlayHeader.CharacterSet} (0x{(uint)overlayHeader.CharacterSet:X8})");
+            builder.AppendLine(Model.GraphicsData, "Graphics data");
+            builder.AppendLine(Model.WiseScriptExitEventOffset, "Wise script exit event offset");
+            builder.AppendLine(Model.WiseScriptCancelEventOffset, "Wise script cancel event offset");
+            builder.AppendLine(Model.WiseScriptInflatedSize, "Wise script inflated size");
+            builder.AppendLine(Model.WiseScriptDeflatedSize, "Wise script deflated size");
+            builder.AppendLine(Model.WiseDllDeflatedSize, "Wise DLL deflated size");
+            builder.AppendLine(Model.Ctl3d32DeflatedSize, "CTL3D32.DLL deflated size");
+            builder.AppendLine(Model.SomeData4DeflatedSize, "FILE0004 deflated size");
+            builder.AppendLine(Model.RegToolDeflatedSize, "Ocxreg32.EXE deflated size");
+            builder.AppendLine(Model.ProgressDllDeflatedSize, "PROGRESS.DLL deflated size");
+            builder.AppendLine(Model.SomeData7DeflatedSize, "FILE0007 deflated size");
+            builder.AppendLine(Model.SomeData8DeflatedSize, "FILE0008 deflated size");
+            builder.AppendLine(Model.SomeData9DeflatedSize, "FILE0009 deflated size");
+            builder.AppendLine(Model.SomeData10DeflatedSize, "FILE000A deflated size");
+            builder.AppendLine(Model.FinalFileDeflatedSize, "FILE000{n}.DAT deflated size");
+            builder.AppendLine(Model.FinalFileInflatedSize, "FILE000{n}.DAT inflated size");
+            builder.AppendLine(Model.EOF, "EOF");
+            builder.AppendLine(Model.DibDeflatedSize, "DIB deflated size");
+            builder.AppendLine(Model.DibInflatedSize, "DIB inflated size");
+            builder.AppendLine(Model.InstallScriptDeflatedSize, "Install script deflated size");
+            if (Model.CharacterSet != null)
+                builder.AppendLine($"Character set: {Model.CharacterSet} (0x{(uint)Model.CharacterSet:X8})");
             else
                 builder.AppendLine((uint?)null, $"Character set");
-            builder.AppendLine($"Endianness: {overlayHeader.Endianness} (0x{(ushort)overlayHeader.Endianness:X4})");
-            builder.AppendLine(overlayHeader.InitTextLen, "Init text length");
-            builder.AppendLine(overlayHeader.InitText, "Init text");
+            builder.AppendLine($"Endianness: {Model.Endianness} (0x{(ushort)Model.Endianness:X4})");
+            builder.AppendLine(Model.InitTextLen, "Init text length");
+            builder.AppendLine(Model.InitText, "Init text");
             builder.AppendLine();
         }
     }

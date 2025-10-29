@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, BspFile file)
         {
             builder.AppendLine("BSP Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            PrintLumps(builder, file);
+            Print(builder, Model.Header);
+            PrintLumps(builder, Model);
         }
 
         private static void Print(StringBuilder builder, BspHeader? header)

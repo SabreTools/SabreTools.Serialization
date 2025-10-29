@@ -13,19 +13,16 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Cart cart)
         {
             builder.AppendLine("NDS Cart Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, cart.CommonHeader);
-            Print(builder, cart.ExtendedDSiHeader);
-            Print(builder, cart.SecureArea);
-            Print(builder, cart.NameTable);
-            Print(builder, cart.FileAllocationTable);
+            Print(builder, Model.CommonHeader);
+            Print(builder, Model.ExtendedDSiHeader);
+            Print(builder, Model.SecureArea);
+            Print(builder, Model.NameTable);
+            Print(builder, Model.FileAllocationTable);
         }
 
         private static void Print(StringBuilder builder, CommonHeader? header)

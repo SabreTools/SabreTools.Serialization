@@ -13,17 +13,14 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("InstallShield Archive V3 Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.Header);
-            Print(builder, archive.Directories);
-            Print(builder, archive.Files);
+            Print(builder, Model.Header);
+            Print(builder, Model.Directories);
+            Print(builder, Model.Files);
         }
 
         private static void Print(StringBuilder builder, Header? header)

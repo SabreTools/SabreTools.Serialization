@@ -13,18 +13,15 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, DiscInformation di)
         {
             builder.AppendLine("PIC Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(di.DataStructureLength, "Data structure length");
-            builder.AppendLine(di.Reserved0, "Reserved");
-            builder.AppendLine(di.Reserved1, "Reserved");
+            builder.AppendLine(Model.DataStructureLength, "Data structure length");
+            builder.AppendLine(Model.Reserved0, "Reserved");
+            builder.AppendLine(Model.Reserved1, "Reserved");
             builder.AppendLine();
 
-            Print(builder, di.Units);
+            Print(builder, Model.Units);
         }
 
         private static void Print(StringBuilder builder, DiscInformationUnit[]? entries)

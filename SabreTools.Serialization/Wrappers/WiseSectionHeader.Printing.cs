@@ -1,6 +1,5 @@
 using System.Text;
 using SabreTools.Data.Extensions;
-using SabreTools.Data.Models.WiseInstaller;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -13,49 +12,46 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, SectionHeader header)
         {
             builder.AppendLine("Wise Section Header Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(header.UnknownDataSize, "Unknown data size");
-            builder.AppendLine(header.SecondExecutableFileEntryLength, "Second executable file entry length");
-            builder.AppendLine(header.UnknownValue2, "Unknown value 2");
-            builder.AppendLine(header.UnknownValue3, "Unknown value 3");
-            builder.AppendLine(header.UnknownValue4, "Unknown value 4");
-            builder.AppendLine(header.FirstExecutableFileEntryLength, "First executable file entry length");
-            builder.AppendLine(header.MsiFileEntryLength, "MSI file entry length");
-            builder.AppendLine(header.UnknownValue7, "Unknown value 7");
-            builder.AppendLine(header.UnknownValue8, "Unknown value 8");
-            builder.AppendLine(header.ThirdExecutableFileEntryLength, "Third executable file entry length");
-            builder.AppendLine(header.UnknownValue10, "Unknown value 10");
-            builder.AppendLine(header.UnknownValue11, "Unknown value 11");
-            builder.AppendLine(header.UnknownValue12, "Unknown value 12");
-            builder.AppendLine(header.UnknownValue13, "Unknown value 13");
-            builder.AppendLine(header.UnknownValue14, "Unknown value 14");
-            builder.AppendLine(header.UnknownValue15, "Unknown value 15");
-            builder.AppendLine(header.UnknownValue16, "Unknown value 16");
-            builder.AppendLine(header.UnknownValue17, "Unknown value 17");
-            builder.AppendLine(header.UnknownValue18, "Unknown value 18");
-            builder.AppendLine(header.Version, "Version");
-            builder.AppendLine(header.TmpString, "TMP string");
-            builder.AppendLine(header.GuidString, "GUID string");
-            builder.AppendLine(header.NonWiseVersion, "Non-Wise version");
-            builder.AppendLine(header.PreFontValue, "Pre-font value");
-            builder.AppendLine(header.FontSize, "Font size");
-            builder.AppendLine(header.PreStringValues, "Pre-string values");
+            builder.AppendLine(Model.UnknownDataSize, "Unknown data size");
+            builder.AppendLine(Model.SecondExecutableFileEntryLength, "Second executable file entry length");
+            builder.AppendLine(Model.UnknownValue2, "Unknown value 2");
+            builder.AppendLine(Model.UnknownValue3, "Unknown value 3");
+            builder.AppendLine(Model.UnknownValue4, "Unknown value 4");
+            builder.AppendLine(Model.FirstExecutableFileEntryLength, "First executable file entry length");
+            builder.AppendLine(Model.MsiFileEntryLength, "MSI file entry length");
+            builder.AppendLine(Model.UnknownValue7, "Unknown value 7");
+            builder.AppendLine(Model.UnknownValue8, "Unknown value 8");
+            builder.AppendLine(Model.ThirdExecutableFileEntryLength, "Third executable file entry length");
+            builder.AppendLine(Model.UnknownValue10, "Unknown value 10");
+            builder.AppendLine(Model.UnknownValue11, "Unknown value 11");
+            builder.AppendLine(Model.UnknownValue12, "Unknown value 12");
+            builder.AppendLine(Model.UnknownValue13, "Unknown value 13");
+            builder.AppendLine(Model.UnknownValue14, "Unknown value 14");
+            builder.AppendLine(Model.UnknownValue15, "Unknown value 15");
+            builder.AppendLine(Model.UnknownValue16, "Unknown value 16");
+            builder.AppendLine(Model.UnknownValue17, "Unknown value 17");
+            builder.AppendLine(Model.UnknownValue18, "Unknown value 18");
+            builder.AppendLine(Model.Version, "Version");
+            builder.AppendLine(Model.TmpString, "TMP string");
+            builder.AppendLine(Model.GuidString, "GUID string");
+            builder.AppendLine(Model.NonWiseVersion, "Non-Wise version");
+            builder.AppendLine(Model.PreFontValue, "Pre-font value");
+            builder.AppendLine(Model.FontSize, "Font size");
+            builder.AppendLine(Model.PreStringValues, "Pre-string values");
             builder.AppendLine();
             builder.AppendLine("Strings:");
-            if (header.Strings == null || header.Strings.Length == 0)
+            if (Model.Strings == null || Model.Strings.Length == 0)
             {
                 builder.AppendLine("  No strings");
             }
             else
             {
-                for (int i = 0; i < header.Strings.Length; i++)
+                for (int i = 0; i < Model.Strings.Length; i++)
                 {
-                    var entry = header.Strings[i];
+                    var entry = Model.Strings[i];
                     builder.AppendLine($"  String {i}: {entry}");
                 }
             }

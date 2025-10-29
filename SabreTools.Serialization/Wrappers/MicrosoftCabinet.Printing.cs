@@ -13,17 +13,14 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Cabinet cabinet)
         {
             builder.AppendLine("Microsoft Cabinet Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, cabinet.Header);
-            Print(builder, cabinet.Folders);
-            Print(builder, cabinet.Files);
+            Print(builder, Model.Header);
+            Print(builder, Model.Folders);
+            Print(builder, Model.Files);
         }
 
         private static void Print(StringBuilder builder, CFHEADER? header)

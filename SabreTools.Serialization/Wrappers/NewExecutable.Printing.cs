@@ -14,28 +14,25 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Executable executable)
         {
             builder.AppendLine("New Executable Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Stub
-            Print(builder, executable.Stub?.Header);
+            Print(builder, Model.Stub?.Header);
 
             // Header
-            Print(builder, executable.Header);
+            Print(builder, Model.Header);
 
             // Tables
-            Print(builder, executable.SegmentTable);
-            Print(builder, executable.ResourceTable);
-            Print(builder, executable.ResidentNameTable);
-            Print(builder, executable.ModuleReferenceTable, executable.Stub?.Header, executable.Header);
-            Print(builder, executable.ImportedNameTable);
-            Print(builder, executable.EntryTable);
-            Print(builder, executable.NonResidentNameTable);
+            Print(builder, Model.SegmentTable);
+            Print(builder, Model.ResourceTable);
+            Print(builder, Model.ResidentNameTable);
+            Print(builder, Model.ModuleReferenceTable, Model.Stub?.Header, Model.Header);
+            Print(builder, Model.ImportedNameTable);
+            Print(builder, Model.EntryTable);
+            Print(builder, Model.NonResidentNameTable);
         }
 
         private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader? header)

@@ -14,48 +14,45 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("GCF Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Header
-            Print(builder, file.Header);
+            Print(builder, Model.Header);
 
             // Block Entries
-            Print(builder, file.BlockEntryHeader);
-            Print(builder, file.BlockEntries);
+            Print(builder, Model.BlockEntryHeader);
+            Print(builder, Model.BlockEntries);
 
             // Fragmentation Maps
-            Print(builder, file.FragmentationMapHeader);
-            Print(builder, file.FragmentationMaps);
+            Print(builder, Model.FragmentationMapHeader);
+            Print(builder, Model.FragmentationMaps);
 
             // Block Entry Maps
-            Print(builder, file.BlockEntryMapHeader);
-            Print(builder, file.BlockEntryMaps);
+            Print(builder, Model.BlockEntryMapHeader);
+            Print(builder, Model.BlockEntryMaps);
 
             // Directory and Directory Maps
-            Print(builder, file.DirectoryHeader);
-            Print(builder, file.DirectoryEntries, file.DirectoryNames);
+            Print(builder, Model.DirectoryHeader);
+            Print(builder, Model.DirectoryEntries, Model.DirectoryNames);
             // TODO: Should we print out the entire string table?
-            Print(builder, file.DirectoryInfo1Entries);
-            Print(builder, file.DirectoryInfo2Entries);
-            Print(builder, file.DirectoryCopyEntries);
-            Print(builder, file.DirectoryLocalEntries);
-            Print(builder, file.DirectoryMapHeader);
-            Print(builder, file.DirectoryMapEntries);
+            Print(builder, Model.DirectoryInfo1Entries);
+            Print(builder, Model.DirectoryInfo2Entries);
+            Print(builder, Model.DirectoryCopyEntries);
+            Print(builder, Model.DirectoryLocalEntries);
+            Print(builder, Model.DirectoryMapHeader);
+            Print(builder, Model.DirectoryMapEntries);
 
             // Checksums and Checksum Maps
-            Print(builder, file.ChecksumHeader);
-            Print(builder, file.ChecksumMapHeader);
-            Print(builder, file.ChecksumMapEntries);
-            Print(builder, file.ChecksumEntries);
+            Print(builder, Model.ChecksumHeader);
+            Print(builder, Model.ChecksumMapHeader);
+            Print(builder, Model.ChecksumMapEntries);
+            Print(builder, Model.ChecksumEntries);
 
             // Data Blocks
-            Print(builder, file.DataBlockHeader);
+            Print(builder, Model.DataBlockHeader);
         }
 
         private static void Print(StringBuilder builder, Header? header)

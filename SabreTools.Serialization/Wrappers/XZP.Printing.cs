@@ -13,20 +13,17 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("XZP Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.DirectoryEntries, "Directory");
-            Print(builder, file.PreloadDirectoryEntries, "Preload Directory");
-            Print(builder, file.PreloadDirectoryMappings);
-            Print(builder, file.DirectoryItems);
-            Print(builder, file.Footer);
+            Print(builder, Model.Header);
+            Print(builder, Model.DirectoryEntries, "Directory");
+            Print(builder, Model.PreloadDirectoryEntries, "Preload Directory");
+            Print(builder, Model.PreloadDirectoryMappings);
+            Print(builder, Model.DirectoryItems);
+            Print(builder, Model.Footer);
         }
 
         private static void Print(StringBuilder builder, Header? header)

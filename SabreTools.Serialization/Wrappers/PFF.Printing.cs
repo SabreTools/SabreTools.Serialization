@@ -13,17 +13,14 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("PFF Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.Header);
-            Print(builder, archive.Segments);
-            Print(builder, archive.Footer);
+            Print(builder, Model.Header);
+            Print(builder, Model.Segments);
+            Print(builder, Model.Footer);
         }
 
         private static void Print(StringBuilder builder, Header? header)

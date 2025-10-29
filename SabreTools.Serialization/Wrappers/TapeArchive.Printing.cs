@@ -13,15 +13,12 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive file)
         {
             builder.AppendLine("Tape Archive Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Entries);
+            Print(builder, Model.Entries);
         }
 
         private static void Print(StringBuilder builder, Entry[]? entries)

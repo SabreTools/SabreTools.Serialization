@@ -13,25 +13,22 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, AudioFile audio)
         {
             builder.AppendLine("PlayJ Audio File Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, audio.Header);
-            Print(builder, audio.UnknownBlock1);
+            Print(builder, Model.Header);
+            Print(builder, Model.UnknownBlock1);
 
-            if (audio.Header?.Version == 0x00000000)
+            if (Model.Header?.Version == 0x00000000)
             {
-                Print(builder, audio.UnknownValue2);
-                Print(builder, audio.UnknownBlock3);
+                Print(builder, Model.UnknownValue2);
+                Print(builder, Model.UnknownBlock3);
             }
-            else if (audio.Header?.Version == 0x0000000A)
+            else if (Model.Header?.Version == 0x0000000A)
             {
-                Print(builder, audio.DataFilesCount, audio.DataFiles);
+                Print(builder, Model.DataFilesCount, Model.DataFiles);
             }
         }
 

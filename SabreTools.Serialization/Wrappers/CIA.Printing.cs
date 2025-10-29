@@ -13,20 +13,17 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Data.Models.N3DS.CIA cia)
         {
             builder.AppendLine("CIA Archive Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, cia.Header);
-            Print(builder, cia.CertificateChain);
-            Print(builder, cia.Ticket);
-            Print(builder, cia.TMDFileData);
-            Print(builder, cia.Partitions);
-            Print(builder, cia.MetaData);
+            Print(builder, Model.Header);
+            Print(builder, Model.CertificateChain);
+            Print(builder, Model.Ticket);
+            Print(builder, Model.TMDFileData);
+            Print(builder, Model.Partitions);
+            Print(builder, Model.MetaData);
         }
 
         private static void Print(StringBuilder builder, CIAHeader? header)

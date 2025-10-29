@@ -20,48 +20,45 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Executable executable)
         {
             builder.AppendLine("Portable Executable Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Stub
-            Print(builder, executable.Stub?.Header);
+            Print(builder, Model.Stub?.Header);
 
             // Header
-            Print(builder, executable.Signature, executable.FileHeader);
-            Print(builder, executable.OptionalHeader, executable.SectionTable);
+            Print(builder, Model.Signature, Model.FileHeader);
+            Print(builder, Model.OptionalHeader, Model.SectionTable);
 
             // COFF Tables
-            Print(builder, executable.SectionTable);
-            Print(builder, executable.SymbolTable);
-            Print(builder, executable.StringTable);
+            Print(builder, Model.SectionTable);
+            Print(builder, Model.SymbolTable);
+            Print(builder, Model.StringTable);
 
             // Export Table
-            Print(builder, executable.ExportDirectoryTable, executable.SectionTable);
-            Print(builder, executable.ExportAddressTable, executable.SectionTable);
-            Print(builder, executable.NamePointerTable);
-            Print(builder, executable.OrdinalTable);
-            Print(builder, executable.ExportNameTable);
+            Print(builder, Model.ExportDirectoryTable, Model.SectionTable);
+            Print(builder, Model.ExportAddressTable, Model.SectionTable);
+            Print(builder, Model.NamePointerTable);
+            Print(builder, Model.OrdinalTable);
+            Print(builder, Model.ExportNameTable);
 
             // Import Table
-            Print(builder, executable.ImportDirectoryTable, executable.SectionTable);
-            Print(builder, executable.ImportLookupTables, executable.SectionTable);
-            Print(builder, executable.ImportAddressTables, executable.SectionTable);
-            Print(builder, executable.HintNameTable);
+            Print(builder, Model.ImportDirectoryTable, Model.SectionTable);
+            Print(builder, Model.ImportLookupTables, Model.SectionTable);
+            Print(builder, Model.ImportAddressTables, Model.SectionTable);
+            Print(builder, Model.HintNameTable);
 
             // Resource Table
-            Print(builder, executable.ResourceDirectoryTable, executable.SectionTable);
+            Print(builder, Model.ResourceDirectoryTable, Model.SectionTable);
 
-            Print(builder, executable.AttributeCertificateTable);
-            Print(builder, executable.DelayLoadDirectoryTable, executable.SectionTable);
+            Print(builder, Model.AttributeCertificateTable);
+            Print(builder, Model.DelayLoadDirectoryTable, Model.SectionTable);
 
             // Named Sections
-            Print(builder, executable.BaseRelocationTable, executable.SectionTable);
-            Print(builder, executable.DebugTable);
+            Print(builder, Model.BaseRelocationTable, Model.SectionTable);
+            Print(builder, Model.DebugTable);
         }
 
         private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader? header)

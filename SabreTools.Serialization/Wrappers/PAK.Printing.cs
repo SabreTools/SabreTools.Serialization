@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, File file)
         {
             builder.AppendLine("PAK Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.DirectoryItems);
+            Print(builder, Model.Header);
+            Print(builder, Model.DirectoryItems);
         }
 
         private static void Print(StringBuilder builder, Header? header)

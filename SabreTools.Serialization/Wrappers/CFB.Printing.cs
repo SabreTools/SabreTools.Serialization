@@ -14,19 +14,16 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Binary binary)
         {
             builder.AppendLine("Compound File Binary Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, binary.Header);
-            Print(builder, binary.FATSectorNumbers, "FAT");
-            Print(builder, binary.MiniFATSectorNumbers, "Mini FAT");
-            Print(builder, binary.DIFATSectorNumbers, "DIFAT");
-            Print(builder, binary.DirectoryEntries);
+            Print(builder, Model.Header);
+            Print(builder, Model.FATSectorNumbers, "FAT");
+            Print(builder, Model.MiniFATSectorNumbers, "Mini FAT");
+            Print(builder, Model.DIFATSectorNumbers, "DIFAT");
+            Print(builder, Model.DirectoryEntries);
         }
 
         private static void Print(StringBuilder builder, FileHeader? header)

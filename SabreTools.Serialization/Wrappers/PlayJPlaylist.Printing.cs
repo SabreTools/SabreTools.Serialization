@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Playlist playlist)
         {
             builder.AppendLine("PlayJ Playlist Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, playlist.Header);
-            Print(builder, playlist.AudioFiles);
+            Print(builder, Model.Header);
+            Print(builder, Model.AudioFiles);
         }
 
         private static void Print(StringBuilder builder, PlaylistHeader? header)

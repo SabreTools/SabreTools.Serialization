@@ -13,18 +13,15 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, DFAFile dfaFile)
         {
             builder.AppendLine("SecuROM DFA File Information:");
             builder.AppendLine("-------------------------");
-            builder.AppendLine(dfaFile.Signature, "Signature");
-            builder.AppendLine(dfaFile.BlockOrHeaderSize, "Block or header size");
+            builder.AppendLine(Model.Signature, "Signature");
+            builder.AppendLine(Model.BlockOrHeaderSize, "Block or header size");
             builder.AppendLine();
 
 
-            Print(builder, dfaFile.Entries);
+            Print(builder, Model.Entries);
         }
 
         private static void Print(StringBuilder builder, DFAEntry[]? entries)

@@ -14,51 +14,28 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Cabinet cabinet)
         {
             builder.AppendLine("InstallShield Cabinet Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            // Major Version
-            int majorVersion = GetMajorVersion(cabinet.CommonHeader);
-
             // Headers
-            Print(builder, cabinet.CommonHeader, majorVersion);
-            Print(builder, cabinet.VolumeHeader, majorVersion);
-            Print(builder, cabinet.Descriptor);
+            Print(builder, Model.CommonHeader, MajorVersion);
+            Print(builder, Model.VolumeHeader, MajorVersion);
+            Print(builder, Model.Descriptor);
 
             // File Descriptors
-            Print(builder, cabinet.FileDescriptorOffsets);
-            Print(builder, cabinet.DirectoryNames);
-            Print(builder, cabinet.FileDescriptors);
+            Print(builder, Model.FileDescriptorOffsets);
+            Print(builder, Model.DirectoryNames);
+            Print(builder, Model.FileDescriptors);
 
             // File Groups
-            Print(builder, cabinet.FileGroupOffsets, "File Group");
-            Print(builder, cabinet.FileGroups);
+            Print(builder, Model.FileGroupOffsets, "File Group");
+            Print(builder, Model.FileGroups);
 
             // Components
-            Print(builder, cabinet.ComponentOffsets, "Component");
-            Print(builder, cabinet.Components);
-        }
-
-        private static int GetMajorVersion(CommonHeader? header)
-        {
-            uint majorVersion = header?.Version ?? 0;
-            if (majorVersion >> 24 == 1)
-            {
-                majorVersion = (majorVersion >> 12) & 0x0F;
-            }
-            else if (majorVersion >> 24 == 2 || majorVersion >> 24 == 4)
-            {
-                majorVersion = majorVersion & 0xFFFF;
-                if (majorVersion != 0)
-                    majorVersion /= 100;
-            }
-
-            return (int)majorVersion;
+            Print(builder, Model.ComponentOffsets, "Component");
+            Print(builder, Model.Components);
         }
 
         private static void Print(StringBuilder builder, CommonHeader? header, int majorVersion)

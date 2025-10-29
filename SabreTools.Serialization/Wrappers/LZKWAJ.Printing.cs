@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, KWAJFile file)
         {
             builder.AppendLine("LZ-compressed File, KWAJ Variant Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.HeaderExtensions);
+            Print(builder, Model.Header);
+            Print(builder, Model.HeaderExtensions);
         }
 
         private static void Print(StringBuilder builder, KWAJHeader? header)

@@ -13,20 +13,17 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-           => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("PKZIP Archive (or Derived Format) Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.LocalFiles);
-            Print(builder, archive.EndOfCentralDirectoryRecord);
-            Print(builder, archive.ZIP64EndOfCentralDirectoryLocator);
-            Print(builder, archive.ZIP64EndOfCentralDirectoryRecord);
-            Print(builder, archive.CentralDirectoryHeaders);
-            Print(builder, archive.ArchiveExtraDataRecord);
+            Print(builder, Model.LocalFiles);
+            Print(builder, Model.EndOfCentralDirectoryRecord);
+            Print(builder, Model.ZIP64EndOfCentralDirectoryLocator);
+            Print(builder, Model.ZIP64EndOfCentralDirectoryRecord);
+            Print(builder, Model.CentralDirectoryHeaders);
+            Print(builder, Model.ArchiveExtraDataRecord);
         }
 
         private static void Print(StringBuilder builder, LocalFile[]? localFiles)

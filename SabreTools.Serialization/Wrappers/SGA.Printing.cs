@@ -13,19 +13,16 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive file)
         {
             builder.AppendLine("SGA Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Header
-            Print(builder, file.Header);
+            Print(builder, Model.Header);
 
             // Directory
-            Print(builder, file.Directory);
+            Print(builder, Model.Directory);
             // TODO: Should we print the string table?
         }
 

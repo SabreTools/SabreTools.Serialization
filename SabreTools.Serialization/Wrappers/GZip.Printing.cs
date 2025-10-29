@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive file)
         {
             builder.AppendLine("gzip Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
-            Print(builder, file.Trailer);
+            Print(builder, Model.Header);
+            Print(builder, Model.Trailer);
         }
 
         private static void Print(StringBuilder builder, Header? header)

@@ -13,23 +13,20 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, MatroshkaPackage package)
         {
             builder.AppendLine("SecuROM Matroschka Package Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
-            builder.AppendLine(package.Signature, "Signature");
-            builder.AppendLine(package.EntryCount, "Entry count");
-            builder.AppendLine(package.UnknownRCValue1, "Unknown RC value 1");
-            builder.AppendLine(package.UnknownRCValue2, "Unknown RC value 2");
-            builder.AppendLine(package.UnknownRCValue3, "Unknown RC value 3");
-            builder.AppendLine(package.KeyHexString, "Key hex string");
-            builder.AppendLine(package.Padding, "Padding");
+            builder.AppendLine(Model.Signature, "Signature");
+            builder.AppendLine(Model.EntryCount, "Entry count");
+            builder.AppendLine(Model.UnknownRCValue1, "Unknown RC value 1");
+            builder.AppendLine(Model.UnknownRCValue2, "Unknown RC value 2");
+            builder.AppendLine(Model.UnknownRCValue3, "Unknown RC value 3");
+            builder.AppendLine(Model.KeyHexString, "Key hex string");
+            builder.AppendLine(Model.Padding, "Padding");
             builder.AppendLine();
 
-            Print(builder, package.Entries);
+            Print(builder, Model.Entries);
         }
 
         private static void Print(StringBuilder builder, MatroshkaEntry[]? entries)

@@ -14,16 +14,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, ScriptFile scriptFile)
         {
             builder.AppendLine("Wise Installer Script File Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, scriptFile.Header);
-            Print(builder, scriptFile.States);
+            Print(builder, Model.Header);
+            Print(builder, Model.States);
         }
 
         private static void Print(StringBuilder builder, ScriptHeader? header)

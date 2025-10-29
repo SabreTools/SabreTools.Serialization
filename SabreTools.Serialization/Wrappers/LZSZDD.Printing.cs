@@ -13,15 +13,12 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, SZDDFile file)
         {
             builder.AppendLine("LZ-compressed File, SZDD Variant Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, file.Header);
+            Print(builder, Model.Header);
         }
 
         private static void Print(StringBuilder builder, SZDDHeader? header)

@@ -13,17 +13,14 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("Quantum Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.Header);
-            Print(builder, archive.FileList);
-            builder.AppendLine(archive.CompressedDataOffset, "  Compressed data offset");
+            Print(builder, Model.Header);
+            Print(builder, Model.FileList);
+            builder.AppendLine(Model.CompressedDataOffset, "  Compressed data offset");
             builder.AppendLine();
         }
 

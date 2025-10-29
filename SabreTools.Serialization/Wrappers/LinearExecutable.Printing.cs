@@ -13,37 +13,34 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Executable executable)
         {
             builder.AppendLine("New Executable Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
             // Stub
-            Print(builder, executable.Stub?.Header);
+            Print(builder, Model.Stub?.Header);
 
             // Information Block
-            Print(builder, executable.InformationBlock);
+            Print(builder, Model.InformationBlock);
 
             // Tables
-            Print(builder, executable.ObjectTable);
-            Print(builder, executable.ObjectPageMap);
-            Print(builder, executable.ResourceTable);
-            Print(builder, executable.ResidentNamesTable);
-            Print(builder, executable.EntryTable);
-            Print(builder, executable.ModuleFormatDirectivesTable);
-            Print(builder, executable.VerifyRecordDirectiveTable);
-            Print(builder, executable.FixupPageTable);
-            Print(builder, executable.FixupRecordTable);
-            Print(builder, executable.ImportModuleNameTable);
-            Print(builder, executable.ImportModuleProcedureNameTable);
-            Print(builder, executable.PerPageChecksumTable);
-            Print(builder, executable.NonResidentNamesTable);
+            Print(builder, Model.ObjectTable);
+            Print(builder, Model.ObjectPageMap);
+            Print(builder, Model.ResourceTable);
+            Print(builder, Model.ResidentNamesTable);
+            Print(builder, Model.EntryTable);
+            Print(builder, Model.ModuleFormatDirectivesTable);
+            Print(builder, Model.VerifyRecordDirectiveTable);
+            Print(builder, Model.FixupPageTable);
+            Print(builder, Model.FixupRecordTable);
+            Print(builder, Model.ImportModuleNameTable);
+            Print(builder, Model.ImportModuleProcedureNameTable);
+            Print(builder, Model.PerPageChecksumTable);
+            Print(builder, Model.NonResidentNamesTable);
 
             // Debug
-            Print(builder, executable.DebugInformation);
+            Print(builder, Model.DebugInformation);
         }
 
         private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader? header)

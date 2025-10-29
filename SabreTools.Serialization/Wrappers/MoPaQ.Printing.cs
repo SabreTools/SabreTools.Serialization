@@ -13,21 +13,18 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("MoPaQ Archive Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.UserData);
-            Print(builder, archive.ArchiveHeader);
-            Print(builder, archive.HetTable);
-            Print(builder, archive.BetTable);
-            Print(builder, archive.HashTable);
-            Print(builder, archive.BlockTable);
-            Print(builder, archive.HiBlockTable);
+            Print(builder, Model.UserData);
+            Print(builder, Model.ArchiveHeader);
+            Print(builder, Model.HetTable);
+            Print(builder, Model.BetTable);
+            Print(builder, Model.HashTable);
+            Print(builder, Model.BlockTable);
+            Print(builder, Model.HiBlockTable);
         }
 
         private static void Print(StringBuilder builder, UserData? userData)

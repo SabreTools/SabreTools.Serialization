@@ -15,21 +15,11 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("CHD Header Information:");
             builder.AppendLine("-------------------------");
 
-            if (header == null)
-            {
-                builder.AppendLine("No header");
-                builder.AppendLine();
-                return;
-            }
-
-            switch (header)
+            switch (Model)
             {
                 case HeaderV1 v1:
                     Print(builder, v1);

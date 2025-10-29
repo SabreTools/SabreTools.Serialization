@@ -14,21 +14,18 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Cart cart)
         {
             builder.AppendLine("3DS Cart Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, cart.Header);
-            Print(builder, cart.CardInfoHeader);
-            Print(builder, cart.DevelopmentCardInfoHeader);
-            Print(builder, cart.Partitions);
-            Print(builder, cart.ExtendedHeaders);
-            Print(builder, cart.ExeFSHeaders);
-            Print(builder, cart.RomFSHeaders);
+            Print(builder, Model.Header);
+            Print(builder, Model.CardInfoHeader);
+            Print(builder, Model.DevelopmentCardInfoHeader);
+            Print(builder, Model.Partitions);
+            Print(builder, Model.ExtendedHeaders);
+            Print(builder, Model.ExeFSHeaders);
+            Print(builder, Model.RomFSHeaders);
         }
 
         private static void Print(StringBuilder builder, NCSDHeader? header)

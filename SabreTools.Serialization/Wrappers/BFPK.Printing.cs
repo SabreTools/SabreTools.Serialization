@@ -13,16 +13,13 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, Archive archive)
         {
             builder.AppendLine("BFPK Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, archive.Header);
-            Print(builder, archive.Files);
+            Print(builder, Model.Header);
+            Print(builder, Model.Files);
         }
 
         private static void Print(StringBuilder builder, Header? header)
