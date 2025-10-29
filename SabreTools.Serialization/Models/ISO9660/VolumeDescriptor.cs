@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// Each VolumeDescriptor consists of 1 logical sector (usually 2048 bytes)
     /// The first 7 bytes are a fixed header, the remaining bytes are application specific
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public abstract class VolumeDescriptor
     {
         /// <summary>

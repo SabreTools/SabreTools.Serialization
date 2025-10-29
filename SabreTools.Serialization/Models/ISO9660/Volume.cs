@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// Note: Volume is made up of logical blocks, usually 2048 bytes, but can be any power of two (minimum 512 / 2^9)
     ///       The logical block size cannot be smaller than the logical sector size
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class Volume
     {
         /// <summary>

@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// ISO9660 / EMCA-119 file system composed of a set of volumes (set of disc images)
     /// Files may be spread across volumes (disc images), or be contained entirely within a single volume (disc image)
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class FileSystem
     {
         /// <summary>

@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// Each path table is intended to point to the same set of directories. All non-null path tables should be identical!
     /// For each directory on the filesystem (except root), the Path Table contains a record which identifies the directory, its parent, and its location.
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class PathTableGroup
     {
         /// <summary>

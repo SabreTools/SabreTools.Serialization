@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// Boot Record Volume Descriptor
     /// Volume Descriptor with VolumeDescriptorType = 0x00
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class BootRecordVolumeDescriptor : VolumeDescriptor
     {
         /// <summary>

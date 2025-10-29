@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// ISO9660 Path Table Record
     /// Each path table record is numbered (starting from 1), which corresponds to the ordinal number of the corresponding directory
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public sealed class PathTableRecord
     {
         /// <summary>

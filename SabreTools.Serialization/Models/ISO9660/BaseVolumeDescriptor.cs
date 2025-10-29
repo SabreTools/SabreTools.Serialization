@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// <summary>
     /// Abstract Volume Descriptor with common fields used by Primary/Supplementary/Enhanced Volume Descriptors
     /// </summary>
-    /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
+    /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
     public abstract class BaseVolumeDescriptor : VolumeDescriptor
     {
         // Virtual variable of 1 byte goes here
