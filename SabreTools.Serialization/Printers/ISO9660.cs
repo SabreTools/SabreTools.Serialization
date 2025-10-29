@@ -430,7 +430,7 @@ namespace SabreTools.Data.Printers
         {
             if (drdt == null)
             {
-                builder.AppendLine(drdt, "      Directory Record Date Time");
+                builder.AppendLine(null, "      Directory Record Date Time");
                 return;
             }
             builder.AppendLine("      Directory Record Date Time:");

@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
                 var dirs = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
-                if (dirs == null || dirs.Length == 0)
+                if (dirs == null || dirs.Count == 0)
                     return null;
                 volume.DirectoryDescriptors = dirs;
 
@@ -421,7 +421,7 @@ namespace SabreTools.Serialization.Readers
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
             
-            short blockLength = GetLogicalBlockSize(vd);
+            short blockLength = GetLogicalBlockSize(vd, sectorLength);
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
@@ -564,7 +564,7 @@ namespace SabreTools.Serialization.Readers
                 if (vd is BaseVolumeDescriptor bvd)
                 {
                     // Determine logical block size
-                    short blockLength = GetLogicalBlockSize(bvd);
+                    short blockLength = GetLogicalBlockSize(bvd, sectorLength);
 
                     // Parse the root directory pointed to from the base volume descriptor
                     var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord);
@@ -573,7 +573,8 @@ namespace SabreTools.Serialization.Readers
                     // Merge dictionaries
                     foreach (var kvp in descriptors)
                     {
-                        directories.TryAdd(kvp.Key, kvp.Value);
+                        if (!directories.ContainsKey(kvp.Key))
+                            directories.Add(kvp.Key, kvp.Value);
                     }
                 }
             }
@@ -618,7 +619,12 @@ namespace SabreTools.Serialization.Readers
             int pos = 0;
             while (pos < dr.ExtentLength)
             {
-                // TODO: Peek next byte to check whether DirectoryRecordLength is not greater than the end of the dir extent
+                // Peek next byte to check whether the next record length is not greater than the end of the dir extent
+                var recordLength = PeekByteValue();
+                if (pos + recordLength > dr.ExtentLength)
+                    break;
+
+                // Get the next directory record
                 var directoryRecord = ParseDirectoryRecord(data, false);
                 if (directoryRecord != null)
                     records.Add(directoryRecord);
@@ -626,18 +632,21 @@ namespace SabreTools.Serialization.Readers
 
             // Add current directory to dictionary
             var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
-            var dir = new SabreTools.Data.Models.ISO9660.Directory();
+            var currentDirectory = new SabreTools.Data.Models.ISO9660.Directory();
             dir.DirectoryRecords = [.. records];
-            directories.Add(dr.ExtentLocation * blocksPerSector, dir);
+            directories.Add(dr.ExtentLocation * blocksPerSector, currentDirectory);
 
             // Add all child directories to dictionary recursively
             foreach (var record in records)
             {
                 int sectorNum = record.ExtentLocation * blocksPerSector;
                 var dir = ParseDirectory(data, sectorLength, blockLength, record);
+                if (dir == null)
+                    continue;
                 foreach (var kvp in dir)
                 {
-                    directories.TryAdd(kvp.Key, kvp.Value);
+                    if (!directories.ContainsKey(kvp.Key))
+                        directories.Add(kvp.Key, kvp.Value);
                 }
             }
 
@@ -756,7 +765,7 @@ namespace SabreTools.Serialization.Readers
             return obj;
         }
 
-        public static short GetLogicalBlockSize(BaseVolumeDescriptor bvd, int sectorLength)
+        public static short GetLogicalBlockSize(BaseVolumeDescriptor bvd, short sectorLength)
         {
             short blockLength = sectorLength;
             if (bvd.LogicalBlockSize.IsValid)
