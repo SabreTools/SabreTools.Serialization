@@ -24,14 +24,14 @@ namespace SabreTools.Data.Models.ISO9660
         public static readonly byte[] StandardIdentifier = [0x43, 0x44, 0x30, 0x30, 0x31];
 
         /// <summary>
-        /// Value of the current directory
+        /// File Identifier of the current directory
         /// </summary>
-        public const byte CurrentDirectory = 0x00;
+        public static readonly byte[] CurrentDirectory = [0x00];
 
         /// <summary>
-        /// Value of the parent directory
+        /// File Identifier of the parent directory
         /// </summary>
-        public const byte ParentDirectory = 0x01;
+        public static readonly byte[] ParentDirectory = [0x01];
 
         #endregion
 

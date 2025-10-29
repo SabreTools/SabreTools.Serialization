@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Length of the extended attribute record
-        /// If no extended attribyute record is used, set to 0x00
+        /// If no extended attribute record is used, set to 0x00
         /// </summary>
         public byte ExtendedAttributeRecordLength { get; set; }
 
@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.ISO9660
         public BothInt32 ExtentLocation { get; set; }
 
         /// <summary>
-        /// Number of logical blocks allocated to this extent
+        /// Number of bytes allocated to this extent
         /// </summary>
         public BothInt32 ExtentLength { get; set; }
 

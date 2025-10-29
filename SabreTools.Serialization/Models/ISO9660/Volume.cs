@@ -43,7 +43,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Map of sector numbers and the directory at that sector number
         /// Each Directory contains child directory and file descriptors
         /// </summary>
-        public Dictionary<int, Directory> DirectoryDescriptors { get; set; }
+        public Dictionary<int, DirectoryExtent> DirectoryDescriptors { get; set; }
 
         #endregion
     }

@@ -4,6 +4,7 @@ using System.IO;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics;
+using SabreTools.Data.Extensions.ISO9660;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -89,7 +90,7 @@ namespace SabreTools.Serialization.Readers
                 if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
                 {
                     // Reset stream to before the just-read volume descriptor
-                    data.Position -= sectorLength;
+                    data.Seek(-sectorLength, SeekOrigin.Current);
                     return [.. obj];
                 }
                 
@@ -144,7 +145,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Position -= 6;
+                data.Seek(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -155,7 +156,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Position += sectorLength - Constants.MinimumSectorSize;
+                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -201,7 +202,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Position -= 6;
+                data.Seek(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -215,7 +216,7 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
-                data.Position -= 8;
+                data.Seek(-8, SeekOrigin.Current);
                 return null;
             }
 
@@ -232,7 +233,7 @@ namespace SabreTools.Serialization.Readers
             else
             {
                 // Rewind and return for unknown descriptor
-                data.Position -= 120;
+                data.Seek(-120, SeekOrigin.Current);
                 return null;
             }
 
@@ -270,7 +271,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Position += sectorLength - Constants.MinimumSectorSize;
+                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -291,7 +292,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Position -= 6;
+                data.Seek(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -305,7 +306,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Position += sectorLength - Constants.MinimumSectorSize;
+                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -326,7 +327,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Position -= 6;
+                data.Seek(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -335,7 +336,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Position += sectorLength - Constants.MinimumSectorSize;
+                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -357,7 +358,7 @@ namespace SabreTools.Serialization.Readers
             // Validate Identifier, return null and rewind if invalid
             if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
             {
-                data.Position -= 6;
+                data.Seek(-6, SeekOrigin.Current);
                 return null;
             }
 
@@ -366,7 +367,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.Position += sectorLength - Constants.MinimumSectorSize;
+                data.Seek(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
 
             return obj;
         }
@@ -426,22 +427,22 @@ namespace SabreTools.Serialization.Readers
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
             {
-                data.Position = locationL * blockLength;
+                data.Seek(locationL * blockLength, SeekOrigin.Begin);
                 groupL.PathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
-                data.Position = locationL2 * blockLength;
+                data.Seek(locationL2 * blockLength, SeekOrigin.Begin);
                 groupL.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeL, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
-                data.Position = locationM * blockLength;
+                data.Seek(locationM * blockLength, SeekOrigin.Begin);
                 groupL.PathTableM = ParsePathTable(data, sectorLength, sizeL, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
-                data.Position = locationM2 * blockLength;
+                data.Seek(locationM2 * blockLength, SeekOrigin.Begin);
                 groupL.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeL, false);
             }
 
@@ -457,22 +458,22 @@ namespace SabreTools.Serialization.Readers
             var groupB = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
             {
-                data.Position = locationL * blockLength;
+                data.Seek(locationL * blockLength, SeekOrigin.Begin);
                 groupB.PathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
-                data.Position = locationL2 * blockLength;
+                data.Seek(locationL2 * blockLength, SeekOrigin.Begin);
                 groupB.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeB, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
-                data.Position = locationM * blockLength;
+                data.Seek(locationM * blockLength, SeekOrigin.Begin);
                 groupB.PathTableM = ParsePathTable(data, sectorLength, sizeB, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
-                data.Position = locationM2 * blockLength;
+                data.Seek(locationM2 * blockLength, SeekOrigin.Begin);
                 groupB.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeB, false);
             }
 
@@ -501,18 +502,20 @@ namespace SabreTools.Serialization.Readers
             while (pos < tableSize)
             {
                 var record = new PathTableRecord();
-                record.DirectoryIdentifierLength = data.ReadByteValue();
+                var directoryIdentifierLength = data.ReadByteValue();
 
                 // Check that the current record can fit within the current path table size
-                pos += 8 + record.DirectoryIdentifierLength;
-                if (record.DirectoryIdentifierLength % 2 != 0)
+                pos += 8 + directoryIdentifierLength;
+                if (directoryIdentifierLength % 2 != 0)
                     pos += 1;
                 if (pos > tableSize)
                 {
-                    // Rewind invalid record byte
-                    data.Position -= 1;
+                    // Invalid record length, quit early
+                    // TODO: Try detect record length and recover?
                     break;
                 }
+
+                record.DirectoryIdentifierLength = directoryIdentifierLength;
 
                 record.ExtendedAttributeRecordLength = data.ReadByteValue();
 
@@ -556,9 +559,9 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
         /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
-        public static Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
+        public static Dictionary<int, DirectoryExtent>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
-            var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
+            var directories = new Dictionary<int, DirectoryExtent>();
             foreach (VolumeDescriptor vd in vdSet)
             {
                 if (vd is BaseVolumeDescriptor bvd)
@@ -594,7 +597,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the directory extent</param>
         /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
-        public static Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr)
+        public static Dictionary<int, DirectoryExtent>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr)
         {
             // Do not parse file extents
 #if NET20 || NET35
@@ -612,7 +615,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Move stream to directory location
-            data.Position = dr.ExtentLocation * blockLength;
+            data.Seek(dr.ExtentLocation * blockLength, SeekOrigin.Begin);
 
             // Read all directory records in this directory
             var records = new List<DirectoryRecord>();
@@ -621,7 +624,19 @@ namespace SabreTools.Serialization.Readers
             {
                 // Peek next byte to check whether the next record length is not greater than the end of the dir extent
                 var recordLength = data.PeekByteValue();
-                if (pos + recordLength > dr.ExtentLength)
+
+                // If record length of 0x00, next record begins in next sector
+                if (recordLength == 0)
+                {
+                    // TODO: Skip to start of next sector rather than incrementing by 1
+                    pos++;
+                    continue;
+                }
+
+                // Ensure record will end in this extent
+                // TODO: Smartly detect record length for invalid record lengths
+                pos += recordLength;
+                if (pos > dr.ExtentLength)
                     break;
 
                 // Get the next directory record
@@ -631,18 +646,23 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Add current directory to dictionary
-            var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
-            var currentDirectory = new SabreTools.Data.Models.ISO9660.Directory();
+            var directories = new Dictionary<int, DirectoryExtent>();
+            var currentDirectory = new DirectoryExtent();
             currentDirectory.DirectoryRecords = [.. records];
             directories.Add(dr.ExtentLocation * blocksPerSector, currentDirectory);
 
             // Add all child directories to dictionary recursively
             foreach (var record in records)
             {
+                // Don't traverse to parent or self
+                if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                    continue;
+                // Recursively parse child directory
                 int sectorNum = record.ExtentLocation * blocksPerSector;
                 var dir = ParseDirectory(data, sectorLength, blockLength, record);
                 if (dir == null)
                     continue;
+                // Add new directories to dictionary
                 foreach (var kvp in dir)
                 {
                     if (!directories.ContainsKey(kvp.Key))
@@ -763,37 +783,6 @@ namespace SabreTools.Serialization.Readers
             obj.TimezoneOffset = data.ReadByteValue();
 
             return obj;
-        }
-
-        public static short GetLogicalBlockSize(BaseVolumeDescriptor bvd, short sectorLength)
-        {
-            short blockLength = sectorLength;
-            if (bvd.LogicalBlockSize.IsValid)
-            {
-                // Validate logical block length
-                if (bvd.LogicalBlockSize >= 512 && bvd.LogicalBlockSize <= sectorLength && (bvd.LogicalBlockSize & (bvd.LogicalBlockSize - 1)) == 0)
-                    blockLength = bvd.LogicalBlockSize;
-            }
-            else
-            {
-                // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
-                short le = bvd.LogicalBlockSize.LittleEndian;
-                short be = bvd.LogicalBlockSize.LittleEndian;
-                bool le_valid = true;
-                bool be_valid = true;
-                if (le < 512 || le > sectorLength || (le & (le - 1)) != 0)
-                    le_valid = false;
-                if (be < 512 || be > sectorLength || (be & (be - 1)) != 0)
-                    be_valid = false;
-                if (le_valid && !be_valid)
-                    blockLength = le;
-                else if (be_valid && !le_valid)
-                    blockLength = be;
-                else
-                    blockLength = sectorLength;
-            }
-
-            return blockLength;
         }
     }
 }

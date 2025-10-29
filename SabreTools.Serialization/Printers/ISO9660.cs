@@ -158,16 +158,12 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
 
             builder.AppendLine("    Volume Creation Date Time:");
-            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeCreationDateTime);
             builder.AppendLine("    Volume Modification Date Time:");
-            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeModificationDateTime);
             builder.AppendLine("    Volume Expiration Date Time:");
-            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeExpirationDateTime);
             builder.AppendLine("    Volume Effective Date Time:");
-            builder.AppendLine("    -------------------------");
             Print(builder, vd.VolumeEffectiveDateTime);
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
@@ -260,42 +256,46 @@ namespace SabreTools.Data.Printers
             {
                 if (ptgs[tableNum].PathTableL != null)
                 {
-                    builder.AppendLine($"    Type-L Path Table {tableNum}");
+                    builder.AppendLine($"    Type-L Path Table {tableNum}:");
+                    builder.AppendLine("    -------------------------");
                     Print(builder, ptgs[tableNum].PathTableL);
                 }
                 else
                 {
-                    builder.AppendLine($"    No Type-L Path Table {tableNum}");
+                    builder.AppendLine($"    No Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
                 if (ptgs[tableNum].OptionalPathTableL != null)
                 {
-                    builder.AppendLine($"    Optional Type-L Path Table {tableNum}");
+                    builder.AppendLine($"    Optional Type-L Path Table {tableNum}:");
+                    builder.AppendLine("    -------------------------");
                     Print(builder, ptgs[tableNum].OptionalPathTableL);
                 }
                 else
                 {
-                    builder.AppendLine($"    No Optional Type-L Path Table {tableNum}");
+                    builder.AppendLine($"    No Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
                 if (ptgs[tableNum].PathTableM != null)
                 {
-                    builder.AppendLine($"    Type-M Path Table {tableNum}");
+                    builder.AppendLine($"    Type-M Path Table {tableNum}:");
+                    builder.AppendLine("    -------------------------");
                     Print(builder, ptgs[tableNum].PathTableM);
                 }
                 else
                 {
-                    builder.AppendLine($"    No Type-M Path Table {tableNum}");
+                    builder.AppendLine($"    No Type-M Path Table {tableNum}:");
                     builder.AppendLine();
                 }
                 if (ptgs[tableNum].OptionalPathTableM != null)
                 {
-                    builder.AppendLine($"    Optional Type-M Path Table {tableNum}");
+                    builder.AppendLine($"    Optional Type-M Path Table {tableNum}:");
+                    builder.AppendLine("    -------------------------");
                     Print(builder, ptgs[tableNum].OptionalPathTableM);
                 }
                 else
                 {
-                    builder.AppendLine($"    No Optional Type-M Path Table {tableNum}");
+                    builder.AppendLine($"    No Optional Type-M Path Table {tableNum}:");
                     builder.AppendLine();
                 }
             }
@@ -305,8 +305,6 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, PathTableRecord[] records)
         {
-            builder.AppendLine("    Path Table Records:");
-            builder.AppendLine("    -------------------------");
             if (records.Length == 0)
             {
                 builder.AppendLine("    No records");
@@ -316,7 +314,7 @@ namespace SabreTools.Data.Printers
 
             for (int recordNum = 0; recordNum < records.Length; recordNum++)
             {
-                builder.AppendLine($"    Record {recordNum}");
+                builder.AppendLine($"    Path Table Record {recordNum}");
                 builder.AppendLine(records[recordNum].DirectoryIdentifierLength, "      Directory Identifier Length");
                 builder.AppendLine(records[recordNum].ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
                 builder.AppendLine(records[recordNum].ExtentLocation, "      Extent Location");
@@ -368,9 +366,11 @@ namespace SabreTools.Data.Printers
                 return;
             }
 
-            foreach (var dr in dir.DirectoryRecords)
+            for (int recordNum = 0; recordNum < records.Length; recordNum++)
             {
-                Print(builder, dr);
+                builder.AppendLine($"      Directory Record {recordNum}:");
+                builder.AppendLine("      -------------------------");
+                Print(builder, dir.DirectoryRecords[recordNum]);
             }
 
             builder.AppendLine();
@@ -378,8 +378,6 @@ namespace SabreTools.Data.Printers
 
         private static void Print(StringBuilder builder, DirectoryRecord? dr)
         {
-            builder.AppendLine("      Directory Record:");
-            builder.AppendLine("      -------------------------");
             if (dr == null)
             {
                 builder.AppendLine("      No directory record");
@@ -396,7 +394,6 @@ namespace SabreTools.Data.Printers
             Print(builder, dr.RecordingDateTime);
             
             builder.AppendLine("      File Flags:");
-            builder.AppendLine("      -------------------------");
             builder.AppendLine((dr.FileFlags & FileFlags.EXISTENCE) == FileFlags.EXISTENCE, "        Existence");
             builder.AppendLine((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY, "        Directory");
             builder.AppendLine((dr.FileFlags & FileFlags.ASSOCIATED_FILE) == FileFlags.ASSOCIATED_FILE, "        Associated File");
@@ -405,7 +402,6 @@ namespace SabreTools.Data.Printers
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT5) == FileFlags.RESERVED_BIT5, "        Reserved Flag (Bit 5)");
             builder.AppendLine((dr.FileFlags & FileFlags.RESERVED_BIT6) == FileFlags.RESERVED_BIT6, "        Reserved Flag (Bit 6)");
             builder.AppendLine((dr.FileFlags & FileFlags.MULTI_EXTENT) == FileFlags.MULTI_EXTENT, "        Multi-Extent");
-            builder.AppendLine();
 
             builder.AppendLine(dr.FileUnitSize, "      File Unit Size");
             builder.AppendLine(dr.InterleaveGapSize, "      Interleave Gap Size");
@@ -443,8 +439,6 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(drdt.Second, "        Second");
             string tz = $"{((drdt.TimezoneOffset-48)*15/60):+0;-0}:{((drdt.TimezoneOffset-48)*15%60+60)%60:00} (0x{drdt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "        Timezone Offset");
-
-            builder.AppendLine();
         }
 
         #endregion
@@ -487,8 +481,6 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine(dt.Centisecond, "      Centisecond");
             string tz = $"{((dt.TimezoneOffset-48)*15/60):+0;-0}:{((dt.TimezoneOffset-48)*15%60+60)%60:00} (0x{dt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "      Timezone Offset");
-
-            builder.AppendLine();
         }
 
         private static bool IsDigits(byte[] arr)
