@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.IO;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics;
 
@@ -633,7 +634,7 @@ namespace SabreTools.Serialization.Readers
             // Add current directory to dictionary
             var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
             var currentDirectory = new SabreTools.Data.Models.ISO9660.Directory();
-            dir.DirectoryRecords = [.. records];
+            currentDirectory.DirectoryRecords = [.. records];
             directories.Add(dr.ExtentLocation * blocksPerSector, currentDirectory);
 
             // Add all child directories to dictionary recursively
