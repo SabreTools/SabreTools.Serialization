@@ -147,6 +147,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine(vd.PathTableLocationM, "    Type-M Path Table Location");
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
         
+            builder.AppendLine("    Root Directory Record:")
             Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
@@ -371,6 +372,7 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine($"      Directory Record {recordNum}:");
                 builder.AppendLine("      -------------------------");
                 Print(builder, dir.DirectoryRecords[recordNum]);
+                builder.AppendLine();
             }
 
             builder.AppendLine();
@@ -418,8 +420,6 @@ namespace SabreTools.Data.Printers
                 builder.AppendLine($"Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
             else
                 builder.AppendLine($"Not Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
-
-            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, DirectoryRecordDateTime? drdt)

@@ -680,13 +680,14 @@ namespace SabreTools.Serialization.Readers
             if (!dr.ExtentLocation.IsValid)
             {
                 var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
-                if (dir == null)
-                    continue;
-                // Add new directories to dictionary
-                foreach (var kvp in dir)
+                if (bigEndianDir != null)
                 {
-                    if (!directories.ContainsKey(kvp.Key))
-                        directories.Add(kvp.Key, kvp.Value);
+                    // Add new directories to dictionary
+                    foreach (var kvp in bigEndianDir)
+                    {
+                        if (!directories.ContainsKey(kvp.Key))
+                            directories.Add(kvp.Key, kvp.Value);
+                    }
                 }
             }
 
