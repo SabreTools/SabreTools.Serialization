@@ -4,7 +4,7 @@ namespace SabreTools.Data.Extensions
 {
     public static class ISO9660
     {
-        public static short GetLogicalBlockSize(BaseVolumeDescriptor bvd, short sectorLength)
+        public static short GetLogicalBlockSize(this BaseVolumeDescriptor bvd, short sectorLength)
         {
             short blockLength = sectorLength;
             if (bvd.LogicalBlockSize.IsValid)

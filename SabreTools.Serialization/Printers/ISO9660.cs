@@ -330,7 +330,7 @@ namespace SabreTools.Data.Printers
 
         #region Directories
 
-        private static void Print(StringBuilder builder, Dictionary<int, Directory>? dirs)
+        private static void Print(StringBuilder builder, Dictionary<int, DirectoryExtent>? dirs)
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
@@ -351,7 +351,7 @@ namespace SabreTools.Data.Printers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory? dir)
+        private static void Print(StringBuilder builder, DirectoryExtent? dir)
         {
             if (dir == null)
             {

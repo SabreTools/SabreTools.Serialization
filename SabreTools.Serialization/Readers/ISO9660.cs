@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
 using SabreTools.Numerics;
-using SabreTools.Data.Extensions.ISO9660;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -422,7 +422,7 @@ namespace SabreTools.Serialization.Readers
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
             
-            short blockLength = GetLogicalBlockSize(vd, sectorLength);
+            short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
@@ -567,7 +567,7 @@ namespace SabreTools.Serialization.Readers
                 if (vd is BaseVolumeDescriptor bvd)
                 {
                     // Determine logical block size
-                    short blockLength = GetLogicalBlockSize(bvd, sectorLength);
+                    short blockLength = bvd.GetLogicalBlockSize(sectorLength);
 
                     // Parse the root directory pointed to from the base volume descriptor
                     var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord);

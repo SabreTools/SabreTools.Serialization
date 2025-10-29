@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.ISO9660
     /// ISO9660 File Extent, the file data itself
     /// </summary>
     /// <see cref="https://ecma-international.org/wp-content/uploads/ECMA-119_5th_edition_december_2024.pdf"/>
-    public sealed class FileExtent
+    public class FileExtent
     {
         /// <summary>
         /// File's extended attribute record
