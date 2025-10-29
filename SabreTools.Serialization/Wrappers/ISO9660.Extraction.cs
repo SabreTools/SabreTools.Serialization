@@ -9,15 +9,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            // If we have no path table groups
-            if (PathTableGroups == null || PathTableGroups.Length == 0)
-                return false;
+            // If we have no path tables or directory descriptors, there is nothing to extract
+            if (PathTableGroups.Length == 0 && DirectoryDescriptors.Count == 0)
+                return true;
 
-            // If we have no directory descriptors
-            if (DirectoryDescriptors == null || DirectoryDescriptors.Count == 0)
-                return false;
-
-            bool allExtracted = true;
+            bool allExtracted = false;
 
             // TODO: Extract all directories and file extents
 
