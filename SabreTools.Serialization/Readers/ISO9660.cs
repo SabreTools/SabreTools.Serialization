@@ -570,7 +570,7 @@ namespace SabreTools.Serialization.Readers
                     short blockLength = bvd.GetLogicalBlockSize(sectorLength);
 
                     // Parse the root directory pointed to from the base volume descriptor
-                    var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord);
+                    var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord, false);
                     if (descriptors == null || descriptors.Count == 0)
                         continue;
                     // Merge dictionaries
@@ -596,8 +596,9 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the directory extent</param>
+        /// <param name="bigEndian">True if the Big Endian extent location/length should be parsed</param>
         /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
-        public static Dictionary<int, DirectoryExtent>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr)
+        public static Dictionary<int, DirectoryExtent>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian)
         {
             // Do not parse file extents
 #if NET20 || NET35
@@ -610,17 +611,22 @@ namespace SabreTools.Serialization.Readers
 
             int blocksPerSector = sectorLength / blockLength;
 
+            // Validate both-endian extent location
+            // TODO: Validate both-endian extent length (use the longest / non-zero one)
+            int extentLocation = bigEndian ? dr.ExtentLocation.LittleEndian : dr.ExtentLocation.BigEndian;
+            int extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
+
             // Validate extent within data stream
-            if ((dr.ExtentLocation * blockLength) + dr.ExtentLength > data.Length)
+            if ((extentLocation * blockLength) + extentLength > data.Length)
                 return null;
 
             // Move stream to directory location
-            data.Seek(dr.ExtentLocation * blockLength, SeekOrigin.Begin);
+            data.Seek(extentLocation * blockLength, SeekOrigin.Begin);
 
             // Read all directory records in this directory
             var records = new List<DirectoryRecord>();
             int pos = 0;
-            while (pos < dr.ExtentLength)
+            while (pos < extentLength)
             {
                 // Peek next byte to check whether the next record length is not greater than the end of the dir extent
                 var recordLength = data.PeekByteValue();
@@ -636,7 +642,7 @@ namespace SabreTools.Serialization.Readers
                 // Ensure record will end in this extent
                 // TODO: Smartly detect record length for invalid record lengths
                 pos += recordLength;
-                if (pos > dr.ExtentLength)
+                if (pos > extentLength)
                     break;
 
                 // Get the next directory record
@@ -649,7 +655,7 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, DirectoryExtent>();
             var currentDirectory = new DirectoryExtent();
             currentDirectory.DirectoryRecords = [.. records];
-            directories.Add(dr.ExtentLocation * blocksPerSector, currentDirectory);
+            directories.Add(extentLocation * blocksPerSector, currentDirectory);
 
             // Add all child directories to dictionary recursively
             foreach (var record in records)
@@ -659,7 +665,21 @@ namespace SabreTools.Serialization.Readers
                     continue;
                 // Recursively parse child directory
                 int sectorNum = record.ExtentLocation * blocksPerSector;
-                var dir = ParseDirectory(data, sectorLength, blockLength, record);
+                var dir = ParseDirectory(data, sectorLength, blockLength, record, false);
+                if (dir == null)
+                    continue;
+                // Add new directories to dictionary
+                foreach (var kvp in dir)
+                {
+                    if (!directories.ContainsKey(kvp.Key))
+                        directories.Add(kvp.Key, kvp.Value);
+                }
+            }
+
+            // If the extent location field is ambiguous, also parse the big-endian directory extent
+            if (!dr.ExtentLocation.IsValid)
+            {
+                var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
                 if (dir == null)
                     continue;
                 // Add new directories to dictionary
