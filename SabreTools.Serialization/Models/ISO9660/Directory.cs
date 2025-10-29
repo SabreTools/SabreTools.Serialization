@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.ISO9660
     public sealed class Directory
     {
         /// <summary>
-        /// Directory records (each a descritor of a directory or a file)
+        /// Directory records (each a descriptor of a directory or a file)
         /// </summary>
         public DirectoryRecord[] DirectoryRecords { get; set; }
     }

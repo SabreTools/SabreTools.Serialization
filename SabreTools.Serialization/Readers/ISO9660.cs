@@ -421,33 +421,7 @@ namespace SabreTools.Serialization.Readers
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
             
-            short blockLength;
-            if (vd.LogicalBlockSize.IsValid)
-            {
-                blockLength = vd.LogicalBlockSize;
-
-                // Validate logical block length, if invalid default to logical sector length
-                if (blockLength < 512 || blockLength > sectorLength || (blockLength & (blockLength - 1)) != 0)
-                    blockLength = sectorLength;
-            }
-            else
-            {
-                // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
-                short le = vd.LogicalBlockSize.LittleEndian;
-                short be = vd.LogicalBlockSize.LittleEndian;
-                bool le_valid = true;
-                bool be_valid = true;
-                if (le < 512 || le > sectorLength || (le & (le - 1)) != 0)
-                    le_valid = false;
-                if (be < 512 || be > sectorLength || (be & (be - 1)) != 0)
-                    be_valid = false;
-                if (le_valid && !be_valid)
-                    blockLength = le;
-                else if (be_valid && !le_valid)
-                    blockLength = be;
-                else
-                    blockLength = sectorLength;
-            }
+            short blockLength = GetLogicalBlockSize(vd);
 
             var groupL = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
@@ -581,7 +555,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
-        /// <returns>Filled Dictionary of int to DirectoryDescriptor on success, null on error</returns>
+        /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
         public static Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
             var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
@@ -589,15 +563,17 @@ namespace SabreTools.Serialization.Readers
             {
                 if (vd is BaseVolumeDescriptor bvd)
                 {
+                    // Determine logical block size
+                    short blockLength = GetLogicalBlockSize(bvd);
+
                     // Parse the root directory pointed to from the base volume descriptor
-                    var descriptors = ParseDirectory(data, sectorLength, bvd.RootDirectoryRecord);
+                    var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord);
                     if (descriptors == null || descriptors.Count == 0)
                         continue;
                     // Merge dictionaries
                     foreach (var kvp in descriptors)
                     {
-                        if (!directories.ContainsKey(kvp.Key))
-                            directories.Add(kvp.Key, kvp.Value);
+                        directories.TryAdd(kvp.Key, kvp.Value);
                     }
                 }
             }
@@ -610,20 +586,62 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a list of DirectoryDescriptor
+        /// Parse a Stream into a map of sector numbers to Directory
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <param name="dr">Root directory record pointing to the root directory extent</param>
-        /// <returns>Filled list of DirectoryDescriptor on success, null on error</returns>
-        public static Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>? ParseDirectory(Stream data, short sectorLength, DirectoryRecord? dr)
+        /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
+        /// <param name="dr">Directory record pointing to the directory extent</param>
+        /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
+        public static Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr)
         {
-            if (dr == null)
+            // Do not parse file extents
+#if NET20 || NET35
+            if ((dr.FileFlags & FileFlags.DIRECTORY) == 0)
+                return null;
+#else
+            if (!dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+                return null;
+#endif
+
+            int blocksPerSector = sectorLength / blockLength;
+
+            // Validate extent within data stream
+            if ((dr.ExtentLocation * blockLength) + dr.ExtentLength > data.Length)
                 return null;
 
-            // Read Directory Descriptors from the extent pointed to by a Directory Record
+            // Move stream to directory location
+            data.Position = dr.ExtentLocation * blockLength;
 
-            return null;
+            // Read all directory records in this directory
+            var records = new List<DirectoryRecord>();
+            int pos = 0;
+            while (pos < dr.ExtentLength)
+            {
+                // TODO: Peek next byte to check whether DirectoryRecordLength is not greater than the end of the dir extent
+                var directoryRecord = ParseDirectoryRecord(data, false);
+                if (directoryRecord != null)
+                    records.Add(directoryRecord);
+            }
+
+            // Add current directory to dictionary
+            var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
+            var dir = new SabreTools.Data.Models.ISO9660.Directory();
+            dir.DirectoryRecords = [.. records];
+            directories.Add(dr.ExtentLocation * blocksPerSector, dir)
+
+            // Add all child directories to dictionary recursively
+            foreach (var record in records)
+            {
+                int sectorNum = record.ExtentLocation * blocksPerSector;
+                var dir = ParseDirectory(data, sectorLength, blockLength, record);
+                foreach (var kvp in dir)
+                {
+                    directories.TryAdd(kvp.Key, kvp.Value);
+                }
+            }
+
+            return directories;
         }
 
         /// <summary>
@@ -736,6 +754,37 @@ namespace SabreTools.Serialization.Readers
             obj.TimezoneOffset = data.ReadByteValue();
 
             return obj;
+        }
+
+        public static short GetLogicalBlockSize(BaseVolumeDescriptor bvd, int sectorLength)
+        {
+            short blockLength = sectorLength;
+            if (bvd.LogicalBlockSize.IsValid)
+            {
+                // Validate logical block length
+                if (bvd.LogicalBlockSize >= 512 && bvd.LogicalBlockSize <= sectorLength && (bvd.LogicalBlockSize & (bvd.LogicalBlockSize - 1)) == 0)
+                    blockLength = bvd.LogicalBlockSize;
+            }
+            else
+            {
+                // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
+                short le = bvd.LogicalBlockSize.LittleEndian;
+                short be = bvd.LogicalBlockSize.LittleEndian;
+                bool le_valid = true;
+                bool be_valid = true;
+                if (le < 512 || le > sectorLength || (le & (le - 1)) != 0)
+                    le_valid = false;
+                if (be < 512 || be > sectorLength || (be & (be - 1)) != 0)
+                    be_valid = false;
+                if (le_valid && !be_valid)
+                    blockLength = le;
+                else if (be_valid && !le_valid)
+                    blockLength = be;
+                else
+                    blockLength = sectorLength;
+            }
+
+            return blockLength;
         }
     }
 }
