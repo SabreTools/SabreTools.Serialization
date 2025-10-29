@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Readers
     public class ISO9660 : BaseBinaryReader<Volume>
     {
         /// <inheritdoc/>
-        public override Volume? Deserialize(Stream? data) => Deserialize(data, 2048);
+        public override Volume? Deserialize(Stream? data) => Deserialize(data, Constants.MinimumSectorSize);
 
         /// <inheritdoc cref="Deserialize(Stream?)" />
         /// <param name="sectorLength">Size of the logical sector used in the volume</param>
@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Ensure the logical sector size is valid (2^n where n>=11)
-            if (sectorLength < 2048 || (sectorLength & (sectorLength - 1)) != 0)
+            if (sectorLength < Constants.MinimumSectorSize || (sectorLength & (sectorLength - 1)) != 0)
                 return null;
 
             // Simple check for a valid stream length
@@ -37,17 +37,22 @@ namespace SabreTools.Serialization.Readers
                 volume.SystemArea = data.ReadBytes(Constants.SystemAreaSectors * sectorLength);
 
                 // Read the set of Volume Descriptors
-                volume.VolumeDescriptorSet = ParseVolumeDescriptorSet(data, sectorLength);
-
-                // If no volume descriptors were found, stream is not a valid ISO9660 volume
-                if (volume.VolumeDescriptorSet == null || volume.VolumeDescriptorSet.Length == 0)
+                var vdSet = ParseVolumeDescriptorSet(data, sectorLength);
+                if (vdSet == null || vdSet.Length == 0)
                     return null;
+                volume.VolumeDescriptorSet = vdSet;
 
                 // Parse the path table group(s) for each base volume descriptor
-                volume.PathTableGroups = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
+                var ptgs = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
+                if (ptgs == null || ptgs.Length == 0)
+                    return null;
+                volume.PathTableGroups = ptgs;
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
-                volume.DirectoryDescriptors = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
+                var dirs = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
+                if (dirs == null || dirs.Length == 0)
+                    return null;
+                volume.DirectoryDescriptors = dirs;
 
                 return volume;
             }
@@ -149,8 +154,8 @@ namespace SabreTools.Serialization.Readers
             obj.BootSystemUse = data.ReadBytes(1977);
 
             // Skip remainder of the logical sector
-            if (sectorLength > 2048)
-                data.Position += sectorLength - 2048;
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.Position += sectorLength - Constants.MinimumSectorSize;
 
             return obj;
         }
@@ -240,7 +245,10 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
+            var dr = ParseDirectoryRecord(data, true);
+            if (dr == null)
+                return null;
+            obj.RootDirectoryRecord = dr;
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -261,8 +269,8 @@ namespace SabreTools.Serialization.Readers
             obj.Reserved653Bytes = data.ReadBytes(653);
 
             // Skip remainder of the logical sector
-            if (sectorLength > 2048)
-                data.Position += sectorLength - 2048;
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.Position += sectorLength - Constants.MinimumSectorSize;
 
             return obj;
         }
@@ -296,8 +304,8 @@ namespace SabreTools.Serialization.Readers
             obj.SystemUse = data.ReadBytes(1960);
 
             // Skip remainder of the logical sector
-            if (sectorLength > 2048)
-                data.Position += sectorLength - 2048;
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.Position += sectorLength - Constants.MinimumSectorSize;
 
             return obj;
         }
@@ -326,8 +334,8 @@ namespace SabreTools.Serialization.Readers
             obj.Reserved2041Bytes = data.ReadBytes(2041);
 
             // Skip remainder of the logical sector
-            if (sectorLength > 2048)
-                data.Position += sectorLength - 2048;
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.Position += sectorLength - Constants.MinimumSectorSize;
 
             return obj;
         }
@@ -357,8 +365,8 @@ namespace SabreTools.Serialization.Readers
             obj.Data = data.ReadBytes(2041);
 
             // Skip remainder of the logical sector
-            if (sectorLength > 2048)
-                data.Position += sectorLength - 2048;
+            if (sectorLength > Constants.MinimumSectorSize)
+                data.Position += sectorLength - Constants.MinimumSectorSize;
 
             return obj;
         }
@@ -714,7 +722,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled DecDateTime on success, null on error</returns>
-        public static DecDateTime? ParseDecDateTime(Stream data)
+        public static DecDateTime ParseDecDateTime(Stream data)
         {
             var obj = new DecDateTime();
 

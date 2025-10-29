@@ -9,6 +9,11 @@ namespace SabreTools.Data.Models.ISO9660
         #region Volume Descriptor Constants
 
         /// <summary>
+        /// Minimum size of a logical sector
+        /// </summary>
+        public const int MinimumSectorSize = 2048;
+
+        /// <summary>
         /// Number of logical sectors in the System Area
         /// </summary>
         public const int SystemAreaSectors = 16;
