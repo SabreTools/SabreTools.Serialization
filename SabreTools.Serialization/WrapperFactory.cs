@@ -28,7 +28,7 @@ namespace SabreTools.Serialization
                 WrapperType.IniFile => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
-                WrapperType.IRD => null,// TODO: Implement wrapper
+                WrapperType.IRD => IRD.Create(data),
                 WrapperType.ISO9660 => ISO9660.Create(data),
                 WrapperType.LDSCRYPT => LDSCRYPT.Create(data),
                 WrapperType.LZKWAJ => LZKWAJ.Create(data),
