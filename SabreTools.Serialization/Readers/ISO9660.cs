@@ -628,7 +628,7 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, SabreTools.Data.Models.ISO9660.Directory>();
             var dir = new SabreTools.Data.Models.ISO9660.Directory();
             dir.DirectoryRecords = [.. records];
-            directories.Add(dr.ExtentLocation * blocksPerSector, dir)
+            directories.Add(dr.ExtentLocation * blocksPerSector, dir);
 
             // Add all child directories to dictionary recursively
             foreach (var record in records)
