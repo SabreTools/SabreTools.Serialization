@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.ISO9660
 
         /// <summary>
         /// Record attributes
-        /// Note: If RecordType is zero, this field is ignored by readers 
+        /// Note: If RecordType is zero, this field is ignored by readers
         /// </summary>
         public RecordAttributes RecordAttributes { get; set; }
 

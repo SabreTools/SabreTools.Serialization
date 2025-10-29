@@ -91,14 +91,5 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         #endregion
-
-        #region JSON Export
-
-#if NETCOREAPP
-        /// <inheritdoc/>
-        public override string ExportJSON() => throw new System.NotImplementedException();
-#endif
-
-        #endregion
     }
 }

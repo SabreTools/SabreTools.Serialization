@@ -1,0 +1,43 @@
+using System.Text;
+using SabreTools.Data.Extensions;
+using SabreTools.Data.Models.LZ;
+
+namespace SabreTools.Serialization.Wrappers
+{
+    public partial class LZQBasic : IPrintable
+    {
+#if NETCOREAPP
+        /// <inheritdoc/>
+        public string ExportJSON() => System.Text.Json.JsonSerializer.Serialize(Model, _jsonSerializerOptions);
+#endif
+
+        /// <inheritdoc/>
+        public void PrintInformation(StringBuilder builder)
+            => Print(builder, Model);
+
+        private static void Print(StringBuilder builder, QBasicFile file)
+        {
+            builder.AppendLine("LZ-compressed File, QBasic Variant Information:");
+            builder.AppendLine("-------------------------");
+            builder.AppendLine();
+
+            Print(builder, file.Header);
+        }
+
+        private static void Print(StringBuilder builder, QBasicHeader? header)
+        {
+            builder.AppendLine("  Header Information:");
+            builder.AppendLine("  -------------------------");
+            if (header == null)
+            {
+                builder.AppendLine("  No header");
+                builder.AppendLine();
+                return;
+            }
+
+            builder.AppendLine(header.Magic, "  Magic number");
+            builder.AppendLine(header.RealLength, "  Real length");
+            builder.AppendLine();
+        }
+    }
+}

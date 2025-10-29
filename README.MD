@@ -99,8 +99,8 @@ Below is a table representing the various non-conversion interfaces that are imp
 
 | Interface Name | Purpose |
 | --- | --- |
-| `SabreTools.Data.Printers.IPrinter<TModel>` | Provides a formatted output for a `TModel` |
 | `SabreTools.Serialization.Wrappers.IExtractable` | Marks a wrapper as able to be extracted |
+| `SabreTools.Serialization.Wrappers.IPrintable` | Marks a wrapper as able to print model information |
 | `SabreTools.Serialization.Wrappers.IWrapper` | Represents an item with a description and JSON serializable state, allowing for extensions |
 | `SabreTools.Serialization.Wrappers.IWrapper<TModel>` | Wraps a model with source data, allowing for extensions |
 
@@ -114,7 +114,6 @@ Below is a table of all namespaces within the library and what they represent
 | `SabreTools.Data.Extensions` | Extension methods related to models |
 | `SabreTools.Data.Models` | Models representing different file and structure types |
 | `SabreTools.Data.ObjectIdentifier` | Object Identifier (OID) parsing |
-| `SabreTools.Data.Printers` | Export model information in a formatted manner |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
 | `SabreTools.Serialization.Interfaces` | Interfaces used commonly throughout the library |
 | `SabreTools.Serialization.Readers` | Convert from external sources to models |

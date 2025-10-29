@@ -3,7 +3,7 @@ using SabreTools.Data.Models.MSDOS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class MSDOS : WrapperBase<Executable>
+    public partial class MSDOS : WrapperBase<Executable>
     {
         #region Descriptive Properties
 

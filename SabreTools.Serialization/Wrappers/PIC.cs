@@ -3,7 +3,7 @@ using SabreTools.Data.Models.PIC;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PIC : WrapperBase<DiscInformation>
+    public partial class PIC : WrapperBase<DiscInformation>
     {
         #region Descriptive Properties
 

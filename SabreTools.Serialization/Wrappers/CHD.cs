@@ -3,7 +3,7 @@ using SabreTools.Data.Models.CHD;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class CHD : WrapperBase<Header>
+    public partial class CHD : WrapperBase<Header>
     {
         #region Descriptive Properties
 

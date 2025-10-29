@@ -1,17 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
-using SabreTools.Numerics;
 
 namespace SabreTools.Serialization.Readers
 {
     public class ISO9660 : BaseBinaryReader<Volume>
     {
         /// <inheritdoc/>
-        public override Volume? Deserialize(Stream? data) => Deserialize(data, Constants.MinimumSectorSize);
+        public override Volume? Deserialize(Stream? data)
+            => Deserialize(data, Constants.MinimumSectorSize);
 
         /// <inheritdoc cref="Deserialize(Stream?)" />
         /// <param name="sectorLength">Size of the logical sector used in the volume</param>
@@ -84,7 +83,7 @@ namespace SabreTools.Serialization.Readers
                 // If no valid volume descriptor could be read, return the current set
                 if (volumeDescriptor == null)
                     return [.. obj];
-                
+
                 // If the set has already been terminated and the returned volume descriptor is not another terminator,
                 // assume the read volume descriptor is not a valid volume descriptor and return the current set
                 if (setTerminated && volumeDescriptor.Type != VolumeDescriptorType.VOLUME_DESCRIPTOR_SET_TERMINATOR)
@@ -93,7 +92,7 @@ namespace SabreTools.Serialization.Readers
                     data.Seek(-sectorLength, SeekOrigin.Current);
                     return [.. obj];
                 }
-                
+
                 // Add the valid read volume descriptor to the set
                 obj.Add(volumeDescriptor);
 
@@ -397,7 +396,7 @@ namespace SabreTools.Serialization.Readers
                 }
             }
 
-            // Return error (null) if no valid path table groups were found 
+            // Return error (null) if no valid path table groups were found
             if (groups.Count == 0)
                 return null;
 
@@ -421,7 +420,7 @@ namespace SabreTools.Serialization.Readers
             int locationL2 = vd.OptionalPathTableLocationL;
             int locationM = vd.PathTableLocationM;
             int locationM2 = vd.OptionalPathTableLocationM;
-            
+
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
             var groupL = new PathTableGroup();
@@ -453,7 +452,7 @@ namespace SabreTools.Serialization.Readers
             // If the both-endian path table size value is consistent, return the single path table group
             if (sizeL == sizeB)
                 return groups;
-            
+
             // Get the other-sized path table group
             var groupB = new PathTableGroup();
             if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
@@ -582,7 +581,7 @@ namespace SabreTools.Serialization.Readers
                 }
             }
 
-            // Return error (null) if no valid directory descriptors were found 
+            // Return error (null) if no valid directory descriptors were found
             if (directories.Count == 0)
                 return null;
 

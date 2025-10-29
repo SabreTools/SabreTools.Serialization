@@ -10,7 +10,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class WiseScript : WrapperBase<ScriptFile>
+    public partial class WiseScript : WrapperBase<ScriptFile>
     {
         #region Descriptive Properties
 

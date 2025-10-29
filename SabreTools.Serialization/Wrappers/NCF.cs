@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class NCF : WrapperBase<Data.Models.NCF.File>
+    public partial class NCF : WrapperBase<Data.Models.NCF.File>
     {
         #region Descriptive Properties
 

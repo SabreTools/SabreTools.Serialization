@@ -9,12 +9,5 @@ namespace SabreTools.Serialization.Wrappers
         /// Get a human-readable description of the wrapper
         /// </summary>
         string Description();
-
-#if NETCOREAPP
-        /// <summary>
-        /// Export the item information as JSON
-        /// </summary>
-        string ExportJSON();
-#endif
     }
 }

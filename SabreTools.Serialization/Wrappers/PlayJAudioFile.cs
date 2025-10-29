@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PlayJAudioFile : WrapperBase<Data.Models.PlayJ.AudioFile>
+    public partial class PlayJAudioFile : WrapperBase<Data.Models.PlayJ.AudioFile>
     {
         #region Descriptive Properties
 

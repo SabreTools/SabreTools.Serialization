@@ -4,7 +4,7 @@ using SabreTools.Data.Models.AACS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class AACSMediaKeyBlock : WrapperBase<MediaKeyBlock>
+    public partial class AACSMediaKeyBlock : WrapperBase<MediaKeyBlock>
     {
         #region Descriptive Properties
 

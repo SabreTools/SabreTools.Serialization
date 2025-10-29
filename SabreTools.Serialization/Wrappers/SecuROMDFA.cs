@@ -3,7 +3,7 @@ using SabreTools.Data.Models.SecuROM;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class SecuROMDFA : WrapperBase<DFAFile>
+    public partial class SecuROMDFA : WrapperBase<DFAFile>
     {
         #region Descriptive Properties
 

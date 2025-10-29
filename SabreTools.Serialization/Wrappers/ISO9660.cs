@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
@@ -16,19 +15,13 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
-        /// <summary>
-        /// Volume Descriptors
-        /// </summary>
+        /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
         public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
 
-        /// <summary>
-        /// Path Tables
-        /// </summary>
+        /// <inheritdoc cref="Volume.PathTableGroups"/>
         public PathTableGroup[] PathTableGroups => Model.PathTableGroups ?? [];
 
-        /// <summary>
-        /// Directory Descriptors
-        /// </summary>
+        /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
         public Dictionary<int, DirectoryExtent> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion

@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class LinearExecutable : WrapperBase<Executable>
+    public partial class LinearExecutable : WrapperBase<Executable>
     {
         #region Descriptive Properties
 

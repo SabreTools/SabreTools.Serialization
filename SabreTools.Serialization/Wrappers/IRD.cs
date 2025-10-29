@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class IRD : WrapperBase<Data.Models.IRD.File>
+    public partial class IRD : WrapperBase<Data.Models.IRD.File>
     {
         #region Descriptive Properties
 

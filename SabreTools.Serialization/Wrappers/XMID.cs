@@ -4,7 +4,7 @@ using static SabreTools.Data.Models.Xbox.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class XMID : WrapperBase<Data.Models.Xbox.XMID>
+    public partial class XMID : WrapperBase<Data.Models.Xbox.XMID>
     {
         #region Descriptive Properties
 

@@ -3,7 +3,7 @@ using SabreTools.Data.Models.N3DS;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class CIA : WrapperBase<Data.Models.N3DS.CIA>
+    public partial class CIA : WrapperBase<Data.Models.N3DS.CIA>
     {
         #region Descriptive Properties
 

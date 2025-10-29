@@ -4,6 +4,12 @@ namespace SabreTools.Data.Extensions
 {
     public static class ISO9660
     {
+        /// <summary>
+        /// Get the logical block size from a sector length
+        /// </summary>
+        /// <param name="bvd">Volume descriptor containing block information</param>
+        /// <param name="sectorLength">Defined sector length</param>
+        /// <returns>Size of a logical block</returns>
         public static short GetLogicalBlockSize(this BaseVolumeDescriptor bvd, short sectorLength)
         {
             short blockLength = sectorLength;

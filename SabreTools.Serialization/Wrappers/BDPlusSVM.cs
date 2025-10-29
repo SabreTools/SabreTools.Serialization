@@ -3,7 +3,7 @@ using SabreTools.Data.Models.BDPlus;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class BDPlusSVM : WrapperBase<SVM>
+    public partial class BDPlusSVM : WrapperBase<SVM>
     {
         #region Descriptive Properties
 

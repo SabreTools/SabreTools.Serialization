@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Wrappers
     /// types that typically do not have models.
     /// </summary>
     /// TODO: Hook up the models to a proper deserializer
-    public class SFFS : WrapperBase<FileSystem>
+    public partial class SFFS : WrapperBase<FileSystem>
     {
         #region Descriptive Properties
 
@@ -76,15 +76,6 @@ namespace SabreTools.Serialization.Wrappers
 
             return new SFFS(new FileSystem(), data);
         }
-
-        #endregion
-
-        #region JSON Export
-
-#if NETCOREAPP
-        /// <inheritdoc/>
-        public override string ExportJSON() => throw new System.NotImplementedException();
-#endif
 
         #endregion
     }

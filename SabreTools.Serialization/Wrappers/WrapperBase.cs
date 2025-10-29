@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Wrappers
 #endif
 
         /// <summary>
-        /// Lock for accessing <see cref="_dataSource"/> 
+        /// Lock for accessing <see cref="_dataSource"/>
         /// </summary>
         protected readonly object _dataSourceLock = new();
 
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.Wrappers
         /// This method locks the data source to avoid potential conflicts in reading
         /// from the data source. This should be the preferred way of reading in cases
         /// where there may be multiple threads accessing the wrapper.
-        /// 
+        ///
         /// This method will return an empty array if the length is greater than what is left
         /// in the stream. This is different behavior than a normal stream read that would
         /// attempt to read as much as possible, returning the amount of bytes read.
@@ -169,17 +169,6 @@ namespace SabreTools.Serialization.Wrappers
                 return _dataSource.ReadFrom(offset, length, retainPosition: true) ?? [];
             }
         }
-
-        #endregion
-
-        #region JSON Export
-
-#if NETCOREAPP
-        /// <summary>
-        /// Export the item information as JSON
-        /// </summary>
-        public abstract string ExportJSON();
-#endif
 
         #endregion
     }
