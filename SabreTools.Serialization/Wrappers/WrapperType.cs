@@ -83,6 +83,16 @@ namespace SabreTools.Serialization.Wrappers
         InstallShieldCAB,
 
         /// <summary>
+        /// PS3 ISO Rebuild Data
+        /// </summary>
+        IRD,
+
+        /// <summary>
+        /// ISO 9660 Volume (Disc image)
+        /// </summary>
+        ISO9660,
+
+        /// <summary>
         /// Link Data Security encrypted file
         /// </summary>
         LDSCRYPT,

@@ -190,6 +190,11 @@ namespace ExtractionTool.Features
                     iscab.Extract(OutputPath, Debug);
                     break;
 
+                // ISO 9660 volume
+                case ISO9660 iso9660:
+                    iso9660.Extract(OutputPath, Debug);
+                    break;
+
                 // LZ-compressed file, KWAJ variant
                 case LZKWAJ kwaj:
                     kwaj.Extract(OutputPath, Debug);

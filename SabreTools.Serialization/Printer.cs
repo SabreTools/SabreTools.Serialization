@@ -45,6 +45,7 @@ namespace SabreTools.Serialization
                 Wrapper.InstallShieldArchiveV3 item => item.PrettyPrint(),
                 Wrapper.InstallShieldCabinet item => item.PrettyPrint(),
                 Wrapper.IRD item => item.PrettyPrint(),
+                Wrapper.ISO9660 item => item.PrettyPrint(),
                 Wrapper.LinearExecutable item => item.PrettyPrint(),
                 Wrapper.LZKWAJ item => item.PrettyPrint(),
                 Wrapper.LZQBasic item => item.PrettyPrint(),
@@ -101,6 +102,7 @@ namespace SabreTools.Serialization
                 Wrapper.InstallShieldArchiveV3 item => item.ExportJSON(),
                 Wrapper.InstallShieldCabinet item => item.ExportJSON(),
                 Wrapper.IRD item => item.ExportJSON(),
+                Wrapper.ISO9660 item => item.ExportJSON(),
                 Wrapper.LinearExecutable item => item.ExportJSON(),
                 Wrapper.LZKWAJ item => item.ExportJSON(),
                 Wrapper.LZQBasic item => item.ExportJSON(),
@@ -257,6 +259,16 @@ namespace SabreTools.Serialization
         {
             var builder = new StringBuilder();
             IRD.Print(builder, item.Model);
+            return builder;
+        }
+
+        /// <summary>
+        /// Export the item information as pretty-printed text
+        /// </summary>
+        private static StringBuilder PrettyPrint(this Wrapper.ISO9660 item)
+        {
+            var builder = new StringBuilder();
+            ISO9660.Print(builder, item.Model);
             return builder;
         }
 

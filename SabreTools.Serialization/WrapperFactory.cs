@@ -28,6 +28,8 @@ namespace SabreTools.Serialization
                 WrapperType.IniFile => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
+                WrapperType.IRD => null,// TODO: Implement wrapper
+                WrapperType.ISO9660 => ISO9660.Create(data),
                 WrapperType.LDSCRYPT => LDSCRYPT.Create(data),
                 WrapperType.LZKWAJ => LZKWAJ.Create(data),
                 WrapperType.LZQBasic => LZQBasic.Create(data),
@@ -326,6 +328,23 @@ namespace SabreTools.Serialization
                 return WrapperType.InstallShieldCAB;
 
             // Both InstallShieldCAB and MicrosoftCAB share the same extension
+
+            #endregion
+
+            #region IRD
+
+            if (magic.StartsWith([0x33, 0x49, 0x52, 0x44]))
+                return WrapperType.IRD;
+
+            if (extension.Equals("ird", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.IRD;
+
+            #endregion
+
+            #region ISO9660
+
+            if (extension.Equals("iso", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.ISO9660;
 
             #endregion
 
