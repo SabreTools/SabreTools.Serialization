@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
 
             builder.AppendLine("    Root Directory Record:");
-            Print(builder, vd.RootDirectoryRecord, encoding););
+            Print(builder, vd.RootDirectoryRecord, encoding);
 
             builder.AppendLine(encoding.GetString(vd.VolumeSetIdentifier), "    Volume Set Identifier");
             builder.AppendLine(encoding.GetString(vd.PublisherIdentifier), "    Publisher Identifier");
