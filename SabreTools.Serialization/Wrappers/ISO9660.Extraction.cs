@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Data.Extensions;
-using SabreTools.IO;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
@@ -12,7 +11,7 @@ namespace SabreTools.Serialization.Wrappers
     public partial class ISO9660 : IExtractable
     {
         /// <inheritdoc/>
-        public bool Extract(string outputDirectory, bool includeDebug)
+        public virtual bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no volume or directory descriptors, there is nothing to extract
             if (VolumeDescriptorSet.Length == 0 || DirectoryDescriptors.Count == 0)
