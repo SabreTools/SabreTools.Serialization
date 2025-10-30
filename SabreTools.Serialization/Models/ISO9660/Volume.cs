@@ -42,7 +42,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Map of sector numbers and the directory at that sector number
         /// Each Directory contains child directory and file descriptors
-        /// /// Note: FileExtent is the base class for DirectoryExtent
+        /// Note: FileExtent is the base class for DirectoryExtent
         /// </summary>
         public Dictionary<int, FileExtent> DirectoryDescriptors { get; set; }
 
