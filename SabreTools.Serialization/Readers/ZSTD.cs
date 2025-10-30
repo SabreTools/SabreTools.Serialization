@@ -59,6 +59,4 @@ namespace SabreTools.Serialization.Readers
             return obj;
         }
     }
-
-    
 }
