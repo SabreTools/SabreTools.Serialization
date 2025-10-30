@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Data
 
         /// <summary>
-        /// Read a number of bytes from an offset fomr the data source, if possible
+        /// Read a number of bytes from an offset from the data source, if possible
         /// </summary>
         /// <param name="offset">Offset within the data source to start reading</param>
         /// <param name="length">Number of bytes to read from the offset</param>

@@ -15,6 +15,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Volume.SystemArea"/>
+        public byte[] SystemArea => Model.SystemArea ?? [];
+
         /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
         public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
 
@@ -22,7 +25,7 @@ namespace SabreTools.Serialization.Wrappers
         public PathTableGroup[] PathTableGroups => Model.PathTableGroups ?? [];
 
         /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
-        public Dictionary<int, DirectoryExtent> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
+        public Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion
 

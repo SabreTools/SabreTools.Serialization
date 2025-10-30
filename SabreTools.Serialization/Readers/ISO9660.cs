@@ -577,10 +577,10 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Set of volume descriptors for a volume</param>
-        /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
-        public static Dictionary<int, DirectoryExtent>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
+        /// <returns>Filled Dictionary of int to FileExtent on success, null on error</returns>
+        public static Dictionary<int, FileExtent>? ParseDirectoryDescriptors(Stream data, short sectorLength, VolumeDescriptor[] vdSet)
         {
-            var directories = new Dictionary<int, DirectoryExtent>();
+            var directories = new Dictionary<int, FileExtent>();
             foreach (VolumeDescriptor vd in vdSet)
             {
                 if (vd is not BaseVolumeDescriptor bvd)
@@ -617,85 +617,104 @@ namespace SabreTools.Serialization.Readers
         /// <param name="blockLength">Number of bytes in a logical block (usually 2048)</param>
         /// <param name="dr">Directory record pointing to the directory extent</param>
         /// <param name="bigEndian">True if the Big Endian extent location/length should be parsed</param>
-        /// <returns>Filled Dictionary of int to Directory on success, null on error</returns>
-        public static Dictionary<int, DirectoryExtent>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian)
+        /// <returns>Filled Dictionary of int to FileExtent on success, null on error</returns>
+        public static Dictionary<int, FileExtent>? ParseDirectory(Stream data, short sectorLength, short blockLength, DirectoryRecord dr, bool bigEndian)
         {
-            // Do not parse file extents
-#if NET20 || NET35
-            if ((dr.FileFlags & FileFlags.DIRECTORY) == 0)
-                return null;
-#else
-            if (!dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
-                return null;
-#endif
-
+            var directories = new Dictionary<int, FileExtent>();
             int blocksPerSector = sectorLength / blockLength;
 
-            // Validate both-endian extent location
-            // TODO: Validate both-endian extent length (use the longest / non-zero one)
-            int extentLocation = bigEndian ? dr.ExtentLocation.LittleEndian : dr.ExtentLocation.BigEndian;
-            int extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
+            // Use provided extent endinanness
+            int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
+            int extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
 
-            // Validate extent within data stream
-            if ((extentLocation * blockLength) + extentLength > data.Length)
+            // Deal with extent length ambiguity
+            if (!dr.ExtentLength.IsValid)
+            {
+                // If provided extent length is invalid, use the other value
+                if (extentLength <= 0 || (extentLocation * blockLength) + extentLength > data.Length)
+                    extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
+            }
+
+            // Validate extent length
+            if (extentLength <= 0 || (extentLocation * blockLength) + extentLength > data.Length)
                 return null;
 
             // Move stream to directory location
             data.SeekIfPossible(extentLocation * blockLength, SeekOrigin.Begin);
 
-            // Read all directory records in this directory
-            var records = new List<DirectoryRecord>();
-            int pos = 0;
-            while (pos < extentLength)
+            // Check if the current extent is a directory
+#if NET20 || NET35
+            if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+#else
+            if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+#endif
             {
-                // Peek next byte to check whether the next record length is not greater than the end of the dir extent
-                var recordLength = data.PeekByteValue();
-
-                // If record length of 0x00, next record begins in next sector
-                if (recordLength == 0)
+                // Read all directory records in this directory
+                var records = new List<DirectoryRecord>();
+                int pos = 0;
+                while (pos < extentLength)
                 {
-                    int paddingLength = sectorLength - (pos % sectorLength);
-                    pos += paddingLength;
-                    _ = data.ReadBytes(paddingLength);
-                    continue;
+                    // Peek next byte to check whether the next record length is not greater than the end of the dir extent
+                    var recordLength = data.PeekByteValue();
+
+                    // If record length of 0x00, next record begins in next sector
+                    if (recordLength == 0)
+                    {
+                        int paddingLength = sectorLength - (pos % sectorLength);
+                        pos += paddingLength;
+                        _ = data.ReadBytes(paddingLength);
+                        continue;
+                    }
+
+                    // Ensure record will end in this extent
+                    // TODO: Smartly detect record length for invalid record lengths
+                    pos += recordLength;
+                    if (pos > extentLength)
+                        break;
+
+                    // Get the next directory record
+                    var directoryRecord = ParseDirectoryRecord(data, false);
+                    records.Add(directoryRecord);
                 }
 
-                // Ensure record will end in this extent
-                // TODO: Smartly detect record length for invalid record lengths
-                pos += recordLength;
-                if (pos > extentLength)
-                    break;
+                // Add current directory to dictionary
+                var currentDirectory = new DirectoryExtent();
+                currentDirectory.DirectoryRecords = [.. records];
+                directories.Add(extentLocation * blocksPerSector, currentDirectory);
 
-                // Get the next directory record
-                var directoryRecord = ParseDirectoryRecord(data, false);
-                records.Add(directoryRecord);
+                // Add all child directories to dictionary recursively
+                foreach (var record in records)
+                {
+                    // Don't traverse to parent or self
+                    if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                        continue;
+
+                    // Recursively parse child directory
+                    int sectorNum = record.ExtentLocation * blocksPerSector;
+                    var dir = ParseDirectory(data, sectorLength, blockLength, record, false);
+                    if (dir == null)
+                        continue;
+
+                    // Add new directories to dictionary
+                    foreach (var kvp in dir)
+                    {
+                        if (!directories.ContainsKey(kvp.Key))
+                            directories.Add(kvp.Key, kvp.Value);
+                    }
+                }
             }
-
-            // Add current directory to dictionary
-            var directories = new Dictionary<int, DirectoryExtent>();
-            var currentDirectory = new DirectoryExtent();
-            currentDirectory.DirectoryRecords = [.. records];
-            directories.Add(extentLocation * blocksPerSector, currentDirectory);
-
-            // Add all child directories to dictionary recursively
-            foreach (var record in records)
+            else
             {
-                // Don't traverse to parent or self
-                if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
-                    continue;
-
-                // Recursively parse child directory
-                int sectorNum = record.ExtentLocation * blocksPerSector;
-                var dir = ParseDirectory(data, sectorLength, blockLength, record, false);
-                if (dir == null)
-                    continue;
-
-                // Add new directories to dictionary
-                foreach (var kvp in dir)
-                {
-                    if (!directories.ContainsKey(kvp.Key))
-                        directories.Add(kvp.Key, kvp.Value);
-                }
+                // TODO: Create ParseExtendedAttributeRecord()
+                // Extent is a file, parse the Extended Attribute Record
+                // var ear = ParseExtendedAttributeRecord();
+                // if (ear != null)
+                // {
+                //     var fileExtent = new FileExtent();
+                //     fileExtent.ExtendedAttributeRecord = ear;
+                //     if (!directories.ContainsKey(extentLocation))
+                //         directories.Add(extentLocation, fileExtent);
+                // }
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent
