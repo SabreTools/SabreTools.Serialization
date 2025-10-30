@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.ZSTD
         public int VersionByte;
 
         /// <summary>
-        /// "0x28 0xB5 0x2F 0xFC"
+        /// "0x?? 0xB5 0x2F 0xFD"
         /// </summary>
         public byte[]? Magic;
     }
