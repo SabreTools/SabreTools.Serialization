@@ -51,6 +51,7 @@ namespace SabreTools.Serialization
                 WrapperType.RealArcadeMezzanine => RealArcadeMezzanine.Create(data),
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => SevenZip.Create(data),
+                WrapperType.Skeleton => Skeleton.Create(data),
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
@@ -666,6 +667,13 @@ namespace SabreTools.Serialization
 
             if (extension.Equals("sga", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.SGA;
+
+            #endregion
+
+            #region Skeleton
+
+            if (extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.Skeleton;
 
             #endregion
 
