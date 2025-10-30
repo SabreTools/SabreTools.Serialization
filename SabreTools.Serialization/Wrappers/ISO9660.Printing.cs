@@ -160,14 +160,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
             builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
 
-            builder.AppendLine("    Volume Creation Date Time:");
-            Print(builder, vd.VolumeCreationDateTime);
-            builder.AppendLine("    Volume Modification Date Time:");
-            Print(builder, vd.VolumeModificationDateTime);
-            builder.AppendLine("    Volume Expiration Date Time:");
-            Print(builder, vd.VolumeExpirationDateTime);
-            builder.AppendLine("    Volume Effective Date Time:");
-            Print(builder, vd.VolumeEffectiveDateTime);
+            builder.AppendLine(Format(vd.VolumeCreationDateTime), "    Volume Creation Date Time:");
+            builder.AppendLine(Format(vd.VolumeModificationDateTime), "    Volume Modification Date Time:");
+            builder.AppendLine(Format(vd.VolumeExpirationDateTime), "    Volume Expiration Date Time:");
+            builder.AppendLine(Format(vd.VolumeEffectiveDateTime), "    Volume Effective Date Time:");
 
             builder.AppendLine(vd.FileStructureVersion, "    File Structure Version");
 
@@ -445,51 +441,37 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        private static void Print(StringBuilder builder, DecDateTime? dt)
+        private static string? Format(DecDateTime? dt)
         {
             if (dt == null)
-            {
-                builder.AppendLine("      [NULL]");
-                return;
-            }
+                return null;
 
-            if (dt.Year.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Year), "      Year");
-            else
-                builder.AppendLine(dt.Year, "      Year");
+            string year = dt.Year.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Year)
+                : BitConverter.ToString(dt.Year).Replace('-', ' ');
+            string month = dt.Month.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Month)
+                : BitConverter.ToString(dt.Month).Replace('-', ' ');
+            string day = dt.Day.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Day)
+                : BitConverter.ToString(dt.Day).Replace('-', ' ');
 
-            if (dt.Month.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Month), "      Month");
-            else
-                builder.AppendLine(dt.Month, "      Month");
+            string hour = dt.Hour.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Hour)
+                : BitConverter.ToString(dt.Hour).Replace('-', ' ');
+            string minute = dt.Minute.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Minute)
+                : BitConverter.ToString(dt.Minute).Replace('-', ' ');
+            string second = dt.Second.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Second)
+                : BitConverter.ToString(dt.Second).Replace('-', ' ');
+            string csecond = dt.Centisecond.IsNumericArray()
+                ? Encoding.ASCII.GetString(dt.Centisecond)
+                : BitConverter.ToString(dt.Centisecond).Replace('-', ' ');
 
-            if (dt.Day.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Day), "      Day");
-            else
-                builder.AppendLine(dt.Day, "      Day");
+            string tz = $"{((dt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((dt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{dt.TimezoneOffset:X2})";
 
-            if (dt.Hour.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Hour), "      Hour");
-            else
-                builder.AppendLine(dt.Hour, "      Hour");
-
-            if (dt.Minute.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Minute), "      Minute");
-            else
-                builder.AppendLine(dt.Minute, "      Minute");
-            if (dt.Second.IsNumericArray())
-
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Second), "      Second");
-            else
-                builder.AppendLine(dt.Second, "      Second");
-
-            if (dt.Centisecond.IsNumericArray())
-                builder.AppendLine(Encoding.ASCII.GetString(dt.Centisecond), "      Centisecond");
-            else
-                builder.AppendLine(dt.Centisecond, "      Centisecond");
-
-            string tz = $"{((dt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((dt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{dt.TimezoneOffset.ToString("X2")})";
-            builder.AppendLine(tz, "      Timezone Offset");
+            return $"{year}-{month}-{day} {hour}:{minute}:{second}.{csecond} [{tz}]";
         }
     }
 }

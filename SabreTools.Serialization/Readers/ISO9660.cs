@@ -171,31 +171,6 @@ namespace SabreTools.Serialization.Readers
             var obj = new PrimaryVolumeDescriptor();
 
             obj.Type = VolumeDescriptorType.PRIMARY_VOLUME_DESCRIPTOR;
-            return (PrimaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, obj);
-        }
-
-        /// <summary>
-        /// Parse a Stream into a SupplementaryVolumeDescriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <returns>Filled SupplementaryVolumeDescriptor on success, null on error</returns>
-        public static SupplementaryVolumeDescriptor? ParseSupplementaryVolumeDescriptor(Stream data, short sectorLength)
-        {
-            var obj = new SupplementaryVolumeDescriptor();
-
-            obj.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
-            return (SupplementaryVolumeDescriptor?)ParseBaseVolumeDescriptor(data, sectorLength, obj);
-        }
-
-        /// <summary>
-        /// Parse a Stream into a BaseVolumeDescriptor
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
-        /// <returns>Filled BaseVolumeDescriptor on success, null on error</returns>
-        public static BaseVolumeDescriptor? ParseBaseVolumeDescriptor(Stream data, short sectorLength, BaseVolumeDescriptor obj)
-        {
             obj.Identifier = data.ReadBytes(5);
 
             // Validate Identifier, return null and rewind if invalid
@@ -206,36 +181,12 @@ namespace SabreTools.Serialization.Readers
             }
 
             obj.Version = data.ReadByteValue();
-
-            // Read the child-specific field
-            if (obj is PrimaryVolumeDescriptor objPVD)
-                objPVD.UnusedByte = data.ReadByteValue();
-            else if (obj is SupplementaryVolumeDescriptor objSVD)
-                objSVD.VolumeFlags = (VolumeFlags)data.ReadByteValue();
-            else
-            {
-                // Rewind and return for unknown descriptor
-                data.SeekIfPossible(-8, SeekOrigin.Current);
-                return null;
-            }
-
+            obj.UnusedByte = data.ReadByteValue();
             obj.SystemIdentifier = data.ReadBytes(32);
             obj.VolumeIdentifier = data.ReadBytes(32);
             obj.Unused8Bytes = data.ReadBytes(8);
             obj.VolumeSpaceSize = data.ReadInt32BothEndian();
-
-            // Read the child-specific field
-            if (obj is PrimaryVolumeDescriptor objPVD2)
-                objPVD2.Unused32Bytes = data.ReadBytes(32);
-            else if (obj is SupplementaryVolumeDescriptor objSVD2)
-                objSVD2.EscapeSequences = data.ReadBytes(32);
-            else
-            {
-                // Rewind and return for unknown descriptor
-                data.SeekIfPossible(-120, SeekOrigin.Current);
-                return null;
-            }
-
+            obj.Unused32Bytes = data.ReadBytes(32);
             obj.VolumeSetSize = data.ReadInt16BothEndian();
             obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
             obj.LogicalBlockSize = data.ReadInt16BothEndian();
@@ -248,6 +199,7 @@ namespace SabreTools.Serialization.Readers
             var dr = ParseDirectoryRecord(data, true);
             if (dr == null)
                 return null;
+
             obj.RootDirectoryRecord = dr;
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
@@ -270,7 +222,74 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a SupplementaryVolumeDescriptor
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
+        /// <returns>Filled SupplementaryVolumeDescriptor on success, null on error</returns>
+        public static SupplementaryVolumeDescriptor? ParseSupplementaryVolumeDescriptor(Stream data, short sectorLength)
+        {
+            var obj = new SupplementaryVolumeDescriptor();
+
+            obj.Type = VolumeDescriptorType.SUPPLEMENTARY_VOLUME_DESCRIPTOR;
+            obj.Identifier = data.ReadBytes(5);
+
+            // Validate Identifier, return null and rewind if invalid
+            if (!obj.Identifier.EqualsExactly(Constants.StandardIdentifier))
+            {
+                data.SeekIfPossible(-6, SeekOrigin.Current);
+                return null;
+            }
+
+            obj.Version = data.ReadByteValue();
+            obj.VolumeFlags = (VolumeFlags)data.ReadByteValue();
+            obj.SystemIdentifier = data.ReadBytes(32);
+            obj.VolumeIdentifier = data.ReadBytes(32);
+            obj.Unused8Bytes = data.ReadBytes(8);
+            obj.VolumeSpaceSize = data.ReadInt32BothEndian();
+            obj.EscapeSequences = data.ReadBytes(32);
+            obj.VolumeSetSize = data.ReadInt16BothEndian();
+            obj.VolumeSequenceNumber = data.ReadInt16BothEndian();
+            obj.LogicalBlockSize = data.ReadInt16BothEndian();
+            obj.PathTableSize = data.ReadInt32BothEndian();
+            obj.PathTableLocationL = data.ReadInt32LittleEndian();
+            obj.OptionalPathTableLocationL = data.ReadInt32LittleEndian();
+            obj.PathTableLocationM = data.ReadInt32BigEndian();
+            obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
+
+            var dr = ParseDirectoryRecord(data, true);
+            if (dr == null)
+                return null;
+
+            obj.RootDirectoryRecord = dr;
+
+            obj.VolumeSetIdentifier = data.ReadBytes(128);
+            obj.PublisherIdentifier = data.ReadBytes(128);
+            obj.DataPreparerIdentifier = data.ReadBytes(128);
+            obj.ApplicationIdentifier = data.ReadBytes(128);
+            obj.CopyrightFileIdentifier = data.ReadBytes(37);
+            obj.AbstractFileIdentifier = data.ReadBytes(37);
+            obj.BibliographicFileIdentifier = data.ReadBytes(37);
+
+            obj.VolumeCreationDateTime = ParseDecDateTime(data);
+            obj.VolumeModificationDateTime = ParseDecDateTime(data);
+            obj.VolumeExpirationDateTime = ParseDecDateTime(data);
+            obj.VolumeEffectiveDateTime = ParseDecDateTime(data);
+
+            obj.FileStructureVersion = data.ReadByteValue();
+            obj.ReservedByte = data.ReadByteValue();
+            obj.ApplicationUse = data.ReadBytes(512);
+            obj.Reserved653Bytes = data.ReadBytes(653);
+
+            // Skip remainder of the logical sector
+            if (sectorLength > Constants.MinimumSectorSize)
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
@@ -305,7 +324,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
@@ -335,7 +354,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
@@ -366,7 +385,7 @@ namespace SabreTools.Serialization.Readers
 
             // Skip remainder of the logical sector
             if (sectorLength > Constants.MinimumSectorSize)
-                data.SeekIfPossible(sectorLength - Constants.MinimumSectorSize, SeekOrigin.Current);
+                _ = data.ReadBytes(sectorLength - Constants.MinimumSectorSize);
 
             return obj;
         }
@@ -387,13 +406,13 @@ namespace SabreTools.Serialization.Readers
             var groups = new List<PathTableGroup>();
             foreach (VolumeDescriptor vd in vdSet)
             {
-                if (vd is BaseVolumeDescriptor bvd)
-                {
-                    // Parse the path table group in the base volume descriptor
-                    var pathTableGroups = ParsePathTableGroup(data, sectorLength, bvd);
-                    if (pathTableGroups != null && pathTableGroups.Count > 0)
-                        groups.AddRange(pathTableGroups);
-                }
+                if (vd is not BaseVolumeDescriptor bvd)
+                    continue;
+
+                // Parse the path table group in the base volume descriptor
+                var pathTableGroups = ParsePathTableGroup(data, sectorLength, bvd);
+                if (pathTableGroups != null && pathTableGroups.Count > 0)
+                    groups.AddRange(pathTableGroups);
             }
 
             // Return error (null) if no valid path table groups were found
@@ -427,22 +446,22 @@ namespace SabreTools.Serialization.Readers
             if (locationL != 0 && ((locationL * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
-                groupL.PathTableL = ParsePathTable(data, sectorLength, sizeL, true);
+                groupL.PathTableL = ParsePathTable(data, sizeL, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
-                groupL.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeL, true);
+                groupL.OptionalPathTableL = ParsePathTable(data, sizeL, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
-                groupL.PathTableM = ParsePathTable(data, sectorLength, sizeL, false);
+                groupL.PathTableM = ParsePathTable(data, sizeL, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
-                groupL.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeL, false);
+                groupL.OptionalPathTableM = ParsePathTable(data, sizeL, false);
             }
 
             // If no valid path tables were found, don't add the table group
@@ -458,22 +477,22 @@ namespace SabreTools.Serialization.Readers
             if (locationL != 0 && ((locationL * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
-                groupB.PathTableL = ParsePathTable(data, sectorLength, sizeB, true);
+                groupB.PathTableL = ParsePathTable(data, sizeB, true);
             }
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
-                groupB.OptionalPathTableL = ParsePathTable(data, sectorLength, sizeB, true);
+                groupB.OptionalPathTableL = ParsePathTable(data, sizeB, true);
             }
             if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
-                groupB.PathTableM = ParsePathTable(data, sectorLength, sizeB, false);
+                groupB.PathTableM = ParsePathTable(data, sizeB, false);
             }
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
-                groupB.OptionalPathTableM = ParsePathTable(data, sectorLength, sizeB, false);
+                groupB.OptionalPathTableM = ParsePathTable(data, sizeB, false);
             }
 
             // If no valid path tables were found, don't add the table group
@@ -487,11 +506,10 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into an array of path table records
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="tableSize">Size of the path table</param>
         /// <param name="littleEndian">True if path table is little endian, false if big endian</param>
         /// <returns>Filled array of path table records on success, null on error</returns>
-        public static PathTableRecord[]? ParsePathTable(Stream data, short sectorLength, int tableSize, bool littleEndian)
+        public static PathTableRecord[]? ParsePathTable(Stream data, int tableSize, bool littleEndian)
         {
             var pathTable = new List<PathTableRecord>();
 
@@ -515,7 +533,6 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 record.DirectoryIdentifierLength = directoryIdentifierLength;
-
                 record.ExtendedAttributeRecordLength = data.ReadByteValue();
 
                 // Read numerics with correct endianness
@@ -563,21 +580,22 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, DirectoryExtent>();
             foreach (VolumeDescriptor vd in vdSet)
             {
-                if (vd is BaseVolumeDescriptor bvd)
-                {
-                    // Determine logical block size
-                    short blockLength = bvd.GetLogicalBlockSize(sectorLength);
+                if (vd is not BaseVolumeDescriptor bvd)
+                    continue;
 
-                    // Parse the root directory pointed to from the base volume descriptor
-                    var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord, false);
-                    if (descriptors == null || descriptors.Count == 0)
-                        continue;
-                    // Merge dictionaries
-                    foreach (var kvp in descriptors)
-                    {
-                        if (!directories.ContainsKey(kvp.Key))
-                            directories.Add(kvp.Key, kvp.Value);
-                    }
+                // Determine logical block size
+                short blockLength = bvd.GetLogicalBlockSize(sectorLength);
+
+                // Parse the root directory pointed to from the base volume descriptor
+                var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord, false);
+                if (descriptors == null || descriptors.Count == 0)
+                    continue;
+
+                // Merge dictionaries
+                foreach (var kvp in descriptors)
+                {
+                    if (!directories.ContainsKey(kvp.Key))
+                        directories.Add(kvp.Key, kvp.Value);
                 }
             }
 
@@ -662,11 +680,13 @@ namespace SabreTools.Serialization.Readers
                 // Don't traverse to parent or self
                 if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                     continue;
+
                 // Recursively parse child directory
                 int sectorNum = record.ExtentLocation * blocksPerSector;
                 var dir = ParseDirectory(data, sectorLength, blockLength, record, false);
                 if (dir == null)
                     continue;
+
                 // Add new directories to dictionary
                 foreach (var kvp in dir)
                 {
@@ -732,8 +752,10 @@ namespace SabreTools.Serialization.Readers
 
             // Calculate actual size of record
             int totalBytes = 33 + obj.FileIdentifierLength;
+
             // Calculate the size of the system use section (remaining allocated bytes)
             int systemUseLength = obj.DirectoryRecordLength - 33 - obj.FileIdentifierLength;
+
             // Account for padding field after file identifier
             if (obj.FileIdentifierLength % 2 == 0)
             {
