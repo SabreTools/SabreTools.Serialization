@@ -43,6 +43,21 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Check if a volume descriptor has all 0x00 reserved bytes
+        /// </summary>
+        /// <param name="bvd">Volume descriptor containing the reserved bytes</param>
+        /// <returns>True if the reserved bytes are all 0x00, false otherwise</returns>
+        public static bool HasUnsetReservedBytes(this BaseVolumeDescriptor? bvd)
+        {
+            // Invalid volume descriptor
+            if (bvd?.Reserved653Bytes == null)
+                return false;
+
+            // Check if all bytes are 0x00
+            return Array.TrueForAll(bvd.Reserved653Bytes, b => b == 0x00);
+        }
+
+        /// <summary>
         /// Indicates if an array contains all ASCII numeric digits
         /// </summary>
         /// TODO: Move to IO as an array extension
