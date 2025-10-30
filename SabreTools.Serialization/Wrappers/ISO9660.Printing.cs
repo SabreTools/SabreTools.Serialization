@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Volume Descriptors
 
-        private static void Print(StringBuilder builder, VolumeDescriptor[]? vdSet)
+        protected static void Print(StringBuilder builder, VolumeDescriptor[]? vdSet)
         {
             builder.AppendLine("  Volume Descriptors:");
             builder.AppendLine("  -------------------------");
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Path Tables
 
-        private static void Print(StringBuilder builder, PathTableGroup[]? ptgs, Encoding encoding)
+        protected static void Print(StringBuilder builder, PathTableGroup[]? ptgs, Encoding encoding)
         {
             builder.AppendLine("  Path Table Group(s):");
             builder.AppendLine("  -------------------------");
@@ -336,7 +336,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Directories
 
-        private static void Print(StringBuilder builder, Dictionary<int, FileExtent>? dirs, Encoding encoding)
+        protected static void Print(StringBuilder builder, Dictionary<int, FileExtent>? dirs, Encoding encoding)
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");

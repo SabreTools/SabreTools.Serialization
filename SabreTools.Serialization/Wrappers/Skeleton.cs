@@ -1,31 +1,14 @@
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class Skeleton : WrapperBase<Volume>
+    public partial class Skeleton : ISO9660
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
         public override string DescriptionString => "Redumper Skeleton";
-
-        #endregion
-
-        #region Extension Properties
-
-        /// <inheritdoc cref="Volume.SystemArea"/>
-        public byte[] SystemArea => Model.SystemArea ?? [];
-
-        /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
-        public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
-
-        /// <inheritdoc cref="Volume.PathTableGroups"/>
-        public PathTableGroup[] PathTableGroups => Model.PathTableGroups ?? [];
-
-        /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
-        public Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion
 
@@ -59,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the archive</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
-        public static Skeleton? Create(byte[]? data, int offset)
+        public new static Skeleton? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data == null || data.Length == 0)
@@ -79,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the archive</param>
         /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
-        public static Skeleton? Create(Stream? data)
+        public new static Skeleton? Create(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
