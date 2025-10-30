@@ -40,18 +40,21 @@ namespace SabreTools.Serialization.Readers
                 var vdSet = ParseVolumeDescriptorSet(data, sectorLength);
                 if (vdSet == null || vdSet.Length == 0)
                     return null;
+
                 volume.VolumeDescriptorSet = vdSet;
 
                 // Parse the path table group(s) for each base volume descriptor
                 var ptgs = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
                 if (ptgs == null || ptgs.Length == 0)
                     return null;
+
                 volume.PathTableGroups = ptgs;
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
                 var dirs = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
                 if (dirs == null || dirs.Count == 0)
                     return null;
+
                 volume.DirectoryDescriptors = dirs;
 
                 return volume;
@@ -651,8 +654,9 @@ namespace SabreTools.Serialization.Readers
                 // If record length of 0x00, next record begins in next sector
                 if (recordLength == 0)
                 {
-                    // TODO: Skip to start of next sector rather than incrementing by 1
-                    pos++;
+                    int paddingLength = sectorLength - (pos % sectorLength);
+                    pos += paddingLength;
+                    _ = data.ReadBytes(paddingLength);
                     continue;
                 }
 
@@ -664,8 +668,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Get the next directory record
                 var directoryRecord = ParseDirectoryRecord(data, false);
-                if (directoryRecord != null)
-                    records.Add(directoryRecord);
+                records.Add(directoryRecord);
             }
 
             // Add current directory to dictionary
@@ -719,7 +722,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="root">true if root directory record, false otherwise</param>
         /// <returns>Filled DirectoryRecord on success, null on error</returns>
-        public static DirectoryRecord? ParseDirectoryRecord(Stream data, bool root)
+        public static DirectoryRecord ParseDirectoryRecord(Stream data, bool root)
         {
             var obj = new DirectoryRecord();
 
