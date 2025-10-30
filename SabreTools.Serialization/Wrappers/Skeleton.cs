@@ -51,14 +51,57 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        public static ISO9660? Create(byte[]? data, int offset)
+        #region Static Constructors
+
+        /// <summary>
+        /// Create an Skeleton Volume from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
+        public static Skeleton? Create(byte[]? data, int offset)
         {
-            return ISO9660.Create(data, offset);
+            // If the data is invalid
+            if (data == null || data.Length == 0)
+                return null;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return null;
+
+            // Create a memory stream and use that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return Create(dataStream);
         }
 
-        public static ISO9660? Create(Stream? data)
+        /// <summary>
+        /// Create an Skeleton Volume from a Stream
+        /// </summary>
+        /// <param name="data">Stream representing the archive</param>
+        /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
+        public static Skeleton? Create(Stream? data)
         {
-            return ISO9660.Create(data);
+            // If the data is invalid
+            if (data == null || !data.CanRead)
+                return null;
+
+            try
+            {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
+                var model = new Readers.ISO9660().Deserialize(data);
+                if (model == null)
+                    return null;
+
+                return new Skeleton(model, data, currentOffset);
+            }
+            catch
+            {
+                return null;
+            }
         }
+
+        #endregion
     }
 }
