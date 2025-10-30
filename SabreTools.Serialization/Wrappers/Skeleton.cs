@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.IO;
+using SabreTools.Data.Models.ISO9660;
+
 namespace SabreTools.Serialization.Wrappers
 {
     public class Skeleton : ISO9660
@@ -31,7 +35,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        public override bool Extract(string outputDirectory, bool includeDebug)
+        public new bool Extract(string outputDirectory, bool includeDebug)
         {
             // Skeleton does not support extraction
             return false;
