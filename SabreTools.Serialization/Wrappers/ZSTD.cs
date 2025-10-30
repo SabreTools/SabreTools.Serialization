@@ -15,6 +15,9 @@ namespace SabreTools.Serialization.Wrappers
         
         #region Extension Properties
 
+        /// <inheritdoc cref="Header.VersionByte"/>
+        public byte VersionByte => Model.VersionByte;
+        
         /// <inheritdoc cref="Header.Magic"/>
         public byte[]? Magic => Model.Magic;
 

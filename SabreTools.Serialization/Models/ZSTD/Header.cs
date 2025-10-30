@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.ZSTD
         /// 0.1 used 0x1E, then it was 0.2(0x22)-0.8(0x28)
         /// </summary>
         /// <see cref="https://github.com/facebook/zstd/issues/713"/>
-        public int VersionByte;
+        public byte VersionByte;
 
         /// <summary>
         /// "0x?? 0xB5 0x2F 0xFD"
