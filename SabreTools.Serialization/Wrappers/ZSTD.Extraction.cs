@@ -42,12 +42,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
-                // Open the source as a DEFLATE stream
-                var zStandardStream = new ZStandardStream(_dataSource, false);
+                // Open the source as a zStandard stream
+                var zstdStream = new ZStandardStream(_dataSource, false);
                 
                 // Write the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                zStandardStream.CopyTo(fs);
+                zstdStream.CopyTo(fs);
                 fs.Flush();
                 
                 return true;
