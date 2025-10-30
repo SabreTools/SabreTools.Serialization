@@ -44,6 +44,7 @@ namespace SabreTools.Serialization.Readers
         public static Header? ParseHeader(Stream data)
         {
             var obj = new Header();
+            
             obj.VersionByte = data.ReadByte(); // ReadByte returning int is actually preferable here
             obj.Magic = data.ReadBytes(3);
             if (!obj.Magic.EqualsExactly(SignatureBytes))
