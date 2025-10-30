@@ -4,12 +4,28 @@ using SabreTools.Data.Models.ISO9660;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class Skeleton : ISO9660
+    public class Skeleton : WrapperBase<Volume>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
         public override string DescriptionString => "Redumper Skeleton";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Volume.SystemArea"/>
+        public byte[] SystemArea => Model.SystemArea ?? [];
+
+        /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
+        public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet ?? [];
+
+        /// <inheritdoc cref="Volume.PathTableGroups"/>
+        public PathTableGroup[] PathTableGroups => Model.PathTableGroups ?? [];
+
+        /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
+        public Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors ?? [];
 
         #endregion
 
@@ -35,10 +51,16 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        public new bool Extract(string outputDirectory, bool includeDebug)
+        private readonly ISO9660 _iso9660 = new ISO9660();
+
+        public static ISO9660? Create(byte[]? data, int offset)
         {
-            // Skeleton wipes all files in ISO9660 volume, nothing can be extracted 
-            return true;
+            return _iso9660.Create(data, offset); 
+        }
+
+        public static ISO9660? Create(Stream? data)
+        {
+            return _iso9660.Create(data);
         }
     }
 }
