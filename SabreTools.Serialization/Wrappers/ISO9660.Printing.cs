@@ -29,6 +29,9 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
 
             Print(builder, Model.VolumeDescriptorSet);
+
+            // TODO: Parse the volume descriptors to print the Path Table Groups and Directory Descriptors with proper encoding
+            Encoding encoding = Encoding.UTF8;
             Print(builder, Model.PathTableGroups);
             Print(builder, Model.DirectoryDescriptors);
         }
@@ -96,12 +99,16 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("    Unidentified Base Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
+            // Default to UTF-8 deocding (note: Spec says PVD uses subset of ASCII, but UTF-8 is used here as it is a strict superset)
+            Encoding encoding = Encoding.UTF8;
             if (vd is PrimaryVolumeDescriptor pvd)
             {
                 builder.AppendLine(pvd.UnusedByte, "    Unused Byte");
             }
             else if (vd is SupplementaryVolumeDescriptor svd)
             {
+                // Decode strings using UTF-16 BigEndian (note: Spec says SVD uses UCS-2, but UTF-16 is used here as it is a strict superset)
+                encoding = Encoding.BigEndianUnicode;
                 builder.AppendLine("    Volume Flags:");
 #if NET20 || NET35
                 builder.AppendLine((svd.VolumeFlags & VolumeFlags.UNREGISTERED_ESCAPE_SEQUENCES) != 0, "    Unregistered Escape Sequences");
@@ -114,10 +121,10 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine("Zeroed", "      Reserved Flags");
             }
 
-            // TODO: Decode all byte arrays into strings (based on encoding above)
+            // TODO: Better string decoding (based on spec, EscapeSequences, and detection)
 
-            builder.AppendLine(vd.SystemIdentifier, "    System Identifier");
-            builder.AppendLine(vd.VolumeIdentifier, "    Volume Identifier");
+            builder.AppendLine(encoding.GetString(vd.SystemIdentifier), "    System Identifier");
+            builder.AppendLine(encoding.GetString(vd.VolumeIdentifier), "    Volume Identifier");
 
 
             if (vd.Unused8Bytes != null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
@@ -150,15 +157,15 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
 
             builder.AppendLine("    Root Directory Record:");
-            Print(builder, vd.RootDirectoryRecord);
+            Print(builder, vd.RootDirectoryRecord, encoding););
 
-            builder.AppendLine(vd.VolumeSetIdentifier, "    Volume Set Identifier");
-            builder.AppendLine(vd.PublisherIdentifier, "    Publisher Identifier");
-            builder.AppendLine(vd.DataPreparerIdentifier, "    Data Preparer Identifier");
-            builder.AppendLine(vd.ApplicationIdentifier, "    Application Identifier");
-            builder.AppendLine(vd.CopyrightFileIdentifier, "    Copyright Identifier");
-            builder.AppendLine(vd.AbstractFileIdentifier, "    Abstract Identifier");
-            builder.AppendLine(vd.BibliographicFileIdentifier, "    Bibliographic Identifier");
+            builder.AppendLine(encoding.GetString(vd.VolumeSetIdentifier), "    Volume Set Identifier");
+            builder.AppendLine(encoding.GetString(vd.PublisherIdentifier), "    Publisher Identifier");
+            builder.AppendLine(encoding.GetString(vd.DataPreparerIdentifier), "    Data Preparer Identifier");
+            builder.AppendLine(encoding.GetString(vd.ApplicationIdentifier), "    Application Identifier");
+            builder.AppendLine(encoding.GetString(vd.CopyrightFileIdentifier), "    Copyright Identifier");
+            builder.AppendLine(encoding.GetString(vd.AbstractFileIdentifier), "    Abstract Identifier");
+            builder.AppendLine(encoding.GetString(vd.BibliographicFileIdentifier), "    Bibliographic Identifier");
 
             builder.AppendLine(Format(vd.VolumeCreationDateTime), "    Volume Creation Date Time:");
             builder.AppendLine(Format(vd.VolumeModificationDateTime), "    Volume Modification Date Time:");
@@ -240,7 +247,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Path Tables
 
-        private static void Print(StringBuilder builder, PathTableGroup[]? ptgs)
+        private static void Print(StringBuilder builder, PathTableGroup[]? ptgs, Encoding encoding)
         {
             builder.AppendLine("  Path Table Group(s):");
             builder.AppendLine("  -------------------------");
@@ -257,7 +264,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].PathTableL);
+                    Print(builder, ptgs[tableNum].PathTableL, encoding);
                 }
                 else
                 {
@@ -268,7 +275,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].OptionalPathTableL);
+                    Print(builder, ptgs[tableNum].OptionalPathTableL, encoding);
                 }
                 else
                 {
@@ -279,7 +286,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].PathTableM);
+                    Print(builder, ptgs[tableNum].PathTableM, encoding);
                 }
                 else
                 {
@@ -290,7 +297,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Optional Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].OptionalPathTableM);
+                    Print(builder, ptgs[tableNum].OptionalPathTableM, encoding);
                 }
                 else
                 {
@@ -302,7 +309,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, PathTableRecord[] records)
+        private static void Print(StringBuilder builder, PathTableRecord[] records, Encoding encoding)
         {
             if (records.Length == 0)
             {
@@ -329,7 +336,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Directories
 
-        private static void Print(StringBuilder builder, Dictionary<int, DirectoryExtent>? dirs)
+        private static void Print(StringBuilder builder, Dictionary<int, FileExtent>? dirs, Encoding encoding)
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
@@ -344,39 +351,56 @@ namespace SabreTools.Serialization.Wrappers
             {
                 builder.AppendLine($"    Directory at Sector {kvp.Key}");
                 builder.AppendLine("    -------------------------");
-                Print(builder, kvp.Value);
+                Print(builder, kvp.Value, encoding);
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryExtent? dir)
+        private static void Print(StringBuilder builder, FileExtent? extent, Encoding encoding)
         {
-            if (dir == null)
+            if (extent == null)
             {
                 builder.AppendLine("    No directory descriptor");
                 builder.AppendLine();
                 return;
             }
-            if (dir.DirectoryRecords == null)
-            {
-                builder.AppendLine("    No directory records");
-                builder.AppendLine();
-                return;
-            }
 
-            for (int recordNum = 0; recordNum < dir.DirectoryRecords.Length; recordNum++)
+            if (extent is DirectoryExtent dir)
             {
-                builder.AppendLine($"      Directory Record {recordNum}:");
-                builder.AppendLine("      -------------------------");
-                Print(builder, dir.DirectoryRecords[recordNum]);
-                builder.AppendLine();
+                if (dir.DirectoryRecords == null)
+                {
+                    builder.AppendLine("    No directory records");
+                    builder.AppendLine();
+                    return;
+                }
+
+                // File extent is a directory, print all directory records
+                for (int recordNum = 0; recordNum < dir.DirectoryRecords.Length; recordNum++)
+                {
+                    builder.AppendLine($"      Directory Record {recordNum}:");
+                    builder.AppendLine("      -------------------------");
+                    Print(builder, dir.DirectoryRecords[recordNum], encoding);
+                    builder.AppendLine();
+                }
+            }
+            else
+            {
+                // File extent is a file, print the file's Extended Attribute Record
+                Print(builder, extent.ExtendedAttributeRecord);
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryRecord? dr)
+        private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear)
+        {
+            // TODO: Implement ExtendedAttributeRecord printing
+
+            return;
+        }
+
+        private static void Print(StringBuilder builder, DirectoryRecord? dr, Encoding encoding)
         {
             if (dr == null)
             {
