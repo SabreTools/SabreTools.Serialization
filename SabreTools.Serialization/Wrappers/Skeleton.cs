@@ -37,8 +37,8 @@ namespace SabreTools.Serialization.Wrappers
 
         public new bool Extract(string outputDirectory, bool includeDebug)
         {
-            // Skeleton does not support extraction
-            return false;
+            // Skeleton wipes all files in ISO9660 volume, nothing can be extracted 
+            return true;
         }
     }
 }
