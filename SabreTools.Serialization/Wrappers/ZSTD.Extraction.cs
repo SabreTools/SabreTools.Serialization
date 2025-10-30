@@ -1,4 +1,4 @@
-using System; 
+using System;
 using System.IO;
 #if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Compressors.ZStandard;
@@ -22,15 +22,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.Error.WriteLine("Invalid archive detected, skipping...");
                 return false;
             }
-            
+
 #if NET462_OR_GREATER || NETCOREAPP
             try
             {
                 // Ensure directory separators are consistent
-                string filename = (Filename != null ? Path.GetFileName(Filename).Replace(".zstd", string.Empty) : null) 
-                    ?? (Filename != null ? Path.GetFileName(Filename).Replace(".zst", string.Empty) : null)
-                    ?? $"extracted_file";
-
+                string filename = string.IsNullOrEmpty(Filename) ? "filename" : Path.GetFileNameWithoutExtension(Filename);
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')
@@ -44,12 +41,12 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Open the source as a zStandard stream
                 var zstdStream = new ZStandardStream(_dataSource, false);
-                
+
                 // Write the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
                 zstdStream.CopyTo(fs);
                 fs.Flush();
-                
+
                 return true;
             }
             catch (Exception ex)
