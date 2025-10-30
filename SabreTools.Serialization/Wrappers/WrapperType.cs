@@ -208,6 +208,11 @@ namespace SabreTools.Serialization.Wrappers
         SGA,
 
         /// <summary>
+        /// Redumper skeleton (Wiped ISO9660 disc image)
+        /// </summary>
+        Skeleton,
+
+        /// <summary>
         /// Tape archive
         /// </summary>
         TapeArchive,
