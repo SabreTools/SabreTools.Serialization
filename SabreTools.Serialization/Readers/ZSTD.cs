@@ -22,7 +22,6 @@ namespace SabreTools.Serialization.Readers
                 #region Header
                 
                 var header = ParseHeader(data);
-
                 if (header == null)
                     return null;
                 
