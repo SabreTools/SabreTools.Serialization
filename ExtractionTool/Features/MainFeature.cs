@@ -289,6 +289,11 @@ namespace ExtractionTool.Features
                 case XZP xzp:
                     xzp.Extract(OutputPath, Debug);
                     break;
+                
+                // ZSTD
+                case ZSTD zstd:
+                    zstd.Extract(OutputPath, Debug);
+                    break;
 
                 // Everything else
                 default:
