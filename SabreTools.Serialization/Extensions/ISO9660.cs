@@ -44,51 +44,6 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        /// Check if a volume descriptor has all 0x00 reserved bytes
-        /// </summary>
-        /// <param name="bvd">Volume descriptor containing the reserved bytes</param>
-        /// <returns>True if the reserved bytes are all 0x00, false otherwise</returns>
-        public static bool HasUnsetReservedBytes(this BaseVolumeDescriptor? bvd)
-        {
-            // Invalid volume descriptor
-            if (bvd?.Reserved653Bytes == null)
-                return false;
-
-            // Check if all bytes are 0x00
-            return Array.TrueForAll(bvd.Reserved653Bytes, b => b == 0x00);
-        }
-
-        /// <summary>
-        /// Determine if a volume descriptor was written by ImgBurn
-        /// </summary>
-        /// <param name="bvd">Volume descriptor containing the application use bytes</param>
-        /// <returns>True if the descriptor was written by ImgBurn, false otherwise</returns>
-        public static bool IsImgBurn(this BaseVolumeDescriptor? bvd)
-        {
-            // Invalid volume descriptor
-            if (bvd?.ApplicationUse == null)
-                return false;
-
-            // "ImgBurn"
-            return bvd.ApplicationUse.StartsWith([0x49, 0x6D, 0x67, 0x42, 0x75, 0x72, 0x6E]);
-        }
-
-        /// <summary>
-        /// Determine if a volume descriptor was written by UltraISO
-        /// </summary>
-        /// <param name="bvd">Volume descriptor containing the application use bytes</param>
-        /// <returns>True if the descriptor was written by UltraISO, false otherwise</returns>
-        public static bool IsUltraISO(this BaseVolumeDescriptor? bvd)
-        {
-            // Invalid volume descriptor
-            if (bvd?.ApplicationUse == null)
-                return false;
-
-            // "ULTRAISO"
-            return bvd.ApplicationUse.StartsWith([0x55, 0x4C, 0x54, 0x52, 0x41, 0x49, 0x53, 0x4F]);
-        }
-
-        /// <summary>
         /// Indicates if an array contains all ASCII numeric digits
         /// </summary>
         /// TODO: Move to IO as an array extension
