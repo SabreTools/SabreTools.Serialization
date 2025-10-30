@@ -51,15 +51,15 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        private readonly ISO9660 _iso9660 = new ISO9660();
-
         public static ISO9660? Create(byte[]? data, int offset)
         {
-            return _iso9660.Create(data, offset); 
+            ISO9660 _iso9660 = new ISO9660(Model, data, offset);
+            return _iso9660.Create(data, offset);
         }
 
         public static ISO9660? Create(Stream? data)
         {
+            ISO9660 _iso9660 = new ISO9660(Model, data);
             return _iso9660.Create(data);
         }
     }
