@@ -27,22 +27,23 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.Header, "Header");
             builder.AppendLine(Model.FooterLength, "Footer length");
             builder.AppendLine(Model.Footer, "Footer");
+
             builder.AppendLine(Model.RegionCount, "Region count");
-            if (Model.RegionCount != 0 && Model.RegionHashes != null && Model.RegionHashes.Length != 0)
+            if (Model.RegionCount != 0 && Model.RegionHashes.Length != 0)
             {
                 for (int i = 0; i < Model.RegionCount; i++)
                 {
                     builder.AppendLine(Model.RegionHashes[i], $"Region {i} hash");
                 }
             }
+
             builder.AppendLine(Model.FileCount, "File count");
             for (int i = 0; i < Model.FileCount; i++)
             {
-                if (Model.FileKeys != null)
-                    builder.AppendLine(Model.FileKeys[i], $"File {i} key");
-                if (Model.FileHashes != null)
-                    builder.AppendLine(Model.FileHashes[i], $"File {i} hash");
+                builder.AppendLine(Model.FileKeys[i], $"File {i} key");
+                builder.AppendLine(Model.FileHashes[i], $"File {i} hash");
             }
+
             builder.AppendLine(Model.ExtraConfig, "Extra config");
             builder.AppendLine(Model.Attachments, "Attachments");
             builder.AppendLine(Model.Data1Key, "Data 1 key");

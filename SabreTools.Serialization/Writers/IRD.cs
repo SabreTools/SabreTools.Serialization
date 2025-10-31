@@ -23,31 +23,31 @@ namespace SabreTools.Serialization.Writers
                 return null;
 
             // If any static-length fields aren't the correct length
-            if (obj.TitleID == null || obj.TitleID.Length != 9)
+            if (obj.TitleID.Length != 9)
                 return null;
-            if (obj.Title == null || obj.Title.Length != obj.TitleLength)
+            if (obj.Title.Length != obj.TitleLength)
                 return null;
-            if (obj.SystemVersion == null || obj.SystemVersion.Length != 4)
+            if (obj.SystemVersion.Length != 4)
                 return null;
-            if (obj.GameVersion == null || obj.GameVersion.Length != 5)
+            if (obj.GameVersion.Length != 5)
                 return null;
-            if (obj.AppVersion == null || obj.AppVersion.Length != 5)
+            if (obj.AppVersion.Length != 5)
                 return null;
-            if (obj.Header == null || obj.Header.Length != obj.HeaderLength)
+            if (obj.Header.Length != obj.HeaderLength)
                 return null;
-            if (obj.Footer == null || obj.Footer.Length != obj.FooterLength)
+            if (obj.Footer.Length != obj.FooterLength)
                 return null;
-            if (obj.RegionHashes == null || obj.RegionHashes.Length != obj.RegionCount || !Array.TrueForAll(obj.RegionHashes, h => h == null || h.Length != 16))
+            if (obj.RegionHashes.Length != obj.RegionCount || !Array.TrueForAll(obj.RegionHashes, h => h == null || h.Length != 16))
                 return null;
-            if (obj.FileKeys == null || obj.FileKeys.Length != obj.FileCount)
+            if (obj.FileKeys.Length != obj.FileCount)
                 return null;
-            if (obj.FileHashes == null || obj.FileHashes.Length != obj.FileCount || !Array.TrueForAll(obj.FileHashes, h => h == null || h.Length != 16))
+            if (obj.FileHashes.Length != obj.FileCount || !Array.TrueForAll(obj.FileHashes, h => h == null || h.Length != 16))
                 return null;
-            if (obj.PIC == null || obj.PIC.Length != 115)
+            if (obj.PIC.Length != 115)
                 return null;
-            if (obj.Data1Key == null || obj.Data1Key.Length != 16)
+            if (obj.Data1Key.Length != 16)
                 return null;
-            if (obj.Data2Key == null || obj.Data2Key.Length != 16)
+            if (obj.Data2Key.Length != 16)
                 return null;
 
             // Create the output stream
