@@ -458,7 +458,7 @@ namespace SabreTools.Serialization.Wrappers
 
         private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear, Encoding encoding)
         {
-            builder.AppendLine("      File Extent")
+            builder.AppendLine("      File Extent");
             if (ear == null)
                 return;
             
