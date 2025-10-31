@@ -75,7 +75,7 @@ namespace SabreTools.Data.Models.CFB
         /// Properties
         /// </summary>
         /// <remarks>Each Variant might be followed by an index and offset value</remarks>
-        public Variant[]? Properties { get; set; }
+        public Variant[] Properties { get; set; }
 
         #endregion
     }

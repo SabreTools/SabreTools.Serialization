@@ -40,6 +40,6 @@ namespace SabreTools.Data.Models.CFB
         /// MUST contain an instance of the type, according to the value
         /// in the <see cref="VariantType"/> field.
         /// </summary>
-        public object? Union { get; set; }
+        public object Union { get; set; }
     }
 }

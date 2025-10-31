@@ -26,16 +26,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.DirectoryEntries);
         }
 
-        private static void Print(StringBuilder builder, FileHeader? header)
+        private static void Print(StringBuilder builder, FileHeader header)
         {
             builder.AppendLine("  File Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No file header");
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.CLSID, "  CLSID");
             builder.AppendLine(header.MinorVersion, "  Minor version");
@@ -54,7 +48,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(header.FirstDIFATSectorLocation, "  First DIFAT sector location");
             builder.AppendLine(header.NumberOfDIFATSectors, "  Number of DIFAT sectors");
             builder.AppendLine("  DIFAT:");
-            if (header.DIFAT == null || header.DIFAT.Length == 0)
+            if (header.DIFAT.Length == 0)
             {
                 builder.AppendLine("  No DIFAT entries");
                 builder.AppendLine();
@@ -69,11 +63,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SectorNumber[]? entries, string name)
+        private static void Print(StringBuilder builder, SectorNumber[] entries, string name)
         {
             builder.AppendLine($"  {name} Sectors Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine($"  No {name} sectors");
                 builder.AppendLine();
@@ -88,7 +82,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryEntry[] entries)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");

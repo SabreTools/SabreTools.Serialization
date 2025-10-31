@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.CFB
         /// <summary>
         /// Compound file header
         /// </summary>
-        public FileHeader? Header { get; set; }
+        public FileHeader Header { get; set; }
 
         /// <summary>
         /// The FAT is the main allocator for space within a compound file.
@@ -22,10 +22,10 @@ namespace SabreTools.Data.Models.CFB
         /// </summary>
         /// <remarks>
         /// If Header Major Version is 3, there MUST be 128 fields specified to fill a 512-byte sector.
-        /// 
+        ///
         /// If Header Major Version is 4, there MUST be 1,024 fields specified to fill a 4,096-byte sector
         /// </remarks>
-        public SectorNumber[]? FATSectorNumbers { get; set; }
+        public SectorNumber[] FATSectorNumbers { get; set; }
 
         /// <summary>
         /// The mini FAT is used to allocate space in the mini stream.
@@ -35,10 +35,10 @@ namespace SabreTools.Data.Models.CFB
         /// </summary>
         /// <remarks>
         /// If Header Major Version is 3, there MUST be 128 fields specified to fill a 512-byte sector.
-        /// 
+        ///
         /// If Header Major Version is 4, there MUST be 1,024 fields specified to fill a 4,096-byte sector
         /// </remarks>
-        public SectorNumber[]? MiniFATSectorNumbers { get; set; }
+        public SectorNumber[] MiniFATSectorNumbers { get; set; }
 
         /// <summary>
         /// The DIFAT array is used to represent storage of the FAT sectors.
@@ -51,11 +51,11 @@ namespace SabreTools.Data.Models.CFB
         /// <remarks>
         /// If Header Major Version is 3, there MUST be 127 fields specified to
         /// fill a 512-byte sector minus the "Next DIFAT Sector Location" field.
-        /// 
+        ///
         /// If Header Major Version is 4, there MUST be 1,023 fields specified
         /// to fill a 4,096-byte sector minus the "Next DIFAT Sector Location" field.
         /// </remarks>
-        public SectorNumber[]? DIFATSectorNumbers { get; set; }
+        public SectorNumber[] DIFATSectorNumbers { get; set; }
 
         /// <summary>
         /// The directory entry array is an array of directory entries that
@@ -71,22 +71,22 @@ namespace SabreTools.Data.Models.CFB
         /// two purposes. First, it provides a root parent for all objects that
         /// are stationed at the root of the compound file. Second, its function
         /// is overloaded to store the size and starting sector for the mini stream.
-        /// 
+        ///
         /// The root directory entry behaves as both a stream and a storage object.
         /// The root directory entry's Name field MUST contain the null-terminated
         /// string "Root Entry" in Unicode UTF-16.
-        /// 
+        ///
         /// The object class GUID (CLSID) that is stored in the root directory
         /// entry can be used for COM activation of the document's application.
-        /// 
+        ///
         /// The time stamps for the root storage are not maintained in the root
         /// directory entry. Rather, the root storage's creation and modification
         /// time stamps are normally stored on the file itself in the file system.
-        /// 
+        ///
         /// The Creation Time field in the root storage directory entry MUST be
         /// all zeroes. The Modified Time field in the root storage directory
         /// entry MAY be all zeroes.
         /// <remarks>
-        public DirectoryEntry[]? DirectoryEntries { get; set; }
+        public DirectoryEntry[] DirectoryEntries { get; set; }
     }
 }
