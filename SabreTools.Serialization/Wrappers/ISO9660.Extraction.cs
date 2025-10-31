@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
                             ExtractExtent(dr.ExtentLocation.BigEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
                         }
                     }
-                    else
+                    else if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0)
                     {
                         // Record is a file extent, extract file
                         succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, false, outputDirectory, includeDebug);
@@ -99,7 +99,10 @@ namespace SabreTools.Serialization.Wrappers
                             succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, true, outputDirectory, includeDebug);
                         }
                     }
-
+                    else
+                    {
+                        if (includeDebug) Console.WriteLine("Extraction of multi-extent files is currently not supported");
+                    }
                 }
             }
 
