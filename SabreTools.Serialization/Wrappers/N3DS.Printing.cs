@@ -28,17 +28,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.RomFSHeaders);
         }
 
-        private static void Print(StringBuilder builder, NCSDHeader? header)
+        private static void Print(StringBuilder builder, NCSDHeader header)
         {
             builder.AppendLine("  NCSD Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No NCSD header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.RSA2048Signature, "  RSA-2048 SHA-256 signature");
             builder.AppendLine(header.MagicNumber, "  Magic number");
             builder.AppendLine(header.ImageSizeInMediaUnits, "  Image size in media units");
@@ -49,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("    Partition table:");
             builder.AppendLine("    -------------------------");
-            if (header.PartitionsTable == null || header.PartitionsTable.Length == 0)
+            if (header.PartitionsTable.Length == 0)
             {
                 builder.AppendLine("    No partition table entries");
             }
@@ -108,17 +101,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CardInfoHeader? header)
+        private static void Print(StringBuilder builder, CardInfoHeader header)
         {
             builder.AppendLine("  Card Info Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No card info header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.WritableAddressMediaUnits, "  Writable address in media units");
             builder.AppendLine(header.CardInfoBitmask, "  Card info bitmask");
             builder.AppendLine(header.Reserved1, "  Reserved 1");
@@ -135,17 +121,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, header.InitialData);
         }
 
-        private static void Print(StringBuilder builder, DevelopmentCardInfoHeader? header)
+        private static void Print(StringBuilder builder, DevelopmentCardInfoHeader header)
         {
             builder.AppendLine("  Development Card Info Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No development card info header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.CardDeviceReserved1, "  Card device reserved 1");
             builder.AppendLine(header.TitleKey, "  Title key");
             builder.AppendLine(header.CardDeviceReserved2, "  Card device reserved 2");
@@ -153,38 +132,24 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Test Data:");
             builder.AppendLine("  -------------------------");
-            if (header.TestData == null)
-            {
-                builder.AppendLine("  No test data");
-            }
-            else
-            {
-                builder.AppendLine(header.TestData.Signature, "  Signature");
-                builder.AppendLine(header.TestData.AscendingByteSequence, "  Ascending byte sequence");
-                builder.AppendLine(header.TestData.DescendingByteSequence, "  Descending byte sequence");
-                builder.AppendLine(header.TestData.Filled00, "  Filled with 00");
-                builder.AppendLine(header.TestData.FilledFF, "  Filled with FF");
-                builder.AppendLine(header.TestData.Filled0F, "  Filled with 0F");
-                builder.AppendLine(header.TestData.FilledF0, "  Filled with F0");
-                builder.AppendLine(header.TestData.Filled55, "  Filled with 55");
-                builder.AppendLine(header.TestData.FilledAA, "  Filled with AA");
-                builder.AppendLine(header.TestData.FinalByte, "  Final byte");
-            }
+            builder.AppendLine(header.TestData.Signature, "  Signature");
+            builder.AppendLine(header.TestData.AscendingByteSequence, "  Ascending byte sequence");
+            builder.AppendLine(header.TestData.DescendingByteSequence, "  Descending byte sequence");
+            builder.AppendLine(header.TestData.Filled00, "  Filled with 00");
+            builder.AppendLine(header.TestData.FilledFF, "  Filled with FF");
+            builder.AppendLine(header.TestData.Filled0F, "  Filled with 0F");
+            builder.AppendLine(header.TestData.FilledF0, "  Filled with F0");
+            builder.AppendLine(header.TestData.Filled55, "  Filled with 55");
+            builder.AppendLine(header.TestData.FilledAA, "  Filled with AA");
+            builder.AppendLine(header.TestData.FinalByte, "  Final byte");
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, InitialData? id)
+        private static void Print(StringBuilder builder, InitialData id)
         {
             builder.AppendLine("    Initial Data Information:");
             builder.AppendLine("    -------------------------");
-            if (id == null)
-            {
-                builder.AppendLine("    No initial data");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(id.CardSeedKeyY, "    Card seed KeyY");
             builder.AppendLine(id.EncryptedCardSeed, "    Encrypted card seed");
             builder.AppendLine(id.CardSeedAESMAC, "    Card seed AES-MAC");
@@ -195,17 +160,10 @@ namespace SabreTools.Serialization.Wrappers
             PrintBackup(builder, id.BackupHeader);
         }
 
-        private static void PrintBackup(StringBuilder builder, NCCHHeader? header)
+        private static void PrintBackup(StringBuilder builder, NCCHHeader header)
         {
             builder.AppendLine("      Backup NCCH Header Information:");
             builder.AppendLine("      -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("      No backup NCCH header");
-                builder.AppendLine();
-                return;
-            }
-
             if (header.MagicID == string.Empty)
             {
                 builder.AppendLine("      Empty backup header, no data can be parsed");
@@ -233,22 +191,17 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(header.ExtendedHeaderHash, "      Extended header SHA-256 hash");
             builder.AppendLine(header.ExtendedHeaderSizeInBytes, "      Extended header size in bytes");
             builder.AppendLine(header.Reserved2, "      Reserved 2");
+
             builder.AppendLine("      Flags:");
-            if (header.Flags == null)
-            {
-                builder.AppendLine("        [NULL]");
-            }
-            else
-            {
-                builder.AppendLine(header.Flags.Reserved0, "        Reserved 0");
-                builder.AppendLine(header.Flags.Reserved1, "        Reserved 1");
-                builder.AppendLine(header.Flags.Reserved2, "        Reserved 2");
-                builder.AppendLine($"        Crypto method: {header.Flags.CryptoMethod} (0x{header.Flags.CryptoMethod:X})");
-                builder.AppendLine($"        Content platform: {header.Flags.ContentPlatform} (0x{header.Flags.ContentPlatform:X})");
-                builder.AppendLine($"        Content type: {header.Flags.MediaPlatformIndex} (0x{header.Flags.MediaPlatformIndex:X})");
-                builder.AppendLine(header.Flags.ContentUnitSize, "        Content unit size");
-                builder.AppendLine($"        Bitmasks: {header.Flags.BitMasks} (0x{header.Flags.BitMasks:X})");
-            }
+            builder.AppendLine(header.Flags.Reserved0, "        Reserved 0");
+            builder.AppendLine(header.Flags.Reserved1, "        Reserved 1");
+            builder.AppendLine(header.Flags.Reserved2, "        Reserved 2");
+            builder.AppendLine($"        Crypto method: {header.Flags.CryptoMethod} (0x{header.Flags.CryptoMethod:X})");
+            builder.AppendLine($"        Content platform: {header.Flags.ContentPlatform} (0x{header.Flags.ContentPlatform:X})");
+            builder.AppendLine($"        Content type: {header.Flags.MediaPlatformIndex} (0x{header.Flags.MediaPlatformIndex:X})");
+            builder.AppendLine(header.Flags.ContentUnitSize, "        Content unit size");
+            builder.AppendLine($"        Bitmasks: {header.Flags.BitMasks} (0x{header.Flags.BitMasks:X})");
+
             builder.AppendLine(header.PlainRegionOffsetInMediaUnits, "      Plain region offset, in media units");
             builder.AppendLine(header.PlainRegionSizeInMediaUnits, "      Plain region size, in media units");
             builder.AppendLine(header.LogoRegionOffsetInMediaUnits, "      Logo region offset, in media units");
@@ -266,11 +219,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHHeader[]? entries)
+        private static void Print(StringBuilder builder, NCCHHeader[] entries)
         {
             builder.AppendLine("  NCCH Partition Header Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No NCCH partition headers");
                 builder.AppendLine();
@@ -344,11 +297,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHExtendedHeader[]? entries)
+        private static void Print(StringBuilder builder, NCCHExtendedHeader[] entries)
         {
             builder.AppendLine("  NCCH Extended Header Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No NCCH extended headers");
                 builder.AppendLine();
@@ -360,226 +313,115 @@ namespace SabreTools.Serialization.Wrappers
                 var entry = entries[i];
 
                 builder.AppendLine($"  NCCH Extended Header {i}");
+
                 builder.AppendLine("    System control info:");
-                if (entry.SCI == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine(entry.SCI.ApplicationTitle, "      Application title");
-                    builder.AppendLine(entry.SCI.Reserved1, "      Reserved 1");
-                    builder.AppendLine(entry.SCI.Flag, "      Flag");
-                    builder.AppendLine(entry.SCI.RemasterVersion, "      Remaster version");
+                builder.AppendLine(entry.SCI.ApplicationTitle, "      Application title");
+                builder.AppendLine(entry.SCI.Reserved1, "      Reserved 1");
+                builder.AppendLine(entry.SCI.Flag, "      Flag");
+                builder.AppendLine(entry.SCI.RemasterVersion, "      Remaster version");
 
-                    builder.AppendLine("      Text code set info:");
-                    if (entry.SCI.TextCodeSetInfo == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.SCI.TextCodeSetInfo.Address, "        Address");
-                        builder.AppendLine(entry.SCI.TextCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
-                        builder.AppendLine(entry.SCI.TextCodeSetInfo.SizeInBytes, "        Size (in bytes)");
-                    }
+                builder.AppendLine("      Text code set info:");
+                builder.AppendLine(entry.SCI.TextCodeSetInfo.Address, "        Address");
+                builder.AppendLine(entry.SCI.TextCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
+                builder.AppendLine(entry.SCI.TextCodeSetInfo.SizeInBytes, "        Size (in bytes)");
 
-                    builder.AppendLine(entry.SCI.StackSize, "      Stack size");
+                builder.AppendLine(entry.SCI.StackSize, "      Stack size");
 
-                    builder.AppendLine("      Read-only code set info:");
-                    if (entry.SCI.ReadOnlyCodeSetInfo == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.Address, "        Address");
-                        builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
-                        builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.SizeInBytes, "        Size (in bytes)");
-                    }
+                builder.AppendLine("      Read-only code set info:");
+                builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.Address, "        Address");
+                builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
+                builder.AppendLine(entry.SCI.ReadOnlyCodeSetInfo.SizeInBytes, "        Size (in bytes)");
 
-                    builder.AppendLine(entry.SCI.Reserved2, "      Reserved 2");
+                builder.AppendLine(entry.SCI.Reserved2, "      Reserved 2");
 
-                    builder.AppendLine("      Data code set info:");
-                    if (entry.SCI.DataCodeSetInfo == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.SCI.DataCodeSetInfo.Address, "        Address");
-                        builder.AppendLine(entry.SCI.DataCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
-                        builder.AppendLine(entry.SCI.DataCodeSetInfo.SizeInBytes, "        Size (in bytes)");
-                    }
+                builder.AppendLine("      Data code set info:");
+                builder.AppendLine(entry.SCI.DataCodeSetInfo.Address, "        Address");
+                builder.AppendLine(entry.SCI.DataCodeSetInfo.PhysicalRegionSizeInPages, "        Physical region size (in page-multiples)");
+                builder.AppendLine(entry.SCI.DataCodeSetInfo.SizeInBytes, "        Size (in bytes)");
 
-                    builder.AppendLine(entry.SCI.BSSSize, "      BSS size");
-                    builder.AppendLine(entry.SCI.DependencyModuleList, "      Dependency module list");
+                builder.AppendLine(entry.SCI.BSSSize, "      BSS size");
+                builder.AppendLine(entry.SCI.DependencyModuleList, "      Dependency module list");
 
-                    builder.AppendLine("      System info:");
-                    if (entry.SCI.SystemInfo == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.SCI.SystemInfo.SaveDataSize, "        SaveData size");
-                        builder.AppendLine(entry.SCI.SystemInfo.JumpID, "        Jump ID");
-                        builder.AppendLine(entry.SCI.SystemInfo.Reserved, "        Reserved");
-                    }
-                }
+                builder.AppendLine("      System info:");
+                builder.AppendLine(entry.SCI.SystemInfo.SaveDataSize, "        SaveData size");
+                builder.AppendLine(entry.SCI.SystemInfo.JumpID, "        Jump ID");
+                builder.AppendLine(entry.SCI.SystemInfo.Reserved, "        Reserved");
 
                 builder.AppendLine("    Access control info:");
-                if (entry.ACI == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine("      ARM11 local system capabilities:");
-                    if (entry.ACI.ARM11LocalSystemCapabilities == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ProgramID, "        Program ID");
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.CoreVersion, "        Core version");
-                        builder.AppendLine($"        Flag 1: {entry.ACI.ARM11LocalSystemCapabilities.Flag1} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag1:X})");
-                        builder.AppendLine($"        Flag 2: {entry.ACI.ARM11LocalSystemCapabilities.Flag2} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag2:X})");
-                        builder.AppendLine($"        Flag 0: {entry.ACI.ARM11LocalSystemCapabilities.Flag0} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag0:X})");
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.Priority, "        Priority");
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitDescriptors, "        Resource limit descriptors");
-                        builder.AppendLine("        Storage info:");
-                        if (entry.ACI.ARM11LocalSystemCapabilities.StorageInfo == null)
-                        {
-                            builder.AppendLine("          [NULL]");
-                        }
-                        else
-                        {
-                            builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.ExtdataID, "          Extdata ID");
-                            builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.SystemSavedataIDs, "          System savedata IDs");
-                            builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.StorageAccessibleUniqueIDs, "          Storage accessible unique IDs");
-                            builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.FileSystemAccessInfo, "          File system access info");
-                            builder.AppendLine($"          Other attributes: {entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes} (0x{entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes:X})");
-                        }
+                builder.AppendLine("      ARM11 local system capabilities:");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ProgramID, "        Program ID");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.CoreVersion, "        Core version");
+                builder.AppendLine($"        Flag 1: {entry.ACI.ARM11LocalSystemCapabilities.Flag1} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag1:X})");
+                builder.AppendLine($"        Flag 2: {entry.ACI.ARM11LocalSystemCapabilities.Flag2} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag2:X})");
+                builder.AppendLine($"        Flag 0: {entry.ACI.ARM11LocalSystemCapabilities.Flag0} (0x{entry.ACI.ARM11LocalSystemCapabilities.Flag0:X})");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.Priority, "        Priority");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitDescriptors, "        Resource limit descriptors");
 
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ServiceAccessControl, "        Service access control");
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ExtendedServiceAccessControl, "        Extended service access control");
-                        builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.Reserved, "        Reserved");
-                        builder.AppendLine($"        Resource limit cateogry: {entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitCategory} (0x{entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitCategory:X})");
-                    }
+                builder.AppendLine("        Storage info:");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.ExtdataID, "          Extdata ID");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.SystemSavedataIDs, "          System savedata IDs");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.StorageAccessibleUniqueIDs, "          Storage accessible unique IDs");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.FileSystemAccessInfo, "          File system access info");
+                builder.AppendLine($"          Other attributes: {entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes} (0x{entry.ACI.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes:X})");
 
-                    builder.AppendLine("      ARM11 kernel capabilities:");
-                    if (entry.ACI.ARM11KernelCapabilities == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.ACI.ARM11KernelCapabilities.Descriptors, "        Descriptors");
-                        builder.AppendLine(entry.ACI.ARM11KernelCapabilities.Reserved, "        Reserved");
-                    }
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ServiceAccessControl, "        Service access control");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.ExtendedServiceAccessControl, "        Extended service access control");
+                builder.AppendLine(entry.ACI.ARM11LocalSystemCapabilities.Reserved, "        Reserved");
+                builder.AppendLine($"        Resource limit cateogry: {entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitCategory} (0x{entry.ACI.ARM11LocalSystemCapabilities.ResourceLimitCategory:X})");
 
-                    builder.AppendLine("      ARM9 access control:");
-                    if (entry.ACI.ARM9AccessControl == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        string descriptorsStr = "[NULL]";
-                        if (entry.ACI.ARM9AccessControl.Descriptors != null)
-                        {
-                            var descriptors = Array.ConvertAll(entry.ACI.ARM9AccessControl.Descriptors, d => d.ToString());
-                            descriptorsStr = string.Join(", ", descriptors);
-                        }
-                        builder.AppendLine(descriptorsStr, "        Descriptors");
-                        builder.AppendLine(entry.ACI.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
-                    }
-                }
+                builder.AppendLine("      ARM11 kernel capabilities:");
+                builder.AppendLine(entry.ACI.ARM11KernelCapabilities.Descriptors, "        Descriptors");
+                builder.AppendLine(entry.ACI.ARM11KernelCapabilities.Reserved, "        Reserved");
+
+                builder.AppendLine("      ARM9 access control:");
+                var descriptors = Array.ConvertAll(entry.ACI.ARM9AccessControl.Descriptors, d => d.ToString());
+                string descriptorsStr = string.Join(", ", descriptors);
+                builder.AppendLine(descriptorsStr, "        Descriptors");
+                builder.AppendLine(entry.ACI.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
 
                 builder.AppendLine(entry.AccessDescSignature, "    AccessDec signature (RSA-2048-SHA256)");
                 builder.AppendLine(entry.NCCHHDRPublicKey, "    NCCH HDR RSA-2048 public key");
 
                 builder.AppendLine("    Access control info (for limitations of first ACI):");
-                if (entry.ACIForLimitations == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine("      ARM11 local system capabilities:");
-                    if (entry.ACIForLimitations.ARM11LocalSystemCapabilities == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ProgramID, "        Program ID");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.CoreVersion, "        Core version");
-                        builder.AppendLine($"        Flag 1: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag1} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag1:X})");
-                        builder.AppendLine($"        Flag 2: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag2} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag2:X})");
-                        builder.AppendLine($"        Flag 0: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag0} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag0:X})");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.Priority, "        Priority");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitDescriptors, "        Resource limit descriptors");
+                builder.AppendLine("      ARM11 local system capabilities:");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ProgramID, "        Program ID");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.CoreVersion, "        Core version");
+                builder.AppendLine($"        Flag 1: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag1} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag1:X})");
+                builder.AppendLine($"        Flag 2: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag2} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag2:X})");
+                builder.AppendLine($"        Flag 0: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag0} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.Flag0:X})");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.Priority, "        Priority");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitDescriptors, "        Resource limit descriptors");
 
-                        builder.AppendLine("        Storage info:");
-                        if (entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo == null)
-                        {
-                            builder.AppendLine("          [NULL]");
-                        }
-                        else
-                        {
-                            builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.ExtdataID, "          Extdata ID");
-                            builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.SystemSavedataIDs, "          System savedata IDs");
-                            builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.StorageAccessibleUniqueIDs, "          Storage accessible unique IDs");
-                            builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.FileSystemAccessInfo, "          File system access info");
-                            builder.AppendLine($"          Other attributes: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes:X})");
-                        }
+                builder.AppendLine("        Storage info:");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.ExtdataID, "          Extdata ID");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.SystemSavedataIDs, "          System savedata IDs");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.StorageAccessibleUniqueIDs, "          Storage accessible unique IDs");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.FileSystemAccessInfo, "          File system access info");
+                builder.AppendLine($"          Other attributes: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.StorageInfo.OtherAttributes:X})");
 
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ServiceAccessControl, "        Service access control");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ExtendedServiceAccessControl, "        Extended service access control");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.Reserved, "        Reserved");
-                        builder.AppendLine($"        Resource limit cateogry: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitCategory} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitCategory:X})");
-                    }
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ServiceAccessControl, "        Service access control");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.ExtendedServiceAccessControl, "        Extended service access control");
+                builder.AppendLine(entry.ACIForLimitations.ARM11LocalSystemCapabilities.Reserved, "        Reserved");
+                builder.AppendLine($"        Resource limit cateogry: {entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitCategory} (0x{entry.ACIForLimitations.ARM11LocalSystemCapabilities.ResourceLimitCategory:X})");
 
-                    builder.AppendLine("      ARM11 kernel capabilities:");
-                    if (entry.ACIForLimitations.ARM11KernelCapabilities == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        builder.AppendLine(entry.ACIForLimitations.ARM11KernelCapabilities.Descriptors, "        Descriptors");
-                        builder.AppendLine(entry.ACIForLimitations.ARM11KernelCapabilities.Reserved, "        Reserved");
-                    }
+                builder.AppendLine("      ARM11 kernel capabilities:");
+                builder.AppendLine(entry.ACIForLimitations.ARM11KernelCapabilities.Descriptors, "        Descriptors");
+                builder.AppendLine(entry.ACIForLimitations.ARM11KernelCapabilities.Reserved, "        Reserved");
 
-                    builder.AppendLine("      ARM9 access control:");
-                    if (entry.ACIForLimitations.ARM9AccessControl == null)
-                    {
-                        builder.AppendLine("        [NULL]");
-                    }
-                    else
-                    {
-                        string descriptorsStr = "[NULL]";
-                        if (entry.ACIForLimitations.ARM9AccessControl.Descriptors != null)
-                        {
-                            var descriptors = Array.ConvertAll(entry.ACIForLimitations.ARM9AccessControl.Descriptors, d => d.ToString());
-                            descriptorsStr = string.Join(", ", descriptors);
-                        }
-                        builder.AppendLine(descriptorsStr, "        Descriptors");
-                        builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
-                    }
-                }
+                builder.AppendLine("      ARM9 access control:");
+                descriptors = Array.ConvertAll(entry.ACIForLimitations.ARM9AccessControl.Descriptors, d => d.ToString());
+                descriptorsStr = string.Join(", ", descriptors);
+                builder.AppendLine(descriptorsStr, "        Descriptors");
+                builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
             }
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExeFSHeader[]? entries)
+        private static void Print(StringBuilder builder, ExeFSHeader[] entries)
         {
             builder.AppendLine("  ExeFS Header Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No ExeFS headers");
                 builder.AppendLine();
@@ -595,7 +437,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(entry.Reserved, "    Reserved");
 
                 builder.AppendLine("    File hashes:");
-                if (entry.FileHashes == null || entry.FileHashes.Length == 0)
+                if (entry.FileHashes.Length == 0)
                 {
                     builder.AppendLine("    No file hashes");
                 }
@@ -614,10 +456,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExeFSFileHeader[]? entries)
+        private static void Print(StringBuilder builder, ExeFSFileHeader[] entries)
         {
             builder.AppendLine("    File headers:");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("    No file headers");
                 return;
@@ -634,11 +476,11 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, RomFSHeader[]? entries)
+        private static void Print(StringBuilder builder, RomFSHeader[] entries)
         {
             builder.AppendLine("  RomFS Header Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No RomFS headers");
                 builder.AppendLine();

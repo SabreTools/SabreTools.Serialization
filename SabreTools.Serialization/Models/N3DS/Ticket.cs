@@ -160,7 +160,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// In demos, the first u32 in the "Limits" section is 0x4, then the second u32 is the max-playcount.
         /// </remarks>
-        public uint[]? Limits { get; set; }
+        public uint[] Limits { get; set; }
 
         /// <summary>
         /// The Content Index of a ticket has its own size defined within itself,
@@ -180,6 +180,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// https://www.3dbrew.org/wiki/Ticket#Certificate_Chain
         /// </remarks>
-        public Certificate[]? CertificateChain { get; set; }
+        public Certificate[] CertificateChain { get; set; }
     }
 }

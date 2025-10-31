@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? FileName;
+        public string FileName;
 
         /// <summary>
         /// File offset

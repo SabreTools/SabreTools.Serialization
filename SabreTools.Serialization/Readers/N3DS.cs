@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < 8; i++)
                 {
                     // Find the offset to the partition
-                    long partitionOffset = initialOffset + cart.Header.PartitionsTable?[i]?.Offset ?? 0;
+                    long partitionOffset = initialOffset + cart.Header.PartitionsTable[i].Offset;
                     partitionOffset *= mediaUnitSize;
                     if (partitionOffset <= initialOffset)
                         continue;

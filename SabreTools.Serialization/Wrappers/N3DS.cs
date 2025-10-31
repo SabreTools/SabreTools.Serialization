@@ -19,12 +19,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Backup header
         /// </summary>
-        public NCCHHeader? BackupHeader => Model.CardInfoHeader?.InitialData?.BackupHeader;
+        public NCCHHeader BackupHeader => Model.CardInfoHeader.InitialData.BackupHeader;
 
         /// <summary>
         /// ExeFS headers
         /// </summary>
-        public ExeFSHeader[] ExeFSHeaders => Model.ExeFSHeaders ?? [];
+        public ExeFSHeader[] ExeFSHeaders => Model.ExeFSHeaders;
 
         /// <summary>
         /// Media unit size in bytes
@@ -33,9 +33,6 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (Model.Header?.PartitionFlags == null)
-                    return default;
-
                 return (uint)(0x200 * Math.Pow(2, Model.Header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
             }
         }
@@ -43,12 +40,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Partitions data table
         /// </summary>
-        public NCCHHeader[] Partitions => Model.Partitions ?? [];
+        public NCCHHeader[] Partitions => Model.Partitions;
 
         /// <summary>
         /// Partitions header table
         /// </summary>
-        public PartitionTableEntry[] PartitionsTable => Model.Header?.PartitionsTable ?? [];
+        public PartitionTableEntry[] PartitionsTable => Model.Header.PartitionsTable;
 
         #region Named Partition Entries
 
@@ -59,7 +56,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionsTable == null || PartitionsTable.Length == 0)
+                if (PartitionsTable.Length == 0)
                     return null;
 
                 return PartitionsTable[0];
@@ -73,7 +70,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionsTable == null || PartitionsTable.Length == 0)
+                if (PartitionsTable.Length == 0)
                     return null;
 
                 return PartitionsTable[1];
@@ -87,7 +84,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionsTable == null || PartitionsTable.Length == 0)
+                if (PartitionsTable.Length == 0)
                     return null;
 
                 return PartitionsTable[2];
@@ -101,7 +98,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionsTable == null || PartitionsTable.Length == 0)
+                if (PartitionsTable.Length == 0)
                     return null;
 
                 return PartitionsTable[6];
@@ -115,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionsTable == null || PartitionsTable.Length == 0)
+                if (PartitionsTable.Length == 0)
                     return null;
 
                 return PartitionsTable[7];
@@ -127,7 +124,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Partitions flags
         /// </summary>
-        public byte[] PartitionFlags => Model.Header?.PartitionFlags ?? [];
+        public byte[] PartitionFlags => Model.Header.PartitionFlags;
 
         #region Partition Flags
 
@@ -139,7 +136,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                if (PartitionFlags.Length == 0)
                     return default;
 
                 return PartitionFlags[(int)NCSDFlags.BackupWriteWaitTime];
@@ -153,7 +150,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                if (PartitionFlags.Length == 0)
                     return default;
 
                 return (MediaCardDeviceType)PartitionFlags[(int)NCSDFlags.MediaCardDevice2X];
@@ -167,7 +164,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                if (PartitionFlags.Length == 0)
                     return default;
 
                 return (MediaCardDeviceType)PartitionFlags[(int)NCSDFlags.MediaCardDevice3X];
@@ -181,7 +178,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                if (PartitionFlags.Length == 0)
                     return default;
 
                 return (MediaPlatformIndex)PartitionFlags[(int)NCSDFlags.MediaPlatformIndex];
@@ -195,7 +192,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (PartitionFlags == null || PartitionFlags.Length == 0)
+                if (PartitionFlags.Length == 0)
                     return default;
 
                 return (MediaTypeIndex)PartitionFlags[(int)NCSDFlags.MediaTypeIndex];

@@ -26,17 +26,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.MetaData);
         }
 
-        private static void Print(StringBuilder builder, CIAHeader? header)
+        private static void Print(StringBuilder builder, CIAHeader header)
         {
             builder.AppendLine("  CIA Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No CIA header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.HeaderSize, "  Header size");
             builder.AppendLine(header.Type, "  Type");
             builder.AppendLine(header.Version, "  Version");
@@ -49,11 +42,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Certificate[]? certificateChain)
+        private static void Print(StringBuilder builder, Certificate[] certificateChain)
         {
             builder.AppendLine("  Certificate Chain Information:");
             builder.AppendLine("  -------------------------");
-            if (certificateChain == null || certificateChain.Length == 0)
+            if (certificateChain.Length == 0)
             {
                 builder.AppendLine("  No certificates, expected 3");
                 builder.AppendLine();
@@ -100,17 +93,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Ticket? ticket)
+        private static void Print(StringBuilder builder, Ticket ticket)
         {
             builder.AppendLine("  Ticket Information:");
             builder.AppendLine("  -------------------------");
-            if (ticket == null)
-            {
-                builder.AppendLine("  No ticket");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine($"  Signature type: {ticket.SignatureType} (0x{ticket.SignatureType:X})");
             builder.AppendLine(ticket.SignatureSize, "  Signature size");
             builder.AppendLine(ticket.PaddingSize, "  Padding size");
@@ -137,7 +123,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(ticket.Audit, "  Audit");
             builder.AppendLine(ticket.Reserved6, "  Reserved 6");
             builder.AppendLine("  Limits:");
-            if (ticket.Limits == null || ticket.Limits.Length == 0)
+            if (ticket.Limits.Length == 0)
             {
                 builder.AppendLine("    No limits");
             }
@@ -154,7 +140,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Ticket Certificate Chain Information:");
             builder.AppendLine("  -------------------------");
-            if (ticket.CertificateChain == null || ticket.CertificateChain.Length == 0)
+            if (ticket.CertificateChain.Length == 0)
             {
                 builder.AppendLine("  No certificates, expected 2");
             }
@@ -200,17 +186,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, TitleMetadata? tmd)
+        private static void Print(StringBuilder builder, TitleMetadata tmd)
         {
             builder.AppendLine("  Title Metadata Information:");
             builder.AppendLine("  -------------------------");
-            if (tmd == null)
-            {
-                builder.AppendLine("  No title metadata");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine($"  Signature type: {tmd.SignatureType} (0x{tmd.SignatureType:X})");
             builder.AppendLine(tmd.SignatureSize, "  Signature size");
             builder.AppendLine(tmd.PaddingSize, "  Padding size");
@@ -240,7 +219,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Ticket Content Info Records Information:");
             builder.AppendLine("  -------------------------");
-            if (tmd.ContentInfoRecords == null || tmd.ContentInfoRecords.Length == 0)
+            if (tmd.ContentInfoRecords.Length == 0)
             {
                 builder.AppendLine("  No content info records, expected 64");
             }
@@ -261,7 +240,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Ticket Content Chunk Records Information:");
             builder.AppendLine("  -------------------------");
-            if (tmd.ContentChunkRecords == null || tmd.ContentChunkRecords.Length == 0)
+            if (tmd.ContentChunkRecords.Length == 0)
             {
                 builder.AppendLine($"  No content chunk records, expected {tmd.ContentCount}");
             }
@@ -284,7 +263,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Ticket Certificate Chain Information:");
             builder.AppendLine("  -------------------------");
-            if (tmd.CertificateChain == null || tmd.CertificateChain.Length == 0)
+            if (tmd.CertificateChain.Length == 0)
             {
                 builder.AppendLine("  No certificates, expected 2");
             }
@@ -330,11 +309,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NCCHHeader[]? partitions)
+        private static void Print(StringBuilder builder, NCCHHeader[] partitions)
         {
             builder.AppendLine("  NCCH Partition Header Information:");
             builder.AppendLine("  -------------------------");
-            if (partitions == null || partitions.Length == 0)
+            if (partitions.Length == 0)
             {
                 builder.AppendLine("  No NCCH partition headers");
                 builder.AppendLine();
@@ -371,22 +350,17 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(partitionHeader.ExtendedHeaderHash, "    Extended header SHA-256 hash");
                 builder.AppendLine(partitionHeader.ExtendedHeaderSizeInBytes, "    Extended header size in bytes");
                 builder.AppendLine(partitionHeader.Reserved2, "    Reserved 2");
+
                 builder.AppendLine("    Flags:");
-                if (partitionHeader.Flags == null)
-                {
-                    builder.AppendLine("      [NULL]");
-                }
-                else
-                {
-                    builder.AppendLine(partitionHeader.Flags.Reserved0, "      Reserved 0");
-                    builder.AppendLine(partitionHeader.Flags.Reserved1, "      Reserved 1");
-                    builder.AppendLine(partitionHeader.Flags.Reserved2, "      Reserved 2");
-                    builder.AppendLine($"      Crypto method: {partitionHeader.Flags.CryptoMethod} (0x{partitionHeader.Flags.CryptoMethod:X})");
-                    builder.AppendLine($"      Content platform: {partitionHeader.Flags.ContentPlatform} (0x{partitionHeader.Flags.ContentPlatform:X})");
-                    builder.AppendLine($"      Content type: {partitionHeader.Flags.MediaPlatformIndex} (0x{partitionHeader.Flags.MediaPlatformIndex:X})");
-                    builder.AppendLine(partitionHeader.Flags.ContentUnitSize, "      Content unit size");
-                    builder.AppendLine($"      Bitmasks: {partitionHeader.Flags.BitMasks} (0x{partitionHeader.Flags.BitMasks:X})");
-                }
+                builder.AppendLine(partitionHeader.Flags.Reserved0, "      Reserved 0");
+                builder.AppendLine(partitionHeader.Flags.Reserved1, "      Reserved 1");
+                builder.AppendLine(partitionHeader.Flags.Reserved2, "      Reserved 2");
+                builder.AppendLine($"      Crypto method: {partitionHeader.Flags.CryptoMethod} (0x{partitionHeader.Flags.CryptoMethod:X})");
+                builder.AppendLine($"      Content platform: {partitionHeader.Flags.ContentPlatform} (0x{partitionHeader.Flags.ContentPlatform:X})");
+                builder.AppendLine($"      Content type: {partitionHeader.Flags.MediaPlatformIndex} (0x{partitionHeader.Flags.MediaPlatformIndex:X})");
+                builder.AppendLine(partitionHeader.Flags.ContentUnitSize, "      Content unit size");
+                builder.AppendLine($"      Bitmasks: {partitionHeader.Flags.BitMasks} (0x{partitionHeader.Flags.BitMasks:X})");
+
                 builder.AppendLine(partitionHeader.PlainRegionOffsetInMediaUnits, "    Plain region offset, in media units");
                 builder.AppendLine(partitionHeader.PlainRegionSizeInMediaUnits, "    Plain region size, in media units");
                 builder.AppendLine(partitionHeader.LogoRegionOffsetInMediaUnits, "    Logo region offset, in media units");
@@ -406,17 +380,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, MetaData? metaData)
+        private static void Print(StringBuilder builder, MetaData metaData)
         {
             builder.AppendLine("  Meta Data Information:");
             builder.AppendLine("  -------------------------");
-            if (metaData == null)
-            {
-                builder.AppendLine("  No meta file data");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(metaData.TitleIDDependencyList, "  Title ID dependency list");
             builder.AppendLine(metaData.Reserved1, "  Reserved 1");
             builder.AppendLine(metaData.CoreVersion, "  Core version");

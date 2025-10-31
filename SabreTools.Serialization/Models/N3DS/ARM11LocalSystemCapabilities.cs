@@ -44,26 +44,26 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>16 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public ushort[]? ResourceLimitDescriptors;
+        public ushort[] ResourceLimitDescriptors = new ushort[16];
 
         /// <summary>
         /// Storage info
         /// </summary>
-        public StorageInfo? StorageInfo;
+        public StorageInfo StorageInfo;
 
         /// <summary>
         /// Service access control
         /// </summary>
         /// <remarks>32 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public ulong[]? ServiceAccessControl;
+        public ulong[] ServiceAccessControl = new ulong[32];
 
         /// <summary>
         /// Extended service access control, support for this was implemented with 9.3.0-X.
         /// </summary>
         /// <remarks>2 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public ulong[]? ExtendedServiceAccessControl;
+        public ulong[] ExtendedServiceAccessControl = new ulong[2];
 
         /// <summary>
         /// Reserved

@@ -21,7 +21,7 @@ namespace SabreTools.Data.Models.N3DS
     public enum ARM11LSCFlag0 : byte
     {
         IdealProcessor = 0x01 | 0x02,
-        
+
         AffinityMask = 0x04 | 0x08,
 
         /// <summary>

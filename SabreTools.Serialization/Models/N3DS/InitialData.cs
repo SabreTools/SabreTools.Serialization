@@ -44,6 +44,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Copy of first NCCH header (excluding RSA signature)
         /// </summary>
-        public NCCHHeader? BackupHeader;
+        public NCCHHeader BackupHeader;
     }
 }

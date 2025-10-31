@@ -30,6 +30,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// TestData
         /// </summary>
-        public TestData? TestData;
+        public TestData TestData;
     }
 }
