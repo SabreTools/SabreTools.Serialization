@@ -19,13 +19,13 @@ namespace SabreTools.Data.Models.COFF
 
         /// <summary>
         /// The number of sections. This indicates the size of the section table,
-        /// which immediately follows the headers. 
+        /// which immediately follows the headers.
         /// </summary>
         public ushort NumberOfSections;
 
         /// <summary>
         /// The low 32 bits of the number of seconds since 00:00 January 1, 1970
-        /// (a C run-time time_t value), which indicates when the file was created. 
+        /// (a C run-time time_t value), which indicates when the file was created.
         /// </summary>
         public uint TimeDateStamp;
 

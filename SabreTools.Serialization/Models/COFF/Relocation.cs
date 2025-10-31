@@ -6,12 +6,12 @@ namespace SabreTools.Data.Models.COFF
     /// Object files contain COFF relocations, which specify how the section data
     /// should be modified when placed in the image file and subsequently loaded
     /// into memory.
-    /// 
+    ///
     /// Image files do not contain COFF relocations, because all referenced symbols
     /// have already been assigned addresses in a flat address space. An image
     /// contains relocation information in the form of base relocations in the
     /// .reloc section (unless the image has the IMAGE_FILE_RELOCS_STRIPPED attribute).
-    /// 
+    ///
     /// For each section in an object file, an array of fixed-length records holds
     /// the section's COFF relocations. The position and length of the array are
     /// specified in the section header.

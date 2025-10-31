@@ -422,7 +422,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
-            if (stringTable?.Strings == null || stringTable.Strings.Length == 0)
+            if (stringTable.Strings.Length == 0)
             {
                 builder.AppendLine("  No string table items");
                 builder.AppendLine();
