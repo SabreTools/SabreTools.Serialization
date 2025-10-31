@@ -24,11 +24,11 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Units);
         }
 
-        private static void Print(StringBuilder builder, DiscInformationUnit[]? entries)
+        private static void Print(StringBuilder builder, DiscInformationUnit[] entries)
         {
             builder.AppendLine("  Disc Information Units:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No disc information units");
                 builder.AppendLine();
@@ -40,34 +40,19 @@ namespace SabreTools.Serialization.Wrappers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Disc Information Unit {i}");
-                if (entry.Header == null)
-                {
-                    builder.AppendLine("    No header");
-                }
-                else
-                {
-                    var header = entry.Header;
 
-                    builder.AppendLine(header.DiscInformationIdentifier, "    Disc information identifier");
-                    builder.AppendLine(header.DiscInformationFormat, "    Disc information format");
-                    builder.AppendLine(header.Reserved0, "    Reserved");
-                    builder.AppendLine(header.SequenceNumber, "    Sequence number");
-                    builder.AppendLine(header.BytesInUse, "    Bytes in use");
-                    builder.AppendLine(header.Reserved1, "    Reserved");
-                }
+                var header = entry.Header;
+                builder.AppendLine(header.DiscInformationIdentifier, "    Disc information identifier");
+                builder.AppendLine(header.DiscInformationFormat, "    Disc information format");
+                builder.AppendLine(header.Reserved0, "    Reserved");
+                builder.AppendLine(header.SequenceNumber, "    Sequence number");
+                builder.AppendLine(header.BytesInUse, "    Bytes in use");
+                builder.AppendLine(header.Reserved1, "    Reserved");
 
-                if (entry.Body == null)
-                {
-                    builder.AppendLine("    No body");
-                }
-                else
-                {
-                    var body = entry.Body;
-
-                    builder.AppendLine(body.DiscTypeIdentifier, "    Disc type identifer");
-                    builder.AppendLine(body.DiscSizeClassVersion, "    Disc size class version");
-                    builder.AppendLine(body.FormatDependentContents, "    Format-dependent contents");
-                }
+                var body = entry.Body;
+                builder.AppendLine(body.DiscTypeIdentifier, "    Disc type identifer");
+                builder.AppendLine(body.DiscSizeClassVersion, "    Disc size class version");
+                builder.AppendLine(body.FormatDependentContents, "    Format-dependent contents");
 
                 if (entry.Trailer == null)
                 {

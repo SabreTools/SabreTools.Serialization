@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.PIC
         /// Emergency Brake Identifier "EB"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? DiscInformationIdentifier;
+        public string DiscInformationIdentifier;
 
         /// <summary>
         /// Disc Information Format
