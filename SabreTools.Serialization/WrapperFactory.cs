@@ -86,7 +86,7 @@ namespace SabreTools.Serialization
                 return null;
 
             // Check for a valid new executable address
-            if (msdos.Model.Header?.NewExeHeaderAddr == null || initialOffset + msdos.Model.Header.NewExeHeaderAddr >= stream.Length)
+            if (initialOffset + msdos.Model.Header.NewExeHeaderAddr >= stream.Length)
                 return wrapper;
 
             // Try to read the executable info
@@ -833,7 +833,7 @@ namespace SabreTools.Serialization
                 return WrapperType.XZP;
 
             #endregion
-            
+
             #region ZSTD
 
             if (magic.StartsWith([null, 0xB5, 0x2F, 0xFD]))

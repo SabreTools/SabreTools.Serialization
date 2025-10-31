@@ -50,11 +50,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, RelocationEntry[]? entries)
+        private static void Print(StringBuilder builder, RelocationEntry[] entries)
         {
             builder.AppendLine("  Relocation Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No relocation table items");
                 builder.AppendLine();
