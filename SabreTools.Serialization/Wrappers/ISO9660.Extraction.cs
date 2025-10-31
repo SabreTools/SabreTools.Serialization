@@ -119,7 +119,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            int fileOffset = dr.ExtentLocation * blockLength;
+            int fileOffset = (dr.ExtentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
 
             // Check that the file hasn't been extracted already
             if (extractedFiles.ContainsKey(fileOffset))
@@ -128,9 +128,6 @@ namespace SabreTools.Serialization.Wrappers
             const int chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
-                // Skip the blocks allocated to the Extended Attribute Record
-                fileOffset += dr.ExtendedAttributeRecordLength * blockLength;
-
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF

@@ -649,6 +649,11 @@ namespace SabreTools.Serialization.Readers
             if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
 #endif
             {
+                // Start of directory should not be 0
+                int firstRecordLength = data.PeekByteValue();
+                if (firstRecordLength == 0)
+                    return null
+
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
                 int pos = 0;
@@ -663,6 +668,11 @@ namespace SabreTools.Serialization.Readers
                         int paddingLength = sectorLength - (pos % sectorLength);
                         pos += paddingLength;
                         _ = data.ReadBytes(paddingLength);
+
+                        // Start of sector should not be 0
+                        int nextRecordLength = data.PeekByteValue();
+                        if (nextRecordLength == 0)
+                            break;
                         continue;
                     }
 
@@ -686,7 +696,7 @@ namespace SabreTools.Serialization.Readers
                 foreach (var record in records)
                 {
                     // Don't traverse to parent or self
-                    if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                    if (record?.FileIdentifier == null || record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                         continue;
 
                     // Recursively parse child directory
@@ -723,7 +733,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent
-            if (!dr.ExtentLocation.IsValid)
+            if (!bigEndian && dr.ExtentLocation.IsValid)
             {
                 var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
                 if (bigEndianDir != null)
@@ -838,8 +848,10 @@ namespace SabreTools.Serialization.Readers
             obj.Reserved64Bytes = data.ReadBytes(64);
             obj.ApplicationLength = data.ReadInt16BothEndian();
 
-            obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
-            obj.ApplicationUse = data.ReadBytes(obj.EscapeSequencesLength);
+            if (obj.ApplicationLength > 0)
+                obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
+            if (obj.EscapeSequencesLength > 0)
+                obj.ApplicationUse = data.ReadBytes(obj.EscapeSequencesLength);
 
             return obj;
         }
