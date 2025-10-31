@@ -11,7 +11,7 @@
     /// To find the relocation data for a segment, seek to:
     ///     <see cref="SegmentTableEntry.Offset"/>
     ///     * (1 << <see cref="ExecutableHeader.SegmentAlignmentShiftCount"/>)
-    ///     + <see cref="SegmentTableEntry.Length"/> 
+    ///     + <see cref="SegmentTableEntry.Length"/>
     /// </remarks>
     /// <see href="https://web.archive.org/web/20240422070115/http://bytepointer.com/resources/win16_ne_exe_format_win3.0.htm"/>
     /// <see href="https://wiki.osdev.org/NE"/>
@@ -25,6 +25,6 @@
         /// <summary>
         /// A table of relocation records follows.
         /// </summary>
-        public RelocationRecord[]? RelocationRecords { get; set; }
+        public RelocationRecord[] RelocationRecords { get; set; }
     }
 }
