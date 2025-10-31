@@ -56,6 +56,6 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// <summary>
         /// Unicode-encoded file name
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }
