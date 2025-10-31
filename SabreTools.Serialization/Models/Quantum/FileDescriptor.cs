@@ -10,11 +10,11 @@ namespace SabreTools.Data.Models.Quantum
         /// Length of file name
         /// </summary>
         public int FileNameSize { get; set; }
-        
+
         /// <summary>
         /// File name, variable length string, not zero-terminated
         /// </summary>
-        public string? FileName { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// Length of comment field
@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.Quantum
         /// <summary>
         /// Comment field, variable length string, not zero-terminated
         /// </summary>
-        public string? CommentField { get; set; }
+        public string CommentField { get; set; }
 
         /// <summary>
         /// Fully expanded file size in bytes
@@ -32,12 +32,12 @@ namespace SabreTools.Data.Models.Quantum
         public uint ExpandedFileSize { get; set; }
 
         /// <summary>
-        /// File time (DOS format) 
+        /// File time (DOS format)
         /// </summary>
         public ushort FileTime { get; set; }
 
         /// <summary>
-        /// File date (DOS format) 
+        /// File date (DOS format)
         /// </summary>
         public ushort FileDate { get; set; }
 

@@ -24,17 +24,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.MajorVersion, "  Major version");
             builder.AppendLine(header.MinorVersion, "  Minor version");
@@ -44,11 +37,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileDescriptor[]? entries)
+        private static void Print(StringBuilder builder, FileDescriptor[] entries)
         {
             builder.AppendLine("  File List Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file list items");
                 builder.AppendLine();
