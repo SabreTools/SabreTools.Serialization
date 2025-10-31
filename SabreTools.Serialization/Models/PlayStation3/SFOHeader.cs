@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.PlayStation3
 {
-    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/> 
+    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/>
     [StructLayout(LayoutKind.Sequential)]
     public class SFOHeader
     {
