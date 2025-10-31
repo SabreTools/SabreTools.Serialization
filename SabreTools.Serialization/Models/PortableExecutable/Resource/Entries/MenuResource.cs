@@ -12,11 +12,11 @@
         /// <summary>
         /// Menu header structure
         /// </summary>
-        public MenuHeader? MenuHeader { get; set; }
+        public MenuHeader MenuHeader { get; set; }
 
         /// <summary>
         /// Menu items
         /// </summary>
-        public MenuItem[]? MenuItems { get; set; }
+        public MenuItem[] MenuItems { get; set; }
     }
 }

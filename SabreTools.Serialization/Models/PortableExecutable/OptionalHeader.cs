@@ -6,22 +6,22 @@
     /// do not have it. For image files, this header is required. An object file can have
     /// an optional header, but generally this header has no function in an object file
     /// except to increase its size.
-    /// 
+    ///
     /// Note that the size of the optional header is not fixed. The SizeOfOptionalHeader
     /// field in the COFF header must be used to validate that a probe into the file for
     /// a particular data directory does not go beyond SizeOfOptionalHeader.
-    /// 
+    ///
     /// The NumberOfRvaAndSizes field of the optional header should also be used to ensure
     /// that no probe for a particular data directory entry goes beyond the optional header.
     /// In addition, it is important to validate the optional header magic number for format
     /// compatibility.
-    /// 
+    ///
     /// The optional header magic number determines whether an image is a PE32 or
     /// PE32+ executable.
-    /// 
+    ///
     /// PE32+ images allow for a 64-bit address space while limiting the image size to
     /// 2 gigabytes. Other PE32+ modifications are addressed in their respective sections.
-    /// 
+    ///
     /// The first eight fields of the optional header are standard fields that are defined
     /// for every implementation of COFF. These fields contain general information that is
     /// useful for loading and running an executable file. They are unchanged for the
@@ -127,7 +127,7 @@
         public ulong SizeOfStackReserve { get; set; }
 
         /// <summary>
-        /// The size of the stack to commit. 
+        /// The size of the stack to commit.
         /// </summary>
         /// <remarks>This value is 32-bit if PE32 and 64-bit if PE32+</remarks>
         public ulong SizeOfStackCommit { get; set; }

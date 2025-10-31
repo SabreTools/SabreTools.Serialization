@@ -7,11 +7,11 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
     /// of debug information is present and where it is. This directory consists
     /// of an array of debug directory entries whose location and size are indicated
     /// in the image optional header.
-    /// 
+    ///
     /// The debug directory can be in a discardable .debug section (if one exists),
     /// or it can be included in any other section in the image file, or not be in
     /// a section at all.
-    /// 
+    ///
     /// Each debug directory entry identifies the location and size of a block of
     /// debug information. The specified RVA can be zero if the debug information
     /// is not covered by a section header (that is, it resides in the image file
@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
     public sealed class Entry
     {
         /// <summary>
-        /// Reserved, must be zero. 
+        /// Reserved, must be zero.
         /// </summary>
         public uint Characteristics;
 

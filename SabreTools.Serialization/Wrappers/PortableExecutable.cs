@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Executable.FileHeader"/>
-        public FileHeader? COFFFileHeader => Model.FileHeader;
+        public FileHeader COFFFileHeader => Model.FileHeader;
 
         /// <summary>
         /// Dictionary of debug data
@@ -65,20 +65,6 @@ namespace SabreTools.Serialization.Wrappers
                     // If we already have cached data, just use that immediately
                     if (_entryPointData != null)
                         return _entryPointData;
-
-                    // If the section table is missing
-                    if (SectionTable == null)
-                    {
-                        _entryPointData = [];
-                        return _entryPointData;
-                    }
-
-                    // If the address is missing
-                    if (OptionalHeader?.AddressOfEntryPoint == null)
-                    {
-                        _entryPointData = [];
-                        return _entryPointData;
-                    }
 
                     // If we have no entry point
                     int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
@@ -132,13 +118,6 @@ namespace SabreTools.Serialization.Wrappers
                         return _headerPaddingData;
 
                     // TODO: Don't scan the known header data as well
-
-                    // If any required pieces are missing
-                    if (Stub?.Header == null || SectionTable == null)
-                    {
-                        _headerPaddingData = [];
-                        return _headerPaddingData;
-                    }
 
                     // Populate the raw header padding data based on the source
                     uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
@@ -233,13 +212,6 @@ namespace SabreTools.Serialization.Wrappers
                         return null;
                     }
 
-                    // If the section table is missing
-                    if (SectionTable == null)
-                    {
-                        _matroschkaPackageFailed = true;
-                        return null;
-                    }
-
                     // Find the matrosch or rcpacker section
                     SectionHeader? section = null;
                     foreach (var searchedSection in SectionTable)
@@ -287,7 +259,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
-        public Data.Models.PortableExecutable.OptionalHeader? OptionalHeader => Model.OptionalHeader;
+        public Data.Models.PortableExecutable.OptionalHeader OptionalHeader => Model.OptionalHeader;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -306,13 +278,6 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                    {
-                        _overlayAddress = -1;
-                        return _overlayAddress.Value;
-                    }
-
-                    // If the section table is missing
-                    if (OptionalHeader == null || SectionTable == null)
                     {
                         _overlayAddress = -1;
                         return _overlayAddress.Value;
@@ -369,7 +334,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable != null)
                     {
                         long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
@@ -425,15 +390,8 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlaySize;
                     }
 
-                    // If the section table is missing
-                    if (SectionTable == null)
-                    {
-                        _overlaySize = 0;
-                        return _overlaySize;
-                    }
-
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader?.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable != null)
                     {
                         long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
@@ -508,13 +466,6 @@ namespace SabreTools.Serialization.Wrappers
                     if (_sectionNames != null)
                         return _sectionNames;
 
-                    // If there are no sections
-                    if (SectionTable == null)
-                    {
-                        _sectionNames = [];
-                        return _sectionNames;
-                    }
-
                     // Otherwise, build and return the cached array
                     _sectionNames = new string[SectionTable.Length];
                     for (int i = 0; i < _sectionNames.Length; i++)
@@ -531,7 +482,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.SectionTable"/>
-        public SectionHeader[]? SectionTable => Model.SectionTable;
+        public SectionHeader[] SectionTable => Model.SectionTable;
 
         /// <summary>
         /// Data after the section table, if it exists
@@ -545,17 +496,6 @@ namespace SabreTools.Serialization.Wrappers
                     // If we already have cached data, just use that immediately
                     if (_sectionTableTrailerData != null)
                         return _sectionTableTrailerData;
-
-                    if (Stub?.Header?.NewExeHeaderAddr == null)
-                    {
-                        _sectionTableTrailerData = [];
-                        return _sectionTableTrailerData;
-                    }
-                    if (COFFFileHeader == null)
-                    {
-                        _sectionTableTrailerData = [];
-                        return _sectionTableTrailerData;
-                    }
 
                     // Get the offset from the end of the section table
                     long endOfSectionTable = Stub.Header.NewExeHeaderAddr
@@ -575,7 +515,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public Data.Models.MSDOS.Executable? Stub => Model.Stub;
+        public Data.Models.MSDOS.Executable Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists
@@ -589,12 +529,6 @@ namespace SabreTools.Serialization.Wrappers
                     // If we already have cached data, just use that immediately
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
-
-                    if (Stub?.Header?.NewExeHeaderAddr == null)
-                    {
-                        _stubExecutableData = [];
-                        return _stubExecutableData;
-                    }
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
@@ -621,7 +555,7 @@ namespace SabreTools.Serialization.Wrappers
                         return _resourceData;
 
                     // If we have no resource table, just return
-                    if (OptionalHeader?.ResourceTable == null
+                    if (OptionalHeader.ResourceTable == null
                         || OptionalHeader.ResourceTable.VirtualAddress == 0
                         || ResourceDirectoryTable == null)
                     {
@@ -651,13 +585,6 @@ namespace SabreTools.Serialization.Wrappers
                     // If the header will not be found due to missing section data
                     if (_wiseSectionHeaderMissing)
                         return null;
-
-                    // If the section table is invalid
-                    if (SectionTable == null)
-                    {
-                        _wiseSectionHeaderMissing = true;
-                        return null;
-                    }
 
                     // Find the .WISE section
                     SectionHeader? wiseSection = null;
@@ -1197,7 +1124,7 @@ namespace SabreTools.Serialization.Wrappers
             StringData? match = null;
             foreach (var st in stringTable)
             {
-                if (st.Children == null || st.Length == 0)
+                if (st.Length == 0)
                     continue;
 
                 // Return the match if found
@@ -1609,7 +1536,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // Check section data
-                foreach (var section in SectionTable ?? [])
+                foreach (var section in SectionTable)
                 {
                     string sectionName = Encoding.ASCII.GetString(section.Name).TrimEnd('\0');
                     long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
@@ -1643,7 +1570,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If there are no resources
-            if (OptionalHeader?.ResourceTable == null)
+            if (OptionalHeader.ResourceTable == null)
                 return -1;
 
             // Cache the resource data for easier reading
@@ -1713,9 +1640,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private void ParseResourceDirectoryTable(Data.Models.PortableExecutable.Resource.DirectoryTable table, List<object> types)
         {
-            if (table?.Entries == null)
-                return;
-
             for (int i = 0; i < table.Entries.Length; i++)
             {
                 var entry = table.Entries[i];
@@ -1887,14 +1811,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Section index on success, null on error</returns>
         public int FindEntryPointSectionIndex()
         {
-            // If the section table is missing
-            if (SectionTable == null)
-                return -1;
-
-            // If the address is missing
-            if (OptionalHeader?.AddressOfEntryPoint == null)
-                return -1;
-
             // If we don't have an entry point
             if (OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable) == 0)
                 return -1;
@@ -1912,7 +1828,7 @@ namespace SabreTools.Serialization.Wrappers
         public SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1937,7 +1853,7 @@ namespace SabreTools.Serialization.Wrappers
         public SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1961,7 +1877,7 @@ namespace SabreTools.Serialization.Wrappers
         public SectionHeader? GetSection(int index)
         {
             // If we have no sections
-            if (SectionTable == null || SectionTable.Length == 0)
+            if (SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -1981,7 +1897,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2002,7 +1918,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetLastSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2022,7 +1938,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetSectionData(int index)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2062,7 +1978,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2083,7 +1999,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2103,7 +2019,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetSectionStrings(int index)
         {
             // If we have no sections
-            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2145,7 +2061,7 @@ namespace SabreTools.Serialization.Wrappers
         public DataDirectory? GetTable(int index)
         {
             // If the table doesn't exist
-            if (OptionalHeader == null || index < 0 || index > 16)
+            if (index < 0 || index > 16)
                 return null;
 
             return index switch
@@ -2180,7 +2096,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetTableData(int index)
         {
             // If the table doesn't exist
-            if (OptionalHeader == null || index < 0 || index > 16)
+            if (index < 0 || index > 16)
                 return null;
 
             // If we already have cached data, just use that immediately
@@ -2193,10 +2109,6 @@ namespace SabreTools.Serialization.Wrappers
             // Get the virtual address and size from the entries
             uint virtualAddress = table?.VirtualAddress ?? 0;
             uint size = table?.Size ?? 0;
-
-            // If there is  no section table
-            if (SectionTable == null)
-                return null;
 
             // Get the physical address from the virtual one
             uint address = virtualAddress.ConvertVirtualAddress(SectionTable);

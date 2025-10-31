@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.PortableExecutable
     /// Each data directory gives the address and size of a table or string that Windows uses.
     /// These data directory entries are all loaded into memory so that the system can use them
     /// at run time.
-    /// 
+    ///
     /// Also, do not assume that the RVAs in this table point to the beginning of a section or
     /// that the sections that contain specific tables have specific names.
     /// </summary>

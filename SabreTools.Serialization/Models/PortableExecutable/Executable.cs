@@ -14,29 +14,29 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// MS-DOS executable stub
         /// </summary>
-        public MSDOS.Executable? Stub { get; set; }
+        public MSDOS.Executable Stub { get; set; }
 
         /// <summary>
         /// After the MS-DOS stub, at the file offset specified at offset 0x3c, is a 4-byte
         /// signature that identifies the file as a PE format image file. This signature is "PE\0\0"
         /// (the letters "P" and "E" followed by two null bytes).
         /// </summary>
-        public string? Signature { get; set; }
+        public string Signature { get; set; }
 
         /// <summary>
         /// File header
         /// </summary>
-        public COFF.FileHeader? FileHeader { get; set; }
+        public COFF.FileHeader FileHeader { get; set; }
 
         /// <summary>
         /// Microsoft extended optional header
         /// </summary>
-        public OptionalHeader? OptionalHeader { get; set; }
+        public OptionalHeader OptionalHeader { get; set; }
 
         /// <summary>
         /// Section table
         /// </summary>
-        public COFF.SectionHeader[]? SectionTable { get; set; }
+        public COFF.SectionHeader[] SectionTable { get; set; }
 
         /// <summary>
         /// Symbol table
@@ -54,7 +54,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// The export data section, named .edata, contains information about symbols that other images
         /// can access through dynamic linking. Exported symbols are generally found in DLLs, but DLLs
         /// can also import symbols.
-        /// 
+        ///
         /// An overview of the general structure of the export section is described below. The tables
         /// described are usually contiguous in the file in the order shown (though this is not
         /// required). Only the export directory table and export address table are required to export
@@ -96,7 +96,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// A series of null-terminated ASCII strings. Members of the name pointer table point into
         /// this area. These names are the public names through which the symbols are imported and
         /// exported; they are not necessarily the same as the private names that are used within
-        /// the image file. 
+        /// the image file.
         /// </summary>
         public Export.NameTable? ExportNameTable { get; set; }
 
@@ -105,7 +105,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// All image files that import symbols, including virtually all executable (EXE) files,
         /// have an .idata section. A typical file layout for the import information follows:
-        /// 
+        ///
         ///     - Directory Table
         ///       Null Directory Entry
         ///     - DLL1 Import Lookup Table
@@ -121,7 +121,7 @@ namespace SabreTools.Data.Models.PortableExecutable
 
         /// <summary>
         /// The import information begins with the import directory table, which describes the
-        /// remainder of the import information. 
+        /// remainder of the import information.
         /// </summary>
         public Import.DirectoryTableEntry[]? ImportDirectoryTable { get; set; }
 

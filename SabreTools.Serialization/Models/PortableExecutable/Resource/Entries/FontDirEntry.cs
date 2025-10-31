@@ -164,11 +164,11 @@
         /// <summary>
         /// The name of the device if this font file is designated for a specific device.
         /// </summary>
-        public string? DeviceName { get; set; }
+        public string DeviceName { get; set; }
 
         /// <summary>
         /// The typeface name of the font.
         /// </summary>
-        public string? FaceName { get; set; }
+        public string FaceName { get; set; }
     }
 }

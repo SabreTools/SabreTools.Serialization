@@ -35,7 +35,7 @@
 
         /// <summary>
         /// An array of one or more values that are language and code page identifier pairs.
-        /// 
+        ///
         /// If you use the Var structure to list the languages your application or DLL supports
         /// instead of using multiple version resources, use the Value member to contain an array
         /// of DWORD values indicating the language and code page combinations supported by this
@@ -45,6 +45,6 @@
         /// independent. If the Var structure is omitted, the file will be interpreted as both
         /// language and code page independent.
         /// </summary>
-        public uint[]? Value { get; set; }
+        public uint[] Value { get; set; }
     }
 }

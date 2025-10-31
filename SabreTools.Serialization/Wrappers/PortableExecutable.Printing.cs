@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
 
             // Stub
-            Print(builder, Model.Stub?.Header);
+            Print(builder, Model.Stub.Header);
 
             // Header
             Print(builder, Model.Signature, Model.FileHeader);
@@ -61,17 +61,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.DebugTable);
         }
 
-        private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader? header)
+        private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader header)
         {
             builder.AppendLine("  MS-DOS Stub Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No MS-DOS stub header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine(header.LastPageBytes, "  Last page bytes");
             builder.AppendLine(header.Pages, "  Pages");
@@ -98,17 +91,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, string? signature, FileHeader? header)
+        private static void Print(StringBuilder builder, string? signature, FileHeader header)
         {
             builder.AppendLine("  File Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No file header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(signature, "  Signature");
             builder.AppendLine($"  Machine: {header.Machine} (0x{header.Machine:X})");
             builder.AppendLine(header.NumberOfSections, "  Number of sections");
@@ -120,17 +106,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.OptionalHeader? header, SectionHeader[]? table)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.OptionalHeader header, SectionHeader[] table)
         {
             builder.AppendLine("  Optional Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No optional header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine($"  Magic: {header.Magic} (0x{header.Magic:X})");
             builder.AppendLine(header.MajorLinkerVersion, "  Major linker version");
             builder.AppendLine(header.MinorLinkerVersion, "  Minor linker version");
@@ -422,7 +401,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
-            if (stringTable.Strings.Length == 0)
+            if (stringTable?.Strings == null || stringTable.Strings.Length == 0)
             {
                 builder.AppendLine("  No string table items");
                 builder.AppendLine();
@@ -557,7 +536,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 builder.AppendLine($"    Base Relocation Table {i} Type and Offset Information:");
                 builder.AppendLine("    -------------------------");
-                if (baseRelocationTableEntry.TypeOffsetFieldEntries == null || baseRelocationTableEntry.TypeOffsetFieldEntries.Length == 0)
+                if (baseRelocationTableEntry.TypeOffsetFieldEntries.Length == 0)
                 {
                     builder.AppendLine("    No base relocation table type and offset entries");
                     builder.AppendLine();
@@ -907,9 +886,6 @@ namespace SabreTools.Serialization.Wrappers
             }
             else
             {
-                if (table.Entries == null)
-                    return;
-
                 for (int i = 0; i < table.Entries.Length; i++)
                 {
                     var entry = table.Entries[i];
@@ -1072,29 +1048,26 @@ namespace SabreTools.Serialization.Wrappers
                 return;
             }
 
-            if (menu.MenuHeader != null)
+            if (menu.MenuHeader is NormalMenuHeader normalMenuHeader)
             {
-                if (menu.MenuHeader is NormalMenuHeader normalMenuHeader)
-                {
-                    builder.AppendLine(normalMenuHeader.Version, $"{padding}Version");
-                    builder.AppendLine(normalMenuHeader.HeaderSize, $"{padding}Header size");
-                }
-                else if (menu.MenuHeader is MenuHeaderExtended menuHeaderExtended)
-                {
-                    builder.AppendLine(menuHeaderExtended.Version, $"{padding}Version");
-                    builder.AppendLine(menuHeaderExtended.Offset, $"{padding}Offset");
-                    builder.AppendLine(menuHeaderExtended.HelpID, $"{padding}Help ID");
-                }
-                else
-                {
-                    builder.AppendLine($"{padding}Menu header found, but malformed");
-                }
-                builder.AppendLine();
+                builder.AppendLine(normalMenuHeader.Version, $"{padding}Version");
+                builder.AppendLine(normalMenuHeader.HeaderSize, $"{padding}Header size");
             }
+            else if (menu.MenuHeader is MenuHeaderExtended menuHeaderExtended)
+            {
+                builder.AppendLine(menuHeaderExtended.Version, $"{padding}Version");
+                builder.AppendLine(menuHeaderExtended.Offset, $"{padding}Offset");
+                builder.AppendLine(menuHeaderExtended.HelpID, $"{padding}Help ID");
+            }
+            else
+            {
+                builder.AppendLine($"{padding}Menu header found, but malformed");
+            }
+            builder.AppendLine();
 
             builder.AppendLine($"{padding}Menu items");
             builder.AppendLine($"{padding}-------------------------");
-            if (menu.MenuItems == null || menu.MenuItems.Length == 0)
+            if (menu.MenuItems.Length == 0)
             {
                 builder.AppendLine($"{padding}No menu items");
                 return;
@@ -1403,9 +1376,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
             builder.AppendLine($"{padding}Message resource blocks");
             builder.AppendLine($"{padding}-------------------------");
-            if (messageTable.NumberOfBlocks == 0
-                || messageTable.Blocks == null
-                || messageTable.Blocks.Length == 0)
+            if (messageTable.NumberOfBlocks == 0 || messageTable.Blocks.Length == 0)
             {
                 builder.AppendLine($"{padding}No message resource blocks");
             }
@@ -1430,7 +1401,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine($"{padding}Message resource entries");
             builder.AppendLine($"{padding}-------------------------");
-            if (messageTable.Entries == null || messageTable.Entries.Count == 0)
+            if (messageTable.Entries.Count == 0)
             {
                 builder.AppendLine($"{padding}No message resource entries");
             }
@@ -1507,7 +1478,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(versionInfo.StringFileInfo.Key, $"{padding}[String File Info] Key");
                 builder.AppendLine($"{padding}Children:");
                 builder.AppendLine($"{padding}-------------------------");
-                if (versionInfo.StringFileInfo.Children == null || versionInfo.StringFileInfo.Children.Length == 0)
+                if (versionInfo.StringFileInfo.Children.Length == 0)
                 {
                     builder.AppendLine($"{padding}No string file info children");
                 }
@@ -1528,7 +1499,7 @@ namespace SabreTools.Serialization.Wrappers
                         builder.AppendLine(stringFileInfoChildEntry.Key, $"{padding}  [String Table {i}] Key");
                         builder.AppendLine($"{padding}  [String Table {i}] Children:");
                         builder.AppendLine($"{padding}  -------------------------");
-                        if (stringFileInfoChildEntry.Children == null || stringFileInfoChildEntry.Children.Length == 0)
+                        if (stringFileInfoChildEntry.Children.Length == 0)
                         {
                             builder.AppendLine($"{padding}  No string table {i} children");
                         }
@@ -1562,7 +1533,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(versionInfo.VarFileInfo.Key, $"{padding}[Var File Info] Key");
                 builder.AppendLine($"{padding}Children:");
                 builder.AppendLine($"{padding}-------------------------");
-                if (versionInfo.VarFileInfo.Children == null || versionInfo.VarFileInfo.Children.Length == 0)
+                if (versionInfo.VarFileInfo.Children.Length == 0)
                 {
                     builder.AppendLine($"{padding}No var file info children");
                 }

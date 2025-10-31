@@ -5,12 +5,12 @@
     /// .res files and in executable files as a group of icon resources or a group of cursor
     /// resources. The file formats of icon and cursor resources are similar. In the .res file
     /// a resource group header follows all of the individual icon or cursor group components.
-    /// 
+    ///
     /// The format of each icon component closely resembles the format of the .ico file. Each
     /// icon image is stored in a BITMAPINFO structure followed by the color device-independent
     /// bitmap (DIB) bits of the icon's XOR mask. The monochrome DIB bits of the icon's AND
     /// mask follow the color DIB bits.
-    /// 
+    ///
     /// The format of each cursor component resembles the format of the .cur file. Each cursor
     /// image is stored in a BITMAPINFO structure followed by the monochrome DIB bits of the
     /// cursor's XOR mask, and then by the monochrome DIB bits of the cursor's AND mask. Note
@@ -19,7 +19,7 @@
     /// monochrome and do not have DIB headers or color tables, the bits are still in DIB
     /// format with respect to alignment and direction. Another significant difference
     /// between cursors and icons is that cursors have a hotspot and icons do not.
-    /// 
+    ///
     /// The group header for both icon and cursor resources consists of a NEWHEADER structure
     /// plus one or more RESDIR structures. There is one RESDIR structure for each icon or
     /// cursor. The group header contains the information an application needs to select the
@@ -33,7 +33,7 @@
         /// <summary>
         /// Describes keyboard accelerator characteristics.
         /// </summary>
-        public NewHeader? NEWHEADER { get; set; }
+        public NewHeader NEWHEADER { get; set; }
 
         // TODO: Add array of entries in the resource
     }

@@ -29,7 +29,7 @@
         /// <summary>
         /// The Unicode string L"VS_VERSION_INFO".
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// Contains as many zero words as necessary to align the Value member on a 32-bit boundary.

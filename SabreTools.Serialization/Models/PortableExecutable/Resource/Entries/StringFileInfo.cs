@@ -38,6 +38,6 @@
         /// member indicates the appropriate language and code page for displaying the text in
         /// that StringTable structure.
         /// </summary>
-        public StringTable[]? Children { get; set; }
+        public StringTable[] Children { get; set; }
     }
 }
