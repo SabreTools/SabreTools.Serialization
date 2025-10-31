@@ -792,6 +792,7 @@ namespace SabreTools.Serialization.Readers
                 obj.PaddingField = data.ReadByteValue();
 
             // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
+            obj.SystemUse = [];
             if (root)
                 return obj;
 
