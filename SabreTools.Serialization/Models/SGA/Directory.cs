@@ -21,6 +21,7 @@ namespace SabreTools.Data.Models.SGA
         where TSection : Section<U>
         where TFolder : Folder<U>
         where TFile : File
+        where U : notnull
     {
         /// <summary>
         /// Directory header data
