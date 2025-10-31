@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no lumps
-            if (DirEntries == null || DirEntries.Length == 0)
+            if (DirEntries.Length == 0)
                 return false;
 
             // Loop through and extract all lumps to the output
@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractLump(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no lumps
-            if (DirEntries == null || DirEntries.Length == 0)
+            if (DirEntries.Length == 0)
                 return false;
 
             // If the lumps index is invalid

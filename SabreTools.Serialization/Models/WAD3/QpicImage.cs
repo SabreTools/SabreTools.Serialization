@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.WAD3
         /// Raw image data. Each byte points to an index in the palette
         /// </summary>
         /// <remarks>[height][width]</remarks>
-        public byte[][]? Data { get; set; }
+        public byte[][] Data { get; set; }
 
         /// <summary>
         /// Number of colors used in the palette (always 256 for GoldSrc)
@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.WAD3
         /// The color palette for the mipmaps (always 256 * 3 = 768 for GoldSrc)
         /// </summary>
         /// <remarks>[ColorsUsed][3]</remarks>
-        public byte[][]? Palette { get; set; }
+        public byte[][] Palette { get; set; }
     }
 }
