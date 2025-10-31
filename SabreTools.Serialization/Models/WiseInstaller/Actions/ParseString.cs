@@ -2,16 +2,16 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Parse String
-    /// 
+    ///
     /// This action splits a text string and places the results in two variables.
-    /// 
+    ///
     /// You can split the string at a character or substring that you specify, which discards the
     /// character or substring you specified. Example: If you split the string “ONE,TWO” at the
     /// first occurrence of a comma, “ONE” is put into destination variable 1 and “TWO” is put
     /// into the destination variable 2. If the character or substring is not found, the entire
     /// string is put into destination variable 1, and nothing is put into destination variable 2.
     /// The find is case-sensitive.
-    /// 
+    ///
     /// You can also split a string at any arbitrary character position, which discards no
     /// characters. Example: If you split the string “ONE,TWO” at character position four from
     /// left, then “ONE,” is put into the destination variable 1 and “TWO” is put into the
@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f27".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class ParseString : FunctionData
     {
         /// <summary>

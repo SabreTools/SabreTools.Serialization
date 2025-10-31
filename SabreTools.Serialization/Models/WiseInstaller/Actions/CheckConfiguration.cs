@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Check Configuration
-    /// 
+    ///
     /// This action tests the hardware configuration, operating system, and other characteristics
     /// of the destination computer. As a result of this check, the action can display a message,
     /// halt the installation after displaying a message, or start a conditional block.
@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// This action is called through Call DLL Function and is mapped to "f12".
     /// This acts like the start of a block if a flag is set.
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class CheckConfiguration : FunctionData
     {
         /// <summary>

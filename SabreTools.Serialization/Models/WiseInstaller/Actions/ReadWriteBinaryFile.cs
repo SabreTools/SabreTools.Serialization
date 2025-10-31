@@ -2,18 +2,18 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Read/Write Binary File
-    /// 
+    ///
     /// This action reads from a binary file to a variable, or writes from a variable to a binary
     /// file. If you write to the file, the existing information in the file is not moved, it is
     /// overwritten.
-    /// 
+    ///
     /// This action does not support reading or writing non-ASCII characters (characters with
     /// codes above 127).
     /// </summary>
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f15".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class ReadWriteBinaryFile : FunctionData
     {
         /// <summary>

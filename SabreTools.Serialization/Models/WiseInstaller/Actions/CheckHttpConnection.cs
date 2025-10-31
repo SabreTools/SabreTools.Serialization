@@ -2,10 +2,10 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Check HTTP Connection
-    /// 
+    ///
     /// This action determines whether a given URL is valid by using WinSock.dll to try to
     /// download the HTML page.
-    /// 
+    ///
     /// If the installation is not true 32-bit, specify both Win16 and Win32 error variables. Then,
     /// the Win32 WinSock.dll is used, followed by the Win16 WinSock.dll. Otherwise, only the
     /// 32-bit version is used.
@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f38".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class CheckHttpConnection : FunctionData
     {
         /// <summary>

@@ -2,18 +2,18 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Check Disk Space
-    /// 
+    ///
     /// This action determines if enough disk space is available for the installation, based on
     /// files that are always installed. You would use this action only if the WiseScript contains
     /// Install File(s) actions that install files permanently on the destination computer.
-    /// 
+    ///
     /// You can leave all fields blank and the action checks disk space for all files. This action
     /// takes the cluster size of the disk into account.
     /// </summary>
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f23".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class CheckDiskSpace : FunctionData
     {
         /// <summary>

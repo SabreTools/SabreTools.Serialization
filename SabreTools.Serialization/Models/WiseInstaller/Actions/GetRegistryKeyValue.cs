@@ -2,14 +2,14 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Get Registry Key Value
-    /// 
+    ///
     /// This action puts the value of a registry key into a variable. Multi-line (MULTI_SZ)
     /// registry values are read into a list format.
     /// </summary>
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f9".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class GetRegistryKeyValue : FunctionData
     {
         /// <summary>

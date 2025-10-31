@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// The CharacterSet Enumeration defines the possible sets of
     /// character glyphs that are defined in fonts for graphics output.
     /// </summary>
-    /// <see href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wmf/0d0b32ac-a836-4bd2-a112-b6000a1b4fc9"/> 
+    /// <see href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wmf/0d0b32ac-a836-4bd2-a112-b6000a1b4fc9"/>
     public enum CharacterSet : uint
     {
         ANSI_CHARSET = 0x00000000,
@@ -31,7 +31,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// <summary>
     /// Endianness of the file(?)
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/>
     public enum Endianness : ushort
     {
         BigEndian = 0x0008,
@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// <summary>
     /// Opcodes for the state machine
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
     public enum OperationCode : byte
     {
         /// <summary>
@@ -193,7 +193,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// Acts like a no-op in the parsed script. Includes a
         /// "Pathname" to the file to be included.
-        /// 
+        ///
         /// In WISE0001.DLL, it seeks forward until it doesn't
         /// find another 0x1B value again. Indicates that this
         /// may not be "Include Script" as previously expected.
@@ -246,7 +246,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// The flag used by this and <see cref="Unknown0x25"/> seems
         /// to only be referenced in contexts where there are registry
-        /// keys read and written, specifically about repair. 
+        /// keys read and written, specifically about repair.
         /// </remarks>
         Unknown0x24 = 0x24,
 
@@ -256,7 +256,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// The flag used by this and <see cref="Unknown0x24"/> seems
         /// to only be referenced in contexts where there are registry
-        /// keys read and written, specifically about repair. 
+        /// keys read and written, specifically about repair.
         /// </remarks>
         Unknown0x25 = 0x25,
 
@@ -270,7 +270,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// <summary>
     /// Wise installer overlay header flags
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/>
     public enum OverlayHeaderFlags : uint
     {
         /// <summary>
@@ -278,7 +278,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// and <see cref="WISE_FLAG_UNKNOWN_1"/> are both not
         /// set, then it shows the commandline when silent mode
         /// is disabled.
-        /// 
+        ///
         /// If just this value is set, the bottom of the window
         /// is adjusted by (MainWindowBottom * 3) / 4 and then
         /// displays the window with the current size.
@@ -291,11 +291,11 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// and <see cref="WISE_FLAG_UNKNOWN_7"/> is set and
         /// the silent mode flag is not enabled, it runs a
         /// function. Maybe debug window?
-        /// 
+        ///
         /// If this value and <see cref="WISE_FLAG_UNKNOWN_0"/>
         /// are both not set, then it displays the window
         /// maximized.
-        /// 
+        ///
         /// If just this value is set and silent mode is enabled,
         /// the position of the window is set to full screen
         /// but the window is not shown.
@@ -310,7 +310,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// If this flag is enabled, it sets the following window flags:
         /// WS_BORDER | WS_DLGFRAME | WS_SYSMENU | WS_MAXIMIZEBOX | WS_TILED
-        /// 
+        ///
         /// If this flag is disabled, it sets the following window flags:
         /// WS_POPUP | WS_SIZEBOX
         /// </remarks>
@@ -404,7 +404,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// same outcome. The set of installers that include
         /// this flag need to be further analyzed to see what
         /// possible files are omitted if this flag is set.
-        /// 
+        ///
         /// Preliminary inspection of output files does not
         /// show any notable missing files. It is very possible
         /// that this represents a file that is not currently

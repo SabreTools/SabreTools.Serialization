@@ -22,40 +22,40 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="ScriptHeader.DateTime"/>
-        public uint DateTime => Model.Header?.DateTime ?? 0;
+        public uint DateTime => Model.Header.DateTime;
 
         /// <inheritdoc cref="ScriptHeader.Flags"/>
-        public ushort Flags => Model.Header?.Flags ?? 0;
+        public ushort Flags => Model.Header.Flags;
 
         /// <inheritdoc cref="ScriptHeader.FontSize"/>
-        public uint FontSize => Model.Header?.FontSize ?? 0;
+        public uint FontSize => Model.Header.FontSize;
 
         /// <inheritdoc cref="ScriptHeader.FTPURL"/>
-        public string? FTPURL => Model.Header?.FTPURL;
+        public string? FTPURL => Model.Header.FTPURL;
 
         /// <inheritdoc cref="ScriptFile.HeaderStrings"/>
-        public string[]? HeaderStrings => Model.Header?.HeaderStrings;
+        public string[]? HeaderStrings => Model.Header.HeaderStrings;
 
         /// <inheritdoc cref="ScriptHeader.LanguageCount"/>
-        public byte LanguageCount => Model.Header?.LanguageCount ?? 0;
+        public byte LanguageCount => Model.Header.LanguageCount;
 
         /// <inheritdoc cref="ScriptHeader.LogPathname"/>
-        public string? LogPathname => Model.Header?.LogPathname;
+        public string? LogPathname => Model.Header.LogPathname;
 
         /// <inheritdoc cref="ScriptHeader.MessageFont"/>
-        public string? MessageFont => Model.Header?.MessageFont;
+        public string? MessageFont => Model.Header.MessageFont;
 
         /// <inheritdoc cref="ScriptFile.States"/>
-        public MachineState[]? States => Model.States;
+        public MachineState[] States => Model.States;
 
         /// <inheritdoc cref="ScriptHeader.UnknownU16_1"/>
-        public ushort UnknownU16_1 => Model.Header?.UnknownU16_1 ?? 0;
+        public ushort UnknownU16_1 => Model.Header.UnknownU16_1;
 
         /// <inheritdoc cref="ScriptHeader.UnknownU16_2"/>
-        public ushort UnknownU16_2 => Model.Header?.UnknownU16_2 ?? 0;
+        public ushort UnknownU16_2 => Model.Header.UnknownU16_2;
 
         /// <inheritdoc cref="ScriptFile.VariableLengthData"/>
-        public byte[]? VariableLengthData => Model.Header?.VariableLengthData;
+        public byte[]? VariableLengthData => Model.Header.VariableLengthData;
 
         #endregion
 
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Wrappers
             bool includeDebug)
         {
             // If the state machine is invalid
-            if (States == null || States.Length == 0)
+            if (States.Length == 0)
                 return false;
 
             // Initialize important loop information

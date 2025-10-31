@@ -2,15 +2,15 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Display Billboard
-    /// 
+    ///
     /// This action displays a bitmap or .GRF file during installation if you have set the
     /// background to display a gradient on the Screen page. Create .GRF files (scalable
     /// bitmaps) with the Custom Billboard Editor.
-    /// 
+    ///
     /// You can use up to 16 Display Billboard actions in the script.
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class DisplayBillboard : MachineStateData
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// Deflate information
         /// </summary>
         /// <remarks> One per language</remarks>
-        public DeflateEntry[]? DeflateInfo { get; set; } // 0x07 - 
+        public DeflateEntry[]? DeflateInfo { get; set; } // 0x07 -
 
         /// <summary>
         /// Terminator?
