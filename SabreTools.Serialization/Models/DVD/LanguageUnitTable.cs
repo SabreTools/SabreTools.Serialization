@@ -23,12 +23,12 @@ namespace SabreTools.Data.Models.DVD
         /// Language Units
         /// </summary>
         /// <remarks>NumberOfVOBIDs entries</remarks>
-        public LanguageUnitTableEntry[]? Entries { get; set; }
+        public LanguageUnitTableEntry[] Entries { get; set; }
 
         /// <summary>
         /// Program Chains
         /// </summary>
         /// <remarks>NumberOfVOBIDs entries</remarks>
-        public ProgramChainTable[]? ProgramChains { get; set; }
+        public ProgramChainTable[] ProgramChains { get; set; }
     }
 }
