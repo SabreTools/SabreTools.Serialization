@@ -43,18 +43,10 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("    Header:");
             builder.AppendLine("    -------------------------");
-
-            if (header == null)
-            {
-                builder.AppendLine("    No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.FileName?.TrimEnd('\0'), "    File name");
             builder.AppendLine(header.Mode, "    Mode");
             builder.AppendLine(header.UID, "    UID");
@@ -74,11 +66,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Block[]? entries)
+        private static void Print(StringBuilder builder, Block[] entries)
         {
             builder.AppendLine("    Blocks:");
             builder.AppendLine("    -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("    No blocks");
                 builder.AppendLine();

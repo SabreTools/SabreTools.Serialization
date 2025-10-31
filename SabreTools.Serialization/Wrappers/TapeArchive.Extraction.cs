@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Ensure there are entries to extract
-            if (Entries == null || Entries.Length == 0)
+            if (Entries.Length == 0)
                 return false;
 
             try
@@ -19,11 +19,6 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < Entries.Length; i++)
                 {
                     var entry = Entries[i];
-                    if (entry.Header == null)
-                    {
-                        if (includeDebug) Console.Error.WriteLine($"Invalid entry {i} found! Skipping...");
-                        continue;
-                    }
 
                     // Handle special entries
                     var header = entry.Header;
@@ -89,13 +84,6 @@ namespace SabreTools.Serialization.Wrappers
                             // Create the director
                             Directory.CreateDirectory(entryDirectory);
                             continue;
-                    }
-
-                    // Ensure there are blocks to extract
-                    if (entry.Blocks == null)
-                    {
-                        if (includeDebug) Console.WriteLine($"Entry {i} had no block data");
-                        continue;
                     }
 
                     // Get the file size

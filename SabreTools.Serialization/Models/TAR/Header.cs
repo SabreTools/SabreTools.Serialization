@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.TAR
 {
-    /// <see href="https://www.ibm.com/docs/en/aix/7.3?topic=files-tarh-file"/> 
+    /// <see href="https://www.ibm.com/docs/en/aix/7.3?topic=files-tarh-file"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public sealed class Header
     {
@@ -10,49 +10,49 @@ namespace SabreTools.Data.Models.TAR
         /// File name without a forward slash
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-        public string? FileName;
+        public string FileName;
 
         /// <summary>
         /// File mode
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? Mode;
+        public string Mode;
 
         /// <summary>
         /// Owner's numeric user ID
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? UID;
+        public string UID;
 
         /// <summary>
         /// Owner's numeric group ID
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? GID;
+        public string GID;
 
         /// <summary>
         /// File size in bytes
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string? Size;
+        public string Size;
 
         /// <summary>
         /// Last modification time in numeric Unix time format
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string? ModifiedTime;
+        public string ModifiedTime;
 
         /// <summary>
         /// Checksum for header record
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? Checksum;
+        public string Checksum;
 
         /// <summary>
         /// Link indicator (file type) / Type flag
@@ -63,7 +63,7 @@ namespace SabreTools.Data.Models.TAR
         /// Linked path name or file name
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-        public string? LinkName;
+        public string LinkName;
 
         #region USTAR Extension
 
