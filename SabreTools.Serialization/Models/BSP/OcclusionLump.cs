@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.BSP
     /// Brush sides textured with tools/toolsoccluder or tools/toolstrigger
     /// are then stored together with the occluder keys and some additional
     /// info in this lump.
-    /// 
+    ///
     /// The lump is divided into three parts and begins with a integer value
     /// with the total number of occluders, followed by an array of
     /// doccluderdata_t fields of the same size. The next part begins with
@@ -27,20 +27,20 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// <see cref="Count">
         /// </summary>
-        public OccluderData[]? Data;
-        
+        public OccluderData[] Data;
+
         public int PolyDataCount;
 
         /// <summary>
         /// <see cref="PolyDataCount">
         /// </summary>
-        public OccluderPolyData[]? PolyData;
+        public OccluderPolyData[] PolyData;
 
         public int VertexIndexCount;
 
         /// <summary>
         /// <see cref="VertexIndexCount">
         /// </summary>
-        public int[]? VertexIndicies;
+        public int[] VertexIndicies;
     }
 }

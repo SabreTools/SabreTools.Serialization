@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// <see cref="LeafEntries">
         /// </summary>
-        public ushort[]? Leaf;
+        public ushort[] Leaf;
     }
 }

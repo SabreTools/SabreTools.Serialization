@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.BSP
     /// texture lump relative to the beginning of it's BSPMIPTEX struct.
     /// </summary>
     /// <see href="https://github.com/RavuAlHemio/hllib/blob/master/HLLib/BSPFile.h"/>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class MipTexture
     {
@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.BSP
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Constants.MAXTEXTURENAME)]
         public string? Name;
-    
+
         /// <summary>
         /// Extends of the texture
         /// </summary>
@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.BSP
         /// Offsets to texture mipmaps BSPMIPTEX
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.MIPLEVELS)]
-        public uint[]? Offsets;
+        public uint[] Offsets;
     }
 }

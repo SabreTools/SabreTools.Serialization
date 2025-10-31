@@ -8,15 +8,15 @@ namespace SabreTools.Data.Models.BSP
     /// Potentially Visible Sets (PVS) (also called VIS lists) in the
     /// same amout of leaves of the tree, the user can enter (often
     /// referred to as VisLeaves). The visiblilty lists are stored as
-    /// sequences of bitfields, which are run-length encoded. 
+    /// sequences of bitfields, which are run-length encoded.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public sealed class VisibilityLump
     {
         public int NumClusters { get; set; }
 
         /// <remarks>[numclusters][2]</remarks>
-        public int[][]? ByteOffsets { get; set; }
+        public int[][] ByteOffsets { get; set; }
     }
 }

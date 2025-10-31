@@ -8,15 +8,15 @@ namespace SabreTools.Data.Models.BSP
     /// or negative. If the value of the surfedge is positive, the first vertex
     /// of the edge is used as vertex for rendering the face, otherwise, the
     /// value is multiplied by -1 and the second vertex of the indexed edge is
-    /// used. 
+    /// used.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public sealed class SurfedgesLump : Lump
     {
         /// <summary>
         /// Surfedges
         /// </summary>
-        public int[]? Surfedges { get; set; }
+        public int[] Surfedges { get; set; }
     }
 }

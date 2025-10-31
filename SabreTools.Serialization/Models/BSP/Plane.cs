@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.BSP
     /// <summary>
     /// Each of this structures defines a plane in 3-dimensional
     /// space by using the Hesse normal form: normal * point - distance = 0
-    /// 
+    ///
     /// Where vNormal is the normalized normal vector of the plane
     /// and fDist is the distance of the plane to the origin of
     /// the coord system. Additionally, the structure also saves an
@@ -15,9 +15,9 @@ namespace SabreTools.Data.Models.BSP
     /// to the x axis. If nType equals PLANE_ANYX, then the plane's
     /// normal is nearer to the x axis then to any other axis.
     /// This information is used by the renderer to speed up some
-    /// computations. 
+    /// computations.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class Plane
@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// The planes normal vector
         /// </summary>
-        public Vector3D? NormalVector;
+        public Vector3D NormalVector;
 
         /// <summary>
         /// Plane equation is: vNormal * X = fDist

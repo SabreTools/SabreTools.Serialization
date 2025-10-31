@@ -136,9 +136,9 @@ namespace SabreTools.Serialization.Wrappers
             };
         }
 
-        private static void Print(StringBuilder builder, EntitiesLump? lump)
+        private static void Print(StringBuilder builder, EntitiesLump lump)
         {
-            if (lump?.Entities == null || lump.Entities.Length == 0)
+            if (lump.Entities.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Wrappers
                 var entity = lump.Entities[i];
 
                 builder.AppendLine($"    Entity {i}:");
-                if (entity.Attributes == null || entity.Attributes.Count == 0)
+                if (entity.Attributes.Count == 0)
                 {
                     builder.AppendLine("      No attributes");
                     continue;
@@ -164,9 +164,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, PlanesLump? lump)
+        private static void Print(StringBuilder builder, PlanesLump lump)
         {
-            if (lump?.Planes == null || lump.Planes.Length == 0)
+            if (lump.Planes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -177,33 +177,20 @@ namespace SabreTools.Serialization.Wrappers
                 var plane = lump.Planes[i];
 
                 builder.AppendLine($"    Plane {i}");
-                builder.AppendLine($"      Normal vector: ({plane.NormalVector?.X}, {plane.NormalVector?.Y}, {plane.NormalVector?.Z})");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
                 builder.AppendLine(plane.Distance, "      Distance");
                 builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
             }
         }
 
-        private static void Print(StringBuilder builder, TextureLump? lump)
+        private static void Print(StringBuilder builder, TextureLump lump)
         {
-            if (lump == null)
-            {
-                builder.AppendLine("    No data");
-                return;
-            }
-
-            if (lump?.Header == null)
-            {
-                builder.AppendLine("    No texture header");
-            }
-            else
-            {
-                builder.AppendLine("    Texture Header:");
-                builder.AppendLine(lump.Header.MipTextureCount, "      MipTexture count");
-                builder.AppendLine(lump.Header.Offsets, "      Offsets");
-            }
+            builder.AppendLine("    Texture Header:");
+            builder.AppendLine(lump.Header.MipTextureCount, "      MipTexture count");
+            builder.AppendLine(lump.Header.Offsets, "      Offsets");
 
             builder.AppendLine("    Textures:");
-            if (lump?.Textures == null || lump.Textures.Length == 0)
+            if (lump.Textures.Length == 0)
             {
                 builder.AppendLine("    No texture data");
                 return;
@@ -221,9 +208,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VerticesLump? lump)
+        private static void Print(StringBuilder builder, VerticesLump lump)
         {
-            if (lump?.Vertices == null || lump.Vertices.Length == 0)
+            if (lump.Vertices.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -236,21 +223,15 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VisibilityLump? lump)
+        private static void Print(StringBuilder builder, VisibilityLump lump)
         {
-            if (lump == null)
-            {
-                builder.AppendLine("    No data");
-                return;
-            }
-
             builder.AppendLine(lump.NumClusters, "    Cluster count");
             builder.AppendLine("    Byte offsets skipped...");
         }
 
-        private static void Print(StringBuilder builder, BspNodesLump? lump)
+        private static void Print(StringBuilder builder, BspNodesLump lump)
         {
-            if (lump?.Nodes == null || lump.Nodes.Length == 0)
+            if (lump.Nodes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -269,9 +250,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BspTexinfoLump? lump)
+        private static void Print(StringBuilder builder, BspTexinfoLump lump)
         {
-            if (lump?.Texinfos == null || lump.Texinfos.Length == 0)
+            if (lump.Texinfos.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -291,9 +272,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BspFacesLump? lump)
+        private static void Print(StringBuilder builder, BspFacesLump lump)
         {
-            if (lump?.Faces == null || lump.Faces.Length == 0)
+            if (lump.Faces.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -314,17 +295,17 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, LightmapLump? lump)
+        private static void Print(StringBuilder builder, LightmapLump lump)
         {
-            if (lump?.Lightmap == null || lump.Lightmap.Length == 0)
+            if (lump.Lightmap.Length == 0)
                 builder.AppendLine("    No data");
             else
                 builder.AppendLine("    Lightmap data skipped...");
         }
 
-        private static void Print(StringBuilder builder, ClipnodesLump? lump)
+        private static void Print(StringBuilder builder, ClipnodesLump lump)
         {
-            if (lump?.Clipnodes == null || lump.Clipnodes.Length == 0)
+            if (lump.Clipnodes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -340,9 +321,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BspLeavesLump? lump)
+        private static void Print(StringBuilder builder, BspLeavesLump lump)
         {
-            if (lump?.Leaves == null || lump.Leaves.Length == 0)
+            if (lump.Leaves.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -363,9 +344,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, MarksurfacesLump? lump)
+        private static void Print(StringBuilder builder, MarksurfacesLump lump)
         {
-            if (lump?.Marksurfaces == null || lump.Marksurfaces.Length == 0)
+            if (lump.Marksurfaces.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -378,9 +359,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, EdgesLump? lump)
+        private static void Print(StringBuilder builder, EdgesLump lump)
         {
-            if (lump?.Edges == null || lump.Edges.Length == 0)
+            if (lump.Edges.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -394,9 +375,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, SurfedgesLump? lump)
+        private static void Print(StringBuilder builder, SurfedgesLump lump)
         {
-            if (lump?.Surfedges == null || lump.Surfedges.Length == 0)
+            if (lump.Surfedges.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -409,9 +390,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BspModelsLump? lump)
+        private static void Print(StringBuilder builder, BspModelsLump lump)
         {
-            if (lump?.Models == null || lump.Models.Length == 0)
+            if (lump.Models.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;

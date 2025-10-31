@@ -14,14 +14,14 @@ namespace SabreTools.Data.Models.BSP
     [StructLayout(LayoutKind.Sequential)]
     public sealed class WorldLight
     {
-        public Vector3D? Origin;
+        public Vector3D Origin;
 
-        public Vector3D? Intensity;
+        public Vector3D Intensity;
 
         /// <summary>
         /// For surfaces and spotlights
         /// </summary>
-        public Vector3D? Normal;
+        public Vector3D Normal;
 
         public int Cluster;
 
@@ -46,7 +46,7 @@ namespace SabreTools.Data.Models.BSP
         /// </summary>
         public float Radius;
 
-        // falloff for emit_spotlight + emit_point: 
+        // falloff for emit_spotlight + emit_point:
         // 1 / (constant_attn + linear_attn * dist + quadratic_attn * dist^2)
 
         public float ConstantAttn;

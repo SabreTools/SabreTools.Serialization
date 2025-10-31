@@ -15,8 +15,8 @@ namespace SabreTools.Data.Models.BSP
         public int LumpCount;
 
         /// <summary>
-        /// <see cref="LumpCount"/> 
+        /// <see cref="LumpCount"/>
         /// </summary>
-        public GameLumpDirectory[]? Directories;
+        public GameLumpDirectory[] Directories;
     }
 }

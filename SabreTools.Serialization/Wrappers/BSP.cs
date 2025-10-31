@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="BspHeader.Lumps"/>
-        public BspLumpEntry[]? Lumps => Model.Header?.Lumps;
+        public BspLumpEntry[] Lumps => Model.Header.Lumps;
 
         #endregion
 

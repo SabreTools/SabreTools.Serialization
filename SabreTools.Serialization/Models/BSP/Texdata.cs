@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// RGB reflectivity
         /// </summary>
-        public Vector3D? Reflectivity;
+        public Vector3D Reflectivity;
 
         /// <summary>
         /// Index into TexdataStringTable
