@@ -9,11 +9,11 @@ namespace SabreTools.Data.Models.PAK
         /// <summary>
         /// Deserialized directory header data
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Deserialized directory items data
         /// </summary>
-        public DirectoryItem[]? DirectoryItems { get; set; }
+        public DirectoryItem[] DirectoryItems { get; set; }
     }
 }

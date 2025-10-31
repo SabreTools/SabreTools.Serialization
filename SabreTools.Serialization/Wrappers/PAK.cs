@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Models.PAK.File.DirectoryItems"/>
-        public DirectoryItem[] DirectoryItems => Model.DirectoryItems ?? [];
+        public DirectoryItem[] DirectoryItems => Model.DirectoryItems;
 
         #endregion
 
