@@ -11,7 +11,7 @@
         /// <summary>
         /// The MPQ archive signature
         /// </summary>
-        public string? Signature { get; set; }
+        public string Signature { get; set; }
 
         /// <summary>
         /// Size of the archive header

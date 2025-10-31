@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// 'BET\x1A'
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Version. Seems to be always 1
@@ -130,7 +130,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// Followed by array of file flags. Each entry is 32-bit size and its meaning is the same like
         /// </summary>
         /// <remarks>Size from <see cref="FlagCount"/></remarks>
-        public uint[]? FlagsArray { get; set; }
+        public uint[] FlagsArray { get; set; }
 
         // File table. Size of each entry is taken from dwTableEntrySize.
         // Size of the table is (dwTableEntrySize * dwMaxFileCount), round up to 8.

@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// <see cref="SignatureValue"/>
         /// <remarks>4 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Maximum size of the user data
