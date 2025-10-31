@@ -28,13 +28,13 @@ namespace SabreTools.Data.Models.SpoonInstaller
         public uint Crc32 { get; set; }
 
         /// <summary>
-        /// Length of <see cref="Filename"/> 
+        /// Length of <see cref="Filename"/>
         /// </summary>
         public byte FilenameLength { get; set; }
 
         /// <summary>
         /// ASCII filename
         /// </summary>
-        public string? Filename { get; set; }
+        public string Filename { get; set; }
     }
 }
