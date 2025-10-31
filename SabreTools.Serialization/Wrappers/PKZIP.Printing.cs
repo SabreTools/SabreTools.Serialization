@@ -53,26 +53,19 @@ namespace SabreTools.Serialization.Wrappers
             #region Local File Header
 
             var localFileHeader = localFile.LocalFileHeader;
-            if (localFileHeader == null)
-            {
-                builder.AppendLine("    [Local File Header] [NULL]");
-            }
-            else
-            {
-                builder.AppendLine(localFileHeader.Signature, "    [Local File Header] Signature");
-                builder.AppendLine(localFileHeader.Version, "    [Local File Header] Version");
-                builder.AppendLine($"    [Local File Header] Flags: {localFileHeader.Flags} (0x{localFileHeader.Flags:X})");
-                builder.AppendLine($"    [Local File Header] Compression method: {localFileHeader.CompressionMethod} (0x{localFileHeader.CompressionMethod:X})");
-                builder.AppendLine(localFileHeader.LastModifedFileTime, "    [Local File Header] Last modified file time"); // TODO: Parse from MS-DOS
-                builder.AppendLine(localFileHeader.LastModifiedFileDate, "    [Local File Header] Last modified file date"); // TODO: Parse from MS-DOS
-                builder.AppendLine(localFileHeader.CRC32, "    [Local File Header] CRC-32");
-                builder.AppendLine(localFileHeader.CompressedSize, "    [Local File Header] Compressed size");
-                builder.AppendLine(localFileHeader.UncompressedSize, "    [Local File Header] Uncompressed size");
-                builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
-                builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
-                builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
-                Print(builder, "    [Local File Header] Extra Fields", localFileHeader.ExtraFields);
-            }
+            builder.AppendLine(localFileHeader.Signature, "    [Local File Header] Signature");
+            builder.AppendLine(localFileHeader.Version, "    [Local File Header] Version");
+            builder.AppendLine($"    [Local File Header] Flags: {localFileHeader.Flags} (0x{localFileHeader.Flags:X})");
+            builder.AppendLine($"    [Local File Header] Compression method: {localFileHeader.CompressionMethod} (0x{localFileHeader.CompressionMethod:X})");
+            builder.AppendLine(localFileHeader.LastModifedFileTime, "    [Local File Header] Last modified file time"); // TODO: Parse from MS-DOS
+            builder.AppendLine(localFileHeader.LastModifiedFileDate, "    [Local File Header] Last modified file date"); // TODO: Parse from MS-DOS
+            builder.AppendLine(localFileHeader.CRC32, "    [Local File Header] CRC-32");
+            builder.AppendLine(localFileHeader.CompressedSize, "    [Local File Header] Compressed size");
+            builder.AppendLine(localFileHeader.UncompressedSize, "    [Local File Header] Uncompressed size");
+            builder.AppendLine(localFileHeader.FileNameLength, "    [Local File Header] File name length");
+            builder.AppendLine(localFileHeader.ExtraFieldLength, "    [Local File Header] Extra field length");
+            builder.AppendLine(localFileHeader.FileName, "    [Local File Header] File name");
+            Print(builder, "    [Local File Header] Extra Fields", localFileHeader.ExtraFields);
 
             #endregion
 
@@ -485,11 +478,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(field.Data, "      Data");
         }
 
-        private static void Print(StringBuilder builder, TagSizeVar[]? tuples)
+        private static void Print(StringBuilder builder, TagSizeVar[] tuples)
         {
             builder.AppendLine("      Tag/Size/Var Tuples:");
             builder.AppendLine("      -------------------------");
-            if (tuples == null)
+            if (tuples.Length == 0)
             {
                 builder.AppendLine("      No tuples");
                 return;

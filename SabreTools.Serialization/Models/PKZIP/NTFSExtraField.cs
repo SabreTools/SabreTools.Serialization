@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// and Ctime values MAY be used on any WIN32 system.)
     /// </summary>
     /// <remarks>Header ID = 0x000A</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class NTFSExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// NTFS attribute tags
         /// </summary>
-        public TagSizeVar[]? TagSizeVars { get; set; }
+        public TagSizeVar[] TagSizeVars { get; set; }
     }
 }

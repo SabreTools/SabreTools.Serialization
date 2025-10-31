@@ -1,7 +1,7 @@
 using System;
 
-/// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
-/// <see href="https://github.com/adamhathcock/sharpcompress/blob/master/src/SharpCompress/Common/Zip/Headers/LocalEntryHeaderExtraFactory.cs"/> 
+/// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
+/// <see href="https://github.com/adamhathcock/sharpcompress/blob/master/src/SharpCompress/Common/Zip/Headers/LocalEntryHeaderExtraFactory.cs"/>
 namespace SabreTools.Data.Models.PKZIP
 {
     [Flags]
@@ -503,7 +503,7 @@ namespace SabreTools.Data.Models.PKZIP
         NoCRC = 0b0000_0000_0000_1000,
 
         /// <summary>
-        /// Reserved for use with method 8, for enhanced deflating. 
+        /// Reserved for use with method 8, for enhanced deflating.
         /// </summary>
         EnhancedDeflateReserved = 0b0000_0000_0001_0000,
 
@@ -992,13 +992,13 @@ namespace SabreTools.Data.Models.PKZIP
         Bit2 = 0b0000_0000_0000_0100,
 
         /*
-         4.4.14.2 The 0x0002 bit of this field indicates, if set, that 
-         a 4 byte variable record length control field precedes each 
-         logical record indicating the length of the record. The 
+         4.4.14.2 The 0x0002 bit of this field indicates, if set, that
+         a 4 byte variable record length control field precedes each
+         logical record indicating the length of the record. The
          record length control field is stored in little-endian byte
-         order.  This flag is independent of text control characters, 
-         and if used in conjunction with text data, includes any 
-         control characters in the total length of the record. This 
+         order.  This flag is independent of text control characters,
+         and if used in conjunction with text data, includes any
+         control characters in the total length of the record. This
          value is provided for mainframe data transfer support.
         */
     }

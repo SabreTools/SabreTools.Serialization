@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// WinZip AES encryption data
     /// </summary>
     /// <remarks>Header ID = 0x9901</remarks>
-    /// <see href="https://github.com/adamhathcock/sharpcompress/blob/master/src/SharpCompress/Common/Zip/Headers/LocalEntryHeaderExtraFactory.cs"/> 
+    /// <see href="https://github.com/adamhathcock/sharpcompress/blob/master/src/SharpCompress/Common/Zip/Headers/LocalEntryHeaderExtraFactory.cs"/>
     public class AesEncryptionStructure : ExtensibleDataField
     {
         /// <summary>

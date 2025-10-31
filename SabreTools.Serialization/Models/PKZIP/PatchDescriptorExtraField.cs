@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// The following is the layout of the Patch Descriptor
     /// "extra" block.
-    /// 
+    ///
     /// Patch support is provided by PKPatchMaker(tm) technology
     /// and is covered under U.S. Patents and Patents Pending. The use or
     /// implementation in a product of certain technological aspects set
@@ -14,7 +14,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// information.
     /// </summary>
     /// <remarks>Header ID = 0x000F</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class PatchDescriptorExtraField : ExtensibleDataField
     {
         /// <summary>
