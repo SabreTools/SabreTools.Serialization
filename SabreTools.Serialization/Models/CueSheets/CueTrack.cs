@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.CueSheets
         /// List of INDEX in TRACK
         /// </summary>
         /// <remarks>Must start with 0 or 1 and then sequential</remarks>
-        public CueIndex[]? Indices { get; set; }
+        public CueIndex[] Indices { get; set; }
 
         /// <summary>
         /// POSTGAP
