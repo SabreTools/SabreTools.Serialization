@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.SGA
         /// <summary>
         /// Source SGA file
         /// </summary>
-        public Archive File { get; set; } = new();
+        public Archive? File { get; set; }
     }
 
     /// <summary>
