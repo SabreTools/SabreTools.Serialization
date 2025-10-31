@@ -140,7 +140,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // TODO: Decode properly (Use VD's separator characters and encoding)
                 string filename = encoding.GetString(dr.FileIdentifier);
-                int index = filename.IndexOf(';');
+                int index = filename.LastIndexOf(';');
                 if (index > 0)
                     filename = filename.Substring(0, index);
 
@@ -149,6 +149,13 @@ namespace SabreTools.Serialization.Wrappers
                 var directoryName = Path.GetDirectoryName(filename);
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
+                
+                // Check that the output file doesn't already exist
+                if (File.Exists(filename) || Directory.Exists(filename))
+                {
+                    if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
+                    return false;
+                }
 
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {filename}");
