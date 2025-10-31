@@ -2,13 +2,13 @@ using System;
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chdcodec.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chdcodec.h"/>
     public enum AVHuffCodec
     {
         DECOMPRESS_CONFIG = 1,
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chdcodec.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chdcodec.h"/>
     public enum CodecType : uint
     {
         CHD_CODEC_NONE = 0,
@@ -75,7 +75,7 @@ namespace SabreTools.Data.Models.CHD
         #endregion
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     public enum CompressionType : uint
     {
         #region V1
@@ -98,7 +98,7 @@ namespace SabreTools.Data.Models.CHD
         #endregion
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     public enum Error : uint
     {
         NO_INTERFACE = 1,
@@ -127,7 +127,7 @@ namespace SabreTools.Data.Models.CHD
         COMPRESSING
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     [Flags]
     public enum Flags : uint
     {
@@ -142,7 +142,7 @@ namespace SabreTools.Data.Models.CHD
         DriveAllowsWrites = 0x00000002,
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     [Flags]
     public enum MetadataFlags : byte
     {
@@ -152,7 +152,7 @@ namespace SabreTools.Data.Models.CHD
         CHD_MDFLAGS_CHECKSUM = 0x01,
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     public enum MetadataTag : uint
     {
         CHDMETATAG_WILDCARD = 0,
@@ -239,7 +239,7 @@ namespace SabreTools.Data.Models.CHD
         #endregion
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/>
     public enum V34EntryType : uint
     {
         /// <summary>
@@ -278,7 +278,7 @@ namespace SabreTools.Data.Models.CHD
         V34_MAP_ENTRY_TYPE_2ND_COMPRESSED = 6,
     }
 
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/>
     public enum V5CompressionType : uint
     {
         // These types are live when running

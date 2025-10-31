@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class MetadataEntry
     {
