@@ -652,7 +652,7 @@ namespace SabreTools.Serialization.Readers
                 // Start of directory should not be 0
                 int firstRecordLength = data.PeekByteValue();
                 if (firstRecordLength == 0)
-                    return null
+                    return null;
 
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
@@ -669,10 +669,10 @@ namespace SabreTools.Serialization.Readers
                         pos += paddingLength;
                         _ = data.ReadBytes(paddingLength);
 
-                        // Start of sector should not be 0
+                        // Start of sector should not be 0, ignore entire directory
                         int nextRecordLength = data.PeekByteValue();
                         if (nextRecordLength == 0)
-                            break;
+                            return;
                         continue;
                     }
 
