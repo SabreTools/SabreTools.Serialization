@@ -15,10 +15,10 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Methods
 
         /// <inheritdoc cref="Cart.CommonHeader"/>
-        public CommonHeader? CommonHeader => Model.CommonHeader;
+        public CommonHeader CommonHeader => Model.CommonHeader;
 
         /// <inheritdoc cref="CommonHeader.GameCode"/>
-        public uint GameCode => Model.CommonHeader?.GameCode ?? 0;
+        public uint GameCode => Model.CommonHeader.GameCode;
 
         /// <inheritdoc cref="Cart.SecureArea"/>
         public byte[] SecureArea => Model.SecureArea;

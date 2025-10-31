@@ -14,7 +14,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>12 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string? GameTitle;
+        public string GameTitle;
 
         /// <summary>
         /// Gamecode
@@ -26,7 +26,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>2 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? MakerCode;
+        public string MakerCode;
 
         /// <summary>
         /// Unitcode

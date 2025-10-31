@@ -14,21 +14,21 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>5 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public uint[]? GlobalMBK15Settings;
+        public uint[] GlobalMBK15Settings = new uint[5];
 
         /// <summary>
         ///	Local MBK6..MBK8 Settings for ARM9
         /// </summary>
         /// <remarks>3 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public uint[]? LocalMBK68SettingsARM9;
+        public uint[] LocalMBK68SettingsARM9 = new uint[3];
 
         /// <summary>
         /// Local MBK6..MBK8 Settings for ARM7
         /// </summary>
         /// <remarks>3 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public uint[]? LocalMBK68SettingsARM7;
+        public uint[] LocalMBK68SettingsARM7 = new uint[3];
 
         /// <summary>
         /// Global MBK9 Setting
