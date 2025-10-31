@@ -18,8 +18,8 @@ namespace SabreTools.Data.Models.BSP
         public int Size;
 
         /// <summary>
-        /// Collision data of length <see cref="Size"/> 
+        /// Collision data of length <see cref="Size"/>
         /// </summary>
-        public byte[]? CollisionData;
+        public byte[] CollisionData;
     }
 }

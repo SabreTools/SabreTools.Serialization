@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.BZip2
         /// from the footer.
         /// </summary>
         /// <remarks>This may not be byte-aligned</remarks>
-        public byte[]? Magic { get; set; }
+        public byte[] Magic { get; set; } = new byte[6];
 
         /// <summary>
         /// The CRC-32 checksum of the uncompressed data contained

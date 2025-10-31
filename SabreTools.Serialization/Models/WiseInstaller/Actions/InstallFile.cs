@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Install File
-    /// 
+    ///
     /// This action installs files on the destination computer. Each file or directory to be installed
     /// must have a separate Install File(s) action.
     /// </summary>
@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// Wildcards have been observed in a few examples to denote
     /// entire directories or subdirectories being copied.
     /// </remarks>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
     public class InstallFile : MachineStateData
     {
         /// <summary>
@@ -26,9 +26,9 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// - Self-Register OCX/DLL/EXE/TLB (unknown)
         /// - Replace Existing File [Always, Never, Check File [Doesn't Matter, Same or Older, Older]] (unknown)
         /// - Retain Duplicates in Path (unknown)
-        /// 
+        ///
         /// This is two separate fields in WISE0001.DLL (bVar1 and bVar2)
-        /// 
+        ///
         /// if (bVar2 & 0x48) == 0 && (bVar1 & 0x40) == 0
         ///     Checksum set? Verify the file if possible
         ///     if (bVar1 & 1) != 0 && action[0x13] != 0
@@ -73,7 +73,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// 0x1F (4 bytes) - local_68.Control
         /// 0x23 (4 bytes) - local_68.Privilege[0].Luid.LowPart
         /// </remarks>
-        public byte[]? Operand_7 { get; set; } // 0x13 - 0x26
+        public byte[] Operand_7 { get; set; } = new byte[20]; // 0x13 - 0x26
 
         /// <summary>
         /// CRC-32 checksum of the data
@@ -95,7 +95,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// Source file
         /// </summary>
         /// <remarks>
-        /// Unused because structure is internally shared with <see cref="CopyLocalFile"/> 
+        /// Unused because structure is internally shared with <see cref="CopyLocalFile"/>
         /// </remarks>
         public string? Source { get; set; }
     }

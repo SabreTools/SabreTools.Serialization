@@ -8,6 +8,6 @@ namespace SabreTools.Data.Models.AACS
         /// <summary>
         /// Unparsed data comprising the record after the header
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

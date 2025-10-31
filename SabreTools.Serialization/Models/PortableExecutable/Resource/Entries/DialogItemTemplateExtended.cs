@@ -76,7 +76,7 @@
         /// A variable-length array of 16-bit elements that specifies the window class of the control. If
         /// the first element of this array is any value other than 0xFFFF, the system treats the array as
         /// a null-terminated Unicode string that specifies the name of a registered window class.
-        /// 
+        ///
         /// If the first element is 0xFFFF, the array has one additional element that specifies the ordinal
         /// value of a predefined system class.
         /// </summary>
@@ -123,6 +123,6 @@
         /// When the system creates the control, it passes a pointer to this data in the lParam parameter of the
         /// WM_CREATE message that it sends to the control.
         /// </summary>
-        public byte[]? CreationData { get; set; }
+        public byte[] CreationData { get; set; }
     }
 }

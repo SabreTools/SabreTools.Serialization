@@ -18,7 +18,8 @@ namespace SabreTools.Data.Models.Nitro
         /// <summary>
         /// Secure area, may be encrypted or decrypted
         /// </summary>
-        public byte[]? SecureArea { get; set; }
+        /// <remarks>0x800 bytes</remarks>
+        public byte[] SecureArea { get; set; } = new byte[0x800];
 
         /// <summary>
         /// Name table (folder allocation table, name list)

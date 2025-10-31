@@ -70,7 +70,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x0F bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0F)]
-        public byte[]? Reserved;
+        public byte[] Reserved = new byte[0x0F];
 
         /// <summary>
         /// Resource limit category. (0 = APPLICATION, 1 = SYS_APPLET, 2 = LIB_APPLET, 3 = OTHER (sysmodules running under the BASE memregion))

@@ -15,14 +15,14 @@ namespace SabreTools.Data.Models.PIC
         /// </summary>
         /// <remarks>6 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[]? DiscManufacturerID;
+        public byte[] DiscManufacturerID = new byte[6];
 
         /// <summary>
         /// Media Type ID
         /// </summary>
         /// <remarks>3 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public byte[]? MediaTypeID;
+        public byte[] MediaTypeID = new byte[3];
 
         /// <summary>
         /// Time Stamp

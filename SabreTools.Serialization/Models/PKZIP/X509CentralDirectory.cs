@@ -8,12 +8,12 @@ namespace SabreTools.Data.Models.PKZIP
     /// otherwise it will appear in the first central directory record.
     /// </summary>
     /// <remarks>Header ID = 0x0016</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class X509CentralDirectory : ExtensibleDataField
     {
         /// <summary>
         /// Data
         /// </summary>
-        public byte[]? TData { get; set; }
+        public byte[] TData { get; set; }
     }
 }

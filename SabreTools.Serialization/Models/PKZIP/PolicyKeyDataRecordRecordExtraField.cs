@@ -6,17 +6,17 @@ namespace SabreTools.Data.Models.PKZIP
     /// information about encryptions and/or encryption key sources.
     /// Contact PKWARE for information on current TData structures.
     /// Information in this "extra" block may aternatively be placed
-    /// within comment fields.  Refer to the section in this document 
+    /// within comment fields.  Refer to the section in this document
     /// entitled "Incorporating PKWARE Proprietary Technology into Your
     /// Product" for more information.
     /// </summary>
     /// <remarks>Header ID = 0x0023</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class PolicyKeyDataRecordRecordExtraField : ExtensibleDataField
     {
         /// <summary>
         /// Data about the key
         /// </summary>
-        public byte[]? TData { get; set; }
+        public byte[] TData { get; set; }
     }
 }

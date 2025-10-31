@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// Auxiliary Format 4: Files
-    /// 
+    ///
     /// This format follows a symbol-table record with storage class FILE (103).
     /// The symbol name itself should be .file, and the auxiliary record that
     /// follows it gives the name of a source-code file.
@@ -15,6 +15,6 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
         /// with nulls if it is less than the maximum length.
         /// </summary>
         /// <remarks>18 bytes</remarks>
-        public byte[]? FileName { get; set; }
+        public byte[] FileName { get; set; } = new byte[18];
     }
 }

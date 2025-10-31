@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? MD5;
+        public byte[] MD5 = new byte[0x10];
 
         /// <summary>
         /// The sector offset table (variable length)

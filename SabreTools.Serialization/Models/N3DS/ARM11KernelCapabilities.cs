@@ -13,14 +13,14 @@ namespace SabreTools.Data.Models.N3DS
         /// Descriptors
         /// -------------------
         /// Pattern of bits 20-31	Type	Fields
-        /// 0b1110xxxxxxxx Interrupt info	
+        /// 0b1110xxxxxxxx Interrupt info
         /// 0b11110xxxxxxx System call mask    Bits 24-26: System call mask table index; Bits 0-23: mask
         /// 0b1111110xxxxx Kernel release version  Bits 8-15: Major version; Bits 0-7: Minor version
         /// 0b11111110xxxx Handle table size   Bits 0-18: size
         /// 0b111111110xxx Kernel flags
         /// 0b11111111100x Map address range   Describes a memory mapping like the 0b111111111110 descriptor, but an entire range rather than a single page is mapped.Another 0b11111111100x descriptor must follow this one to denote the(exclusive) end of the address range to map.
         /// 0b111111111110	Map memory page Bits 0-19: page index to map(virtual address >> 12; the physical address is determined per-page according to Memory layout); Bit 20: Map read-only(otherwise read-write)
-        /// 
+        ///
         /// ARM11 Kernel Flags
         /// -------------------
         /// Bit	Description
@@ -46,6 +46,6 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? Reserved;
+        public byte[] Reserved = new byte[0x10];
     }
 }

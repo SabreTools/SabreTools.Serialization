@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.SafeDisc
 
         /// <remarks>0x0D bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0D)]
-        public byte[]? Name;
+        public byte[] Name = new byte[0x0D];
     }
 }

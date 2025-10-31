@@ -2,7 +2,7 @@
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class HeaderV3 : Header
     {
@@ -37,13 +37,13 @@ namespace SabreTools.Data.Models.CHD
         /// MD5 checksum of raw data
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[]? MD5 = new byte[16];
+        public byte[] MD5 = new byte[16];
 
         /// <summary>
         /// MD5 checksum of parent file
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[]? ParentMD5 = new byte[16];
+        public byte[] ParentMD5 = new byte[16];
 
         /// <summary>
         /// Number of bytes per hunk
@@ -54,12 +54,12 @@ namespace SabreTools.Data.Models.CHD
         /// SHA1 checksum of raw data
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? SHA1 = new byte[20];
+        public byte[] SHA1 = new byte[20];
 
         /// <summary>
         /// SHA1 checksum of parent file
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ParentSHA1 = new byte[20];
+        public byte[] ParentSHA1 = new byte[20];
     }
 }

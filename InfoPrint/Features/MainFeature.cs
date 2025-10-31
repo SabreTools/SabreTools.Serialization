@@ -159,8 +159,7 @@ namespace InfoPrint.Features
                 using Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
                 // Read the first 8 bytes
-                byte[]? magic = stream.ReadBytes(8);
-                stream.SeekIfPossible(0, SeekOrigin.Begin);
+                byte[] magic = stream.PeekBytes(8);
 
                 // Get the file type
                 string extension = Path.GetExtension(file).TrimStart('.');

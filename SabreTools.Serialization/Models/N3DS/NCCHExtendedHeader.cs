@@ -26,14 +26,14 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x100 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
-        public byte[]? AccessDescSignature;
+        public byte[] AccessDescSignature = new byte[0x100];
 
         /// <summary>
         /// NCCH HDR RSA-2048 public key
         /// </summary>
         /// <remarks>0x100 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
-        public byte[]? NCCHHDRPublicKey;
+        public byte[] NCCHHDRPublicKey = new byte[0x100];
 
         /// <summary>
         /// ACI (for limitation of first ACI)

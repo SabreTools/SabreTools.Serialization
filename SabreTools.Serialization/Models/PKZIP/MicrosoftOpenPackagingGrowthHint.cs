@@ -1,7 +1,7 @@
 namespace SabreTools.Data.Models.PKZIP
 {
     /// <remarks>Header ID = 0xa220</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class MicrosoftOpenPackagingGrowthHint : ExtensibleDataField
     {
         /// <summary>
@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Filled with NULL characters
         /// </summary>
-        public byte[]? Padding { get; set; }
+        public byte[] Padding { get; set; }
     }
 }

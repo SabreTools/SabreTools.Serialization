@@ -16,8 +16,8 @@ namespace SabreTools.Data.Models.XZ
 
         /// <summary>
         /// Properties of the filter whose length is given by
-        /// <see cref="SizeOfProperties"/> 
+        /// <see cref="SizeOfProperties"/>
         /// </summary>
-        public byte[]? Properties { get; set; }
+        public byte[] Properties { get; set; }
     }
 }

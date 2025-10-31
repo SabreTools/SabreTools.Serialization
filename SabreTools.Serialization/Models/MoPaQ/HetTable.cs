@@ -76,7 +76,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// HET hash table. Each entry is 8 bits.
         /// </summary>
         /// <remarks>Size is derived from HashTableSize</remarks>
-        public byte[]? HashTable { get; set; }
+        public byte[] HashTable { get; set; }
 
         /// <summary>
         /// Array of file indexes. Bit size of each entry is taken from dwTotalIndexSize.

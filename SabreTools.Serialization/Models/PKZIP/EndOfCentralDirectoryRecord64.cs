@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Zip64 end of central directory record
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class EndOfCentralDirectoryRecord64
     {
         /// <summary>
@@ -67,6 +67,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// ZIP64 extensible data sector
         /// </summary>
-        public byte[]? ExtensibleDataSector { get; set; }
+        public byte[] ExtensibleDataSector { get; set; }
     }
 }

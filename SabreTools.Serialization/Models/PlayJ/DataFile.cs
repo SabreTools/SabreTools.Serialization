@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Data
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
 
         // Notes about Data:
         // - Each data block in the samples contains a GIF header

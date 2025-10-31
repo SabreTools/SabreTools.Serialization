@@ -20,6 +20,6 @@ namespace SabreTools.Data.Models.AACS
         /// Range value).
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[]? HostID;
+        public byte[] HostID = new byte[6];
     }
 }

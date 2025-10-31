@@ -20,7 +20,7 @@
         /// <summary>
         /// ASCII text of the name string.
         /// </summary>
-        public byte[]? NameString { get; set; }
+        public byte[] NameString { get; set; }
 
         /// <summary>
         /// Ordinal number (index into entry table). This value is ignored

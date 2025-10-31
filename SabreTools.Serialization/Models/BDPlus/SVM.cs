@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.BDPlus
         /// Unknown data
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public byte[]? Unknown1 = new byte[5];
+        public byte[] Unknown1 = new byte[5];
 
         /// <summary>
         /// Version year
@@ -43,8 +43,8 @@ namespace SabreTools.Data.Models.BDPlus
         public uint Length;
 
         /// <summary>
-        /// Length bytes of data
+        /// <see cref="Length"> bytes of data
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

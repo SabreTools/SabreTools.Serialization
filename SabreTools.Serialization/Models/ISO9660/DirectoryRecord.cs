@@ -83,6 +83,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// Note: This is where SUSP contents are located, including Rock Ridge extension
         /// Optional field
         /// </summary>
-        public byte[]? SystemUse { get; set; }
+        public byte[] SystemUse { get; set; }
     }
 }

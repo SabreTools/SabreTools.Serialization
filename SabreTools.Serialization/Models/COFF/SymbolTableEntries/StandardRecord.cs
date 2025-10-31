@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
         /// An array of 8 bytes. This array is padded with nulls on the right if
         /// the name is less than 8 bytes long.
         /// </summary>
-        public byte[]? ShortName { get; set; } = new byte[8];
+        public byte[] ShortName { get; set; } = new byte[8];
 
         /// <summary>
         /// A field that is set to all zeros if the name is longer than 8 bytes.

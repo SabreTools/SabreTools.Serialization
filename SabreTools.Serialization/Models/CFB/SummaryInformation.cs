@@ -36,7 +36,7 @@ namespace SabreTools.Data.Models.CFB
         /// <summary>
         /// 4 bytes of reserved data
         /// </summary>
-        public byte[]? Reserved { get; set; }
+        public byte[] Reserved { get; set; } = new byte[4];
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace SabreTools.Data.Models.CFB
         /// <summary>
         /// 16 bytes of unknown data
         /// </summary>
-        public byte[]? Unknown { get; set; }
+        public byte[] Unknown { get; set; } = new byte[16];
 
         #endregion
 

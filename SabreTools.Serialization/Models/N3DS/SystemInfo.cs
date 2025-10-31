@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x30 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x30)]
-        public byte[]? Reserved;
+        public byte[] Reserved = new byte[0x30];
     }
 }

@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.StarForce
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? FilenameMD5Hash;
+        public byte[] FilenameMD5Hash = new byte[0x10];
 
         /// <summary>
         /// Index of fileheader (encrypted with filename)

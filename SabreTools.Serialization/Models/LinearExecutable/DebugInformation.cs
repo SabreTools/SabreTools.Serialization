@@ -5,7 +5,7 @@
     /// the linear EXE format or linker. The only data defined by the linear EXE
     /// format relative to the debug information is it's offset in the EXE file and
     /// length in bytes as defined in the linear EXE header.
-    /// 
+    ///
     /// To support multiple debuggers the first word of the debug information is a
     /// type field which determines the format of the debug information.
     /// </summary>
@@ -30,6 +30,6 @@
         /// the responsibility of the linker or debugging tools to follow the convention
         /// for the type field that is defined here.
         /// </summary>
-        public byte[]? DebuggerData { get; set; }
+        public byte[] DebuggerData { get; set; }
     }
 }

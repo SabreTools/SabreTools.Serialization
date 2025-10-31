@@ -125,6 +125,6 @@
         /// When the system creates the control, it passes a pointer to this data in the lParam parameter of the
         /// WM_CREATE message that it sends to the control.
         /// </summary>
-        public byte[]? CreationData { get; set; }
+        public byte[] CreationData { get; set; }
     }
 }

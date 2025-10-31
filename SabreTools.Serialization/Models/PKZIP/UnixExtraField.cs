@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.PKZIP
 {
     /// <summary>
     /// The following is the layout of the UNIX "extra" block.
-    /// 
+    ///
     /// The variable length data field will contain file type
     /// specific data.  Currently the only values allowed are
     /// the original "linked to" file names for hard or symbolic
@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// device number.
     /// </summary>
     /// <remarks>Header ID = 0x000D</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class UnixExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -44,6 +44,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Variable length data field
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

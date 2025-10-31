@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.LZ
         /// "SZ" signature
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public byte[]? Magic;
+        public byte[] Magic = new byte[8];
 
         /// <summary>
         /// The integer length of the file when unpacked

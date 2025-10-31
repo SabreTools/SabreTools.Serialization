@@ -19,14 +19,14 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? SystemSavedataIDs;
+        public byte[] SystemSavedataIDs = new byte[8];
 
         /// <summary>
         /// Storage accessible unique IDs
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? StorageAccessibleUniqueIDs;
+        public byte[] StorageAccessibleUniqueIDs = new byte[8];
 
         /// <summary>
         /// Filesystem access info
@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.N3DS
         /// TODO: Combine with "other attributes"
         /// <remarks>7 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        public byte[]? FileSystemAccessInfo;
+        public byte[] FileSystemAccessInfo = new byte[7];
 
         /// <summary>
         /// Other attributes

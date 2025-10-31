@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.VPK
         /// Expected checksum
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[]? MD5Checksum = new byte[16];
+        public byte[]MD5Checksum = new byte[16];
     }
 }

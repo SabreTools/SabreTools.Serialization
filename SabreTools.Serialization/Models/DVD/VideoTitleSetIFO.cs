@@ -60,7 +60,7 @@ namespace SabreTools.Data.Models.DVD
         /// Provider ID
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public byte[]? ProviderID;
+        public byte[] ProviderID = new byte[32];
 
         /// <summary>
         /// VMG POS
@@ -147,7 +147,7 @@ namespace SabreTools.Data.Models.DVD
         /// Unknown
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[]? Unknown;
+        public byte[] Unknown = new byte[16];
 
         /// <summary>
         /// Number of subpicture streams in VTSM_VOBS (0 or 1)
@@ -158,12 +158,12 @@ namespace SabreTools.Data.Models.DVD
         /// Subpicture attributes of VTSM_VOBS
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[]? SubpictureAttributes;
+        public byte[] SubpictureAttributes = new byte[6];
 
         /// <summary>
         /// Reserved
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 164)]
-        public byte[]? Reserved;
+        public byte[] Reserved = new byte[164];
     }
 }

@@ -9,12 +9,12 @@ namespace SabreTools.Data.Models.PKZIP
     /// other record.
     /// </summary>
     /// <remarks>Header ID = 0x0014</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class PKCS7Store : ExtensibleDataField
     {
         /// <summary>
         /// Data about the store
         /// </summary>
-        public byte[]? TData { get; set; }
+        public byte[] TData { get; set; }
     }
 }

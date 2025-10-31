@@ -2,7 +2,7 @@
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class HeaderV4 : Header
     {
@@ -42,18 +42,18 @@ namespace SabreTools.Data.Models.CHD
         /// Combined raw+meta SHA1
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? SHA1 = new byte[20];
+        public byte[] SHA1 = new byte[20];
 
         /// <summary>
         /// Combined raw+meta SHA1 of parent
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ParentSHA1 = new byte[20];
+        public byte[] ParentSHA1 = new byte[20];
 
         /// <summary>
         /// Raw data SHA1
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? RawSHA1 = new byte[20];
+        public byte[] RawSHA1 = new byte[20];
     }
 }

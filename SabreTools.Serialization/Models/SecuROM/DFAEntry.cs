@@ -17,8 +17,8 @@ namespace SabreTools.Data.Models.SecuROM
         public uint Length { get; set; }
 
         /// <summary>
-        /// Value of the entry whose length is given by <see cref="Length"/> 
+        /// Value of the entry whose length is given by <see cref="Length"/>
         /// </summary>
-        public byte[]? Value { get; set; }
+        public byte[] Value { get; set; }
     }
 }

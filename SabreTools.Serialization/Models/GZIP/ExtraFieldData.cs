@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.GZIP
 {
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public sealed class ExtraFieldData
     {
         /// <summary>
@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.GZIP
         /// </summary>
         public ushort Length { get; set; }
 
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

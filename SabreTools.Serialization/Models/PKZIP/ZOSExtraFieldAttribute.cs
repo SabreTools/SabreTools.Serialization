@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// z/OS Extra Field (0x0065) Attribute [APPENDIX B]
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class ZOSExtraFieldAttribute : ExtensibleDataField
     {
         /// <summary>
@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// Data
         /// </summary>
         /// <remarks>Variable byte length based on field code</remarks>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

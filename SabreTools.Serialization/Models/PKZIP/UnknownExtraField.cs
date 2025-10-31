@@ -8,8 +8,8 @@ namespace SabreTools.Data.Models.PKZIP
     public class UnknownExtraField : ExtensibleDataField
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

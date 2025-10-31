@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>5 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[5];
 
         /// <summary>
         /// Flag (bit 0: CompressExefsCode, bit 1: SDApplication)

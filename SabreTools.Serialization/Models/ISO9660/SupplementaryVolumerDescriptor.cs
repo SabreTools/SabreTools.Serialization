@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// If all bytes are set to 0x00, then a1-characters are identical to a-characters
         /// Note: Joliet Extension implies Constants.JolietEscapeSequences
         /// </summary>
-        public byte[] EscapeSequences { get; set; }
+        public byte[] EscapeSequences { get; set; } = new byte[32];
     }
 }

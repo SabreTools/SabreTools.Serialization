@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.VPK
         /// MD5
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? Hash;
+        public byte[] Hash = new byte[0x10];
     }
 }

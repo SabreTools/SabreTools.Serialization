@@ -94,13 +94,13 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// Reserved
         /// </summary>
         /// <remarks>28 bytes, see CompAttrs</remarks>
-        public byte[]? Reserved2 { get; set; }
+        public byte[] Reserved2 { get; set; } = new byte[28];
 
         /// <summary>
         /// Reserved
         /// </summary>
         /// <remarks>2 bytes (<= v5), 1 byte (> v5)</remarks>
-        public byte[]? Reserved3 { get; set; }
+        public byte[] Reserved3 { get; set; }
 
         /// <summary>
         /// Number of depends(?)

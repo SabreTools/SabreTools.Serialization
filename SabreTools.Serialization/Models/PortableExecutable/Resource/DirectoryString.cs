@@ -18,6 +18,6 @@
         /// <summary>
         /// The variable-length Unicode string data, word-aligned.
         /// </summary>
-        public byte[]? UnicodeString { get; set; }
+        public byte[] UnicodeString { get; set; }
     }
 }

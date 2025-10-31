@@ -2,13 +2,13 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// Auxiliary Format 3: Weak Externals
-    /// 
+    ///
     /// "Weak externals" are a mechanism for object files that allows flexibility at
     /// link time. A module can contain an unresolved external symbol (sym1), but it
     /// can also include an auxiliary record that indicates that if sym1 is not
     /// present at link time, another external symbol (sym2) is used to resolve
     /// references instead.
-    /// 
+    ///
     /// If a definition of sym1 is linked, then an external reference to the symbol
     /// is resolved normally. If a definition of sym1 is not linked, then all references
     /// to the weak external for sym1 refer to sym2 instead. The external symbol, sym2,
@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
     public class WeakExternal : BaseEntry
     {
         /// <summary>
-        /// The symbol-table index of sym2, the symbol to be linked if sym1 is not found. 
+        /// The symbol-table index of sym2, the symbol to be linked if sym1 is not found.
         /// </summary>
         public uint TagIndex { get; set; }
 
@@ -40,6 +40,6 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
         /// Unused
         /// </summary>
         /// <remarks>10 bytes</remarks>
-        public byte[]? Unused { get; set; }
+        public byte[] Unused { get; set; } = new byte[10];
     }
 }

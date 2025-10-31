@@ -36,7 +36,7 @@
         /// Unknown
         /// </summary>
         /// <remarks>44 bytes</remarks>
-        public byte[]? Unknown1 { get; set; }
+        public byte[] Unknown1 { get; set; } = new byte[44];
 
         /// <summary>
         /// Product ID?
@@ -52,7 +52,7 @@
         /// <remarks>
         /// 58 bytes, only present in 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
         /// </remarks>
-        public byte[]? Unknown2 { get; set; }
+        public byte[] Unknown2 { get; set; } = new byte[58];
 
         /// <summary>
         /// Entry table

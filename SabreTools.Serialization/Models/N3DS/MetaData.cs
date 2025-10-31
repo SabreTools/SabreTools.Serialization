@@ -12,14 +12,14 @@ namespace SabreTools.Data.Models.N3DS
         /// TODO: Determine numeric format of each entry
         /// <remarks>0x180 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x180)]
-        public byte[]? TitleIDDependencyList;
+        public byte[] TitleIDDependencyList = new byte[0x180];
 
         /// <summary>
         /// Reserved
         /// </summary>
         /// <remarks>0x180 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x180)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[0x180];
 
         /// <summary>
         /// Core Version
@@ -31,13 +31,13 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0xFC bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xFC)]
-        public byte[]? Reserved2;
+        public byte[] Reserved2 = new byte[0xFC];
 
         /// <summary>
         /// Icon Data(.ICN) - Taken from the application's ExeFS
         /// </summary>
         /// <remarks>0x36C0 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x36C0)]
-        public byte[]? IconData;
+        public byte[] IconData = new byte[0x36C0];
     }
 }

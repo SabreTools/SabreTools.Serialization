@@ -11,12 +11,12 @@ namespace SabreTools.Data.Models.PKZIP
     /// Product" for more information.
     /// </summary>
     /// <remarks>Header ID = 0x0021</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class PolicyDecryptionKeyRecordExtraField : ExtensibleDataField
     {
         /// <summary>
         /// Data about the key
         /// </summary>
-        public byte[]? TData { get; set; }
+        public byte[] TData { get; set; }
     }
 }

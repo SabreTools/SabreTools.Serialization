@@ -83,10 +83,10 @@ namespace SabreTools.Serialization.Wrappers
         public uint UnknownValue18 => Model.UnknownValue18;
 
         /// <inheritdoc cref="SectionHeader.Version"/>
-        public byte[]? Version => Model.Version;
+        public byte[] Version => Model.Version;
 
         /// <inheritdoc cref="SectionHeader.PreStringValues"/>
-        public byte[]? PreStringValues => Model.PreStringValues;
+        public byte[] PreStringValues => Model.PreStringValues;
 
         /// <inheritdoc cref="SectionHeader.Strings"/>
         public byte[][]? Strings => Model.Strings;

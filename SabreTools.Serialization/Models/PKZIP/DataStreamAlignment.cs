@@ -4,10 +4,10 @@ namespace SabreTools.Data.Models.PKZIP
     /// (per Zbynek Vyskovsky) Defines alignment of data stream of this
     /// entry within the zip archive.  Additionally, indicates whether the
     /// compression method should be kept when re-compressing the zip file.
-    /// 
+    ///
     /// The purpose of this extra field is to align specific resources to
     /// word or page boundaries so they can be easily mapped into memory.
-    /// 
+    ///
     /// The alignment field (lower 15 bits) defines the minimal alignment
     /// required by the data stream.   Bit 15 of alignment field indicates
     /// whether the compression method of this entry can be changed when
@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// alignment changes. (see https://issues.apache.org/jira/browse/COMPRESS-391)
     /// </summary>
     /// <remarks>Header ID = 0xa11e</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class DataStreamAlignment : ExtensibleDataField
     {
         /// <summary>
@@ -29,6 +29,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// 0x00-padding
         /// </summary>
-        public byte[]? Padding { get; set; }
+        public byte[] Padding { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The leaves lump contains the leaves of the BSP tree.
-    /// 
+    ///
     /// The first entry of this struct is the type of the content
     /// of this leaf. It can be one of the predefined values, found
     /// in the compiler source codes, and is litte relevant for the
@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
     /// specify the volume of ambient sounds in Quake, but are unused in
     /// GoldSrc.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class BspLeaf
     {
@@ -62,6 +62,6 @@ namespace SabreTools.Data.Models.BSP
         /// Ambient sound levels
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[]? AmbientLevels = new byte[4];
+        public byte[] AmbientLevels = new byte[4];
     }
 }

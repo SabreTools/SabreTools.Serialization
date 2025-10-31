@@ -18,6 +18,6 @@
         /// <summary>
         /// ASCII text of the type or name string.
         /// </summary>
-        public byte[]? Text { get; set; }
+        public byte[] Text { get; set; }
     }
 }

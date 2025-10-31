@@ -165,7 +165,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>12 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public byte[]? Unknown2;
+        public byte[] Unknown2 = new byte[12];
 
         /// <summary>
         /// Modcrypt area 1 offset
@@ -192,7 +192,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? TitleID;
+        public byte[] TitleID = new byte[8];
 
         /// <summary>
         /// DSiWare: "public.sav" size
@@ -209,90 +209,90 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>176 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 176)]
-        public byte[]? ReservedZero;
+        public byte[] ReservedZero = new byte[176];
 
         /// <summary>
         /// Unknown (used by DSi)
         /// </summary>
         /// <remarks>16 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public byte[]? Unknown3;
+        public byte[] Unknown3 = new byte[16];
 
         /// <summary>
         /// ARM9 (with encrypted secure area) SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ARM9WithSecureAreaSHA1HMACHash;
+        public byte[] ARM9WithSecureAreaSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// ARM7 SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ARM7SHA1HMACHash;
+        public byte[] ARM7SHA1HMACHash = new byte[20];
 
         /// <summary>
         /// Digest master SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? DigestMasterSHA1HMACHash;
+        public byte[] DigestMasterSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// Banner SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? BannerSHA1HMACHash;
+        public byte[] BannerSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// ARM9i (decrypted) SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ARM9iDecryptedSHA1HMACHash;
+        public byte[] ARM9iDecryptedSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// ARM7i (decrypted) SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ARM7iDecryptedSHA1HMACHash;
+        public byte[] ARM7iDecryptedSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// Reserved
         /// </summary>
         /// <remarks>40 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
-        public byte[]? Reserved5;
+        public byte[] Reserved5 = new byte[40];
 
         /// <summary>
         /// ARM9 (without secure area) SHA1 HMAC hash
         /// </summary>
         /// <remarks>20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? ARM9NoSecureAreaSHA1HMACHash;
+        public byte[] ARM9NoSecureAreaSHA1HMACHash = new byte[20];
 
         /// <summary>
         /// Reserved
         /// </summary>
         /// <remarks>2636 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2636)]
-        public byte[]? Reserved6;
+        public byte[] Reserved6 = new byte[2636];
 
         /// <summary>
         /// Reserved and unchecked region, always zero. Used for passing arguments in debug environment.
         /// </summary>
         /// <remarks>0x180 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x180)]
-        public byte[]? ReservedAndUnchecked;
+        public byte[] ReservedAndUnchecked = new byte[0x180];
 
         /// <summary>
         /// RSA signature (the first 0xE00 bytes of the header are signed with an 1024-bit RSA signature).
         /// </summary>
         /// <remarks>0x80 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x80)]
-        public byte[]? RSASignature;
+        public byte[] RSASignature = new byte[0x80];
     }
 }

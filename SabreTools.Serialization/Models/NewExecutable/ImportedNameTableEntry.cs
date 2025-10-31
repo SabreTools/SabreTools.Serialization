@@ -20,6 +20,6 @@
         /// <summary>
         /// ASCII text of the name string.
         /// </summary>
-        public byte[]? NameString { get; set; }
+        public byte[] NameString { get; set; }
     }
 }

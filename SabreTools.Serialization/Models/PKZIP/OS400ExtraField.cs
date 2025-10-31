@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// The following is the layout of the OS/400 "extra" block.
     /// </summary>
     /// <remarks>Header ID = 0x0065</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class OS400ExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Attribute data (see APPENDIX A)
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

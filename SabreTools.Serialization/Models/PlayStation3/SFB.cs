@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.PlayStation3
 {
-    /// <see href="https://psdevwiki.com/ps3/PS3_DISC.SFB"/> 
+    /// <see href="https://psdevwiki.com/ps3/PS3_DISC.SFB"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public class SFB
     {
@@ -21,7 +21,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x18 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x18)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[0x18];
 
         /// <summary>
         /// "HYBRID_FLAG" (Flags type)
@@ -45,7 +45,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x08 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x08)]
-        public byte[]? Reserved2;
+        public byte[] Reserved2 = new byte[0x08];
 
         /// <summary>
         /// "TITLE_ID" (Disc Title Name)
@@ -59,7 +59,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x08 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x08)]
-        public byte[]? Reserved3;
+        public byte[] Reserved3 = new byte[0x08];
 
         /// <summary>
         /// Disc Version Data Offset
@@ -76,7 +76,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x188 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x188)]
-        public byte[]? Reserved4;
+        public byte[] Reserved4 = new byte[0x188];
 
         /// <summary>
         /// Disc Content (Hybrid Flags)
@@ -104,6 +104,6 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x3C0 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x3C0)]
-        public byte[]? Reserved5;
+        public byte[] Reserved5 = new byte[0x3C0];
     }
 }

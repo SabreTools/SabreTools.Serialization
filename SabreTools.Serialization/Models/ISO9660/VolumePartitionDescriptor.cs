@@ -18,13 +18,13 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32-byte name of the intended system that can use this record
         /// a-characters only
         /// </summary>
-        public byte[] SystemIdentifier { get; set; }
+        public byte[] SystemIdentifier { get; set; } = new byte[32];
 
         /// <summary>
         /// 32-byte name of this volume partition
         /// d-characters only
         /// </summary>
-        public byte[] VolumePartitionIdentifier { get; set; }
+        public byte[] VolumePartitionIdentifier { get; set; } = new byte[32];
 
         /// <summary>
         /// Logical block number of the first logical block allocated to this volume partition
@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 1960 bytes for System Use, contents not defined by ISO9660
         /// </summary>
-        public byte[] SystemUse { get; set; }
+        public byte[] SystemUse { get; set; } = new byte[1960];
     }
 }

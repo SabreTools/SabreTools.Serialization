@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.ZSTD
         /// <summary>
         /// "0x?? 0xB5 0x2F 0xFD"
         /// </summary>
-        public byte[]? Magic;
+        public byte[] Magic = new byte[3];
     }
 }

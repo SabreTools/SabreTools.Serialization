@@ -12,6 +12,6 @@ namespace SabreTools.Data.Models.VPK
 
         public DirectoryEntry? DirectoryEntry { get; set; }
 
-        public byte[]? PreloadData { get; set; }
+        public byte[] PreloadData { get; set; }
     }
 }

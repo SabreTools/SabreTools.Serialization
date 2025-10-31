@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.OLE
     /// <summary>
     /// The ClipboardData packet represents clipboard data
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class ClipboardData
     {
         /// <summary>
@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be an array of bytes, followed by zero padding to a multiple of 4 bytes
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

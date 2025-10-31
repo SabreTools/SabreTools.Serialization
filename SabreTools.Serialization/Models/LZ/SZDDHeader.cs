@@ -14,12 +14,12 @@ namespace SabreTools.Data.Models.LZ
         /// "SZDD" signature
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public byte[]? Magic;
+        public byte[] Magic = new byte[8];
 
         /// <summary>
         /// Compression mode
         /// </summary>
-        /// <remarks>Only <see cref="ExpandCompressionType.A"/> is supported</remarks> 
+        /// <remarks>Only <see cref="ExpandCompressionType.A"/> is supported</remarks>
         [MarshalAs(UnmanagedType.U1)]
         public ExpandCompressionType CompressionType;
 

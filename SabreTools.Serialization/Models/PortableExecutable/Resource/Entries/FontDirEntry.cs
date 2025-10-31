@@ -22,7 +22,7 @@
         /// The font supplier's copyright information.
         /// </summary>
         /// <remarks>60 characters</remarks>
-        public byte[]? Copyright { get; set; }
+        public byte[] Copyright { get; set; } = new byte[60];
 
         /// <summary>
         /// The type of font file.

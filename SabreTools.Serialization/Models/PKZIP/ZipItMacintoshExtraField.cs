@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// is not stored MacBinary-encoded.
     /// </summary>
     /// <remarks>Header ID = 0x2605</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class ZipItMacintoshExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -30,12 +30,12 @@ namespace SabreTools.Data.Models.PKZIP
         /// Four-byte Mac file type string
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public byte[]? FileType { get; set; }
+        public byte[] FileType { get; set; } = new byte[4];
 
         /// <summary>
         /// Four-byte Mac creator string
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public byte[]? Creator { get; set; }
+        public byte[] Creator { get; set; } = new byte[4];
     }
 }

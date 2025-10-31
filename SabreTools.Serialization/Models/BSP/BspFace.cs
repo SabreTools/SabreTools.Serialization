@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.BSP
 {
     /// <summary>
     /// The face lump contains the surfaces of the scene.
-    /// 
+    ///
     /// The first number of this data structure is an index into
     /// the planes lump giving a plane which is parallel to this
     /// face (meaning they share the same normal). The second
@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
     /// an offset in byes giving the beginning of the binary lightmap
     /// data of this face in the lighting lump.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class BspFace
     {
@@ -55,7 +55,7 @@ namespace SabreTools.Data.Models.BSP
         /// Specify lighting styles
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[]? LightingStyles = new byte[4];
+        public byte[] LightingStyles = new byte[4];
 
         /// <summary>
         /// Offsets into the raw lightmap data; if less than zero,

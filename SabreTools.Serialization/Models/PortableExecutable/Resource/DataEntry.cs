@@ -24,7 +24,7 @@
         /// <summary>
         /// The resource data that is pointed to by the Data RVA field.
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// The code page that is used to decode code point values within the

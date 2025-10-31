@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.XZ
         /// This field MUST contain 0-3 null bytes to pad the Index to
         /// a multiple of four bytes.
         /// </summary>
-        public byte[]? Padding { get; set; }
+        public byte[] Padding { get; set; }
 
         /// <summary>
         /// The CRC32 is calculated over everything in the Index field

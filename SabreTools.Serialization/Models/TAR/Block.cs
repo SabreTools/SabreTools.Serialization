@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.TAR
         /// Data
         /// </summary>
         /// <remarks>512 bytes</remarks>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; } = new byte[512];
     }
 }

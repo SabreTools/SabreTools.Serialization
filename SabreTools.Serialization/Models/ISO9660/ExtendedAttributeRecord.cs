@@ -69,12 +69,12 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32-byte name of the intended system
         /// Primary: a-characters or a1-characters only, padded to the right with spaces
         /// </summary>
-        public byte[] SystemIdentifier { get; set; }
+        public byte[] SystemIdentifier { get; set; } = new byte[32];
 
         /// <summary>
         /// 64-bytes for system use
         /// </summary>
-        public byte[] SystemUse { get; set; }
+        public byte[] SystemUse { get; set; } = new byte[64];
 
         /// <summary>
         /// Extended Attribyte Record Version
@@ -90,7 +90,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 64-bytes reserved (0x00)
         /// </summary>
-        public byte[] Reserved64Bytes { get; set; }
+        public byte[] Reserved64Bytes { get; set; } = new byte[64];
 
         /// <summary>
         /// Length of the Application use field
@@ -106,6 +106,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// EscapeSequencesLength-bytes list of escape sequences to interpret this file
         /// Optional, and if present, padded to the right with 0x00
         /// </summary>
-        public byte[]? EscapeSequences { get; set; }
+        public byte[] EscapeSequences { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 using System.IO;
 using SabreTools.Data.Models.ZSTD;
-using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -12,14 +11,14 @@ namespace SabreTools.Serialization.Wrappers
         public override string DescriptionString => "ZSTD file";
 
         #endregion
-        
+
         #region Extension Properties
 
         /// <inheritdoc cref="Header.VersionByte"/>
         public byte VersionByte => Model.VersionByte;
-        
+
         /// <inheritdoc cref="Header.Magic"/>
-        public byte[]? Magic => Model.Magic;
+        public byte[] Magic => Model.Magic;
 
         #endregion
 

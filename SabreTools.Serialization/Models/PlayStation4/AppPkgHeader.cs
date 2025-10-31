@@ -77,12 +77,12 @@ namespace SabreTools.Data.Models.PlayStation4
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x24)]
         public string? ContentID;
-        
+
         /// <summary>
         /// PKG Content Padding (Zeroes)
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xC)]
-        public byte[]? ContentZeroes;
+        public byte[] ContentZeroes = new byte[0xC];
 
         /// <summary>
         /// PKG DRM Type
@@ -113,42 +113,42 @@ namespace SabreTools.Data.Models.PlayStation4
         /// PKG Content Flags
         /// </summary>
         public uint VersionHash;
-        
+
         /// <summary>
         /// PKG Padding Section 1
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x78)]
-        public byte[]? Zeroes1;
-        
+        public byte[] Zeroes1 = new byte[0x78];
+
         /// <summary>
         /// PKG SHA256 for Main Entry 1
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? MainEntry1SHA256;
-        
+        public byte[] MainEntry1SHA256 = new byte[0x20];
+
         /// <summary>
         /// PKG SHA256 for Main Entry 2
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? MainEntry2SHA256;
-        
+        public byte[] MainEntry2SHA256 = new byte[0x20];
+
         /// <summary>
         /// PKG SHA256 for Digest Table
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? DigestTableSHA256;
-        
+        public byte[] DigestTableSHA256 = new byte[0x20];
+
         /// <summary>
         /// PKG SHA256 for Main Table
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? MainTableSHA256;
-        
+        public byte[] MainTableSHA256 = new byte[0x20];
+
         /// <summary>
         /// PKG Padding Section 2
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x280)]
-        public byte[]? Zeroes2;
+        public byte[] Zeroes2 = new byte[0x280];
 
         /// <summary>
         /// PFS Unknown Field
@@ -199,18 +199,18 @@ namespace SabreTools.Data.Models.PlayStation4
         /// PKG Signed Size
         /// </summary>
         public uint PKGCacheSize;
-        
+
         /// <summary>
         /// SHA256 for PFS Image
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? PFSImageSHA256;
-        
+        public byte[] PFSImageSHA256 = new byte[0x20];
+
         /// <summary>
         /// SHA256 for PFS Signed
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? PFSSignedSHA256;
+        public byte[] PFSSignedSHA256 = new byte[0x20];
 
         /// <summary>
         /// PFS Split Size nth 0
@@ -221,17 +221,17 @@ namespace SabreTools.Data.Models.PlayStation4
         /// PFS Split Size nth 1
         /// </summary>
         public ulong PFSSplitSize1;
-        
+
         /// <summary>
         /// PKG Padding Section 3
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xB50)]
-        public byte[]? Zeroes3;
-        
+        public byte[] Zeroes3 = new byte[0xB50];
+
         /// <summary>
         /// SHA256 for PKG
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? PKGSHA256;
+        public byte[] PKGSHA256 = new byte[0x20];
     }
 }

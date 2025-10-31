@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Set to Constants.StandardIdentifier ("CD001")
         /// On non-ISO9660 CD-i discs, set to Constants.StandardIdentifierCDI ("CD-I ")
         /// </summary>
-        public byte[] Identifier { get; set; }
+        public byte[] Identifier { get; set; } = new byte[5];
 
         /// <summary>
         /// The Volume Descriptor version number

@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Archive extra data record
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class ArchiveExtraDataRecord
     {
         /// <summary>
@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Extra field data (variable size)
         /// </summary>
-        public byte[]? ExtraFieldData { get; set; }
+        public byte[] ExtraFieldData { get; set; }
     }
 }

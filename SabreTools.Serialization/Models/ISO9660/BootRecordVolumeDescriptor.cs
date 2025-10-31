@@ -11,17 +11,17 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32-byte name of the intended system that can use this record
         /// a-characters only
         /// </summary>
-        public byte[] BootSystemIdentifier { get; set; }
+        public byte[] BootSystemIdentifier { get; set; } = new byte[32];
 
         /// <summary>
         /// 32-byte name of this boot system
         /// a-characters only
         /// </summary>
-        public byte[] BootIdentifier { get; set; }
+        public byte[] BootIdentifier { get; set; } = new byte[32];
 
         /// <summary>
         /// 1997 bytes for Boot System Use, contents not defined by ISO9660
         /// </summary>
-        public byte[] BootSystemUse { get; set; }
+        public byte[] BootSystemUse { get; set; } = new byte[1997];
     }
 }

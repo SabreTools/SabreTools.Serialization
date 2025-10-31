@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Digital signature
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class DigitalSignature
     {
         /// <summary>
@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Signature data (variable size)
         /// </summary>
-        public byte[]? SignatureData { get; set; }
+        public byte[] SignatureData { get; set; }
     }
 }

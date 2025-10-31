@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.XZ
         /// Header magic number (0xFD, '7', 'z', 'X', 'Z', 0x00)
         /// </summary>
         /// <remarks>6 bytes</remarks>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; } = new byte[6];
 
         /// <summary>
         /// The first byte of Stream Flags is always a null byte. In the

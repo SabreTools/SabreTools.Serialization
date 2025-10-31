@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.OLE
     /// <summary>
     /// The BLOB packet represents binary data
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class BLOB
     {
         /// <summary>
@@ -14,6 +14,6 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be an array of bytes, followed by zero padding to a multiple of 4 bytes.
         /// </summary>
-        public byte[]? Bytes { get; set; }
+        public byte[] Bytes { get; set; }
     }
 }

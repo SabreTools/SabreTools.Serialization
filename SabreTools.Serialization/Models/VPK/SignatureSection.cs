@@ -12,9 +12,9 @@ namespace SabreTools.Data.Models.VPK
         public uint PublicKeySize;
 
         /// <summary>
-        /// <see cref="PublicKeySize"/> 
+        /// <see cref="PublicKeySize"/>
         /// </summary>
-        public byte[]? PublicKey;
+        public byte[] PublicKey;
 
         /// <summary>
         /// Always seen as 128 (0x80) bytes
@@ -22,8 +22,8 @@ namespace SabreTools.Data.Models.VPK
         public uint SignatureSize;
 
         /// <summary>
-        /// <see cref="SignatureSize"/> 
+        /// <see cref="SignatureSize"/>
         /// </summary>
-        public byte[]? Signature;
+        public byte[] Signature;
     }
 }

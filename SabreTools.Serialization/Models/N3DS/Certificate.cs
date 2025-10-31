@@ -27,12 +27,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Signature
         /// </summary>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; }
 
         /// <summary>
         /// Padding to align next data to 0x40 bytes
         /// </summary>
-        public byte[]? Padding { get; set; }
+        public byte[] Padding { get; set; }
 
         /// <summary>
         /// Issuer
@@ -60,7 +60,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Modulus
         /// </summary>
-        public byte[]? RSAModulus { get; set; }
+        public byte[] RSAModulus { get; set; }
 
         /// <summary>
         /// Public Exponent
@@ -70,7 +70,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[]? RSAPadding { get; set; }
+        public byte[] RSAPadding { get; set; }
 
         #endregion
 
@@ -80,12 +80,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Public Key
         /// </summary>
-        public byte[]? ECCPublicKey { get; set; }
+        public byte[] ECCPublicKey { get; set; }
 
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[]? ECCPadding { get; set; }
+        public byte[] ECCPadding { get; set; }
 
         #endregion
     }

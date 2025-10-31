@@ -8,12 +8,12 @@ namespace SabreTools.Data.Models.BSP
     /// In this case, the lump data starts with the following header
     /// (from public/tier1/lzmaDecoder.h), which is used in place of
     /// the standard 13-byte LZMA header.
-    /// 
+    ///
     /// lzmaSize denotes the size (in bytes) of compressed data, it
     /// is equal to the size of a lump minus 17 bytes (lzma header).
     /// actualSize denotes the size of decompressed data. properties[5]
     /// field are used solely for LZMA decoding.
-    /// 
+    ///
     /// There are two special cases for compression: LUMP_PAKFILE is never
     /// compressed as a lump (the contents of the zip are compressed instead)
     /// and each of the game lumps in LUMP_GAME_LUMP are compressed individually.
@@ -35,6 +35,6 @@ namespace SabreTools.Data.Models.BSP
         public uint LzmaSize;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public byte[]? Properties = new byte[5];
+        public byte[] Properties = new byte[5];
     }
 }

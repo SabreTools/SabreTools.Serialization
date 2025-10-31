@@ -107,7 +107,7 @@
         /// cbCFHeader field is non-zero, this field contains per-cabinet-file application information. This field
         /// is defined by the application, and is used for application-defined purposes.
         /// </summary>
-        public byte[]? ReservedData { get; set; }
+        public byte[] ReservedData { get; set; }
 
         /// <summary>
         /// If the flags.cfhdrPREV_CABINET field is not set, this

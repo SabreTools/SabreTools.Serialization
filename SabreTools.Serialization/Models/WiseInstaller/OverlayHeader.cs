@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// <summary>
     /// Wise installer overlay data header
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wiseoverlay.h"/>
     public class OverlayHeader
     {
         /// <summary>
@@ -12,12 +12,12 @@ namespace SabreTools.Data.Models.WiseInstaller
         public byte DllNameLen { get; set; } // 0x00
 
         /// <summary>
-        /// DLL name, missing if <see cref="DllNameLen"/> is 0 
+        /// DLL name, missing if <see cref="DllNameLen"/> is 0
         /// </summary>
-        public string? DllName { get; set; } // 
+        public string? DllName { get; set; } //
 
         /// <summary>
-        /// DLL size, missing if <see cref="DllNameLen"/> is 0 
+        /// DLL size, missing if <see cref="DllNameLen"/> is 0
         /// </summary>
         public uint? DllSize { get; set; } //
 
@@ -31,12 +31,12 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// </summary>
         /// <remarks>
         /// 12 bytes
-        /// 
+        ///
         /// When the data is processed, it does the following:
-        /// 
+        ///
         /// ushort[] colors = new ushort[3];
         /// int colorsPtr = 0;
-        /// 
+        ///
         /// for (int i = 0; i < 3; i++)
         /// {
         ///     uint color = (GraphicsData[i + 3] * <mult>) / 0x5F + GraphicsData[i];
@@ -45,11 +45,11 @@ namespace SabreTools.Data.Models.WiseInstaller
         ///         colors[colorsPtr] = 0;
         ///     if (colors[colorsPtr] > 0xFF)
         ///         colors[colorsPtr] = 0xFF
-        /// 
+        ///
         ///     colorsPtr++;
         /// }
         /// </remarks>
-        public byte[]? GraphicsData { get; set; } // 0x05 - 0x10
+        public byte[] GraphicsData { get; set; } = new byte[12]; // 0x05 - 0x10
 
         /// <summary>
         /// Points to the Exit event in the script, if it exists
@@ -175,8 +175,8 @@ namespace SabreTools.Data.Models.WiseInstaller
         public byte InitTextLen { get; set; } // 0x63
 
         /// <summary>
-        /// Init text whose length is given by <see cref="InitTextLen"/> 
+        /// Init text whose length is given by <see cref="InitTextLen"/>
         /// </summary>
-        public string? InitText { get; set; } // 0x64 - 
+        public string? InitText { get; set; } // 0x64 -
     }
 }

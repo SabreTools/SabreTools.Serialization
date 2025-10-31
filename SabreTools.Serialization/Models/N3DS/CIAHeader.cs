@@ -51,6 +51,6 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x2000 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x2000)]
-        public byte[]? ContentIndex;
+        public byte[] ContentIndex = new byte[0x2000];
     }
 }

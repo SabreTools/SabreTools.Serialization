@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Readers
     /// <typeparam name="TModel">Type of the model to deserialize</typeparam>
     /// <remarks>
     /// This class allows all inheriting types to only implement <see cref="IStreamReader<>"/>
-    /// and still implicitly implement <see cref="IByteReader<>"/>  and <see cref="IFileReader<>"/> 
+    /// and still implicitly implement <see cref="IByteReader<>"/>  and <see cref="IFileReader<>"/>
     /// </remarks>
     public abstract class BaseBinaryReader<TModel> :
         IByteReader<TModel>,

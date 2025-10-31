@@ -1,13 +1,13 @@
 namespace SabreTools.Data.Models.IRD
 {
-    /// <see href="https://psdevwiki.com/ps3/Bluray_disc#IRD_file"/> 
-    /// <see href="https://github.com/SabreTools/MPF/files/13062347/IRD.File.Format.pdf"/> 
+    /// <see href="https://psdevwiki.com/ps3/Bluray_disc#IRD_file"/>
+    /// <see href="https://github.com/SabreTools/MPF/files/13062347/IRD.File.Format.pdf"/>
     public class File
     {
         /// <summary>
         /// "3IRD"
         /// </summary>
-        public byte[]? Magic { get; set; }
+        public byte[] Magic { get; set; } = new byte[4];
 
         /// <summary>
         /// Version
@@ -58,7 +58,7 @@ namespace SabreTools.Data.Models.IRD
         /// <summary>
         /// Gzip-compressed header data
         /// </summary>
-        public byte[]? Header { get; set; }
+        public byte[] Header { get; set; }
 
         /// <summary>
         /// Length of the gzip-compressed footer data
@@ -68,7 +68,7 @@ namespace SabreTools.Data.Models.IRD
         /// <summary>
         /// Gzip-compressed footer data
         /// </summary>
-        public byte[]? Footer { get; set; }
+        public byte[] Footer { get; set; }
 
         /// <summary>
         /// Number of complete regions in the image
@@ -112,19 +112,19 @@ namespace SabreTools.Data.Models.IRD
         /// D1 key
         /// </summary>
         /// <remarks>16 bytes</remarks>
-        public byte[]? Data1Key { get; set; }
+        public byte[] Data1Key { get; set; } = new byte[16];
 
         /// <summary>
         /// D2 key
         /// </summary>
         /// <remarks>16 bytes</remarks>
-        public byte[]? Data2Key { get; set; }
+        public byte[] Data2Key { get; set; } = new byte[16];
 
         /// <summary>
         /// Uncompressed PIC data
         /// </summary>
         /// <remarks>115 bytes, before D1/D2 keys on version 9</remarks>
-        public byte[]? PIC { get; set; }
+        public byte[] PIC { get; set; } = new byte[115];
 
         /// <summary>
         /// Unique Identifier

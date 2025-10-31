@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? UnhashedContentRecordsSHA256Hash;
+        public byte[] UnhashedContentRecordsSHA256Hash = new byte[0x20];
     }
 }

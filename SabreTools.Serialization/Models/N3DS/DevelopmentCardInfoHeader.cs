@@ -11,21 +11,21 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x200 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x200)]
-        public byte[]? CardDeviceReserved1;
+        public byte[] CardDeviceReserved1 = new byte[0x200];
 
         /// <summary>
         /// TitleKey
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? TitleKey;
+        public byte[] TitleKey = new byte[0x10];
 
         /// <summary>
         /// CardDeviceReserved2
         /// </summary>
         /// <remarks>0x1BF0 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x1BF0)]
-        public byte[]? CardDeviceReserved2;
+        public byte[] CardDeviceReserved2 = new byte[0x1BF0];
 
         /// <summary>
         /// TestData

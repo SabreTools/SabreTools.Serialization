@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.OLE
     /// <summary>
     /// The TypedPropertyValue structure represents the typed value of a property in a property set
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class TypedPropertyValue
     {
         /// <summary>
@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.OLE
         /// the value of Type as follows.
         /// </summary>
         /// <remarks>See documentation for required lengths</remarks>
-        public byte[]? Value { get; set; }
+        public byte[] Value { get; set; }
     }
 }

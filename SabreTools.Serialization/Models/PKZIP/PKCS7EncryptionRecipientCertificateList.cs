@@ -8,14 +8,14 @@ namespace SabreTools.Data.Models.PKZIP
     /// serves only to aid archive modifications by preserving public
     /// encryption key data. Individual security requirements may dictate
     /// that this data be omitted to deter information exposure.
-    /// 
+    ///
     /// See the section describing the Strong Encryption Specification
     /// for details.  Refer to the section in this document entitled
     /// "Incorporating PKWARE Proprietary Technology into Your Product"
     /// for more information.
     /// </summary>
     /// <remarks>Header ID = 0x0019</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class PKCS7EncryptionRecipientCertificateList : ExtensibleDataField
     {
         /// <summary>
@@ -26,6 +26,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// PKCS#7 data blob
         /// </summary>
-        public byte[]? CStore { get; set; }
+        public byte[] CStore { get; set; }
     }
 }

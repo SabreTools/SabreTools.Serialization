@@ -46,12 +46,12 @@
         /// <summary>
         /// MD5 of the original (unpached) file
         /// </summary>
-        public byte[]? Md5BeforePatch { get; set; } = new byte[0x10];
+        public byte[] Md5BeforePatch { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the patched file
         /// </summary>
-        public byte[]? Md5AfterPatch { get; set; } = new byte[0x10];
+        public byte[] Md5AfterPatch { get; set; } = new byte[0x10];
 
         #endregion
 
@@ -108,7 +108,7 @@
         /// <summary>
         /// File data are simply replaced by the data in the patch.
         /// </summary>
-        public byte[]? PatchDataCopy { get; set; }
+        public byte[] PatchDataCopy { get; set; }
 
         #endregion
     }

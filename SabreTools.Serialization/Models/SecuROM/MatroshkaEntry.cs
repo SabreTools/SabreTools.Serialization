@@ -36,30 +36,30 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// File modification time, stored in NTFS filetime.
         /// </summary>
-        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/> 
+        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/>
         public ulong ModifiedTime { get; set; }
 
         /// <summary>
         /// File creation time, stored in NTFS filetime.
         /// </summary>
-        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/> 
+        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/>
         public ulong CreatedTime { get; set; }
 
         /// <summary>
         /// File access time, stored in NTFS filetime.
         /// </summary>
-        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/> 
+        /// <see href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times"/>
         public ulong AccessedTime { get; set; }
 
         /// <summary>
         /// MD5 hash of the data
         /// </summary>
         /// <remarks>16 bytes</remarks>
-        public byte[]? MD5 { get; set; }
-                
+        public byte[] MD5 { get; set; } = new byte[16];
+
         /// <summary>
         /// The file data, stored as a byte array
         /// </summary>
-        public byte[]? FileData { get; set; }
+        public byte[] FileData { get; set; }
     }
 }

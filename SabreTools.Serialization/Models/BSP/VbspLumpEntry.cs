@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.BSP
         /// </summary>
         /// <remarks>Default to 0, 0, 0, 0</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[]? FourCC = new byte[4];
+        public byte[] FourCC = new byte[4];
     }
 }

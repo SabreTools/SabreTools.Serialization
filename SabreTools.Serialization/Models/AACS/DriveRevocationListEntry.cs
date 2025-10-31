@@ -20,6 +20,6 @@ namespace SabreTools.Data.Models.AACS
         /// case of a non-zero Range value).
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[]? DriveID;
+        public byte[] DriveID = new byte[6];
     }
 }

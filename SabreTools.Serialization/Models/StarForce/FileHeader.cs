@@ -12,6 +12,6 @@
         /// File info (timestamps, size, data position, encrypted)
         /// </summary>
         /// <remarks>Unknown format</remarks>
-        public byte[]? FileInfo { get; set; }
+        public byte[]FileInfo { get; set; }
     }
 }

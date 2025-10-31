@@ -34,6 +34,6 @@ namespace SabreTools.Data.Models.XZ
         /// Header magic number ("YZ")
         /// </summary>
         /// <remarks>2 bytes</remarks>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; } = new byte[2];
     }
 }

@@ -140,37 +140,37 @@
         /// MD5 of the block table before decryption
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? BlockTableMD5 { get; set; }
+        public byte[] BlockTableMD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the hash table before decryption
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? HashTableMD5 { get; set; }
+        public byte[] HashTableMD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the hi-block table
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? HiBlockTableMD5 { get; set; }
+        public byte[] HiBlockTableMD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the BET table before decryption
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? BetTableMD5 { get; set; }
+        public byte[] BetTableMD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the HET table before decryption
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? HetTableMD5 { get; set; }
+        public byte[] HetTableMD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// MD5 of the MPQ header from signature to (including) HetTableMD5
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
-        public byte[]? MpqHeaderMD5 { get; set; }
+        public byte[] MpqHeaderMD5 { get; set; } = new byte[0x10];
 
         #endregion
     }

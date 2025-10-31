@@ -7,12 +7,12 @@
     /// Instead, the location of the section table is determined by calculating the
     /// location of the first byte after the headers. Make sure to use the size of
     /// the optional header as specified in the file header.
-    /// 
+    ///
     /// The number of entries in the section table is given by the NumberOfSections
     /// field in the file header. Entries in the section table are numbered starting
     /// from one (1). The code and data memory section entries are in the order chosen
     /// by the linker.
-    /// 
+    ///
     /// In an image file, the VAs for sections must be assigned by the linker so that
     /// they are in ascending order and adjacent, and they must be a multiple of the
     /// SectionAlignment value in the optional header.
@@ -27,10 +27,10 @@
         /// decimal number that is an offset into the string table. Executable images
         /// do not use a string table and do not support section names longer than 8
         /// characters. Long names in object files are truncated if they are emitted
-        /// to an executable file. 
+        /// to an executable file.
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public byte[]? Name { get; set; }
+        public byte[] Name { get; set; } = new byte[8];
 
         /// <summary>
         /// The total size of the section when loaded into memory. If this value is
@@ -77,7 +77,7 @@
         /// <summary>
         /// The file pointer to the beginning of line-number entries for the section. This
         /// is set to zero if there are no COFF line numbers. This value should be zero for
-        /// an image because COFF debugging information is deprecated. 
+        /// an image because COFF debugging information is deprecated.
         /// </summary>
         public uint PointerToLinenumbers { get; set; }
 

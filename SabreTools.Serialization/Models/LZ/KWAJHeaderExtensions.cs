@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.LZ
         public ushort? UnknownPurpose { get; set; }
 
         /// <summary>
-        /// Length of <see cref="UnknownData"/> 
+        /// Length of <see cref="UnknownData"/>
         /// </summary>
         public ushort? UnknownDataLength { get; set; }
 
@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.LZ
         /// Unknown purpose data whose length is defined
         /// by <see cref="UnknownDataLength"/>
         /// </summary>
-        public byte[]? UnknownData { get; set; }
+        public byte[] UnknownData { get; set; }
 
         /// <summary>
         /// Null-terminated string with max length 8: file name
@@ -38,7 +38,7 @@ namespace SabreTools.Data.Models.LZ
         public string? FileExtension { get; set; }
 
         /// <summary>
-        /// Length of <see cref="ArbitraryText"/> 
+        /// Length of <see cref="ArbitraryText"/>
         /// </summary>
         public ushort? ArbitraryTextLength { get; set; }
 
@@ -46,6 +46,6 @@ namespace SabreTools.Data.Models.LZ
         /// Arbitrary text data whose length is defined
         /// by <see cref="ArbitraryTextLength"/>
         /// </summary>
-        public byte[]? ArbitraryText { get; set; }
+        public byte[] ArbitraryText { get; set; }
     }
 }

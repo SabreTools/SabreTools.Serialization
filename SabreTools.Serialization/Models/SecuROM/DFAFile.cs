@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// "SDFA" 0x04 0x00 0x00 0x00
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; } = new byte[8];
 
         /// <summary>
         /// Unknown value, possibly a block or header size

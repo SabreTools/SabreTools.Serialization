@@ -898,9 +898,8 @@ namespace SabreTools.Data.Extensions
                         messageResourceEntry.Flags = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                         Encoding textEncoding = messageResourceEntry.Flags == 0x0001 ? Encoding.Unicode : Encoding.ASCII;
-                        byte[]? textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
-                        if (textArray != null)
-                            messageResourceEntry.Text = textEncoding.GetString(textArray);
+                        byte[] textArray = entry.Data.ReadBytes(ref offset, messageResourceEntry.Length - 4);
+                        messageResourceEntry.Text = textEncoding.GetString(textArray);
 
                         messageResourceEntries[j] = messageResourceEntry;
                     }
@@ -1007,7 +1006,7 @@ namespace SabreTools.Data.Extensions
             // Create the output table
             var stringTable = new Dictionary<int, string?>();
 
-            // Loop through and add 
+            // Loop through and add
             while (offset < entry.Data.Length)
             {
                 string? stringValue = entry.Data.ReadPrefixedUnicodeString(ref offset);

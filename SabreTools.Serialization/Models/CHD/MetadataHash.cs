@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.cpp"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class MetadataHash
     {
@@ -15,6 +15,6 @@ namespace SabreTools.Data.Models.CHD
         /// Hash data
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public byte[]? SHA1;
+        public byte[] SHA1 = new byte[20];
     }
 }

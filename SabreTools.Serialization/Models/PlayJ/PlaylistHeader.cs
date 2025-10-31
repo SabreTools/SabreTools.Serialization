@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// 52 bytes of unknown data
         /// </summary>
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; } = new byte[52];
     }
 }

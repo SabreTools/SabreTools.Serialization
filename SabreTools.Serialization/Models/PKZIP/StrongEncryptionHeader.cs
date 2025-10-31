@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// for more information.
     /// </summary>
     /// <remarks>Header ID = 0x0017</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class StrongEncryptionHeader : ExtensibleDataField
     {
         /// <summary>
@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// Certificate Processing Method under
         /// the Strong Encryption Specification
         /// </remarks>
-        public byte[]? CertData { get; set; }
+        public byte[] CertData { get; set; }
     }
 }

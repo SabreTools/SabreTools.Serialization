@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.PIC
         /// DI Unit Format dependent contents
         /// </summary>
         /// <remarks>52 bytes for BD-ROM, 100 bytes for BD-R/RE</remarks>
-        public byte[]? FormatDependentContents { get; set; }
+        public byte[] FormatDependentContents { get; set; }
     }
 }

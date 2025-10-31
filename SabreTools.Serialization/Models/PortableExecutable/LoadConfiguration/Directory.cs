@@ -36,7 +36,7 @@
 
         /// <summary>
         /// The global loader flags to clear for this process as the loader starts
-        /// the process. 
+        /// the process.
         /// </summary>
         public uint GlobalFlagsClear { get; set; }
 
@@ -160,7 +160,7 @@
         /// Code integrity information.
         /// </summary>
         /// <remarks>12 bytes</remarks>
-        public byte[]? CodeIntegrity { get; set; }
+        public byte[] CodeIntegrity { get; set; } = new byte[12];
 
         /// <summary>
         /// The VA where Control Flow Guard address taken IAT table is stored.

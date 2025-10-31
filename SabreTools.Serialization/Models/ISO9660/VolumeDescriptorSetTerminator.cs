@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// 2041 reserved bytes, should be 0x00
         /// </summary>
-        public byte[] Reserved2041Bytes { get; set; }
+        public byte[] Reserved2041Bytes { get; set; } = new byte[2041];
     }
 }

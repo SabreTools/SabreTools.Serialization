@@ -4,7 +4,7 @@
     /// There are two known specialisations of the NCSD container format:
     /// - The CTR Cart Image (CCI) format, the 3DS' raw NAND format
     /// - CCI is the format of game ROM images.
-    /// 
+    ///
     /// CTR System Update (CSU) is a variant of CCI, where the only difference
     /// is in the file extension.
     /// </summary>
@@ -16,7 +16,8 @@
         /// <summary>
         /// RSA-2048 SHA-256 signature of the NCSD header
         /// </summary>
-        public byte[]? RSA2048Signature { get; set; }
+        /// <remarks>0x100 bytes</remarks>
+        public byte[] RSA2048Signature { get; set; } = new byte[0x100];
 
         /// <summary>
         /// Magic Number 'NCSD'
@@ -31,7 +32,8 @@
         /// <summary>
         /// Media ID
         /// </summary>
-        public byte[]? MediaId { get; set; }
+        /// <remarks>8 bytes</remarks>
+        public byte[] MediaId { get; set; } = new byte[8];
 
         /// <summary>
         /// Partitions FS type (0=None, 1=Normal, 3=FIRM, 4=AGB_FIRM save)
@@ -41,7 +43,8 @@
         /// <summary>
         /// Partitions crypt type (each byte corresponds to a partition in the partition table)
         /// </summary>
-        public byte[]? PartitionsCryptType { get; set; }
+        /// <remarks>8 bytes</remarks>
+        public byte[] PartitionsCryptType { get; set; } = new byte[8];
 
         /// <summary>
         /// Offset & Length partition table, in media units
@@ -55,7 +58,8 @@
         /// <summary>
         /// Exheader SHA-256 hash
         /// </summary>
-        public byte[]? ExheaderHash { get; set; }
+        /// <remarks>0x20 bytes</remarks>
+        public byte[] ExheaderHash { get; set; } = new byte[0x200];
 
         /// <summary>
         /// Additional header size
@@ -70,7 +74,7 @@
         /// <summary>
         /// Partition Flags
         /// </summary>
-        public byte[]? PartitionFlags { get; set; }
+        public byte[] PartitionFlags { get; set; }
 
         /// <summary>
         /// Partition ID table
@@ -80,12 +84,14 @@
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved1 { get; set; }
+        /// <remarks>0x20 bytes</remarks>
+        public byte[] Reserved1 { get; set; } = new byte[0x20];
 
         /// <summary>
         /// Reserved?
         /// </summary>
-        public byte[]? Reserved2 { get; set; }
+        /// <remarks>0x0E bytes</remarks>
+        public byte[] Reserved2 { get; set; } = new byte[0x0E];
 
         /// <summary>
         /// Support for this was implemented with 9.6.0-X FIRM. Bit0=1 enables using bits 1-2, it's unknown
@@ -107,12 +113,14 @@
         /// <summary>
         /// Unknown
         /// </summary>
-        public byte[]? Unknown { get; set; }
+        /// <remarks>0x5E bytes</remarks>
+        public byte[] Unknown { get; set; } = new byte[0x5E];
 
         /// <summary>
         /// Encrypted MBR partition-table, for the TWL partitions(key-data used for this keyslot is console-unique).
         /// </summary>
-        public byte[]? EncryptedMBR { get; set; }
+        /// <remarks>0x42 bytes</remarks>
+        public byte[] EncryptedMBR { get; set; } = new byte[0x42];
 
         #endregion
     }

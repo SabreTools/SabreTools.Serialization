@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// MD5 of the entry data
         /// </summary>
-        public byte[]? MD5 { get; set; }
+        public byte[] MD5 { get; set; } = new byte[0x10];
 
         /// <summary>
         /// Volume number

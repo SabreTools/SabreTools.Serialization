@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.Wrappers
                     SectionHeader? section = null;
                     foreach (var searchedSection in SectionTable)
                     {
-                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name ?? []).TrimEnd('\0');
+                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name).TrimEnd('\0');
                         if (sectionName != "matrosch" && sectionName != "rcpacker")
                             continue;
 
@@ -521,12 +521,8 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         // TODO: Handle long section names with leading `/`
                         var section = SectionTable[i];
-                        byte[]? sectionNameBytes = section.Name;
-                        if (sectionNameBytes != null)
-                        {
-                            string sectionNameString = Encoding.UTF8.GetString(sectionNameBytes).TrimEnd('\0');
-                            _sectionNames[i] = sectionNameString;
-                        }
+                        string sectionNameString = Encoding.UTF8.GetString(section.Name).TrimEnd('\0');
+                        _sectionNames[i] = sectionNameString;
                     }
 
                     return _sectionNames;
@@ -667,7 +663,7 @@ namespace SabreTools.Serialization.Wrappers
                     SectionHeader? wiseSection = null;
                     foreach (var section in SectionTable)
                     {
-                        string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                        string sectionName = Encoding.ASCII.GetString(section.Name).TrimEnd('\0');
                         if (sectionName != ".WISE")
                             continue;
 
@@ -1615,7 +1611,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Check section data
                 foreach (var section in SectionTable ?? [])
                 {
-                    string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                    string sectionName = Encoding.ASCII.GetString(section.Name).TrimEnd('\0');
                     long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
                     _dataSource.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 

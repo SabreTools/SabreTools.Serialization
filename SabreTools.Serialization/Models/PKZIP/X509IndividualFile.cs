@@ -7,12 +7,12 @@ namespace SabreTools.Data.Models.PKZIP
     /// times, but can only appear once per certificate.
     /// </summary>
     /// <remarks>Header ID = 0x0015</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class X509IndividualFile : ExtensibleDataField
     {
         /// <summary>
         /// Signature Data
         /// </summary>
-        public byte[]? TData { get; set; }
+        public byte[] TData { get; set; }
     }
 }

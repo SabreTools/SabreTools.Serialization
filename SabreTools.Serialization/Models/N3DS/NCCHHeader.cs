@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x100 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
-        public byte[]? RSA2048Signature;
+        public byte[] RSA2048Signature = new byte[0x100];
 
         /// <summary>
         /// Magic ID, always 'NCCH'
@@ -53,21 +53,21 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? ProgramId;
+        public byte[] ProgramId = new byte[8];
 
         /// <summary>
         /// Reserved
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[0x10];
 
         /// <summary>
         /// Logo Region SHA-256 hash. (For applications built with SDK 5+) (Supported from firmware: 5.0.0-11)
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? LogoRegionHash;
+        public byte[] LogoRegionHash = new byte[0x20];
 
         /// <summary>
         /// Product code
@@ -81,7 +81,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? ExtendedHeaderHash;
+        public byte[] ExtendedHeaderHash = new byte[0x20];
 
         /// <summary>
         /// Extended header size, in bytes
@@ -164,7 +164,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? ExeFSSuperblockHash;
+        public byte[] ExeFSSuperblockHash = new byte[0x20];
 
         /// <summary>
         /// RomFS superblock SHA-256 hash - (SHA-256 hash, starting at 0x0 of the RomFS over the number
@@ -172,6 +172,6 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? RomFSSuperblockHash;
+        public byte[] RomFSSuperblockHash = new byte[0x20];
     }
 }

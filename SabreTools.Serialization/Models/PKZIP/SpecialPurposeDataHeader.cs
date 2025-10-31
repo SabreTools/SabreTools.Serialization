@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Special purpose data for ZIP64 extensible data field
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class SpecialPurposeDataHeader
     {
         /// <summary>
@@ -20,6 +20,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// Data (variable size)
         /// </summary>
         /// TODO: Implement models for all extra field types - 4.5.3
-        public byte[]? Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

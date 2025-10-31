@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GameCode => Model.CommonHeader?.GameCode ?? 0;
 
         /// <inheritdoc cref="Cart.SecureArea"/>
-        public byte[]? SecureArea => Model.SecureArea;
+        public byte[] SecureArea => Model.SecureArea;
 
         #endregion
 

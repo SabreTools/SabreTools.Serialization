@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// The following is the layout of the MVS "extra" block.
     /// </summary>
     /// <remarks>Header ID = 0x0065</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class MVSExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Attribute data (see APPENDIX B)
         /// </summary>
-        public byte[]? Var { get; set; }
+        public byte[] Var { get; set; }
     }
 }

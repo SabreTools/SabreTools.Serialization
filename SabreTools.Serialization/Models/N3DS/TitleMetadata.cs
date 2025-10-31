@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.N3DS
     /// <summary>
     /// A format used to store information about a title (installed title, DLC, etc.)
     /// and all its installed contents, including which contents they consist of and
-    /// their SHA256 hashes. 
+    /// their SHA256 hashes.
     /// </summary>
     /// <see href="https://www.3dbrew.org/wiki/Title_metadata"/>
     public sealed class TitleMetadata
@@ -26,12 +26,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Signature
         /// </summary>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; }
 
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[]? Padding1 { get; set; }
+        public byte[] Padding1 { get; set; }
 
         /// <summary>
         /// Signature Issuer
@@ -42,7 +42,7 @@ namespace SabreTools.Data.Models.N3DS
         /// Version
         /// </summary>
         public byte Version { get; set; }
-        
+
         /// <summary>
         /// CaCrlVersion
         /// </summary>
@@ -91,7 +91,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved2 { get; set; }
+        /// <remarks>4 bytes</remarks>
+        public byte[] Reserved2 { get; set; } = new byte[4];
 
         /// <summary>
         /// SRL Flag
@@ -101,7 +102,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved3 { get; set; }
+        /// <remarks>0x31 bytes</remarks>
+        public byte[] Reserved3 { get; set; } = new byte[0x31];
 
         /// <summary>
         /// Access Rights
@@ -126,12 +128,14 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[]? Padding2 { get; set; }
+        /// <remarks>2 bytes</remarks>
+        public byte[] Padding2 { get; set; } = new byte[2];
 
         /// <summary>
         /// SHA-256 Hash of the Content Info Records
         /// </summary>
-        public byte[]? SHA256HashContentInfoRecords { get; set; }
+        /// <remarks>0x20 bytes</remarks>
+        public byte[] SHA256HashContentInfoRecords { get; set; } = new byte[0x20];
 
         /// <summary>
         /// There are 64 of these records, usually only the first is used.

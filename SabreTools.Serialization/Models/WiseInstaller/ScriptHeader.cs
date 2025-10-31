@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.WiseInstaller
     /// <summary>
     /// Header for the Wise script
     /// </summary>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
     public class ScriptHeader
     {
         /// <summary>
@@ -21,7 +21,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// Read in a loop with <see cref="UnknownU16_2"/>, possibly
         /// an offset? It's read into an array.
-        /// 
+        ///
         /// Both values are then used to build variable names if they're
         /// non-zero. The variable names use "SYS" as the template.
         /// The values are then seemingly read over?
@@ -34,7 +34,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <remarks>
         /// Read in a loop with <see cref="UnknownU16_1"/>, possibly
         /// an offset? It's read into an array.
-        /// 
+        ///
         /// Both values are then used to build variable names if they're
         /// non-zero. The variable names use "SYS" as the template.
         /// The values are then seemingly read over?
@@ -48,7 +48,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// This seems to match the offset we can do filesize - SomeOffset1
         /// to get to the script file deflate offset, but not on all
         /// installers..
-        /// 
+        ///
         /// Values from WISE0001.DLL
         /// - < 0   - Display abort installation message and return 1?
         /// - 0x400 - Breaks a loop?
@@ -69,13 +69,13 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// </summary>
         /// <remarks>
         /// 4 bytes
-        /// 
+        ///
         /// In WISE0001.DLL, the first byte of this array is checked
         /// to be 0x00. If it's not 0x00, then it skips a string, ending
         /// at the next null terminator. The string at that offset is
         /// then comapred to ...
         /// </remarks>
-        public byte[]? UnknownBytes_2 { get; set; }
+        public byte[] UnknownBytes_2 { get; set; } = new byte[4];
 
         /// <summary>
         /// Creation of this WiseScript.bin since UNIX epoch
@@ -94,7 +94,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// - 22 - Normal header data, all fields present
         /// - 31 - Long header data, all fields present
         /// </remarks>
-        public byte[]? VariableLengthData { get; set; }
+        public byte[] VariableLengthData { get; set; }
 
         /// <summary>
         /// FTP URL for online downloading
@@ -120,7 +120,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// Unknown
         /// </summary>
         /// <remarks>2 bytes</remarks>
-        public byte[]? Unknown_2 { get; set; }
+        public byte[] Unknown_2 { get; set; } = new byte[2];
 
         /// <summary>
         /// if languageCount > 1: the total string count is larger, there
@@ -165,7 +165,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// All strings in the aheader
         /// </summary>
-        /// <remarks>See the remarks in <see cref="LanguageCount"/></remarks> 
+        /// <remarks>See the remarks in <see cref="LanguageCount"/></remarks>
         public string[]? HeaderStrings { get; set; }
     }
 }

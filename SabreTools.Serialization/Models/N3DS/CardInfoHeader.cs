@@ -21,7 +21,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0xF8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xF8)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[0xF8];
 
         /// <summary>
         /// Filled size of cartridge
@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x0C bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
-        public byte[]? Reserved2;
+        public byte[] Reserved2 = new byte[0x0C];
 
         /// <summary>
         /// Title version
@@ -50,14 +50,14 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x0C bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
-        public byte[]? Reserved3;
+        public byte[] Reserved3 = new byte[0x0C];
 
         /// <summary>
         /// Title ID of CVer in included update partition
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? CVerTitleID;
+        public byte[] CVerTitleID = new byte[8];
 
         /// <summary>
         /// Version number of CVer in included update partition
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0xCD6 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xCD6)]
-        public byte[]? Reserved4;
+        public byte[] Reserved4 = new byte[0xCD6];
 
         /// <summary>
         /// This data is returned by 16-byte cartridge command 0x82.

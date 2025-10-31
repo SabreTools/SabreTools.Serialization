@@ -40,10 +40,10 @@ namespace SabreTools.Data.Models.CFB
         /// This field MUST be set to 0x0009, or 0x000c, depending on the Major
         /// Version field. This field specifies the sector size of the compound file
         /// as a power of 2.
-        /// 
+        ///
         /// If Major Version is 3, the Sector Shift MUST be 0x0009, specifying a
         /// sector size of 512 bytes.
-        /// 
+        ///
         /// If Major Version is 4, the Sector Shift MUST be 0x000C, specifying a
         /// sector size of 4096 bytes.
         /// </summary>
@@ -61,12 +61,12 @@ namespace SabreTools.Data.Models.CFB
         /// </summary>
         /// <remarks>6 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[]? Reserved;
+        public byte[] Reserved = new byte[6];
 
         /// <summary>
         /// This integer field contains the count of the number of directory sectors
         /// in the compound file.
-        /// 
+        ///
         /// If Major Version is 3, the Number of Directory Sectors MUST be zero. This
         /// field is not supported for version 3 compound files.
         /// </summary>

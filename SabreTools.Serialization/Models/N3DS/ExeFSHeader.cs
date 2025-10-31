@@ -2,8 +2,8 @@
 {
     /// <summary>
     /// ExeFS or Executable Filesystem contains information related to the
-    /// executable program, and is the part of the CXI format. 
-    /// 
+    /// executable program, and is the part of the CXI format.
+    ///
     /// The ExeFS usually contains one or more of the following files:
     /// - .code Contains the code binary, which can be optionally reverse-LZSS compressed via an exheader flag.
     /// - logo Contains distribution licensing Binary data.
@@ -22,7 +22,7 @@
         /// Reserved
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
-        public byte[]? Reserved { get; set; }
+        public byte[] Reserved { get; set; } = new byte[0x20];
 
         /// <summary>
         /// File hashes (10 hashes maximum, 32 bytes each, one for each header)

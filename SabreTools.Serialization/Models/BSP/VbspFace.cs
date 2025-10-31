@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.BSP
     /// the faces of brushes created in Hammer. Faces are always flat,
     /// convex polygons, though they can contain edges that are co-linear.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class VbspFace
     {
@@ -58,7 +58,7 @@ namespace SabreTools.Data.Models.BSP
         /// Switchable lighting info
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[]? Styles = new byte[4];
+        public byte[] Styles = new byte[4];
 
         /// <summary>
         /// Offset into lightmap lump

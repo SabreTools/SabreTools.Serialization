@@ -25,12 +25,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Signature
         /// </summary>
-        public byte[]? Signature { get; set; }
+        public byte[] Signature { get; set; }
 
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[]? Padding { get; set; }
+        public byte[] Padding { get; set; }
 
         /// <summary>
         /// Issuer
@@ -40,7 +40,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// ECC PublicKey
         /// </summary>
-        public byte[]? ECCPublicKey { get; set; }
+        /// <remarks>0x3C bytes</remarks>
+        public byte[] ECCPublicKey { get; set; } = new byte[0x3C];
 
         /// <summary>
         /// Version (For 3DS this is always 1)
@@ -61,17 +62,19 @@ namespace SabreTools.Data.Models.N3DS
         /// TitleKey (normal-key encrypted using one of the common keyYs; see below)
         /// </summary>
         /// <remarks>
+        /// 0x10 bytes
+        ///
         /// The titlekey is decrypted by using the AES engine with the ticket common-key keyslot.
         /// The keyY is selected through an index (ticket offset 0xB1) into a plaintext array
         /// of 6 keys ("common keyYs") stored in the data section of Process9. AES-CBC mode is used
         /// where the IV is the big-endian titleID. Note that on a retail unit index0 is a retail keyY,
         /// while on a dev-unit index0 is the dev common-key which is a normal-key.
         /// (On retail for these keyYs, the hardware key-scrambler is used)
-        /// 
+        ///
         /// The titlekey is used to decrypt content downloaded from the CDN using 128-bit AES-CBC with
         /// the content index (as big endian u16, padded with trailing zeroes) as the IV.
         /// </remarks>
-        public byte[]? TitleKey { get; set; }
+        public byte[] TitleKey { get; set; } = new byte[0x10];
 
         /// <summary>
         /// Reserved
@@ -96,7 +99,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved2 { get; set; }
+        /// <remarks>2 bytes</remarks>
+        public byte[] Reserved2 { get; set; } = new byte[2];
 
         /// <summary>
         /// Ticket title version
@@ -110,7 +114,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved3 { get; set; }
+        /// <remarks>8 bytes</remarks>
+        public byte[] Reserved3 { get; set; } = new byte[8];
 
         /// <summary>
         /// License Type
@@ -125,7 +130,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved4 { get; set; }
+        /// <remarks>0x2A bytes</remarks>
+        public byte[] Reserved4 { get; set; } = new byte[0x2A];
 
         /// <summary>
         /// eShop Account ID?
@@ -145,7 +151,8 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Reserved
         /// </summary>
-        public byte[]? Reserved6 { get; set; }
+        /// <remarks>0x42 bytes</remarks>
+        public byte[] Reserved6 { get; set; } = new byte[0x42];
 
         /// <summary>
         /// Limits
@@ -165,7 +172,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Content Index
         /// </summary>
-        public byte[]? ContentIndex { get; set; }
+        public byte[] ContentIndex { get; set; }
 
         /// <summary>
         /// Certificate chain

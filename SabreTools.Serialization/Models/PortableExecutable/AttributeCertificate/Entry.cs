@@ -6,7 +6,7 @@
     /// contiguous, quadword-aligned attribute certificate entries. Zero padding is
     /// inserted between the original end of the file and the beginning of the attribute
     /// certificate table to achieve this alignment.
-    /// 
+    ///
     /// The virtual address value from the Certificate Table entry in the Optional
     /// Header Data Directory is a file offset to the first attribute certificate
     /// entry. Subsequent entries are accessed by advancing that entry's dwLength
@@ -16,10 +16,10 @@
     /// Header Data Directory. If the sum of the rounded dwLength values does not equal
     /// the Size value, then either the attribute certificate table or the Size field
     /// is corrupted.
-    /// 
+    ///
     /// The first certificate starts at offset 0x5000 from the start of the file on disk.
     /// To advance through all the attribute certificate entries:
-    /// 
+    ///
     /// 1. Add the first attribute certificate's dwLength value to the starting offset.
     /// 2. Round the value from step 1 up to the nearest 8-byte multiple to find the offset
     ///    of the second attribute certificate entry.
@@ -29,7 +29,7 @@
     /// 4. Repeat step 3 for each successive certificate until the calculated offset equals
     ///    0x6000 (0x5000 start + 0x1000 total size), which indicates that you've walked
     ///    the entire table.
-    /// 
+    ///
     /// Attribute certificate table entries can contain any certificate type, as long as
     /// the entry has the correct dwLength value, a unique wRevision value, and a unique
     /// wCertificateType value. The most common type of certificate table entry is a
@@ -58,6 +58,6 @@
         /// Contains a certificate, such as an Authenticode signature.
         /// </summary>
         /// <see href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#certificate-data"/>
-        public byte[]? Certificate { get; set; }
+        public byte[] Certificate { get; set; }
     }
 }

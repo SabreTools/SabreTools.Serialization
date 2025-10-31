@@ -49,7 +49,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>7 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        public byte[]? Reserved1;
+        public byte[] Reserved1 = new byte[7];
 
         /// <summary>
         /// Game Revision (used by DSi titles)
@@ -186,7 +186,7 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[]? SecureDisable;
+        public byte[] SecureDisable = new byte[8];
 
         /// <summary>
         /// NTR region ROM size (excluding DSi area)
@@ -203,14 +203,14 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>56 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)]
-        public byte[]? Reserved2;
+        public byte[] Reserved2 = new byte[56];
 
         /// <summary>
         /// Nintendo Logo
         /// </summary>
         /// <remarks>156 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 156)]
-        public byte[]? NintendoLogo;
+        public byte[] NintendoLogo = new byte[156];
 
         /// <summary>
         /// Nintendo Logo CRC
@@ -227,6 +227,6 @@ namespace SabreTools.Data.Models.Nitro
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
-        public byte[]? DebuggerReserved;
+        public byte[] DebuggerReserved = new byte[0x20];
     }
 }

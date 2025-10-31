@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// Auxiliary Format 5: Section Definitions
-    /// 
+    ///
     /// This format follows a symbol-table record that defines a section. Such a
     /// record has a symbol name that is the name of a section (such as .text or
     /// .drectve) and has storage class STATIC (3). The auxiliary record provides
@@ -49,6 +49,6 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
         /// Unused
         /// </summary>
         /// <remarks>3 bytes</remarks>
-        public byte[]? Unused { get; set; }
+        public byte[] Unused { get; set; } = new byte[3];
     }
 }

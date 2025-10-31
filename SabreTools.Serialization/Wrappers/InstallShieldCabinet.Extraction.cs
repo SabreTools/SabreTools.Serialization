@@ -389,7 +389,7 @@ namespace SabreTools.Serialization.Wrappers
             // Validate the data written, if required
             if (MajorVersion >= 6)
             {
-                string expectedMd5 = BitConverter.ToString(fileDescriptor.MD5!);
+                string expectedMd5 = BitConverter.ToString(fileDescriptor.MD5);
                 expectedMd5 = expectedMd5.ToLowerInvariant().Replace("-", string.Empty);
 
                 string? actualMd5 = md5.CurrentHashString;

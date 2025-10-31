@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32 unused bytes at offset 88, should be all 0x00
         /// Note: These is used for EscapeSequences on SupplementaryVolumeDescriptor
         /// </summary>
-        public byte[] Unused32Bytes { get; set; }
+        public byte[] Unused32Bytes { get; set; } = new byte[32];
     }
 }
