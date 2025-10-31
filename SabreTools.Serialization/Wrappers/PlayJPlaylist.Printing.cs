@@ -22,27 +22,20 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.AudioFiles);
         }
 
-        private static void Print(StringBuilder builder, PlaylistHeader? header)
+        private static void Print(StringBuilder builder, PlaylistHeader header)
         {
             builder.AppendLine("  Playlist Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No playlist header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.TrackCount, "  Track count");
             builder.AppendLine(header.Data, "  Data");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, AudioFile[]? entries)
+        private static void Print(StringBuilder builder, AudioFile[] entries)
         {
             builder.AppendLine("  Audio Files Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No audio files");
                 builder.AppendLine();
@@ -57,12 +50,12 @@ namespace SabreTools.Serialization.Wrappers
                 Print(builder, entry.Header);
                 Print(builder, entry.UnknownBlock1);
 
-                if (entry.Header?.Version == 0x00000000)
+                if (entry.Header.Version == 0x00000000)
                 {
                     Print(builder, entry.UnknownValue2);
                     Print(builder, entry.UnknownBlock3);
                 }
-                else if (entry.Header?.Version == 0x0000000A)
+                else if (entry.Header.Version == 0x0000000A)
                 {
                     Print(builder, entry.DataFilesCount, entry.DataFiles);
                 }
@@ -71,17 +64,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, AudioHeader? header)
+        private static void Print(StringBuilder builder, AudioHeader header)
         {
             builder.AppendLine("    Audio Header Information:");
             builder.AppendLine("    -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("    No audio header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "    Signature");
             builder.AppendLine(header.Version, "    Version");
             if (header.Version == 0x00000000 && header is AudioHeaderV1 headerV1)
@@ -145,33 +131,19 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, UnknownBlock1? block)
+        private static void Print(StringBuilder builder, UnknownBlock1 block)
         {
             builder.AppendLine("    Unknown Block 1 Information:");
             builder.AppendLine("    -------------------------");
-            if (block == null)
-            {
-                builder.AppendLine("    No unknown block 1r");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(block.Length, "    Length");
             builder.AppendLine(block.Data, "    Data");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, uint? value)
+        private static void Print(StringBuilder builder, uint value)
         {
             builder.AppendLine("    Unknown Value 2 Information:");
             builder.AppendLine("    -------------------------");
-            if (value == null)
-            {
-                builder.AppendLine("    No unknown block 1r");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(value, "    Value");
             builder.AppendLine();
         }

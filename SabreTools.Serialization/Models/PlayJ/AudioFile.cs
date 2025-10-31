@@ -8,12 +8,12 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Header
         /// </summary>
-        public AudioHeader? Header { get; set; }
+        public AudioHeader Header { get; set; }
 
         /// <summary>
         /// Unknown block 1
         /// </summary>
-        public UnknownBlock1? UnknownBlock1 { get; set; }
+        public UnknownBlock1 UnknownBlock1 { get; set; }
 
         #region V1 Only
 

@@ -26,7 +26,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Track name (not null-terminated)
         /// </summary>
-        public string? Track { get; set; }
+        public string Track { get; set; }
 
         /// <summary>
         /// Length of the artist name
@@ -36,7 +36,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Artist name (not null-terminated)
         /// </summary>
-        public string? Artist { get; set; }
+        public string Artist { get; set; }
 
         /// <summary>
         /// Length of the album name
@@ -46,7 +46,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Album name (not null-terminated)
         /// </summary>
-        public string? Album { get; set; }
+        public string Album { get; set; }
 
         /// <summary>
         /// Length of the writer name
@@ -56,7 +56,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Writer name (not null-terminated)
         /// </summary>
-        public string? Writer { get; set; }
+        public string Writer { get; set; }
 
         /// <summary>
         /// Length of the publisher name
@@ -66,7 +66,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Publisher name (not null-terminated)
         /// </summary>
-        public string? Publisher { get; set; }
+        public string Publisher { get; set; }
 
         /// <summary>
         /// Length of the label name
@@ -76,7 +76,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Label name (not null-terminated)
         /// </summary>
-        public string? Label { get; set; }
+        public string Label { get; set; }
 
         /// <summary>
         /// Length of the comments

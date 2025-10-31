@@ -21,28 +21,21 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Header);
             Print(builder, Model.UnknownBlock1);
 
-            if (Model.Header?.Version == 0x00000000)
+            if (Model.Header.Version == 0x00000000)
             {
                 Print(builder, Model.UnknownValue2);
                 Print(builder, Model.UnknownBlock3);
             }
-            else if (Model.Header?.Version == 0x0000000A)
+            else if (Model.Header.Version == 0x0000000A)
             {
                 Print(builder, Model.DataFilesCount, Model.DataFiles);
             }
         }
 
-        private static void Print(StringBuilder builder, AudioHeader? header)
+        private static void Print(StringBuilder builder, AudioHeader header)
         {
             builder.AppendLine("  Audio Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No audio header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Version, "  Version");
             if (header.Version == 0x00000000 && header is AudioHeaderV1 headerV1)
@@ -106,33 +99,19 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, UnknownBlock1? block)
+        private static void Print(StringBuilder builder, UnknownBlock1 block)
         {
             builder.AppendLine("  Unknown Block 1 Information:");
             builder.AppendLine("  -------------------------");
-            if (block == null)
-            {
-                builder.AppendLine("  No unknown block 1r");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(block.Length, "  Length");
             builder.AppendLine(block.Data, "  Data");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, uint? value)
+        private static void Print(StringBuilder builder, uint value)
         {
             builder.AppendLine("  Unknown Value 2 Information:");
             builder.AppendLine("  -------------------------");
-            if (value == null)
-            {
-                builder.AppendLine("  No unknown block 1r");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(value, "  Value");
             builder.AppendLine();
         }
