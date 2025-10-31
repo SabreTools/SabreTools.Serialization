@@ -21,17 +21,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Header);
         }
 
-        private static void Print(StringBuilder builder, QBasicHeader? header)
+        private static void Print(StringBuilder builder, QBasicHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine(header.RealLength, "  Real length");
             builder.AppendLine();

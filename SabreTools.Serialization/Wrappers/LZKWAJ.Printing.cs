@@ -22,17 +22,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.HeaderExtensions);
         }
 
-        private static void Print(StringBuilder builder, KWAJHeader? header)
+        private static void Print(StringBuilder builder, KWAJHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine($"  Compression type: {header.CompressionType} (0x{header.CompressionType:X})");
             builder.AppendLine(header.DataOffset, "  Data offset");
@@ -40,17 +33,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, KWAJHeaderExtensions? header)
+        private static void Print(StringBuilder builder, KWAJHeaderExtensions header)
         {
             builder.AppendLine("  Header Extensions Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header extensions");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.DecompressedLength, "  Decompressed length");
             builder.AppendLine(header.UnknownPurpose, "  Unknown purpose");
             builder.AppendLine(header.UnknownDataLength, "  Unknown data length");

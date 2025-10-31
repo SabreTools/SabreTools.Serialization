@@ -9,12 +9,12 @@ namespace SabreTools.Data.Models.LZ
         /// <summary>
         /// Header
         /// </summary>
-        public KWAJHeader? Header { get; set; }
+        public KWAJHeader Header { get; set; }
 
         /// <summary>
-        /// Optional extensions defined by <see cref="KWAJHeader.HeaderFlags"/> 
+        /// Optional extensions defined by <see cref="KWAJHeader.HeaderFlags"/>
         /// </summary>
-        public KWAJHeaderExtensions? HeaderExtensions { get; set; }
+        public KWAJHeaderExtensions HeaderExtensions { get; set; }
 
         // Followed immediately by compressed data
     }
