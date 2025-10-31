@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.XZP
 
         public uint NameOffset { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public uint TimeCreated { get; set; }
     }

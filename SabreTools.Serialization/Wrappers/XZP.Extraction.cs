@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no directory entries
-            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+            if (DirectoryEntries.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
@@ -32,11 +32,11 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no directory entries
-            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+            if (DirectoryEntries.Length == 0)
                 return false;
 
             // If we have no directory items
-            if (DirectoryItems == null || DirectoryItems.Length == 0)
+            if (DirectoryItems.Length == 0)
                 return false;
 
             // If the directory entry index is invalid
