@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.LinearExecutable
     /// <summary>
     /// The Per-Page Checksum table provides space for a cryptographic checksum for
     /// each physical page in the EXE file.
-    /// 
+    ///
     /// The checksum table is arranged such that the first entry in the table corresponds
     /// to the first logical page of code/data in the EXE file (usually a preload page)
     /// and the last entry corresponds to the last logical page in the EXE file (usually

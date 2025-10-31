@@ -5,8 +5,8 @@
     /// fixup references to the entry points within this module. Not all entry points
     /// in the entry table will be exported, some entry points will only be used
     /// within the module. An ordinal number is used to index into the entry table.
-    /// The entry table entries are numbered starting from one. 
-    /// 
+    /// The entry table entries are numbered starting from one.
+    ///
     /// The list of entries are compressed into 'bundles', where possible. The entries
     /// within each bundle are all the same size. A bundle starts with a count field
     /// which indicates the number of entries in the bundle. The count is followed by
@@ -22,12 +22,12 @@
         /// </summary>
         /// <remarks>
         /// This is the number of entries in this bundle.
-        /// 
+        ///
         /// A zero value for the number of entries identifies the end of the
         /// entry table. There is no further bundle information when the number
         /// of entries is zero. In other words the entry table is terminated by
         /// a single zero byte.
-        /// 
+        ///
         /// For <see cref="BundleType.UnusedEntry"/>, this is the number of unused
         ///     entries to skip.
         /// For <see cref="BundleType.SixteenBitEntry"/>, this is the number of 16-bit
@@ -51,6 +51,6 @@
         /// <summary>
         /// Table entries in the bundle
         /// </summary>
-        public EntryTableEntry[]? TableEntries { get; set; }
+        public EntryTableEntry[] TableEntries { get; set; }
     }
 }

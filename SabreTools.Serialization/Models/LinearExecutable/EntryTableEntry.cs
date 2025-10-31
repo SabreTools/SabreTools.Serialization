@@ -136,19 +136,19 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// If the FLAGS field indicates import by ordinal, then this field is the
         /// ordinal number into the Entry Table of the target module, otherwise this
         /// field is the offset into the Procedure Names Table of the target module.
-        /// 
+        ///
         /// A Forwarder entry (type = 4) is an entry point whose value is an imported
         /// reference. When a load time fixup occurs whose target is a forwarder, the
         /// loader obtains the address imported by the forwarder and uses that imported
         /// address to resolve the fixup.
-        /// 
+        ///
         /// A forwarder may refer to an entry point in another module which is itself a
         /// forwarder, so there can be a chain of forwarders. The loader will traverse
         /// the chain until it finds a non-forwarded entry point which terminates the
         /// chain, and use this to resolve the original fixup. Circular chains are
         /// detected by the loader and result in a load time error. A maximum of 1024
         /// forwarders is allowed in a chain; more than this results in a load time error.
-        /// 
+        ///
         /// Forwarders are useful for merging and recombining API calls into different
         /// sets of libraries, while maintaining compatibility with applications. For
         /// example, if one wanted to combine MONCALLS, MOUCALLS, and VIOCALLS into a
@@ -164,19 +164,19 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// If the FLAGS field indicates import by ordinal, then this field is the
         /// ordinal number into the Entry Table of the target module, otherwise this
         /// field is the offset into the Procedure Names Table of the target module.
-        /// 
+        ///
         /// A Forwarder entry (type = 4) is an entry point whose value is an imported
         /// reference. When a load time fixup occurs whose target is a forwarder, the
         /// loader obtains the address imported by the forwarder and uses that imported
         /// address to resolve the fixup.
-        /// 
+        ///
         /// A forwarder may refer to an entry point in another module which is itself a
         /// forwarder, so there can be a chain of forwarders. The loader will traverse
         /// the chain until it finds a non-forwarded entry point which terminates the
         /// chain, and use this to resolve the original fixup. Circular chains are
         /// detected by the loader and result in a load time error. A maximum of 1024
         /// forwarders is allowed in a chain; more than this results in a load time error.
-        /// 
+        ///
         /// Forwarders are useful for merging and recombining API calls into different
         /// sets of libraries, while maintaining compatibility with applications. For
         /// example, if one wanted to combine MONCALLS, MOUCALLS, and VIOCALLS into a

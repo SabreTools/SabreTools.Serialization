@@ -360,7 +360,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// The setting of this bit requires the EIP Object # and EIP fields
         /// to have valid values. If the EIP Object # and EIP fields are
         /// valid and this bit is NOT set, then Global Library Initialization
-        /// is assumed. Setting this bit for an EXE file is invalid. 
+        /// is assumed. Setting this bit for an EXE file is invalid.
         /// </remarks>
         Initialization = 0x00000004,
 
@@ -370,14 +370,14 @@ namespace SabreTools.Data.Models.LinearExecutable
         Reserved3 = 0x00000008,
 
         /// <summary>
-        /// Internal fixups for the module have been applied. 
+        /// Internal fixups for the module have been applied.
         /// </summary>
         /// <remarks>
         /// The setting of this bit in a Linear Executable Module indicates that
         /// each object of the module has a preferred load address specified in
         /// the Object Table Reloc Base Addr. If the module's objects can not be
         /// loaded at these preferred addresses, then the relocation records that
-        /// have been retained in the file data will be applied. 
+        /// have been retained in the file data will be applied.
         /// </remarks>
         InternalFixupsApplied = 0x00000010,
 
@@ -432,7 +432,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// <remarks>
         /// When the 'Module is not loadable' flag is set, it indicates that
         /// either errors were detected at link time or that the module is
-        /// being incrementally linked and therefore can't be loaded. 
+        /// being incrementally linked and therefore can't be loaded.
         /// </remarks>
         ModuleNotLoadable = 0x00002000,
 
@@ -451,7 +451,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// </summary>
         /// <remarks>
         /// A module can not contain dynamic links to other modules that have
-        /// the 'program module' type. 
+        /// the 'program module' type.
         /// </remarks>
         ProgramModule = 0x00000000,
 
@@ -482,7 +482,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// The setting of this bit requires the EIP Object # and EIP fields
         /// to have valid values. If the EIP Object # and EIP fields are
         /// valid and this bit is NOT set, then Global Library Termination
-        /// is assumed. Setting this bit for an EXE file is invalid. 
+        /// is assumed. Setting this bit for an EXE file is invalid.
         /// </remarks>
         PerProcessLibraryTermination = 0x40000000,
     }
@@ -508,7 +508,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         // The readable, writable and executable flags provide support for all possible
         // protections. In systems where all of these protections are not supported,
         // the loader will be responsible for making the appropriate protection match
-        // for the system. 
+        // for the system.
 
         /// <summary>
         /// Resource Object.
@@ -576,7 +576,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         // this bit controls the setting of the Default bit in the segment
         // descriptor. (The Default bit, or D-bit, determines whether the default
         // word size is 32-bits or 16-bits. It also affects the interpretation of
-        // the instruction stream.) 
+        // the instruction stream.)
 
         /// <summary>
         /// Object is conforming for code (80x86 Specific).
@@ -621,7 +621,7 @@ namespace SabreTools.Data.Models.LinearExecutable
     public enum OperatingSystem : ushort
     {
         /// <summary>
-        /// Unknown (any "new-format" OS) 
+        /// Unknown (any "new-format" OS)
         /// </summary>
         Unknown = 0x00,
 

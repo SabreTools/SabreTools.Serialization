@@ -13,39 +13,39 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// <summary>
         /// MS-DOS executable stub
         /// </summary>
-        public MSDOS.Executable? Stub { get; set; }
+        public MSDOS.Executable Stub { get; set; }
 
         /// <summary>
         /// Information block
         /// </summary>
-        public InformationBlock? InformationBlock { get; set; }
+        public InformationBlock InformationBlock { get; set; }
 
         /// <summary>
         /// Object table
         /// </summary>
-        public ObjectTableEntry[]? ObjectTable { get; set; }
+        public ObjectTableEntry[] ObjectTable { get; set; }
 
         /// <summary>
         /// Object page map
         /// </summary>
-        public ObjectPageMapEntry[]? ObjectPageMap { get; set; }
+        public ObjectPageMapEntry[] ObjectPageMap { get; set; }
 
         // TODO: Object iterate data map table (Undefined)
 
         /// <summary>
         /// Resource table
         /// </summary>
-        public ResourceTableEntry[]? ResourceTable { get; set; }
+        public ResourceTableEntry[] ResourceTable { get; set; }
 
         /// <summary>
         /// Resident Name table
         /// </summary>
-        public ResidentNamesTableEntry[]? ResidentNamesTable { get; set; }
+        public ResidentNamesTableEntry[] ResidentNamesTable { get; set; }
 
         /// <summary>
         /// Entry table
         /// </summary>
-        public EntryTableBundle[]? EntryTable { get; set; }
+        public EntryTableBundle[] EntryTable { get; set; }
 
         /// <summary>
         /// Module format directives table (optional)
@@ -60,32 +60,32 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// <summary>
         /// Fix-up page table
         /// </summary>
-        public FixupPageTableEntry[]? FixupPageTable { get; set; }
+        public FixupPageTableEntry[] FixupPageTable { get; set; }
 
         /// <summary>
         /// Fix-up record table
         /// </summary>
-        public FixupRecordTableEntry[]? FixupRecordTable { get; set; }
+        public FixupRecordTableEntry[] FixupRecordTable { get; set; }
 
         /// <summary>
         /// Import module name table
         /// </summary>
-        public ImportModuleNameTableEntry[]? ImportModuleNameTable { get; set; }
+        public ImportModuleNameTableEntry[] ImportModuleNameTable { get; set; }
 
         /// <summary>
         /// Import procedure name table
         /// </summary>
-        public ImportModuleProcedureNameTableEntry[]? ImportModuleProcedureNameTable { get; set; }
+        public ImportModuleProcedureNameTableEntry[] ImportModuleProcedureNameTable { get; set; }
 
         /// <summary>
         /// Per-Page checksum table
         /// </summary>
-        public PerPageChecksumTableEntry[]? PerPageChecksumTable { get; set; }
+        public PerPageChecksumTableEntry[] PerPageChecksumTable { get; set; }
 
         /// <summary>
         /// Non-Resident Name table
         /// </summary>
-        public NonResidentNamesTableEntry[]? NonResidentNamesTable { get; set; }
+        public NonResidentNamesTableEntry[] NonResidentNamesTable { get; set; }
 
         // TODO: Non-resident directives data (Undefined)
 

@@ -44,7 +44,7 @@
         /// entries in the source offset list. Otherwise, this is the single source
         /// offset for the fixup. Source offsets are relative to the beginning of
         /// the page where the fixup is to be made.
-        /// 
+        ///
         /// Note that for fixups that cross page boundaries, a separate fixup record
         /// is specified for each page. An offset is still used for the 2nd page but
         /// it now becomes a negative offset since the fixup originated on the
@@ -68,7 +68,7 @@
         /// entries in the source offset list. Otherwise, this is the single source
         /// offset for the fixup. Source offsets are relative to the beginning of
         /// the page where the fixup is to be made.
-        /// 
+        ///
         /// Note that for fixups that cross page boundaries, a separate fixup record
         /// is specified for each page. An offset is still used for the 2nd page but
         /// it now becomes a negative offset since the fixup originated on the
@@ -208,7 +208,7 @@
         /// <remarks>
         /// This field is an offset into the Import Procedure Name Table. It is
         /// a Word value when the '32-bit Target Offset Flag' bit in the target
-        /// flags field is clear and a Dword value when the bit is set. 
+        /// flags field is clear and a Dword value when the bit is set.
         /// </remarks>
         public uint OffsetImportProcedureNameTableDWORD { get; set; }
 
@@ -222,7 +222,7 @@
         /// <remarks>
         /// This field is an offset into the Import Procedure Name Table. It is
         /// a Word value when the '32-bit Target Offset Flag' bit in the target
-        /// flags field is clear and a Dword value when the bit is set. 
+        /// flags field is clear and a Dword value when the bit is set.
         /// </remarks>
         public ushort OffsetImportProcedureNameTableWORD { get; set; }
 
@@ -245,7 +245,7 @@
         /// This is the imported procedure's ordinal number. It is a Byte value when the
         /// '8-bit Ordinal' bit in the target flags field is set. Otherwise it is a Word value
         /// when the '32-bit Target Offset Flag' bit in the target flags field is clear and a
-        /// Dword value when the bit is set. 
+        /// Dword value when the bit is set.
         /// </remarks>
         public byte ImportedOrdinalNumberByte { get; set; }
 
@@ -264,7 +264,7 @@
         /// This is the imported procedure's ordinal number. It is a Byte value when the
         /// '8-bit Ordinal' bit in the target flags field is set. Otherwise it is a Word value
         /// when the '32-bit Target Offset Flag' bit in the target flags field is clear and a
-        /// Dword value when the bit is set. 
+        /// Dword value when the bit is set.
         /// </remarks>
         public uint ImportedOrdinalNumberDWORD { get; set; }
 
@@ -279,7 +279,7 @@
         /// This is the imported procedure's ordinal number. It is a Byte value when the
         /// '8-bit Ordinal' bit in the target flags field is set. Otherwise it is a Word value
         /// when the '32-bit Target Offset Flag' bit in the target flags field is clear and a
-        /// Dword value when the bit is set. 
+        /// Dword value when the bit is set.
         /// </remarks>
         public uint ImportedOrdinalNumberWORD { get; set; }
 
@@ -310,7 +310,7 @@
         /// clear the fixup record does not contain this field and is immediately
         /// followed by the next fixup record (or by the source offset list for this
         /// fixup record).
-        /// 
+        ///
         /// This value is added to the address derived from the target entry point.
         /// This field is a Word value when the '32-bit Additive Flag' bit in the
         /// target flags field is clear and a Dword value when the bit is set.
@@ -330,7 +330,7 @@
         /// clear the fixup record does not contain this field and is immediately
         /// followed by the next fixup record (or by the source offset list for this
         /// fixup record).
-        /// 
+        ///
         /// This value is added to the address derived from the target entry point.
         /// This field is a Word value when the '32-bit Additive Flag' bit in the
         /// target flags field is clear and a Dword value when the bit is set.
