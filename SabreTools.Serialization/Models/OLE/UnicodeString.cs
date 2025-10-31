@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.OLE
     /// <summary>
     /// The UnicodeString packet represents a Unicode string.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class UnicodeString
     {
         /// <summary>
@@ -18,6 +18,6 @@ namespace SabreTools.Data.Models.OLE
         /// padding to a multiple of 4 bytes. The string represented by this field SHOULD NOT contain
         /// embedded or additional trailing null characters.
         /// </summary>
-        public string? Characters { get; set; }
+        public string Characters { get; set; }
     }
 }

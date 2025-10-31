@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.OLE
     /// otherwise stated, a SummaryInformation property set SHOULD have all of these properties, and SHOULD
     /// NOT have any other properties, except for the special properties specified in section 2.18.
     /// </remarks>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public enum PropertyIdentifier : uint
     {
         /// <summary>
@@ -162,7 +162,7 @@ namespace SabreTools.Data.Models.OLE
     /// PropertySetStream packet. In addition, the property types not supported in simple property sets
     /// are specified as such. PropertyType is an enumeration, which MUST be one of the following values
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public enum PropertyType : ushort
     {
         /// <summary>

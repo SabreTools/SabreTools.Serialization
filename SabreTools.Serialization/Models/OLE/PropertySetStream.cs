@@ -5,17 +5,17 @@ namespace SabreTools.Data.Models.OLE
     /// sets and the stream format for the CONTENTS stream in the Non-Simple Property
     /// Set Storage Format. A simple property set MUST be represented by a stream
     /// containing a PropertySetStream packet.
-    /// 
+    ///
     /// The PropertySetStream packet usually represents exactly one property set, but
     /// for historical reasons, the DocumentSummaryInfo and UserDefinedProperties
     /// property sets are represented in the same stream.In this special case, a
     /// PropertySetStream might represent two property sets.
-    /// 
+    ///
     /// An implementation SHOULD enforce a limit on the total size of a PropertySetStream
     /// packet. This limit MUST be at least 262,144 bytes, and for maximum interoperability
     /// SHOULD be 2,097,152 bytes.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class PropertySetStream
     {
         /// <summary>
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.OLE
         /// - Property types not supported for version 0 property sets, as specified in
         ///   the PropertyType enumeration.
         /// - The Behavior property.
-        /// 
+        ///
         /// If the property set does not use any of these features, this field SHOULD be
         /// set to 0x0000 for maximum interoperability.
         /// </summary>
@@ -50,12 +50,12 @@ namespace SabreTools.Data.Models.OLE
         /// the property set (or property sets). If no CLSID is provided by the
         /// application, it SHOULD be set to GUID_NULL by default.
         /// </summary>
-        public GUID? CLSID { get; set; }
+        public GUID CLSID { get; set; }
 
         /// <summary>
         /// An unsigned integer indicating the number of property sets represented by
         /// this PropertySetStream structure. MUST be either 0x00000001 or 0x00000002.
-        /// 
+        ///
         /// - 0x00000001: This structure contains one property set
         /// - 0x00000002: This structure contains two property sets.
         ///               The optional fields for PropertySet 1 are present.
@@ -68,7 +68,7 @@ namespace SabreTools.Data.Models.OLE
         /// GUID MUST be set to FMTID_DocSummaryInformation
         /// ({D5CDD502-2E9C-101B-9397-08002B2CF9AE}).
         /// </summary>
-        public GUID? FMTID0 { get; set; }
+        public GUID FMTID0 { get; set; }
 
         /// <summary>
         /// An unsigned integer that MUST be set to the offset in bytes from the beginning
@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.OLE
         /// If NumPropertySets has the value 0x00000002, it MUST be set to FMTID_UserDefinedProperties
         /// ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}). Otherwise, it MUST be absent.
         /// </summary>
-        public GUID? FMTID1 { get; set; }
+        public GUID FMTID1 { get; set; }
 
         /// <summary>
         /// If NumPropertySets has the value 0x00000002, it MUST be set to the offset in bytes
@@ -92,13 +92,13 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be a PropertySet packet
         /// </summary>
-        public PropertySet? PropertySet0 { get; set; }
+        public PropertySet PropertySet0 { get; set; }
 
         /// <summary>
         /// If NumPropertySets has the value 0x00000002, it MUST be a PropertySet packet.
         /// Otherwise, it MUST be absent.
         /// </summary>
-        public PropertySet? PropertySet1 { get; set; }
+        public PropertySet PropertySet1 { get; set; }
 
         // Padding (variable): Contains additional padding added by the implementation.
         // If present, padding MUST be zeroes and MUST be ignored.

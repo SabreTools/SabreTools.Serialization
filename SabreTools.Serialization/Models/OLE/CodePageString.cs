@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.OLE
     /// The CodePageString packet represents a string whose encoding depends on the
     /// value of the property set's CodePage property.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class CodePageString
     {
         /// <summary>
@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.OLE
         /// implementation SHOULD NOT write strings with embedded or trailing null characters unless
         /// specifically requested to do so by an application.
         /// </summary>
-        public string? Characters { get; set; }
+        public string Characters { get; set; }
     }
 }

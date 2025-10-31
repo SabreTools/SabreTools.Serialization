@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.OLE
     /// stream binding MUST have a control stream, which is an alternate stream with the name
     /// "{4c8cc155-6c1e-11d1-8e41-00c04fb9386d}". This stream MUST contain the following packet.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class ControlStream
     {
         /// <summary>
@@ -30,6 +30,6 @@ namespace SabreTools.Data.Models.OLE
         /// OLEPS implementation. If the application did not provide a value,
         /// it SHOULD be absent.
         /// </summary>
-        public GUID? CLSID { get; set; }
+        public GUID CLSID { get; set; }
     }
 }
