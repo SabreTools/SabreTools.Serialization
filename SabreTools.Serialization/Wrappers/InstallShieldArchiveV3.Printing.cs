@@ -23,17 +23,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Files);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature1, "  Signature 1");
             builder.AppendLine(header.Signature2, "  Signature 2");
             builder.AppendLine(header.Reserved0, "  Reserved 0");
@@ -56,11 +49,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory[]? entries)
+        private static void Print(StringBuilder builder, Directory[] entries)
         {
             builder.AppendLine("  Directories:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directories");
                 builder.AppendLine();
@@ -80,11 +73,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File[]? entries)
+        private static void Print(StringBuilder builder, File[] entries)
         {
             builder.AppendLine("  Files:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No files");
                 builder.AppendLine();

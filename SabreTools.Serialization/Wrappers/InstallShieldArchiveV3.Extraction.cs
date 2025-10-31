@@ -58,8 +58,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the directory name
             var dirName = Directories[dirIndex].Name;
-            if (dirName != null)
-                filename = Path.Combine(dirName, filename);
+            filename = Path.Combine(dirName, filename);
 
             // Get and adjust the file offset
             long fileOffset = file.Offset + DataStart;

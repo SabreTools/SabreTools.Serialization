@@ -6,16 +6,16 @@
         /// <summary>
         /// Archive header information
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Directories found in the archive
         /// </summary>
-        public Directory[]? Directories {  get; set; }
+        public Directory[] Directories {  get; set; }
 
         /// <summary>
         /// Files found in the archive
         /// </summary>
-        public File[]? Files { get; set; }
+        public File[] Files { get; set; }
     }
 }

@@ -20,16 +20,16 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Header.DirCount"/>
-        public ushort DirCount => Model.Header?.DirCount ?? 0;
+        public ushort DirCount => Model.Header.DirCount;
 
         /// <inheritdoc cref="Header.FileCount"/>
-        public ushort FileCount => Model.Header?.FileCount ?? 0;
+        public ushort FileCount => Model.Header.FileCount;
 
         /// <inheritdoc cref="Archive.Directories"/>
-        public Data.Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories ?? [];
+        public Data.Models.InstallShieldArchiveV3.Directory[] Directories => Model.Directories;
 
         /// <inheritdoc cref="Archive.Files"/>
-        public Data.Models.InstallShieldArchiveV3.File[] Files => Model.Files ?? [];
+        public Data.Models.InstallShieldArchiveV3.File[] Files => Model.Files;
 
         /// <summary>
         /// Map of all files to their parent directories by index
@@ -85,8 +85,8 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Create the filename
                     string filename = Path.Combine(
-                        Directories[dirIndex]?.Name ?? $"dir_{dirIndex}",
-                        file.Name ?? $"file_{fileIndex}"
+                        Directories[dirIndex].Name.Length == 0 ? $"dir_{dirIndex}" : Directories[dirIndex].Name,
+                        file.Name.Length == 0 ? $"file_{fileIndex}" : file.Name
                     );
 
                     // Add to the map
