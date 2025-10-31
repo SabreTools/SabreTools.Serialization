@@ -11,17 +11,17 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Common header
         /// </summary>
-        public CommonHeader? CommonHeader { get; set; }
+        public CommonHeader CommonHeader { get; set; }
 
         /// <summary>
         /// Volume header
         /// </summary>
-        public VolumeHeader? VolumeHeader { get; set; }
+        public VolumeHeader VolumeHeader { get; set; }
 
         /// <summary>
         /// Descriptor
         /// </summary>
-        public Descriptor? Descriptor { get; set; }
+        public Descriptor Descriptor { get; set; }
 
         #endregion
 
@@ -30,17 +30,17 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Offsets to all file descriptors
         /// </summary>
-        public uint[]? FileDescriptorOffsets { get; set; }
+        public uint[] FileDescriptorOffsets { get; set; }
 
         /// <summary>
         /// Directory names
         /// </summary>
-        public string[]? DirectoryNames { get; set; }
+        public string[] DirectoryNames { get; set; }
 
         /// <summary>
         /// Standard file descriptors
         /// </summary>
-        public FileDescriptor[]? FileDescriptors { get; set; }
+        public FileDescriptor[] FileDescriptors { get; set; }
 
         #endregion
 
@@ -49,12 +49,12 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// File group offset to offset list mapping
         /// </summary>
-        public Dictionary<long, OffsetList?>? FileGroupOffsets { get; set; }
+        public Dictionary<long, OffsetList?> FileGroupOffsets { get; set; }
 
         /// <summary>
         /// File groups
         /// </summary>
-        public FileGroup[]? FileGroups { get; set; }
+        public FileGroup[] FileGroups { get; set; }
 
         #endregion
 
@@ -63,12 +63,12 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Component offset to offset list mapping
         /// </summary>
-        public Dictionary<long, OffsetList?>? ComponentOffsets { get; set; }
+        public Dictionary<long, OffsetList?> ComponentOffsets { get; set; }
 
         /// <summary>
         /// Components
         /// </summary>
-        public Component[]? Components { get; set; }
+        public Component[] Components { get; set; }
 
         #endregion
     }

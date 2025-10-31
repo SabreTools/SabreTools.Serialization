@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         public uint LastFileSizeExpandedHigh { get; set; }
 
         public uint LastFileSizeCompressed { get; set; }
-        
+
         public uint LastFileSizeCompressedHigh { get; set; }
     }
 }

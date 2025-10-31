@@ -38,17 +38,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Components);
         }
 
-        private static void Print(StringBuilder builder, CommonHeader? header, int majorVersion)
+        private static void Print(StringBuilder builder, CommonHeader header, int majorVersion)
         {
             builder.AppendLine("  Common Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine(value: "  No common header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine($"  Version: {header.Version} (0x{header.Version:X}) [{majorVersion}]");
             builder.AppendLine(header.VolumeInfo, "  Volume info");
@@ -57,17 +50,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, VolumeHeader? header, int majorVersion)
+        private static void Print(StringBuilder builder, VolumeHeader header, int majorVersion)
         {
             builder.AppendLine("  Volume Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine(value: "  No volume header");
-                builder.AppendLine();
-                return;
-            }
-
             if (majorVersion <= 5)
             {
                 builder.AppendLine(header.DataOffset, "  Data offset");
@@ -102,17 +88,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Descriptor? descriptor)
+        private static void Print(StringBuilder builder, Descriptor descriptor)
         {
             builder.AppendLine("  Descriptor Information:");
             builder.AppendLine("  -------------------------");
-            if (descriptor == null)
-            {
-                builder.AppendLine("  No descriptor");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(descriptor.StringsOffset, "  Strings offset");
             builder.AppendLine(descriptor.Reserved0, "  Reserved 0");
             builder.AppendLine(descriptor.ComponentListOffset, "  Component list offset");
@@ -134,7 +113,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  File group offsets:");
             builder.AppendLine("  -------------------------");
-            if (descriptor.FileGroupOffsets == null || descriptor.FileGroupOffsets.Length == 0)
+            if (descriptor.FileGroupOffsets.Length == 0)
             {
                 builder.AppendLine("  No file group offsets");
             }
@@ -150,7 +129,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  Component offsets:");
             builder.AppendLine("  -------------------------");
-            if (descriptor.ComponentOffsets == null || descriptor.ComponentOffsets.Length == 0)
+            if (descriptor.ComponentOffsets.Length == 0)
             {
                 builder.AppendLine("  No component offsets");
             }
@@ -171,11 +150,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, uint[]? entries)
+        private static void Print(StringBuilder builder, uint[] entries)
         {
             builder.AppendLine("  File Descriptor Offsets:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file descriptor offsets");
                 builder.AppendLine();
@@ -190,11 +169,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, string[]? entries)
+        private static void Print(StringBuilder builder, string[] entries)
         {
             builder.AppendLine("  Directory Names:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory names");
                 builder.AppendLine();
@@ -209,11 +188,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileDescriptor[]? entries)
+        private static void Print(StringBuilder builder, FileDescriptor[] entries)
         {
             builder.AppendLine("  File Descriptors:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file descriptors");
                 builder.AppendLine();
@@ -242,11 +221,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<long, OffsetList?>? entries, string name)
+        private static void Print(StringBuilder builder, Dictionary<long, OffsetList?> entries, string name)
         {
             builder.AppendLine($"  {name} Offsets:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Count == 0)
+            if (entries.Count == 0)
             {
                 builder.AppendLine($"  No {name.ToLowerInvariant()} offsets");
                 builder.AppendLine();
@@ -274,11 +253,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileGroup[]? entries)
+        private static void Print(StringBuilder builder, FileGroup[] entries)
         {
             builder.AppendLine("  File Groups:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file groups");
                 builder.AppendLine();
@@ -311,11 +290,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Component[]? entries)
+        private static void Print(StringBuilder builder, Component[] entries)
         {
             builder.AppendLine("  Components:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No components");
                 builder.AppendLine();
@@ -354,7 +333,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 builder.AppendLine("    File group names:");
                 builder.AppendLine("    -------------------------");
-                if (entry.FileGroupNames == null || entry.FileGroupNames.Length == 0)
+                if (entry.FileGroupNames.Length == 0)
                 {
                     builder.AppendLine("    No file group names");
                 }

@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Component identifier
         /// </summary>
-        public string? Identifier { get; set; }
+        public string Identifier { get; set; }
 
         /// <summary>
         /// Offset to the component descriptor
@@ -28,7 +28,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Display name
         /// </summary>
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Component status
@@ -58,7 +58,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Component name
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Offset to the CD-ROM folder
@@ -78,7 +78,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Unknown GUIDs
         /// </summary>
-        public Guid[]? Guid { get; set; } = new Guid[2];
+        public Guid[] Guid { get; set; } = new Guid[2];
 
         /// <summary>
         /// Offset to the component CLSID
@@ -125,7 +125,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// File group names
         /// </summary>
-        public string[]? FileGroupNames { get; set; }
+        public string[] FileGroupNames { get; set; }
 
         /// <summary>
         /// Number of X3(?)
