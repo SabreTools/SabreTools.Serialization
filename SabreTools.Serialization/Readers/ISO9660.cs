@@ -820,7 +820,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.OwnerIdentification = data.ReadInt16BothEndian();
             obj.GroupIdentification = data.ReadInt16BothEndian();
-            obj.Permissions = (Permissions)data.ReadInt16LittleEndian();
+            obj.Permissions = (Permissions)data.ReadUInt16LittleEndian();
             obj.FileCreationDateTime = ParseDecDateTime(data);
             obj.FileModificationDateTime = ParseDecDateTime(data);
             obj.FileExpirationDateTime = ParseDecDateTime(data);
