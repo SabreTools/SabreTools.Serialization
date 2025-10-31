@@ -44,10 +44,8 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Get the archive count
                 ushort archiveCount = 0;
-                foreach (var di in DirectoryItems ?? [])
+                foreach (var di in DirectoryItems)
                 {
-                    if (di.DirectoryEntry == null)
-                        continue;
                     if (di.DirectoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE)
                         continue;
 
@@ -71,7 +69,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Models.VPK.File.DirectoryItems"/>
-        public Data.Models.VPK.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
+        public Data.Models.VPK.DirectoryItem[] DirectoryItems => Model.DirectoryItems;
 
         #endregion
 
