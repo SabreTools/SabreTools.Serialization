@@ -6,21 +6,21 @@ namespace SabreTools.Data.Models.XZ
         /// <summary>
         /// Pre-blocks header
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Sequence of 0 or more blocks
         /// </summary>
-        public Block[]? Blocks { get; set; }
+        public Block[] Blocks { get; set; }
 
         /// <summary>
         /// Index structure
         /// </summary>
-        public Index? Index { get; set; }
+        public Index Index { get; set; }
 
         /// <summary>
         /// Post-blocks footer
         /// </summary>
-        public Footer? Footer { get; set; }
+        public Footer Footer { get; set; }
     }
 }

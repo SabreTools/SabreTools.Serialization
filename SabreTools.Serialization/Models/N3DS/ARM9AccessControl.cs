@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>15 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
-        public ARM9AccessControlDescriptors[]? Descriptors;
+        public ARM9AccessControlDescriptors[] Descriptors;
 
         /// <summary>
         /// ARM9 Descriptor Version. Originally this value had to be ≥ 2.

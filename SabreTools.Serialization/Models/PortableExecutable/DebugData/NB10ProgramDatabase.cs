@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
     public sealed class NB10ProgramDatabase
     {
         /// <summary>
-        /// "CodeView signature, equal to “NB10” 
+        /// "CodeView signature, equal to “NB10”
         /// </summary>
         public uint Signature;
 
@@ -22,14 +22,14 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
 
         /// <summary>
         /// The time when debug information was created (in seconds
-        /// since 01.01.1970) 
+        /// since 01.01.1970)
         /// </summary>
         public uint Timestamp;
 
         /// <summary>
         /// Ever-incrementing value, which is initially set to 1 and
         /// incremented every time when a part of the PDB file is updated
-        /// without rewriting the whole file. 
+        /// without rewriting the whole file.
         /// </summary>
         public uint Age;
 
@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
         /// </summary>
         /// <remarks>Is this Unicode?</remarks>
         [MarshalAs(UnmanagedType.LPStr)]
-        public string? PdbFileName;
+        public string PdbFileName;
     }
 }

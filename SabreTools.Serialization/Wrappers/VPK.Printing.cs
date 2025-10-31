@@ -24,17 +24,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.DirectoryItems);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Version, "  Version");
             builder.AppendLine(header.TreeSize, "  Tree size");
@@ -84,11 +77,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryItem[]? entries)
+        private static void Print(StringBuilder builder, DirectoryItem[] entries)
         {
             builder.AppendLine("  Directory Items Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory items");
                 builder.AppendLine();
@@ -112,16 +105,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry? entry)
+        private static void Print(StringBuilder builder, DirectoryEntry entry)
         {
             builder.AppendLine("    Directory Entry:");
             builder.AppendLine("    -------------------------");
-            if (entry == null)
-            {
-                builder.AppendLine("    [NULL]");
-                return;
-            }
-
             builder.AppendLine(entry.CRC, "    CRC");
             builder.AppendLine(entry.PreloadBytes, "    Preload bytes");
             builder.AppendLine(entry.ArchiveIndex, "    Archive index");

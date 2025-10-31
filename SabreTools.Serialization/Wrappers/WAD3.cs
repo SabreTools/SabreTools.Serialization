@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Models.WAD3.File.DirEntries"/>
-        public Data.Models.WAD3.DirEntry[]? DirEntries => Model.DirEntries;
+        public Data.Models.WAD3.DirEntry[] DirEntries => Model.DirEntries;
 
         #endregion
 

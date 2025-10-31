@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Edit Registry
-    /// 
+    ///
     /// This action adds, edits, or deletes registry keys or values. You can create registry entries
     /// manually or import a registry file (.REG).
     /// </summary>
@@ -12,8 +12,8 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// pairs. As far as research has taken, this set of options does not
     /// appear to be immediately mappable to the data below.
     /// </remarks>
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class EditRegistry : MachineStateData
     {
         /// <summary>

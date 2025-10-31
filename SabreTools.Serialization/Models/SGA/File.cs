@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.SGA
     {
         public uint NameOffset { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public uint Offset { get; set; }
 

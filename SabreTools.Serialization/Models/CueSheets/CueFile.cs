@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.CueSheets
         /// <summary>
         /// List of TRACK in FILE
         /// </summary>
-        public CueTrack[]? Tracks { get; set; }
+        public CueTrack[] Tracks { get; set; }
     }
 }

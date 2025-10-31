@@ -45,17 +45,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ArchiveHeader? header)
+        private static void Print(StringBuilder builder, ArchiveHeader header)
         {
             builder.AppendLine("  Archive Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No archive header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.HeaderSize, "  Header size");
             builder.AppendLine(header.ArchiveSize, "  Archive size");
@@ -112,7 +105,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine("  File indexes:");
             builder.AppendLine("  -------------------------");
-            if (table.FileIndexes == null)
+            if (table.FileIndexes.Length == 0)
             {
                 builder.AppendLine("  No file indexes ");
             }

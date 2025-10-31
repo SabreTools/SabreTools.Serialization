@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.OLE
     /// The DECIMAL (Packet Version) packet represents a DECIMAL as specified in [MS-OAUT] section
     /// 2.2.26
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class DECIMAL
     {
         /// <summary>

@@ -37,6 +37,6 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
         /// <summary>
         /// Set of file entries
         /// </summary>
-        public FileEntry[]? Entries { get; set; }
+        public FileEntry[] Entries { get; set; }
     }
 }

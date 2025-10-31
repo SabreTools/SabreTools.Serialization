@@ -363,9 +363,9 @@ namespace SabreTools.Serialization.Wrappers
             };
         }
 
-        private static void Print(StringBuilder builder, EntitiesLump? lump)
+        private static void Print(StringBuilder builder, EntitiesLump lump)
         {
-            if (lump?.Entities == null || lump.Entities.Length == 0)
+            if (lump.Entities.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -380,9 +380,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, PlanesLump? lump)
+        private static void Print(StringBuilder builder, PlanesLump lump)
         {
-            if (lump?.Planes == null || lump.Planes.Length == 0)
+            if (lump.Planes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -393,15 +393,15 @@ namespace SabreTools.Serialization.Wrappers
                 var plane = lump.Planes[i];
 
                 builder.AppendLine($"    Plane {i}");
-                builder.AppendLine($"      Normal vector: ({plane.NormalVector?.X}, {plane.NormalVector?.Y}, {plane.NormalVector?.Z})");
+                builder.AppendLine($"      Normal vector: ({plane.NormalVector.X}, {plane.NormalVector.Y}, {plane.NormalVector.Z})");
                 builder.AppendLine(plane.Distance, "      Distance");
                 builder.AppendLine($"      Plane type: {plane.PlaneType} (0x{plane.PlaneType:X})");
             }
         }
 
-        private static void Print(StringBuilder builder, TexdataLump? lump)
+        private static void Print(StringBuilder builder, TexdataLump lump)
         {
-            if (lump?.Texdatas == null || lump.Texdatas.Length == 0)
+            if (lump.Texdatas.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -412,7 +412,7 @@ namespace SabreTools.Serialization.Wrappers
                 var texdata = lump.Texdatas[i];
 
                 builder.AppendLine($"    Texture {i}");
-                builder.AppendLine($"      Reflectivity: ({texdata.Reflectivity?.X}, {texdata.Reflectivity?.Y}, {texdata.Reflectivity?.Z})");
+                builder.AppendLine($"      Reflectivity: ({texdata.Reflectivity.X}, {texdata.Reflectivity.Y}, {texdata.Reflectivity.Z})");
                 builder.AppendLine(texdata.NameStringTableID, "      Name string table ID");
                 builder.AppendLine(texdata.Width, "      Width");
                 builder.AppendLine(texdata.Height, "      Height");
@@ -421,9 +421,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VerticesLump? lump)
+        private static void Print(StringBuilder builder, VerticesLump lump)
         {
-            if (lump?.Vertices == null || lump.Vertices.Length == 0)
+            if (lump.Vertices.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -436,21 +436,15 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VisibilityLump? lump)
+        private static void Print(StringBuilder builder, VisibilityLump lump)
         {
-            if (lump == null)
-            {
-                builder.AppendLine("    No data");
-                return;
-            }
-
             builder.AppendLine(lump.NumClusters, "    Cluster count");
             builder.AppendLine("    Byte offsets skipped...");
         }
 
-        private static void Print(StringBuilder builder, VbspNodesLump? lump)
+        private static void Print(StringBuilder builder, VbspNodesLump lump)
         {
-            if (lump?.Nodes == null || lump.Nodes.Length == 0)
+            if (lump.Nodes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -471,9 +465,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VbspTexinfoLump? lump)
+        private static void Print(StringBuilder builder, VbspTexinfoLump lump)
         {
-            if (lump?.Texinfos == null || lump.Texinfos.Length == 0)
+            if (lump.Texinfos.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -484,22 +478,22 @@ namespace SabreTools.Serialization.Wrappers
                 var texinfo = lump.Texinfos[i];
 
                 builder.AppendLine($"    Texinfo {i}");
-                builder.AppendLine($"      Texture S-Vector: ({texinfo.TextureSVector?.X}, {texinfo.TextureSVector?.Y}, {texinfo.TextureSVector?.Z})");
+                builder.AppendLine($"      Texture S-Vector: ({texinfo.TextureSVector.X}, {texinfo.TextureSVector.Y}, {texinfo.TextureSVector.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Texture shift in S direction");
-                builder.AppendLine($"      Texture T-Vector: ({texinfo.TextureTVector?.X}, {texinfo.TextureTVector?.Y}, {texinfo.TextureTVector?.Z})");
+                builder.AppendLine($"      Texture T-Vector: ({texinfo.TextureTVector.X}, {texinfo.TextureTVector.Y}, {texinfo.TextureTVector.Z})");
                 builder.AppendLine(texinfo.TextureTShift, "      Texture shift in T direction");
-                builder.AppendLine($"      Lightmap S-Vector: ({texinfo.LightmapSVector?.X}, {texinfo.LightmapSVector?.Y}, {texinfo.LightmapSVector?.Z})");
+                builder.AppendLine($"      Lightmap S-Vector: ({texinfo.LightmapSVector.X}, {texinfo.LightmapSVector.Y}, {texinfo.LightmapSVector.Z})");
                 builder.AppendLine(texinfo.TextureSShift, "      Lightmap shift in S direction");
-                builder.AppendLine($"      Lightmap T-Vector: ({texinfo.LightmapTVector?.X}, {texinfo.LightmapTVector?.Y}, {texinfo.LightmapTVector?.Z})");
+                builder.AppendLine($"      Lightmap T-Vector: ({texinfo.LightmapTVector.X}, {texinfo.LightmapTVector.Y}, {texinfo.LightmapTVector.Z})");
                 builder.AppendLine(texinfo.TextureTShift, "      Lightmap shift in T direction");
                 builder.AppendLine($"      Flags: {texinfo.Flags} (0x{texinfo.Flags:X})");
                 builder.AppendLine(texinfo.TexData, "      Pointer to texdata");
             }
         }
 
-        private static void Print(StringBuilder builder, VbspFacesLump? lump)
+        private static void Print(StringBuilder builder, VbspFacesLump lump)
         {
-            if (lump?.Faces == null || lump.Faces.Length == 0)
+            if (lump.Faces.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -530,9 +524,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, PhysCollideLump? lump)
+        private static void Print(StringBuilder builder, PhysCollideLump lump)
         {
-            if (lump?.Models == null || lump.Models.Length == 0)
+            if (lump.Models.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -546,7 +540,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(model.DataSize, "      Data size");
                 builder.AppendLine(model.KeydataSize, "      Keydata size");
                 builder.AppendLine(model.SolidCount, "      Solid count");
-                if (model.Solids == null || model.Solids.Length == 0)
+                if (model.Solids.Length == 0)
                 {
                     builder.AppendLine("      No solids");
                 }
@@ -565,24 +559,18 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, LightmapLump? lump)
+        private static void Print(StringBuilder builder, LightmapLump lump)
         {
-            if (lump?.Lightmap == null || lump.Lightmap.Length == 0)
+            if (lump.Lightmap.Length == 0)
                 builder.AppendLine("    No data");
             else
                 builder.AppendLine("    Lightmap data skipped...");
         }
 
-        private static void Print(StringBuilder builder, OcclusionLump? lump)
+        private static void Print(StringBuilder builder, OcclusionLump lump)
         {
-            if (lump == null)
-            {
-                builder.AppendLine("    No data");
-                return;
-            }
-
             builder.AppendLine(lump.Count, "    Count");
-            if (lump.Data == null || lump.Data.Length == 0)
+            if (lump.Data.Length == 0)
             {
                 builder.AppendLine("    No occluder data");
             }
@@ -596,14 +584,14 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(data.Flags, "      Flags");
                     builder.AppendLine(data.FirstPoly, "      First poly");
                     builder.AppendLine(data.PolyCount, "      Poly count");
-                    builder.AppendLine($"      Mins: {data.Mins?.X}, {data.Mins?.Y}, {data.Mins?.Z}");
-                    builder.AppendLine($"      Maxs: {data.Maxs?.X}, {data.Maxs?.Y}, {data.Maxs?.Z}");
+                    builder.AppendLine($"      Mins: {data.Mins.X}, {data.Mins.Y}, {data.Mins.Z}");
+                    builder.AppendLine($"      Maxs: {data.Maxs.X}, {data.Maxs.Y}, {data.Maxs.Z}");
                     builder.AppendLine(data.Area, "      Area");
                 }
             }
 
             builder.AppendLine(lump.PolyDataCount, "    Polydata count");
-            if (lump.PolyData == null || lump.PolyData.Length == 0)
+            if (lump.PolyData.Length == 0)
             {
                 builder.AppendLine("    No occluder polydata");
             }
@@ -621,7 +609,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             builder.AppendLine(lump.VertexIndexCount, "    Vertex index count");
-            if (lump.VertexIndicies == null || lump.VertexIndicies.Length == 0)
+            if (lump.VertexIndicies.Length == 0)
             {
                 builder.AppendLine("    No vertex indicies");
             }
@@ -634,9 +622,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VbspLeavesLump? lump, uint version)
+        private static void Print(StringBuilder builder, VbspLeavesLump lump, uint version)
         {
-            if (lump?.Leaves == null || lump.Leaves.Length == 0)
+            if (lump.Leaves.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -659,7 +647,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(leaf.LeafWaterDataID, "      Leaf water data ID");
                 if (version == 0)
                 {
-                    if (leaf.AmbientLighting?.Colors == null || leaf.AmbientLighting.Colors.Length == 0)
+                    if (leaf.AmbientLighting.Colors.Length == 0)
                     {
                         builder.AppendLine("      No ambient lighting colors");
                     }
@@ -683,9 +671,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, MarksurfacesLump? lump)
+        private static void Print(StringBuilder builder, MarksurfacesLump lump)
         {
-            if (lump?.Marksurfaces == null || lump.Marksurfaces.Length == 0)
+            if (lump.Marksurfaces.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -698,9 +686,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, EdgesLump? lump)
+        private static void Print(StringBuilder builder, EdgesLump lump)
         {
-            if (lump?.Edges == null || lump.Edges.Length == 0)
+            if (lump.Edges.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -714,9 +702,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, SurfedgesLump? lump)
+        private static void Print(StringBuilder builder, SurfedgesLump lump)
         {
-            if (lump?.Surfedges == null || lump.Surfedges.Length == 0)
+            if (lump.Surfedges.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -729,9 +717,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, VbspModelsLump? lump)
+        private static void Print(StringBuilder builder, VbspModelsLump lump)
         {
-            if (lump?.Models == null || lump.Models.Length == 0)
+            if (lump.Models.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -742,18 +730,18 @@ namespace SabreTools.Serialization.Wrappers
                 var model = lump.Models[i];
 
                 builder.AppendLine($"    Model {i}");
-                builder.AppendLine($"      Mins: ({model.Mins?.X}, {model.Mins?.Y}, {model.Mins?.Z})");
-                builder.AppendLine($"      Maxs: ({model.Maxs?.X}, {model.Maxs?.Y}, {model.Maxs?.Z})");
-                builder.AppendLine($"      Origin vector: ({model.OriginVector?.X}, {model.OriginVector?.Y}, {model.OriginVector?.Z})");
+                builder.AppendLine($"      Mins: ({model.Mins.X}, {model.Mins.Y}, {model.Mins.Z})");
+                builder.AppendLine($"      Maxs: ({model.Maxs.X}, {model.Maxs.Y}, {model.Maxs.Z})");
+                builder.AppendLine($"      Origin vector: ({model.OriginVector.X}, {model.OriginVector.Y}, {model.OriginVector.Z})");
                 builder.AppendLine(model.HeadNode, "      Headnode index");
                 builder.AppendLine(model.FirstFaceIndex, "      First face index");
                 builder.AppendLine(model.FacesCount, "      Faces count");
             }
         }
 
-        private static void Print(StringBuilder builder, WorldLightsLump? lump)
+        private static void Print(StringBuilder builder, WorldLightsLump lump)
         {
-            if (lump?.WorldLights == null || lump.WorldLights.Length == 0)
+            if (lump.WorldLights.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -764,9 +752,9 @@ namespace SabreTools.Serialization.Wrappers
                 var worldlight = lump.WorldLights[j];
 
                 builder.AppendLine($"    World Light {j}");
-                builder.AppendLine($"      Origin: ({worldlight.Origin?.X}, {worldlight.Origin?.Y}, {worldlight.Origin?.Z})");
-                builder.AppendLine($"      Intensity: ({worldlight.Intensity?.X}, {worldlight.Intensity?.Y}, {worldlight.Intensity?.Z})");
-                builder.AppendLine($"      Normal: ({worldlight.Normal?.X}, {worldlight.Normal?.Y}, {worldlight.Normal?.Z})");
+                builder.AppendLine($"      Origin: ({worldlight.Origin.X}, {worldlight.Origin.Y}, {worldlight.Origin.Z})");
+                builder.AppendLine($"      Intensity: ({worldlight.Intensity.X}, {worldlight.Intensity.Y}, {worldlight.Intensity.Z})");
+                builder.AppendLine($"      Normal: ({worldlight.Normal.X}, {worldlight.Normal.Y}, {worldlight.Normal.Z})");
                 builder.AppendLine(worldlight.Cluster, "      Cluster");
                 builder.AppendLine($"      Emit type: {worldlight.EmitType} (0x{worldlight.EmitType:X})");
                 builder.AppendLine(worldlight.Style, "      Style");
@@ -783,9 +771,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, LeafFacesLump? lump)
+        private static void Print(StringBuilder builder, LeafFacesLump lump)
         {
-            if (lump?.Map == null || lump.Map.Length == 0)
+            if (lump.Map.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -798,9 +786,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, LeafBrushesLump? lump)
+        private static void Print(StringBuilder builder, LeafBrushesLump lump)
         {
-            if (lump?.Map == null || lump.Map.Length == 0)
+            if (lump.Map.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -813,9 +801,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BrushesLump? lump)
+        private static void Print(StringBuilder builder, BrushesLump lump)
         {
-            if (lump?.Brushes == null || lump.Brushes.Length == 0)
+            if (lump.Brushes.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -832,9 +820,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, BrushsidesLump? lump)
+        private static void Print(StringBuilder builder, BrushsidesLump lump)
         {
-            if (lump?.Brushsides == null || lump.Brushsides.Length == 0)
+            if (lump.Brushsides.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -852,9 +840,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, DispInfosLump? lump)
+        private static void Print(StringBuilder builder, DispInfosLump lump)
         {
-            if (lump?.Infos == null || lump.Infos.Length == 0)
+            if (lump.Infos.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -865,7 +853,7 @@ namespace SabreTools.Serialization.Wrappers
                 var info = lump.Infos[i];
 
                 builder.AppendLine($"    Disp Info {i}");
-                builder.AppendLine($"      Start position: ({info.StartPosition?.X}, {info.StartPosition?.Y}, {info.StartPosition?.Z})");
+                builder.AppendLine($"      Start position: ({info.StartPosition.X}, {info.StartPosition.Y}, {info.StartPosition.Z})");
                 builder.AppendLine(info.DispVertStart, "      Index into disp verts");
                 builder.AppendLine(info.DispTriStart, "      Index into disp tris");
                 builder.AppendLine(info.Power, "      Power");
@@ -876,7 +864,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(info.LightmapAlphaStart, "      Lightmap alpha start");
                 builder.AppendLine(info.LightmapSamplePositionStart, "      Lightmap sample position start");
                 builder.AppendLine($"      Edge Neighbors:");
-                if (info.EdgeNeighbors == null || info.EdgeNeighbors.Length == 0)
+                if (info.EdgeNeighbors.Length == 0)
                 {
                     builder.AppendLine("      No edge neighbors");
                 }
@@ -886,7 +874,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         var edgeNeighbor = info.EdgeNeighbors[j];
                         builder.AppendLine($"        Edge Neighbor {j}");
-                        if (edgeNeighbor.SubNeighbors == null || edgeNeighbor.SubNeighbors.Length == 0)
+                        if (edgeNeighbor.SubNeighbors.Length == 0)
                         {
                             builder.AppendLine("          No subneighbors");
                         }
@@ -906,7 +894,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 builder.AppendLine($"      Corner Neighbors:");
-                if (info.CornerNeighbors == null || info.CornerNeighbors.Length == 0)
+                if (info.CornerNeighbors.Length == 0)
                 {
                     builder.AppendLine("      No corner neighbors");
                 }
@@ -925,9 +913,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, DispVertsLump? lump)
+        private static void Print(StringBuilder builder, DispVertsLump lump)
         {
-            if (lump?.Verts == null || lump.Verts.Length == 0)
+            if (lump.Verts.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -938,22 +926,16 @@ namespace SabreTools.Serialization.Wrappers
                 var vert = lump.Verts[i];
 
                 builder.AppendLine($"    Disp Vert {i}");
-                builder.AppendLine($"      Vec: ({vert.Vec?.X}, {vert.Vec?.Y}, {vert.Vec?.Z})");
+                builder.AppendLine($"      Vec: ({vert.Vec.X}, {vert.Vec.Y}, {vert.Vec.Z})");
                 builder.AppendLine(vert.Dist, "      Dist");
                 builder.AppendLine(vert.Alpha, "      Alpha");
             }
         }
 
-        private static void Print(StringBuilder builder, GameLump? lump)
+        private static void Print(StringBuilder builder, GameLump lump)
         {
-            if (lump == null)
-            {
-                builder.AppendLine("    No data");
-                return;
-            }
-
             builder.AppendLine(lump.LumpCount, "    Lump count");
-            if (lump.Directories == null || lump.Directories.Length == 0)
+            if (lump.Directories.Length == 0)
             {
                 builder.AppendLine("    No directories");
                 return;
@@ -972,9 +954,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, PakfileLump? lump)
+        private static void Print(StringBuilder builder, PakfileLump lump)
         {
-            if (lump?.Data == null || lump.Data.Length == 0)
+            if (lump.Data.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -983,9 +965,9 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("    Data skipped...");
         }
 
-        private static void Print(StringBuilder builder, CubemapsLump? lump)
+        private static void Print(StringBuilder builder, CubemapsLump lump)
         {
-            if (lump?.Cubemaps == null || lump.Cubemaps.Length == 0)
+            if (lump.Cubemaps.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1001,9 +983,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, TexdataStringData? lump)
+        private static void Print(StringBuilder builder, TexdataStringData lump)
         {
-            if (lump?.Strings == null || lump.Strings.Length == 0)
+            if (lump.Strings.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1016,9 +998,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, TexdataStringTable? lump)
+        private static void Print(StringBuilder builder, TexdataStringTable lump)
         {
-            if (lump?.Offsets == null || lump.Offsets.Length == 0)
+            if (lump.Offsets.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1031,9 +1013,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, OverlaysLump? lump)
+        private static void Print(StringBuilder builder, OverlaysLump lump)
         {
-            if (lump?.Overlays == null || lump.Overlays.Length == 0)
+            if (lump.Overlays.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1050,7 +1032,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(overlay.Ofaces, "      Ofaces");
                 builder.AppendLine(overlay.U, "      U");
                 builder.AppendLine(overlay.V, "      V");
-                if (overlay.UVPoints == null || overlay.UVPoints.Length == 0)
+                if (overlay.UVPoints.Length == 0)
                 {
                     builder.AppendLine("      No UV points");
                 }
@@ -1063,14 +1045,14 @@ namespace SabreTools.Serialization.Wrappers
                     }
                 }
 
-                builder.AppendLine($"      Origin: ({overlay.Origin?.X}, {overlay.Origin?.Y}, {overlay.Origin?.Z})");
-                builder.AppendLine($"      Basis normal: ({overlay.BasisNormal?.X}, {overlay.BasisNormal?.Y}, {overlay.BasisNormal?.Z})");
+                builder.AppendLine($"      Origin: ({overlay.Origin.X}, {overlay.Origin.Y}, {overlay.Origin.Z})");
+                builder.AppendLine($"      Basis normal: ({overlay.BasisNormal.X}, {overlay.BasisNormal.Y}, {overlay.BasisNormal.Z})");
             }
         }
 
-        private static void Print(StringBuilder builder, DispTrisLump? lump)
+        private static void Print(StringBuilder builder, DispTrisLump lump)
         {
-            if (lump?.Tris == null || lump.Tris.Length == 0)
+            if (lump.Tris.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1085,9 +1067,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, AmbientIndexLump? lump)
+        private static void Print(StringBuilder builder, AmbientIndexLump lump)
         {
-            if (lump?.Indicies == null || lump.Indicies.Length == 0)
+            if (lump.Indicies.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;
@@ -1103,9 +1085,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, AmbientLightingLump? lump)
+        private static void Print(StringBuilder builder, AmbientLightingLump lump)
         {
-            if (lump?.Lightings == null || lump.Lightings.Length == 0)
+            if (lump.Lightings.Length == 0)
             {
                 builder.AppendLine("    No data");
                 return;

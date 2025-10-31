@@ -5,12 +5,12 @@ namespace SabreTools.Data.Models.COFF
     /// <summary>
     /// COFF line numbers are no longer produced and, in the future, will
     /// not be consumed.
-    /// 
+    ///
     /// COFF line numbers indicate the relationship between code and line
     /// numbers in source files. The Microsoft format for COFF line numbers
     /// is similar to standard COFF, but it has been extended to allow a
     /// single section to relate to line numbers in multiple source files.
-    /// 
+    ///
     /// COFF line numbers consist of an array of fixed-length records.
     /// The location (file offset) and size of the array are specified in
     /// the section header.

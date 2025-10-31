@@ -22,11 +22,11 @@ namespace SabreTools.Data.Models.DVD
         /// Offset to VTS_ATRT n
         /// </summary>
         /// <remarks>NumberOfTitleSets entries</remarks>
-        public uint[]? Offsets { get; set; }
+        public uint[] Offsets { get; set; }
 
         /// <summary>
         /// Entries
         /// </summary>
-        public AudioSubPictureAttributesTableEntry[]? Entries { get; set; }
+        public AudioSubPictureAttributesTableEntry[] Entries { get; set; }
     }
 }

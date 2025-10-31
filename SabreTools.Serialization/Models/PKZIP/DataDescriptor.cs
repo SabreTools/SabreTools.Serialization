@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Data descriptor
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class DataDescriptor
     {
         /// <summary>

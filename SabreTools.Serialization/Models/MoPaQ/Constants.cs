@@ -65,7 +65,7 @@ namespace SabreTools.Data.Models.MoPaQ
         public const ulong BSDIFF40SignatureValue = 0x3034464649445342;
 
         #endregion
-        
+
         #region Encryption
 
         /// <summary>

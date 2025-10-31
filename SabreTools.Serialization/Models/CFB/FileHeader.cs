@@ -128,6 +128,6 @@ namespace SabreTools.Data.Models.CFB
         /// </summary>
         /// <remarks>109 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 109)]
-        public SectorNumber[]? DIFAT;
+        public SectorNumber[] DIFAT = new SectorNumber[109];
     }
 }

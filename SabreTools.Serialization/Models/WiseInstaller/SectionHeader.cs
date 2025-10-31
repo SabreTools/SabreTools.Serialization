@@ -141,19 +141,19 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// String representing the WIS[etc].TMP string
         /// </summary>
-        public string? TmpString { get; set; }
+        public string TmpString { get; set; }
 
         /// <summary>
         /// String representing the GUID string.
         /// </summary>
-        public string? GuidString { get; set; }
+        public string GuidString { get; set; }
 
         /// <summary>
         /// String representing a version number. This isn't the version of the .WISE installer itself, as it is
         /// entirely inconsistent even within the same week. Likely refers to a version for what's being installed
         /// rather than the installer itself
         /// </summary>
-        public string? NonWiseVersion { get; set; }
+        public string NonWiseVersion { get; set; }
 
         /// <summary>
         /// Unknown. May also refer to a non-value for pre-78-offset executables and only a value for 78-offset-onwards
@@ -175,6 +175,6 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Strings for the section. Size and any breakup of strings currently unknown.
         /// </summary>
-        public byte[][]? Strings { get; set; }
+        public byte[][] Strings { get; set; }
     }
 }

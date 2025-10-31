@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// </summary>
         /// <remarks>
         /// Theorized to be a checksum?
-        /// 
+        ///
         /// Observed values:
         /// - 81 83 DA 2F (802849665)
         /// </remarks>
@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// </summary>
         /// <remarks>
         /// Could also be part of the signature?
-        /// 
+        ///
         /// Observed values:
         /// - 83 52 34 03 (53760643)
         /// </remarks>

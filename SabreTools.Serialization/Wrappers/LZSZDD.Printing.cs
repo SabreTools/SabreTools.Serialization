@@ -21,17 +21,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Header);
         }
 
-        private static void Print(StringBuilder builder, SZDDHeader? header)
+        private static void Print(StringBuilder builder, SZDDHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine($"  Compression type: {header.CompressionType} (0x{header.CompressionType:X})");
             builder.AppendLine(header.LastChar, "  Last char");

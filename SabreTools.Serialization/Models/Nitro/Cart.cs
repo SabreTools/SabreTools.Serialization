@@ -8,12 +8,12 @@ namespace SabreTools.Data.Models.Nitro
         /// <summary>
         /// DS/DSi cart header
         /// </summary>
-        public CommonHeader? CommonHeader { get; set; }
+        public CommonHeader CommonHeader { get; set; }
 
         /// <summary>
         /// DSi extended cart header
         /// </summary>
-        public ExtendedDSiHeader? ExtendedDSiHeader { get; set; }
+        public ExtendedDSiHeader ExtendedDSiHeader { get; set; }
 
         /// <summary>
         /// Secure area, may be encrypted or decrypted
@@ -24,11 +24,11 @@ namespace SabreTools.Data.Models.Nitro
         /// <summary>
         /// Name table (folder allocation table, name list)
         /// </summary>
-        public NameTable? NameTable { get; set; }
+        public NameTable NameTable { get; set; }
 
         /// <summary>
         /// File allocation table
         /// </summary>
-        public FileAllocationTableEntry[]? FileAllocationTable { get; set; }
+        public FileAllocationTableEntry[] FileAllocationTable { get; set; }
     }
 }

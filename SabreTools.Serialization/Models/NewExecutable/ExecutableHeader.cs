@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.NewExecutable
         /// "NE"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? Magic;
+        public string Magic;
 
         /// <summary>
         /// Version number of the linker.
@@ -90,7 +90,7 @@ namespace SabreTools.Data.Models.NewExecutable
         /// </summary>
         /// <remarks>
         /// SS:SP initial stack pointer, SS is index into segment table
-        /// 
+        ///
         /// If SS equals the automatic data segment and SP equals
         /// zero, the stack pointer is set to the top of the
         /// automatic data segment just below the additional heap

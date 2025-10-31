@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.BSP
     /// The texinfo lump contains informations about how textures are
     /// applied to surfaces. The lump itself is an array of binary data
     /// structures.
-    /// 
+    ///
     /// This struct is mainly responsible for the calculation of the texture
     /// coordinates (vS, fSShift, vT, fTShift). This values determine the
     /// position of the texture on the surface. The iMiptex integer refers
@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// S-vector
         /// </summary>
-        public Vector3D? SVector;
+        public Vector3D SVector;
 
         /// <summary>
         /// Texture shift in the S direction
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// T-vector
         /// </summary>
-        public Vector3D? TVector;
+        public Vector3D TVector;
 
         /// <summary>
         /// Texture shift in the T direction

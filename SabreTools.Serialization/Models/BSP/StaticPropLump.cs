@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.BSP
     /// Counter-Strike: Global Offensive since the addition of uniform prop scaling
     /// (before this it was version 10). After version 7, DX level options were
     /// removed. In version 11 XBox 360 flags were removed.
-    /// 
+    ///
     /// Version 7* is used by games built on Source 2013 Multiplayer
     /// ( Team Fortress 2, Counter-Strike: Source, etc.) and may come across as
     /// either version 7 or 10. Specifically, Team Fortress 2 has referred to it
@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.BSP
     /// rearranged such that Flags is an int and at the bottom, above two new
     /// entries. These new entries (LightmapResX and LightmapResY) control the
     /// width and height of the prop's lightmap image and are specific to this
-    /// version. 
+    /// version.
     /// </summary>
     /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public sealed class StaticPropLump
@@ -118,7 +118,7 @@ namespace SabreTools.Data.Models.BSP
         #endregion
 
         #region v7* only
-        
+
         [MarshalAs(UnmanagedType.U4)]
         public byte FlagsV7;
 

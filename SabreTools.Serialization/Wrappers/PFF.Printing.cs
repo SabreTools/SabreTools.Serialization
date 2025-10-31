@@ -23,17 +23,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Footer);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.HeaderSize, "  Header size");
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.NumberOfFiles, "  Number of files");
@@ -42,11 +35,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Segment[]? entries)
+        private static void Print(StringBuilder builder, Segment[] entries)
         {
             builder.AppendLine("  Segments Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No segments");
                 builder.AppendLine();
@@ -70,17 +63,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Footer? footer)
+        private static void Print(StringBuilder builder, Footer footer)
         {
             builder.AppendLine("  Footer Information:");
             builder.AppendLine("  -------------------------");
-            if (footer == null)
-            {
-                builder.AppendLine("  No footer");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(footer.SystemIP, "  System IP");
             builder.AppendLine(footer.Reserved, "  Reserved");
             builder.AppendLine(footer.KingTag, "  King tag");

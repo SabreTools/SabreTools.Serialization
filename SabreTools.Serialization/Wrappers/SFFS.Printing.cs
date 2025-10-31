@@ -13,41 +13,31 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
-            => Print(builder, Model);
-
-        private static void Print(StringBuilder builder, FileSystem fs)
         {
             builder.AppendLine("StarForce File System Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, fs.Header);
-            Print(builder, fs.Files);
-            Print(builder, fs.FileHeaders);
+            Print(builder, Model.Header);
+            Print(builder, Model.Files);
+            Print(builder, Model.FileHeaders);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic");
             builder.AppendLine(header.Version, "  Version");
             builder.AppendLine(header.FileCount, "  FileCount");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry[]? entries)
+        private static void Print(StringBuilder builder, FileEntry[] entries)
         {
             builder.AppendLine("  File Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file entries");
                 builder.AppendLine();
@@ -66,11 +56,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileHeader[]? entries)
+        private static void Print(StringBuilder builder, FileHeader[] entries)
         {
             builder.AppendLine("  File Headers Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file headers");
                 builder.AppendLine();

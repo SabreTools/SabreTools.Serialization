@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Infos
         /// </summary>
-        public DispInfo[]? Infos { get; set; }
+        public DispInfo[] Infos { get; set; }
     }
 }

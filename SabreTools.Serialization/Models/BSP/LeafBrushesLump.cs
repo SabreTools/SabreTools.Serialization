@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Map
         /// </summary>
-        public ushort[]? Map { get; set; }
+        public ushort[] Map { get; set; }
     }
 }

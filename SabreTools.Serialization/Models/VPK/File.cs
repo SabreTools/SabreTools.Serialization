@@ -9,21 +9,23 @@ namespace SabreTools.Data.Models.VPK
         /// <summary>
         /// Header data
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Extended header data
         /// </summary>
+        /// <remarks>Version 2 only</remarks>
         public ExtendedHeader? ExtendedHeader { get; set; }
 
         /// <summary>
         /// Archive hashes data
         /// </summary>
+        /// <remarks>Version 2 only</remarks>
         public ArchiveHash[]? ArchiveHashes { get; set; }
 
         /// <summary>
         /// Directory items data
         /// </summary>
-        public DirectoryItem[]? DirectoryItems { get; set; }
+        public DirectoryItem[] DirectoryItems { get; set; }
     }
 }

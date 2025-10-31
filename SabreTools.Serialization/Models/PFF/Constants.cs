@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.PFF
         public static readonly byte[] Version0SignatureBytes = [0x50, 0x46, 0x46, 0x30];
 
         public const string Version0SignatureString = "PFF0";
-        
+
         public const uint Version0HSegmentSize = 0x00000020;
 
         // Version 1 not confirmed

@@ -9,17 +9,17 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// ARM11 local system capabilities
         /// </summary>
-        public ARM11LocalSystemCapabilities? ARM11LocalSystemCapabilities;
+        public ARM11LocalSystemCapabilities ARM11LocalSystemCapabilities;
 
         /// <summary>
         /// ARM11 kernel capabilities
         /// </summary>
-        public ARM11KernelCapabilities? ARM11KernelCapabilities;
+        public ARM11KernelCapabilities ARM11KernelCapabilities;
 
         /// <summary>
         /// ARM9 access control
         /// </summary>
         /// TODO: Fix serialization issue with this type
-        public ARM9AccessControl? ARM9AccessControl;
+        public ARM9AccessControl ARM9AccessControl;
     }
 }

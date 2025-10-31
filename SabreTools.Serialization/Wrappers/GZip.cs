@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Only valid for Torrent GZip
-                if (Header == null || !IsTorrentGZip)
+                if (!IsTorrentGZip)
                     return null;
 
                 // CRC-32 is the second packed field
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Only valid for Torrent GZip
-                if (Header == null || !IsTorrentGZip)
+                if (!IsTorrentGZip)
                     return null;
 
                 // MD5 is the first packed field
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Only valid for Torrent GZip
-                if (Header == null || !IsTorrentGZip)
+                if (!IsTorrentGZip)
                     return 0;
 
                 // MD5 is the first packed field
@@ -79,9 +79,6 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (_dataOffset > -1)
                     return _dataOffset;
-
-                if (Header == null)
-                    return -1;
 
                 // Minimum offset is 10 bytes:
                 // - ID1 (1)
@@ -107,7 +104,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Archive.Header"/>
-        public Header? Header => Model.Header;
+        public Header Header => Model.Header;
 
         /// <summary>
         /// Indicates if the archive is in the standard
@@ -119,10 +116,6 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                // If the header is invalid
-                if (Header == null)
-                    return false;
-
                 // Torrent GZip uses normal deflate, not GZIP deflate
                 if (Header.CompressionMethod != CompressionMethod.Deflate)
                     return false;
@@ -155,7 +148,7 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Archive.Trailer"/>
-        public Trailer? Trailer => Model.Trailer;
+        public Trailer Trailer => Model.Trailer;
 
         #endregion
 

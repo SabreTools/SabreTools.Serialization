@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Insert Line Into Text File
-    /// 
+    ///
     /// This action edits a text file on the destination computer. Use it to edit configuration files
     /// that cannot be edited by Edit INI File, Add Device to System.ini, Add Command to
     /// Config.sys, or Add Command to Autoexec.bat.
@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f25".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class InsertLineIntoTextFile : FunctionData
     {
         /// <summary>

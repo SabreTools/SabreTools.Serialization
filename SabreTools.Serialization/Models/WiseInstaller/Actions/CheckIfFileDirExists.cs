@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Check If File/Dir Exists
-    /// 
+    ///
     /// This action determines if a file or directory exists, whether a directory is writable, or if a
     /// .DLL is loaded into memory. It can perform different actions based on the result of the
     /// check.
@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// This action is called through Call DLL Function and is mapped to "f19".
     /// This acts like the start of a block if a flag is set.
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class CheckIfFileDirExists : FunctionData
     {
         /// <summary>

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace SabreTools.Data.Models.Xbox
 {
-    /// <see href="https://xboxdevwiki.net/Xbe"/> 
-    /// <see href="http://wiki.redump.org/index.php?title=Xbox_Title_IDs"/> 
-    /// <see href="https://dbox.tools/publishers/"/> 
+    /// <see href="https://xboxdevwiki.net/Xbe"/>
+    /// <see href="http://wiki.redump.org/index.php?title=Xbox_Title_IDs"/>
+    /// <see href="https://dbox.tools/publishers/"/>
     public static class Constants
     {
         /// <summary>
@@ -129,7 +129,7 @@ namespace SabreTools.Data.Models.Xbox
 
             { "PC", "Playlogic Entertainment" },
             { "PL", "Phantagram Co., Ltd. / Playlogic Entertainment" }, // TODO: Confirm
-            
+
             { "RA", "Rage" },
 
             { "SA", "Sammy" },
@@ -183,7 +183,7 @@ namespace SabreTools.Data.Models.Xbox
             { "" + (char)0xFF + (char)0xFE, "Microsoft Downloadable Content" },
             { "" + (char)0xFF + (char)0xFF, "Microsoft Downloadable Content" },
         };
-    
+
         /// <summary>
         /// Mapping of all region 1-letter codes to long names
         /// </summary>

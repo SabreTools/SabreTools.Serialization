@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.BSP
     /// references into the texture and displacement info lumps.
     /// Bevel is zero for normal brush sides, but 1 if the side is
     /// a bevel plane (which seem to be used for collision detection).
-    /// 
+    ///
     /// Unlike the face array, brushsides are not culled (removed)
     /// where they touch the void. Void-facing sides do however have
     /// their texinfo entry changed to the tools/toolsnodraw texture
@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.BSP
     /// entries which are used to render that brush. Brushsides are
     /// used by the engine to calculate all player physics collision
     /// with world brushes. (Vphysics objects use lump 29 instead.)
-    /// 
+    ///
     /// The maximum number of brushsides is 65536 (MAX_MAP_BRUSHSIDES).
     /// The maximum number of brushsides on a single brush is 128 (MAX_BRUSH_SIDES).
     /// </summary>

@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Verts
         /// </summary>
-        public DispVert[]? Verts { get; set; }
+        public DispVert[] Verts { get; set; }
     }
 }

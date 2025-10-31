@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.GZIP
 {
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public sealed class Header
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// Modification TIME
-        /// 
+        ///
         /// This gives the most recent modification time of the original
         /// file being compressed.  The time is in Unix format, i.e.,
         /// seconds since 00:00:00 GMT, Jan.  1, 1970.  (Note that this
@@ -44,7 +44,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// Operating System
-        /// 
+        ///
         /// This identifies the type of file system on which compression
         /// took place.  This may be useful in determining end-of-line
         /// convention for text files.
@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// eXtra LENgth
-        /// 
+        ///
         /// If FLG.FEXTRA is set, this gives the length of the optional
         /// extra field.
         /// </summary>
@@ -61,7 +61,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// Extra field
-        /// 
+        ///
         /// If the FLG.FEXTRA bit is set, an "extra field" is present in
         /// the header, with total length XLEN bytes.  It consists of a
         /// series of subfields, each of the form <see cref="ExtraFieldData"/>.
@@ -71,7 +71,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// Extra field
-        /// 
+        ///
         /// If the FLG.FEXTRA bit is set, an "extra field" is present in
         /// the header, with total length XLEN bytes.  It consists of a
         /// series of subfields, each of the form <see cref="ExtraFieldData"/>.

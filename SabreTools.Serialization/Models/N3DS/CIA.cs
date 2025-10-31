@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// CIA header
         /// </summary>
-        public CIAHeader? Header { get; set; }
+        public CIAHeader Header { get; set; }
 
         /// <summary>
         /// Certificate chain
@@ -25,22 +25,22 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// https://www.3dbrew.org/wiki/CIA#Certificate_Chain
         /// </remarks>
-        public Certificate[]? CertificateChain { get; set; }
+        public Certificate[] CertificateChain { get; set; }
 
         /// <summary>
         /// Ticket
         /// </summary>
-        public Ticket? Ticket { get; set; }
+        public Ticket Ticket { get; set; }
 
         /// <summary>
         /// TMD file data
         /// </summary>
-        public TitleMetadata? TMDFileData { get; set; }
+        public TitleMetadata TMDFileData { get; set; }
 
         /// <summary>
         /// Content file data
         /// </summary>
-        public NCCHHeader[]? Partitions { get; set; }
+        public NCCHHeader[] Partitions { get; set; }
 
         /// <summary>
         /// Content file data
@@ -51,6 +51,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Meta file data (Not a necessary component)
         /// </summary>
-        public MetaData? MetaData { get; set; }
+        public MetaData MetaData { get; set; }
     }
 }

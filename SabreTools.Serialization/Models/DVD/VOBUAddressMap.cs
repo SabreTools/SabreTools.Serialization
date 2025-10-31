@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.DVD
         /// <summary>
         /// Starting sector within VOB of nth VOBU
         /// </summary>
-        public uint[]? StartingSectors { get; set; }
+        public uint[] StartingSectors { get; set; }
     }
 }

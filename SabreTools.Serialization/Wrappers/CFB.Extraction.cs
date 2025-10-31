@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Ensure the output filename is trimmed
-            string filename = entry.Name ?? $"entry{index}";
+            string filename = entry.Name.Length == 0 ? $"entry{index}" : entry.Name;
             byte[] nameBytes = Encoding.UTF8.GetBytes(filename);
             if (nameBytes[0] == 0xe4 && nameBytes[1] == 0xa1 && nameBytes[2] == 0x80)
                 filename = Encoding.UTF8.GetString(nameBytes, 3, nameBytes.Length - 3);

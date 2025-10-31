@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.Quantum
         /// Quantum signature: 0x44 0x53
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Quantum major version number

@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.WAD3
         /// </summary>
         /// <remarks>4 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Number of Directory entries

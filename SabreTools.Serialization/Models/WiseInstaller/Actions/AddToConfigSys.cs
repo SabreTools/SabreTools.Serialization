@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Add to CONFIG.SYS
-    /// 
+    ///
     /// This action edits the Config.sys file to add new commands. Insert commands at a
     /// particular line number, or search the file for specific text and insert the new line before,
     /// after, or in place of the existing line. The destination computer is restarted automatically
@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f2".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class AddToConfigSys : FunctionData
     {
         /// <summary>

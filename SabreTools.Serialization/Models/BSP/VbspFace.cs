@@ -74,13 +74,13 @@ namespace SabreTools.Data.Models.BSP
         /// Texture lighting info
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public int[]? LightmapTextureMinsInLuxels = new int[2];
+        public int[] LightmapTextureMinsInLuxels = new int[2];
 
         /// <summary>
         /// Texture lighting info
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public int[]? LightmapTextureSizeInLuxels = new int[2];
+        public int[] LightmapTextureSizeInLuxels = new int[2];
 
         /// <summary>
         /// Original face this was split from

@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Data file name
         /// </summary>
-        public string? FileName { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// Length of the data

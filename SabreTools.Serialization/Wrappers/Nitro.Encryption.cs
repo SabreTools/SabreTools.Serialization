@@ -56,10 +56,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="tableData">Blowfish table data as a byte array</param>
         private void EncryptARM9(byte[] tableData)
         {
-            // If the secure area is invalid, nothing can be done
-            if (SecureArea == null)
-                return;
-
             // Point to the beginning of the secure area
             int readOffset = 0;
 
@@ -178,10 +174,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="tableData">Blowfish table data as a byte array</param>
         private void DecryptARM9(byte[] tableData)
         {
-            // If the secure area is invalid, nothing can be done
-            if (SecureArea == null)
-                return;
-
             // Point to the beginning of the secure area
             int readOffset = 0;
             int writeOffset = 0;
@@ -259,13 +251,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>True if the file has known values for a decrypted file, null if it's empty, false otherwise</returns>
         public bool? CheckIfDecrypted(out string? message)
         {
-            // Return empty if the secure area is undefined
-            if (SecureArea == null)
-            {
-                message = "Secure area is undefined. Cannot be encrypted or decrypted.";
-                return null;
-            }
-
             int offset = 0;
             uint firstValue = SecureArea.ReadUInt32LittleEndian(ref offset);
             uint secondValue = SecureArea.ReadUInt32LittleEndian(ref offset);

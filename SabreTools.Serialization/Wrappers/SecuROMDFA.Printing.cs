@@ -24,11 +24,11 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Entries);
         }
 
-        private static void Print(StringBuilder builder, DFAEntry[]? entries)
+        private static void Print(StringBuilder builder, DFAEntry[] entries)
         {
             builder.AppendLine("  Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No entries");
                 builder.AppendLine();
@@ -38,24 +38,14 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                Print(builder, entry, i);
+
+                builder.AppendLine($"  Entry {i}");
+                builder.AppendLine(entry.Name, "    Name");
+                builder.AppendLine(entry.Length, "    Length");
+                builder.AppendLine(entry.Value, "    Value");
             }
 
             builder.AppendLine();
-        }
-
-        private static void Print(StringBuilder builder, DFAEntry? entry, int index)
-        {
-            builder.AppendLine($"  Entry {index}");
-            if (entry == null)
-            {
-                builder.AppendLine("    [NULL]");
-                return;
-            }
-
-            builder.AppendLine(entry.Name, "    Name");
-            builder.AppendLine(entry.Length, "    Length");
-            builder.AppendLine(entry.Value, "    Value");
         }
     }
 }

@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Play Multimedia File
-    /// 
+    ///
     /// This action plays an audio (.WAV) or video (.AVI) file during installation. Playback is
     /// asynchronous, which means the sound or movie can play while the installation
     /// continues. The multimedia file must be installed on the destination computer before this
@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// produce sound, the destination computer must be properly equipped and configured.
     /// </summary>
     /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class PlayMultimediaFile : MachineStateData
     {
         /// <summary>

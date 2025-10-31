@@ -2,7 +2,7 @@ using System;
 
 namespace SabreTools.Data.Models.BSP
 {
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     public enum BspContents : int
     {
         CONTENTS_EMPTY = -1,
@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
         CONTENTS_TRANSLUCENT = -15,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_flags_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_flags_(Source)"/>
     [Flags]
     public enum VbspContents : uint
     {
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.BSP
         CONTENTS_EMPTY = 0x00000000,
 
         /// <summary>
-        /// An eye is never valid in a solid 
+        /// An eye is never valid in a solid
         /// </summary>
         CONTENTS_SOLID = 0x00000001,
 
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Models.BSP
         CONTENTS_MIST = 0x00000040,
 
         /// <summary>
-        /// Block AI line of sight 
+        /// Block AI line of sight
         /// </summary>
         CONTENTS_BLOCKLOS = 0x00000040,
 
@@ -101,13 +101,13 @@ namespace SabreTools.Data.Models.BSP
 
         /// <summary>
         /// Per team contents used to differentiate collisions
-        /// between players and objects on different teams 
+        /// between players and objects on different teams
         /// </summary>
         CONTENTS_TEAM1 = 0x00000800,
 
         /// <summary>
         /// Per team contents used to differentiate collisions
-        /// between players and objects on different teams 
+        /// between players and objects on different teams
         /// </summary>
         CONTENTS_TEAM2 = 0x00001000,
 
@@ -215,12 +215,12 @@ namespace SabreTools.Data.Models.BSP
         CONTENTS_LADDER = 0x20000000,
 
         /// <summary>
-        /// Use accurate hitboxes on trace 
+        /// Use accurate hitboxes on trace
         /// </summary>
         CONTENTS_HITBOX = 0x40000000,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [Flags]
     public enum DispTriTag : ushort
     {
@@ -231,7 +231,7 @@ namespace SabreTools.Data.Models.BSP
         DISPTRI_FLAG_SURFPROP2 = 0x10,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public enum EmitType
     {
         /// <summary>
@@ -267,8 +267,8 @@ namespace SabreTools.Data.Models.BSP
         EMIT_SKYAMBIENT,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public enum LumpType : int
     {
         #region BSP and VBSP
@@ -292,14 +292,14 @@ namespace SabreTools.Data.Models.BSP
         /// The texture lump is somehow a bit more complex then the
         /// other lumps, because it is possible to save textures
         /// directly within the BSP file instead of storing them in
-        /// external WAD files. 
+        /// external WAD files.
         /// </summary>
         /// <remarks>LUMP_TEXDATA in VBSP</remarks>
         LUMP_TEXTURES = 2,
 
         /// <summary>
         /// This lump simply consists of all vertices of the BSP tree.
-        /// They are stored as a primitve array of triples of floats. 
+        /// They are stored as a primitve array of triples of floats.
         /// </summary>
         /// <remarks>LUMP_VERTEXES in VBSP</remarks>
         LUMP_VERTICES = 3,
@@ -312,20 +312,20 @@ namespace SabreTools.Data.Models.BSP
         /// Potentially Visible Sets (PVS) (also called VIS lists) in the
         /// same amout of leaves of the tree, the user can enter (often
         /// referred to as VisLeaves). The visiblilty lists are stored as
-        /// sequences of bitfields, which are run-length encoded. 
+        /// sequences of bitfields, which are run-length encoded.
         /// </summary>
         LUMP_VISIBILITY = 4,
 
         /// <summary>
         /// This lump is simple again and contains an array of binary
-        /// structures, the nodes, which are a major part of the BSP tree. 
+        /// structures, the nodes, which are a major part of the BSP tree.
         /// </summary>
         LUMP_NODES = 5,
 
         /// <summary>
         /// The texinfo lump contains informations about how textures are
         /// applied to surfaces. The lump itself is an array of binary data
-        /// structures. 
+        /// structures.
         /// </summary>
         LUMP_TEXINFO = 6,
 
@@ -338,13 +338,13 @@ namespace SabreTools.Data.Models.BSP
         /// This is one of the largest lumps in the BSP file. The lightmap
         /// lump stores all lightmaps used in the entire map. The lightmaps
         /// are arrays of triples of bytes (3 channel color, RGB) and stored
-        /// continuously. 
+        /// continuously.
         /// </summary>
         LUMP_LIGHTING = 8,
 
         /// <summary>
         /// This lump contains the so-called clipnodes, which build a second
-        /// BSP tree used only for collision detection. 
+        /// BSP tree used only for collision detection.
         /// </summary>
         /// <remarks>LUMP_OCCLUSION in VBSP</remarks>
         LUMP_CLIPNODES = 9,
@@ -363,7 +363,7 @@ namespace SabreTools.Data.Models.BSP
 
         /// <summary>
         /// The edges delimit the face and further refer to the vertices of the
-        /// face. Each edge is pointing to the start and end vertex of the edge. 
+        /// face. Each edge is pointing to the start and end vertex of the edge.
         /// </summary>
         LUMP_EDGES = 12,
 
@@ -375,7 +375,7 @@ namespace SabreTools.Data.Models.BSP
         /// or negative. If the value of the surfedge is positive, the first vertex
         /// of the edge is used as vertex for rendering the face, otherwise, the
         /// value is multiplied by -1 and the second vertex of the indexed edge is
-        /// used. 
+        /// used.
         /// </summary>
         LUMP_SURFEDGES = 13,
 
@@ -711,7 +711,7 @@ namespace SabreTools.Data.Models.BSP
         #endregion
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     public enum PlaneType : int
     {
         // Plane is perpendicular to given axis
@@ -725,7 +725,7 @@ namespace SabreTools.Data.Models.BSP
         PLANE_ANYZ = 5,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)/Static_prop_flags"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)/Static_prop_flags"/>
     [Flags]
     public enum StaticPropFlags : uint
     {
@@ -787,7 +787,7 @@ namespace SabreTools.Data.Models.BSP
         STATIC_PROP_NO_PER_TEXEL_LIGHTING = 0x100,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)/Static_prop_flags"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)/Static_prop_flags"/>
     [Flags]
     public enum StaticPropFlagsEx : uint
     {
@@ -807,7 +807,7 @@ namespace SabreTools.Data.Models.BSP
         STATIC_PROP_FLAGS_EX_ENABLE_LIGHT_BOUNCE = 0x00000004,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_flags_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_flags_(Source)"/>
     [Flags]
     public enum SurfaceFlag : uint
     {
@@ -908,12 +908,12 @@ namespace SabreTools.Data.Models.BSP
         SURF_NOCHOP = 0x4000,
 
         /// <summary>
-        /// Surface is part of a hitbox 
+        /// Surface is part of a hitbox
         /// </summary>
         SURF_HITBOX = 0x8000,
     }
 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     [Flags]
     public enum TextureFlag : uint
     {

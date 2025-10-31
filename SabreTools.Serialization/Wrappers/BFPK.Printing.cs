@@ -22,28 +22,21 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Files);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic");
             builder.AppendLine(header.Version, "  Version");
             builder.AppendLine(header.Files, "  Files");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry[]? entries)
+        private static void Print(StringBuilder builder, FileEntry[] entries)
         {
             builder.AppendLine("  File Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file table items");
                 return;

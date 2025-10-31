@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.WAD3
         /// </summary>
         /// <remarks>16 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
-        public string? Name;
+        public string Name;
 
         /// <summary>
         /// Dimensions of the texture (must be divisible by 16)

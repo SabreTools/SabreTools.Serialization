@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// File group name
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Size of the expanded data
@@ -82,6 +82,6 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// Reserved
         /// </summary>
-        public uint[]? Reserved { get; set; } = new uint[4];
+        public uint[] Reserved { get; set; } = new uint[4];
     }
 }

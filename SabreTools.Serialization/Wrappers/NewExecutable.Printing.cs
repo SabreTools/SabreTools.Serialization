@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
 
             // Stub
-            Print(builder, Model.Stub?.Header);
+            Print(builder, Model.Stub.Header);
 
             // Header
             Print(builder, Model.Header);
@@ -29,23 +29,16 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.SegmentTable);
             Print(builder, Model.ResourceTable);
             Print(builder, Model.ResidentNameTable);
-            Print(builder, Model.ModuleReferenceTable, Model.Stub?.Header, Model.Header);
+            Print(builder, Model.ModuleReferenceTable, Model.Stub.Header, Model.Header);
             Print(builder, Model.ImportedNameTable);
             Print(builder, Model.EntryTable);
             Print(builder, Model.NonResidentNameTable);
         }
 
-        private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader? header)
+        private static void Print(StringBuilder builder, Data.Models.MSDOS.ExecutableHeader header)
         {
             builder.AppendLine("  MS-DOS Stub Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No MS-DOS stub header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine(header.LastPageBytes, "  Last page bytes");
             builder.AppendLine(header.Pages, "  Pages");
@@ -72,17 +65,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExecutableHeader? header)
+        private static void Print(StringBuilder builder, ExecutableHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Magic, "  Magic number");
             builder.AppendLine(header.LinkerVersion, "  Linker version");
             builder.AppendLine(header.LinkerRevision, "  Linker revision");
@@ -117,11 +103,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SegmentTableEntry[]? entries)
+        private static void Print(StringBuilder builder, SegmentTableEntry[] entries)
         {
             builder.AppendLine("  Segment Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No segment table items");
                 builder.AppendLine();
@@ -142,19 +128,12 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResourceTable? table)
+        private static void Print(StringBuilder builder, ResourceTable table)
         {
             builder.AppendLine("  Resource Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
-            {
-                builder.AppendLine("  No resource table");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(table.AlignmentShiftCount, "  Alignment shift count");
-            if (table.ResourceTypes == null || table.ResourceTypes.Length == 0)
+            if (table.ResourceTypes.Length == 0)
             {
                 builder.AppendLine("  No resource table items");
             }
@@ -170,7 +149,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(entry.ResourceCount, "    Resource count");
                     builder.AppendLine(entry.Reserved, "    Reserved");
                     builder.AppendLine("    Resources = ");
-                    if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                    if (entry.ResourceCount == 0 || entry.Resources.Length == 0)
                     {
                         builder.AppendLine("      No resource items");
                     }
@@ -197,7 +176,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            if (table.TypeAndNameStrings == null || table.TypeAndNameStrings.Count == 0)
+            if (table.TypeAndNameStrings.Count == 0)
             {
                 builder.AppendLine("  No resource table type/name strings");
             }
@@ -220,11 +199,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ResidentNameTableEntry[]? entries)
+        private static void Print(StringBuilder builder, ResidentNameTableEntry[] entries)
         {
             builder.AppendLine("  Resident-Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No resident-name table items");
                 builder.AppendLine();
@@ -244,11 +223,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ModuleReferenceTableEntry[]? entries, Data.Models.MSDOS.ExecutableHeader? stub, ExecutableHeader? header)
+        private static void Print(StringBuilder builder, ModuleReferenceTableEntry[] entries, Data.Models.MSDOS.ExecutableHeader stub, ExecutableHeader header)
         {
             builder.AppendLine("  Module-Reference Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No module-reference table items");
                 builder.AppendLine();
@@ -261,17 +240,17 @@ namespace SabreTools.Serialization.Wrappers
                 var entry = entries[i];
 
                 builder.AppendLine($"  Module-Reference Table Entry {i}");
-                builder.AppendLine($"    Offset: {entry.Offset} (adjusted to be {entry.Offset + (stub?.NewExeHeaderAddr ?? 0) + (header?.ImportedNamesTableOffset ?? 0)})");
+                builder.AppendLine($"    Offset: {entry.Offset} (adjusted to be {entry.Offset + stub.NewExeHeaderAddr + header.ImportedNamesTableOffset})");
             }
 
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<ushort, ImportedNameTableEntry>? entries)
+        private static void Print(StringBuilder builder, Dictionary<ushort, ImportedNameTableEntry> entries)
         {
             builder.AppendLine("  Imported-Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Count == 0)
+            if (entries.Count == 0)
             {
                 builder.AppendLine("  No imported-name table items");
                 builder.AppendLine();
@@ -288,11 +267,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, EntryTableBundle[]? entries)
+        private static void Print(StringBuilder builder, EntryTableBundle[] entries)
         {
             builder.AppendLine("  Entry Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No entry table items");
                 builder.AppendLine();
@@ -324,11 +303,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NonResidentNameTableEntry[]? entries)
+        private static void Print(StringBuilder builder, NonResidentNameTableEntry[] entries)
         {
             builder.AppendLine("  Nonresident-Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No nonresident-name table items");
                 builder.AppendLine();

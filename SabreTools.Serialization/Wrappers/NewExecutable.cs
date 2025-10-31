@@ -18,13 +18,13 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Executable.Header"/>
-        public ExecutableHeader? Header => Model.Header;
+        public ExecutableHeader Header => Model.Header;
 
         /// <inheritdoc cref="Executable.ImportedNameTable"/>
-        public Dictionary<ushort, ImportedNameTableEntry>? ImportedNameTable => Model.ImportedNameTable;
+        public Dictionary<ushort, ImportedNameTableEntry> ImportedNameTable => Model.ImportedNameTable;
 
         /// <inheritdoc cref="Executable.NonResidentNameTable"/>
-        public NonResidentNameTableEntry[]? NonResidentNameTable => Model.NonResidentNameTable;
+        public NonResidentNameTableEntry[] NonResidentNameTable => Model.NonResidentNameTable;
 
         /// <summary>
         /// Address of the overlay, if it exists
@@ -43,13 +43,6 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                    {
-                        _overlayAddress = -1;
-                        return _overlayAddress.Value;
-                    }
-
-                    // If a required property is missing
-                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
                     {
                         _overlayAddress = -1;
                         return _overlayAddress.Value;
@@ -86,7 +79,7 @@ namespace SabreTools.Serialization.Wrappers
                     foreach (var entry in ResourceTable.ResourceTypes)
                     {
                         // Skip invalid entries
-                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
+                        if (entry.ResourceCount == 0 || entry.Resources.Length == 0)
                             continue;
 
                         foreach (var resource in entry.Resources)
@@ -184,13 +177,6 @@ namespace SabreTools.Serialization.Wrappers
                         return _overlaySize;
                     }
 
-                    // If a required property is missing
-                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                    {
-                        _overlaySize = 0;
-                        return _overlaySize;
-                    }
-
                     // Get the overlay address if possible
                     long endOfSectionData = OverlayAddress;
 
@@ -252,16 +238,16 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <inheritdoc cref="Executable.ResidentNameTable"/>
-        public ResidentNameTableEntry[]? ResidentNameTable => Model.ResidentNameTable;
+        public ResidentNameTableEntry[] ResidentNameTable => Model.ResidentNameTable;
 
         /// <inheritdoc cref="Executable.ResourceTable"/>
-        public ResourceTable? ResourceTable => Model.ResourceTable;
+        public ResourceTable ResourceTable => Model.ResourceTable;
 
         /// <inheritdoc cref="Executable.SegmentTable"/>
-        public SegmentTableEntry[]? SegmentTable => Model.SegmentTable;
+        public SegmentTableEntry[] SegmentTable => Model.SegmentTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public Data.Models.MSDOS.Executable? Stub => Model.Stub;
+        public Data.Models.MSDOS.Executable Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists
@@ -275,12 +261,6 @@ namespace SabreTools.Serialization.Wrappers
                     // If we already have cached data, just use that immediately
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
-
-                    if (Stub?.Header?.NewExeHeaderAddr == null)
-                    {
-                        _stubExecutableData = [];
-                        return _stubExecutableData;
-                    }
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
@@ -472,24 +452,20 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Resource on success, null otherwise</returns>
         public ResourceTypeResourceEntry? GetResource(int id)
         {
-            // If the header is invalid
-            if (Header == null)
-                return null;
-
             // Get the available source length, if possible
             long dataLength = Length;
             if (dataLength == -1)
                 return null;
 
             // If the resource table is invalid
-            if (ResourceTable?.ResourceTypes == null || ResourceTable.ResourceTypes.Length == 0)
+            if (ResourceTable.ResourceTypes.Length == 0)
                 return null;
 
             // Loop through the resources to find a matching ID
             foreach (var resourceType in ResourceTable.ResourceTypes)
             {
                 // Skip invalid resource types
-                if (resourceType.ResourceCount == 0 || resourceType.Resources == null || resourceType.Resources.Length == 0)
+                if (resourceType.ResourceCount == 0 || resourceType.Resources.Length == 0)
                     continue;
 
                 // Loop through the entries to find a matching ID
@@ -559,10 +535,6 @@ namespace SabreTools.Serialization.Wrappers
             if (dataLength == -1)
                 return -1;
 
-            // If the resource table is invalid
-            if (ResourceTable == null)
-                return -1;
-
             // Get the matching resource
             var resource = GetSegment(id);
             if (resource == null)
@@ -589,7 +561,7 @@ namespace SabreTools.Serialization.Wrappers
         public SegmentTableEntry? GetSegment(int index)
         {
             // If the segment table is invalid
-            if (SegmentTable == null || SegmentTable.Length == 0)
+            if (SegmentTable.Length == 0)
                 return null;
 
             // If the index is invalid
@@ -646,10 +618,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Segment offset on success, -1 otherwise</returns>
         public int GetSegmentOffset(int index)
         {
-            // If the header is invalid
-            if (Header == null)
-                return -1;
-
             // Get the available source length, if possible
             long dataLength = Length;
             if (dataLength == -1)

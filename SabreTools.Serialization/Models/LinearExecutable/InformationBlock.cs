@@ -25,10 +25,10 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// file as a valid 32-bit Linear Executable Module Format.
         /// </remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
-        /// Byte Ordering. 
+        /// Byte Ordering.
         /// </summary>
         /// <remarks>
         /// This byte specifies the byte ordering for the linear EXE format.
@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// 32-bit linear EXE format. Each incompatible change to the linear EXE
         /// format must increment this value. This allows the system to recognized
         /// future EXE file versions so that an appropriate error message may be
-        /// displayed if an attempt is made to load them. 
+        /// displayed if an attempt is made to load them.
         /// </remarks>
         public uint ExecutableFormatLevel;
 
@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// </summary>
         /// <remarks>
         /// This is useful for differentiating between revisions of dynamic linked modules.
-        /// This value is specified at link time by the user. 
+        /// This value is specified at link time by the user.
         /// </remarks>
         public uint ModuleVersion;
 
@@ -101,7 +101,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// actually in the linear EXE file. These pages are contained in the 'preload
         /// pages', 'demand load pages' and 'iterated data pages' sections of the linear
         /// EXE module. This is used to determine the size of the page information tables
-        /// in the linear EXE module. 
+        /// in the linear EXE module.
         /// </remarks>
         public uint ModuleNumberPages;
 
@@ -125,7 +125,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// </summary>
         /// <remarks>
         /// The Entry Address is the starting address for program modules and the library
-        /// initialization and Library termination address for library modules. 
+        /// initialization and Library termination address for library modules.
         /// </remarks>
         public uint InitialEIP;
 
@@ -135,7 +135,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// <remarks>
         /// This specifies the object to which the starting ESP is relative. This must be a
         /// nonzero value for a program module to be correctly loaded. This field is ignored
-        /// for a library module. 
+        /// for a library module.
         /// </remarks>
         public uint InitialObjectSS;
 
@@ -145,7 +145,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// <remarks>
         /// The ESP defines the starting stack pointer address for program modules. A zero
         /// value in this field indicates that the stack pointer is to be initialized to the
-        /// highest address/offset in the object. This field is ignored for a library module. 
+        /// highest address/offset in the object. This field is ignored for a library module.
         /// </remarks>
         public uint InitialESP;
 

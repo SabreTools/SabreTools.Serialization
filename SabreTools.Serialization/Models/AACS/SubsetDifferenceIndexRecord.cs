@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.AACS
         /// Subset-Difference record, with 0 being the start of the record.
         /// </summary>
         // <remarks>UInt24 not UInt32</remarks>
-        public uint[]? Offsets { get; set; }
+        public uint[] Offsets { get; set; }
     }
 }

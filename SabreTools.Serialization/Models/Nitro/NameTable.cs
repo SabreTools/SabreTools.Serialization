@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.Nitro
     /// The name table stores the names of the files and the structure
     /// of the file system. From the information stored, the index of the
     /// file's entry in the File Allocation Table can be found.
-    /// 
+    ///
     /// It is split into two parts:
     /// - Folder Allocation Table
     /// - Name List
@@ -15,11 +15,11 @@ namespace SabreTools.Data.Models.Nitro
         /// <summary>
         /// Folder allocation table
         /// </summary>
-        public FolderAllocationTableEntry[]? FolderAllocationTable { get; set; }
+        public FolderAllocationTableEntry[] FolderAllocationTable { get; set; }
 
         /// <summary>
         /// Name list
         /// </summary>
-        public NameListEntry[]? NameList { get; set; }
+        public NameListEntry[] NameList { get; set; }
     }
 }

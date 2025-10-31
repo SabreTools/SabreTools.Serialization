@@ -14,10 +14,10 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Models.XZP.File.DirectoryEntries"/>
-        public Data.Models.XZP.DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
+        public Data.Models.XZP.DirectoryEntry[] DirectoryEntries => Model.DirectoryEntries;
 
         /// <inheritdoc cref="Models.XZP.File.DirectoryItems"/>
-        public Data.Models.XZP.DirectoryItem[]? DirectoryItems => Model.DirectoryItems;
+        public Data.Models.XZP.DirectoryItem[] DirectoryItems => Model.DirectoryItems;
 
         #endregion
 

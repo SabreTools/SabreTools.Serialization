@@ -8,11 +8,11 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Playlist header
         /// </summary>
-        public PlaylistHeader? Header { get; set; }
+        public PlaylistHeader Header { get; set; }
 
         /// <summary>
         /// Embedded audio files / headers
         /// </summary>
-        public AudioFile[]? AudioFiles { get; set; }
+        public AudioFile[] AudioFiles { get; set; }
     }
 }

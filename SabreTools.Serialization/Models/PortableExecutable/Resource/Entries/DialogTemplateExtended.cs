@@ -5,7 +5,7 @@
     /// the dialog box and specifies the number of controls in the dialog box. For each
     /// control in a dialog box, an extended dialog box template has a block of data that
     /// uses the DLGITEMTEMPLATEEX format to describe the control.
-    /// 
+    ///
     /// The DLGTEMPLATEEX structure is not defined in any standard header file. The
     /// structure definition is provided here to explain the format of an extended template
     /// for a dialog box.
@@ -38,13 +38,13 @@
         /// <summary>
         /// The extended windows styles. This member is not used when creating dialog boxes,
         /// but applications that use dialog box templates can use it to create other types
-        /// of windows. 
+        /// of windows.
         /// </summary>
         public ExtendedWindowStyles ExtendedStyle { get; set; }
 
         /// <summary>
         /// The style of the dialog box.
-        /// 
+        ///
         /// If style includes the DS_SETFONT or DS_SHELLFONT dialog box style, the DLGTEMPLATEEX
         /// header of the extended dialog box template contains four additional members (pointsize,
         /// weight, italic, and typeface) that describe the font to use for the text in the client
@@ -107,7 +107,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? MenuResource { get; set; }
+        public string MenuResource { get; set; }
 
         /// <summary>
         /// The ordinal value of a menu resource in an executable file.
@@ -125,7 +125,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? ClassResource { get; set; }
+        public string ClassResource { get; set; }
 
         /// <summary>
         /// The ordinal value of a predefined system window class.
@@ -140,11 +140,11 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? TitleResource { get; set; }
+        public string TitleResource { get; set; }
 
         /// <summary>
         /// The point size of the font to use for the text in the dialog box and its controls.
-        /// 
+        ///
         /// This member is present only if the style member specifies DS_SETFONT or DS_SHELLFONT.
         /// </summary>
         public ushort PointSize { get; set; }
@@ -152,34 +152,34 @@
         /// <summary>
         /// The weight of the font. Note that, although this can be any of the values listed for the lfWeight
         /// member of the LOGFONT structure, any value that is used will be automatically changed to FW_NORMAL.
-        /// 
+        ///
         /// This member is present only if the style member specifies DS_SETFONT or DS_SHELLFONT.
         /// </summary>
         public ushort Weight { get; set; }
 
         /// <summary>
         /// Indicates whether the font is italic. If this value is TRUE, the font is italic.
-        /// 
+        ///
         /// This member is present only if the style member specifies DS_SETFONT or DS_SHELLFONT.
         /// </summary>
         public byte Italic { get; set; }
 
         /// <summary>
         /// The character set to be used. For more information, see the lfcharset member of LOGFONT.
-        /// 
+        ///
         /// This member is present only if the style member specifies DS_SETFONT or DS_SHELLFONT.
         /// </summary>
         public byte CharSet { get; set; }
 
         /// <summary>
         /// The name of the typeface for the font.
-        /// 
+        ///
         /// This member is present only if the style member specifies DS_SETFONT or DS_SHELLFONT.
         /// </summary>
         /// <remarks>
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? Typeface { get; set; }
+        public string Typeface { get; set; }
     }
 }

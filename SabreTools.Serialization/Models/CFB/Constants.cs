@@ -5,10 +5,10 @@ namespace SabreTools.Data.Models.CFB
     public static class Constants
     {
         public static readonly byte[] SignatureBytes = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
-    
+
         public const ulong SignatureUInt64 = 0xE11AB1A1E011CFD0;
 
-        
+
         /// <see href="https://devblogs.microsoft.com/setup/identifying-windows-installer-file-types/"/>
         #region Class IDs
 
@@ -36,12 +36,12 @@ namespace SabreTools.Data.Models.CFB
         /// The Summary Information Property Set
         /// </summary>
         public static readonly Guid FMTID_SummaryInformation = new("F29F85E0-4FF9-1068-AB91-08002B27B3D9");
-        
+
         /// <summary>
         /// The DocumentSummaryInformation and UserDefined Property Sets
         /// </summary>
         public static readonly Guid FMTID_DocSummaryInformation = new("D5CDD502-2E9C-101B-9397-08002B2CF9AE");
-        
+
         /// <summary>
         /// The DocumentSummaryInformation and UserDefined Property Sets
         /// </summary>

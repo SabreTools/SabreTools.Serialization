@@ -41,6 +41,6 @@
         /// <summary>
         /// An array of one or more StringData structures.
         /// </summary>
-        public StringData[]? Children { get; set; }
+        public StringData[] Children { get; set; }
     }
 }

@@ -29,6 +29,6 @@
         /// <summary>
         /// A table of resources for this type follows.
         /// </summary>
-        public ResourceTypeResourceEntry[]? Resources { get; set; }
+        public ResourceTypeResourceEntry[] Resources { get; set; }
     }
 }

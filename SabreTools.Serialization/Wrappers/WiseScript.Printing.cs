@@ -23,17 +23,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.States);
         }
 
-        private static void Print(StringBuilder builder, ScriptHeader? header)
+        private static void Print(StringBuilder builder, ScriptHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Flags, "  Flags");
             builder.AppendLine(header.UnknownU16_1, "  UnknownU16_1");
             builder.AppendLine(header.UnknownU16_2, "  UnknownU16_2");
@@ -66,11 +59,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, MachineState[]? entries)
+        private static void Print(StringBuilder builder, MachineState[] entries)
         {
             builder.AppendLine("  State Machine Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No state machine items");
                 return;

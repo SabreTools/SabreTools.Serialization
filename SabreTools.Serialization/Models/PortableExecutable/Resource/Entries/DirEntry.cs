@@ -16,6 +16,6 @@
         /// The FONTDIRENTRY structure for the specified font directly follows the DIRENTRY structure
         /// for that font.
         /// </summary>
-        public FontDirEntry? Entry { get; set; }
+        public FontDirEntry Entry { get; set; }
     }
 }

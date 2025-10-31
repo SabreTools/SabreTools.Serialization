@@ -1,7 +1,7 @@
 namespace SabreTools.Data.Models.BSP
 {
     /// <see href="https://github.com/RavuAlHemio/hllib/blob/master/HLLib/BSPFile.h"/>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     public sealed class TextureHeader
     {
         /// <summary>
@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.BSP
         /// Offsets
         /// </summary>
         /// <remarks><see cref="MipTextureCount"> entries</remarks>
-        public int[]? Offsets { get; set; }
+        public int[] Offsets { get; set; }
     }
 }

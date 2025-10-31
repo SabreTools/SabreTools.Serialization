@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Find File in Path
-    /// 
+    ///
     /// This action searches for a file on the destination computer. If more than one match
     /// exists, only the first match is returned.
     /// </summary>
@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// This action is called through Call DLL Function and is mapped to "f22".
     /// This acts like the start of a block if the default value is omitted(?)
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class FindFileInPath : FunctionData
     {
         /// <summary>

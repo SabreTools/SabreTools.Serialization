@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.BSP
         /// BSP file signature
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// BSP file version
@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.BSP
         /// Lump directory array
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.VBSP_HEADER_LUMPS)]
-        public VbspLumpEntry[]? Lumps = new VbspLumpEntry[Constants.VBSP_HEADER_LUMPS];
+        public VbspLumpEntry[] Lumps = new VbspLumpEntry[Constants.VBSP_HEADER_LUMPS];
 
         /// <summary>
         /// The map's revision (iteration, version) number.

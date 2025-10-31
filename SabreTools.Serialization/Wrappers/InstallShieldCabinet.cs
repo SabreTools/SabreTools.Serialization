@@ -17,39 +17,39 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Cabinet.CommonHeader"/>
-        public CommonHeader? CommonHeader => Model.CommonHeader;
+        public CommonHeader CommonHeader => Model.CommonHeader;
 
         /// <inheritdoc cref="Cabinet.Components"/>
-        public Component[]? Components => Model.Components;
+        public Component[] Components => Model.Components;
 
         /// <summary>
         /// Number of components in the cabinet set
         /// </summary>
-        public int ComponentCount => Components?.Length ?? 0;
+        public int ComponentCount => Components.Length;
 
         /// <summary>
         /// Number of directories in the cabinet set
         /// </summary>
-        public ushort DirectoryCount => Model.Descriptor?.DirectoryCount ?? 0;
+        public ushort DirectoryCount => Model.Descriptor.DirectoryCount;
 
         /// <inheritdoc cref="Cabinet.DirectoryNames"/>
-        public string[]? DirectoryNames => Model.DirectoryNames;
+        public string[] DirectoryNames => Model.DirectoryNames;
 
         /// <summary>
         /// Number of files in the cabinet set
         /// </summary>
-        public uint FileCount => Model.Descriptor?.FileCount ?? 0;
+        public uint FileCount => Model.Descriptor.FileCount;
 
         /// <inheritdoc cref="Cabinet.FileDescriptors"/>
-        public FileDescriptor[]? FileDescriptors => Model.FileDescriptors;
+        public FileDescriptor[] FileDescriptors => Model.FileDescriptors;
 
         /// <inheritdoc cref="Cabinet.FileGroups"/>
-        public FileGroup[]? FileGroups => Model.FileGroups;
+        public FileGroup[] FileGroups => Model.FileGroups;
 
         /// <summary>
         /// Number of file groups in the cabinet set
         /// </summary>
-        public int FileGroupCount => Model.FileGroups?.Length ?? 0;
+        public int FileGroupCount => Model.FileGroups.Length;
 
         /// <summary>
         /// Indicates if Unicode strings are used
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
         public int MajorVersion => Model.GetMajorVersion();
 
         /// <inheritdoc cref="Cabinet.VolumeHeader"/>
-        public VolumeHeader? VolumeHeader => Model.VolumeHeader;
+        public VolumeHeader VolumeHeader => Model.VolumeHeader;
 
         #endregion
 
@@ -170,9 +170,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public string? GetDirectoryName(int index)
         {
-            if (DirectoryNames == null)
-                return null;
-
             if (index < 0 || index >= DirectoryNames.Length)
                 return null;
 
@@ -237,9 +234,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileDescriptor? GetFileDescriptor(int index)
         {
-            if (FileDescriptors == null)
-                return null;
-
             if (index < 0 || index >= FileDescriptors.Length)
                 return null;
 
@@ -313,9 +307,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public FileGroup? GetFileGroup(int index)
         {
-            if (FileGroups == null)
-                return null;
-
             if (index < 0 || index >= FileGroups.Length)
                 return null;
 
@@ -326,21 +317,13 @@ namespace SabreTools.Serialization.Wrappers
         /// Get the file group at a given name, if possible
         /// </summary>
         public FileGroup? GetFileGroup(string name)
-        {
-            if (FileGroups == null)
-                return null;
-
-            return Array.Find(FileGroups, fg => fg != null && string.Equals(fg.Name, name));
-        }
+            => Array.Find(FileGroups, fg => string.Equals(fg.Name, name));
 
         /// <summary>
         /// Get the file group for the given file index, if possible
         /// </summary>
         public FileGroup? GetFileGroupFromFile(int index)
         {
-            if (FileGroups == null)
-                return null;
-
             if (index < 0 || index >= FileCount)
                 return null;
 

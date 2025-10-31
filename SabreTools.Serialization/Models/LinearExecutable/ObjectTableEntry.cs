@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// is loaded. The object's virtual size (rounded up to the page size value)
         /// must be greater than or equal to the total size of the pages in the EXE
         /// file for the object. This memory size must also be large enough to
-        /// contain all of the iterated data and uninitialized data in the EXE file. 
+        /// contain all of the iterated data and uninitialized data in the EXE file.
         /// </remarks>
         public uint VirtualSegmentSize;
 
@@ -52,7 +52,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// This specifies the number of the first object page table entry for this object.
         /// The object page table specifies where in the EXE file a page can be found for
         /// a given object and specifies per-page attributes.
-        /// 
+        ///
         /// The object table entries are ordered by logical page in the object table. In
         /// other words the object table entries are sorted based on the object page table
         /// index value.
@@ -66,7 +66,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// Any logical pages at the end of an object that do not have an entry in the object
         /// page table associated with them are handled as zero filled or invalid pages by
         /// the loader.
-        /// 
+        ///
         /// When the last logical pages of an object are not specified with an object page
         /// table entry, they are treated as either zero filled pages or invalid pages based
         /// on the last entry in the object page table for that object. If the last entry

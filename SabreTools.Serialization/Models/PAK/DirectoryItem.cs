@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.PAK
         /// Item Name
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 56)]
-        public string? ItemName;
+        public string ItemName;
 
         /// <summary>
         /// Item Offset

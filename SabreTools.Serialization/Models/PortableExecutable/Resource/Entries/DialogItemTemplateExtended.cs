@@ -84,7 +84,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? ClassResource { get; set; }
+        public string ClassResource { get; set; }
 
         /// <summary>
         /// The ordinal value of a predefined system class.
@@ -103,7 +103,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string? TitleResource { get; set; }
+        public string TitleResource { get; set; }
 
         /// <summary>
         /// An ordinal value of a resource, such as an icon, in an executable file

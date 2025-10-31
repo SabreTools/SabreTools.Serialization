@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Wizard Block / Wizard Loop
-    /// 
+    ///
     /// This action precedes dialog boxes that make up the majority of the installation’s end
     /// user interface. End users can move forward and backward through these dialog boxes.
     /// The script continues executing inside the wizard loop until the last dialog box has been
@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// This action is called through Call DLL Function and is mapped to "f31".
     /// This acts like the start of a block if a flag is set(?).
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class WizardBlockLoop : FunctionData
     {
         /// <summary>

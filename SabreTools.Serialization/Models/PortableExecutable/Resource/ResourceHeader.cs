@@ -28,11 +28,11 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource
         /// The resource type. The TYPE member can either be a numeric value or a
         /// null-terminated Unicode string that specifies the name of the type. See the
         /// following Remarks section for a description of Name or Ordinal type members.
-        /// 
+        ///
         /// If the TYPE member is a numeric value, it can specify either a standard or a
         /// user-defined resource type. If the member is a string, then it is a
         /// user-defined resource type.
-        /// 
+        ///
         /// Values less than 256 are reserved for system use.
         /// </summary>
         [MarshalAs(UnmanagedType.U4)]
@@ -43,7 +43,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource
         /// member, can either be a numeric value or a null-terminated Unicode string.
         /// See the following Remarks section for a description of Name or Ordinal type
         /// members.
-        /// 
+        ///
         /// You do not need to add padding for DWORD alignment between the TYPE and NAME
         /// members because they contain WORD data. However, you may need to add a WORD of
         /// padding after the NAME member to align the rest of the header on DWORD boundaries.
@@ -60,7 +60,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource
         /// A set of attribute flags that can describe the state of the resource. Modifiers
         /// in the .RC script file assign these attributes to the resource. The script
         /// identifiers can assign the following flag values.
-        /// 
+        ///
         /// Applications do not use any of these attributes. The attributes are permitted
         /// in the script for backward compatibility with existing scripts, but they are
         /// ignored. Resources are loaded when the corresponding module is loaded, and are
@@ -73,7 +73,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource
         /// The language for the resource or set of resources. Set the value for this member
         /// with the optional LANGUAGE resource definition statement. The parameters are
         /// constants from the Winnt.h file.
-        /// 
+        ///
         /// Each resource includes a language identifier so the system or application can
         /// select a language appropriate for the current locale of the system. If there are
         /// multiple resources of the same type and name that differ only in the language of

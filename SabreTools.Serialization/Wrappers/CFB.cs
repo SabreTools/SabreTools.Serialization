@@ -18,16 +18,16 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Binary.Header"/>
-        public FileHeader? Header => Model.Header;
+        public FileHeader Header => Model.Header;
 
         /// <inheritdoc cref="Binary.DirectoryEntries"/>
-        public DirectoryEntry[]? DirectoryEntries => Model.DirectoryEntries;
+        public DirectoryEntry[] DirectoryEntries => Model.DirectoryEntries;
 
         /// <inheritdoc cref="Binary.FATSectorNumbers"/>
-        public SectorNumber[]? FATSectorNumbers => Model.FATSectorNumbers;
+        public SectorNumber[] FATSectorNumbers => Model.FATSectorNumbers;
 
         /// <inheritdoc cref="Binary.MiniFATSectorNumbers"/>
-        public SectorNumber[]? MiniFATSectorNumbers => Model.MiniFATSectorNumbers;
+        public SectorNumber[] MiniFATSectorNumbers => Model.MiniFATSectorNumbers;
 
         /// <summary>
         /// Byte array representing the mini stream

@@ -9,11 +9,11 @@ namespace SabreTools.Data.Models.SGA
         /// <summary>
         ///Header data
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Directory data
         /// </summary>
-        public Directory? Directory { get; set; }
+        public Directory Directory { get; set; }
     }
 }

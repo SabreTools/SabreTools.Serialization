@@ -17,51 +17,51 @@ namespace SabreTools.Data.Models.NewExecutable
         /// <summary>
         /// MS-DOS executable stub
         /// </summary>
-        public MSDOS.Executable? Stub { get; set; }
+        public MSDOS.Executable Stub { get; set; }
 
         /// <summary>
         /// New Executable header
         /// </summary>
-        public ExecutableHeader? Header { get; set; }
+        public ExecutableHeader Header { get; set; }
 
         /// <summary>
         /// Segment table
         /// </summary>
-        public SegmentTableEntry[]? SegmentTable { get; set; }
+        public SegmentTableEntry[] SegmentTable { get; set; }
 
         /// <summary>
         /// Resource table
         /// </summary>
-        public ResourceTable? ResourceTable { get; set; }
+        public ResourceTable ResourceTable { get; set; }
 
         /// <summary>
         /// Resident-Name table
         /// </summary>
-        public ResidentNameTableEntry[]? ResidentNameTable { get; set; }
+        public ResidentNameTableEntry[] ResidentNameTable { get; set; }
 
         /// <summary>
         /// Module-Reference table
         /// </summary>
-        public ModuleReferenceTableEntry[]? ModuleReferenceTable { get; set; }
+        public ModuleReferenceTableEntry[] ModuleReferenceTable { get; set; }
 
         /// <summary>
         /// Imported-Name table
         /// </summary>
-        public Dictionary<ushort, ImportedNameTableEntry>? ImportedNameTable { get; set; }
+        public Dictionary<ushort, ImportedNameTableEntry> ImportedNameTable { get; set; }
 
         /// <summary>
         /// Entry table
         /// </summary>
-        public EntryTableBundle[]? EntryTable { get; set; }
+        public EntryTableBundle[] EntryTable { get; set; }
 
         /// <summary>
         /// Nonresident-Name table
         /// </summary>
-        public NonResidentNameTableEntry[]? NonResidentNameTable { get; set; }
+        public NonResidentNameTableEntry[] NonResidentNameTable { get; set; }
 
         /// <summary>
         /// Segment relocation data
         /// </summary>
-        public PerSegmentData[]? SegmentRelocationData { get; set; }
+        public PerSegmentData[] SegmentRelocationData { get; set; }
     }
 }

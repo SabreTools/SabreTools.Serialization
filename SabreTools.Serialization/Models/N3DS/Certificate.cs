@@ -37,7 +37,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Issuer
         /// </summary>
-        public string? Issuer { get; set; }
+        public string Issuer { get; set; }
 
         /// <summary>
         /// Key Type
@@ -47,7 +47,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Name
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Expiration time as UNIX Timestamp, used at least for CTCert

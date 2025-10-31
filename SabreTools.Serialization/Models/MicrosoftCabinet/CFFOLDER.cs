@@ -51,6 +51,6 @@
         /// <summary>
         /// Data blocks associated with this folder
         /// </summary>
-        public CFDATA[]? DataBlocks { get; set; }
+        public CFDATA[] DataBlocks { get; set; }
     }
 }

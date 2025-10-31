@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.PFF
         /// </summary>
         /// <remarks>Versions 2 and 3 share the same signature but different header sizes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Number of files

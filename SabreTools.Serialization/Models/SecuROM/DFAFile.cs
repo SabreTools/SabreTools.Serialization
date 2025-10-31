@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// All entries in the file
         /// </summary>
-        public DFAEntry[]? Entries { get; set; }
+        public DFAEntry[] Entries { get; set; }
     }
 }

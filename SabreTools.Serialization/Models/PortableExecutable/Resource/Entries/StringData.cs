@@ -64,7 +64,7 @@
         ///     set in the dwFileFlags member of the VS_FIXEDFILEINFO structure. For example, Value
         ///     could be "Private build for Olivetti solving mouse problems on M250 and M250E computers".
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// As many zero words as necessary to align the Value member on a 32-bit boundary.
@@ -74,6 +74,6 @@
         /// <summary>
         /// A zero-terminated string. See the szKey member description for more information.
         /// </summary>
-        public string? Value { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -26,7 +26,7 @@
         /// <summary>
         /// The Unicode string L"VarFileInfo".
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// As many zero words as necessary to align the Children member on a 32-bit boundary.
@@ -36,6 +36,6 @@
         /// <summary>
         /// Typically contains a list of languages that the application or DLL supports.
         /// </summary>
-        public VarData[]? Children { get; set; }
+        public VarData[] Children { get; set; }
     }
 }

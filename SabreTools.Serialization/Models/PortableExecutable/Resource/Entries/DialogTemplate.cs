@@ -13,7 +13,7 @@
         /// The style of the dialog box. This member can be a combination of window style
         /// values (such as WS_CAPTION and WS_SYSMENU) and dialog box style values (such
         /// as DS_CENTER).
-        /// 
+        ///
         /// If the style member includes the DS_SETFONT style, the header of the dialog box
         /// template contains additional data specifying the font to use for text in the
         /// client area and controls of the dialog box. The font data begins on the WORD
@@ -23,7 +23,7 @@
         /// message to the dialog box and to each control to provide a handle to the font.
         /// If DS_SETFONT is not specified, the dialog box template does not include the
         /// font data.
-        /// 
+        ///
         /// The DS_SHELLFONT style is not supported in the DLGTEMPLATE header.
         /// </summary>
         public WindowStyles Style { get; set; }
@@ -96,7 +96,7 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string? MenuResource { get; set; }
+        public string MenuResource { get; set; }
 
         /// <summary>
         /// The ordinal value of a menu resource in an executable file.
@@ -115,7 +115,7 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string? ClassResource { get; set; }
+        public string ClassResource { get; set; }
 
         /// <summary>
         /// The ordinal value of a predefined system class.
@@ -155,6 +155,6 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string? Typeface { get; set; }
+        public string Typeface { get; set; }
     }
 }

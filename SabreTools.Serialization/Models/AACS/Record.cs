@@ -2,8 +2,8 @@ namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
     /// Each Record begins with a one-byte Record Type field, followed by a
-    /// three-byte Record Length field. 
-    /// 
+    /// three-byte Record Length field.
+    ///
     /// The following subsections describe the currently defined Record types,
     /// and how a device processes each. All multi-byte integers, including
     /// the length field, are “Big Endian”; in other words, the most significant

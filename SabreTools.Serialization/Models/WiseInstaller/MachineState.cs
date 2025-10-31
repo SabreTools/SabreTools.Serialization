@@ -16,7 +16,6 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Data specific to the operation, may be null
         /// </summary>
-
         public MachineStateData? Data { get; set; }
     }
 }

@@ -18,32 +18,32 @@ namespace SabreTools.Data.Models.BSP
     /// clipnodes, but I am not sure about this. The meaning of the
     /// next value is also somehow unclear to me. Finally their are
     /// direct indexes into the faces array, not taking the redirecting
-    /// by the marksurfaces. 
+    /// by the marksurfaces.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class BspModel
     {
         /// <summary>
         /// Defines bounding box
         /// </summary>
-        public Vector3D? Mins;
+        public Vector3D Mins;
 
         /// <summary>
         /// Defines bounding box
         /// </summary>
-        public Vector3D? Maxs;
+        public Vector3D Maxs;
 
         /// <summary>
         /// Coordinates to move the coordinate system
         /// </summary>
-        public Vector3D? OriginVector;
+        public Vector3D OriginVector;
 
         /// <summary>
         /// Index into nodes array
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.MAX_MAP_HULLS)]
-        public int[]? HeadnodesIndex = new int[Constants.MAX_MAP_HULLS];
+        public int[] HeadnodesIndex = new int[Constants.MAX_MAP_HULLS];
 
         /// <summary>
         /// ???

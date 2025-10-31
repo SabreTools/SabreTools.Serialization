@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Call DLL Function
-    /// 
+    ///
     /// This action calls a .DLL function from a .DLL on the destination computer. They can be
     /// be .DLLs you have written, .DLLs developed for WiseScript, or Windows .DLLs. You can
     /// branch the script based on the returned results of a .DLL by setting the Action to Start
@@ -11,8 +11,8 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// <remarks>
     /// This acts like the start of a block if a flag is set.
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
-    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
+    /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/wisescript.h"/>
     public class CallDllFunction : MachineStateData
     {
         /// <summary>

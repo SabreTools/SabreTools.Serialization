@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Indicies
         /// </summary>
-        public LeafAmbientIndex[]? Indicies { get; set; }
+        public LeafAmbientIndex[] Indicies { get; set; }
     }
 }

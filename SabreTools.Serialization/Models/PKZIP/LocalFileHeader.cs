@@ -3,8 +3,8 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// PKZIP local file header
     /// </summary>
-    /// <see href="https://petlibrary.tripod.com/ZIP.HTM"/> 
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://petlibrary.tripod.com/ZIP.HTM"/>
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class LocalFileHeader
     {
         /// <summary>

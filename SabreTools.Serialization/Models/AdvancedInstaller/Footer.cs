@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// </summary>
         /// <remarks>
         /// Only seen when the preceeding two fields exist
-        /// 
+        ///
         /// Observed values:
         /// - 01 00 00 00
         /// </remarks>
@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// Hex string that looks like a key or other identifier
         /// </summary>
         /// <remarks>32 bytes</remarks>
-        public string? HexString { get; set; }
+        public string HexString { get; set; }
 
         /// <summary>
         /// Unknown
@@ -89,7 +89,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// Offset pointer to <see cref="FileDataStart"/>
         /// relative to the end of the signature if no filename
         /// exists.
-        /// 
+        ///
         /// Observed values:
         /// - 32 00 00 00 (No original filename)
         /// - 13 02 00 00 (Original filename)
@@ -99,7 +99,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// <summary>
         /// "ADVINSTSFX"
         /// </summary>
-        public string? Signature { get; set; }
+        public string Signature { get; set; }
 
         /// <summary>
         /// Unknown, always 0? Padding?

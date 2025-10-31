@@ -9,11 +9,11 @@ namespace SabreTools.Data.Models.OLE
     /// Augmented Backus–Naur Form (ABNF) [RFC4234] syntax.
     ///
     /// Indirectproperty = "prop" propertyIdentifier
-    /// 
+    ///
     /// Where PropertyIdentifier is the decimal string representation of the property identifier. This property
     /// identifier MUST be a valid PropertyIdentifier value and MUST NOT be the property identifier for any of
     /// the special properties specified in section 2.18.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class IndirectPropertyName : CodePageString { }
 }

@@ -13,7 +13,7 @@
     {
         /// <summary>
         /// If this bit is set, import by ordinal. Otherwise, import by name. Bit is
-        /// masked as 0x80000000 for PE32, 0x8000000000000000 for PE32+. 
+        /// masked as 0x80000000 for PE32, 0x8000000000000000 for PE32+.
         /// </summary>
         /// <remarks>Bit 31/63</remarks>
         public bool OrdinalNameFlag { get; set; }

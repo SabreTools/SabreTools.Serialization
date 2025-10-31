@@ -26,17 +26,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Footer);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Version, "  Version");
             builder.AppendLine(header.PreloadDirectoryEntryCount, "  Preload directory entry count");
@@ -49,11 +42,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry[]? entries, string prefix)
+        private static void Print(StringBuilder builder, DirectoryEntry[] entries, string prefix)
         {
             builder.AppendLine($"  {prefix} Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory entries");
                 builder.AppendLine();
@@ -73,11 +66,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryMapping[]? entries)
+        private static void Print(StringBuilder builder, DirectoryMapping[] entries)
         {
             builder.AppendLine("  Preload Directory Mappings Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No preload directory mappings");
                 builder.AppendLine();
@@ -95,11 +88,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryItem[]? entries)
+        private static void Print(StringBuilder builder, DirectoryItem[] entries)
         {
             builder.AppendLine("  Directory Items Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory items");
                 builder.AppendLine();
@@ -120,17 +113,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Footer? footer)
+        private static void Print(StringBuilder builder, Footer footer)
         {
             builder.AppendLine("  Footer Information:");
             builder.AppendLine("  -------------------------");
-            if (footer == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(footer.FileLength, "  File length");
             builder.AppendLine(footer.Signature, "  Signature");
             builder.AppendLine();

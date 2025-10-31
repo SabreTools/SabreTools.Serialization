@@ -15,16 +15,16 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="KWAJHeader.CompressionType"/>
-        public KWAJCompressionType CompressionType => Model.Header?.CompressionType ?? KWAJCompressionType.NoCompression;
+        public KWAJCompressionType CompressionType => Model.Header.CompressionType;
 
         /// <inheritdoc cref="KWAJHeader.DataOffset"/>
-        public ushort DataOffset => Model.Header?.DataOffset ?? 0;
+        public ushort DataOffset => Model.Header.DataOffset;
 
         /// <inheritdoc cref="KWAJHeaderExtensions.FileName"/>
-        public string? FileName => Model.HeaderExtensions?.FileName;
+        public string? FileName => Model.HeaderExtensions.FileName;
 
         /// <inheritdoc cref="KWAJHeaderExtensions.FileExtension"/>
-        public string? FileExtension => Model.HeaderExtensions?.FileExtension;
+        public string? FileExtension => Model.HeaderExtensions.FileExtension;
 
         #endregion
 

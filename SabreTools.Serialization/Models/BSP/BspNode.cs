@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.BSP
     /// <summary>
     /// This lump is simple again and contains an array of binary
     /// structures, the nodes, which are a major part of the BSP tree.
-    /// 
+    ///
     /// Every BSPNODE structure represents a node in the BSP tree and
     /// every node equals more or less a division step of the BSP algorithm.
     /// Therefore, each node has an index (iPlane) referring to a plane
@@ -20,8 +20,8 @@ namespace SabreTools.Data.Models.BSP
     /// Finally firstFace indexes into the face lump and spezifies the
     /// first of nFaces surfaces contained in this node.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public class BspNode
     {

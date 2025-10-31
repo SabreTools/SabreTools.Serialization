@@ -14,12 +14,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// SCI
         /// </summary>
-        public SystemControlInfo? SCI;
+        public SystemControlInfo SCI;
 
         /// <summary>
         /// ACI
         /// </summary>
-        public AccessControlInfo? ACI;
+        public AccessControlInfo ACI;
 
         /// <summary>
         /// AccessDesc signature (RSA-2048-SHA256)
@@ -38,6 +38,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// ACI (for limitation of first ACI)
         /// </summary>
-        public AccessControlInfo? ACIForLimitations;
+        public AccessControlInfo ACIForLimitations;
     }
 }

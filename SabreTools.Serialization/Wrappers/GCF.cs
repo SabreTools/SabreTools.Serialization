@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
                     return _files;
 
                 // If we don't have a required property
-                if (Model.DirectoryEntries == null || Model.DirectoryMapEntries == null || Model.BlockEntries == null)
+                if (Model.DirectoryEntries == null || Model.DirectoryMapEntries == null)
                     return null;
 
                 // Otherwise, scan and build the files

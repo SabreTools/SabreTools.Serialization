@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.PortableExecutable
     {
         /// <summary>
         /// The accelerator key is a virtual-key code. If this flag is not specified,
-        /// the accelerator key is assumed to specify an ASCII character code. 
+        /// the accelerator key is assumed to specify an ASCII character code.
         /// </summary>
         FVIRTKEY = 0x01,
 
@@ -20,19 +20,19 @@ namespace SabreTools.Data.Models.PortableExecutable
 
         /// <summary>
         /// The accelerator is activated only if the user presses the SHIFT key. This flag
-        /// applies only to virtual keys. 
+        /// applies only to virtual keys.
         /// </summary>
         FSHIFT = 0x04,
 
         /// <summary>
         /// The accelerator is activated only if the user presses the CTRL key. This flag
-        /// applies only to virtual keys. 
+        /// applies only to virtual keys.
         /// </summary>
         FCONTROL = 0x08,
 
         /// <summary>
         /// The accelerator is activated only if the user presses the ALT key. This flag
-        /// applies only to virtual keys. 
+        /// applies only to virtual keys.
         /// </summary>
         FALT = 0x10,
 
@@ -142,7 +142,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         IMAGE_REL_BASED_MIPS_JMPADDR16 = 9,
 
         /// <summary>
-        /// The base relocation applies the difference to the 64-bit field at offset. 
+        /// The base relocation applies the difference to the 64-bit field at offset.
         /// </summary>
         IMAGE_REL_BASED_DIR64 = 10,
     }
@@ -150,19 +150,19 @@ namespace SabreTools.Data.Models.PortableExecutable
     public enum CallbackReason : ushort
     {
         /// <summary>
-        /// A new process has started, including the first thread. 
+        /// A new process has started, including the first thread.
         /// </summary>
         DLL_PROCESS_ATTACH = 1,
 
         /// <summary>
         /// A new thread has been created. This notification sent for
-        /// all but the first thread. 
+        /// all but the first thread.
         /// </summary>
         DLL_THREAD_ATTACH = 2,
 
         /// <summary>
         /// A thread is about to be terminated. This notification sent
-        /// for all but the first thread. 
+        /// for all but the first thread.
         /// </summary>
         DLL_THREAD_DETACH = 3,
 
@@ -455,7 +455,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// The window should not be painted until siblings beneath the window (that were created
         /// by the same thread) have been painted. The window appears transparent because the bits
         /// of underlying sibling windows have already been painted.
-        /// 
+        ///
         /// To achieve transparency without these restrictions, use the SetWindowRgn function.
         /// </summary>
         WS_EX_TRANSPARENT = 0x00000020,
@@ -471,7 +471,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// smaller font. A tool window does not appear in the taskbar or in the dialog that
         /// appears when the user presses ALT+TAB. If a tool window has a system menu, its icon
         /// is not displayed on the title bar. However, you can display the system menu by
-        /// right-clicking or by typing ALT+SPACE. 
+        /// right-clicking or by typing ALT+SPACE.
         /// </summary>
         WS_EX_TOOLWINDOW = 0x00000080,
 
@@ -493,7 +493,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// which should call the WinHelp function using the HELP_WM_HELP command. The
         /// Help application displays a pop-up window that typically contains help for
         /// the child window.
-        /// 
+        ///
         /// WS_EX_CONTEXTHELP cannot be used with the WS_MAXIMIZEBOX or WS_MINIMIZEBOX
         /// styles.
         /// </summary>
@@ -503,10 +503,10 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// The window has generic "right-aligned" properties. This depends on the window class.
         /// This style has an effect only if the shell language is Hebrew, Arabic, or another
         /// language that supports reading-order alignment; otherwise, the style is ignored.
-        /// 
+        ///
         /// Using the WS_EX_RIGHT style for static or edit controls has the same effect as using
         /// the SS_RIGHT or ES_RIGHT style, respectively. Using this style with button controls
-        /// has the same effect as using BS_RIGHT and BS_RIGHTBUTTON styles. 
+        /// has the same effect as using BS_RIGHT and BS_RIGHTBUTTON styles.
         /// </summary>
         WS_EX_RIGHT = 0x00001000,
 
@@ -546,7 +546,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// The window is a layered window. This style cannot be used if the window has a
         /// class style of either CS_OWNDC or CS_CLASSDC.
-        /// 
+        ///
         /// Windows 8: The WS_EX_LAYERED style is supported for top-level windows and child
         /// windows. Previous Windows versions support WS_EX_LAYERED only for top-level windows.
         /// </summary>
@@ -578,7 +578,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// Double-buffering allows the window and its descendents to be painted without
         /// flicker. This cannot be used if the window has a class style of either
         /// CS_OWNDC or CS_CLASSDC.
-        /// 
+        ///
         /// Windows 2000: This style is not supported.
         /// </summary>
         WS_EX_COMPOSITED = 0x02000000,
@@ -587,12 +587,12 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// A top-level window created with this style does not become the foreground window when
         /// the user clicks it. The system does not bring this window to the foreground when the
         /// user minimizes or closes the foreground window.
-        /// 
+        ///
         /// The window should not be activated through programmatic access or via keyboard
         /// navigation by accessible technology, such as Narrator.
-        /// 
+        ///
         /// To activate the window, use the SetActiveWindow or SetForegroundWindow function.
-        /// 
+        ///
         /// The window does not appear on the taskbar by default. To force the window to appear on
         /// the taskbar, use the WS_EX_APPWINDOW style.
         /// </summary>
@@ -766,7 +766,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// The file's version structure was created dynamically; therefore, some
         /// of the members in this structure may be empty or incorrect. This flag
-        /// should never be set in a file's VS_VERSIONINFO data. 
+        /// should never be set in a file's VS_VERSIONINFO data.
         /// </summary>
         VS_FF_INFOINFERRED = 0x00000010,
 
@@ -1195,7 +1195,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// The window is a control that can receive the keyboard focus when the user
         /// presses the TAB key. Pressing the TAB key changes the keyboard focus to
         /// the next control with the WS_TABSTOP style.
-        /// 
+        ///
         /// You can turn this style on and off to change dialog box navigation. To
         /// change this style after a window has been created, use the SetWindowLong
         /// function. For user-created windows and modeless dialogs to work with tab
@@ -1216,7 +1216,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// has the WS_TABSTOP style so that the user can move from group to group.
         /// The user can subsequently change the keyboard focus from one control in
         /// the group to the next control in the group by using the direction keys.
-        /// 
+        ///
         /// You can turn this style on and off to change dialog box navigation. To
         /// change this style after a window has been created, use the SetWindowLong
         /// function.
@@ -1349,7 +1349,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// Causes the control to position itself at the top of the parent window's
         /// client area and sets the width to be the same as the parent window's width.
-        /// Toolbars have this style by default. 
+        /// Toolbars have this style by default.
         /// </summary>
         CCS_TOP = 0x00000001,
 
@@ -1378,7 +1378,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// Prevents the control from automatically moving to the top or bottom of the parent
         /// window. Instead, the control keeps its position within the parent window despite
         /// changes to the size of the parent. If CCS_TOP or CCS_BOTTOM is also used, the
-        /// height is adjusted to the default, but the position and width remain unchanged. 
+        /// height is adjusted to the default, but the position and width remain unchanged.
         /// </summary>
         CCS_NOPARENTALIGN = 0x00000008,
 
@@ -1434,7 +1434,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// of Windows. If you specify this style, the system creates the dialog box with
         /// the WS_EX_TOPMOST style. This style does not prevent the user from accessing
         /// other windows on the desktop.
-        /// 
+        ///
         /// Do not combine this style with the DS_CONTROL style.
         /// </summary>
         DS_SYSMODAL = 0x00000002,
@@ -1472,7 +1472,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// to the specified font data. The system passes a handle to the font to the dialog
         /// box and to each control by sending them the WM_SETFONT message. For descriptions
         /// of the format of this font data, see DLGTEMPLATE and DLGTEMPLATEEX.
-        /// 
+        ///
         /// If neither DS_SETFONT nor DS_SHELLFONT is specified, the dialog box template does
         /// not include the font data.
         /// </summary>
@@ -1495,7 +1495,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// to the foreground. This style is useful for modal dialog boxes that require immediate
         /// attention from the user regardless of whether the owner window is the foreground
         /// window.
-        /// 
+        ///
         /// The system restricts which processes can set the foreground window. For more
         /// information, see Foreground and Background Windows.
         /// </summary>
@@ -1528,7 +1528,7 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// the message to the dialog box procedure, which should call the function using the
         /// HELP_WM_HELP command. The help application displays a pop-up window that typically contains
         /// help for the control.
-        /// 
+        ///
         /// Note that DS_CONTEXTHELP is only a placeholder. When the dialog box is created, the system
         /// checks for DS_CONTEXTHELP and, if it is there, adds WS_EX_CONTEXTHELP to the extended style
         /// of the dialog box. WS_EX_CONTEXTHELP cannot be used with the WS_MAXIMIZEBOX or WS_MINIMIZEBOX
@@ -1546,12 +1546,12 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// dialog box template must be set to MS Shell Dlg. Otherwise, this style has no effect. It is
         /// also recommended that you use the DIALOGEX Resource, rather than the DIALOG Resource. For
         /// more information, see Dialog Box Fonts.
-        /// 
+        ///
         /// The system selects a font using the font data specified in the pointsize, weight, and italic
         /// members. The system passes a handle to the font to the dialog box and to each control by
         /// sending them the WM_SETFONT message. For descriptions of the format of this font data, see
-        /// DLGTEMPLATEEX. 
-        /// 
+        /// DLGTEMPLATEEX.
+        ///
         /// If neither DS_SHELLFONT nor DS_SETFONT is specified, the extended dialog box template does
         /// not include the font data.
         /// </summary>

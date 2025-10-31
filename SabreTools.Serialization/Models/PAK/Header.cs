@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.PAK
         /// Signature
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Directory Offset

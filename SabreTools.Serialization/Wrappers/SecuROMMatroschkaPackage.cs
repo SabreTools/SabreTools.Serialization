@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint? Padding => Model.Padding;
 
         /// <inheritdoc cref="MatroshkaPackage.Entries"/>
-        public MatroshkaEntry[]? Entries => Model.Entries;
+        public MatroshkaEntry[] Entries => Model.Entries;
 
         #endregion
 

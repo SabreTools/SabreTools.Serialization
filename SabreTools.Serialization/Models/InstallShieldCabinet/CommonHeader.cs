@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// "ISc("
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Encoded version

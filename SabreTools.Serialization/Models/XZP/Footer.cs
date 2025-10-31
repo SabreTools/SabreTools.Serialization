@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.XZP
         /// </summary>
         /// <remarks>4 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? Signature;
+        public string Signature;
     }
 }

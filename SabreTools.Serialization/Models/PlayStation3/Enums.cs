@@ -1,7 +1,7 @@
 // TODO: Add more enumerations from the wiki
 namespace SabreTools.Data.Models.PlayStation3
 {
-    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/> 
+    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/>
     public enum DataFormat : ushort
     {
         /// <summary>

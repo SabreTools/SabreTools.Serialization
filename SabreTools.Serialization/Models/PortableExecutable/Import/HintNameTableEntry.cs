@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.PortableExecutable.Import
         /// and terminated by a null byte.
         /// </summary>
         [MarshalAs(UnmanagedType.LPStr)]
-        public string? Name;
+        public string Name;
     }
 }

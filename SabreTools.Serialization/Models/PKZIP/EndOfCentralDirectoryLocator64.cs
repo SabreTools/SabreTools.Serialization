@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Zip64 end of central directory locator
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     [StructLayout(LayoutKind.Sequential)]
     public class EndOfCentralDirectoryLocator64
     {

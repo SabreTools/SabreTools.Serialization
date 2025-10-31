@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>4 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? MagicID;
+        public string MagicID;
 
         /// <summary>
         /// Content size, in media units (1 media unit = 0x200 bytes)
@@ -74,7 +74,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x10)]
-        public string? ProductCode;
+        public string ProductCode;
 
         /// <summary>
         /// Extended header SHA-256 hash (SHA256 of 2x Alignment Size, beginning at 0x0 of ExHeader)
@@ -96,7 +96,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Flags
         /// </summary>
-        public NCCHHeaderFlags? Flags;
+        public NCCHHeaderFlags Flags;
 
         /// <summary>
         /// Plain region offset, in media units

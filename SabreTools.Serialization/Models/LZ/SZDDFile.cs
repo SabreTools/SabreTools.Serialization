@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.LZ
         /// <summary>
         /// Header
         /// </summary>
-        public SZDDHeader? Header { get; set; }
+        public SZDDHeader Header { get; set; }
 
         // Followed immediately by compressed data
     }

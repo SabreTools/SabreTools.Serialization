@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.OLE
     /// The DictionaryEntry packet represents a mapping between a property identifier and a
     /// property name
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class DictionaryEntry
     {
         /// <summary>
@@ -30,6 +30,6 @@ namespace SabreTools.Data.Models.OLE
         /// 8-bit characters from the code page identified by the CodePage property and MUST
         /// NOT be padded.
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

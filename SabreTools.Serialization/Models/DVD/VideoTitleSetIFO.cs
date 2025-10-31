@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.DVD
         /// "DVDVIDEO-VTS"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Last sector of title set (last sector of BUP)
@@ -141,7 +141,7 @@ namespace SabreTools.Data.Models.DVD
         /// Audio attributes of VTSM_VOBS
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public ulong[]? AudioAttributes;
+        public ulong[] AudioAttributes = new ulong[8];
 
         /// <summary>
         /// Unknown

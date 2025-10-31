@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.LZ
         /// <summary>
         /// Header
         /// </summary>
-        public QBasicHeader? Header { get; set; }
+        public QBasicHeader Header { get; set; }
 
         // Followed immediately by compressed data
     }

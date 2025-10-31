@@ -2,14 +2,14 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Set Variable
-    /// 
+    ///
     /// This action sets the value of a variable by providing a literal value, by modifying the
     /// variable’s existing value, or by evaluating an expression.
     /// </summary>
     /// <remarks>
     /// This action is called through Call DLL Function and is mapped to "f16".
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class SetVariable : FunctionData
     {
         /// <summary>
@@ -27,7 +27,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// - Convert to short filename (0x14)
         /// - Convert to uppercase (0x18)
         /// - Convert to lowercase (0x1C)
-        /// 
+        ///
         /// One of the following is case 0x20:
         /// - Evaluate Expression (unknown)
         /// - Append to Existing Value (unknown)

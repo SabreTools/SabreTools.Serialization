@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// files, the following structure MUST be used for all
     /// programs storing data in this field
     /// </summary>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public abstract class ExtensibleDataField
     {
         /// <summary>

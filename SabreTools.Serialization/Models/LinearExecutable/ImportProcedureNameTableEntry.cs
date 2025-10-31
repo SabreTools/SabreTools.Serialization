@@ -4,7 +4,7 @@
     /// The import procedure name table defines the procedure name strings imported
     /// by this module through dynamic link references. These strings are referenced
     /// through the imported relocation fixups.
-    /// 
+    ///
     /// To determine the length of the import procedure name table add the fixup
     /// section size to the fixup page table offset, this computes the offset to
     /// the end of the fixup section, then subtract the import procedure name table
@@ -13,7 +13,7 @@
     /// pages section is aligned on a 'page size' boundary, padded space may exist
     /// between the last import name string and the first page in the data pages
     /// section. If this padded space exists it will be zero filled.
-    /// 
+    ///
     /// The strings are CASE SENSITIVE and NOT NULL TERMINATED.
     /// </summary>
     /// <see href="https://faydoc.tripod.com/formats/exe-LE.htm"/>
@@ -26,7 +26,7 @@
         /// <remarks>
         /// This defines the length of the string in bytes. The length of each
         /// ascii name string is limited to 127 characters.
-        /// 
+        ///
         /// The high bit in the LEN field (bit 7) is defined as an Overload bit.
         /// This bit signifies that additional information is contained in the
         /// linear EXE module and will be used in the future for parameter type
@@ -41,6 +41,6 @@
         /// This is a variable length string with it's length defined in bytes by
         /// the LEN field. The string is case sensitive and is not null terminated.
         /// </remarks>
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -23,28 +23,21 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.FileEntries);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.NumDirs, "  Number of directory entries");
             builder.AppendLine(header.DirOffset, "  Offset to first directory entry");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirEntry[]? entries)
+        private static void Print(StringBuilder builder, DirEntry[] entries)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory entries");
                 builder.AppendLine();
@@ -68,11 +61,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileEntry[]? entries)
+        private static void Print(StringBuilder builder, FileEntry[] entries)
         {
             builder.AppendLine("  File Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file entries");
                 builder.AppendLine();

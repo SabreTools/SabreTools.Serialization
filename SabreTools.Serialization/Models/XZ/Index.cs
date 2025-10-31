@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.XZ
         /// <summary>
         /// One record per block
         /// </summary>
-        public Record[]? Records { get; set; }
+        public Record[] Records { get; set; }
 
         /// <summary>
         /// This field MUST contain 0-3 null bytes to pad the Index to

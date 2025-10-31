@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
 {
     /// <summary>
     /// Prompt for Filename
-    /// 
+    ///
     /// This action prompts the end user to select a file using a standard Open or Save dialog
     /// box. The complete path of the file or directory is returned in a variable. (Example: Use
     /// the returned directory to set the installation directory for a subset of files.) No file is
@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
     /// This action is called through Call DLL Function and is mapped to "f35".
     /// This acts like the start of a block.
     /// </remarks>
-    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/> 
+    /// <see href="https://www.manualslib.com/manual/404969/Symantec-Wisescript-Editor-8-0-Reference-For-Wise-Package-Studio-V1-0.html"/>
     public class PromptForFilename : FunctionData
     {
         /// <summary>

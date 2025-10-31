@@ -8,24 +8,24 @@ namespace SabreTools.Data.Models.BSP
     /// confused with the prop models used in Hammer, which are usually
     /// called "studiomodels" in the SDK source.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class VbspModel
     {
         /// <summary>
         /// Bounding box
         /// </summary>
-        public Vector3D? Mins;
+        public Vector3D Mins;
 
         /// <summary>
         /// Bounding box
         /// </summary>
-        public Vector3D? Maxs;
+        public Vector3D Maxs;
 
         /// <summary>
         /// For sounds or lights
         /// </summary>
-        public Vector3D? OriginVector;
+        public Vector3D OriginVector;
 
         /// <summary>
         /// Index into nodes

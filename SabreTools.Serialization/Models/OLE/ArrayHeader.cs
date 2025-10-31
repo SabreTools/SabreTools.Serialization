@@ -3,7 +3,7 @@ namespace SabreTools.Data.Models.OLE
     /// <summary>
     /// The ArrayHeader packet represents the type and dimensions of an array property type.
     /// </summary>
-    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/> 
+    /// <see href="https://winprotocoldoc.z19.web.core.windows.net/MS-OLEPS/%5bMS-OLEPS%5d.pdf"/>
     public class ArrayHeader
     {
         /// <summary>
@@ -20,10 +20,10 @@ namespace SabreTools.Data.Models.OLE
 
         /// <summary>
         /// MUST be a sequence of ArrayDimension packets
-        /// 
+        ///
         /// The number of scalar values in an array property can be calculated from the ArrayHeader packet
         /// as the product of the Size fields of each of the ArrayDimension packets.
         /// </summary>
-        public ArrayDimension[]? Dimensions { get; set; }
+        public ArrayDimension[] Dimensions { get; set; }
     }
 }

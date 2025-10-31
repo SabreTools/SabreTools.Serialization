@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.BSP
     /// most other entities, static props are not stored in the entity lump. The
     /// gamelump formats used in Source are defined in the public/gamebspfile.h
     /// header file.
-    /// 
+    ///
     /// The first element of the static prop game lump is the dictionary; this is
     /// an integer count followed by the list of model (prop) names used in the map
     /// </summary>
@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.BSP
         /// Model name
         /// </summary>
         /// <remarks>[dictEntries][128]</remarks>
-        public char[][]? Name;
+        public char[][] Name;
     }
 }

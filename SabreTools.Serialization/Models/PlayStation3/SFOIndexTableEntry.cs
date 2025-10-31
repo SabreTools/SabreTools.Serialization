@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace SabreTools.Data.Models.PlayStation3
 {
-    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/> 
+    /// <see href="https://psdevwiki.com/ps3/PARAM.SFO"/>
     [StructLayout(LayoutKind.Sequential)]
     public class SFOIndexTableEntry
     {
@@ -16,12 +16,12 @@ namespace SabreTools.Data.Models.PlayStation3
         /// Data type
         /// </summary>
         [MarshalAs(UnmanagedType.U2)]
-        public DataFormat DataFormat; 
+        public DataFormat DataFormat;
 
         /// <summary>
         /// Data used length
         /// </summary>
-        public uint DataLength; 
+        public uint DataLength;
 
         /// <summary>
         /// Data total length. TITLE_ID is always = 16 bytes

@@ -7,6 +7,6 @@ namespace SabreTools.Data.Models.WAD3
         /// Raw image data. Each byte points to an index in the palette
         /// </summary>
         /// <remarks>[width][height]</remarks>
-        public byte[][]? Data { get; set; }
+        public byte[][] Data { get; set; }
     }
 }

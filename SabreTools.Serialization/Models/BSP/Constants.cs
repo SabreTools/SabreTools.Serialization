@@ -1,7 +1,7 @@
 namespace SabreTools.Data.Models.BSP
 {
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/> 
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     public static class Constants
     {
         #region Header
@@ -45,7 +45,7 @@ namespace SabreTools.Data.Models.BSP
         public const int MAX_MAP_PORTALS = 65536;
 
         #endregion
-    
+
         #region Entities
 
         public const int MAX_KEY = 32;
@@ -61,7 +61,7 @@ namespace SabreTools.Data.Models.BSP
         public const int MIPLEVELS = 4;
 
         #endregion
-    
+
         #region VBSP
 
         public static readonly byte[] SignatureBytes = [0x56, 0x42, 0x53, 0x50];
@@ -79,15 +79,15 @@ namespace SabreTools.Data.Models.BSP
         public const string LzmaHeaderString = "LZMA";
 
         public const uint LzmaHeaderUInt32 = 0x414D5A4C;
-        
+
         #endregion
-    
+
         #region Overlay
 
         public const int OVERLAY_BSP_FACE_COUNT = 64;
 
         #endregion
-    
+
         #region Worldlights
 
         /// <summary>

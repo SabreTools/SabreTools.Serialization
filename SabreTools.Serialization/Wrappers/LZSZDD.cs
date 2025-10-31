@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="SZDDHeader.LastChar"/>
-        public char LastChar => Model.Header?.LastChar ?? '\0';
+        public char LastChar => Model.Header.LastChar;
 
         #endregion
 

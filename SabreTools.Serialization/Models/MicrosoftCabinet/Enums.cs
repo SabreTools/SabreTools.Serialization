@@ -75,7 +75,7 @@ namespace SabreTools.Data.Models.MicrosoftCabinet
         /// <summary>
         /// Indicates that the folder index is actually zero, but that
         /// extraction of this file would have to begin with the cabinet named in the
-        /// CFHEADER.szCabinetPrev field. 
+        /// CFHEADER.szCabinetPrev field.
         /// </summary>
         CONTINUED_FROM_PREV = 0xFFFD,
 

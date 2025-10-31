@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Try to deserialize the source data
                 var deserializer = new Readers.AdvancedInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
-                if (sfx?.Entries == null)
+                if (sfx == null || sfx.Entries.Length == 0)
                     return false;
 
                 // Loop through the entries and extract
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Wrappers
                         continue;
 
                     // Ensure directory separators are consistent
-                    string filename = entry.Name ?? $"FILE_{i}";
+                    string filename = entry.Name.Length == 0 ? $"FILE_{i}" : entry.Name;
                     if (Path.DirectorySeparatorChar == '\\')
                         filename = filename.Replace('/', '\\');
                     else if (Path.DirectorySeparatorChar == '/')

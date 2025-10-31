@@ -25,17 +25,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.FileAllocationTable);
         }
 
-        private static void Print(StringBuilder builder, CommonHeader? header)
+        private static void Print(StringBuilder builder, CommonHeader header)
         {
             builder.AppendLine("  Common Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No common header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.GameTitle, "  Game title");
             builder.AppendLine(header.GameCode, "  Game code");
             builder.AppendLine(header.MakerCode, "  Maker code");
@@ -79,17 +72,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ExtendedDSiHeader? header)
+        private static void Print(StringBuilder builder, ExtendedDSiHeader header)
         {
             builder.AppendLine("  Extended DSi Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No extended DSi header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.GlobalMBK15Settings, "  Global MBK1..MBK5 settings");
             builder.AppendLine(header.LocalMBK68SettingsARM9, "  Local MBK6..MBK8 settings for ARM9");
             builder.AppendLine(header.LocalMBK68SettingsARM7, "  Local MBK6..MBK8 settings for ARM7");
@@ -141,7 +127,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, byte[]? secureArea)
+        private static void Print(StringBuilder builder, byte[] secureArea)
         {
             builder.AppendLine("  Secure Area Information:");
             builder.AppendLine("  -------------------------");
@@ -149,27 +135,21 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NameTable? table)
+        private static void Print(StringBuilder builder, NameTable table)
         {
             builder.AppendLine("  Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
-            {
-                builder.AppendLine("  No name table");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine();
+
             Print(builder, table.FolderAllocationTable);
             Print(builder, table.NameList);
         }
 
-        private static void Print(StringBuilder builder, FolderAllocationTableEntry[]? entries)
+        private static void Print(StringBuilder builder, FolderAllocationTableEntry[] entries)
         {
             builder.AppendLine("  Folder Allocation Table:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No folder allocation table entries");
                 builder.AppendLine();
@@ -198,11 +178,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, NameListEntry[]? entries)
+        private static void Print(StringBuilder builder, NameListEntry[] entries)
         {
             builder.AppendLine("  Name List:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No name list entries");
                 builder.AppendLine();
@@ -223,11 +203,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FileAllocationTableEntry[]? entries)
+        private static void Print(StringBuilder builder, FileAllocationTableEntry[] entries)
         {
             builder.AppendLine("  File Allocation Table:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No file allocation table entries");
                 builder.AppendLine();

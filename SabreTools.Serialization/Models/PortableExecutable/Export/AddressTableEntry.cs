@@ -6,7 +6,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Export
     /// The export address table contains the address of exported entry points
     /// and exported data and absolutes. An ordinal number is used as an index
     /// into the export address table.
-    /// 
+    ///
     /// Each entry in the export address table is a field that uses one of two
     /// formats in the following table. If the address specified is not within
     /// the export section (as defined by the address and length that are

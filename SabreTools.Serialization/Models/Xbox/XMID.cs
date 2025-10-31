@@ -17,17 +17,17 @@ namespace SabreTools.Data.Models.Xbox
         /// <summary>
         /// 2-character publisher identifier
         /// </summary>
-        public string? PublisherIdentifier { get; set; }
+        public string PublisherIdentifier { get; set; }
 
         /// <summary>
         /// 3-character Game ID
         /// </summary>
-        public string? GameID { get; set; }
+        public string GameID { get; set; }
 
         /// <summary>
         /// 2-character Internal version number
         /// </summary>
-        public string? VersionNumber { get; set; }
+        public string VersionNumber { get; set; }
 
         /// <summary>
         /// 1-character Region identifier character

@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Lightings
         /// </summary>
-        public LeafAmbientLighting[]? Lightings { get; set; }
+        public LeafAmbientLighting[] Lightings { get; set; }
     }
 }

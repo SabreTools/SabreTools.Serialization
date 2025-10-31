@@ -18,14 +18,14 @@ namespace SabreTools.Data.Models.BSP
     /// This face is used to set the texture and overall physical location
     /// and boundaries of the displacement.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class DispInfo
     {
         /// <summary>
         /// Start position used for orientation
         /// </summary>
-        public Vector3D? StartPosition;
+        public Vector3D StartPosition;
 
         /// <summary>
         /// Index into LUMP_DISP_VERTS.
@@ -76,18 +76,18 @@ namespace SabreTools.Data.Models.BSP
         /// Indexed by NEIGHBOREDGE_ defines.
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public CDispNeighbor[]? EdgeNeighbors = new CDispNeighbor[4];
+        public CDispNeighbor[] EdgeNeighbors = new CDispNeighbor[4];
 
         /// <summary>
         /// Indexed by CORNER_ defines.
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public CDispCornerNeighbors[]? CornerNeighbors = new CDispCornerNeighbors[4];
+        public CDispCornerNeighbors[] CornerNeighbors = new CDispCornerNeighbors[4];
 
         /// <summary>
         /// Active verticies
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public uint[]? AllowedVerts = new uint[10];
+        public uint[] AllowedVerts = new uint[10];
     }
 }

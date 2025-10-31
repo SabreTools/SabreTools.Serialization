@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.MSDOS
         /// </summary>
         /// <remarks>15 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string? Magic;
+        public string Magic;
 
         /// <summary>
         /// Number of bytes in the last page.
@@ -104,7 +104,7 @@ namespace SabreTools.Data.Models.MSDOS
         /// </summary>
         /// <remarks>4 entries/remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public ushort[]? Reserved1;
+        public ushort[] Reserved1 = new ushort[4];
 
         /// <summary>
         /// Defined by name but no other information is given; typically zeroes
@@ -121,7 +121,7 @@ namespace SabreTools.Data.Models.MSDOS
         /// </summary>
         /// <remarks>10 entries/remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public ushort[]? Reserved2;
+        public ushort[] Reserved2 = new ushort[10];
 
         /// <summary>
         /// Starting address of the PE header

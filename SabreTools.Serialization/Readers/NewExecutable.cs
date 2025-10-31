@@ -549,7 +549,7 @@ namespace SabreTools.Serialization.Readers
                     stringOffsets.Add(rtie.TypeID);
 
                 // Handle types with resources
-                foreach (var rtre in rtie.Resources ?? [])
+                foreach (var rtre in rtie.Resources)
                 {
                     // Skip invalid entries
                     if (rtre == null || rtre.IsIntegerType() || rtre.ResourceID == 0)

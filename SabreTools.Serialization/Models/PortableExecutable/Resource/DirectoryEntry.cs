@@ -6,7 +6,7 @@
     /// determines Type ID, the second table (pointed to by the directory entry
     /// in the first table) determines Name ID, and the third table determines
     /// Language ID.
-    /// 
+    ///
     /// The directory entries make up the rows of a table. Each resource directory
     /// entry has the following format. Whether the entry is a Name or ID entry
     /// is indicated by the resource directory table, which indicates how many

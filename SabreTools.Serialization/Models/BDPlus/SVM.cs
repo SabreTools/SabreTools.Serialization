@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.BDPlus
         /// "BDSVM_CC"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string? Signature;
+        public string Signature;
 
         /// <summary>
         /// Unknown data

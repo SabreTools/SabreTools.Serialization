@@ -878,7 +878,7 @@ namespace SabreTools.Data.Extensions
             }
 
             // Message resource entries
-            if (messageResourceData.Blocks != null && messageResourceData.Blocks.Length != 0)
+            if (messageResourceData.Blocks.Length != 0)
             {
                 var messageResourceEntries = new Dictionary<uint, MessageResourceEntry?>();
 

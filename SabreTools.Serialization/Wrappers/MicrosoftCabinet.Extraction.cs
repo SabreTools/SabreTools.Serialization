@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Wrappers
         private MicrosoftCabinet? OpenNext(string? filename)
         {
             // Ignore invalid archives
-            if (Header == null || string.IsNullOrEmpty(filename))
+            if (string.IsNullOrEmpty(filename))
                 return null;
 
             // Normalize the filename
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Wrappers
         private MicrosoftCabinet? OpenPrevious(string? filename)
         {
             // Ignore invalid archives
-            if (Header == null || string.IsNullOrEmpty(filename))
+            if (string.IsNullOrEmpty(filename))
                 return null;
 
             // Normalize the filename
@@ -222,7 +222,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
 
                 // Ensure directory separators are consistent
-                string filename = file.Name!;
+                string filename = file.Name;
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')

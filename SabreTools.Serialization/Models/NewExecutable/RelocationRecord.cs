@@ -14,7 +14,7 @@
 
         /// <summary>
         /// Flags byte.
-        /// 
+        ///
         /// The target value has four types that are defined in the flag
         /// byte field.
         /// </summary>

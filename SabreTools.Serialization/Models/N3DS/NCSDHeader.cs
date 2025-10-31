@@ -22,7 +22,7 @@
         /// <summary>
         /// Magic Number 'NCSD'
         /// </summary>
-        public string? MagicNumber { get; set; }
+        public string MagicNumber { get; set; }
 
         /// <summary>
         /// Size of the NCSD image, in media units (1 media unit = 0x200 bytes)
@@ -49,7 +49,7 @@
         /// <summary>
         /// Offset & Length partition table, in media units
         /// </summary>
-        public PartitionTableEntry[]? PartitionsTable { get; set; }
+        public PartitionTableEntry[] PartitionsTable { get; set; }
 
         #endregion
 

@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Collision data of length <see cref="SolidCount"/>
         /// </summary>
-        public PhysSolid[]? Solids;
+        public PhysSolid[] Solids;
 
         /// <summary>
         /// Key data of size <see cref="KeydataSize"/>

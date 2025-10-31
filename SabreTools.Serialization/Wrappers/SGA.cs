@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Directory data
         /// </summary>
-        public Data.Models.SGA.Directory? Directory => Model.Directory;
+        public Data.Models.SGA.Directory Directory => Model.Directory;
 
         /// <summary>
         /// Number of files in the directory
@@ -29,10 +29,10 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return Directory switch
                 {
-                    Directory4 d4 => d4.Files?.Length ?? 0,
-                    Directory5 d5 => d5.Files?.Length ?? 0,
-                    Directory6 d6 => d6.Files?.Length ?? 0,
-                    Directory7 d7 => d7.Files?.Length ?? 0,
+                    Directory4 d4 => d4.Files.Length,
+                    Directory5 d5 => d5.Files.Length,
+                    Directory6 d6 => d6.Files.Length,
+                    Directory7 d7 => d7.Files.Length,
                     _ => 0,
                 };
             }
@@ -220,10 +220,10 @@ namespace SabreTools.Serialization.Wrappers
             // Get the folder
             Folder? folder = Directory switch
             {
-                Directory4 d4 => Array.Find(d4.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory5 d5 => Array.Find(d5.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory6 d6 => Array.Find(d6.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory7 d7 => Array.Find(d7.Folders ?? [], f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory4 d4 => Array.Find(d4.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory5 d5 => Array.Find(d5.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory6 d6 => Array.Find(d6.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory7 d7 => Array.Find(d7.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
                 _ => default,
             };
 

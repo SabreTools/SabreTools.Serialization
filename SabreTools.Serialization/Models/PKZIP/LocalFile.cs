@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Local file header
         /// </summary>
-        public LocalFileHeader? LocalFileHeader { get; set; }
+        public LocalFileHeader LocalFileHeader { get; set; }
 
         /// <summary>
         /// Encryption header

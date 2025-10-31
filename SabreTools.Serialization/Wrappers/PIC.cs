@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="DiscInformation.Units"/>
-        public DiscInformationUnit[] Units => Model.Units ?? [];
+        public DiscInformationUnit[] Units => Model.Units;
 
         #endregion
 

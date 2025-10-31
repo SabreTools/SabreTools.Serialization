@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Archive.Files"/>
-        public FileEntry[] Files => Model.Files ?? [];
+        public FileEntry[] Files => Model.Files;
 
         #endregion
 

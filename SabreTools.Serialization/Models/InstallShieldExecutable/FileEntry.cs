@@ -6,19 +6,19 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
         /// Name of the file
         /// </summary>
         /// <remarks>May only contain ASCII (7-bit) characters</remarks>
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Path of the file, seems to usually use \ filepaths
         /// </summary>
         /// <remarks>May only contain ASCII (7-bit) characters</remarks>
-        public string? Path { get; set; }
+        public string Path { get; set; }
 
         /// <summary>
         /// Version of the file
         /// </summary>
         /// <remarks>May only contain ASCII (7-bit) characters</remarks>
-        public string? Version { get; set; }
+        public string Version { get; set; }
 
         /// <summary>
         /// Length of the file. Stored in the installshield executable as a string.

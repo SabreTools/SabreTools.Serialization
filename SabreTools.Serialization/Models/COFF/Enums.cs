@@ -45,14 +45,14 @@ namespace SabreTools.Data.Models.COFF
         IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x0020,
 
         /// <summary>
-        /// This flag is reserved for future use. 
+        /// This flag is reserved for future use.
         /// </summary>
         RESERVED = 0x0040,
 
         /// <summary>
         /// Little endian: the least significant bit (LSB) precedes the most
         /// significant bit (MSB) in memory. This flag is deprecated and
-        /// should be zero. 
+        /// should be zero.
         /// </summary>
         IMAGE_FILE_BYTES_REVERSED_LO = 0x0080,
 
@@ -86,7 +86,7 @@ namespace SabreTools.Data.Models.COFF
         /// <summary>
         /// The image file is a dynamic-link library (DLL). Such files
         /// are considered executable files for almost all purposes,
-        /// although they cannot be directly run. 
+        /// although they cannot be directly run.
         /// </summary>
         IMAGE_FILE_DLL = 0x2000,
 
@@ -338,7 +338,7 @@ namespace SabreTools.Data.Models.COFF
         IMAGE_REL_AMD64_PAIR = 0x000F,
 
         /// <summary>
-        /// A 32-bit signed span-dependent value that is applied at link time. 
+        /// A 32-bit signed span-dependent value that is applied at link time.
         /// </summary>
         IMAGE_REL_AMD64_SSPAN32 = 0x0010,
 
@@ -1435,7 +1435,7 @@ namespace SabreTools.Data.Models.COFF
         IMAGE_SCN_MEM_READ = 0x40000000,
 
         /// <summary>
-        /// The section can be written to. 
+        /// The section can be written to.
         /// </summary>
         IMAGE_SCN_MEM_WRITE = 0x80000000,
     }
@@ -1446,20 +1446,20 @@ namespace SabreTools.Data.Models.COFF
         /// The symbol record is not yet assigned a section. A value of
         /// zero indicates that a reference to an external symbol is
         /// defined elsewhere. A value of non-zero is a common symbol
-        /// with a size that is specified by the value. 
+        /// with a size that is specified by the value.
         /// </summary>
         IMAGE_SYM_UNDEFINED = 0,
 
         /// <summary>
         /// The symbol has an absolute (non-relocatable) value and
-        /// is not an address. 
+        /// is not an address.
         /// </summary>
         IMAGE_SYM_ABSOLUTE = -1,
 
         /// <summary>
         /// The symbol provides general type or debugging information
         /// but does not correspond to a section. Microsoft tools use
-        /// this setting along with .file records (storage class FILE). 
+        /// this setting along with .file records (storage class FILE).
         /// </summary>
         IMAGE_SYM_DEBUG = -2,
     }

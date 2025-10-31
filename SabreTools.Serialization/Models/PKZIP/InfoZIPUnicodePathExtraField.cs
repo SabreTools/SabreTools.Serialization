@@ -3,12 +3,12 @@ namespace SabreTools.Data.Models.PKZIP
     /// <summary>
     /// Stores the UTF-8 version of the file name field as stored in the
     /// local header and central directory header. (Last Revision 20070912)
-    /// 
+    ///
     /// Currently Version is set to the number 1.  If there is a need
     /// to change this field, the version will be incremented.  Changes
     /// MAY NOT be backward compatible so this extra field SHOULD NOT be
     /// used if the version is not recognized.
-    /// 
+    ///
     /// The NameCRC32 is the standard zip CRC32 checksum of the File Name
     /// field in the header.  This is used to verify that the header
     /// File Name field has not changed since the Unicode Path extra field
@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// does not update the UTF-8 path extra field.  If the CRC check fails,
     /// this UTF-8 Path Extra Field SHOULD be ignored and the File Name field
     /// in the header SHOULD be used instead.
-    /// 
+    ///
     /// The UnicodeName is the UTF-8 version of the contents of the File Name
     /// field in the header.  As UnicodeName is defined to be UTF-8, no UTF-8
     /// byte order mark (BOM) is used.  The length of this field is determined
@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.PKZIP
     /// Directory Header for a file.
     /// </summary>
     /// <remarks>Header ID = 0x7075</remarks>
-    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/> 
+    /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
     public class InfoZIPUnicodePathExtraField : ExtensibleDataField
     {
         /// <summary>
@@ -49,6 +49,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// UTF-8 version of the entry File Name
         /// </summary>
-        public string? UnicodeName { get; set; }
+        public string UnicodeName { get; set; }
     }
 }

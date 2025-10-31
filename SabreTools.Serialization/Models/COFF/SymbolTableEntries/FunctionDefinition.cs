@@ -2,7 +2,7 @@ namespace SabreTools.Data.Models.COFF.SymbolTableEntries
 {
     /// <summary>
     /// Auxiliary Format 1: Function Definitions
-    /// 
+    ///
     /// A symbol table record marks the beginning of a function definition if it
     /// has all of the following: a storage class of EXTERNAL (2), a Type value
     /// that indicates it is a function (0x20), and a section number that is

@@ -55,17 +55,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.DataBlockHeader);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Dummy0, "  Dummy 0");
             builder.AppendLine(header.MajorVersion, "  Major version");
             builder.AppendLine(header.MinorVersion, "  Minor version");
@@ -80,17 +73,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntryHeader? header)
+        private static void Print(StringBuilder builder, BlockEntryHeader header)
         {
             builder.AppendLine("  Block Entry Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No block entry header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.BlockCount, "  Block count");
             builder.AppendLine(header.BlocksUsed, "  Blocks used");
             builder.AppendLine(header.Dummy0, "  Dummy 0");
@@ -102,11 +88,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntry[]? entries)
+        private static void Print(StringBuilder builder, BlockEntry[] entries)
         {
             builder.AppendLine("  Block Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No block entries");
                 builder.AppendLine();
@@ -130,17 +116,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FragmentationMapHeader? header)
+        private static void Print(StringBuilder builder, FragmentationMapHeader header)
         {
             builder.AppendLine("  Fragmentation Map Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No fragmentation map header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.BlockCount, "  Block count");
             builder.AppendLine(header.FirstUnusedEntry, "  First unused entry");
             builder.AppendLine(header.Terminator, "  Terminator");
@@ -148,11 +127,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, FragmentationMap[]? entries)
+        private static void Print(StringBuilder builder, FragmentationMap[] entries)
         {
             builder.AppendLine("  Fragmentation Maps Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No fragmentation maps");
                 builder.AppendLine();
@@ -170,17 +149,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntryMapHeader? header)
+        private static void Print(StringBuilder builder, BlockEntryMapHeader header)
         {
             builder.AppendLine("  Block Entry Map Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No block entry map header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.BlockCount, "  Block count");
             builder.AppendLine(header.FirstBlockEntryIndex, "  First block entry index");
             builder.AppendLine(header.LastBlockEntryIndex, "  Last block entry index");
@@ -189,11 +161,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, BlockEntryMap[]? entries)
+        private static void Print(StringBuilder builder, BlockEntryMap[] entries)
         {
             builder.AppendLine("  Block Entry Maps Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No block entry maps");
                 builder.AppendLine();
@@ -212,17 +184,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryHeader? header)
+        private static void Print(StringBuilder builder, DirectoryHeader header)
         {
             builder.AppendLine("  Directory Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No directory header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Dummy0, "  Dummy 0");
             builder.AppendLine(header.CacheID, "  Cache ID");
             builder.AppendLine(header.LastVersionPlayed, "  Last version played");
@@ -240,11 +205,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryEntry[]? entries, Dictionary<long, string?>? entryNames)
+        private static void Print(StringBuilder builder, DirectoryEntry[] entries, Dictionary<long, string?> entryNames)
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory entries");
                 builder.AppendLine();
@@ -269,11 +234,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryInfo1Entry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryInfo1Entry[] entries)
         {
             builder.AppendLine("  Directory Info 1 Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory info 1 entries");
                 builder.AppendLine();
@@ -291,11 +256,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryInfo2Entry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryInfo2Entry[] entries)
         {
             builder.AppendLine("  Directory Info 2 Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory info 2 entries");
                 builder.AppendLine();
@@ -313,11 +278,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryCopyEntry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryCopyEntry[] entries)
         {
             builder.AppendLine("  Directory Copy Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory copy entries");
                 builder.AppendLine();
@@ -335,11 +300,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryLocalEntry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryLocalEntry[] entries)
         {
             builder.AppendLine("  Directory Local Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory local entries");
                 builder.AppendLine();
@@ -357,27 +322,20 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryMapHeader? header)
+        private static void Print(StringBuilder builder, DirectoryMapHeader header)
         {
             builder.AppendLine("  Directory Map Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No directory map header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Dummy0, "  Dummy 0");
             builder.AppendLine(header.Dummy1, "  Dummy 1");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryMapEntry[]? entries)
+        private static void Print(StringBuilder builder, DirectoryMapEntry[] entries)
         {
             builder.AppendLine("  Directory Map Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No directory map entries");
                 builder.AppendLine();
@@ -395,33 +353,19 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumHeader? header)
+        private static void Print(StringBuilder builder, ChecksumHeader header)
         {
             builder.AppendLine("  Checksum Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No checksum header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Dummy0, "  Dummy 0");
             builder.AppendLine(header.ChecksumSize, "  Checksum size");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumMapHeader? header)
+        private static void Print(StringBuilder builder, ChecksumMapHeader header)
         {
             builder.AppendLine("  Checksum Map Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No checksum map header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Dummy0, "  Dummy 0");
             builder.AppendLine(header.Dummy1, "  Dummy 1");
             builder.AppendLine(header.ItemCount, "  Item count");
@@ -429,11 +373,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumMapEntry[]? entries)
+        private static void Print(StringBuilder builder, ChecksumMapEntry[] entries)
         {
             builder.AppendLine("  Checksum Map Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No checksum map entries");
                 builder.AppendLine();
@@ -452,11 +396,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, ChecksumEntry[]? entries)
+        private static void Print(StringBuilder builder, ChecksumEntry[] entries)
         {
             builder.AppendLine("  Checksum Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No checksum entries");
                 builder.AppendLine();
@@ -474,17 +418,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DataBlockHeader? header)
+        private static void Print(StringBuilder builder, DataBlockHeader header)
         {
             builder.AppendLine("  Data Block Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No data block header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.LastVersionPlayed, "  Last version played");
             builder.AppendLine(header.BlockCount, "  Block count");
             builder.AppendLine(header.BlockSize, "  Block size");

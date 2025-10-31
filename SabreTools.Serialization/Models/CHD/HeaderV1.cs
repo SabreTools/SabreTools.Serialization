@@ -2,7 +2,7 @@
 
 namespace SabreTools.Data.Models.CHD
 {
-    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/> 
+    /// <see href="https://github.com/mamedev/mame/blob/master/src/lib/util/chd.h"/>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class HeaderV1 : Header
     {

@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.PIC
         /// <summary>
         /// Disc Type Identifier
         /// </summary>
-        public string? DiscTypeIdentifier { get; set; }
+        public string DiscTypeIdentifier { get; set; }
 
         /// <summary>
         /// Disc Size/Class/Version
