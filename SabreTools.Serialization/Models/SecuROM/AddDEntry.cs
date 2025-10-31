@@ -112,7 +112,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// </summary>
         /// <remarks>12 bytes long in all samples</remarks>
         [MarshalAs(UnmanagedType.LPStr)]
-        public string? FileName;
+        public string FileName;
 
         /// <summary>
         /// Unknown (0x2C)

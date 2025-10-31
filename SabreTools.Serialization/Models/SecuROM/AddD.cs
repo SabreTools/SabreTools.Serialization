@@ -13,7 +13,7 @@
         /// <summary>
         /// "AddD"
         /// </summary>
-        public string? Signature { get; set; }
+        public string Signature { get; set; }
 
         /// <summary>s
         /// Entry count
@@ -24,13 +24,13 @@
         /// Version, null-terminated
         /// </summary>
         /// <remarks>Always 8 bytes?</remarks>
-        public string? Version { get; set; }
+        public string Version { get; set; }
 
         /// <summary>
         /// Build number
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public string? Build { get; set; }
+        public string Build { get; set; }
 
         /// <summary>
         /// Unknown
@@ -44,7 +44,7 @@
         /// <remarks>
         /// 10 bytes, only present in 4.84.00.0054, 4.84.69.0037, 4.84.76.7966, 4.84.76.7968, 4.85.07.0009
         /// </remarks>
-        public string? ProductId { get; set; }
+        public string ProductId { get; set; }
 
         /// <summary>
         /// Unknown
@@ -57,6 +57,6 @@
         /// <summary>
         /// Entry table
         /// </summary>
-        public AddDEntry[]? Entries { get; set; }
+        public AddDEntry[] Entries { get; set; }
     }
 }

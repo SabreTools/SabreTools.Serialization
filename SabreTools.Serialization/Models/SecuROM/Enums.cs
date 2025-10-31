@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.SecuROM
         Dependency = 0x04,
 
         /// <summary>
-        /// Similar use to <see cref="Dependency"/> 
+        /// Similar use to <see cref="Dependency"/>
         /// </summary>
         Unknown0x08 = 0x08,
     }
