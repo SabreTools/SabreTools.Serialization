@@ -23,6 +23,6 @@ namespace SabreTools.Data.Models.PFF
         /// King tag
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string? KingTag;
+        public string KingTag;
     }
 }

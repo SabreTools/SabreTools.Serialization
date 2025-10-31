@@ -9,16 +9,16 @@ namespace SabreTools.Data.Models.PFF
         /// <summary>
         /// Archive header
         /// </summary>
-        public Header? Header { get; set; }
+        public Header Header { get; set; }
 
         /// <summary>
         /// Segments
         /// </summary>
-        public Segment[]? Segments { get; set; }
+        public Segment[] Segments { get; set; }
 
         /// <summary>
         /// Footer
         /// </summary>
-        public Footer? Footer { get; set; }
+        public Footer Footer { get; set; }
     }
 }
