@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
 
             Print(builder, Model.Header);
-            Print(builder, Model.HeaderExtensions);
+            Print(builder, Model.HeaderExtensions ?? new());
         }
 
         private static void Print(StringBuilder builder, KWAJHeader header)

@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Brushes
         /// </summary>
-        public Brush[] Brushes { get; set; }
+        public Brush[] Brushes { get; set; } = [];
     }
 }

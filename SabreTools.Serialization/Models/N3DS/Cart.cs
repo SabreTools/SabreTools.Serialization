@@ -8,36 +8,36 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// 3DS cart header
         /// </summary>
-        public NCSDHeader Header { get; set; }
+        public NCSDHeader Header { get; set; } = new();
 
         /// <summary>
         /// 3DS card info header
         /// </summary>
-        public CardInfoHeader CardInfoHeader { get; set; }
+        public CardInfoHeader CardInfoHeader { get; set; } = new();
 
         /// <summary>
         /// 3DS development card info header
         /// </summary>
-        public DevelopmentCardInfoHeader DevelopmentCardInfoHeader { get; set; }
+        public DevelopmentCardInfoHeader DevelopmentCardInfoHeader { get; set; } = new();
 
         /// <summary>
         /// NCCH partitions
         /// </summary>
-        public NCCHHeader[] Partitions { get; set; }
+        public NCCHHeader[] Partitions { get; set; } = [];
 
         /// <summary>
         /// NCCH extended headers
         /// </summary>
-        public NCCHExtendedHeader[] ExtendedHeaders { get; set; }
+        public NCCHExtendedHeader[] ExtendedHeaders { get; set; } = [];
 
         /// <summary>
         /// ExeFS headers associated with each partition
         /// </summary>
-        public ExeFSHeader[] ExeFSHeaders { get; set; }
+        public ExeFSHeader[] ExeFSHeaders { get; set; } = [];
 
         /// <summary>
         /// RomFS headers associated with each partition
         /// </summary>
-        public RomFSHeader[] RomFSHeaders { get; set; }
+        public RomFSHeader[] RomFSHeaders { get; set; } = [];
     }
 }

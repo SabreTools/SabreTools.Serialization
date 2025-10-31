@@ -234,9 +234,9 @@ namespace SabreTools.Serialization.Readers
 #else
             if (file.Attributes.HasFlag(Data.Models.MicrosoftCabinet.FileAttributes.NAME_IS_UTF))
 #endif
-                file.Name = data.ReadNullTerminatedUnicodeString();
+                file.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
             else
-                file.Name = data.ReadNullTerminatedAnsiString();
+                file.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
             return file;
         }

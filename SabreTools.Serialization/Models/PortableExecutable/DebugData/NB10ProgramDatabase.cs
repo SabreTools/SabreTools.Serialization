@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
         /// </summary>
         /// <remarks>Is this Unicode?</remarks>
         [MarshalAs(UnmanagedType.LPStr)]
-        public string PdbFileName;
+        public string PdbFileName = string.Empty;
     }
 }

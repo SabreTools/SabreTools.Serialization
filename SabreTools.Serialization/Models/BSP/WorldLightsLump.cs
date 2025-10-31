@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// WorldLights
         /// </summary>
-        public WorldLight[] WorldLights { get; set; }
+        public WorldLight[] WorldLights { get; set; } = [];
     }
 }

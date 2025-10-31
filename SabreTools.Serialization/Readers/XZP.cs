@@ -167,7 +167,7 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(initialOffset + obj.NameOffset, SeekOrigin.Begin);
 
             // Read the name
-            obj.Name = data.ReadNullTerminatedAnsiString();
+            obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
             // Seek back to the right position
             data.SeekIfPossible(currentPosition, SeekOrigin.Begin);

@@ -14,6 +14,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Marksurfaces
         /// </summary>
-        public ushort[] Marksurfaces { get; set; }
+        public ushort[] Marksurfaces { get; set; } = [];
     }
 }

@@ -26,6 +26,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// PKCS#7 data blob
         /// </summary>
-        public byte[] CStore { get; set; }
+        public byte[] CStore { get; set; } = [];
     }
 }

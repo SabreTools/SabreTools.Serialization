@@ -10,19 +10,19 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Local file header
         /// </summary>
-        public LocalFileHeader LocalFileHeader { get; set; }
+        public LocalFileHeader LocalFileHeader { get; set; } = new();
 
         /// <summary>
         /// Encryption header
         /// </summary>
         /// TODO: Determine the model for the encryption headers
-        public byte[] EncryptionHeaders { get; set; }
+        public byte[] EncryptionHeaders { get; set; } = [];
 
         /// <summary>
         /// File data, appears after the encryption header
         /// if it exists or after the local file header otherwise
         /// </summary>
-        public byte[] FileData { get; set; }
+        public byte[] FileData { get; set; } = [];
 
         /// <summary>
         /// Data descriptors, appears after the file data

@@ -23,6 +23,6 @@ namespace SabreTools.Data.Models.DVD
         /// Program Chains
         /// </summary>
         /// <remarks>NumberOfProgramChains entries</remarks>
-        public ProgramChainTableEntry[] Entries { get; set; }
+        public ProgramChainTableEntry[] Entries { get; set; } = [];
     }
 }

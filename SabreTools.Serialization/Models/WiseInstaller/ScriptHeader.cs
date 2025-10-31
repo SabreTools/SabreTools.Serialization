@@ -94,7 +94,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// - 22 - Normal header data, all fields present
         /// - 31 - Long header data, all fields present
         /// </remarks>
-        public byte[] VariableLengthData { get; set; }
+        public byte[] VariableLengthData { get; set; } = [];
 
         /// <summary>
         /// FTP URL for online downloading

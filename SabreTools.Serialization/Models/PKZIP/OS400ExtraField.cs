@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Attribute data (see APPENDIX A)
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.DVD
         /// 12-byte entries
         /// </summary>
         /// <remarks>NumberOfTitles entries</remarks>
-        public TitlesTableEntry[] Entries { get; set; }
+        public TitlesTableEntry[] Entries { get; set; } = [];
     }
 }

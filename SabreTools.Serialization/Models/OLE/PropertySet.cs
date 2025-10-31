@@ -24,13 +24,13 @@ namespace SabreTools.Data.Models.OLE
         /// in any particular order with regard to the value of the PropertyIdentifier
         /// field.
         /// </summary>
-        public PropertyIdentifierAndOffset[] PropertyIdentifierAndOffsets { get; set; }
+        public PropertyIdentifierAndOffset[] PropertyIdentifierAndOffsets { get; set; } = [];
 
         /// <summary>
         /// Each Property field is a sequence of property values, each of which MUST
         /// be represented by a TypedPropertyValue packet or a Dictionary packet in
         /// the special case of the Dictionary property.
         /// </summary>
-        public object[] Properties { get; set; }
+        public object[] Properties { get; set; } = [];
     }
 }

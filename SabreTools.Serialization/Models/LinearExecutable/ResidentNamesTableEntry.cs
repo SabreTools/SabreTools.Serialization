@@ -48,7 +48,7 @@
         /// This is a variable length string with it's length defined in bytes by the LEN field.
         /// The string is case case sensitive and is not null terminated.
         /// </remarks>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Ordinal number.

@@ -29,6 +29,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// 0x00-padding
         /// </summary>
-        public byte[] Padding { get; set; }
+        public byte[] Padding { get; set; } = [];
     }
 }

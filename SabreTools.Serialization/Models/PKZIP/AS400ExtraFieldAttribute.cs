@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// Data
         /// </summary>
         /// <remarks>Variable byte length based on field code</remarks>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

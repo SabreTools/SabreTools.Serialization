@@ -12,11 +12,11 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Number of game lumps
         /// </summary>
-        public int LumpCount;
+        public int LumpCount { get; set; }
 
         /// <summary>
         /// <see cref="LumpCount"/>
         /// </summary>
-        public GameLumpDirectory[] Directories;
+        public GameLumpDirectory[] Directories { get; set; } = [];
     }
 }

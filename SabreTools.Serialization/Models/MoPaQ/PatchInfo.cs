@@ -37,6 +37,6 @@ namespace SabreTools.Data.Models.MoPaQ
         /// <remarks>0 entries</remarks>
         /// TODO: Determine the number of entries
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0)]
-        public uint[] SectorOffsetTable;
+        public uint[] SectorOffsetTable = [];
     }
 }

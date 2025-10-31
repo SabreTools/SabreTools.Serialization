@@ -83,7 +83,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Precaculated light info for entities.
         /// </summary>
-        public CompressedLightCube AmbientLighting;
+        public CompressedLightCube AmbientLighting = new();
 
         #endregion
 

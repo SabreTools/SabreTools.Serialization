@@ -37,26 +37,29 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled FileEntry on success, null on error</returns>
-        public static FileEntry? ParseFileEntry(Stream? data)
+        public static FileEntry? ParseFileEntry(Stream data)
         {
-            var obj = new FileEntry();
-
-            obj.Name = data.ReadNullTerminatedAnsiString();
-            if (obj.Name == null)
+            string? name = data.ReadNullTerminatedAnsiString();
+            if (name == null)
                 return null;
 
-            obj.Path = data.ReadNullTerminatedAnsiString();
-            if (obj.Path == null)
+            string? path = data.ReadNullTerminatedAnsiString();
+            if (path == null)
                 return null;
 
-            obj.Version = data.ReadNullTerminatedAnsiString();
-            if (obj.Version == null)
+            string? version = data.ReadNullTerminatedAnsiString();
+            if (version == null)
                 return null;
 
             var lengthString = data.ReadNullTerminatedAnsiString();
             if (lengthString == null || !ulong.TryParse(lengthString, out var lengthValue))
                 return null;
 
+            var obj = new FileEntry();
+
+            obj.Name = name;
+            obj.Path = path;
+            obj.Version = version;
             obj.Length = lengthValue;
 
             return obj;

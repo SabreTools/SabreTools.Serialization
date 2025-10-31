@@ -10,49 +10,49 @@ namespace SabreTools.Data.Models.TAR
         /// File name without a forward slash
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-        public string FileName;
+        public string FileName = string.Empty;
 
         /// <summary>
         /// File mode
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string Mode;
+        public string Mode = string.Empty;
 
         /// <summary>
         /// Owner's numeric user ID
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string UID;
+        public string UID = string.Empty;
 
         /// <summary>
         /// Owner's numeric group ID
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string GID;
+        public string GID = string.Empty;
 
         /// <summary>
         /// File size in bytes
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string Size;
+        public string Size = string.Empty;
 
         /// <summary>
         /// Last modification time in numeric Unix time format
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string ModifiedTime;
+        public string ModifiedTime = string.Empty;
 
         /// <summary>
         /// Checksum for header record
         /// </summary>
         /// <remarks>Octal string representation</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string Checksum;
+        public string Checksum = string.Empty;
 
         /// <summary>
         /// Link indicator (file type) / Type flag
@@ -63,7 +63,7 @@ namespace SabreTools.Data.Models.TAR
         /// Linked path name or file name
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
-        public string LinkName;
+        public string LinkName = string.Empty;
 
         #region USTAR Extension
 

@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.InstallShieldArchiveV3
         /// <summary>
         /// Name as an ASCII string
         /// </summary>
-        public string Name;
+        public string Name = string.Empty;
     }
 }

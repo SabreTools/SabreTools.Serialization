@@ -21,10 +21,10 @@ namespace SabreTools.Serialization.Wrappers
         public ushort DataOffset => Model.Header.DataOffset;
 
         /// <inheritdoc cref="KWAJHeaderExtensions.FileName"/>
-        public string? FileName => Model.HeaderExtensions.FileName;
+        public string? FileName => Model.HeaderExtensions?.FileName;
 
         /// <inheritdoc cref="KWAJHeaderExtensions.FileExtension"/>
-        public string? FileExtension => Model.HeaderExtensions.FileExtension;
+        public string? FileExtension => Model.HeaderExtensions?.FileExtension;
 
         #endregion
 

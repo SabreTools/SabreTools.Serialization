@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Signature Data
         /// </summary>
-        public byte[] TData { get; set; }
+        public byte[] TData { get; set; } = [];
     }
 }

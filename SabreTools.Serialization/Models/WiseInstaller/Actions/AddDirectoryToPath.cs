@@ -31,6 +31,6 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// Directory name to add to path
         /// </summary>
         /// <remarks>May contain a variable name</remarks>
-        public string Directory { get; set; }
+        public string? Directory { get; set; }
     }
 }

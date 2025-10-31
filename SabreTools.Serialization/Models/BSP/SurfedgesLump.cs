@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Surfedges
         /// </summary>
-        public int[] Surfedges { get; set; }
+        public int[] Surfedges { get; set; } = [];
     }
 }

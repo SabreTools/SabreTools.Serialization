@@ -11,7 +11,7 @@
         /// Contains the characters "M", "S", "C", and "F" (bytes 0x4D, 0x53, 0x43,
         /// 0x46). This field is used to ensure that the file is a cabinet (.cab) file.
         /// </summary>
-        public string Signature { get; set; }
+        public string Signature { get; set; } = string.Empty;
 
         /// <summary>
         /// Reserved field; MUST be set to 0 (zero).
@@ -107,7 +107,7 @@
         /// cbCFHeader field is non-zero, this field contains per-cabinet-file application information. This field
         /// is defined by the application, and is used for application-defined purposes.
         /// </summary>
-        public byte[] ReservedData { get; set; }
+        public byte[]? ReservedData { get; set; }
 
         /// <summary>
         /// If the flags.cfhdrPREV_CABINET field is not set, this

@@ -322,7 +322,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled initial data on success, null on error</returns>
-        public static InitialData? ParseInitialData(Stream data)
+        public static InitialData ParseInitialData(Stream data)
         {
             var obj = new InitialData();
 

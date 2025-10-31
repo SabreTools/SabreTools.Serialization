@@ -39,7 +39,7 @@ namespace SabreTools.Data.Models.N3DS
         /// TODO: Make enum for flag values
         /// <remarks>28 entries</remarks>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
-        public uint[] Descriptors;
+        public uint[] Descriptors = new uint[28];
 
         /// <summary>
         /// Reserved

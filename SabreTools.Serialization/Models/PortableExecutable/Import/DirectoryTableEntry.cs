@@ -39,7 +39,7 @@
         /// <summary>
         /// ASCII string that contains the name of the DLL.
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The RVA of the import address table. The contents of this table are identical

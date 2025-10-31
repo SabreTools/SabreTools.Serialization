@@ -9,11 +9,11 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be a GUID (Packet Version).
         /// </summary>
-        public GUID VersionGuid { get; set; }
+        public GUID VersionGuid { get; set; } = new();
 
         /// <summary>
         /// MUST be an IndirectPropertyName.
         /// </summary>
-        public IndirectPropertyName StreamName { get; set; }
+        public IndirectPropertyName StreamName { get; set; } = new();
     }
 }

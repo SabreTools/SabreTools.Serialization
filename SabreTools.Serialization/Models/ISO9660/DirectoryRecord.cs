@@ -22,18 +22,18 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Logical block number of the first logical block allocated to this extent
         /// </summary>
-        public BothInt32 ExtentLocation { get; set; }
+        public BothInt32 ExtentLocation { get; set; } = 0;
 
         /// <summary>
         /// Number of bytes allocated to this extent
         /// </summary>
-        public BothInt32 ExtentLength { get; set; }
+        public BothInt32 ExtentLength { get; set; } = 0;
 
         /// <summary>
         /// Datetime of recording for the Directory Record
         /// If not specified, all values are 0x00
         /// </summary>
-        public DirectoryRecordDateTime RecordingDateTime { get; set; }
+        public DirectoryRecordDateTime RecordingDateTime { get; set; } = new();
 
         /// <summary>
         /// Flags for indicating attributes of the directory record
@@ -55,7 +55,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Volume sequence ordinal number of the volume in the volume set on which the record extent is recorded
         /// </summary>
-        public BothInt16 VolumeSequenceNumber { get; set; }
+        public BothInt16 VolumeSequenceNumber { get; set; } = 0;
 
         /// <summary>
         /// Length of the FileIdentifier field in bytes
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Directory: Uses either d-characters or d1-characters, or:
         ///            Is exactly Constants.CurrentDirectory (0x00) or Constants.ParentDirectory (0x01)
         /// </summary>
-        public byte[] FileIdentifier { get; set; }
+        public byte[] FileIdentifier { get; set; } = [];
 
         /// <summary>
         /// If record length prior to this is odd, the FileIdentifier is followed by a single padding byte (0x00)
@@ -83,6 +83,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// Note: This is where SUSP contents are located, including Rock Ridge extension
         /// Optional field
         /// </summary>
-        public byte[] SystemUse { get; set; }
+        public byte[] SystemUse { get; set; } = [];
     }
 }

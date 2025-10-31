@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Extra field data (variable size)
         /// </summary>
-        public byte[] ExtraFieldData { get; set; }
+        public byte[] ExtraFieldData { get; set; } = [];
     }
 }

@@ -50,7 +50,7 @@ namespace SabreTools.Data.Models.OLE
         /// the property set (or property sets). If no CLSID is provided by the
         /// application, it SHOULD be set to GUID_NULL by default.
         /// </summary>
-        public GUID CLSID { get; set; }
+        public GUID CLSID { get; set; } = new();
 
         /// <summary>
         /// An unsigned integer indicating the number of property sets represented by
@@ -68,7 +68,7 @@ namespace SabreTools.Data.Models.OLE
         /// GUID MUST be set to FMTID_DocSummaryInformation
         /// ({D5CDD502-2E9C-101B-9397-08002B2CF9AE}).
         /// </summary>
-        public GUID FMTID0 { get; set; }
+        public GUID FMTID0 { get; set; } = new();
 
         /// <summary>
         /// An unsigned integer that MUST be set to the offset in bytes from the beginning
@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.OLE
         /// If NumPropertySets has the value 0x00000002, it MUST be set to FMTID_UserDefinedProperties
         /// ({D5CDD505-2E9C-101B-9397-08002B2CF9AE}). Otherwise, it MUST be absent.
         /// </summary>
-        public GUID FMTID1 { get; set; }
+        public GUID FMTID1 { get; set; } = new();
 
         /// <summary>
         /// If NumPropertySets has the value 0x00000002, it MUST be set to the offset in bytes
@@ -92,13 +92,13 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be a PropertySet packet
         /// </summary>
-        public PropertySet PropertySet0 { get; set; }
+        public PropertySet PropertySet0 { get; set; } = new();
 
         /// <summary>
         /// If NumPropertySets has the value 0x00000002, it MUST be a PropertySet packet.
         /// Otherwise, it MUST be absent.
         /// </summary>
-        public PropertySet PropertySet1 { get; set; }
+        public PropertySet PropertySet1 { get; set; } = new();
 
         // Padding (variable): Contains additional padding added by the implementation.
         // If present, padding MUST be zeroes and MUST be ignored.

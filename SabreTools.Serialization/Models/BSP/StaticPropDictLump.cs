@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.BSP
         /// Model name
         /// </summary>
         /// <remarks>[dictEntries][128]</remarks>
-        public char[][] Name;
+        public char[][] Name = [];
     }
 }

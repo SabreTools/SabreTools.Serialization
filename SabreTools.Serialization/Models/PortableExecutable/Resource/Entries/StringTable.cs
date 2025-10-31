@@ -31,7 +31,7 @@
         /// identifier contains two parts: the low-order 10 bits specify the major language,
         /// and the high-order 6 bits specify the sublanguage.
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; } = string.Empty;
 
         /// <summary>
         /// As many zero words as necessary to align the Children member on a 32-bit boundary.
@@ -41,6 +41,6 @@
         /// <summary>
         /// An array of one or more StringData structures.
         /// </summary>
-        public StringData[] Children { get; set; }
+        public StringData[] Children { get; set; } = [];
     }
 }

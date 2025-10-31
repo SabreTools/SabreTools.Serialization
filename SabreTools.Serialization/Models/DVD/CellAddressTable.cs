@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.DVD
         /// 12-byte entries
         /// </summary>
         /// <remarks>NumberOfVOBIDs entries</remarks>
-        public CellAddressTableEntry[] Entries { get; set; }
+        public CellAddressTableEntry[] Entries { get; set; } = [];
     }
 }

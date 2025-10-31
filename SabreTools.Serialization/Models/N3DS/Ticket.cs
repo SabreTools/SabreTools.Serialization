@@ -25,12 +25,12 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Signature
         /// </summary>
-        public byte[] Signature { get; set; }
+        public byte[] Signature { get; set; } = [];
 
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[] Padding { get; set; }
+        public byte[] Padding { get; set; } = [];
 
         /// <summary>
         /// Issuer
@@ -160,7 +160,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// In demos, the first u32 in the "Limits" section is 0x4, then the second u32 is the max-playcount.
         /// </remarks>
-        public uint[] Limits { get; set; }
+        public uint[] Limits { get; set; } = [];
 
         /// <summary>
         /// The Content Index of a ticket has its own size defined within itself,
@@ -172,7 +172,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Content Index
         /// </summary>
-        public byte[] ContentIndex { get; set; }
+        public byte[] ContentIndex { get; set; } = [];
 
         /// <summary>
         /// Certificate chain
@@ -180,6 +180,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// https://www.3dbrew.org/wiki/Ticket#Certificate_Chain
         /// </remarks>
-        public Certificate[] CertificateChain { get; set; }
+        public Certificate[] CertificateChain { get; set; } = [];
     }
 }

@@ -36,6 +36,6 @@ namespace SabreTools.Data.Models.PortableExecutable.DebugData
 #else
         [MarshalAs(UnmanagedType.LPStr)]
 #endif
-        public string? PathAndFileName;
+        public string PathAndFileName = string.Empty;
     }
 }

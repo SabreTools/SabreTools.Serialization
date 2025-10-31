@@ -49,7 +49,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Storage info
         /// </summary>
-        public StorageInfo StorageInfo;
+        public StorageInfo StorageInfo = new();
 
         /// <summary>
         /// Service access control

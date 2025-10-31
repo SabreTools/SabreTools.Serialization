@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Clipnodes
         /// </summary>
-        public Clipnode[] Clipnodes { get; set; }
+        public Clipnode[] Clipnodes { get; set; } = [];
     }
 }

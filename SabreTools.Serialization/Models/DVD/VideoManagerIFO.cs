@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.DVD
         /// "DVDVIDEO-VMG"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        public string Signature;
+        public string Signature = string.Empty;
 
         /// <summary>
         /// Last sector of VMG set (last sector of BUP)

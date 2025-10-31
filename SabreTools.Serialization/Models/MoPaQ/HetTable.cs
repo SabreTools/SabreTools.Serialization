@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.MoPaQ
         /// 'HET\x1A'
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string Signature;
+        public string Signature = string.Empty;
 
         /// <summary>
         /// Version. Seems to be always 1
@@ -76,12 +76,12 @@ namespace SabreTools.Data.Models.MoPaQ
         /// HET hash table. Each entry is 8 bits.
         /// </summary>
         /// <remarks>Size is derived from HashTableSize</remarks>
-        public byte[] HashTable { get; set; }
+        public byte[] HashTable { get; set; } = [];
 
         /// <summary>
         /// Array of file indexes. Bit size of each entry is taken from dwTotalIndexSize.
         /// Table size is taken from dwHashTableSize.
         /// </summary>
-        public byte[][] FileIndexes { get; set; }
+        public byte[][] FileIndexes { get; set; } = [];
     }
 }

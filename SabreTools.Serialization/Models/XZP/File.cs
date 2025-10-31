@@ -9,31 +9,31 @@ namespace SabreTools.Data.Models.XZP
         /// <summary>
         /// Header data
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         /// <summary>
         /// Directory entries data
         /// </summary>
-        public DirectoryEntry[] DirectoryEntries { get; set; }
+        public DirectoryEntry[] DirectoryEntries { get; set; } = [];
 
         /// <summary>
         /// Preload directory entries data
         /// </summary>
-        public DirectoryEntry[] PreloadDirectoryEntries { get; set; }
+        public DirectoryEntry[] PreloadDirectoryEntries { get; set; } = [];
 
         /// <summary>
         /// Preload directory mappings data
         /// </summary>
-        public DirectoryMapping[] PreloadDirectoryMappings { get; set; }
+        public DirectoryMapping[] PreloadDirectoryMappings { get; set; } = [];
 
         /// <summary>
         /// Directory items data
         /// </summary>
-        public DirectoryItem[] DirectoryItems { get; set; }
+        public DirectoryItem[] DirectoryItems { get; set; } = [];
 
         /// <summary>
         /// Footer data
         /// </summary>
-        public Footer Footer { get; set; }
+        public Footer Footer { get; set; } = new();
     }
 }

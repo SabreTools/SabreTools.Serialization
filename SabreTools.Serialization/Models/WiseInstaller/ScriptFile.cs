@@ -9,11 +9,11 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Script header
         /// </summary>
-        public ScriptHeader Header { get; set; }
+        public ScriptHeader Header { get; set; } = new();
 
         /// <summary>
         /// States representing the state machine in order
         /// </summary>
-        public MachineState[] States { get; set; }
+        public MachineState[] States { get; set; } = [];
     }
 }

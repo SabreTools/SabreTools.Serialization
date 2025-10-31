@@ -132,8 +132,8 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Read the consistent strings
-            obj.TmpString = data.ReadNullTerminatedAnsiString();
-            obj.GuidString = data.ReadNullTerminatedAnsiString();
+            obj.TmpString = data.ReadNullTerminatedAnsiString() ?? string.Empty;
+            obj.GuidString = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
             // Parse the pre-string section
             int preStringBytesSize = GetPreStringBytesSize(data, obj, wisOffset);

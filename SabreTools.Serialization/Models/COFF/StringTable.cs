@@ -20,6 +20,6 @@
         /// Following the size are null-terminated strings that are pointed to by symbols
         /// in the COFF symbol table.
         /// </summary>
-        public string[] Strings { get; set; }
+        public string[] Strings { get; set; } = [];
     }
 }

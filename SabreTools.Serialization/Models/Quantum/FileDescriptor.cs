@@ -14,7 +14,7 @@ namespace SabreTools.Data.Models.Quantum
         /// <summary>
         /// File name, variable length string, not zero-terminated
         /// </summary>
-        public string FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
         /// <summary>
         /// Length of comment field
@@ -24,7 +24,7 @@ namespace SabreTools.Data.Models.Quantum
         /// <summary>
         /// Comment field, variable length string, not zero-terminated
         /// </summary>
-        public string CommentField { get; set; }
+        public string CommentField { get; set; } = string.Empty;
 
         /// <summary>
         /// Fully expanded file size in bytes

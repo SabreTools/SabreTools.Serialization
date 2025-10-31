@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.AACS
         /// must refuse to use the Media Key.
         /// </summary>
         /// <remarks><see cref="RecordLength"/>-4 bytes</remarks>
-        public byte[] SignatureData { get; set; }
+        public byte[] SignatureData { get; set; } = [];
     }
 }

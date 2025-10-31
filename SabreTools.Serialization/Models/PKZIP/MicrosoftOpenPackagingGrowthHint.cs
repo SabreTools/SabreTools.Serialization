@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Filled with NULL characters
         /// </summary>
-        public byte[] Padding { get; set; }
+        public byte[] Padding { get; set; } = [];
     }
 }

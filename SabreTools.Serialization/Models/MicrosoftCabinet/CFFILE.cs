@@ -60,6 +60,6 @@
         /// CFFILE.szName field, but the _A_NAME_IS_UTF attribute is not set, the characters SHOULD be
         /// interpreted according to the current location.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

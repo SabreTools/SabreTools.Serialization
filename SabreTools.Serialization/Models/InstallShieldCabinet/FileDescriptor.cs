@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// File descriptor name
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Directory index

@@ -54,6 +54,6 @@
         /// strings to identify Type, Name, or Language entries (depending on the
         /// level of the table).
         /// </summary>
-        public DirectoryEntry[] Entries { get; set; }
+        public DirectoryEntry[] Entries { get; set; } = [];
     }
 }

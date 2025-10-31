@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.Nitro
         /// <summary>
         /// The variable length name (UTF-8)
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Only there if it is a folder. Refers to the the index of it

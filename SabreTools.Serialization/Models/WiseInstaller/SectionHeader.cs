@@ -136,30 +136,30 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Byte array representing version. Byte array used due to unknown size and type for version.
         /// </summary>
-        public byte[] Version { get; set; }
+        public byte[] Version { get; set; } = [];
 
         /// <summary>
         /// String representing the WIS[etc].TMP string
         /// </summary>
-        public string TmpString { get; set; }
+        public string TmpString { get; set; } = string.Empty;
 
         /// <summary>
         /// String representing the GUID string.
         /// </summary>
-        public string GuidString { get; set; }
+        public string GuidString { get; set; } = string.Empty;
 
         /// <summary>
         /// String representing a version number. This isn't the version of the .WISE installer itself, as it is
         /// entirely inconsistent even within the same week. Likely refers to a version for what's being installed
         /// rather than the installer itself
         /// </summary>
-        public string NonWiseVersion { get; set; }
+        public string NonWiseVersion { get; set; } = string.Empty;
 
         /// <summary>
         /// Unknown. May also refer to a non-value for pre-78-offset executables and only a value for 78-offset-onwards
         /// ones.
         /// </summary>
-        public byte[] PreFontValue {get; set;}
+        public byte[] PreFontValue {get; set;} = [];
 
         /// <summary>
         /// Font size
@@ -170,11 +170,11 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// Byte array representing string lengths and info. Individual strings not predefined since number of strings
         /// will likely vary between many installers.
         /// </summary>
-        public byte[] PreStringValues { get; set; }
+        public byte[] PreStringValues { get; set; } = [];
 
         /// <summary>
         /// Strings for the section. Size and any breakup of strings currently unknown.
         /// </summary>
-        public byte[][] Strings { get; set; }
+        public byte[][] Strings { get; set; } = [];
     }
 }

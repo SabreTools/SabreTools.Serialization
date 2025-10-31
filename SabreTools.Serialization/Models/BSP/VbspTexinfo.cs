@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Texture S-vector
         /// </summary>
-        public Vector3D TextureSVector;
+        public Vector3D TextureSVector = new();
 
         /// <summary>
         /// Texture shift in the S direction
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Texture T-vector
         /// </summary>
-        public Vector3D TextureTVector;
+        public Vector3D TextureTVector = new();
 
         /// <summary>
         /// Texture shift in the T direction
@@ -42,7 +42,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Lightmap S-vector
         /// </summary>
-        public Vector3D LightmapSVector;
+        public Vector3D LightmapSVector = new();
 
         /// <summary>
         /// Lightmap shift in the S direction
@@ -52,7 +52,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Lightmap T-vector
         /// </summary>
-        public Vector3D LightmapTVector;
+        public Vector3D LightmapTVector = new();
 
         /// <summary>
         /// Lightmap shift in the T direction

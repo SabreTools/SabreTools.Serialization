@@ -67,7 +67,7 @@ namespace SabreTools.Data.Models.GZIP
         /// series of subfields, each of the form <see cref="ExtraFieldData"/>.
         /// </summary>
         /// <remarks>This is the raw version of <see cref="ExtraField"/></remarks>
-        public byte[] ExtraFieldBytes { get; set; }
+        public byte[] ExtraFieldBytes { get; set; } = [];
 
         /// <summary>
         /// Extra field

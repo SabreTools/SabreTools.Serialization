@@ -7,13 +7,13 @@ namespace SabreTools.Data.Models.SGA
     public sealed class Archive
     {
         /// <summary>
-        ///Header data
+        /// Header data
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new Header4();
 
         /// <summary>
         /// Directory data
         /// </summary>
-        public Directory Directory { get; set; }
+        public Directory Directory { get; set; } = new Directory4();
     }
 }

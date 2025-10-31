@@ -30,6 +30,6 @@
         /// the responsibility of the linker or debugging tools to follow the convention
         /// for the type field that is defined here.
         /// </summary>
-        public byte[] DebuggerData { get; set; }
+        public byte[] DebuggerData { get; set; } = [];
     }
 }

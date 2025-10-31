@@ -46,6 +46,6 @@
         ///                    in the Page RVA field for the block. This offset
         ///                    specifies where the base relocation is to be applied.
         /// </summary>
-        public TypeOffsetFieldEntry[] TypeOffsetFieldEntries { get; set; }
+        public TypeOffsetFieldEntry[] TypeOffsetFieldEntries { get; set; } = [];
     }
 }

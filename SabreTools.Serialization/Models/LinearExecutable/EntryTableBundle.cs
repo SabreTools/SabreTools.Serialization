@@ -51,6 +51,6 @@
         /// <summary>
         /// Table entries in the bundle
         /// </summary>
-        public EntryTableEntry[] TableEntries { get; set; }
+        public EntryTableEntry[] TableEntries { get; set; } = [];
     }
 }

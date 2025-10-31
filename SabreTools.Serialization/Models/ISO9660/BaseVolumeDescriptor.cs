@@ -36,7 +36,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of logical blocks in this volume
         /// </summary>
-        public BothInt32 VolumeSpaceSize { get; set; }
+        public BothInt32 VolumeSpaceSize { get; set; } = 0;
 
         // Virtual variable of 32 bytes goes here:
         // PrimaryVolumeDescriptor: Unused32Bytes
@@ -45,23 +45,23 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of Volumes (discs) in this VolumeSet
         /// </summary>
-        public BothInt16 VolumeSetSize { get; set; }
+        public BothInt16 VolumeSetSize { get; set; } = 0;
 
         /// <summary>
         /// Volume (disc) number in this volume set
         /// </summary>
-        public BothInt16 VolumeSequenceNumber { get; set; }
+        public BothInt16 VolumeSequenceNumber { get; set; } = 0;
 
         /// <summary>
         /// Number of bytes per logical block, usually 2048
         /// Must be a power of 2, minimum 2^9, and not greater than the logical sector size
         /// </summary>
-        public BothInt16 LogicalBlockSize { get; set; }
+        public BothInt16 LogicalBlockSize { get; set; } = 0;
 
         /// <summary>
         /// Number of bytes in the path table
         /// </summary>
-        public BothInt32 PathTableSize { get; set; }
+        public BothInt32 PathTableSize { get; set; } = 0;
 
         /// <summary>
         /// Sector number of the start of the little-endian path table, type L
@@ -93,7 +93,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// Root directory entry, 34 bytes
         /// DirectoryIdentifier = 0x00
         /// </summary>
-        public DirectoryRecord RootDirectoryRecord { get; set; }
+        public DirectoryRecord RootDirectoryRecord { get; set; } = new();
 
         /// <summary>
         /// 128-byte name of the volume set
@@ -167,22 +167,22 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// PVD-style DateTime format for the Creation date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeCreationDateTime { get; set; }
+        public DecDateTime VolumeCreationDateTime { get; set; } = new();
 
         /// <summary>
         /// PVD-style DateTime format for the Modification date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeModificationDateTime { get; set; }
+        public DecDateTime VolumeModificationDateTime { get; set; } = new();
 
         /// <summary>
         /// PVD-style DateTime format for the Expiration date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeExpirationDateTime { get; set; }
+        public DecDateTime VolumeExpirationDateTime { get; set; } = new();
 
         /// <summary>
         /// PVD-style DateTime format for the Effective date/time of the Volume
         /// </summary>
-        public DecDateTime VolumeEffectiveDateTime { get; set; }
+        public DecDateTime VolumeEffectiveDateTime { get; set; } = new();
 
         /// <summary>
         /// Version number of the Records / Path Table format

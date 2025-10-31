@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// Versions with key values either are 256 or 512 bytes.
         /// Stored as a string as the rest of the 256/512 bytes are just padding.
         /// </remarks>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// Type of the entry data
@@ -60,6 +60,6 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// The file data, stored as a byte array
         /// </summary>
-        public byte[] FileData { get; set; }
+        public byte[] FileData { get; set; } = [];
     }
 }

@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         ///
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

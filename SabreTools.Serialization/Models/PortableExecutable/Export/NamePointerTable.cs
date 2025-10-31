@@ -13,6 +13,6 @@
         /// <summary>
         /// The pointers are 32 bits each and are relative to the image base.
         /// </summary>
-        public uint[] Pointers { get; set; }
+        public uint[] Pointers { get; set; } = [];
     }
 }

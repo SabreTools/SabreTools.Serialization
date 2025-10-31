@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Vertices
         /// </summary>
-        public Vector3D[] Vertices { get; set; }
+        public Vector3D[] Vertices { get; set; } = [];
     }
 }

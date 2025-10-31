@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.BFPK
         /// "BFPK"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string Magic;
+        public string Magic = string.Empty;
 
         /// <summary>
         /// Version

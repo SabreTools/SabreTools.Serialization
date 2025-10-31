@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.SGA
     {
         public byte[] FileMD5 { get; set; } = new byte[0x10];
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public byte[] HeaderMD5 { get; set; } = new byte[0x10];
 

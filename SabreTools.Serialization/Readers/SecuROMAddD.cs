@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Readers
             byte[] signatureBytes = data.ReadBytes(4);
             obj.Signature = Encoding.ASCII.GetString(signatureBytes);
             obj.EntryCount = data.ReadUInt32LittleEndian();
-            obj.Version = data.ReadNullTerminatedAnsiString();
+            obj.Version = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             byte[] buildBytes = data.ReadBytes(4);
             obj.Build = Encoding.ASCII.GetString(buildBytes);
             obj.Unknown1 = data.ReadBytes(44);
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Readers
             obj.Unknown14h = data.ReadUInt32LittleEndian();
             obj.Unknown18h = data.ReadUInt32LittleEndian();
             obj.Unknown1Ch = data.ReadUInt32LittleEndian();
-            obj.FileName = data.ReadNullTerminatedAnsiString();
+            obj.FileName = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             obj.Unknown2Ch = data.ReadUInt32LittleEndian();
 
             return obj;

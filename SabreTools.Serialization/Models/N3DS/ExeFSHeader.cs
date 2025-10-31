@@ -16,7 +16,7 @@
         /// <summary>
         /// File headers (10 headers maximum, 16 bytes each)
         /// </summary>
-        public ExeFSFileHeader[] FileHeaders { get; set; }
+        public ExeFSFileHeader[] FileHeaders { get; set; } = [];
 
         /// <summary>
         /// Reserved
@@ -28,6 +28,6 @@
         /// File hashes (10 hashes maximum, 32 bytes each, one for each header)
         /// </summary>
         /// <remarks>SHA-256 hashes</remarks>
-        public byte[][] FileHashes { get; set; }
+        public byte[][] FileHashes { get; set; } = [];
     }
 }

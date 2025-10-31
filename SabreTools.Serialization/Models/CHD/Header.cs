@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.CHD
         /// 'MComprHD'
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string Tag;
+        public string Tag = string.Empty;
 
         /// <summary>
         /// Length of header (including tag and length fields)

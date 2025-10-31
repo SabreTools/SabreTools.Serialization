@@ -14,6 +14,6 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
         /// <summary>
         /// Accelerator table entries
         /// </summary>
-        public AcceleratorTableEntry[] Entries { get; set; }
+        public AcceleratorTableEntry[] Entries { get; set; } = [];
     }
 }

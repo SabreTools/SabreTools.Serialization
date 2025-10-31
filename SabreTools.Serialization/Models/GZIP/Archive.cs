@@ -6,13 +6,13 @@ namespace SabreTools.Data.Models.GZIP
         /// <summary>
         /// Header including optional fields
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         // Compressed blocks live here
 
         /// <summary>
         /// Trailer
         /// </summary>
-        public Trailer Trailer { get; set; }
+        public Trailer Trailer { get; set; } = new();
     }
 }

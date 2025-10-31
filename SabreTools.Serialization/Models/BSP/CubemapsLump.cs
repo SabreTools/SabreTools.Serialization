@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Cubemaps
         /// </summary>
-        public Cubemap[] Cubemaps { get; set; }
+        public Cubemap[] Cubemaps { get; set; } = [];
     }
 }

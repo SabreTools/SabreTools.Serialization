@@ -108,7 +108,7 @@
         /// <summary>
         /// File data are simply replaced by the data in the patch.
         /// </summary>
-        public byte[] PatchDataCopy { get; set; }
+        public byte[] PatchDataCopy { get; set; } = [];
 
         #endregion
     }

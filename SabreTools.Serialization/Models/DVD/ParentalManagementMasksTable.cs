@@ -25,13 +25,13 @@ namespace SabreTools.Data.Models.DVD
         /// <summary>
         /// Entries
         /// </summary>
-        public ParentalManagementMasksTableEntry[] Entries { get; set; }
+        public ParentalManagementMasksTableEntry[] Entries { get; set; } = [];
 
         /// <summary>
         /// The PTL_MAIT contains the 16-bit masks for the VMG and
         /// all title sets for parental management level 8 followed
         /// by the masks for level 7, and so on to level 1.
         /// </summary>
-        public byte[][] BitMasks { get; set; }
+        public byte[][] BitMasks { get; set; } = [];
     }
 }

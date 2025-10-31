@@ -35,6 +35,6 @@ namespace SabreTools.Data.Models.SpoonInstaller
         /// <summary>
         /// ASCII filename
         /// </summary>
-        public string Filename { get; set; }
+        public string Filename { get; set; } = string.Empty;
     }
 }

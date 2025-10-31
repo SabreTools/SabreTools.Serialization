@@ -19,7 +19,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// "MatR"
         /// </summary>
         /// <remarks>4 bytes</remarks>
-        public string Signature { get; set; }
+        public string Signature { get; set; } = string.Empty;
 
         /// <summary>
         /// Number of internal entries
@@ -81,6 +81,6 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// Entries array whose length is given by <see cref="EntryCount"/>
         /// </summary>
-        public MatroshkaEntry[] Entries { get; set; }
+        public MatroshkaEntry[] Entries { get; set; } = [];
     }
 }

@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.N3DS
         /// Magic "IVFC"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string MagicString;
+        public string MagicString = string.Empty;
 
         /// <summary>
         /// Magic number 0x10000

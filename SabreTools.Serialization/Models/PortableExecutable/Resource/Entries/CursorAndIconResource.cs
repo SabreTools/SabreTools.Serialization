@@ -33,7 +33,7 @@
         /// <summary>
         /// Describes keyboard accelerator characteristics.
         /// </summary>
-        public NewHeader NEWHEADER { get; set; }
+        public NewHeader NEWHEADER { get; set; } = new();
 
         // TODO: Add array of entries in the resource
     }

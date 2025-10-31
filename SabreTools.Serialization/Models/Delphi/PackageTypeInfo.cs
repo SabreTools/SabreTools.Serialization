@@ -10,10 +10,10 @@ namespace SabreTools.Data.Models.Delphi
         /// <remarks>
         /// System-dependent pointer type, assumed to be encoded for x86
         /// </remarks>
-        public uint[] TypeTable { get; set; }
+        public uint[] TypeTable { get; set; } = [];
 
         public int UnitCount { get; set; }
 
-        public string[] UnitNames { get; set; }
+        public string[] UnitNames { get; set; } = [];
     }
 }

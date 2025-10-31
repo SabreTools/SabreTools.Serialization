@@ -96,7 +96,7 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string MenuResource { get; set; }
+        public string MenuResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The ordinal value of a menu resource in an executable file.
@@ -115,7 +115,7 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string ClassResource { get; set; }
+        public string ClassResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The ordinal value of a predefined system class.
@@ -131,7 +131,7 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string? TitleResource { get; set; }
+        public string TitleResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The 16-bit point size value and the typeface array follow the title array, but only if the
@@ -155,6 +155,6 @@
         /// If you specify character strings in the menu, class, title, or typeface arrays, you must use
         /// Unicode strings.
         /// </remarks>
-        public string Typeface { get; set; }
+        public string Typeface { get; set; } = string.Empty;
     }
 }

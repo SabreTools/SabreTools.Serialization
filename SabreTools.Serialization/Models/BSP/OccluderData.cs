@@ -27,12 +27,12 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Minima of all vertices
         /// </summary>
-        public Vector3D Mins;
+        public Vector3D Mins = new();
 
         /// <summary>
         /// Maxima of all vertices
         /// </summary>
-        public Vector3D Maxs;
+        public Vector3D Maxs = new();
 
         /// <remarks>Since v1</remarks>
         public int Area;

@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// S-vector
         /// </summary>
-        public Vector3D SVector;
+        public Vector3D SVector = new();
 
         /// <summary>
         /// Texture shift in the S direction
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// T-vector
         /// </summary>
-        public Vector3D TVector;
+        public Vector3D TVector = new();
 
         /// <summary>
         /// Texture shift in the T direction

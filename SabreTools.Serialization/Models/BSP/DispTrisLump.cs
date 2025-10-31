@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Tris
         /// </summary>
-        public DispTri[] Tris { get; set; }
+        public DispTri[] Tris { get; set; } = [];
     }
 }

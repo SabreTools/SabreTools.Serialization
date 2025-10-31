@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.AACS
         /// Null-terminated ASCII string representing the copyright
         /// </summary>
         [MarshalAs(UnmanagedType.LPStr)]
-        public string Copyright;
+        public string Copyright = string.Empty;
     }
 }

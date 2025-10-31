@@ -20,7 +20,7 @@ namespace SabreTools.Data.Models.CFB
         /// </summary>
         /// <remarks>64 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-        public string Name;
+        public string Name = string.Empty;
 
         /// <summary>
         /// This field MUST match the length of the Directory Entry Name Unicode

@@ -28,6 +28,6 @@ namespace SabreTools.Data.Models.OLE
         /// implementation SHOULD NOT write strings with embedded or trailing null characters unless
         /// specifically requested to do so by an application.
         /// </summary>
-        public string Characters { get; set; }
+        public string Characters { get; set; } = string.Empty;
     }
 }

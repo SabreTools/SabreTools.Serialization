@@ -40,6 +40,6 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
         /// There is no fixed limit on the size of this string.
         /// </summary>
         [MarshalAs(UnmanagedType.LPWStr)]
-        public string PopupMenuText;
+        public string PopupMenuText = string.Empty;
     }
 }

@@ -13,6 +13,6 @@ namespace SabreTools.Data.Models.BSP
         /// Offsets
         /// </summary>
         /// <remarks><see cref="MipTextureCount"> entries</remarks>
-        public int[] Offsets { get; set; }
+        public int[] Offsets { get; set; } = [];
     }
 }

@@ -6,13 +6,13 @@ namespace SabreTools.Data.Models.BZip2
         /// <summary>
         /// Stream header
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         // TODO: Implement remaining structures
 
         /// <summary>
         /// Stream footer
         /// </summary>
-        public Footer Footer { get; set; }
+        public Footer Footer { get; set; } = new();
     }
 }

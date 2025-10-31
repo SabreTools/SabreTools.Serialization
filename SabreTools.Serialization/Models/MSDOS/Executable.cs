@@ -14,7 +14,7 @@ namespace SabreTools.Data.Models.MSDOS
         /// <summary>
         /// MS-DOS executable header
         /// </summary>
-        public ExecutableHeader Header { get; set; }
+        public ExecutableHeader Header { get; set; } = new();
 
         /// <summary>
         /// After loading the executable into memory, the program loader goes through
@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.MSDOS
         /// make the loader add start segment address to the value at offset
         /// 1*0x10+0x1A=0x2A within the program data.
         /// </summary>
-        public RelocationEntry[] RelocationTable { get; set; }
+        public RelocationEntry[] RelocationTable { get; set; } = [];
     }
 }

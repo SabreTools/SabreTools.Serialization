@@ -67,7 +67,10 @@ namespace SabreTools.Serialization.Readers
                             file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
                         case LumpType.LUMP_VISIBILITY:
-                            file.VisibilityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            var visiblityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
+                            if (visiblityLump != null)
+                                file.VisibilityLump = visiblityLump;
+
                             break;
                         case LumpType.LUMP_NODES:
                             file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
@@ -387,7 +390,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_ENTITIES on success, null on error</returns>
-        private static EntitiesLump? ParseEntitiesLump(Stream data, int offset, int length)
+        private static EntitiesLump ParseEntitiesLump(Stream data, int offset, int length)
         {
             var entities = new List<Entity>();
 
@@ -429,7 +432,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_PLANES on success, null on error</returns>
-        private static PlanesLump? ParsePlanesLump(Stream data, int offset, int length)
+        private static PlanesLump ParsePlanesLump(Stream data, int offset, int length)
         {
             var planes = new List<Plane>();
             while (data.Position < offset + length)
@@ -446,7 +449,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_TEXTURES on success, null on error</returns>
-        private static TextureLump? ParseTextureLump(Stream data, int offset, int length)
+        private static TextureLump ParseTextureLump(Stream data, int offset, int length)
         {
             var lump = new TextureLump();
 
@@ -467,7 +470,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_VERTICES on success, null on error</returns>
-        private static VerticesLump? ParseVerticesLump(Stream data, int offset, int length)
+        private static VerticesLump ParseVerticesLump(Stream data, int offset, int length)
         {
             var vertices = new List<Vector3D>();
             while (data.Position < offset + length)
@@ -513,7 +516,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_NODES on success, null on error</returns>
-        private static BspNodesLump? ParseNodesLump(Stream data, int offset, int length)
+        private static BspNodesLump ParseNodesLump(Stream data, int offset, int length)
         {
             var nodes = new List<BspNode>();
             while (data.Position < offset + length)
@@ -530,7 +533,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_TEXINFO on success, null on error</returns>
-        private static BspTexinfoLump? ParseTexinfoLump(Stream data, int offset, int length)
+        private static BspTexinfoLump ParseTexinfoLump(Stream data, int offset, int length)
         {
             var texinfos = new List<BspTexinfo>();
             while (data.Position < offset + length)
@@ -547,7 +550,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_FACES on success, null on error</returns>
-        private static BspFacesLump? ParseFacesLump(Stream data, int offset, int length)
+        private static BspFacesLump ParseFacesLump(Stream data, int offset, int length)
         {
             var faces = new List<BspFace>();
             while (data.Position < offset + length)
@@ -564,7 +567,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_LIGHTING on success, null on error</returns>
-        private static LightmapLump? ParseLightmapLump(Stream data, int offset, int length)
+        private static LightmapLump ParseLightmapLump(Stream data, int offset, int length)
         {
             var lump = new LightmapLump();
             lump.Lightmap = new byte[length / 3][];
@@ -582,7 +585,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_CLIPNODES on success, null on error</returns>
-        private static ClipnodesLump? ParseClipnodesLump(Stream data, int offset, int length)
+        private static ClipnodesLump ParseClipnodesLump(Stream data, int offset, int length)
         {
             var clipnodes = new List<Clipnode>();
             while (data.Position < offset + length)
@@ -599,7 +602,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_LEAVES on success, null on error</returns>
-        private static BspLeavesLump? ParseLeavesLump(Stream data, int offset, int length)
+        private static BspLeavesLump ParseLeavesLump(Stream data, int offset, int length)
         {
             var leaves = new List<BspLeaf>();
             while (data.Position < offset + length)
@@ -616,7 +619,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_MARKSURFACES on success, null on error</returns>
-        private static MarksurfacesLump? ParseMarksurfacesLump(Stream data, int offset, int length)
+        private static MarksurfacesLump ParseMarksurfacesLump(Stream data, int offset, int length)
         {
             var marksurfaces = new List<ushort>();
             while (data.Position < offset + length)
@@ -632,7 +635,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_EDGES on success, null on error</returns>
-        private static EdgesLump? ParseEdgesLump(Stream data, int offset, int length)
+        private static EdgesLump ParseEdgesLump(Stream data, int offset, int length)
         {
             var edges = new List<Edge>();
             while (data.Position < offset + length)
@@ -649,7 +652,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_SURFEDGES on success, null on error</returns>
-        private static SurfedgesLump? ParseSurfedgesLump(Stream data, int offset, int length)
+        private static SurfedgesLump ParseSurfedgesLump(Stream data, int offset, int length)
         {
             var surfedges = new List<int>();
             while (data.Position < offset + length)
@@ -665,7 +668,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled LUMP_MODELS on success, null on error</returns>
-        private static BspModelsLump? ParseModelsLump(Stream data, int offset, int length)
+        private static BspModelsLump ParseModelsLump(Stream data, int offset, int length)
         {
             var models = new List<BspModel>();
             while (data.Position < offset + length)

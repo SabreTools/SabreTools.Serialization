@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+            directory.StringTable = new Dictionary<long, string>((int)directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
@@ -255,7 +255,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directoryHeader.StringTableCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Loop through all folders to assign names
@@ -392,7 +392,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+            directory.StringTable = new Dictionary<long, string>((int)directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
@@ -401,7 +401,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directoryHeader.StringTableCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Loop through all folders to assign names
@@ -538,7 +538,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+            directory.StringTable = new Dictionary<long, string>((int)directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
@@ -547,7 +547,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directoryHeader.StringTableCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Loop through all folders to assign names
@@ -684,7 +684,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            directory.StringTable = new Dictionary<long, string?>((int)directoryHeader.StringTableCount);
+            directory.StringTable = new Dictionary<long, string>((int)directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;
@@ -693,7 +693,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directoryHeader.StringTableCount; i++)
             {
                 long currentPosition = data.Position - stringTableStart;
-                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString();
+                directory.StringTable[currentPosition] = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Loop through all folders to assign names
@@ -883,7 +883,7 @@ namespace SabreTools.Serialization.Readers
             var file4 = new File4();
 
             file4.NameOffset = data.ReadUInt32LittleEndian();
-            file4.Name = null; // Read from string table
+            file4.Name = string.Empty; // Read from string table
             file4.Offset = data.ReadUInt32LittleEndian();
             file4.SizeOnDisk = data.ReadUInt32LittleEndian();
             file4.Size = data.ReadUInt32LittleEndian();
@@ -905,7 +905,7 @@ namespace SabreTools.Serialization.Readers
             var file6 = new File6();
 
             file6.NameOffset = data.ReadUInt32LittleEndian();
-            file6.Name = null; // Read from string table
+            file6.Name = string.Empty; // Read from string table
             file6.Offset = data.ReadUInt32LittleEndian();
             file6.SizeOnDisk = data.ReadUInt32LittleEndian();
             file6.Size = data.ReadUInt32LittleEndian();
@@ -928,7 +928,7 @@ namespace SabreTools.Serialization.Readers
             var file7 = new File7();
 
             file7.NameOffset = data.ReadUInt32LittleEndian();
-            file7.Name = null; // Read from string table
+            file7.Name = string.Empty; // Read from string table
             file7.Offset = data.ReadUInt32LittleEndian();
             file7.SizeOnDisk = data.ReadUInt32LittleEndian();
             file7.Size = data.ReadUInt32LittleEndian();

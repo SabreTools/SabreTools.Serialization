@@ -10,109 +10,109 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Header data
         /// </summary>
-        public VbspHeader Header { get; set; }
+        public VbspHeader Header { get; set; } = new();
 
         #region Lumps
 
         /// <summary>
         /// LUMP_ENTITIES [0]
         /// </summary>
-        public EntitiesLump Entities { get; set; }
+        public EntitiesLump Entities { get; set; } = new();
 
         /// <summary>
         /// LUMP_PLANES [1]
         /// </summary>
-        public PlanesLump PlanesLump { get; set; }
+        public PlanesLump PlanesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_TEXDATA [2]
         /// </summary>
-        public TexdataLump TexdataLump { get; set; }
+        public TexdataLump TexdataLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_VERTEXES [3]
         /// </summary>
-        public VerticesLump VerticesLump { get; set; }
+        public VerticesLump VerticesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_VISIBILITY [4]
         /// </summary>
-        public VisibilityLump VisibilityLump { get; set; }
+        public VisibilityLump VisibilityLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_NODES [5]
         /// </summary>
-        public VbspNodesLump NodesLump { get; set; }
+        public VbspNodesLump NodesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_TEXINFO [6]
         /// </summary>
-        public VbspTexinfoLump TexinfoLump { get; set; }
+        public VbspTexinfoLump TexinfoLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_FACES [7]
         /// </summary>
-        public VbspFacesLump FacesLump { get; set; }
+        public VbspFacesLump FacesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LIGHTING [8]
         /// </summary>
-        public LightmapLump LightmapLump { get; set; }
+        public LightmapLump LightmapLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_OCCLUSION [9]
         /// </summary>s
-        public OcclusionLump OcclusionLump { get; set; }
+        public OcclusionLump OcclusionLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAVES [10]
         /// </summary>
-        public VbspLeavesLump LeavesLump { get; set; }
+        public VbspLeavesLump LeavesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_FACEIDS [11]
         /// </summary>
-        public MarksurfacesLump MarksurfacesLump { get; set; }
+        public MarksurfacesLump MarksurfacesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_EDGES [12]
         /// </summary>
-        public EdgesLump EdgesLump { get; set; }
+        public EdgesLump EdgesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_SURFEDGES [13]
         /// </summary>
-        public SurfedgesLump SurfedgesLump { get; set; }
+        public SurfedgesLump SurfedgesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_MODELS [14]
         /// </summary>
-        public VbspModelsLump ModelsLump { get; set; }
+        public VbspModelsLump ModelsLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_WORLDLIGHTS [15]
         /// </summary>
-        public WorldLightsLump LDRWorldLightsLump { get; set; }
+        public WorldLightsLump LDRWorldLightsLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAFFACES [16]
         /// </summary>
-        public LeafFacesLump LeafFacesLump { get; set; }
+        public LeafFacesLump LeafFacesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAFBRUSHES [17]
         /// </summary>
-        public LeafBrushesLump LeafBrushesLump { get; set; }
+        public LeafBrushesLump LeafBrushesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_BRUSHES [18]
         /// </summary>
-        public BrushesLump BrushesLump { get; set; }
+        public BrushesLump BrushesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_BRUSHSIDES [19]
         /// </summary>
-        public BrushsidesLump BrushsidesLump { get; set; }
+        public BrushsidesLump BrushsidesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_AREAS [20]
@@ -153,12 +153,12 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_DISPINFO [26]
         /// </summary>
-        public DispInfosLump DispInfosLump { get; set; }
+        public DispInfosLump DispInfosLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_ORIGINALFACES [27]
         /// </summary>
-        public VbspFacesLump OriginalFacesLump { get; set; }
+        public VbspFacesLump OriginalFacesLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_PHYSDISP [28]
@@ -169,7 +169,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_PHYSCOLLIDE [29]
         /// </summary>
-        public PhysCollideLump PhysCollideLump { get; set; }
+        public PhysCollideLump PhysCollideLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_VERTNORMALS [30]
@@ -192,7 +192,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_DISP_VERTS [33]
         /// </summary>
-        public DispVertsLump DispVertsLump { get; set; }
+        public DispVertsLump DispVertsLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34]
@@ -203,7 +203,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_GAME_LUMP [35]
         /// </summary>
-        public GameLump GameLump { get; set; }
+        public GameLump GameLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAFWATERDATA [36]
@@ -232,7 +232,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_PAKFILE [40]
         /// </summary>
-        public PakfileLump PakfileLump { get; set; }
+        public PakfileLump PakfileLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_CLIPPORTALVERTS [41]
@@ -243,22 +243,22 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_CUBEMAPS [42]
         /// </summary>
-        public CubemapsLump CubemapsLump { get; set; }
+        public CubemapsLump CubemapsLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_TEXDATA_STRING_DATA [43]
         /// </summary>
-        public TexdataStringData? TexdataStringData { get; set; }
+        public TexdataStringData TexdataStringData { get; set; } = new();
 
         /// <summary>
         /// LUMP_TEXDATA_STRING_TABLE [44]
         /// </summary>
-        public TexdataStringTable? TexdataStringTable { get; set; }
+        public TexdataStringTable TexdataStringTable { get; set; } = new();
 
         /// <summary>
         /// LUMP_OVERLAYS [45]
         /// </summary>
-        public OverlaysLump OverlaysLump { get; set; }
+        public OverlaysLump OverlaysLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAFMINDISTTOWATER [46]
@@ -275,7 +275,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_DISP_TRIS [48]
         /// </summary>
-        public DispTrisLump DispTrisLump { get; set; }
+        public DispTrisLump DispTrisLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB [49]
@@ -292,12 +292,12 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_LIGHTMAPPAGES / LUMP_LEAF_AMBIENT_INDEX_HDR [51]
         /// </summary>
-        public AmbientIndexLump HDRAmbientIndexLump { get; set; }
+        public AmbientIndexLump HDRAmbientIndexLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LIGHTMAPPAGEINFOS / LUMP_LEAF_AMBIENT_INDEX [52]
         /// </summary>
-        public AmbientIndexLump LDRAmbientIndexLump { get; set; }
+        public AmbientIndexLump LDRAmbientIndexLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LIGHTING_HDR [53]
@@ -308,17 +308,17 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// LUMP_WORLDLIGHTS_HDR [54]
         /// </summary>
-        public WorldLightsLump HDRWorldLightsLump { get; set; }
+        public WorldLightsLump HDRWorldLightsLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAF_AMBIENT_LIGHTING_HDR [55]
         /// </summary>
-        public AmbientLightingLump HDRAmbientLightingLump { get; set; }
+        public AmbientLightingLump HDRAmbientLightingLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_LEAF_AMBIENT_LIGHTING [56]
         /// </summary>
-        public AmbientLightingLump LDRAmbientLightingLump { get; set; }
+        public AmbientLightingLump LDRAmbientLightingLump { get; set; } = new();
 
         /// <summary>
         /// LUMP_XZIPPAKFILE [57]

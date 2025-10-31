@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Nodes
         /// </summary>
-        public VbspNode[] Nodes { get; set; }
+        public VbspNode[] Nodes { get; set; } = [];
     }
 }

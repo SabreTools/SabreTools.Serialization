@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Leaves
         /// </summary>
-        public VbspLeaf[] Leaves { get; set; }
+        public VbspLeaf[] Leaves { get; set; } = [];
     }
 }

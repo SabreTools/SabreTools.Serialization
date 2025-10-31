@@ -107,7 +107,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string MenuResource { get; set; }
+        public string MenuResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The ordinal value of a menu resource in an executable file.
@@ -125,7 +125,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string ClassResource { get; set; }
+        public string ClassResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The ordinal value of a predefined system window class.
@@ -140,7 +140,7 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string TitleResource { get; set; }
+        public string TitleResource { get; set; } = string.Empty;
 
         /// <summary>
         /// The point size of the font to use for the text in the dialog box and its controls.
@@ -180,6 +180,6 @@
         /// If you specify character strings in the class and title arrays, you must use Unicode strings. Use the
         /// MultiByteToWideChar function to generate Unicode strings from ANSI strings.
         /// </remarks>
-        public string Typeface { get; set; }
+        public string Typeface { get; set; } = string.Empty;
     }
 }
