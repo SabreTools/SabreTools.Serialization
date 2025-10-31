@@ -26,17 +26,10 @@ namespace SabreTools.Serialization.Wrappers
             // TODO: Should we print the string table?
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.MajorVersion, "  Major version");
             builder.AppendLine(header.MinorVersion, "  Minor version");
@@ -62,17 +55,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Directory? directory)
+        private static void Print(StringBuilder builder, Directory directory)
         {
             builder.AppendLine("  Directory Information:");
             builder.AppendLine("  -------------------------");
-            if (directory == null)
-            {
-                builder.AppendLine("  No directory");
-                builder.AppendLine();
-                return;
-            }
-
             switch (directory)
             {
                 case Directory4 directory4:
@@ -111,17 +97,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryHeader4? header)
+        private static void Print(StringBuilder builder, DirectoryHeader4 header)
         {
             builder.AppendLine("  Directory Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No directory header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.SectionOffset, "  Section offset");
             builder.AppendLine(header.SectionCount, "  Section count");
             builder.AppendLine(header.FolderOffset, "  Folder offset");
@@ -133,17 +112,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryHeader5? header)
+        private static void Print(StringBuilder builder, DirectoryHeader5 header)
         {
             builder.AppendLine("  Directory Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No directory header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.SectionOffset, "  Section offset");
             builder.AppendLine(header.SectionCount, "  Section count");
             builder.AppendLine(header.FolderOffset, "  Folder offset");
@@ -155,17 +127,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryHeader7? header)
+        private static void Print(StringBuilder builder, DirectoryHeader7 header)
         {
             builder.AppendLine("  Directory Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No directory header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.SectionOffset, "  Section offset");
             builder.AppendLine(header.SectionCount, "  Section count");
             builder.AppendLine(header.FolderOffset, "  Folder offset");
@@ -179,11 +144,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Section4[]? sections)
+        private static void Print(StringBuilder builder, Section4[] sections)
         {
             builder.AppendLine("  Sections Information:");
             builder.AppendLine("  -------------------------");
-            if (sections == null || sections.Length == 0)
+            if (sections.Length == 0)
             {
                 builder.AppendLine("  No sections");
                 builder.AppendLine();
@@ -207,11 +172,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Section5[]? sections)
+        private static void Print(StringBuilder builder, Section5[] sections)
         {
             builder.AppendLine("  Sections Information:");
             builder.AppendLine("  -------------------------");
-            if (sections == null || sections.Length == 0)
+            if (sections.Length == 0)
             {
                 builder.AppendLine("  No sections");
                 builder.AppendLine();
@@ -235,11 +200,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Folder4[]? folders)
+        private static void Print(StringBuilder builder, Folder4[] folders)
         {
             builder.AppendLine("  Folders Information:");
             builder.AppendLine("  -------------------------");
-            if (folders == null || folders.Length == 0)
+            if (folders.Length == 0)
             {
                 builder.AppendLine("  No folders");
                 builder.AppendLine();
@@ -262,11 +227,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Folder5[]? folders)
+        private static void Print(StringBuilder builder, Folder5[] folders)
         {
             builder.AppendLine("  Folders Information:");
             builder.AppendLine("  -------------------------");
-            if (folders == null || folders.Length == 0)
+            if (folders.Length == 0)
             {
                 builder.AppendLine("  No folders");
                 builder.AppendLine();
@@ -289,11 +254,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File4[]? files)
+        private static void Print(StringBuilder builder, File4[] files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");
-            if (files == null || files.Length == 0)
+            if (files.Length == 0)
             {
                 builder.AppendLine("  No files");
                 builder.AppendLine();
@@ -318,11 +283,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File6[]? files)
+        private static void Print(StringBuilder builder, File6[] files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");
-            if (files == null || files.Length == 0)
+            if (files.Length == 0)
             {
                 builder.AppendLine("  No files");
                 builder.AppendLine();
@@ -348,11 +313,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, File7[]? files)
+        private static void Print(StringBuilder builder, File7[] files)
         {
             builder.AppendLine("  Files Information:");
             builder.AppendLine("  -------------------------");
-            if (files == null || files.Length == 0)
+            if (files.Length == 0)
             {
                 builder.AppendLine("  No files");
                 builder.AppendLine();
