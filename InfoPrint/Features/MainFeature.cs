@@ -154,8 +154,8 @@ namespace InfoPrint.Features
                 }
             }
 
-            //try
-            //{
+            try
+            {
                 using Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
                 // Read the first 8 bytes
@@ -210,12 +210,12 @@ namespace InfoPrint.Features
                 sw.WriteLine();
                 sw.WriteLine(builder.ToString());
                 sw.Flush();
-            // }
-            // catch (Exception ex)
-            // {
-            //     Console.WriteLine(Debug ? ex : "[Exception opening file, please try again]");
-            //     Console.WriteLine();
-            // }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(Debug ? ex : "[Exception opening file, please try again]");
+                Console.WriteLine();
+            }
         }
 
         /// <summary>

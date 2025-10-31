@@ -28,8 +28,8 @@ namespace SabreTools.Serialization.Readers
             if (sectorLength * (Constants.SystemAreaSectors + 2) > data.Length - data.Position)
                 return null;
 
-            // try
-            // {
+            try
+            {
                 // Create a new Volume to fill
                 var volume = new Volume();
 
@@ -58,12 +58,12 @@ namespace SabreTools.Serialization.Readers
                 volume.DirectoryDescriptors = dirs;
 
                 return volume;
-            // }
-            // catch
-            // {
-            //     // Ignore the actual error
-            //     return null;
-            // }
+            }
+            catch
+            {
+                // Ignore the actual error
+                return null;
+            }
         }
 
         #region Volume Descriptor Parsing
@@ -714,12 +714,12 @@ namespace SabreTools.Serialization.Readers
                     {
                         fileExtent.ExtendedAttributeRecord = ear;
                     }
-                }
-                // Do not parse file data into file extent, too large
+                    // Do not parse file data into file extent, too large
 
-                // Put the file extent is the dictionary
-                if (!directories.ContainsKey(extentLocation))
-                    directories.Add(extentLocation, fileExtent);
+                    // Put the file extent is the dictionary
+                    if (!directories.ContainsKey(extentLocation))
+                        directories.Add(extentLocation, fileExtent);
+                }
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent

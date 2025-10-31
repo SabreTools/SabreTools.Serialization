@@ -128,6 +128,9 @@ namespace SabreTools.Serialization.Wrappers
             const int chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
+                // Skip the blocks allocated to the Extended Attribute Record
+                fileOffset += dr.ExtendedAttributeRecordLength * blockLength;
+
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
