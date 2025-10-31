@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.AACS
     /// A properly formatted type 3 or type 4 Media Key Block contains exactly
     /// one Drive Revocation List Record. It follows the Host Revocation List
     /// Record, although it may not immediately follow it.
-    /// 
+    ///
     /// The Drive Revocation List Record is identical to the Host Revocation
     /// List Record, except it has type 2016, and it contains Drive Revocation
     /// List Entries, not Host Revocation List Entries. The Drive Revocation List
@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.AACS
         /// <summary>
         /// Revocation list entries
         /// </summary>
-        public DriveRevocationSignatureBlock[]? SignatureBlocks { get; set; }
+        public DriveRevocationSignatureBlock[] SignatureBlocks { get; set; }
     }
 }
