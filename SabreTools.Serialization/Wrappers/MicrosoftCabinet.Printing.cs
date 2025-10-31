@@ -23,17 +23,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Files);
         }
 
-        private static void Print(StringBuilder builder, CFHEADER? header)
+        private static void Print(StringBuilder builder, CFHEADER header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Reserved1, "  Reserved 1");
             builder.AppendLine(header.CabinetSize, "  Cabinet size");
@@ -83,11 +76,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CFFOLDER[]? entries)
+        private static void Print(StringBuilder builder, CFFOLDER[] entries)
         {
             builder.AppendLine("  Folders:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No folders");
                 builder.AppendLine();
@@ -108,7 +101,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 builder.AppendLine("    Data Blocks");
                 builder.AppendLine("    -------------------------");
-                if (entry.DataBlocks == null || entry.DataBlocks.Length == 0)
+                if (entry.DataBlocks.Length == 0)
                 {
                     builder.AppendLine("    No data blocks");
                     continue;
@@ -130,11 +123,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, CFFILE[]? entries)
+        private static void Print(StringBuilder builder, CFFILE[] entries)
         {
             builder.AppendLine("  Files:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No files");
                 builder.AppendLine();

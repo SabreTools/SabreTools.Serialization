@@ -17,25 +17,25 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Cabinet.Files"/>
-        public CFFILE[]? Files => Model.Files;
+        public CFFILE[] Files => Model.Files;
 
         /// <inheritdoc cref="CFHEADER.FileCount"/>
-        public int FileCount => Header?.FileCount ?? 0;
+        public int FileCount => Header.FileCount;
 
         /// <inheritdoc cref="Cabinet.Folders"/>
-        public CFFOLDER[]? Folders => Model.Folders;
+        public CFFOLDER[] Folders => Model.Folders;
 
         /// <inheritdoc cref="CFHEADER.FolderCount"/>
-        public int FolderCount => Header?.FolderCount ?? 0;
+        public int FolderCount => Header.FolderCount;
 
         /// <inheritdoc cref="Cabinet.Header"/>
-        public CFHEADER? Header => Model.Header;
+        public CFHEADER Header => Model.Header;
 
         /// <inheritdoc cref="CFHEADER.CabinetNext"/>
-        public string? CabinetNext => Header?.CabinetNext;
+        public string? CabinetNext => Header.CabinetNext;
 
         /// <inheritdoc cref="CFHEADER.CabinetPrev"/>
-        public string? CabinetPrev => Header?.CabinetPrev;
+        public string? CabinetPrev => Header.CabinetPrev;
 
         #endregion
 
@@ -162,7 +162,7 @@ namespace SabreTools.Serialization.Wrappers
             return file.FolderIndex switch
             {
                 FolderIndex.CONTINUED_FROM_PREV => 0,
-                FolderIndex.CONTINUED_TO_NEXT => (Header?.FolderCount ?? 1) - 1,
+                FolderIndex.CONTINUED_TO_NEXT => Header.FolderCount - 1,
                 FolderIndex.CONTINUED_PREV_AND_NEXT => 0,
                 _ => (int)file.FolderIndex,
             };
@@ -199,8 +199,6 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < dataBlocks.Length; i++)
             {
                 var db = dataBlocks[i];
-                if (db.CompressedData == null)
-                    continue;
 
                 // Get the data to be processed
                 byte[] blockData = db.CompressedData;
