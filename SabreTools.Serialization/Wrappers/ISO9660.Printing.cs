@@ -387,17 +387,10 @@ namespace SabreTools.Serialization.Wrappers
             else
             {
                 // File extent is a file, print the file's Extended Attribute Record
-                Print(builder, extent.ExtendedAttributeRecord);
+                Print(builder, extent.ExtendedAttributeRecord, encoding);
             }
 
             builder.AppendLine();
-        }
-
-        private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear)
-        {
-            // TODO: Implement ExtendedAttributeRecord printing
-
-            return;
         }
 
         private static void Print(StringBuilder builder, DirectoryRecord? dr, Encoding encoding)
@@ -461,6 +454,49 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(drdt.Second, "        Second");
             string tz = $"{((drdt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((drdt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{drdt.TimezoneOffset.ToString("X2")})";
             builder.AppendLine(tz, "        Timezone Offset");
+        }
+
+        private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear, Encoding encoding)
+        {
+            builder.AppendLine("      File Extent")
+            if (ear == null)
+                return;
+            
+            builder.AppendLineBothEndian(ear.OwnerIdentification, "        Owner Identification");
+            builder.AppendLineBothEndian(ear.OwnerIdentification, "        Group Identification");
+            builder.AppendLine(ear.Permissions, "        Permissions");
+
+            builder.AppendLine("      Permissions:");
+            builder.AppendLine((ear.Permissions & Permissions.SYSTEM_USER_CANNOT_READ) != 0, "        System User Cannot Read");
+            builder.AppendLine((ear.Permissions & Permissions.SYSTEM_USER_CANNOT_EXECUTE) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.OWNER_CANNOT_READ) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.OWNER_CANNOT_EXECUTE) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.GROUP_MEMBER_CANNOT_READ) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.GROUP_MEMBER_CANNOT_EXECUTE) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.NON_GROUP_MEMBER_CANNOT_READ) != 0, "        System User Cannot Execute");
+            builder.AppendLine((ear.Permissions & Permissions.NON_GROUP_MEMBER_CANNOT_EXECUTE) != 0, "        System User Cannot Execute");
+            if ((ear.Permissions & Permissions.PERMISSIONS_MASK) == Permissions.PERMISSIONS_MASK)
+                builder.AppendLine("        Fixed Bits: All Set");
+            else
+                builder.AppendLine("        Fixed Bits: Not All Set");
+
+
+            builder.AppendLine(Format(ear.FileCreationDateTime), "        File Creation Date Time");
+            builder.AppendLine(Format(ear.FileModificationDateTime), "        File Modification Date Time");
+            builder.AppendLine(Format(ear.FileExpirationDateTime), "        File Expiration Date Time");
+            builder.AppendLine(Format(ear.FileEffectiveDateTime), "        File Effective Date Time");
+
+            builder.AppendLine((byte)ear.RecordFormat, "      Record Format:");
+            builder.AppendLine((byte)ear.RecordAttributes, "        Record Attributes");
+            builder.AppendLineBothEndian(ear.RecordLength, "        Record Length");
+            builder.AppendLine(encoding.GetString(ear.SystemIdentifier), "        System Identifier");
+            builder.AppendLine(ear.SystemUse, "        System Use");
+            builder.AppendLine(ear.ExtendedAttributeRecordVersion, "        Extended Attribute Record Version");
+            builder.AppendLine(ear.EscapeSequencesLength, "        Escape Sequences Length");
+            builder.AppendLine(ear.Reserved64Bytes, "        Reserved 64 Bytes");
+            builder.AppendLineBothEndian(ear.ApplicationLength, "        Application Length");
+            builder.AppendLine(ear.ApplicationUse, "        Application Use");
+            builder.AppendLine(ear.EscapeSequences, "        Escape Sequences");
         }
 
         #endregion

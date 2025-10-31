@@ -705,16 +705,18 @@ namespace SabreTools.Serialization.Readers
             }
             else
             {
-                // TODO: Create ParseExtendedAttributeRecord()
                 // Extent is a file, parse the Extended Attribute Record
-                // var ear = ParseExtendedAttributeRecord();
-                // if (ear != null)
-                // {
-                //     var fileExtent = new FileExtent();
-                //     fileExtent.ExtendedAttributeRecord = ear;
-                //     if (!directories.ContainsKey(extentLocation))
-                //         directories.Add(extentLocation, fileExtent);
-                // }
+                var fileExtent = new FileExtent();
+                var ear = ParseExtendedAttributeRecord();
+                if (ear != null)
+                {
+                    fileExtent.ExtendedAttributeRecord = ear;
+                }
+                // Do not parse file data into file extent, too large
+
+                // Put the file extent is the dictionary
+                if (!directories.ContainsKey(extentLocation))
+                    directories.Add(extentLocation, fileExtent);
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent
@@ -802,6 +804,39 @@ namespace SabreTools.Serialization.Readers
 
             // Read system use field
             obj.SystemUse = data.ReadBytes(systemUseLength);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExtendedAttributeRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="root">true if root directory record, false otherwise</param>
+        /// <returns>Filled ExtendedAttributeRecord on success, null on error</returns>
+        public static ExtendedAttributeRecord ParseExtendedAttributeRecord(Stream data)
+        {
+            var obj = new ExtendedAttributeRecord();
+
+            obj.OwnerIdentification = data.ReadInt16BothEndian();
+            obj.GroupIdentification = data.ReadInt16BothEndian();
+            obj.Permissions = (Permissions)data.ReadInt16LittleEndian();
+            obj.FileCreationDateTime = ParseDecDateTime(data);
+            obj.FileModificationDateTime = ParseDecDateTime(data);
+            obj.FileExpirationDateTime = ParseDecDateTime(data);
+            obj.FileEffectiveDateTime = ParseDecDateTime(data);
+            obj.RecordFormat = (RecordFormat)data.ReadByteValue();
+            obj.RecordAttributes = (RecordAttributes)data.ReadByteValue();
+            obj.RecordLength = data.ReadInt16BothEndian();
+            obj.BootSystemIdentifier = data.ReadBytes(32);
+            obj.SystemUse = data.ReadBytes(64);
+            obj.ExtendedAttributeRecordVersion = data.ReadByteValue();
+            obj.EscapeSequencesLength = data.ReadByteValue();
+            obj.Reserved64Bytes = data.ReadBytes(64);
+            obj.ApplicationLength = data.ReadInt16BothEndian();
+
+            obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
+            obj.ApplicationUse = data.ReadBytes(obj.EscapeSequencesLength);
 
             return obj;
         }
