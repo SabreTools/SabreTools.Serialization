@@ -51,13 +51,13 @@ namespace SabreTools.Data.Models.Bitmap
         /// For compressed video and YUV formats, this member is a FOURCC code, specified as a
         /// DWORD in little-endian order. For example, YUYV video has the FOURCC 'VYUY' or
         /// 0x56595559. For more information, see FOURCC Codes.
-        /// 
+        ///
         /// For uncompressed RGB formats, the following values are possible:
         /// - BI_RGB: Uncompressed RGB.
         /// - BI_BITFIELDS: Uncompressed RGB with color masks. Valid for 16-bpp and 32-bpp bitmaps.
         ///
         /// Note that BI_JPG and BI_PNG are not valid video formats.
-        /// 
+        ///
         /// For 16-bpp bitmaps, if biCompression equals BI_RGB, the format is always RGB 555.
         /// If biCompression equals BI_BITFIELDS, the format is either RGB 555 or RGB 565. Use
         /// the subtype GUID in the AM_MEDIA_TYPE structure to determine the specific RGB type.
