@@ -671,7 +671,7 @@ namespace SabreTools.Serialization.Readers
 
                         // Start of sector should not be 0, ignore entire directory
                         int nextRecordLength = data.PeekByteValue();
-                        if (nextRecordLength == 0)
+                        if (nextRecordLength <= paddingLength)
                             return null;
                         continue;
                     }
@@ -684,6 +684,14 @@ namespace SabreTools.Serialization.Readers
 
                     // Get the next directory record
                     var directoryRecord = ParseDirectoryRecord(data, false);
+                    if (directoryRecord == null)
+                        return null;
+
+                    // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
+                    var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField == null ? 0 : 1) + directoryRecord.SystemUse.Length;
+                    if (readLength != recordLength)
+                        return null;
+
                     records.Add(directoryRecord);
                 }
 
