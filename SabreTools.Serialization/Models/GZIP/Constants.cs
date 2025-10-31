@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.GZIP
 {
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public static class Constants
     {
         public const byte ID1 = 0x1F;

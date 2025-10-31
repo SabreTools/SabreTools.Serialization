@@ -2,7 +2,7 @@ using System;
 
 namespace SabreTools.Data.Models.GZIP
 {
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public enum CompressionMethod : byte
     {
         RESERVED0 = 0,
@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.GZIP
         Deflate = 8,
     }
 
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     [Flags]
     public enum ExtraFlags : byte
     {
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Models.GZIP
         FastestAlgorithm = 0x04,
     }
 
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     [Flags]
     public enum Flags : byte
     {
@@ -66,7 +66,7 @@ namespace SabreTools.Data.Models.GZIP
         RESERVED7 = 0x80,
     }
 
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public enum OperatingSystem : byte
     {
         /// <summary>

@@ -1,11 +1,11 @@
 namespace SabreTools.Data.Models.GZIP
 {
-    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/> 
+    /// <see href="https://www.ietf.org/rfc/rfc1952.txt"/>
     public sealed class Trailer
     {
         /// <summary>
         /// CRC-32
-        /// 
+        ///
         /// This contains a Cyclic Redundancy Check value of the
         /// uncompressed data computed according to CRC-32 algorithm
         /// used in the ISO 3309 standard and in section 8.1.1.6.2 of
@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.GZIP
 
         /// <summary>
         /// Input SIZE
-        /// 
+        ///
         /// This contains the size of the original (uncompressed) input
         /// data modulo 2^32.
         /// </summary>

@@ -22,17 +22,10 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Trailer);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.ID1, "  ID1");
             builder.AppendLine(header.ID2, "  ID1");
             builder.AppendLine($"  Compression method: {header.CompressionMethod} (0x{(byte)header.CompressionMethod:X2})");
@@ -71,17 +64,10 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, Trailer? trailer)
+        private static void Print(StringBuilder builder, Trailer trailer)
         {
             builder.AppendLine("  Trailer:");
             builder.AppendLine("  -------------------------");
-            if (trailer == null)
-            {
-                builder.AppendLine("  No trailer");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(trailer.CRC32, "  CRC-32");
             builder.AppendLine(trailer.InputSize, "  Input size");
             builder.AppendLine();
