@@ -707,7 +707,7 @@ namespace SabreTools.Serialization.Readers
             {
                 // Extent is a file, parse the Extended Attribute Record
                 var fileExtent = new FileExtent();
-                var ear = ParseExtendedAttributeRecord();
+                var ear = ParseExtendedAttributeRecord(data);
                 if (ear != null)
                 {
                     fileExtent.ExtendedAttributeRecord = ear;
@@ -828,7 +828,7 @@ namespace SabreTools.Serialization.Readers
             obj.RecordFormat = (RecordFormat)data.ReadByteValue();
             obj.RecordAttributes = (RecordAttributes)data.ReadByteValue();
             obj.RecordLength = data.ReadInt16BothEndian();
-            obj.BootSystemIdentifier = data.ReadBytes(32);
+            obj.SystemIdentifier = data.ReadBytes(32);
             obj.SystemUse = data.ReadBytes(64);
             obj.ExtendedAttributeRecordVersion = data.ReadByteValue();
             obj.EscapeSequencesLength = data.ReadByteValue();

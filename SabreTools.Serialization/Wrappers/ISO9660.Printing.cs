@@ -464,7 +464,6 @@ namespace SabreTools.Serialization.Wrappers
             
             builder.AppendLineBothEndian(ear.OwnerIdentification, "        Owner Identification");
             builder.AppendLineBothEndian(ear.OwnerIdentification, "        Group Identification");
-            builder.AppendLine(ear.Permissions, "        Permissions");
 
             builder.AppendLine("      Permissions:");
             builder.AppendLine((ear.Permissions & Permissions.SYSTEM_USER_CANNOT_READ) != 0, "        System User Cannot Read");
