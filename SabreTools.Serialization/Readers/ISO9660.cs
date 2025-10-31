@@ -684,8 +684,6 @@ namespace SabreTools.Serialization.Readers
 
                     // Get the next directory record
                     var directoryRecord = ParseDirectoryRecord(data, false);
-                    if (directoryRecord == null)
-                        return null;
 
                     // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
                     var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField == null ? 0 : 1) + directoryRecord.SystemUse.Length;
@@ -704,7 +702,7 @@ namespace SabreTools.Serialization.Readers
                 foreach (var record in records)
                 {
                     // Don't traverse to parent or self
-                    if (record?.FileIdentifier == null || record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                    if (record.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || record.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
                         continue;
 
                     // Recursively parse child directory
@@ -786,6 +784,8 @@ namespace SabreTools.Serialization.Readers
                 obj.FileIdentifier = data.ReadBytes(1);
             else if (obj.FileIdentifierLength > 0)
                 obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
+            else
+                obj.FileIdentifier = [];
 
             // If file identifier length is even, there is a padding field byte
             if (obj.FileIdentifierLength % 2 == 0)
@@ -858,8 +858,13 @@ namespace SabreTools.Serialization.Readers
 
             if (obj.ApplicationLength > 0)
                 obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
+            else
+                obj.ApplicationUse = [];
+
             if (obj.EscapeSequencesLength > 0)
-                obj.ApplicationUse = data.ReadBytes(obj.EscapeSequencesLength);
+                obj.EscapeSequences = data.ReadBytes(obj.EscapeSequencesLength);
+            else
+                obj.EscapeSequences = [];
 
             return obj;
         }
