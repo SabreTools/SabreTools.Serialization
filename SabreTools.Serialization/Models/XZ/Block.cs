@@ -40,7 +40,7 @@ namespace SabreTools.Data.Models.XZ
         /// The number of filter flags is given by the first two
         /// bits of <see cref="Flags"/>
         /// </remarks>
-        public FilterFlag[]? FilterFlags { get; set; }
+        public FilterFlag[] FilterFlags { get; set; }
 
         /// <summary>
         /// This field contains as many null byte as it is needed to make

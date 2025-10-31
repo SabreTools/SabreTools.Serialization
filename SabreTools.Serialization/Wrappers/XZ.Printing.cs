@@ -24,28 +24,21 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Footer);
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, Header header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine($" Flags: {header.Flags} (0x{(ushort)header.Flags:X4})");
             builder.AppendLine(header.Crc32, "  CRC-32");
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Block[]? blocks)
+        private static void Print(StringBuilder builder, Block[] blocks)
         {
             builder.AppendLine("  Blocks Information:");
             builder.AppendLine("  -------------------------");
-            if (blocks == null || blocks.Length == 0)
+            if (blocks.Length == 0)
             {
                 builder.AppendLine("  No blocks");
                 builder.AppendLine();
@@ -75,17 +68,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Index? index)
+        private static void Print(StringBuilder builder, Index index)
         {
             builder.AppendLine("  Index Information:");
             builder.AppendLine("  -------------------------");
-            if (index == null)
-            {
-                builder.AppendLine("  No index");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(index.IndexIndicator, "  Index indicator");
             builder.AppendLine(index.NumberOfRecords, "  Number of records");
             Print(builder, index.Records);
@@ -94,11 +80,11 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Record[]? records)
+        private static void Print(StringBuilder builder, Record[] records)
         {
             builder.AppendLine("  Records Information:");
             builder.AppendLine("  -------------------------");
-            if (records == null || records.Length == 0)
+            if (records.Length == 0)
             {
                 builder.AppendLine("  No records");
                 builder.AppendLine();
@@ -115,17 +101,10 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, Footer? footer)
+        private static void Print(StringBuilder builder, Footer footer)
         {
             builder.AppendLine("  Footer Information:");
             builder.AppendLine("  -------------------------");
-            if (footer == null)
-            {
-                builder.AppendLine("  No footer");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(footer.Crc32, "  CRC-32");
             builder.AppendLine(footer.BackwardSize, "  Backward size");
             builder.AppendLine($" Flags: {footer.Flags} (0x{(ushort)footer.Flags:X4})");
