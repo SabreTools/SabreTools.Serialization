@@ -353,8 +353,6 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("    -------------------------");
                 Print(builder, kvp.Value, encoding);
             }
-
-            builder.AppendLine();
         }
 
         private static void Print(StringBuilder builder, FileExtent? extent, Encoding encoding)

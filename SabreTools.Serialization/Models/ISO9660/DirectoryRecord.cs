@@ -14,18 +14,19 @@ namespace SabreTools.Data.Models.ISO9660
         public byte DirectoryRecordLength { get; set; }
 
         /// <summary>
-        /// Length of the extended attribute record
+        /// Length of the extended attribute record (in number of logical blocks)
         /// If no extended attribute record is used, set to 0x00
         /// </summary>
         public byte ExtendedAttributeRecordLength { get; set; }
 
         /// <summary>
         /// Logical block number of the first logical block allocated to this extent
+        /// Extent begins with the extended attribute record (if present)
         /// </summary>
         public BothInt32 ExtentLocation { get; set; }
 
         /// <summary>
-        /// Number of bytes allocated to this extent
+        /// Number of bytes allocated to this extent (not including extended attribute record length)
         /// </summary>
         public BothInt32 ExtentLength { get; set; }
 
