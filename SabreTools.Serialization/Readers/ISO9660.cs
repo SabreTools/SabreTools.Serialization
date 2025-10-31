@@ -707,10 +707,13 @@ namespace SabreTools.Serialization.Readers
             {
                 // Extent is a file, parse the Extended Attribute Record
                 var fileExtent = new FileExtent();
-                var ear = ParseExtendedAttributeRecord(data);
-                if (ear != null)
+                if (dr.ExtendedAttributeRecordLength > 0)
                 {
-                    fileExtent.ExtendedAttributeRecord = ear;
+                    var ear = ParseExtendedAttributeRecord(data);
+                    if (ear != null)
+                    {
+                        fileExtent.ExtendedAttributeRecord = ear;
+                    }
                 }
                 // Do not parse file data into file extent, too large
 
