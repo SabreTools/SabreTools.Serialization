@@ -78,11 +78,6 @@ namespace SabreTools.Serialization.Wrappers
                         string outDirTemp = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
                         if (includeDebug) Console.WriteLine($"Extracting to directory: {outDirTemp}");
 
-                        // Ensure directory exists
-                        var directoryName = Path.GetDirectoryName(outDirTemp);
-                        if (directoryName != null && !Directory.Exists(directoryName))
-                            Directory.CreateDirectory(directoryName);
-
                         // Recursively extract from LittleEndian extent location
                         ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outDirTemp, includeDebug);
 
