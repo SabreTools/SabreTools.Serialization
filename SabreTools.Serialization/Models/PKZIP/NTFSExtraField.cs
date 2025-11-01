@@ -17,6 +17,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// NTFS attribute tags
         /// </summary>
-        public TagSizeVar[] TagSizeVars { get; set; }
+        public TagSizeVar[] TagSizeVars { get; set; } = [];
     }
 }

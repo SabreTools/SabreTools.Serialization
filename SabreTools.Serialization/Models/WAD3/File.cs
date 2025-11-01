@@ -9,16 +9,16 @@ namespace SabreTools.Data.Models.WAD3
         /// <summary>
         /// Deserialized header data
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         /// <summary>
         /// Deserialized dir entry data
         /// </summary>
-        public DirEntry[] DirEntries { get; set; }
+        public DirEntry[] DirEntries { get; set; } = [];
 
         /// <summary>
         /// Deserialized file entry data
         /// </summary>
-        public FileEntry[] FileEntries { get; set; }
+        public FileEntry[] FileEntries { get; set; } = [];
     }
 }

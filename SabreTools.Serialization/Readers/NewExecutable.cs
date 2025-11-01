@@ -439,7 +439,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled RelocationRecord on success, null on error</returns>
-        public static RelocationRecord ParseRelocationRecord(Stream data)
+        public static RelocationRecord? ParseRelocationRecord(Stream data)
         {
             // Handle partial relocation sections
             if (data.Position > data.Length - 4)

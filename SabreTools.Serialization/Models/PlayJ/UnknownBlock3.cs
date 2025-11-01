@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Unknown data
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
 
         // Notes about Data:
         // - This may be where the encrypted audio samples live

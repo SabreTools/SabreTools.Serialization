@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Set the preload data
-            obj.PreloadData = preloadData;
+            obj.PreloadData = preloadData ?? [];
 
             return obj;
         }

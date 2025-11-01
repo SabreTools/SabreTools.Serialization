@@ -37,6 +37,6 @@
         /// <summary>
         /// An array of 16-bit unbiased indexes into the export address table
         /// </summary>
-        public ushort[] Indexes { get; set; }
+        public ushort[] Indexes { get; set; } = [];
     }
 }

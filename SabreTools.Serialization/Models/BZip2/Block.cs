@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.BZip2
         /// <summary>
         /// Block header
         /// </summary>
-        public BlockHeader Header { get; set; }
+        public BlockHeader Header { get; set; } = new();
 
         // TODO: Implement remaining structures
     }

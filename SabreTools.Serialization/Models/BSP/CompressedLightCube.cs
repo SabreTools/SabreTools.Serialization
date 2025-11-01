@@ -11,6 +11,6 @@ namespace SabreTools.Data.Models.BSP
     public class CompressedLightCube
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public ColorRGBExp32[] Colors;
+        public ColorRGBExp32[] Colors = new ColorRGBExp32[6];
     }
 }

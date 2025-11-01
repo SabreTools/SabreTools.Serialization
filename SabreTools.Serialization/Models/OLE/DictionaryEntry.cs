@@ -30,6 +30,6 @@ namespace SabreTools.Data.Models.OLE
         /// 8-bit characters from the code page identified by the CodePage property and MUST
         /// NOT be padded.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

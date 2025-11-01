@@ -14,29 +14,29 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// <summary>
         /// MS-DOS executable stub
         /// </summary>
-        public MSDOS.Executable Stub { get; set; }
+        public MSDOS.Executable Stub { get; set; } = new();
 
         /// <summary>
         /// After the MS-DOS stub, at the file offset specified at offset 0x3c, is a 4-byte
         /// signature that identifies the file as a PE format image file. This signature is "PE\0\0"
         /// (the letters "P" and "E" followed by two null bytes).
         /// </summary>
-        public string Signature { get; set; }
+        public string Signature { get; set; } = string.Empty;
 
         /// <summary>
         /// File header
         /// </summary>
-        public COFF.FileHeader FileHeader { get; set; }
+        public COFF.FileHeader FileHeader { get; set; } = new();
 
         /// <summary>
         /// Microsoft extended optional header
         /// </summary>
-        public OptionalHeader OptionalHeader { get; set; }
+        public OptionalHeader OptionalHeader { get; set; } = new();
 
         /// <summary>
         /// Section table
         /// </summary>
-        public COFF.SectionHeader[] SectionTable { get; set; }
+        public COFF.SectionHeader[] SectionTable { get; set; } = [];
 
         /// <summary>
         /// Symbol table

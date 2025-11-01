@@ -7,6 +7,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Record management control attribute tags
         /// </summary>
-        public TagSizeVar[] TagSizeVars { get; set; }
+        public TagSizeVar[] TagSizeVars { get; set; } = [];
     }
 }

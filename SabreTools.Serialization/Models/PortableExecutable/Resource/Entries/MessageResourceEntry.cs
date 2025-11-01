@@ -20,6 +20,6 @@
         /// <summary>
         /// Pointer to an array that contains the error message or message box display text.
         /// </summary>
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }

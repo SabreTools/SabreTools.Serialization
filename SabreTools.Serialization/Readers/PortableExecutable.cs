@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.Readers
                         int tableSize = (int)optionalHeader.ExportTable.Size;
 
                         // Read the table data
-                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true) ?? [];
 
                         // Parse the export directory table
                         int tableDataOffset = 0;
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Readers
                             if (offset > initialOffset && offset < data.Length)
                             {
                                 data.SeekIfPossible(offset, SeekOrigin.Begin);
-                                exportDirectoryTable.Name = data.ReadNullTerminatedAnsiString();
+                                exportDirectoryTable.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
                             }
 
                             // Address table
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Readers
                         int tableSize = (int)optionalHeader.ImportTable.Size;
 
                         // Read the table data
-                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
+                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true) ?? [];
 
                         // Parse the import directory table
                         int tableDataOffset = 0;
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Readers
                                 if (nameOffset != initialOffset)
                                 {
                                     data.SeekIfPossible(nameOffset, SeekOrigin.Begin);
-                                    entry.Name = data.ReadNullTerminatedAnsiString();
+                                    entry.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
                                 }
                             }
 
@@ -309,8 +309,8 @@ namespace SabreTools.Serialization.Readers
                         tableSize = (int)Math.Min(tableSize, data.Length - offset);
 
                         // Read the table data
-                        byte[]? tableData = data.ReadFrom(offset, tableSize, retainPosition: true);
-                        if (tableData != null && tableData.Length < optionalHeader.ResourceTable.Size)
+                        byte[] tableData = data.ReadFrom(offset, tableSize, retainPosition: true) ?? [];
+                        if (tableData.Length > 0 && tableData.Length < optionalHeader.ResourceTable.Size)
                             Array.Resize(ref tableData, (int)optionalHeader.ResourceTable.Size);
 
                         // Set the resource directory table
@@ -1016,7 +1016,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new Data.Models.PortableExecutable.Import.HintNameTableEntry();
 
             obj.Hint = data.ReadUInt16LittleEndian();
-            obj.Name = data.ReadNullTerminatedAnsiString();
+            string? name = data.ReadNullTerminatedAnsiString();
+            if (name != null)
+                obj.Name = name;
 
             return obj;
         }
@@ -1465,7 +1467,9 @@ namespace SabreTools.Serialization.Readers
                     // Otherwise, read from the data stream
                     else if (nextOffset + entry.DataEntry.Size <= data.Length)
                     {
-                        entry.DataEntry.Data = data.ReadFrom(nextOffset + initialOffset, (int)entry.DataEntry.Size, retainPosition: true);
+                        byte[]? entryData = data.ReadFrom(nextOffset + initialOffset, (int)entry.DataEntry.Size, retainPosition: true);
+                        if (entryData != null)
+                            entry.DataEntry.Data = entryData;
                     }
                 }
 

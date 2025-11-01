@@ -9,11 +9,11 @@
         /// <summary>
         /// Header
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         /// <summary>
         /// Files
         /// </summary>
-        public FileEntry[] Files { get; set; }
+        public FileEntry[] Files { get; set; } = [];
     }
 }

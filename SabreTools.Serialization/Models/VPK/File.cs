@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.VPK
         /// <summary>
         /// Header data
         /// </summary>
-        public Header Header { get; set; }
+        public Header Header { get; set; } = new();
 
         /// <summary>
         /// Extended header data
@@ -26,6 +26,6 @@ namespace SabreTools.Data.Models.VPK
         /// <summary>
         /// Directory items data
         /// </summary>
-        public DirectoryItem[] DirectoryItems { get; set; }
+        public DirectoryItem[] DirectoryItems { get; set; } = [];
     }
 }

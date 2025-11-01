@@ -19,11 +19,11 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// <summary>
         /// Set of file entries
         /// </summary>
-        public FileEntry[] Entries { get; set; }
+        public FileEntry[] Entries { get; set; } = [];
 
         /// <summary>
         /// Footer representing the central directory
         /// </summary>
-        public Footer Footer { get; set; }
+        public Footer Footer { get; set; } = new();
     }
 }

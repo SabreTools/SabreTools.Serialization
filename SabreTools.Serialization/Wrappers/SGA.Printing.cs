@@ -62,28 +62,28 @@ namespace SabreTools.Serialization.Wrappers
             switch (directory)
             {
                 case Directory4 directory4:
-                    Print(builder, directory4.DirectoryHeader);
+                    Print(builder, directory4.DirectoryHeader!);
                     Print(builder, directory4.Sections);
                     Print(builder, directory4.Folders);
                     Print(builder, directory4.Files);
                     break;
 
                 case Directory5 directory5:
-                    Print(builder, directory5.DirectoryHeader);
+                    Print(builder, directory5.DirectoryHeader!);
                     Print(builder, directory5.Sections);
                     Print(builder, directory5.Folders);
                     Print(builder, directory5.Files);
                     break;
 
                 case Directory6 directory6:
-                    Print(builder, directory6.DirectoryHeader);
+                    Print(builder, directory6.DirectoryHeader!);
                     Print(builder, directory6.Sections);
                     Print(builder, directory6.Folders);
                     Print(builder, directory6.Files);
                     break;
 
                 case Directory7 directory7:
-                    Print(builder, directory7.DirectoryHeader);
+                    Print(builder, directory7.DirectoryHeader!);
                     Print(builder, directory7.Sections);
                     Print(builder, directory7.Folders);
                     Print(builder, directory7.Files);

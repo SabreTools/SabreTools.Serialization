@@ -7,6 +7,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Edge
         /// </summary>
-        public Edge[] Edges { get; set; }
+        public Edge[] Edges { get; set; } = [];
     }
 }

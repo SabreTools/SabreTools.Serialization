@@ -1607,7 +1607,7 @@ namespace SabreTools.Serialization.Wrappers
                 _dataSource.SeekIfPossible(resourceTableOffset, SeekOrigin.Begin);
                 while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
                 {
-                    ushort possibleSignature = _dataSource.ReadUInt16();
+                    ushort possibleSignature = _dataSource.ReadUInt16LittleEndian();
                     if (possibleSignature == Data.Models.MSDOS.Constants.SignatureUInt16)
                     {
                         resourceOffset = _dataSource.Position - 2;

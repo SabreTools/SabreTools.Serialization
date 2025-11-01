@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// <summary>
         /// File group name
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Size of the expanded data

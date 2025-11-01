@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.BSP
         /// Name of texture
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Constants.MAXTEXTURENAME)]
-        public string? Name;
+        public string Name = string.Empty;
 
         /// <summary>
         /// Extends of the texture
@@ -39,6 +39,6 @@ namespace SabreTools.Data.Models.BSP
         /// Offsets to texture mipmaps BSPMIPTEX
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.MIPLEVELS)]
-        public uint[] Offsets;
+        public uint[] Offsets = new uint[Constants.MIPLEVELS];
     }
 }

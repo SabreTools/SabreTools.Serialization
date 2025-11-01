@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.GZIP
         /// </summary>
         public ushort Length { get; set; }
 
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

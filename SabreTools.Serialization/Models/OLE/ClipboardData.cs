@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.OLE
         /// <summary>
         /// MUST be an array of bytes, followed by zero padding to a multiple of 4 bytes
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

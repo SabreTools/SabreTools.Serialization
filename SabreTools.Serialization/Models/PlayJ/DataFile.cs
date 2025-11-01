@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Data file name
         /// </summary>
-        public string FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
         /// <summary>
         /// Length of the data
@@ -23,7 +23,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Data
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
 
         // Notes about Data:
         // - Each data block in the samples contains a GIF header

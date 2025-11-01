@@ -36,6 +36,6 @@ namespace SabreTools.Data.Models.CueSheets
         /// <summary>
         /// List of FILE in cuesheet
         /// </summary>
-        public CueFile[] Files { get; set; }
+        public CueFile[] Files { get; set; } = [];
     }
 }

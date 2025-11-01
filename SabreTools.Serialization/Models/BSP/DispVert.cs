@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Vector field defining displacement volume.
         /// </summary>
-        public Vector3D Vec;
+        public Vector3D Vec = new();
 
         /// <summary>
         /// Displacement distances.

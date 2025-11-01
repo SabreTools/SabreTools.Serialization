@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Faces
         /// </summary>
-        public BspFace[] Faces { get; set; }
+        public BspFace[] Faces { get; set; } = [];
     }
 }

@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.N3DS
         /// </summary>
         /// <remarks>8 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        public string ApplicationTitle;
+        public string ApplicationTitle = string.Empty;
 
         /// <summary>
         /// Reserved
@@ -33,7 +33,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Text code set info
         /// </summary>
-        public CodeSetInfo TextCodeSetInfo;
+        public CodeSetInfo TextCodeSetInfo = new();
 
         /// <summary>
         /// Stack size
@@ -43,7 +43,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Read-only code set info
         /// </summary>
-        public CodeSetInfo ReadOnlyCodeSetInfo;
+        public CodeSetInfo ReadOnlyCodeSetInfo = new();
 
         /// <summary>
         /// Reserved
@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Data code set info
         /// </summary>
-        public CodeSetInfo DataCodeSetInfo;
+        public CodeSetInfo DataCodeSetInfo = new();
 
         /// <summary>
         /// BSS size
@@ -70,6 +70,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// SystemInfo
         /// </summary>
-        public SystemInfo SystemInfo;
+        public SystemInfo SystemInfo = new();
     }
 }

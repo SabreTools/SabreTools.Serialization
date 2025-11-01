@@ -22,6 +22,6 @@ namespace SabreTools.Data.Models.OLE
         /// the value of Type as follows.
         /// </summary>
         /// <remarks>See documentation for required lengths</remarks>
-        public byte[] Value { get; set; }
+        public byte[] Value { get; set; } = [];
     }
 }

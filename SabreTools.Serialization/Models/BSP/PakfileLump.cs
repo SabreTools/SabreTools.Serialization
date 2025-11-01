@@ -38,6 +38,6 @@ namespace SabreTools.Data.Models.BSP
         /// Pakfile data
         /// </summary>
         /// TODO: Split and/or decompress data?
-        public byte[] Data;
+        public byte[] Data { get; set; } = [];
     }
 }

@@ -74,6 +74,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// This data is returned by 16-byte cartridge command 0x82.
         /// </summary>
-        public InitialData InitialData;
+        public InitialData InitialData = new();
     }
 }

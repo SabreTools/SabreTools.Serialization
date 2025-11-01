@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Readers
                 #region Trailer
 
                 var trailer = ParseTrailer(data);
-                if (header == null)
+                if (trailer == null)
                     return null;
 
                 archive.Trailer = trailer;

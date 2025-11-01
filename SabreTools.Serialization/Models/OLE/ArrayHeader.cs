@@ -24,6 +24,6 @@ namespace SabreTools.Data.Models.OLE
         /// The number of scalar values in an array property can be calculated from the ArrayHeader packet
         /// as the product of the Size fields of each of the ArrayDimension packets.
         /// </summary>
-        public ArrayDimension[] Dimensions { get; set; }
+        public ArrayDimension[] Dimensions { get; set; } = [];
     }
 }

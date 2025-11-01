@@ -4,14 +4,14 @@ namespace SabreTools.Data.Models.VPK
     /// <see href="https://developer.valvesoftware.com/wiki/VPK_(file_format)"/>
     public sealed class DirectoryItem
     {
-        public string Extension { get; set; }
+        public string Extension { get; set; } = string.Empty;
 
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public DirectoryEntry DirectoryEntry { get; set; }
+        public DirectoryEntry DirectoryEntry { get; set; } = new();
 
-        public byte[] PreloadData { get; set; }
+        public byte[] PreloadData { get; set; } = [];
     }
 }

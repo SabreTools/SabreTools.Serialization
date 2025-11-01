@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Variable-length data
         /// </summary>
-        public byte[] Var { get; set; }
+        public byte[] Var { get; set; } = [];
     }
 }

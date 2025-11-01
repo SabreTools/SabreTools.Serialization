@@ -67,6 +67,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// ZIP64 extensible data sector
         /// </summary>
-        public byte[] ExtensibleDataSector { get; set; }
+        public byte[] ExtensibleDataSector { get; set; } = [];
     }
 }

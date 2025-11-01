@@ -49,6 +49,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// UTF-8 version of the entry comment
         /// </summary>
-        public string UnicodeCom { get; set; }
+        public string UnicodeCom { get; set; } = string.Empty;
     }
 }

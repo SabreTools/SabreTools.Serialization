@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.LinearExecutable
         /// file as a valid 32-bit Linear Executable Module Format.
         /// </remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string Signature;
+        public string Signature = string.Empty;
 
         /// <summary>
         /// Byte Ordering.

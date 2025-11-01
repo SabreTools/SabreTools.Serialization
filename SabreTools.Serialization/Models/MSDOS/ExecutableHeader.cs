@@ -18,7 +18,7 @@ namespace SabreTools.Data.Models.MSDOS
         /// </summary>
         /// <remarks>15 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string Magic;
+        public string Magic = string.Empty;
 
         /// <summary>
         /// Number of bytes in the last page.

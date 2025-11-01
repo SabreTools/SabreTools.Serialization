@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Texdatas
         /// </summary>
-        public Texdata[] Texdatas { get; set; }
+        public Texdata[] Texdatas { get; set; } = [];
     }
 }

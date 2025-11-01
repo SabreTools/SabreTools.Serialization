@@ -9,6 +9,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Directory records (each a descriptor of a directory or a file)
         /// </summary>
-        public DirectoryRecord[] DirectoryRecords { get; set; }
+        public DirectoryRecord[] DirectoryRecords { get; set; } = [];
     }
 }

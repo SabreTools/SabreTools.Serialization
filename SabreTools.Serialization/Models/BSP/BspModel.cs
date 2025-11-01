@@ -27,17 +27,17 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Defines bounding box
         /// </summary>
-        public Vector3D Mins;
+        public Vector3D Mins = new();
 
         /// <summary>
         /// Defines bounding box
         /// </summary>
-        public Vector3D Maxs;
+        public Vector3D Maxs = new();
 
         /// <summary>
         /// Coordinates to move the coordinate system
         /// </summary>
-        public Vector3D OriginVector;
+        public Vector3D OriginVector = new();
 
         /// <summary>
         /// Index into nodes array

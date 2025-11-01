@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.BSP
     [StructLayout(LayoutKind.Sequential)]
     public sealed class LeafAmbientLighting
     {
-        public CompressedLightCube? Cube;
+        public CompressedLightCube Cube = new();
 
         /// <summary>
         /// Fixed point fraction of leaf bounds

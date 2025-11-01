@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Strings
         /// </summary>
-        public string[] Strings { get; set; }
+        public string[] Strings { get; set; } = [];
     }
 }

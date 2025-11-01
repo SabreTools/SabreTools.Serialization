@@ -31,6 +31,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Compressed block
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

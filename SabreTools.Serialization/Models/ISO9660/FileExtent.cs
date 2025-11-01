@@ -15,6 +15,6 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Byte array of data within the file extent (after the Extended Attribyte Record)
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

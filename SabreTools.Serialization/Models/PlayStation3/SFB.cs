@@ -28,7 +28,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x10)]
-        public string FlagsType;
+        public string FlagsType = string.Empty;
 
         /// <summary>
         /// Disc Content Data Offset
@@ -52,7 +52,7 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x08 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x08)]
-        public string DiscTitleName;
+        public string DiscTitleName = string.Empty;
 
         /// <summary>
         /// Unknown (zeroes)
@@ -83,21 +83,21 @@ namespace SabreTools.Data.Models.PlayStation3
         /// </summary>
         /// <remarks>0x20 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
-        public string DiscContent;
+        public string DiscContent = string.Empty;
 
         /// <summary>
         /// Disc Title
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x10)]
-        public string DiscTitle;
+        public string DiscTitle = string.Empty;
 
         /// <summary>
         /// Disc Version
         /// </summary>
         /// <remarks>0x10 bytes</remarks>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x10)]
-        public string DiscVersion;
+        public string DiscVersion = string.Empty;
 
         /// <summary>
         /// Unknown (zeroes)

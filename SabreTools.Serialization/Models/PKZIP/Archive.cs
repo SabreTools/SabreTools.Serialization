@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.PKZIP
         /// Optional archive decryption header, appears after all entries
         /// </summary>
         /// TODO: Determine the model
-        public byte[] ArchiveDecryptionHeader { get; set; }
+        public byte[] ArchiveDecryptionHeader { get; set; } = [];
 
         /// <summary>
         /// Optional archive extra data record, appears after either

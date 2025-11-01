@@ -6,6 +6,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Overlays
         /// </summary>
-        public Overlay[] Overlays { get; set; }
+        public Overlay[] Overlays { get; set; } = [];
     }
 }

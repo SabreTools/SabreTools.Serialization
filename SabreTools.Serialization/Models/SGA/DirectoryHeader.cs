@@ -11,18 +11,18 @@ namespace SabreTools.Data.Models.SGA
     {
         public uint SectionOffset { get; set; }
 
-        public T SectionCount { get; set; }
+        public T? SectionCount { get; set; }
 
         public uint FolderOffset { get; set; }
 
-        public T FolderCount { get; set; }
+        public T? FolderCount { get; set; }
 
         public uint FileOffset { get; set; }
 
-        public T FileCount { get; set; }
+        public T? FileCount { get; set; }
 
         public uint StringTableOffset { get; set; }
 
-        public T StringTableCount { get; set; }
+        public T? StringTableCount { get; set; }
     }
 }

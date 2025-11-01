@@ -18,6 +18,6 @@ namespace SabreTools.Data.Models.OLE
         /// padding to a multiple of 4 bytes. The string represented by this field SHOULD NOT contain
         /// embedded or additional trailing null characters.
         /// </summary>
-        public string Characters { get; set; }
+        public string Characters { get; set; } = string.Empty;
     }
 }

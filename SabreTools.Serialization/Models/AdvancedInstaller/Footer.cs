@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// Hex string that looks like a key or other identifier
         /// </summary>
         /// <remarks>32 bytes</remarks>
-        public string HexString { get; set; }
+        public string HexString { get; set; } = string.Empty;
 
         /// <summary>
         /// Unknown
@@ -99,7 +99,7 @@ namespace SabreTools.Data.Models.AdvancedInstaller
         /// <summary>
         /// "ADVINSTSFX"
         /// </summary>
-        public string Signature { get; set; }
+        public string Signature { get; set; } = string.Empty;
 
         /// <summary>
         /// Unknown, always 0? Padding?

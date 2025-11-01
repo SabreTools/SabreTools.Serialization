@@ -101,11 +101,11 @@
         /// <summary>
         /// COFF Relocations (Object Only)
         /// </summary>
-        public Relocation[] COFFRelocations { get; set; }
+        public Relocation[] COFFRelocations { get; set; } = [];
 
         /// <summary>
         /// COFF Line Numbers (Deprecated)
         /// </summary>
-        public LineNumber[] COFFLineNumbers { get; set; }
+        public LineNumber[] COFFLineNumbers { get; set; } = [];
     }
 }

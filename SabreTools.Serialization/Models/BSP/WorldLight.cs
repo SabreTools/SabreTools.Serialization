@@ -14,14 +14,14 @@ namespace SabreTools.Data.Models.BSP
     [StructLayout(LayoutKind.Sequential)]
     public sealed class WorldLight
     {
-        public Vector3D Origin;
+        public Vector3D Origin = new();
 
-        public Vector3D Intensity;
+        public Vector3D Intensity = new();
 
         /// <summary>
         /// For surfaces and spotlights
         /// </summary>
-        public Vector3D Normal;
+        public Vector3D Normal = new();
 
         public int Cluster;
 

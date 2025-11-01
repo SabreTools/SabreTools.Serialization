@@ -33,6 +33,6 @@ namespace SabreTools.Data.Models.InstallShieldArchiveV3
         public byte VolumeStart;
 
         [MarshalAs(UnmanagedType.AnsiBStr)]
-        public string Name;
+        public string Name = string.Empty;
     }
 }

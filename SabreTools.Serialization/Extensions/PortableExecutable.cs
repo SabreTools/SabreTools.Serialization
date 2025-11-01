@@ -121,7 +121,7 @@ namespace SabreTools.Data.Extensions
             obj.Offset = data.ReadUInt32LittleEndian(ref offset);
             obj.Timestamp = data.ReadUInt32LittleEndian(ref offset);
             obj.Age = data.ReadUInt32LittleEndian(ref offset);
-            obj.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset);
+            obj.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
 
             return obj;
         }
@@ -142,7 +142,7 @@ namespace SabreTools.Data.Extensions
 
             obj.GUID = data.ReadGuid(ref offset);
             obj.Age = data.ReadUInt32LittleEndian(ref offset);
-            obj.PathAndFileName = data.ReadNullTerminatedUTF8String(ref offset);
+            obj.PathAndFileName = data.ReadNullTerminatedUTF8String(ref offset) ?? string.Empty;
 
             return obj;
         }
@@ -260,7 +260,7 @@ namespace SabreTools.Data.Extensions
                         offset += sizeof(ushort);
 
                     // Read the menu resource as a string
-                    dialogTemplateExtended.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplateExtended.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -292,7 +292,7 @@ namespace SabreTools.Data.Extensions
                         offset += sizeof(ushort);
 
                     // Read the class resource as a string
-                    dialogTemplateExtended.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplateExtended.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -319,7 +319,7 @@ namespace SabreTools.Data.Extensions
                 else
                 {
                     // Read the title resource as a string
-                    dialogTemplateExtended.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplateExtended.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -340,7 +340,7 @@ namespace SabreTools.Data.Extensions
                     dialogTemplateExtended.Weight = entry.Data.ReadUInt16LittleEndian(ref offset);
                     dialogTemplateExtended.Italic = entry.Data.ReadByte(ref offset);
                     dialogTemplateExtended.CharSet = entry.Data.ReadByte(ref offset);
-                    dialogTemplateExtended.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplateExtended.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
                 }
 
                 // Align to the DWORD boundary if we're not at the end
@@ -392,7 +392,7 @@ namespace SabreTools.Data.Extensions
                             offset += sizeof(ushort);
 
                         // Read the class resource as a string
-                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                         // Align to the WORD boundary if we're not at the end
                         entry.Data.AlignToBoundary(ref offset, 2);
@@ -418,7 +418,7 @@ namespace SabreTools.Data.Extensions
                     else
                     {
                         // Read the title resource as a string
-                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                         // Align to the WORD boundary if we're not at the end
                         entry.Data.AlignToBoundary(ref offset, 2);
@@ -482,7 +482,7 @@ namespace SabreTools.Data.Extensions
                         offset += sizeof(ushort);
 
                     // Read the menu resource as a string
-                    dialogTemplate.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplate.MenuResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -518,7 +518,7 @@ namespace SabreTools.Data.Extensions
                         offset += sizeof(ushort);
 
                     // Read the class resource as a string
-                    dialogTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -549,7 +549,7 @@ namespace SabreTools.Data.Extensions
                 else
                 {
                     // Read the title resource as a string
-                    dialogTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the WORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 2);
@@ -569,7 +569,7 @@ namespace SabreTools.Data.Extensions
                     dialogTemplate.PointSizeValue = entry.Data.ReadUInt16LittleEndian(ref offset);
 
                     // Read the font name as a string
-                    dialogTemplate.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                    dialogTemplate.Typeface = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
                 }
 
                 // Align to the DWORD boundary if we're not at the end
@@ -620,7 +620,7 @@ namespace SabreTools.Data.Extensions
                             offset += sizeof(ushort);
 
                         // Read the class resource as a string
-                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                        dialogItemTemplate.ClassResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                         // Align to the WORD boundary if we're not at the end
                         entry.Data.AlignToBoundary(ref offset, 2);
@@ -646,7 +646,7 @@ namespace SabreTools.Data.Extensions
                     else
                     {
                         // Read the title resource as a string
-                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+                        dialogItemTemplate.TitleResource = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                         // Align to the WORD boundary if we're not at the end
                         entry.Data.AlignToBoundary(ref offset, 2);
@@ -738,8 +738,8 @@ namespace SabreTools.Data.Extensions
                     dirEntry.Entry.Reserved = entry.Data.ReadUInt32LittleEndian(ref offset);
 
                     // TODO: Determine how to read these two? Immediately after?
-                    dirEntry.Entry.DeviceName = entry.Data.ReadNullTerminatedAnsiString(ref offset);
-                    dirEntry.Entry.FaceName = entry.Data.ReadNullTerminatedAnsiString(ref offset);
+                    dirEntry.Entry.DeviceName = entry.Data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
+                    dirEntry.Entry.FaceName = entry.Data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
 
                     fontGroupHeader.DE[i] = dirEntry;
                 }
@@ -927,7 +927,7 @@ namespace SabreTools.Data.Extensions
             stringFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
             stringFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
             stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
             if (stringFileInfo.Key != "StringFileInfo")
             {
                 offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
@@ -945,7 +945,7 @@ namespace SabreTools.Data.Extensions
                 stringTable.Length = data.ReadUInt16LittleEndian(ref offset);
                 stringTable.ValueLength = data.ReadUInt16LittleEndian(ref offset);
                 stringTable.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the DWORD boundary if we're not at the end
                 data.AlignToBoundary(ref offset, 4);
@@ -959,7 +959,7 @@ namespace SabreTools.Data.Extensions
                     stringData.Length = data.ReadUInt16LittleEndian(ref offset);
                     stringData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
                     stringData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                     // Align to the DWORD boundary if we're not at the end
                     data.AlignToBoundary(ref offset, 4);
@@ -1036,7 +1036,7 @@ namespace SabreTools.Data.Extensions
             varFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
             varFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
             varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
             if (varFileInfo.Key != "VarFileInfo")
                 return null;
 
@@ -1051,7 +1051,7 @@ namespace SabreTools.Data.Extensions
                 varData.Length = data.ReadUInt16LittleEndian(ref offset);
                 varData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
                 varData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset);
+                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
                 if (varData.Key != "Translation")
                 {
                     offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);
@@ -1101,7 +1101,7 @@ namespace SabreTools.Data.Extensions
             versionInfo.Length = entry.Data.ReadUInt16LittleEndian(ref offset);
             versionInfo.ValueLength = entry.Data.ReadUInt16LittleEndian(ref offset);
             versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16LittleEndian(ref offset);
-            versionInfo.Key = entry.Data.ReadNullTerminatedUnicodeString(ref offset);
+            versionInfo.Key = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
             if (versionInfo.Key != "VS_VERSION_INFO")
                 return null;
 
@@ -1204,7 +1204,7 @@ namespace SabreTools.Data.Extensions
             obj.State = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
             obj.ID = data.ReadUInt32LittleEndian(ref offset);
             obj.Flags = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
-            obj.MenuText = data.ReadNullTerminatedUnicodeString(ref offset);
+            obj.MenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             return obj;
         }
@@ -1253,7 +1253,7 @@ namespace SabreTools.Data.Extensions
             var obj = new NormalMenuItem();
 
             obj.NormalResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
-            obj.NormalMenuText = data.ReadNullTerminatedUnicodeString(ref offset);
+            obj.NormalMenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             return obj;
         }
@@ -1272,7 +1272,7 @@ namespace SabreTools.Data.Extensions
             obj.PopupState = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
             obj.PopupID = data.ReadUInt32LittleEndian(ref offset);
             obj.PopupResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
-            obj.PopupMenuText = data.ReadNullTerminatedUnicodeString(ref offset);
+            obj.PopupMenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             return obj;
         }

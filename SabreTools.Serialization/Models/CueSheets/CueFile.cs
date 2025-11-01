@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.CueSheets
         /// <summary>
         /// filename
         /// </summary>
-        public string? FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
         /// <summary>
         /// filetype
@@ -21,6 +21,6 @@ namespace SabreTools.Data.Models.CueSheets
         /// <summary>
         /// List of TRACK in FILE
         /// </summary>
-        public CueTrack[] Tracks { get; set; }
+        public CueTrack[] Tracks { get; set; } = [];
     }
 }

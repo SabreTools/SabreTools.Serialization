@@ -44,6 +44,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// Variable length data field
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

@@ -7,6 +7,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Entities
         /// </summary>
-        public Entity[] Entities { get; set; }
+        public Entity[] Entities { get; set; } = [];
     }
 }

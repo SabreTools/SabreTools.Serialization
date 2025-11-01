@@ -19,7 +19,7 @@
         /// <summary>
         /// MPQ Header (required)
         /// </summary>
-        public ArchiveHeader ArchiveHeader { get; set; }
+        public ArchiveHeader ArchiveHeader { get; set; } = new();
 
         // TODO: Files (optional)
         // TODO: Special files (optional)

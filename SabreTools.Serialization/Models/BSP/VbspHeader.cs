@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.BSP
         /// BSP file signature
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string Signature;
+        public string Signature = string.Empty;
 
         /// <summary>
         /// BSP file version

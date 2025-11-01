@@ -879,7 +879,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled DirectoryRecordDateTime on success, null on error</returns>
-        public static DirectoryRecordDateTime? ParseDirectoryRecordDateTime(Stream data)
+        public static DirectoryRecordDateTime ParseDirectoryRecordDateTime(Stream data)
         {
             var obj = new DirectoryRecordDateTime();
 

@@ -125,11 +125,11 @@ namespace SabreTools.Serialization.Readers
             obj.DateTime = data.ReadUInt32LittleEndian();
             obj.Reserved0 = data.ReadUInt32LittleEndian();
             obj.ChunkSize = data.ReadUInt16LittleEndian();
-            obj.Attrib = (Data.Models.InstallShieldArchiveV3.Attributes)data.ReadByteValue();
+            obj.Attrib = (Attributes)data.ReadByteValue();
             obj.IsSplit = data.ReadByteValue();
             obj.Reserved1 = data.ReadByteValue();
             obj.VolumeStart = data.ReadByteValue();
-            obj.Name = data.ReadPrefixedAnsiString();
+            obj.Name = data.ReadPrefixedAnsiString() ?? string.Empty;
 
             return obj;
         }

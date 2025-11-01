@@ -26,17 +26,17 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// Signature
         /// </summary>
-        public byte[] Signature { get; set; }
+        public byte[] Signature { get; set; } = [];
 
         /// <summary>
         /// Padding
         /// </summary>
-        public byte[] Padding1 { get; set; }
+        public byte[] Padding1 { get; set; } = [];
 
         /// <summary>
         /// Signature Issuer
         /// </summary>
-        public string Issuer { get; set; }
+        public string Issuer { get; set; } = string.Empty;
 
         /// <summary>
         /// Version
@@ -140,13 +140,13 @@ namespace SabreTools.Data.Models.N3DS
         /// <summary>
         /// There are 64 of these records, usually only the first is used.
         /// </summary>
-        public ContentInfoRecord[] ContentInfoRecords { get; set; }
+        public ContentInfoRecord[] ContentInfoRecords { get; set; } = [];
 
         /// <summary>
         /// There is one of these for each content contained in this title.
         /// (Determined by "Content Count" in the TMD Header).
         /// </summary>
-        public ContentChunkRecord[] ContentChunkRecords { get; set; }
+        public ContentChunkRecord[] ContentChunkRecords { get; set; } = [];
 
         /// <summary>
         /// Certificate chain
@@ -154,6 +154,6 @@ namespace SabreTools.Data.Models.N3DS
         /// <remarks>
         /// https://www.3dbrew.org/wiki/Title_metadata#Certificate_Chain
         /// </remarks>
-        public Certificate[] CertificateChain { get; set; }
+        public Certificate[] CertificateChain { get; set; } = [];
     }
 }

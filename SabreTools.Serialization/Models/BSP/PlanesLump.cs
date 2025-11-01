@@ -7,6 +7,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Planes
         /// </summary>
-        public Plane[] Planes { get; set; }
+        public Plane[] Planes { get; set; } = [];
     }
 }

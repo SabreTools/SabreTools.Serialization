@@ -20,6 +20,6 @@ namespace SabreTools.Data.Models.PKZIP
         /// Data (variable size)
         /// </summary>
         /// TODO: Implement models for all extra field types - 4.5.3
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
     }
 }

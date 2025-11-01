@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Offsets
         /// </summary>
-        public int[] Offsets { get; set; }
+        public int[] Offsets { get; set; } = [];
     }
 }

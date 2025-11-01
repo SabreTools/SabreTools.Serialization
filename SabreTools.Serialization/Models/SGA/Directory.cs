@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.SGA
         /// <summary>
         /// Source SGA file
         /// </summary>
-        public Archive File { get; set; }
+        public Archive? File { get; set; }
     }
 
     /// <summary>
@@ -26,26 +26,26 @@ namespace SabreTools.Data.Models.SGA
         /// <summary>
         /// Directory header data
         /// </summary>
-        public TDirectoryHeader DirectoryHeader { get; set; }
+        public TDirectoryHeader? DirectoryHeader { get; set; }
 
         /// <summary>
         /// Sections data
         /// </summary>
-        public TSection[] Sections { get; set; }
+        public TSection[] Sections { get; set; } = [];
 
         /// <summary>
         /// Folders data
         /// </summary>
-        public TFolder[] Folders { get; set; }
+        public TFolder[] Folders { get; set; } = [];
 
         /// <summary>
         /// Files data
         /// </summary>
-        public TFile[] Files { get; set; }
+        public TFile[] Files { get; set; } = [];
 
         /// <summary>
         /// String table data
         /// </summary>
-        public Dictionary<long, string?> StringTable { get; set; }
+        public Dictionary<long, string> StringTable { get; set; } = [];
     }
 }

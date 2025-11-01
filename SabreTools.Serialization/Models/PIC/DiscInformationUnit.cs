@@ -7,12 +7,12 @@
         /// <summary>
         /// Unit header
         /// </summary>
-        public DiscInformationUnitHeader Header { get; set; }
+        public DiscInformationUnitHeader Header { get; set; } = new();
 
         /// <summary>
         /// Unit body
         /// </summary>
-        public DiscInformationUnitBody Body { get; set; }
+        public DiscInformationUnitBody Body { get; set; } = new();
 
         /// <summary>
         /// Unit trailer (BD-R/RE only)

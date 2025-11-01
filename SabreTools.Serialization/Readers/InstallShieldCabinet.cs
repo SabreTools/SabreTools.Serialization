@@ -395,9 +395,9 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Identifier = data.ReadNullTerminatedUnicodeString();
+                    obj.Identifier = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Identifier = data.ReadNullTerminatedAnsiString();
+                    obj.Identifier = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Read the display name, if possible
@@ -408,9 +408,9 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.DisplayName = data.ReadNullTerminatedUnicodeString();
+                    obj.DisplayName = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.DisplayName = data.ReadNullTerminatedAnsiString();
+                    obj.DisplayName = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Read the name, if possible
@@ -421,9 +421,9 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Name = data.ReadNullTerminatedUnicodeString();
+                    obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Name = data.ReadNullTerminatedAnsiString();
+                    obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Read the CLSID, if possible
@@ -584,9 +584,9 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Name = data.ReadNullTerminatedUnicodeString();
+                    obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Name = data.ReadNullTerminatedAnsiString();
+                    obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Seek back to the correct offset
@@ -642,9 +642,9 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the string
                 if (majorVersion >= 17)
-                    obj.Name = data.ReadNullTerminatedUnicodeString();
+                    obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
                 else
-                    obj.Name = data.ReadNullTerminatedAnsiString();
+                    obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
             }
 
             // Seek back to the correct offset
@@ -676,9 +676,9 @@ namespace SabreTools.Serialization.Readers
 
             // Read the string
             if (majorVersion >= 17)
-                obj.Name = data.ReadNullTerminatedUnicodeString();
+                obj.Name = data.ReadNullTerminatedUnicodeString() ?? string.Empty;
             else
-                obj.Name = data.ReadNullTerminatedAnsiString();
+                obj.Name = data.ReadNullTerminatedAnsiString() ?? string.Empty;
 
             // Seek back to the correct offset
             data.SeekIfPossible(currentOffset, SeekOrigin.Begin);

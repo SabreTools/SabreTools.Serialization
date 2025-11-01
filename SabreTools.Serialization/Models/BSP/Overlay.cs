@@ -41,8 +41,8 @@ namespace SabreTools.Data.Models.BSP
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Vector3D[] UVPoints = new Vector3D[4];
 
-        public Vector3D Origin;
+        public Vector3D Origin = new();
 
-        public Vector3D BasisNormal;
+        public Vector3D BasisNormal = new();
     }
 }

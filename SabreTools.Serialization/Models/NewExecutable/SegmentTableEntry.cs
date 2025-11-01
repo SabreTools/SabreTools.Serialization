@@ -45,7 +45,7 @@ namespace SabreTools.Data.Models.NewExecutable
         /// Data is not sequential to the entry header. It lives at
         /// the <see cref="Offset"/> and has a size of <see cref="Length"/>
         /// </remarks>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
 
         /// <summary>
         /// Per-segment data

@@ -27,20 +27,20 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// <see cref="Count">
         /// </summary>
-        public OccluderData[] Data;
+        public OccluderData[] Data { get; set; } = [];
 
         public int PolyDataCount;
 
         /// <summary>
         /// <see cref="PolyDataCount">
         /// </summary>
-        public OccluderPolyData[] PolyData;
+        public OccluderPolyData[] PolyData { get; set; } = [];
 
         public int VertexIndexCount;
 
         /// <summary>
         /// <see cref="VertexIndexCount">
         /// </summary>
-        public int[] VertexIndicies;
+        public int[] VertexIndicies { get; set; } = [];
     }
 }

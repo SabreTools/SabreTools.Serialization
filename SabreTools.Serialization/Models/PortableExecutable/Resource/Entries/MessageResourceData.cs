@@ -17,11 +17,11 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
         /// <summary>
         /// An array of structures. The array is the size indicated by the NumberOfBlocks member.
         /// </summary>
-        public MessageResourceBlock[] Blocks { get; set; }
+        public MessageResourceBlock[] Blocks { get; set; } = [];
 
         /// <summary>
         /// Message resource entries
         /// </summary>
-        public Dictionary<uint, MessageResourceEntry?> Entries { get; set; }
+        public Dictionary<uint, MessageResourceEntry?> Entries { get; set; } = [];
     }
 }

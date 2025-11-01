@@ -95,13 +95,13 @@ namespace SabreTools.Data.Models.InstallShieldCabinet
         /// Offsets to the file groups
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 71)]
-        public uint[] FileGroupOffsets;
+        public uint[] FileGroupOffsets = new uint[71];
 
         /// <summary>
         /// Offsets to the components
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 71)]
-        public uint[] ComponentOffsets;
+        public uint[] ComponentOffsets = new uint[71];
 
         /// <summary>
         /// Offset to the setup types

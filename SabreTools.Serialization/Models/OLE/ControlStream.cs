@@ -30,6 +30,6 @@ namespace SabreTools.Data.Models.OLE
         /// OLEPS implementation. If the application did not provide a value,
         /// it SHOULD be absent.
         /// </summary>
-        public GUID CLSID { get; set; }
+        public GUID CLSID { get; set; } = new();
     }
 }

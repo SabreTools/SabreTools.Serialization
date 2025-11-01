@@ -23,6 +23,6 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Entity attributes
         /// </summary>
-        public List<KeyValuePair<string, string>> Attributes { get; set; }
+        public List<KeyValuePair<string, string>> Attributes { get; set; } = [];
     }
 }

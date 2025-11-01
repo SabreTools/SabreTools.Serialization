@@ -309,9 +309,9 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, PathTableRecord[] records, Encoding encoding)
+        private static void Print(StringBuilder builder, PathTableRecord[]? records, Encoding encoding)
         {
-            if (records.Length == 0)
+            if (records == null || records.Length == 0)
             {
                 builder.AppendLine("    No records");
                 builder.AppendLine();

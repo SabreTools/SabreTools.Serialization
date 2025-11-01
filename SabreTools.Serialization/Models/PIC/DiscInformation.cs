@@ -29,6 +29,6 @@
         /// <summary>
         /// Disc information and emergency brake units
         /// </summary>
-        public DiscInformationUnit[] Units { get; set; }
+        public DiscInformationUnit[] Units { get; set; } = [];
     }
 }

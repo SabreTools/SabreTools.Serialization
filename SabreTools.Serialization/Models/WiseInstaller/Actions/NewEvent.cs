@@ -33,6 +33,6 @@ namespace SabreTools.Data.Models.WiseInstaller.Actions
         /// Padding bytes
         /// </summary>
         /// <remarks>Either 0 or 6 bytes from samples</remarks>
-        public byte[] Padding { get; set; }
+        public byte[] Padding { get; set; } = [];
     }
 }

@@ -16,7 +16,7 @@ namespace SabreTools.Data.Models.NewExecutable
         /// "NE"
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        public string Magic;
+        public string Magic = string.Empty;
 
         /// <summary>
         /// Version number of the linker.

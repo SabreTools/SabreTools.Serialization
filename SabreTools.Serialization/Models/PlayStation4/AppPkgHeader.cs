@@ -76,7 +76,7 @@ namespace SabreTools.Data.Models.PlayStation4
         /// PKG Content ID
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x24)]
-        public string ContentID;
+        public string ContentID = string.Empty;
 
         /// <summary>
         /// PKG Content Padding (Zeroes)

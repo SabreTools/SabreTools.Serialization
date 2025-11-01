@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// Entry name, always 4 ASCII characters
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Length of the value in bytes
@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.SecuROM
         /// <summary>
         /// Value of the entry whose length is given by <see cref="Length"/>
         /// </summary>
-        public byte[] Value { get; set; }
+        public byte[] Value { get; set; } = [];
     }
 }

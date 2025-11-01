@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.PlayJ
         /// <summary>
         /// Unknown data
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[] Data { get; set; } = [];
 
         // Notes about Data:
         // - Might be UInt16 offset and UInt16 length pairs

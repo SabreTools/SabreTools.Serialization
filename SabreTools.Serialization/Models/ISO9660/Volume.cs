@@ -17,7 +17,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// 32,768 bytes, assuming logical block size of 2048 bytes
         /// ISO9660 does not specify the content of the System Area
         /// </summary>
-        public byte[] SystemArea { get; set; }
+        public byte[] SystemArea { get; set; } = [];
 
         #region Data Area
 
@@ -30,21 +30,21 @@ namespace SabreTools.Data.Models.ISO9660
         /// - Zero or more Boot Volume Descriptors (Type = 0)
         /// - At least one Volume Descriptor Set Terminator (Type = 255), as the final element(s) in the set
         /// </summary>
-        public VolumeDescriptor[] VolumeDescriptorSet { get; set; }
+        public VolumeDescriptor[] VolumeDescriptorSet { get; set; } = [];
 
         /// <summary>
         /// List of path table records for each directory on the volume
         /// One (or two) Path Table Groups is provided for each Base Volume Descriptor
         /// Note: If a Base Volume Descriptor's Path Table Size field is ambiguous, two Path Table Groups may be given
         /// </summary>
-        public PathTableGroup[] PathTableGroups { get; set; }
+        public PathTableGroup[] PathTableGroups { get; set; } = [];
 
         /// <summary>
         /// Map of sector numbers and the directory at that sector number
         /// Each Directory contains child directory and file descriptors
         /// Note: FileExtent is the base class for DirectoryExtent
         /// </summary>
-        public Dictionary<int, FileExtent> DirectoryDescriptors { get; set; }
+        public Dictionary<int, FileExtent> DirectoryDescriptors { get; set; } = [];
 
         #endregion
     }

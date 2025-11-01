@@ -7,8 +7,8 @@ namespace SabreTools.Data.Models.Delphi
     {
         public int UnitCount { get; set; }
 
-        public PackageUnitEntry[] UnitInfo { get; set; }
+        public PackageUnitEntry[] UnitInfo { get; set; } = [];
 
-        public PackageTypeInfo TypeInfo { get; set; }
+        public PackageTypeInfo TypeInfo { get; set; } = new();
     }
 }

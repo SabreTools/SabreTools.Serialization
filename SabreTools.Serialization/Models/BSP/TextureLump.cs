@@ -6,11 +6,11 @@ namespace SabreTools.Data.Models.BSP
         /// <summary>
         /// Texture header data
         /// </summary>
-        public TextureHeader Header { get; set; }
+        public TextureHeader Header { get; set; } = new();
 
         /// <summary>
         /// Textures
         /// </summary>
-        public MipTexture[] Textures { get; set; }
+        public MipTexture[] Textures { get; set; } = [];
     }
 }
