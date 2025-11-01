@@ -2,7 +2,7 @@ name: Build and Test
 
 on:
   push:
-    branches: [ "multi-extent" ]
+    branches: [ "main" ]
 
 jobs:
   build:
