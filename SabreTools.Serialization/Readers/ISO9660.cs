@@ -649,6 +649,11 @@ namespace SabreTools.Serialization.Readers
             if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
 #endif
             {
+                // Start of directory should not be 0
+                int firstRecordLength = data.PeekByteValue();
+                if (firstRecordLength == 0)
+                    return null;
+
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
                 int pos = 0;
@@ -663,6 +668,16 @@ namespace SabreTools.Serialization.Readers
                         int paddingLength = sectorLength - (pos % sectorLength);
                         pos += paddingLength;
                         _ = data.ReadBytes(paddingLength);
+
+                        // Finish parsing records if end reached
+                        if (pos >= extentLength)
+                            break;
+
+                        // Start of sector should not be 0, ignore entire directory
+                        int nextRecordLength = data.PeekByteValue();
+                        if (nextRecordLength <= paddingLength)
+                            return null;
+
                         continue;
                     }
 
@@ -674,6 +689,12 @@ namespace SabreTools.Serialization.Readers
 
                     // Get the next directory record
                     var directoryRecord = ParseDirectoryRecord(data, false);
+
+                    // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
+                    var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField == null ? 0 : 1) + directoryRecord.SystemUse.Length;
+                    if (readLength != recordLength)
+                        return null;
+
                     records.Add(directoryRecord);
                 }
 
@@ -705,20 +726,25 @@ namespace SabreTools.Serialization.Readers
             }
             else
             {
-                // TODO: Create ParseExtendedAttributeRecord()
                 // Extent is a file, parse the Extended Attribute Record
-                // var ear = ParseExtendedAttributeRecord();
-                // if (ear != null)
-                // {
-                //     var fileExtent = new FileExtent();
-                //     fileExtent.ExtendedAttributeRecord = ear;
-                //     if (!directories.ContainsKey(extentLocation))
-                //         directories.Add(extentLocation, fileExtent);
-                // }
+                var fileExtent = new FileExtent();
+                if (dr.ExtendedAttributeRecordLength > 0)
+                {
+                    var ear = ParseExtendedAttributeRecord(data);
+                    if (ear != null)
+                    {
+                        fileExtent.ExtendedAttributeRecord = ear;
+                    }
+                    // Do not parse file data into file extent, too large
+
+                    // Put the file extent is the dictionary
+                    if (!directories.ContainsKey(extentLocation))
+                        directories.Add(extentLocation, fileExtent);
+                }
             }
 
             // If the extent location field is ambiguous, also parse the big-endian directory extent
-            if (!dr.ExtentLocation.IsValid)
+            if (!bigEndian && dr.ExtentLocation.IsValid)
             {
                 var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
                 if (bigEndianDir != null)
@@ -802,6 +828,42 @@ namespace SabreTools.Serialization.Readers
 
             // Read system use field
             obj.SystemUse = data.ReadBytes(systemUseLength);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a ExtendedAttributeRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="root">true if root directory record, false otherwise</param>
+        /// <returns>Filled ExtendedAttributeRecord on success, null on error</returns>
+        public static ExtendedAttributeRecord ParseExtendedAttributeRecord(Stream data)
+        {
+            var obj = new ExtendedAttributeRecord();
+
+            obj.OwnerIdentification = data.ReadInt16BothEndian();
+            obj.GroupIdentification = data.ReadInt16BothEndian();
+            obj.Permissions = (Permissions)data.ReadUInt16LittleEndian();
+            obj.FileCreationDateTime = ParseDecDateTime(data);
+            obj.FileModificationDateTime = ParseDecDateTime(data);
+            obj.FileExpirationDateTime = ParseDecDateTime(data);
+            obj.FileEffectiveDateTime = ParseDecDateTime(data);
+            obj.RecordFormat = (RecordFormat)data.ReadByteValue();
+            obj.RecordAttributes = (RecordAttributes)data.ReadByteValue();
+            obj.RecordLength = data.ReadInt16BothEndian();
+            obj.SystemIdentifier = data.ReadBytes(32);
+            obj.SystemUse = data.ReadBytes(64);
+            obj.ExtendedAttributeRecordVersion = data.ReadByteValue();
+            obj.EscapeSequencesLength = data.ReadByteValue();
+            obj.Reserved64Bytes = data.ReadBytes(64);
+            obj.ApplicationLength = data.ReadInt16BothEndian();
+
+            if (obj.ApplicationLength > 0)
+                obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
+
+            if (obj.EscapeSequencesLength > 0)
+                obj.EscapeSequences = data.ReadBytes(obj.EscapeSequencesLength);
 
             return obj;
         }
