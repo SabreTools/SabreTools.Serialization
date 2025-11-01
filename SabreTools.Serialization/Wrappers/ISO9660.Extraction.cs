@@ -135,24 +135,26 @@ namespace SabreTools.Serialization.Wrappers
             if (directoryName != null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
-            // Check that the output file doesn't already exist
-            if (File.Exists(filepath) || Directory.Exists(filepath))
-            {
-                if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
-                return false;
-            }
+            bool multiExtent = false;
             
             // Currently cannot extract multi-extent or interleaved files
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
             {
                 Console.WriteLine($"Extraction of multi-extent files is currently not supported: {filename}");
                 extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
-                return false;
+                multiExtent = true;
             }
             else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
             {
                 Console.WriteLine($"Extraction of interleaved files is currently not supported: {filename}");
                 extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
+                return false;
+            }
+
+            // Check that the output file doesn't already exist
+            if (!multiExtent && (File.Exists(filepath) || Directory.Exists(filepath)))
+            {
+                if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
                 return false;
             }
 
@@ -169,7 +171,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
-                using var fs = File.Open(filepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
                     int bytesToRead = (int)Math.Min(length, chunkSize);
