@@ -631,16 +631,16 @@ namespace SabreTools.Serialization.Readers
             if (!dr.ExtentLength.IsValid)
             {
                 // If provided extent length is invalid, use the other value
-                if (extentLength <= 0 || (extentLocation * blockLength) + extentLength > data.Length)
+                if (extentLength <= 0 || ((long)extentLocation * (long)blockLength) + (long)extentLength > (long)data.Length)
                     extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
             }
 
             // Validate extent length
-            if (extentLength <= 0 || (extentLocation * blockLength) + extentLength > data.Length)
+            if (extentLength <= 0 || ((long)extentLocation * (long)blockLength) + (long)extentLength > (long)data.Length)
                 return null;
 
             // Move stream to directory location
-            data.SeekIfPossible(extentLocation * blockLength, SeekOrigin.Begin);
+            data.SeekIfPossible((long)extentLocation * (long)blockLength, SeekOrigin.Begin);
 
             // Check if the current extent is a directory
 #if NET20 || NET35
@@ -701,7 +701,7 @@ namespace SabreTools.Serialization.Readers
                 // Add current directory to dictionary
                 var currentDirectory = new DirectoryExtent();
                 currentDirectory.DirectoryRecords = [.. records];
-                directories.Add(extentLocation * blocksPerSector, currentDirectory);
+                directories.Add(extentLocation, currentDirectory);
 
                 // Add all child directories to dictionary recursively
                 foreach (var record in records)

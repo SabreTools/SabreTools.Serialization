@@ -81,32 +81,39 @@ namespace SabreTools.Serialization.Wrappers
                         // Append directory name
                         string outDirTemp = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
                         if (includeDebug) Console.WriteLine($"Extracting to directory: {outDirTemp}");
+
+                        // Ensure directory exists
+                        var directoryName = Path.GetDirectoryName(outDirTemp);
+                        if (directoryName != null && !Directory.Exists(directoryName))
+                            Directory.CreateDirectory(directoryName);
+
+                        // Recursively extract from LittleEndian extent location
                         ExtractExtent(dr.ExtentLocation.LittleEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
 
                         // Also extract from BigEndian values if ambiguous
                         if (!dr.ExtentLocation.IsValid!)
-                        {
                             ExtractExtent(dr.ExtentLocation.BigEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
-                        }
                     }
-                    else if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0)
+                    else if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0 && dr.FileUnitSize == 0 && dr.InterleaveGapSize == 0)
                     {
-                        // Record is a file extent, extract file
+                        // Record is a simple file extent, extract file
                         succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, false, outputDirectory, includeDebug);
                         // Also extract from BigEndian values if ambiguous
                         if (!dr.ExtentLocation.IsValid!)
-                        {
                             succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, true, outputDirectory, includeDebug);
-                        }
                     }
                     else
                     {
-                        if (includeDebug) Console.WriteLine("Extraction of multi-extent files is currently not supported");
+                        if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0)
+                            Console.WriteLine("Extraction of multi-extent files is currently not supported");
+                        else if (dr.FileUnitSize == 0 || dr.InterleaveGapSize == 0)
+                            Console.WriteLine("Extraction of interleaved files is currently not supported");
+                        succeeded = false;
                     }
                 }
             }
 
-            return true;
+            return succeeded;
         }
 
         /// <summary>
