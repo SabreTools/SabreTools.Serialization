@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Wrappers
             if (sectorLength < 2048 || (sectorLength & (sectorLength - 1)) != 0)
                 sectorLength = 2048;
 
-            // Keep track of extracted files according to their byte location
+            // Keep track of extracted files according to their sector location
             // Note: Using Dictionary instead of HashSet because .NET Framework doesn't support HashSet
             var extractedFiles = new Dictionary<int, int>();
 
@@ -118,10 +118,9 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            int fileOffset = (dr.ExtentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
 
             // Check that the file hasn't been extracted already
-            if (extractedFiles.ContainsKey(fileOffset))
+            if (extractedFiles.ContainsKey(dr.ExtentLocation))
                 return true;
 
             // TODO: Decode properly (Use VD's separator characters and encoding)
@@ -147,19 +146,20 @@ namespace SabreTools.Serialization.Wrappers
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
             {
                 Console.WriteLine($"Extraction of multi-extent files is currently not supported: {filename}");
-                extractedFiles.Add(fileOffset, dr.ExtentLength);
+                extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
                 return false;
             }
             else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
             {
                 Console.WriteLine($"Extraction of interleaved files is currently not supported: {filename}");
-                extractedFiles.Add(fileOffset, dr.ExtentLength);
+                extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
                 return false;
             }
 
             const int chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
+                long fileOffset = ((long)dr.ExtentLocation + (long)dr.ExtendedAttributeRecordLength) * (long)blockLength;
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
@@ -182,7 +182,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // Mark the file as extracted
-                extractedFiles.Add(fileOffset, dr.ExtentLength);
+                extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
             }
 
             return true;
