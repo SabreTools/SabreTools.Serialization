@@ -864,8 +864,6 @@ namespace SabreTools.Serialization.Readers
 
             if (obj.EscapeSequencesLength > 0)
                 obj.EscapeSequences = data.ReadBytes(obj.EscapeSequencesLength);
-            else
-                obj.EscapeSequences = [];
 
             return obj;
         }
