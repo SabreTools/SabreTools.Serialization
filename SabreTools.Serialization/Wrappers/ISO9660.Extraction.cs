@@ -94,21 +94,13 @@ namespace SabreTools.Serialization.Wrappers
                         if (!dr.ExtentLocation.IsValid!)
                             ExtractExtent(dr.ExtentLocation.BigEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
                     }
-                    else if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0 && dr.FileUnitSize == 0 && dr.InterleaveGapSize == 0)
+                    else
                     {
                         // Record is a simple file extent, extract file
                         succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, false, outputDirectory, includeDebug);
                         // Also extract from BigEndian values if ambiguous
                         if (!dr.ExtentLocation.IsValid!)
                             succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, true, outputDirectory, includeDebug);
-                    }
-                    else
-                    {
-                        if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
-                            Console.WriteLine("Extraction of multi-extent files is currently not supported");
-                        else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
-                            Console.WriteLine("Extraction of interleaved files is currently not supported");
-                        succeeded = false;
                     }
                 }
             }
@@ -132,6 +124,39 @@ namespace SabreTools.Serialization.Wrappers
             if (extractedFiles.ContainsKey(fileOffset))
                 return true;
 
+            // TODO: Decode properly (Use VD's separator characters and encoding)
+            string filename = encoding.GetString(dr.FileIdentifier);
+            int index = filename.LastIndexOf(';');
+            if (index > 0)
+                filename = filename.Substring(0, index);
+
+            // Ensure the full output directory exists
+            var filepath = Path.Combine(outputDirectory, filename);
+            var directoryName = Path.GetDirectoryName(filepath);
+            if (directoryName != null && !Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
+
+            // Check that the output file doesn't already exist
+            if (File.Exists(filepath) || Directory.Exists(filepath))
+            {
+                if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
+                return false;
+            }
+            
+            // Currently cannot extract multi-extent or interleaved files
+            if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
+            {
+                Console.WriteLine($"Extraction of multi-extent files is currently not supported: {filename}");
+                extractedFiles.Add(fileOffset, dr.ExtentLength);
+                return false;
+            }
+            else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
+            {
+                Console.WriteLine($"Extraction of interleaved files is currently not supported: {filename}");
+                extractedFiles.Add(fileOffset, dr.ExtentLength);
+                return false;
+            }
+
             const int chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
@@ -142,28 +167,9 @@ namespace SabreTools.Serialization.Wrappers
                 if (length > _dataSource.Length - _dataSource.Position)
                     return false;
 
-                // TODO: Decode properly (Use VD's separator characters and encoding)
-                string filename = encoding.GetString(dr.FileIdentifier);
-                int index = filename.LastIndexOf(';');
-                if (index > 0)
-                    filename = filename.Substring(0, index);
-
-                // Ensure the full output directory exists
-                filename = Path.Combine(outputDirectory, filename);
-                var directoryName = Path.GetDirectoryName(filename);
-                if (directoryName != null && !Directory.Exists(directoryName))
-                    Directory.CreateDirectory(directoryName);
-
-                // Check that the output file doesn't already exist
-                if (File.Exists(filename) || Directory.Exists(filename))
-                {
-                    if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
-                    return false;
-                }
-
                 // Write the output file
-                if (includeDebug) Console.WriteLine($"Extracting: {filename}");
-                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                if (includeDebug) Console.WriteLine($"Extracting: {filepath}");
+                using var fs = File.Open(filepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
                     int bytesToRead = (int)Math.Min(length, chunkSize);
