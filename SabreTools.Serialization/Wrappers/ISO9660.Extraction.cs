@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.Data.Models.ISO9660;
 using SabreTools.Data.Extensions;
+using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
@@ -146,7 +146,7 @@ namespace SabreTools.Serialization.Wrappers
                 var directoryName = Path.GetDirectoryName(filename);
                 if (directoryName != null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
-                
+
                 // Check that the output file doesn't already exist
                 if (File.Exists(filename) || Directory.Exists(filename))
                 {

@@ -459,7 +459,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("      File Extent");
             if (ear == null)
                 return;
-            
+
             builder.AppendLineBothEndian(ear.OwnerIdentification, "        Owner Identification");
             builder.AppendLineBothEndian(ear.OwnerIdentification, "        Group Identification");
 
