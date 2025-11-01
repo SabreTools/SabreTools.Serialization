@@ -677,6 +677,7 @@ namespace SabreTools.Serialization.Readers
                         int nextRecordLength = data.PeekByteValue();
                         if (nextRecordLength <= paddingLength)
                             return null;
+
                         continue;
                     }
 
@@ -788,15 +789,12 @@ namespace SabreTools.Serialization.Readers
                 obj.FileIdentifier = data.ReadBytes(1);
             else if (obj.FileIdentifierLength > 0)
                 obj.FileIdentifier = data.ReadBytes(obj.FileIdentifierLength);
-            else
-                obj.FileIdentifier = [];
 
             // If file identifier length is even, there is a padding field byte
             if (obj.FileIdentifierLength % 2 == 0)
                 obj.PaddingField = data.ReadByteValue();
 
             // Root directory within the volume descriptor has no system use bytes, fixed at 34bytes
-            obj.SystemUse = [];
             if (root)
                 return obj;
 
@@ -863,8 +861,6 @@ namespace SabreTools.Serialization.Readers
 
             if (obj.ApplicationLength > 0)
                 obj.ApplicationUse = data.ReadBytes(obj.ApplicationLength);
-            else
-                obj.ApplicationUse = [];
 
             if (obj.EscapeSequencesLength > 0)
                 obj.EscapeSequences = data.ReadBytes(obj.EscapeSequencesLength);
