@@ -24,10 +24,6 @@ namespace SabreTools.Serialization.Wrappers
             if (sectorLength < 2048 || (sectorLength & (sectorLength - 1)) != 0)
                 sectorLength = 2048;
 
-            // Keep track of extracted files according to their sector location
-            // Note: Using Dictionary instead of HashSet because .NET Framework doesn't support HashSet
-            var extractedFiles = new Dictionary<int, int>();
-
             // Loop through all Base Volume Descriptors to extract files from each directory hierarchy
             // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
             for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
@@ -44,12 +40,12 @@ namespace SabreTools.Serialization.Wrappers
                         encoding = Encoding.BigEndianUnicode;
 
                     // Extract all files within root directory hierarchy
-                    allExtracted &= ExtractExtent(rootDir.ExtentLocation.LittleEndian, extractedFiles, encoding, blockLength, outputDirectory, includeDebug);
+                    allExtracted &= ExtractExtent(rootDir.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
                     // If Big Endian extent location differs from Little Endian extent location, also extract that directory hierarchy
                     if (!rootDir.ExtentLocation.IsValid)
                     {
                         if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
-                        allExtracted &= ExtractExtent(rootDir.ExtentLocation.BigEndian, extractedFiles, encoding, blockLength, outputDirectory, includeDebug);
+                        allExtracted &= ExtractExtent(rootDir.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
                     }
                 }
             }
@@ -60,7 +56,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract all files from within a directory/file extent
         /// </summary>
-        private bool ExtractExtent(int extentLocation, Dictionary<int, int> extractedFiles, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
+        private bool ExtractExtent(int extentLocation, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
         {
             // Check that directory exists in model
             if (!DirectoryDescriptors.ContainsKey(extentLocation))
@@ -88,19 +84,19 @@ namespace SabreTools.Serialization.Wrappers
                             Directory.CreateDirectory(directoryName);
 
                         // Recursively extract from LittleEndian extent location
-                        ExtractExtent(dr.ExtentLocation.LittleEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
+                        ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outDirTemp, includeDebug);
 
                         // Also extract from BigEndian values if ambiguous
                         if (!dr.ExtentLocation.IsValid!)
-                            ExtractExtent(dr.ExtentLocation.BigEndian, extractedFiles, encoding, blockLength, outDirTemp, includeDebug);
+                            ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outDirTemp, includeDebug);
                     }
                     else
                     {
                         // Record is a simple file extent, extract file
-                        succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, false, outputDirectory, includeDebug);
+                        succeeded &= ExtractFile(dr, encoding, blockLength, false, outputDirectory, includeDebug);
                         // Also extract from BigEndian values if ambiguous
                         if (!dr.ExtentLocation.IsValid!)
-                            succeeded &= ExtractFile(dr, extractedFiles, encoding, blockLength, true, outputDirectory, includeDebug);
+                            succeeded &= ExtractFile(dr, encoding, blockLength, true, outputDirectory, includeDebug);
                     }
                 }
             }
@@ -111,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Extract file pointed to by a directory record
         /// </summary>
-        private bool ExtractFile(DirectoryRecord dr, Dictionary<int, int> extractedFiles, Encoding encoding, int blockLength, bool bigEndian, string outputDirectory, bool includeDebug)
+        private bool ExtractFile(DirectoryRecord dr, Encoding encoding, int blockLength, bool bigEndian, string outputDirectory, bool includeDebug)
         {
             // Cannot extract file if it is a directory
             if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
@@ -141,6 +137,7 @@ namespace SabreTools.Serialization.Wrappers
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
             {
                 Console.WriteLine($"Extraction of multi-extent files is currently WIP: {filename}");
+                multiExtentFiles.Add(dr.FileIdentifier);
                 multiExtent = true;
             }
             else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
@@ -153,8 +150,12 @@ namespace SabreTools.Serialization.Wrappers
             // Check that the output file doesn't already exist
             if (!multiExtent && (File.Exists(filepath) || Directory.Exists(filepath)))
             {
-                if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
-                return false;
+                // If it's the last extent of a multi-extent file, continue to append
+                if (multiExtentFiles.Exists(item => Array.EqualsExactly(item, dr.FileIdentifier)))
+                {
+                    if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
+                    return false;
+                }
             }
 
             const int chunkSize = 2048 * 1024;
