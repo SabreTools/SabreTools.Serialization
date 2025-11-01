@@ -140,8 +140,7 @@ namespace SabreTools.Serialization.Wrappers
             // Currently cannot extract multi-extent or interleaved files
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
             {
-                Console.WriteLine($"Extraction of multi-extent files is currently not supported: {filename}");
-                extractedFiles.Add(dr.ExtentLocation, dr.ExtentLength);
+                Console.WriteLine($"Extraction of multi-extent files is currently WIP: {filename}");
                 multiExtent = true;
             }
             else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
