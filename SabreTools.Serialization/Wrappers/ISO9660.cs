@@ -31,9 +31,9 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Global Variables
 
-        private var extractedFiles = new Dictionary<int, int>();
+        private Dictionary<int, int> extractedFiles = new Dictionary<int, int>();
 
-        private var multiExtentFiles = new List<byte[]>();
+        private List<byte[]> multiExtentFiles = new List<byte[]>();
 
         #endregion
 
