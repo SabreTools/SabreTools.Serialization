@@ -104,9 +104,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
                     else
                     {
-                        if ((dr.FileFlags & FileFlags.MULTI_EXTENT) == 0)
+                        if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
                             Console.WriteLine("Extraction of multi-extent files is currently not supported");
-                        else if (dr.FileUnitSize == 0 || dr.InterleaveGapSize == 0)
+                        else if (dr.FileUnitSize != 0 || dr.InterleaveGapSize != 0)
                             Console.WriteLine("Extraction of interleaved files is currently not supported");
                         succeeded = false;
                     }
