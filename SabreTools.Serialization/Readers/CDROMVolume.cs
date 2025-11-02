@@ -39,9 +39,11 @@ namespace SabreTools.Serialization.Readers
                 var vdSet = ParseCDROMVolumeDescriptorSet(data);
                 if (vdSet == null || vdSet.Length == 0)
                     return null;
+
+                volume.VolumeDescriptorSet = vdSet;
                 
-                volume.PathTableGroups = [];
-                volume.DirectoryDescriptors = [];
+                // Only the VolumeDescriptorSet can be read using the CDROMVolume Reader
+                // TODO: CDROM Reader that outputs CDROM.DataTrack that uses custom Stream to wrap ISO9660 for Volume
 
                 return volume;
             }
