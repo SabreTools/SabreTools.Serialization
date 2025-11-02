@@ -10,6 +10,21 @@ namespace SabreTools.Serialization.Wrappers
 {
     public partial class ISO9660 : IExtractable
     {
+        #region Extraction State
+
+        /// <summary>
+        /// List of extracted files by their sector offset
+        /// </summary>
+        private Dictionary<int, int> extractedFiles = [];
+
+        /// <summary>
+        /// List of multi-extent files written, by their FileIdentifier
+        /// </summary>
+        /// <remarks>Used as last-extent has mutli-extent flag=0</remarks>
+        private List<byte[]> multiExtentFiles = [];
+
+        #endregion
+
         /// <inheritdoc/>
         public virtual bool Extract(string outputDirectory, bool includeDebug)
         {

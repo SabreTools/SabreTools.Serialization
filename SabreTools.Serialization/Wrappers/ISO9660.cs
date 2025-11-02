@@ -29,14 +29,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Global Variables
-
-        private Dictionary<int, int> extractedFiles = new Dictionary<int, int>();
-
-        private List<byte[]> multiExtentFiles = new List<byte[]>();
-
-        #endregion
-
         #region Constructors
 
         /// <inheritdoc/>
