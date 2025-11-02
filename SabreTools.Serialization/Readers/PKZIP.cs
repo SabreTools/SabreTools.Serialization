@@ -770,7 +770,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
-            if (obj.DataSize != 0)            
+            if (obj.DataSize <= 0)            
                 obj.Data = data.ReadBytes(ref offset, obj.DataSize);
 
             return obj;
