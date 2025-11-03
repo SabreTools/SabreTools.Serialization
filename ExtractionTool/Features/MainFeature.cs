@@ -165,6 +165,11 @@ namespace ExtractionTool.Features
                     bzip2.Extract(OutputPath, Debug);
                     break;
 
+                // CD-ROM bin file
+                case CDROM cdrom:
+                    cdrom.Extract(OutputPath, Debug);
+                    break;
+
                 // CFB
                 case CFB cfb:
                     cfb.Extract(OutputPath, Debug);

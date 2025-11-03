@@ -36,6 +36,11 @@ namespace SabreTools.Serialization.Wrappers
         BZip2,
 
         /// <summary>
+        /// CD-ROM bin file
+        /// </summary>
+        CDROM,
+
+        /// <summary>
         /// Compound File Binary
         /// </summary>
         CFB,

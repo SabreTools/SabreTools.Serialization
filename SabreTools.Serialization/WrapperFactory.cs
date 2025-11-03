@@ -19,6 +19,7 @@ namespace SabreTools.Serialization
                 WrapperType.BFPK => BFPK.Create(data),
                 WrapperType.BSP => BSP.Create(data),
                 WrapperType.BZip2 => BZip2.Create(data),
+                WrapperType.CDROM => CDROM.Create(data),
                 WrapperType.CFB => CFB.Create(data),
                 WrapperType.CHD => CHD.Create(data),
                 WrapperType.CIA => CIA.Create(data),
@@ -199,6 +200,15 @@ namespace SabreTools.Serialization
 
             if (extension.Equals("bz2", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.BZip2;
+
+            #endregion
+
+            #region CDROM
+
+            if (magic.StartsWith([0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]) && 
+                (extension.Equals("bin", StringComparison.OrdinalIgnoreCase) ||
+                 extension.Equals("skeleton", StringComparison.OrdinalIgnoreCase)))
+                return WrapperType.CDROM;
 
             #endregion
 
