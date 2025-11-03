@@ -79,5 +79,29 @@ namespace SabreTools.Data.Models.MoPaQ
         public const uint MPQ_KEY_HASH_TABLE = 0xC3AF3770;
 
         #endregion
+
+        #region Special Entry Names
+
+        /// <summary>
+        /// Name of internal listfile
+        /// </summary>
+        public const string LISTFILE_NAME = "(listfile)";
+
+        /// <summary>
+        /// Name of internal signature
+        /// </summary>
+        public const string SIGNATURE_NAME = "(signature)";
+
+        /// <summary>
+        /// Name of internal attributes file
+        /// </summary>
+        public const string ATTRIBUTES_NAME = "(attributes)";
+
+        /// <summary>
+        /// Patch metadata
+        /// </summary>
+        public const string PATCH_METADATA_NAME = "(patch_metadata)";
+
+        #endregion
     }
 }

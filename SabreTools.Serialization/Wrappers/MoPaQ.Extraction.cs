@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using StormLibSharp;
+using static SabreTools.Data.Models.MoPaQ.Constants;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -24,7 +25,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Try to open the archive and listfile
                 var mpqArchive = new MpqArchive(Filename, FileAccess.Read);
                 string? listfile = null;
-                MpqFileStream listStream = mpqArchive.OpenFile("(listfile)");
+                MpqFileStream listStream = mpqArchive.OpenFile(LISTFILE_NAME);
 
                 // If we can't read the listfile, we just return
                 if (!listStream.CanRead)
