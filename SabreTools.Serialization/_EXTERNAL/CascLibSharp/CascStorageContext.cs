@@ -1,10 +1,6 @@
-﻿using CascLibSharp.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using CascLibSharp.Native;
 
 namespace CascLibSharp
 {
@@ -14,7 +10,7 @@ namespace CascLibSharp
     public class CascStorageContext : IDisposable
     {
         private CascApi _api;
-        private CascStorageSafeHandle _handle;
+        private CascStorageSafeHandle? _handle;
         private Lazy<bool> _hasListfile;
         private Lazy<CascKnownClient> _clientType;
         private Lazy<long> _fileCount;
@@ -29,7 +25,7 @@ namespace CascLibSharp
         {
             _api = CascApi.Instance;
 
-            if (!_api.CascOpenStorage(dataPath, 0, out _handle) || _handle.IsInvalid)
+            if (!_api.CascOpenStorage!(dataPath, 0, out _handle) || _handle.IsInvalid)
                 throw new CascException();
             _handle.Api = _api;
 
@@ -53,7 +49,7 @@ namespace CascLibSharp
                 throw new ObjectDisposedException("CascStorageContext");
 
             CascStorageFileSafeHandle hFile;
-            if (!_api.CascOpenFile(_handle, fileName, (uint)locale, 0, out hFile))
+            if (!_api.CascOpenFile!(_handle, fileName, (uint)locale, 0, out hFile))
                 throw new CascException();
 
             hFile.Api = _api;
@@ -65,7 +61,7 @@ namespace CascLibSharp
         /// Opens a file by its index key.
         /// </summary>
         /// <remarks>
-        /// An index key is a binary representation of a file.  I do not know what it comes from; I know that it's used to identify files inside of CASC, 
+        /// An index key is a binary representation of a file.  I do not know what it comes from; I know that it's used to identify files inside of CASC,
         /// but I don't know how someone obtains the index key.  They are not produced in the public API of CascLib.
         /// </remarks>
         /// <param name="indexKey">The index key to search.</param>
@@ -84,7 +80,7 @@ namespace CascLibSharp
                 qk.pbData = mem.Pointer;
 
                 CascStorageFileSafeHandle hFile;
-                if (!_api.CascOpenFileByIndexKey(_handle, ref qk, 0, out hFile))
+                if (!_api.CascOpenFileByIndexKey!(_handle, ref qk, 0, out hFile))
                     throw new CascException();
 
                 hFile.Api = _api;
@@ -112,7 +108,7 @@ namespace CascLibSharp
                 qk.pbData = mem.Pointer;
 
                 CascStorageFileSafeHandle hFile;
-                if (!_api.CascOpenFileByEncodingKey(_handle, ref qk, 0, out hFile))
+                if (!_api.CascOpenFileByEncodingKey!(_handle, ref qk, 0, out hFile))
                     throw new CascException();
 
                 hFile.Api = _api;
@@ -127,7 +123,7 @@ namespace CascLibSharp
         /// <param name="mask">The mask to search.  * and ? are valid tokens for substitution.</param>
         /// <param name="listFilePath">A path to a listfile.  Required if the CASC container is for World of Warcraft.</param>
         /// <returns>An enumeration of matching file references in the CASC container.</returns>
-        public IEnumerable<CascFoundFile> SearchFiles(string mask, string listFilePath = null)
+        public IEnumerable<CascFoundFile> SearchFiles(string mask, string? listFilePath = null)
         {
             if (_handle == null || _handle.IsInvalid)
                 throw new ObjectDisposedException("CascStorageContext");
@@ -136,7 +132,7 @@ namespace CascLibSharp
                 throw new ArgumentNullException("listFilePath");
 
             CascFindData cfd = new CascFindData();
-            using (var handle = _api.CascFindFirstFile(_handle, mask, ref cfd, listFilePath))
+            using (var handle = _api.CascFindFirstFile!(_handle, mask, ref cfd, listFilePath))
             {
                 if (handle.IsInvalid)
                     yield break;
@@ -145,20 +141,20 @@ namespace CascLibSharp
 
                 yield return cfd.ToFoundFile(this);
 
-                while (_api.CascFindNextFile(handle, ref cfd))
+                while (_api.CascFindNextFile!(handle, ref cfd))
                 {
                     yield return cfd.ToFoundFile(this);
                 }
             }
         }
-        
+
         private bool CheckHasListfile()
         {
             if (_handle == null || _handle.IsInvalid)
                 throw new ObjectDisposedException("CascStorageContext");
 
             uint storageInfo = 0, lengthNeeded = 4;
-            if (!_api.CascGetStorageInfo(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
+            if (!_api.CascGetStorageInfo!(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
                 throw new CascException();
 
             CascStorageFeatures features = (CascStorageFeatures)storageInfo;
@@ -174,7 +170,7 @@ namespace CascLibSharp
                 throw new ObjectDisposedException("CascStorageContext");
 
             uint storageInfo = 0, lengthNeeded = 4;
-            if (!_api.CascGetStorageInfo(_handle, CascStorageInfoClass.GameInfo, ref storageInfo, new IntPtr(4), ref lengthNeeded))
+            if (!_api.CascGetStorageInfo!(_handle, CascStorageInfoClass.GameInfo, ref storageInfo, new IntPtr(4), ref lengthNeeded))
                 throw new CascException();
 
             CascGameId gameId = (CascGameId)storageInfo;
@@ -188,7 +184,7 @@ namespace CascLibSharp
                 throw new ObjectDisposedException("CascStorageContext");
 
             uint storageInfo = 0, lengthNeeded = 4;
-            if (!_api.CascGetStorageInfo(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
+            if (!_api.CascGetStorageInfo!(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
                 throw new CascException();
 
             return storageInfo;
@@ -200,7 +196,7 @@ namespace CascLibSharp
                 throw new ObjectDisposedException("CascStorageContext");
 
             uint storageInfo = 0, lengthNeeded = 4;
-            if (!_api.CascGetStorageInfo(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
+            if (!_api.CascGetStorageInfo!(_handle, CascStorageInfoClass.Features, ref storageInfo, new IntPtr(4), ref lengthNeeded))
                 throw new CascException();
 
             return unchecked((int)storageInfo);
@@ -274,7 +270,7 @@ namespace CascLibSharp
         /// <param name="disposing">True if this is being called via the Dispose() method; false if it's being called by the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && _handle != null)
             {
                 if (!_handle.IsInvalid)
                 {

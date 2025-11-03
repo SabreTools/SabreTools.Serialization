@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace StormLibSharp.Native
 {
@@ -30,12 +27,12 @@ namespace StormLibSharp.Native
         [DllImport("kernel32", SetLastError = false, ExactSpelling = false)]
         public static extern int GetLastError();
 
-        public static string GetFileNameOfMemoryMappedFile(MemoryMappedFile file)
+        public static string? GetFileNameOfMemoryMappedFile(MemoryMappedFile file)
         {
             const uint size = 522;
             IntPtr path = Marshal.AllocCoTaskMem(unchecked((int)size)); // MAX_PATH + 1 char
 
-            string result = null;
+            string? result;
             try
             {
                 // constant 0x2 = VOLUME_NAME_NT

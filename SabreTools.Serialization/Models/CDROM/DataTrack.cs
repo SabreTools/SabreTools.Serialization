@@ -16,6 +16,6 @@ namespace SabreTools.Data.Models.CDROM
         /// <summary>
         /// ISO9660 volume within the data track
         /// </summary>
-        public Volume Volume { get; set; }
+        public Volume Volume { get; set; } = new();
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CascLibSharp
 {
@@ -12,9 +8,13 @@ namespace CascLibSharp
     /// </summary>
     public class CascFoundFile
     {
+#if NET20 || NET35 || NET40
+        private WeakReference _ownerContext;
+#else
         private WeakReference<CascStorageContext> _ownerContext;
+#endif
 
-        internal CascFoundFile(string fileName, IntPtr plainName, byte[] encodingKey, CascLocales locales, long fileSize, CascStorageContext ownerContext)
+        internal CascFoundFile(string? fileName, IntPtr plainName, byte[] encodingKey, CascLocales locales, long fileSize, CascStorageContext ownerContext)
         {
             FileName = fileName;
             PlainFileName = Marshal.PtrToStringAnsi(plainName);
@@ -22,17 +22,21 @@ namespace CascLibSharp
             Locales = locales;
             FileSize = fileSize;
 
+#if NET20 || NET35 || NET40
+            _ownerContext = new WeakReference(ownerContext);
+#else
             _ownerContext = new WeakReference<CascStorageContext>(ownerContext);
+#endif
         }
 
         /// <summary>
         /// Gets the full path to this file.
         /// </summary>
-        public string FileName { get; private set; }
+        public string? FileName { get; private set; }
         /// <summary>
         /// Gets the plain (no directory-qualified) file name of this file.
         /// </summary>
-        public string PlainFileName { get; private set; }
+        public string? PlainFileName { get; private set; }
         /// <summary>
         /// Gets the CASC encoding key for this file.
         /// </summary>
@@ -52,9 +56,14 @@ namespace CascLibSharp
         /// <returns>A CascFileStream, which acts as a Stream for a CASC stored file.</returns>
         public CascFileStream Open()
         {
-            CascStorageContext context;
-            if (!_ownerContext.TryGetTarget(out context))
+#if NET20 || NET35 || NET40
+            CascStorageContext? context = _ownerContext.Target as CascStorageContext;
+            if (context == null)
                 throw new ObjectDisposedException("The owning context has been closed.");
+#else
+            if (!_ownerContext.TryGetTarget(out CascStorageContext? context) || context == null)
+                throw new ObjectDisposedException("The owning context has been closed.");
+#endif
 
             return context.OpenFileByEncodingKey(EncodingKey);
         }

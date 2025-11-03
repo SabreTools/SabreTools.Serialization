@@ -8,8 +8,6 @@
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <LangVersion>latest</LangVersion>
-        <!-- Added due to StormLibSharp -->
-        <NoWarn>CS8600;CS8601;CS8603;CS8604;CS8618;CS8625;CS8634;IL3000</NoWarn>
         <Nullable>enable</Nullable>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -43,18 +41,7 @@
         <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
 
-    <!-- Exclude certain parts of external modules for by default -->
-    <PropertyGroup>
-        <DefaultItemExcludes>
-            $(DefaultItemExcludes);
-            **\AssemblyInfo.cs;
-            _EXTERNAL\stormlibsharp\lib\**;
-            _EXTERNAL\stormlibsharp\src\CascLibSharp\**;
-            _EXTERNAL\stormlibsharp\src\TestConsole\**
-        </DefaultItemExcludes>
-    </PropertyGroup>
-
-    <!-- Exclude all external modules for .NET Framework 2.0, .NET Framework 3.5, or non-Windows builds -->
+    <!-- Exclude all external modules for .NET Framework 2.0 and .NET Framework 3.5 -->
     <PropertyGroup Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))">
         <DefaultItemExcludes>
             $(DefaultItemExcludes);

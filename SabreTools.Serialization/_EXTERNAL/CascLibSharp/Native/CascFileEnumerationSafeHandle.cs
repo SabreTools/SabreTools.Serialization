@@ -1,9 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.Win32.SafeHandles;
 
 namespace CascLibSharp.Native
 {
@@ -11,6 +7,7 @@ namespace CascLibSharp.Native
     {
         public CascFileEnumerationSafeHandle()
             : base(true) { }
+
         public CascFileEnumerationSafeHandle(IntPtr handle)
             : this()
         {
@@ -20,10 +17,10 @@ namespace CascLibSharp.Native
         protected override bool ReleaseHandle()
         {
             var api = Api ?? CascApi.Instance;
-            return api.CascFindClose(DangerousGetHandle());
+            return api.CascFindClose!(DangerousGetHandle());
         }
 
-        internal CascApi Api
+        internal CascApi? Api
         {
             get;
             set;

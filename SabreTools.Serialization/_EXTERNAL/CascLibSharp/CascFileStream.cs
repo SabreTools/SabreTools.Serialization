@@ -1,11 +1,7 @@
-﻿using CascLibSharp.Native;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CascLibSharp.Native;
 
 namespace CascLibSharp
 {
@@ -17,13 +13,13 @@ namespace CascLibSharp
         private CascStorageFileSafeHandle _handle;
         private CascApi _api;
 
-        internal CascFileStream(CascStorageFileSafeHandle handle, CascApi api)
+        internal CascFileStream(CascStorageFileSafeHandle? handle, CascApi? api)
         {
             Debug.Assert(handle != null);
-            Debug.Assert(!handle.IsInvalid);
+            Debug.Assert(!handle!.IsInvalid);
             Debug.Assert(api != null);
 
-            _api = api;
+            _api = api!;
             _handle = handle;
         }
 
@@ -72,10 +68,10 @@ namespace CascLibSharp
         /// <exception cref="ObjectDisposedException">Thrown if the Stream has been disposed.</exception>
         public override long Length
         {
-            get 
+            get
             {
                 AssertValidHandle();
-                return _api.CascGetFileSize(_handle); 
+                return _api!.CascGetFileSize(_handle);
             }
         }
 
@@ -89,12 +85,12 @@ namespace CascLibSharp
             get
             {
                 AssertValidHandle();
-                return _api.CascSetFilePointer(_handle, 0, SeekOrigin.Current);
+                return _api!.CascSetFilePointer(_handle, 0, SeekOrigin.Current);
             }
             set
             {
                 AssertValidHandle();
-                long result = _api.CascSetFilePointer(_handle, value, SeekOrigin.Begin);
+                long result = _api!.CascSetFilePointer(_handle, value, SeekOrigin.Begin);
                 if (result != value)
                     throw new CascException();
             }
@@ -123,7 +119,7 @@ namespace CascLibSharp
             uint read = 0;
             fixed (byte* pBuffer = &buffer[0])
             {
-                if (!_api.CascReadFile(_handle, new IntPtr((void*)pBuffer), unchecked((uint)count), out read))
+                if (!_api.CascReadFile!(_handle, new IntPtr((void*)pBuffer), unchecked((uint)count), out read))
                     throw new CascException();
             }
 

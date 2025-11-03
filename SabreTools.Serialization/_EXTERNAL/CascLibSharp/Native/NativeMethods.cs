@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CascLibSharp.Native
 {
@@ -48,7 +44,7 @@ namespace CascLibSharp.Native
 
     internal static class GameConverterExtensions
     {
-        private static Dictionary<CascGameId, CascKnownClient> GameClientMap = new Dictionary<CascGameId, CascKnownClient> 
+        private static Dictionary<CascGameId, CascKnownClient> GameClientMap = new Dictionary<CascGameId, CascKnownClient>
         {
             { CascGameId.Hots, CascKnownClient.HeroesOfTheStorm },
             { CascGameId.Wow6, CascKnownClient.WorldOfWarcraft },
@@ -57,7 +53,7 @@ namespace CascLibSharp.Native
             { CascGameId.Starcraft2, CascKnownClient.Starcraft2 },
         };
 
-        private static Dictionary<CascKnownClient, CascGameId> ClientGameMap = new Dictionary<CascKnownClient, CascGameId>() 
+        private static Dictionary<CascKnownClient, CascGameId> ClientGameMap = new Dictionary<CascKnownClient, CascGameId>()
         {
             { CascKnownClient.HeroesOfTheStorm, CascGameId.Hots },
             { CascKnownClient.WorldOfWarcraft, CascGameId.Wow6 },
@@ -106,7 +102,7 @@ namespace CascLibSharp.Native
 
         public unsafe CascFoundFile ToFoundFile(CascStorageContext ownerContext)
         {
-            string fileName = null;
+            string? fileName = null;
             fixed (void* pFileName = szFileName)
             {
                 fileName = Marshal.PtrToStringAnsi(new IntPtr(pFileName));

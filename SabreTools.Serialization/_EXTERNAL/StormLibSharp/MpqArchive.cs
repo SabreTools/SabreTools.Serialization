@@ -1,23 +1,19 @@
-﻿using StormLibSharp.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+using StormLibSharp.Native;
 
 namespace StormLibSharp
 {
     public class MpqArchive : IDisposable
     {
-        private MpqArchiveSafeHandle _handle;
+        private MpqArchiveSafeHandle? _handle;
         private List<MpqFileStream> _openFiles = new List<MpqFileStream>();
         private FileAccess _accessType;
         private List<MpqArchiveCompactingEventHandler> _compactCallbacks = new List<MpqArchiveCompactingEventHandler>();
-        private SFILE_COMPACT_CALLBACK _compactCallback;
+        private SFILE_COMPACT_CALLBACK? _compactCallback;
 
         #region Constructors / Factories
         public MpqArchive(string filePath, FileAccess accessType)
@@ -37,7 +33,7 @@ namespace StormLibSharp
         public MpqArchive(MemoryMappedFile file, FileAccess accessType)
         {
             _accessType = accessType;
-            string fileName = Win32Methods.GetFileNameOfMemoryMappedFile(file);
+            string? fileName = Win32Methods.GetFileNameOfMemoryMappedFile(file);
             if (fileName == null)
                 throw new ArgumentException("Could not retrieve the name of the file to initialize.");
 
@@ -301,7 +297,6 @@ namespace StormLibSharp
                     }
 
                     _openFiles.Clear();
-                    _openFiles = null;
                 }
 
                 // Release

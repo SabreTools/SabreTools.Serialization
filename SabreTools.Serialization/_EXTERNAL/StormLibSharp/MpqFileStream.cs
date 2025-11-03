@@ -1,19 +1,16 @@
-﻿using StormLibSharp.Native;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
+using StormLibSharp.Native;
 
 namespace StormLibSharp
 {
     public class MpqFileStream : Stream
     {
-        private MpqFileSafeHandle _handle;
+        private MpqFileSafeHandle? _handle;
         private FileAccess _accessType;
-        private MpqArchive _owner;
+        private MpqArchive? _owner;
 
         internal MpqFileStream(MpqFileSafeHandle handle, FileAccess accessType, MpqArchive owner)
         {
@@ -47,12 +44,12 @@ namespace StormLibSharp
         {
             VerifyHandle();
 
-            _owner.Flush();
+            _owner?.Flush();
         }
 
         public override long Length
         {
-            get 
+            get
             {
                 VerifyHandle();
 
@@ -166,7 +163,7 @@ namespace StormLibSharp
         }
 
         // TODO: Seems like the right place for SFileGetFileInfo, but will need to determine
-        // what value add these features have except for sophisticated debugging purposes 
+        // what value add these features have except for sophisticated debugging purposes
         // (like in Ladis' MPQ Editor app).
 
         public int ChecksumCrc32

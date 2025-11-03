@@ -1,13 +1,9 @@
-﻿using CascLibSharp.Native;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using CascLibSharp.Native;
 
 namespace CascLibSharp
 {
@@ -30,7 +26,7 @@ namespace CascLibSharp
                                                             ref uint pcbLengthNeeded);
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        internal delegate bool FnCascCloseStorage(          IntPtr hStorage);
+        internal delegate bool FnCascCloseStorage(IntPtr hStorage);
 
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
@@ -73,14 +69,14 @@ namespace CascLibSharp
                                                             out uint dwRead);
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        internal delegate bool FnCascCloseFile(             IntPtr hFile);
+        internal delegate bool FnCascCloseFile(IntPtr hFile);
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate CascFileEnumerationSafeHandle FnCascFindFirstFile(
                                                             CascStorageSafeHandle hStorage,
                                                             [MarshalAs(UnmanagedType.LPStr)] string szMask,
                                                             ref CascFindData pFindData,
-                                                            [MarshalAs(UnmanagedType.LPTStr)] string szListFile);
+                                                            [MarshalAs(UnmanagedType.LPTStr)] string? szListFile);
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascFindNextFile(
@@ -88,28 +84,28 @@ namespace CascLibSharp
                                                             ref CascFindData pFindData);
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        internal delegate bool FnCascFindClose(             IntPtr hFind);
+        internal delegate bool FnCascFindClose(IntPtr hFind);
         #endregion
 
         #region Field and method defs
-        public readonly FnCascOpenStorage CascOpenStorage;
-        public readonly FnCascGetStorageInfo CascGetStorageInfo;
-        public readonly FnCascCloseStorage CascCloseStorage;
+        public readonly FnCascOpenStorage? CascOpenStorage;
+        public readonly FnCascGetStorageInfo? CascGetStorageInfo;
+        public readonly FnCascCloseStorage? CascCloseStorage;
 
-        public readonly FnCascOpenFileByIndexKey CascOpenFileByIndexKey;
-        public readonly FnCascOpenFileByEncodingKey CascOpenFileByEncodingKey;
-        public readonly FnCascOpenFile CascOpenFile;
+        public readonly FnCascOpenFileByIndexKey? CascOpenFileByIndexKey;
+        public readonly FnCascOpenFileByEncodingKey? CascOpenFileByEncodingKey;
+        public readonly FnCascOpenFile? CascOpenFile;
 
-        public readonly FnCascGetFileSize CascGetFileSizeBase;
+        public readonly FnCascGetFileSize? CascGetFileSizeBase;
         public long CascGetFileSize(CascStorageFileSafeHandle hFile)
         {
             uint high;
-            uint low = CascGetFileSizeBase(hFile, out high);
+            uint low = CascGetFileSizeBase!(hFile, out high);
             long result = (high << 32) | low;
 
             return result;
         }
-        public readonly FnCascSetFilePointer CascSetFilePointerBase;
+        public readonly FnCascSetFilePointer? CascSetFilePointerBase;
         public long CascSetFilePointer(CascStorageFileSafeHandle hFile, long filePos, SeekOrigin moveMethod)
         {
             uint low, high;
@@ -119,18 +115,18 @@ namespace CascLibSharp
                 high = (uint)(((ulong)filePos & 0xffffffff00000000) >> 32);
             }
 
-            low = CascSetFilePointerBase(hFile, low, ref high, moveMethod);
+            low = CascSetFilePointerBase!(hFile, low, ref high, moveMethod);
 
             long result = (high << 32) | low;
 
             return result;
         }
-        public readonly FnCascReadFile CascReadFile;
-        public readonly FnCascCloseFile CascCloseFile;
+        public readonly FnCascReadFile? CascReadFile;
+        public readonly FnCascCloseFile? CascCloseFile;
 
-        public readonly FnCascFindFirstFile CascFindFirstFile;
-        public readonly FnCascFindNextFile CascFindNextFile;
-        public readonly FnCascFindClose CascFindClose;
+        public readonly FnCascFindFirstFile? CascFindFirstFile;
+        public readonly FnCascFindNextFile? CascFindNextFile;
+        public readonly FnCascFindClose? CascFindClose;
         #endregion
 
         internal CascApi(IntPtr hModule)
@@ -152,7 +148,7 @@ namespace CascLibSharp
             SetFn(ref CascFindClose, hModule, "CascFindClose");
         }
 
-        private static void SetFn<T>(ref T target, IntPtr hModule, string procName)
+        private static void SetFn<T>(ref T? target, IntPtr hModule, string procName)
             where T : class
         {
             IntPtr procAddr = NativeMethods.GetProcAddress(hModule, procName);
@@ -164,7 +160,7 @@ namespace CascLibSharp
         private static CascApi Load()
         {
             string myPath = Assembly.GetExecutingAssembly().Location;
-            string directory = Path.GetDirectoryName(myPath);
+            string directory = Path.GetDirectoryName(myPath) ?? string.Empty;
             string arch = IntPtr.Size == 8 ? "x64" : "x86";
 #if DEBUG
             string build = "dbg";
