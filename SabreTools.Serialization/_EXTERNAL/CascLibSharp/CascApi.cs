@@ -10,12 +10,14 @@ namespace CascLibSharp
     internal sealed class CascApi
     {
         #region Imported method signature type definitions
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascOpenStorage(
                                                             [MarshalAs(UnmanagedType.LPTStr)] string szDataPath,
                                                             uint dwFlags,
                                                             out CascStorageSafeHandle phStorage);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascGetStorageInfo(
@@ -24,6 +26,7 @@ namespace CascLibSharp
                                                             ref uint pvStorageInfo,
                                                             IntPtr cbStorageInfo,
                                                             ref uint pcbLengthNeeded);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascCloseStorage(IntPtr hStorage);
@@ -35,6 +38,7 @@ namespace CascLibSharp
                                                             ref QueryKey pIndexKey,
                                                             uint dwFlags,
                                                             out CascStorageFileSafeHandle phFile);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascOpenFileByEncodingKey(
@@ -42,6 +46,7 @@ namespace CascLibSharp
                                                             ref QueryKey pEncodingKey,
                                                             uint dwFlags,
                                                             out CascStorageFileSafeHandle phFile);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascOpenFile(
@@ -50,6 +55,7 @@ namespace CascLibSharp
                                                             uint dwLocale,
                                                             uint dwFlags,
                                                             out CascStorageFileSafeHandle phFile);
+
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate uint FnCascGetFileSize(
                                                             CascStorageFileSafeHandle hFile,
@@ -60,6 +66,7 @@ namespace CascLibSharp
                                                             uint lFilePos,
                                                             ref uint plFilePosHigh,
                                                             SeekOrigin dwMoveMethod);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascReadFile(
@@ -67,6 +74,7 @@ namespace CascLibSharp
                                                             IntPtr lpBuffer,
                                                             uint dwToRead,
                                                             out uint dwRead);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascCloseFile(IntPtr hFile);
@@ -77,17 +85,21 @@ namespace CascLibSharp
                                                             [MarshalAs(UnmanagedType.LPStr)] string szMask,
                                                             ref CascFindData pFindData,
                                                             [MarshalAs(UnmanagedType.LPTStr)] string? szListFile);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascFindNextFile(
                                                             CascFileEnumerationSafeHandle hFind,
                                                             ref CascFindData pFindData);
+
         [return: MarshalAs(UnmanagedType.I1)]
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         internal delegate bool FnCascFindClose(IntPtr hFind);
+
         #endregion
 
         #region Field and method defs
+
         public readonly FnCascOpenStorage? CascOpenStorage;
         public readonly FnCascGetStorageInfo? CascGetStorageInfo;
         public readonly FnCascCloseStorage? CascCloseStorage;
@@ -99,8 +111,7 @@ namespace CascLibSharp
         public readonly FnCascGetFileSize? CascGetFileSizeBase;
         public long CascGetFileSize(CascStorageFileSafeHandle hFile)
         {
-            uint high;
-            uint low = CascGetFileSizeBase!(hFile, out high);
+            uint low = CascGetFileSizeBase!(hFile, out uint high);
             long result = (high << 32) | low;
 
             return result;
@@ -127,6 +138,7 @@ namespace CascLibSharp
         public readonly FnCascFindFirstFile? CascFindFirstFile;
         public readonly FnCascFindNextFile? CascFindNextFile;
         public readonly FnCascFindClose? CascFindClose;
+
         #endregion
 
         internal CascApi(IntPtr hModule)
@@ -154,6 +166,7 @@ namespace CascLibSharp
             IntPtr procAddr = NativeMethods.GetProcAddress(hModule, procName);
             if (procAddr == IntPtr.Zero)
                 throw new Win32Exception();
+
             target = Marshal.GetDelegateForFunctionPointer(procAddr, typeof(T)) as T;
         }
 
@@ -194,7 +207,7 @@ namespace CascLibSharp
 #if NET20 || NET35
         private static CascApi? _sharedInstance = null;
 #else
-        private static Lazy<CascApi> _sharedInstance = new Lazy<CascApi>(Load);
+        private static readonly Lazy<CascApi> _sharedInstance = new(Load);
 #endif
         public static CascApi Instance
         {

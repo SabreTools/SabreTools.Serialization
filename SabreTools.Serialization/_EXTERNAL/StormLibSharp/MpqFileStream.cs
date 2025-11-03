@@ -9,7 +9,7 @@ namespace StormLibSharp
     public class MpqFileStream : Stream
     {
         private MpqFileSafeHandle? _handle;
-        private FileAccess _accessType;
+        private readonly FileAccess _accessType;
         private MpqArchive? _owner;
 
         internal MpqFileStream(MpqFileSafeHandle handle, FileAccess accessType, MpqArchive owner)
@@ -78,11 +78,11 @@ namespace StormLibSharp
         public override unsafe int Read(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             if (offset > buffer.Length || (offset + count) > buffer.Length)
                 throw new ArgumentException();
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             VerifyHandle();
 
@@ -108,9 +108,8 @@ namespace StormLibSharp
         {
             VerifyHandle();
 
-            uint low, high;
-            low = unchecked((uint)(offset & 0xffffffffu));
-            high = unchecked((uint)(offset >> 32));
+            uint low = unchecked((uint)(offset & 0xffffffffu));
+            uint high = unchecked((uint)(offset >> 32));
             return NativeMethods.SFileSetFilePointer(_handle, low, ref high, (uint)origin);
         }
 
@@ -124,11 +123,11 @@ namespace StormLibSharp
             VerifyHandle();
 
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             if (offset > buffer.Length || (offset + count) > buffer.Length)
                 throw new ArgumentException();
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             VerifyHandle();
 
@@ -154,11 +153,8 @@ namespace StormLibSharp
                     _handle = null;
                 }
 
-                if (_owner != null)
-                {
-                    _owner.RemoveOwnedFile(this);
-                    _owner = null;
-                }
+                _owner?.RemoveOwnedFile(this);
+                _owner = null;
             }
         }
 

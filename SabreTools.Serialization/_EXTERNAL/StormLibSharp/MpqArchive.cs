@@ -9,15 +9,17 @@ namespace StormLibSharp
     public class MpqArchive : IDisposable
     {
         private MpqArchiveSafeHandle? _handle;
-        private List<MpqFileStream> _openFiles = new List<MpqFileStream>();
-        private FileAccess _accessType;
-        private List<MpqArchiveCompactingEventHandler> _compactCallbacks = new List<MpqArchiveCompactingEventHandler>();
+        private readonly List<MpqFileStream> _openFiles = [];
+        private readonly FileAccess _accessType;
+        private readonly List<MpqArchiveCompactingEventHandler> _compactCallbacks = [];
         private SFILE_COMPACT_CALLBACK? _compactCallback;
 
         #region Constructors / Factories
+
         public MpqArchive(string filePath, FileAccess accessType)
         {
             _accessType = accessType;
+
             SFileOpenArchiveFlags flags = SFileOpenArchiveFlags.TypeIsFile;
             if (accessType == FileAccess.Read)
                 flags |= SFileOpenArchiveFlags.AccessReadOnly;
@@ -63,9 +65,11 @@ namespace StormLibSharp
         {
             return new MpqArchive(mpqPath, version, listfileAttributes, attributesFileAttributes, maxFileCount);
         }
+
         #endregion
 
         #region Properties
+
         // TODO: Move to common location.
         // This is a global setting, not per-archive setting.
 
@@ -91,7 +95,8 @@ namespace StormLibSharp
             set
             {
                 if (value < 0 || value > uint.MaxValue)
-                    throw new ArgumentException("value");
+                    throw new ArgumentException(nameof(value));
+
                 VerifyHandle();
 
                 if (!NativeMethods.SFileSetMaxFileCount(_handle, unchecked((uint)value)))
@@ -113,6 +118,7 @@ namespace StormLibSharp
                 return NativeMethods.SFileIsPatchedArchive(_handle);
             }
         }
+
         #endregion
 
         public void Flush()
@@ -145,7 +151,7 @@ namespace StormLibSharp
 
         private void _OnCompact(IntPtr pvUserData, uint dwWorkType, ulong bytesProcessed, ulong totalBytes)
         {
-            MpqArchiveCompactingEventArgs args = new MpqArchiveCompactingEventArgs(dwWorkType, bytesProcessed, totalBytes);
+            var args = new MpqArchiveCompactingEventArgs(dwWorkType, bytesProcessed, totalBytes);
             OnCompacting(args);
         }
 
@@ -220,11 +226,10 @@ namespace StormLibSharp
         {
             VerifyHandle();
 
-            MpqFileSafeHandle fileHandle;
-            if (!NativeMethods.SFileOpenFileEx(_handle, fileName, 0, out fileHandle))
+            if (!NativeMethods.SFileOpenFileEx(_handle, fileName, 0, out MpqFileSafeHandle fileHandle))
                 throw new Win32Exception();
 
-            MpqFileStream fs = new MpqFileStream(fileHandle, _accessType, this);
+            var fs = new MpqFileStream(fileHandle, _accessType, this);
             _openFiles.Add(fs);
             return fs;
         }
@@ -255,6 +260,7 @@ namespace StormLibSharp
 
 
         #region IDisposable implementation
+
         public void Dispose()
         {
             Dispose(true);
@@ -270,15 +276,12 @@ namespace StormLibSharp
             if (disposing)
             {
                 // Release owned files first.
-                if (_openFiles != null)
+                foreach (var file in _openFiles)
                 {
-                    foreach (var file in _openFiles)
-                    {
-                        file.Dispose();
-                    }
-
-                    _openFiles.Clear();
+                    file.Dispose();
                 }
+
+                _openFiles.Clear();
 
                 // Release
                 if (_handle != null && !_handle.IsInvalid)

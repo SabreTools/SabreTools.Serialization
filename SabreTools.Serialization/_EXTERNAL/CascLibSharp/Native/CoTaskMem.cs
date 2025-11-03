@@ -19,7 +19,7 @@ namespace CascLibSharp.Native
 
         public static CoTaskMem FromBytes(byte[] b)
         {
-            CoTaskMem result = new CoTaskMem(b.Length);
+            var result = new CoTaskMem(b.Length);
             Marshal.Copy(b, 0, result._mem, b.Length);
 
             return result;

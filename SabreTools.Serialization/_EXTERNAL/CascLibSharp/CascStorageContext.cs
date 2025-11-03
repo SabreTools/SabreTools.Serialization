@@ -9,7 +9,7 @@ namespace CascLibSharp
     /// </summary>
     public class CascStorageContext : IDisposable
     {
-        private CascApi _api;
+        private readonly CascApi _api;
         private CascStorageSafeHandle? _handle;
 #if NET20 || NET35
         private bool? _hasListfile = null;
@@ -17,10 +17,10 @@ namespace CascLibSharp
         private long? _fileCount = null;
         private int? _gameBuild = null;
 #else
-        private Lazy<bool> _hasListfile;
-        private Lazy<CascKnownClient> _clientType;
-        private Lazy<long> _fileCount;
-        private Lazy<int> _gameBuild;
+        private readonly Lazy<bool> _hasListfile;
+        private readonly Lazy<CascKnownClient> _clientType;
+        private readonly Lazy<long> _fileCount;
+        private readonly Lazy<int> _gameBuild;
 #endif
 
         /// <summary>
@@ -82,20 +82,19 @@ namespace CascLibSharp
             if (_handle == null || _handle.IsInvalid)
                 throw new ObjectDisposedException("CascStorageContext");
 
-            using (CoTaskMem mem = CoTaskMem.FromBytes(indexKey))
-            {
-                QueryKey qk = new QueryKey();
-                qk.cbData = unchecked((uint)indexKey.Length);
-                qk.pbData = mem.Pointer;
+            using CoTaskMem mem = CoTaskMem.FromBytes(indexKey);
 
-                CascStorageFileSafeHandle hFile;
-                if (!_api.CascOpenFileByIndexKey!(_handle, ref qk, 0, out hFile))
-                    throw new CascException();
+            var qk = new QueryKey();
+            qk.cbData = unchecked((uint)indexKey.Length);
+            qk.pbData = mem.Pointer;
 
-                hFile.Api = _api;
+            CascStorageFileSafeHandle hFile;
+            if (!_api.CascOpenFileByIndexKey!(_handle, ref qk, 0, out hFile))
+                throw new CascException();
 
-                return new CascFileStream(hFile, _api);
-            }
+            hFile.Api = _api;
+
+            return new CascFileStream(hFile, _api);
         }
 
         /// <summary>
@@ -110,20 +109,19 @@ namespace CascLibSharp
             if (_handle == null || _handle.IsInvalid)
                 throw new ObjectDisposedException("CascStorageContext");
 
-            using (CoTaskMem mem = CoTaskMem.FromBytes(encodingKey))
-            {
-                QueryKey qk = new QueryKey();
-                qk.cbData = unchecked((uint)encodingKey.Length);
-                qk.pbData = mem.Pointer;
+            using CoTaskMem mem = CoTaskMem.FromBytes(encodingKey);
 
-                CascStorageFileSafeHandle hFile;
-                if (!_api.CascOpenFileByEncodingKey!(_handle, ref qk, 0, out hFile))
-                    throw new CascException();
+            var qk = new QueryKey();
+            qk.cbData = unchecked((uint)encodingKey.Length);
+            qk.pbData = mem.Pointer;
 
-                hFile.Api = _api;
+            CascStorageFileSafeHandle hFile;
+            if (!_api.CascOpenFileByEncodingKey!(_handle, ref qk, 0, out hFile))
+                throw new CascException();
 
-                return new CascFileStream(hFile, _api);
-            }
+            hFile.Api = _api;
+
+            return new CascFileStream(hFile, _api);
         }
 
         /// <summary>
@@ -138,26 +136,24 @@ namespace CascLibSharp
                 throw new ObjectDisposedException("CascStorageContext");
 
 #if NET20 || NET35
-            if (this.GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrEmpty(listFilePath))
+            if (GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrEmpty(listFilePath))
 #else
-            if (this.GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrWhiteSpace(listFilePath))
+            if (GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrWhiteSpace(listFilePath))
 #endif
                 throw new ArgumentNullException("listFilePath");
 
-            CascFindData cfd = new CascFindData();
-            using (var handle = _api.CascFindFirstFile!(_handle, mask, ref cfd, listFilePath))
+            var cfd = new CascFindData();
+            using var handle = _api.CascFindFirstFile!(_handle, mask, ref cfd, listFilePath);
+            if (handle.IsInvalid)
+                yield break;
+
+            handle.Api = _api;
+
+            yield return cfd.ToFoundFile(this);
+
+            while (_api.CascFindNextFile!(handle, ref cfd))
             {
-                if (handle.IsInvalid)
-                    yield break;
-
-                handle.Api = _api;
-
                 yield return cfd.ToFoundFile(this);
-
-                while (_api.CascFindNextFile!(handle, ref cfd))
-                {
-                    yield return cfd.ToFoundFile(this);
-                }
             }
         }
 
@@ -280,6 +276,7 @@ namespace CascLibSharp
         }
 
         #region IDisposable implementation
+
         /// <summary>
         /// Finalizes the storage context.
         /// </summary>
@@ -303,15 +300,16 @@ namespace CascLibSharp
         /// <param name="disposing">True if this is being called via the Dispose() method; false if it's being called by the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && _handle != null)
+            if (disposing)
             {
-                if (!_handle.IsInvalid)
+                if (_handle != null && !_handle.IsInvalid)
                 {
                     _handle.Close();
                     _handle = null;
                 }
             }
         }
+
         #endregion
     }
 
@@ -325,74 +323,92 @@ namespace CascLibSharp
         /// All available locales.
         /// </summary>
         All = -1,
+
         /// <summary>
         /// No locales.
         /// </summary>
+        ///
         None = 0,
         /// <summary>
         /// Unknown
         /// </summary>
         Unknown1 = 1,
+
         /// <summary>
         /// English, United States
         /// </summary>
         EnUs = 2,
+
         /// <summary>
         /// Korean, South Korea
         /// </summary>
         KoKr = 4,
+
         /// <summary>
         /// Reserved (unknown)
         /// </summary>
         Reserved = 8,
+
         /// <summary>
         /// French, France
         /// </summary>
         FrFr = 0x10,
+
         /// <summary>
         /// German, Germany
         /// </summary>
         DeDe = 0x20,
+
         /// <summary>
         /// Chinese, China
         /// </summary>
         ZhCn = 0x40,
+
         /// <summary>
         /// Spanish, Spain
         /// </summary>
         EsEs = 0x80,
+
         /// <summary>
         /// Chinese, Taiwan
         /// </summary>
         ZhTw = 0x100,
+
         /// <summary>
         /// English, Great Britain
         /// </summary>
         EnGb = 0x200,
+
         /// <summary>
         /// English, China
         /// </summary>
         EnCn = 0x400,
+
         /// <summary>
         /// English, Taiwan
         /// </summary>
         EnTw = 0x800,
+
         /// <summary>
         /// Spanish, Mexico
         /// </summary>
         EsMx = 0x1000,
+
         /// <summary>
         /// Russian, Russia
         /// </summary>
         RuRu = 0x2000,
+
         /// <summary>
         /// Portuguese, Brazil
         /// </summary>
         PtBr = 0x4000,
+
         /// <summary>
         /// Italian, Italy
         /// </summary>
         ItIt = 0x8000,
+
         /// <summary>
         /// Portuguese, Portugal
         /// </summary>
@@ -408,22 +424,27 @@ namespace CascLibSharp
         /// The game client was unrecognized.
         /// </summary>
         Unknown = -1,
+
         /// <summary>
         /// Heroes of the Storm
         /// </summary>
         HeroesOfTheStorm = 0,
+
         /// <summary>
         /// Diablo 3
         /// </summary>
         Diablo3 = 1,
+
         /// <summary>
         /// World of Warcraft
         /// </summary>
         WorldOfWarcraft = 2,
+
         /// <summary>
         /// Overwatch
         /// </summary>
         Overwatch = 3,
+
         /// <summary>
         /// Starcraft 2
         /// </summary>

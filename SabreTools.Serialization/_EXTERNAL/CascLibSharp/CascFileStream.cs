@@ -10,8 +10,8 @@ namespace CascLibSharp
     /// </summary>
     public class CascFileStream : Stream
     {
-        private CascStorageFileSafeHandle _handle;
-        private CascApi _api;
+        private readonly CascStorageFileSafeHandle _handle;
+        private readonly CascApi _api;
 
         internal CascFileStream(CascStorageFileSafeHandle? handle, CascApi? api)
         {
@@ -110,11 +110,11 @@ namespace CascLibSharp
             AssertValidHandle();
             long len = Length;
             if (offset < 0 || offset > len)
-                throw new ArgumentException("offset");
+                throw new ArgumentException(nameof(offset));
             if (count < 0)
-                throw new ArgumentException("count");
+                throw new ArgumentException(nameof(count));
             if (offset + count > len)
-                throw new ArgumentException("count");
+                throw new ArgumentException(nameof(count));
 
             uint read = 0;
             fixed (byte* pBuffer = &buffer[0])

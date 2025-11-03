@@ -8,7 +8,7 @@ namespace StormLibSharp.Native
         public MpqFileSafeHandle(IntPtr handle)
             : base(true)
         {
-            this.SetHandle(handle);
+            SetHandle(handle);
         }
 
         public MpqFileSafeHandle()
@@ -18,7 +18,7 @@ namespace StormLibSharp.Native
 
         protected override bool ReleaseHandle()
         {
-            return NativeMethods.SFileCloseFile(this.handle);
+            return NativeMethods.SFileCloseFile(handle);
         }
     }
 }

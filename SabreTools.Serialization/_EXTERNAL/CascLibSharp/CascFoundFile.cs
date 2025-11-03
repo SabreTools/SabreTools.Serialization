@@ -9,9 +9,9 @@ namespace CascLibSharp
     public class CascFoundFile
     {
 #if NET20 || NET35 || NET40
-        private WeakReference _ownerContext;
+        private readonly WeakReference _ownerContext;
 #else
-        private WeakReference<CascStorageContext> _ownerContext;
+        private readonly WeakReference<CascStorageContext> _ownerContext;
 #endif
 
         internal CascFoundFile(string? fileName, IntPtr plainName, byte[] encodingKey, CascLocales locales, long fileSize, CascStorageContext ownerContext)
@@ -33,18 +33,22 @@ namespace CascLibSharp
         /// Gets the full path to this file.
         /// </summary>
         public string? FileName { get; private set; }
+
         /// <summary>
         /// Gets the plain (no directory-qualified) file name of this file.
         /// </summary>
         public string? PlainFileName { get; private set; }
+
         /// <summary>
         /// Gets the CASC encoding key for this file.
         /// </summary>
         public byte[] EncodingKey { get; private set; }
+
         /// <summary>
         /// Gets the locales supported by this resource.
         /// </summary>
         public CascLocales Locales { get; private set; }
+
         /// <summary>
         /// Gets the length of the file in bytes.
         /// </summary>

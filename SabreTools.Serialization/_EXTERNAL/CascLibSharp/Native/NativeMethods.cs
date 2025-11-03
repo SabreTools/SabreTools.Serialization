@@ -44,7 +44,7 @@ namespace CascLibSharp.Native
 
     internal static class GameConverterExtensions
     {
-        private static Dictionary<CascGameId, CascKnownClient> GameClientMap = new Dictionary<CascGameId, CascKnownClient>
+        private static readonly Dictionary<CascGameId, CascKnownClient> GameClientMap = new()
         {
             { CascGameId.Hots, CascKnownClient.HeroesOfTheStorm },
             { CascGameId.Wow6, CascKnownClient.WorldOfWarcraft },
@@ -53,7 +53,7 @@ namespace CascLibSharp.Native
             { CascGameId.Starcraft2, CascKnownClient.Starcraft2 },
         };
 
-        private static Dictionary<CascKnownClient, CascGameId> ClientGameMap = new Dictionary<CascKnownClient, CascGameId>()
+        private static readonly Dictionary<CascKnownClient, CascGameId> ClientGameMap = new()
         {
             { CascKnownClient.HeroesOfTheStorm, CascGameId.Hots },
             { CascKnownClient.WorldOfWarcraft, CascGameId.Wow6 },
@@ -64,8 +64,7 @@ namespace CascLibSharp.Native
 
         public static CascKnownClient ToKnownClient(this CascGameId gameId)
         {
-            CascKnownClient result;
-            if (!GameClientMap.TryGetValue(gameId, out result))
+            if (!GameClientMap.TryGetValue(gameId, out CascKnownClient result))
                 result = CascKnownClient.Unknown;
 
             return result;
@@ -73,15 +72,12 @@ namespace CascLibSharp.Native
 
         public static CascGameId ToGameId(this CascKnownClient knownClient)
         {
-            CascGameId result;
-            if (!ClientGameMap.TryGetValue(knownClient, out result))
+            if (!ClientGameMap.TryGetValue(knownClient, out CascGameId result))
                 throw new ArgumentException("Invalid client.");
 
             return result;
         }
     }
-
-#pragma warning disable 649
     internal struct QueryKey
     {
         public IntPtr pbData;
@@ -107,6 +103,7 @@ namespace CascLibSharp.Native
             {
                 fileName = Marshal.PtrToStringAnsi(new IntPtr(pFileName));
             }
+
             byte[] encodingKey = new byte[16];
             fixed (void* pEncodingKey = EncodingKey)
             {
@@ -116,5 +113,4 @@ namespace CascLibSharp.Native
             return new CascFoundFile(fileName, szPlainName, encodingKey, (CascLocales)dwLocaleFlags, dwFileSize, ownerContext);
         }
     }
-#pragma warning restore 649
 }
