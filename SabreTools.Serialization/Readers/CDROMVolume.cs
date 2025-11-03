@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled byte[] on success, null on error</returns>
-        public static byte[]? ParseCDROMSystemArea(Stream data)
+        public static byte[] ParseCDROMSystemArea(Stream data)
         {
             var systemArea = new byte[Constants.SystemAreaSectors * Constants.MinimumSectorSize];
             // Process in sectors
