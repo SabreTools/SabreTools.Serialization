@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SabreTools.Data.Models.ISO9660;
 
 namespace SabreTools.Data.Models.CDROM

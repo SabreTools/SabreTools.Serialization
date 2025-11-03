@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.CDROM;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
@@ -41,7 +40,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
 
                 volume.VolumeDescriptorSet = vdSet;
-                
+
                 // Only the VolumeDescriptorSet can be read using the CDROMVolume Reader
                 // TODO: CDROM Reader that outputs CDROM.DataTrack that uses custom Stream to wrap ISO9660 for Volume
 

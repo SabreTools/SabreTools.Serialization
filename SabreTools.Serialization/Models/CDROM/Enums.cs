@@ -1,5 +1,3 @@
-using System;
-
 namespace SabreTools.Data.Models.CDROM
 {
     /// <summary>
