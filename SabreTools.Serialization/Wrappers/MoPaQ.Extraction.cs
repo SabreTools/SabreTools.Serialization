@@ -1,8 +1,6 @@
 ﻿using System;
-#if NET452_OR_GREATER || NETCOREAPP
 using System.IO;
 using StormLibSharp;
-#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -11,7 +9,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-#if NET452_OR_GREATER || NETCOREAPP
             try
             {
                 // Limit use to Windows only
@@ -62,24 +59,19 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         mpqArchive.ExtractFile(sub, filename);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
-                        if (includeDebug) System.Console.WriteLine(ex);
+                        if (includeDebug) Console.WriteLine(ex);
                     }
                 }
 
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.WriteLine(ex);
+                if (includeDebug) Console.WriteLine(ex);
                 return false;
             }
-#else
-            Console.WriteLine("Extraction is not supported for this framework!");
-            Console.WriteLine();
-            return false;
-#endif
         }
     }
 }
