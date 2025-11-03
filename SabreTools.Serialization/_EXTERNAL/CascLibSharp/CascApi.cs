@@ -168,11 +168,19 @@ namespace CascLibSharp
             string build = "fre";
 #endif
 
+#if NET20 || NET35
+            string mainPath = Path.Combine(directory, Path.Combine("CascLib", Path.Combine(build, Path.Combine(arch, "CascLib.dll"))));
+#else
             string mainPath = Path.Combine(directory, "CascLib", build, arch, "CascLib.dll");
+#endif
             if (File.Exists(mainPath))
                 return FromFile(mainPath);
 
+#if NET20 || NET35
+            string alternatePath = Path.Combine(directory, Path.Combine("CascLib", Path.Combine(arch, "CascLib.dll")));
+#else
             string alternatePath = Path.Combine(directory, "CascLib", arch, "CascLib.dll");
+#endif
             if (File.Exists(mainPath))
                 return FromFile(alternatePath);
 
@@ -183,12 +191,23 @@ namespace CascLibSharp
             throw new FileNotFoundException(string.Format("Could not locate a copy of CascLib.dll to load.  The following paths were tried:\n\t{0}\n\t{1}\n\t{2}\n\nEnsure that an architecture-appropriate copy of CascLib.dll is included in your project.", mainPath, alternatePath, localPath));
         }
 
+#if NET20 || NET35
+        private static CascApi? _sharedInstance = null;
+#else
         private static Lazy<CascApi> _sharedInstance = new Lazy<CascApi>(Load);
+#endif
         public static CascApi Instance
         {
             get
             {
+#if NET20 || NET35
+                if (_sharedInstance == null)
+                    _sharedInstance = Load();
+
+                return _sharedInstance;
+#else
                 return _sharedInstance.Value;
+#endif
             }
         }
 

@@ -11,10 +11,17 @@ namespace CascLibSharp
     {
         private CascApi _api;
         private CascStorageSafeHandle? _handle;
+#if NET20 || NET35
+        private bool? _hasListfile = null;
+        private CascKnownClient? _clientType = null;
+        private long? _fileCount = null;
+        private int? _gameBuild = null;
+#else
         private Lazy<bool> _hasListfile;
         private Lazy<CascKnownClient> _clientType;
         private Lazy<long> _fileCount;
         private Lazy<int> _gameBuild;
+#endif
 
         /// <summary>
         /// Creates a new CascStorageContext for the specified path.
@@ -29,10 +36,12 @@ namespace CascLibSharp
                 throw new CascException();
             _handle.Api = _api;
 
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             _hasListfile = new Lazy<bool>(CheckHasListfile);
             _clientType = new Lazy<CascKnownClient>(GetClient);
             _fileCount = new Lazy<long>(GetFileCount);
             _gameBuild = new Lazy<int>(GetGameBuild);
+#endif
         }
 
         /// <summary>
@@ -128,7 +137,11 @@ namespace CascLibSharp
             if (_handle == null || _handle.IsInvalid)
                 throw new ObjectDisposedException("CascStorageContext");
 
+#if NET20 || NET35
+            if (this.GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrEmpty(listFilePath))
+#else
             if (this.GameClient == CascKnownClient.WorldOfWarcraft && string.IsNullOrWhiteSpace(listFilePath))
+#endif
                 throw new ArgumentNullException("listFilePath");
 
             CascFindData cfd = new CascFindData();
@@ -158,7 +171,11 @@ namespace CascLibSharp
                 throw new CascException();
 
             CascStorageFeatures features = (CascStorageFeatures)storageInfo;
+#if NET20 || NET35
+            if ((features & CascStorageFeatures.HasListfile) != 0)
+#else
             if (features.HasFlag(CascStorageFeatures.HasListfile))
+#endif
                 return true;
 
             return false;
@@ -209,6 +226,10 @@ namespace CascLibSharp
         {
             get
             {
+#if NET20 || NET35
+                if (_hasListfile == null)
+                    _hasListfile = CheckHasListfile();
+#endif
                 return _hasListfile.Value;
             }
         }
@@ -220,6 +241,10 @@ namespace CascLibSharp
         {
             get
             {
+#if NET20 || NET35
+                if (_fileCount == null)
+                    _fileCount = GetFileCount();
+#endif
                 return _fileCount.Value;
             }
         }
@@ -231,6 +256,10 @@ namespace CascLibSharp
         {
             get
             {
+#if NET20 || NET35
+                if (_gameBuild == null)
+                    _gameBuild = GetGameBuild();
+#endif
                 return _gameBuild.Value;
             }
         }
@@ -242,6 +271,10 @@ namespace CascLibSharp
         {
             get
             {
+#if NET20 || NET35
+                if (_clientType == null)
+                    _clientType = GetClient();
+#endif
                 return _clientType.Value;
             }
         }

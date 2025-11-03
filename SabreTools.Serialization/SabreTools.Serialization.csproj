@@ -41,14 +41,6 @@
         <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
 
-    <!-- Exclude all external modules for .NET Framework 2.0 and .NET Framework 3.5 -->
-    <PropertyGroup Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))">
-        <DefaultItemExcludes>
-            $(DefaultItemExcludes);
-            _EXTERNAL\**
-        </DefaultItemExcludes>
-    </PropertyGroup>
-
     <!-- These are needed for dealing with native Windows DLLs -->
     <ItemGroup>
         <Content Include="runtimes\**\*">
