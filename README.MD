@@ -66,7 +66,7 @@ Options:
 | InstallShield CAB | |
 | Microsoft cabinet file | Does not support LZX or Quantum compression |
 | Microsoft LZ-compressed files | KWAJ, QBasic, and SZDD variants |
-| MoPaQ game data archive (MPQ) | Windows only. .NET Framework 4.5.2 and above |
+| MoPaQ game data archive (MPQ) | Windows only |
 | New Exectuable | Embedded archives and executables in the overlay and Wise installer |
 | NovaLogic Game Archive Format (PFF) | |
 | PKZIP and derived files (ZIP, etc.) | .NET Framework 4.6.2 and greater |
