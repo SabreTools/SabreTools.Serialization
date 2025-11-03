@@ -29,11 +29,6 @@
 
     <!-- These are needed for dealing with native Windows DLLs -->
     <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x86'">
-        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x86\native\CascLib.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-            <TargetPath>CascLib.dll</TargetPath>
-        </ContentWithTargetPath>
         <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x86\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
@@ -41,11 +36,6 @@
         </ContentWithTargetPath>
     </ItemGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
-        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x64\native\CascLib.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-            <TargetPath>CascLib.dll</TargetPath>
-        </ContentWithTargetPath>
         <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x64\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
