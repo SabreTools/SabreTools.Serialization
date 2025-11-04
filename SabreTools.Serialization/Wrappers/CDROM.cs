@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
 
@@ -8,7 +9,23 @@ namespace SabreTools.Serialization.Wrappers
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "CD-ROM Data Track";
+        public override string DescriptionString => "CD-ROM ISO9660 Volume";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Volume.SystemArea"/>
+        public override byte[] SystemArea => Model.SystemArea;
+
+        /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
+        public override VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet;
+
+        /// <inheritdoc cref="Volume.PathTableGroups"/>
+        public override PathTableGroup[] PathTableGroups => Model.PathTableGroups;
+
+        /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
+        public override Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors;
 
         #endregion
 
@@ -37,9 +54,9 @@ namespace SabreTools.Serialization.Wrappers
         #region Static Constructors
 
         /// <summary>
-        /// Create an CDROM data track from a byte array and offset
+        /// Create a CDROM data track from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="data">Byte array representing the CDROM data track</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
         public new static CDROM? Create(byte[]? data, int offset)
@@ -58,14 +75,14 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create an CDROM data track from a Stream
+        /// Create a CDROM data track from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
+        /// <param name="data">Stream representing the CDROM data track</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
         public new static CDROM? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data == null || !data.CanRead || !data.CanSeek)
                 return null;
 
             try
@@ -73,7 +90,11 @@ namespace SabreTools.Serialization.Wrappers
                 // Cache the current offset
                 long currentOffset = data.Position;
 
-                var model = new Readers.CDROMVolume().Deserialize(data);
+                // Create user data sub-stream
+                SabreTools.Data.Extensions.CDROM.ISO9660Stream userData = new(data);
+
+                // Deserialize just the sub-stream
+                var model = new Readers.ISO9660().Deserialize(userData);
                 if (model == null)
                     return null;
 
