@@ -1,6 +1,5 @@
 using System;
 using SabreTools.Data.Models.ISO9660;
-using SabreTools.IO.Extensions;
 
 namespace SabreTools.Data.Extensions
 {
@@ -25,19 +24,15 @@ namespace SabreTools.Data.Extensions
             {
                 // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
                 short le = bvd.LogicalBlockSize.LittleEndian;
+                bool leValid = le >= 512 && le <= sectorLength && (le & (le - 1)) == 0;
+
                 short be = bvd.LogicalBlockSize.LittleEndian;
-                bool le_valid = true;
-                bool be_valid = true;
-                if (le < 512 || le > sectorLength || (le & (le - 1)) != 0)
-                    le_valid = false;
-                if (be < 512 || be > sectorLength || (be & (be - 1)) != 0)
-                    be_valid = false;
-                if (le_valid && !be_valid)
+                bool beValid = be >= 512 && be <= sectorLength && (be & (be - 1)) == 0;
+
+                if (leValid && !beValid)
                     blockLength = le;
-                else if (be_valid && !le_valid)
+                else if (beValid && !leValid)
                     blockLength = be;
-                else
-                    blockLength = sectorLength;
             }
 
             return blockLength;
