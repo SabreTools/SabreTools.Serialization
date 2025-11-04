@@ -1,5 +1,6 @@
 using System;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.Numerics;
 
 namespace SabreTools.Data.Extensions
 {
@@ -8,35 +9,48 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Get the logical block size from a sector length
         /// </summary>
-        /// <param name="bvd">Volume descriptor containing block information</param>
+        /// <param name="vd">Volume descriptor containing block information</param>
         /// <param name="sectorLength">Defined sector length</param>
         /// <returns>Size of a logical block</returns>
-        public static short GetLogicalBlockSize(this BaseVolumeDescriptor bvd, short sectorLength)
+        public static short GetLogicalBlockSize(this VolumeDescriptor vd, short sectorLength)
         {
-            short blockLength = sectorLength;
-            if (bvd.LogicalBlockSize.IsValid)
-            {
-                // Validate logical block length
-                if (bvd.LogicalBlockSize >= 512 && bvd.LogicalBlockSize <= sectorLength && (bvd.LogicalBlockSize & (bvd.LogicalBlockSize - 1)) == 0)
-                    blockLength = bvd.LogicalBlockSize;
-            }
+            BothInt16 blockLength;
+            if (vd is PrimaryVolumeDescriptor pvd)
+                blockLength = pvd.LogicalBlockSize;
+            else if (vd is SupplementaryVolumeDescriptor svd)
+                blockLength = svd.LogicalBlockSize;
             else
-            {
-                // If logical block size is ambiguous check if only one is valid, otherwise default to sector length
-                short le = bvd.LogicalBlockSize.LittleEndian;
-                bool leValid = le >= 512 && le <= sectorLength && (le & (le - 1)) == 0;
+                return sectorLength;
 
-                short be = bvd.LogicalBlockSize.LittleEndian;
-                bool beValid = be >= 512 && be <= sectorLength && (be & (be - 1)) == 0;
+            // If the block size is inconsistent
+            if (!blockLength.IsValid)
+            {
+                bool leValid = BlockLengthValid(blockLength.LittleEndian, sectorLength);
+                bool beValid = BlockLengthValid(blockLength.BigEndian, sectorLength);
 
                 if (leValid && !beValid)
-                    blockLength = le;
+                    blockLength = blockLength.LittleEndian;
                 else if (beValid && !leValid)
-                    blockLength = be;
+                    blockLength = blockLength.BigEndian;
+                else
+                    return sectorLength;
             }
+
+            // Validate logical block length
+            if (!BlockLengthValid(blockLength, sectorLength))
+                blockLength = sectorLength;
 
             return blockLength;
         }
+
+        /// <summary>
+        /// Indicates if a block length is valid
+        /// </summary>
+        /// <param name="blockLength">Block length to check</param>
+        /// <param name="sectorLength">Defined sector length</param>
+        /// <returns>True if the block length is valid, false otherwise</returns>
+        private static bool BlockLengthValid(short blockLength, short sectorLength)
+            => blockLength >= 512 && blockLength <= sectorLength && (blockLength & (blockLength - 1)) == 0;
 
         /// <summary>
         /// Indicates if an array contains all ASCII numeric digits
