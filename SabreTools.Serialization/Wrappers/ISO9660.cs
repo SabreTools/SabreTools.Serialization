@@ -16,16 +16,16 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Volume.SystemArea"/>
-        public virtual byte[] SystemArea => Model.SystemArea;
+        public byte[] SystemArea => Model.SystemArea;
 
         /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
-        public virtual VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet;
+        public VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet;
 
         /// <inheritdoc cref="Volume.PathTableGroups"/>
-        public virtual PathTableGroup[] PathTableGroups => Model.PathTableGroups;
+        public PathTableGroup[] PathTableGroups => Model.PathTableGroups;
 
         /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
-        public virtual Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors;
+        public Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors;
 
         #endregion
 

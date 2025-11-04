@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ISO9660;
 
@@ -9,23 +8,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "CD-ROM ISO9660 Volume";
-
-        #endregion
-
-        #region Extension Properties
-
-        /// <inheritdoc cref="Volume.SystemArea"/>
-        public override byte[] SystemArea => Model.SystemArea;
-
-        /// <inheritdoc cref="Volume.VolumeDescriptorSet"/>
-        public override VolumeDescriptor[] VolumeDescriptorSet => Model.VolumeDescriptorSet;
-
-        /// <inheritdoc cref="Volume.PathTableGroups"/>
-        public override PathTableGroup[] PathTableGroups => Model.PathTableGroups;
-
-        /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
-        public override Dictionary<int, FileExtent> DirectoryDescriptors => Model.DirectoryDescriptors;
+        public override string DescriptionString => "CD-ROM ISO 9660 Volume";
 
         #endregion
 
@@ -77,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Create a CDROM data track from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the CDROM data track</param>
+        /// <param name="data">Seekable Stream representing the CDROM data track</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
         public new static CDROM? Create(Stream? data)
         {
