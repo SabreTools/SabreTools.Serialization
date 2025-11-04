@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            if (Model.SystemArea == null || Model.SystemArea.Length == 0)
+            if (Model.SystemArea.Length == 0)
                 builder.AppendLine(Model.SystemArea, "System Area");
             else if (Array.TrueForAll(Model.SystemArea, b => b == 0))
                 builder.AppendLine("Zeroed", "System Area");
@@ -38,11 +38,11 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Volume Descriptors
 
-        protected static void Print(StringBuilder builder, VolumeDescriptor[]? vdSet)
+        protected static void Print(StringBuilder builder, VolumeDescriptor[] vdSet)
         {
             builder.AppendLine("  Volume Descriptors:");
             builder.AppendLine("  -------------------------");
-            if (vdSet == null)
+            if (vdSet.Length == 0)
             {
                 builder.AppendLine("  No volume descriptor set");
                 builder.AppendLine();
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot System Identifier");
             builder.AppendLine(vd.BootSystemIdentifier, "    Boot Identifier");
 
-            if (vd.BootSystemUse == null || vd.BootSystemUse.Length == 0)
+            if (vd.BootSystemUse.Length == 0)
                 builder.AppendLine(vd.BootSystemUse, "    Boot System Use");
             else if (Array.TrueForAll(vd.BootSystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    Boot System Use");
@@ -176,14 +176,14 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine(vd.ReservedByte, "    Reserved Byte");
 
-            if (vd.ApplicationUse == null || vd.ApplicationUse.Length == 0)
+            if (vd.ApplicationUse.Length == 0)
                 builder.AppendLine(vd.ApplicationUse, "    Application Use");
             else if (Array.TrueForAll(vd.ApplicationUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    Application Use");
             else
                 builder.AppendLine("Not Zeroed", "    Application Use");
 
-            if (vd.Reserved653Bytes == null || vd.Reserved653Bytes.Length == 0)
+            if (vd.Reserved653Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved653Bytes, "    Reserved 653 Bytes");
             else if (Array.TrueForAll(vd.Reserved653Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved 653 Bytes");
@@ -203,7 +203,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLineBothEndian(vd.VolumePartitionLocation, "    Volume Partition Location");
             builder.AppendLineBothEndian(vd.VolumePartitionSize, "    Volume Partition Size");
 
-            if (vd.SystemUse == null || vd.SystemUse.Length == 0)
+            if (vd.SystemUse.Length == 0)
                 builder.AppendLine(vd.SystemUse, "    System Use");
             else if (Array.TrueForAll(vd.SystemUse, b => b == 0))
                 builder.AppendLine("Zeroed", "    System Use");
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("    Volume Descriptor Set Terminator:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Reserved2041Bytes == null || vd.Reserved2041Bytes.Length == 0)
+            if (vd.Reserved2041Bytes.Length == 0)
                 builder.AppendLine(vd.Reserved2041Bytes, "    Reserved Bytes");
             else if (Array.TrueForAll(vd.Reserved2041Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved Bytes");
@@ -233,7 +233,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("    Unidentified Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            if (vd.Data == null || vd.Data.Length == 0)
+            if (vd.Data.Length == 0)
                 builder.AppendLine(vd.Data, "    Data");
             else if (Array.TrueForAll(vd.Data, b => b == 0))
                 builder.AppendLine("Zeroed", "    Data");
@@ -247,11 +247,11 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Path Tables
 
-        protected static void Print(StringBuilder builder, PathTableGroup[]? ptgs, Encoding encoding)
+        protected static void Print(StringBuilder builder, PathTableGroup[] ptgs, Encoding encoding)
         {
             builder.AppendLine("  Path Table Group(s):");
             builder.AppendLine("  -------------------------");
-            if (ptgs == null)
+            if (ptgs.Length == 0)
             {
                 builder.AppendLine("  No path table groups");
                 builder.AppendLine();
@@ -336,11 +336,11 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Directories
 
-        protected static void Print(StringBuilder builder, Dictionary<int, FileExtent>? dirs, Encoding encoding)
+        protected static void Print(StringBuilder builder, Dictionary<int, FileExtent> dirs, Encoding encoding)
         {
             builder.AppendLine("  Directory Descriptors Information:");
             builder.AppendLine("  -------------------------");
-            if (dirs == null)
+            if (dirs.Count == 0)
             {
                 builder.AppendLine("  No directory descriptors");
                 builder.AppendLine();
@@ -355,18 +355,11 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, FileExtent? extent, Encoding encoding)
+        private static void Print(StringBuilder builder, FileExtent extent, Encoding encoding)
         {
-            if (extent == null)
-            {
-                builder.AppendLine("    No directory descriptor");
-                builder.AppendLine();
-                return;
-            }
-
             if (extent is DirectoryExtent dir)
             {
-                if (dir.DirectoryRecords == null)
+                if (dir.DirectoryRecords.Length == 0)
                 {
                     builder.AppendLine("    No directory records");
                     builder.AppendLine();
@@ -391,15 +384,8 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryRecord? dr, Encoding encoding)
+        private static void Print(StringBuilder builder, DirectoryRecord dr, Encoding encoding)
         {
-            if (dr == null)
-            {
-                builder.AppendLine("      No directory record");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(dr.DirectoryRecordLength, "      Directory Record Length");
             builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
 
@@ -427,7 +413,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(dr.FileIdentifier, "      File Identifier");
             builder.AppendLine(dr.PaddingField, "      Padding Field");
 
-            if (dr.SystemUse == null || dr.SystemUse.Length == 0)
+            if (dr.SystemUse.Length == 0)
                 builder.AppendLine(dr.SystemUse, "      System Use");
             else if (Array.TrueForAll(dr.SystemUse, b => b == 0))
                 builder.AppendLine($"Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
@@ -435,13 +421,8 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine($"Not Zeroed ({dr.SystemUse.Length} bytes)", "      System Use");
         }
 
-        private static void Print(StringBuilder builder, DirectoryRecordDateTime? drdt)
+        private static void Print(StringBuilder builder, DirectoryRecordDateTime drdt)
         {
-            if (drdt == null)
-            {
-                builder.AppendLine("[NULL]", "      Directory Record Date Time");
-                return;
-            }
             builder.AppendLine("      Directory Record Date Time:");
 
             builder.AppendLine(drdt.YearsSince1990, "        Years Since 1900");
@@ -498,11 +479,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        private static string? Format(DecDateTime? dt)
+        private static string Format(DecDateTime dt)
         {
-            if (dt == null)
-                return null;
-
             string year = dt.Year.IsNumericArray()
                 ? Encoding.ASCII.GetString(dt.Year)
                 : BitConverter.ToString(dt.Year).Replace('-', ' ');
