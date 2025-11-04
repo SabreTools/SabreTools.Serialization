@@ -103,7 +103,7 @@ namespace SabreTools.Data.Extensions
                 int totalRead = 0;
                 int remaining = count;
 
-                while (remaining > 0 && _position < Length)
+                while (remaining > 0 && _position < _baseStream.Length)
                 {
                     // Determine location of current sector
                     long baseStreamOffset = (_position / _baseSectorSize) * _baseSectorSize;
@@ -142,7 +142,7 @@ namespace SabreTools.Data.Extensions
                     int bytesToRead = (int)Math.Min(remaining, _isoSectorSize - sectorOffset);
 
                     // Don't overshoot end of stream
-                    bytesToRead = (int)Math.Min(bytesToRead, Length - _position);
+                    bytesToRead = (int)Math.Min(bytesToRead, _baseStream.Length - _position);
 
                     if (bytesToRead == (_isoSectorSize - sectorOffset))
                         readEntireSector = true;
@@ -211,6 +211,7 @@ namespace SabreTools.Data.Extensions
 
             private void SetState(long sectorLocation)
             {
+                long oldPosition = _baseStream.Position;
                 long modePosition = (sectorLocation - sectorLocation % _baseSectorSize) + 15;
                 _baseStream.Seek(modePosition, SeekOrigin.Begin);
                 byte modeByte = _baseStream.ReadByteValue();
@@ -237,13 +238,13 @@ namespace SabreTools.Data.Extensions
                         _userDataStart = 16;
                         _userDataEnd = 2064;
                         //_isoSectorSize = 2048;
-                        return;
+                        break;
 
                     case SectorMode.MODE2_FORM1:
                         _userDataStart = 24;
                         _userDataEnd = 2072;
                         //_isoSectorSize = 2048;
-                        return;
+                        break;
 
                     case SectorMode.MODE2_FORM2:
                         _userDataStart = 24;
@@ -251,7 +252,7 @@ namespace SabreTools.Data.Extensions
                         // TODO: Support flexible sector length
                         //_userDataEnd = 2348;
                         //_isoSectorSize = 2324;
-                        return;
+                        break;
 
                     case SectorMode.MODE0:
                     case SectorMode.MODE2:
@@ -260,14 +261,16 @@ namespace SabreTools.Data.Extensions
                         // TODO: Support flexible sector length
                         //_userDataEnd = 2352;
                         //_isoSectorSize = 2336;
-                        return;
+                        break;
 
                     case SectorMode.UNKNOWN:
                         _userDataStart = 16;
                         _userDataEnd = 2064;
                         //_isoSectorSize = 2048;
-                        return;
+                        break;
                 }
+
+                _baseStream.Seek(oldPosition, SeekOrigin.Begin);
 
                 return;
             }
