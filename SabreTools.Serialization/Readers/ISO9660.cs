@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the set of Volume Descriptors
                 var vdSet = ParseVolumeDescriptorSet(data, sectorLength);
-                if (vdSet == null || vdSet.Length == 0)
+                if (vdSet.Length == 0)
                     return null;
 
                 volume.VolumeDescriptorSet = vdSet;
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumeDescriptor[] on success, null on error</returns>
-        public static VolumeDescriptor[]? ParseVolumeDescriptorSet(Stream data, short sectorLength)
+        public static VolumeDescriptor[] ParseVolumeDescriptorSet(Stream data, short sectorLength)
         {
             var obj = new List<VolumeDescriptor>();
 
@@ -199,11 +199,7 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            var dr = ParseDirectoryRecord(data, true);
-            if (dr == null)
-                return null;
-
-            obj.RootDirectoryRecord = dr;
+            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -266,11 +262,7 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            var dr = ParseDirectoryRecord(data, true);
-            if (dr == null)
-                return null;
-
-            obj.RootDirectoryRecord = dr;
+            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -414,7 +406,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the path table group in the base volume descriptor
                 var pathTableGroups = ParsePathTableGroup(data, sectorLength, bvd);
-                if (pathTableGroups != null && pathTableGroups.Count > 0)
+                if (pathTableGroups.Count > 0)
                     groups.AddRange(pathTableGroups);
             }
 
@@ -432,7 +424,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
         /// <returns>Filled list of PathTableGroup on success, null on error</returns>
-        public static List<PathTableGroup>? ParsePathTableGroup(Stream data, short sectorLength, BaseVolumeDescriptor vd)
+        public static List<PathTableGroup> ParsePathTableGroup(Stream data, short sectorLength, BaseVolumeDescriptor vd)
         {
             var groups = new List<PathTableGroup>();
 
