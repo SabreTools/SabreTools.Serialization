@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the set of Volume Descriptors
                 var vdSet = ParseVolumeDescriptorSet(data, sectorLength);
-                if (vdSet == null || vdSet.Length == 0)
+                if (vdSet.Length == 0)
                     return null;
 
                 volume.VolumeDescriptorSet = vdSet;
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <returns>Filled VolumeDescriptor[] on success, null on error</returns>
-        public static VolumeDescriptor[]? ParseVolumeDescriptorSet(Stream data, short sectorLength)
+        public static VolumeDescriptor[] ParseVolumeDescriptorSet(Stream data, short sectorLength)
         {
             var obj = new List<VolumeDescriptor>();
 
@@ -199,11 +199,7 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            var dr = ParseDirectoryRecord(data, true);
-            if (dr == null)
-                return null;
-
-            obj.RootDirectoryRecord = dr;
+            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -266,11 +262,7 @@ namespace SabreTools.Serialization.Readers
             obj.PathTableLocationM = data.ReadInt32BigEndian();
             obj.OptionalPathTableLocationM = data.ReadInt32BigEndian();
 
-            var dr = ParseDirectoryRecord(data, true);
-            if (dr == null)
-                return null;
-
-            obj.RootDirectoryRecord = dr;
+            obj.RootDirectoryRecord = ParseDirectoryRecord(data, true);
 
             obj.VolumeSetIdentifier = data.ReadBytes(128);
             obj.PublisherIdentifier = data.ReadBytes(128);
@@ -409,12 +401,9 @@ namespace SabreTools.Serialization.Readers
             var groups = new List<PathTableGroup>();
             foreach (VolumeDescriptor vd in vdSet)
             {
-                if (vd is not BaseVolumeDescriptor bvd)
-                    continue;
-
                 // Parse the path table group in the base volume descriptor
-                var pathTableGroups = ParsePathTableGroup(data, sectorLength, bvd);
-                if (pathTableGroups != null && pathTableGroups.Count > 0)
+                var pathTableGroups = ParsePathTableGroup(data, sectorLength, vd);
+                if (pathTableGroups.Count > 0)
                     groups.AddRange(pathTableGroups);
             }
 
@@ -432,17 +421,33 @@ namespace SabreTools.Serialization.Readers
         /// <param name="sectorLength">Number of bytes in a logical sector (usually 2048)</param>
         /// <param name="vd">Primary/Supplementary/Enhanced Volume Descriptor pointing to path table(s)</param>
         /// <returns>Filled list of PathTableGroup on success, null on error</returns>
-        public static List<PathTableGroup>? ParsePathTableGroup(Stream data, short sectorLength, BaseVolumeDescriptor vd)
+        public static List<PathTableGroup> ParsePathTableGroup(Stream data, short sectorLength, VolumeDescriptor vd)
         {
+            int sizeL, sizeB, locationL, locationL2, locationM, locationM2;
+            if (vd is PrimaryVolumeDescriptor pvd)
+            {
+                sizeL = pvd.PathTableSize.LittleEndian;
+                sizeB = pvd.PathTableSize.BigEndian;
+                locationL = pvd.PathTableLocationL;
+                locationL2 = pvd.OptionalPathTableLocationL;
+                locationM = pvd.PathTableLocationM;
+                locationM2 = pvd.OptionalPathTableLocationM;
+            }
+            else if (vd is SupplementaryVolumeDescriptor svd)
+            {
+                sizeL = svd.PathTableSize.LittleEndian;
+                sizeB = svd.PathTableSize.BigEndian;
+                locationL = svd.PathTableLocationL;
+                locationL2 = svd.OptionalPathTableLocationL;
+                locationM = svd.PathTableLocationM;
+                locationM2 = svd.OptionalPathTableLocationM;
+            }
+            else
+            {
+                return [];
+            }
+
             var groups = new List<PathTableGroup>();
-
-            int sizeL = vd.PathTableSize.LittleEndian;
-            int sizeB = vd.PathTableSize.BigEndian;
-            int locationL = vd.PathTableLocationL;
-            int locationL2 = vd.OptionalPathTableLocationL;
-            int locationM = vd.PathTableLocationM;
-            int locationM2 = vd.OptionalPathTableLocationM;
-
             short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
             var groupL = new PathTableGroup();
@@ -583,14 +588,19 @@ namespace SabreTools.Serialization.Readers
             var directories = new Dictionary<int, FileExtent>();
             foreach (VolumeDescriptor vd in vdSet)
             {
-                if (vd is not BaseVolumeDescriptor bvd)
+                DirectoryRecord rootDirectoryRecord;
+                if (vd is PrimaryVolumeDescriptor pvd)
+                    rootDirectoryRecord = pvd.RootDirectoryRecord;
+                else if (vd is SupplementaryVolumeDescriptor svd)
+                    rootDirectoryRecord = svd.RootDirectoryRecord;
+                else
                     continue;
 
                 // Determine logical block size
-                short blockLength = bvd.GetLogicalBlockSize(sectorLength);
+                short blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                 // Parse the root directory pointed to from the base volume descriptor
-                var descriptors = ParseDirectory(data, sectorLength, blockLength, bvd.RootDirectoryRecord, false);
+                var descriptors = ParseDirectory(data, sectorLength, blockLength, rootDirectoryRecord, false);
                 if (descriptors == null || descriptors.Count == 0)
                     continue;
 
