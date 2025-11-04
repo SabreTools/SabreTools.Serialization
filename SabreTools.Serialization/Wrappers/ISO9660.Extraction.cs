@@ -15,13 +15,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private Dictionary<int, int> extractedFiles = [];
+        private readonly Dictionary<int, int> extractedFiles = [];
 
         /// <summary>
         /// List of multi-extent files written, by their FileIdentifier
         /// </summary>
         /// <remarks>Used as last-extent has mutli-extent flag=0</remarks>
-        private List<byte[]> multiExtentFiles = [];
+        private readonly List<byte[]> multiExtentFiles = [];
 
         #endregion
 
@@ -31,6 +31,10 @@ namespace SabreTools.Serialization.Wrappers
             // If we have no volume or directory descriptors, there is nothing to extract
             if (VolumeDescriptorSet.Length == 0 || DirectoryDescriptors.Count == 0)
                 return true;
+
+            // Clear the extraction state
+            extractedFiles.Clear();
+            multiExtentFiles.Clear();
 
             bool allExtracted = true;
 
@@ -43,25 +47,25 @@ namespace SabreTools.Serialization.Wrappers
             // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
             for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
             {
-                if (VolumeDescriptorSet[i] is BaseVolumeDescriptor bvd)
+                if (VolumeDescriptorSet[i] is not BaseVolumeDescriptor bvd)
+                    continue;
+
+                var rootDir = bvd.RootDirectoryRecord;
+                var blockLength = bvd.GetLogicalBlockSize(sectorLength);
+
+                // TODO: Better encoding detection (EscapeSequences)
+                var encoding = Encoding.UTF8;
+                if (bvd is SupplementaryVolumeDescriptor)
+                    encoding = Encoding.BigEndianUnicode;
+
+                // Extract all files within root directory hierarchy
+                allExtracted &= ExtractExtent(rootDir.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
+
+                // If Big Endian extent location differs from Little Endian extent location, also extract that directory hierarchy
+                if (!rootDir.ExtentLocation.IsValid)
                 {
-                    var rootDir = bvd.RootDirectoryRecord;
-
-                    var blockLength = bvd.GetLogicalBlockSize(sectorLength);
-
-                    // TODO: Better encoding detection (EscapeSequences)
-                    var encoding = Encoding.UTF8;
-                    if (bvd is SupplementaryVolumeDescriptor svd)
-                        encoding = Encoding.BigEndianUnicode;
-
-                    // Extract all files within root directory hierarchy
-                    allExtracted &= ExtractExtent(rootDir.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
-                    // If Big Endian extent location differs from Little Endian extent location, also extract that directory hierarchy
-                    if (!rootDir.ExtentLocation.IsValid)
-                    {
-                        if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
-                        allExtracted &= ExtractExtent(rootDir.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
-                    }
+                    if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
+                    allExtracted &= ExtractExtent(rootDir.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
                 }
             }
 
@@ -78,36 +82,41 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             bool succeeded = true;
-            if (DirectoryDescriptors[extentLocation] is DirectoryExtent dir)
+            if (DirectoryDescriptors[extentLocation] is not DirectoryExtent dir)
+                return succeeded;
+
+            foreach (var dr in dir.DirectoryRecords)
             {
-                foreach (var dr in dir.DirectoryRecords)
+                // Recurse if record is directory
+#if NET20 || NET35
+                if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
+#else
+                if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+#endif
                 {
-                    // Recurse if record is directory
-                    if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
-                    {
-                        // Don't recurse up or self
-                        if (dr.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || dr.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
-                            continue;
+                    // Don't recurse up or self
+                    if (dr.FileIdentifier.EqualsExactly(Constants.CurrentDirectory) || dr.FileIdentifier.EqualsExactly(Constants.ParentDirectory))
+                        continue;
 
-                        // Append directory name
-                        string outDirTemp = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
-                        if (includeDebug) Console.WriteLine($"Extracting to directory: {outDirTemp}");
+                    // Append directory name
+                    string outDirTemp = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
+                    if (includeDebug) Console.WriteLine($"Extracting to directory: {outDirTemp}");
 
-                        // Recursively extract from LittleEndian extent location
-                        ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outDirTemp, includeDebug);
+                    // Recursively extract from LittleEndian extent location
+                    ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outDirTemp, includeDebug);
 
-                        // Also extract from BigEndian values if ambiguous
-                        if (!dr.ExtentLocation.IsValid!)
-                            ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outDirTemp, includeDebug);
-                    }
-                    else
-                    {
-                        // Record is a simple file extent, extract file
-                        succeeded &= ExtractFile(dr, encoding, blockLength, false, outputDirectory, includeDebug);
-                        // Also extract from BigEndian values if ambiguous
-                        if (!dr.ExtentLocation.IsValid!)
-                            succeeded &= ExtractFile(dr, encoding, blockLength, true, outputDirectory, includeDebug);
-                    }
+                    // Also extract from BigEndian values if ambiguous
+                    if (!dr.ExtentLocation.IsValid)
+                        ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outDirTemp, includeDebug);
+                }
+                else
+                {
+                    // Record is a simple file extent, extract file
+                    succeeded &= ExtractFile(dr, encoding, blockLength, false, outputDirectory, includeDebug);
+
+                    // Also extract from BigEndian values if ambiguous
+                    if (!dr.ExtentLocation.IsValid)
+                        succeeded &= ExtractFile(dr, encoding, blockLength, true, outputDirectory, includeDebug);
                 }
             }
 
@@ -120,7 +129,11 @@ namespace SabreTools.Serialization.Wrappers
         private bool ExtractFile(DirectoryRecord dr, Encoding encoding, int blockLength, bool bigEndian, string outputDirectory, bool includeDebug)
         {
             // Cannot extract file if it is a directory
-            if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+#if NET20 || NET35
+            if ((dr.FileFlags & FileFlags.DIRECTORY) != 0)
+#else
+            if (dr.FileFlags.HasFlag(FileFlags.DIRECTORY))
+#endif
                 return false;
 
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
@@ -142,9 +155,13 @@ namespace SabreTools.Serialization.Wrappers
                 Directory.CreateDirectory(directoryName);
 
             bool multiExtent = false;
-            
+
             // Currently cannot extract multi-extent or interleaved files
+#if NET20 || NET35
             if ((dr.FileFlags & FileFlags.MULTI_EXTENT) != 0)
+#else
+            if (dr.FileFlags.HasFlag(FileFlags.MULTI_EXTENT))
+#endif
             {
                 if (includeDebug) Console.WriteLine($"Extraction of multi-extent files is currently WIP: {filename}");
                 multiExtentFiles.Add(dr.FileIdentifier);
@@ -171,7 +188,7 @@ namespace SabreTools.Serialization.Wrappers
             const int chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
-                long fileOffset = ((long)dr.ExtentLocation + (long)dr.ExtendedAttributeRecordLength) * (long)blockLength;
+                long fileOffset = ((long)dr.ExtentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
@@ -184,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
-                    int bytesToRead = (int)Math.Min(length, chunkSize);
+                    int bytesToRead = Math.Min(length, chunkSize);
 
                     byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                     fs.Write(buffer, 0, bytesToRead);
