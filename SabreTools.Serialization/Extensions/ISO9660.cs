@@ -14,43 +14,43 @@ namespace SabreTools.Data.Extensions
         /// <returns>Size of a logical block</returns>
         public static short GetLogicalBlockSize(this VolumeDescriptor vd, short sectorLength)
         {
-            BothInt16 blockLength;
+            BothInt16 blockSize;
             if (vd is PrimaryVolumeDescriptor pvd)
-                blockLength = pvd.LogicalBlockSize;
+                blockSize = pvd.LogicalBlockSize;
             else if (vd is SupplementaryVolumeDescriptor svd)
-                blockLength = svd.LogicalBlockSize;
+                blockSize = svd.LogicalBlockSize;
             else
                 return sectorLength;
 
             // If the block size is inconsistent
-            if (!blockLength.IsValid)
+            if (!blockSize.IsValid)
             {
-                bool leValid = BlockLengthValid(blockLength.LittleEndian, sectorLength);
-                bool beValid = BlockLengthValid(blockLength.BigEndian, sectorLength);
+                bool leValid = BlockSizeValid(blockSize.LittleEndian, sectorLength);
+                bool beValid = BlockSizeValid(blockSize.BigEndian, sectorLength);
 
                 if (leValid && !beValid)
-                    blockLength = blockLength.LittleEndian;
+                    blockSize = blockSize.LittleEndian;
                 else if (beValid && !leValid)
-                    blockLength = blockLength.BigEndian;
+                    blockSize = blockSize.BigEndian;
                 else
                     return sectorLength;
             }
 
-            // Validate logical block length
-            if (!BlockLengthValid(blockLength, sectorLength))
-                blockLength = sectorLength;
+            // Validate logical block size
+            if (!BlockSizeValid(blockSize, sectorLength))
+                blockSize = sectorLength;
 
-            return blockLength;
+            return blockSize;
         }
 
         /// <summary>
-        /// Indicates if a block length is valid
+        /// Indicates if a block size is valid
         /// </summary>
-        /// <param name="blockLength">Block length to check</param>
+        /// <param name="blockSize">Block length to check</param>
         /// <param name="sectorLength">Defined sector length</param>
         /// <returns>True if the block length is valid, false otherwise</returns>
-        private static bool BlockLengthValid(short blockLength, short sectorLength)
-            => blockLength >= 512 && blockLength <= sectorLength && (blockLength & (blockLength - 1)) == 0;
+        private static bool BlockSizeValid(short blockSize, short sectorLength)
+            => blockSize >= 512 && blockSize <= sectorLength && (blockSize & (blockSize - 1)) == 0;
 
         /// <summary>
         /// Indicates if an array contains all ASCII numeric digits
