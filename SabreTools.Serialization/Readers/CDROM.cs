@@ -21,15 +21,33 @@ namespace SabreTools.Serialization.Readers
             SectorMode sectorMode = data.GetSectorMode();
             return sectorMode switch
             {
-                SectorMode.MODE0 => null, // TODO: Create data sector for Mode0
+                SectorMode.MODE0 => ParseMode0(data),
                 SectorMode.MODE1 => ParseMode1(data),
-                SectorMode.MODE2 => null, // TODO: Create a data sector for Mode2 formless
+                SectorMode.MODE2 => ParseMode2Formless(data),
                 SectorMode.MODE2_FORM1 => ParseMode2Form1(data),
                 SectorMode.MODE2_FORM2 => ParseMode2Form2(data),
 
                 SectorMode.UNKNOWN => null,
                 _ => null,
             };
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Mode0
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Mode0 on success, null on error</returns>
+        public static Mode0 ParseMode0(Stream data)
+        {
+            var obj = new Mode0();
+
+            obj.SyncPattern = data.ReadBytes(12);
+            obj.Address = data.ReadBytes(3);
+            obj.Mode = data.ReadByteValue();
+
+            obj.UserData = data.ReadBytes(2336);
+
+            return obj;
         }
 
         /// <summary>
@@ -49,6 +67,24 @@ namespace SabreTools.Serialization.Readers
             obj.EDC = data.ReadBytes(4);
             obj.Intermediate = data.ReadBytes(8);
             obj.ECC = data.ReadBytes(276);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a Mode2Formless
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled Mode2Formless on success, null on error</returns>
+        public static Mode2Formless ParseMode2Formless(Stream data)
+        {
+            var obj = new Mode2Formless();
+
+            obj.SyncPattern = data.ReadBytes(12);
+            obj.Address = data.ReadBytes(3);
+            obj.Mode = data.ReadByteValue();
+
+            obj.UserData = data.ReadBytes(2336);
 
             return obj;
         }
