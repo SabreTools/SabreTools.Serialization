@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Reset stream
                 userData.Seek(0, SeekOrigin.Position);
 
-                return new CDROM(model, userData, userData.Position);
+                return new CDROM(model, userData, userData.Begin);
             }
             catch
             {
