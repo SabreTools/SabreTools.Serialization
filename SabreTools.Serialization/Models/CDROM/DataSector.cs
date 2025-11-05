@@ -1,10 +1,10 @@
 namespace SabreTools.Data.Models.CDROM
 {
     /// <summary>
-    /// A CD-ROM sector
+    /// A CD-ROM data sector
     /// </summary>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-130_2nd_edition_june_1996.pdf"/>
-    public abstract class Sector
+    public abstract class DataSector
     {
         /// <summary>
         /// Sync pattern, 12 bytes

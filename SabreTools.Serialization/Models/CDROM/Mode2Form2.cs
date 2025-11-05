@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.CDROM
     /// Larger user data at expense of no error correction, just error detection
     /// </summary>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-130_2nd_edition_june_1996.pdf"/>
-    public sealed class Mode2Form2 : Sector
+    public sealed class Mode2Form2 : DataSector
     {
         /// <summary>
         /// Mode 2 subheader, 8 bytes

@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Create an ISO9660 Volume from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="data">Byte array representing the ISO9660 Volume</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>An ISO 9660 Volume wrapper on success, null on failure</returns>
         public static ISO9660? Create(byte[]? data, int offset)
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Create an ISO9660 Volume from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
+        /// <param name="data">Stream representing the ISO9660 Volume</param>
         /// <returns>An ISO9660 Volume wrapper on success, null on failure</returns>
         public static ISO9660? Create(Stream? data)
         {

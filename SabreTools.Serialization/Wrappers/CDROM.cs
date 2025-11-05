@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Descriptive Properties
 
         /// <inheritdoc/>
-        public override string DescriptionString => "CD-ROM Data Track";
+        public override string DescriptionString => "CD-ROM ISO 9660 Volume";
 
         #endregion
 
@@ -37,9 +37,9 @@ namespace SabreTools.Serialization.Wrappers
         #region Static Constructors
 
         /// <summary>
-        /// Create an CDROM data track from a byte array and offset
+        /// Create a CDROM data track from a byte array and offset
         /// </summary>
-        /// <param name="data">Byte array representing the archive</param>
+        /// <param name="data">Byte array representing the CDROM data track</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
         public new static CDROM? Create(byte[]? data, int offset)
@@ -58,26 +58,33 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Create an CDROM data track from a Stream
+        /// Create a CDROM data track from a Stream
         /// </summary>
-        /// <param name="data">Stream representing the archive</param>
+        /// <param name="data">Seekable Stream representing the CDROM data track</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
         public new static CDROM? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data == null || !data.CanRead || !data.CanSeek)
                 return null;
 
             try
             {
-                // Cache the current offset
-                long currentOffset = data.Position;
+                // Create user data sub-stream
+                SabreTools.Data.Extensions.CDROM.ISO9660Stream userData = new(data);
 
-                var model = new Readers.CDROMVolume().Deserialize(data);
+                // Cache the current offset
+                long currentOffset = userData.Position;
+
+                // Deserialize just the sub-stream
+                var model = new Readers.ISO9660().Deserialize(userData);
                 if (model == null)
                     return null;
 
-                return new CDROM(model, data, currentOffset);
+                // Reset stream
+                userData.Seek(currentOffset, SeekOrigin.Begin);
+
+                return new CDROM(model, userData, userData.Position);
             }
             catch
             {

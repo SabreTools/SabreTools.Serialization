@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.CDROM
     /// A CD-ROM Mode 2 Form 1 sector
     /// </summary>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-130_2nd_edition_june_1996.pdf"/>
-    public sealed class Mode2Form1 : Sector
+    public sealed class Mode2Form1 : DataSector
     {
         /// <summary>
         /// Mode 2 subheader, 8 bytes
