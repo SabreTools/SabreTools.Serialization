@@ -17,18 +17,58 @@ namespace SabreTools.Data.Models.CDROM
         public const long Mode0DataSize = 2336;
 
         /// <summary>
-        /// Size of user data length for Mode1 / Mode2 Form1
+        /// Offset in a Mode0 sector where user data starts
+        /// </summary>
+        public const long Mode0UserDataStart = 16;
+
+        /// <summary>
+        /// Offset in a Mode0 sector where user data ends
+        /// </summary>
+        public const long Mode0UserDataEnd = 2064;
+
+        /// <summary>
+        /// Size of user data length for Mode1
         /// </summary>
         public const long Mode1DataSize = 2048;
 
         /// <summary>
-        /// Size of user data length for Mode1 / Mode2 Form1
+        /// Offset in a Mode1 sector where user data starts
         /// </summary>
-        public const long Form1DataSize = 2048;
+        public const long Mode1UserDataStart = 16;
+
+        /// <summary>
+        /// Offset in a Mode1 sector where user data ends
+        /// </summary>
+        public const long Mode1UserDataEnd = 2064;
+
+        /// <summary>
+        /// Size of user data length for Mode2 Form1
+        /// </summary>
+        public const long Mode2Form1DataSize = 2048;
+
+        /// <summary>
+        /// Offset in a Mode2 Form1 sector where user data starts
+        /// </summary>
+        public const long Mode2Form1UserDataStart = 24;
+
+        /// <summary>
+        /// Offset in a Mode2 Form1 sector where user data ends
+        /// </summary>
+        public const long Mode2Form1UserDataEnd = 2072;
 
         /// <summary>
         /// Size of user data length for Mode2 Form2
         /// </summary>
-        public const long Form2DataSize = 2324;
+        public const long Mode2Form2DataSize = 2324;
+
+        /// <summary>
+        /// Offset in a Mode2 Form2 sector where user data starts
+        /// </summary>
+        public const long Mode2Form2UserDataStart = 24;
+
+        /// <summary>
+        /// Offset in a Mode2 Form2 sector where user data ends
+        /// </summary>
+        public const long Mode2Form2UserDataEnd = 2072;
     }
 }
