@@ -1,4 +1,4 @@
-namespace SabreTools.Data.Models.ISO9660
+namespace SabreTools.Data.Models.CDROM
 {
     /// <summary>
     /// CDROM constant values
