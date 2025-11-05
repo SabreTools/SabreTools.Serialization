@@ -13,23 +13,19 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public class ISO9660Stream : Stream
         {
-            // Constant variables
+            // Base CDROM stream (2352-byte sector)
             private readonly Stream _baseStream;
-            private const long _baseSectorSize = 2352;
-            private long _isoSectorSize = 2048;
-            // TODO: Support flexible sector size (MODE2_FORM2)
 
             // State variables
             private long _position = 0;
             private SectorMode _currentMode = SectorMode.UNKNOWN;
             private long _userDataStart = 16;
             private long _userDataEnd = 2064;
+            private long _isoSectorSize = Constants.Mode1DataSize;
 
             public ISO9660Stream(Stream inputStream)
             {
-                if (inputStream == null)
-                    throw new ArgumentNullException("Stream cannot be null.", nameof(inputStream));
-                else if (!inputStream.CanSeek || !inputStream.CanRead)
+                if (!inputStream.CanSeek || !inputStream.CanRead)
                     throw new ArgumentException("Stream must be readable and seekable.", nameof(inputStream));
                 _baseStream = inputStream;
             }
@@ -47,7 +43,7 @@ namespace SabreTools.Data.Extensions
             {
                 get
                 {
-                    return (_baseStream.Length / _baseSectorSize) * _isoSectorSize;
+                    return (_baseStream.Length / Constants.CDROMSectorSize) * _isoSectorSize;
                 }
             }
 
@@ -79,10 +75,10 @@ namespace SabreTools.Data.Extensions
                     SetState(_position);
 
                     // Get the number of ISO sectors before current position
-                    long isoPosition = (_position / _baseSectorSize) * _isoSectorSize;
+                    long isoPosition = (_position / Constants.CDROMSectorSize) * _isoSectorSize;
 
                     // Add the within-sector position
-                    long remainder = _position % _baseSectorSize;
+                    long remainder = _position % Constants.CDROMSectorSize;
                     if (remainder > _userDataEnd)
                         isoPosition += _isoSectorSize;
                     else if (remainder > _userDataStart)
@@ -106,13 +102,13 @@ namespace SabreTools.Data.Extensions
                 while (remaining > 0 && _position < _baseStream.Length)
                 {
                     // Determine location of current sector
-                    long baseStreamOffset = (_position / _baseSectorSize) * _baseSectorSize;
+                    long baseStreamOffset = (_position / Constants.CDROMSectorSize) * Constants.CDROMSectorSize;
 
                     // Set the current sector's mode and user data location
                     SetState(baseStreamOffset);
 
                     // Deal with case where base position is not in ISO stream
-                    long remainder = _position % _baseSectorSize;
+                    long remainder = _position % Constants.CDROMSectorSize;
                     long sectorOffset = remainder - _userDataStart;
                     if (remainder < _userDataStart)
                     {
@@ -122,9 +118,9 @@ namespace SabreTools.Data.Extensions
                     }
                     else if (remainder >= _userDataEnd)
                     {
-                        baseStreamOffset += _baseSectorSize;
+                        baseStreamOffset += Constants.CDROMSectorSize;
                         sectorOffset = 0;
-                        _position += _baseSectorSize - _userDataEnd + _userDataStart;
+                        _position += Constants.CDROMSectorSize - _userDataEnd + _userDataStart;
                     }
                     else
                         baseStreamOffset += remainder;
@@ -159,7 +155,7 @@ namespace SabreTools.Data.Extensions
                     // Update state for base stream
                     _position = _baseStream.Position;
                     if (readEntireSector)
-                        _position += (_baseSectorSize - _userDataEnd) + _userDataStart;
+                        _position += (Constants.CDROMSectorSize - _userDataEnd) + _userDataStart;
 
                     // Update state for ISO stream
                     totalRead += bytesRead;
@@ -192,7 +188,7 @@ namespace SabreTools.Data.Extensions
                 }
 
                 // Get the number of ISO sectors before current position
-                long newPosition = (targetPosition / _isoSectorSize) * _baseSectorSize;
+                long newPosition = (targetPosition / _isoSectorSize) * Constants.CDROMSectorSize;
 
                 // Set the current sector's mode and user data location
                 SetState(newPosition);
@@ -212,7 +208,7 @@ namespace SabreTools.Data.Extensions
             private void SetState(long sectorLocation)
             {
                 long oldPosition = _baseStream.Position;
-                long modePosition = (sectorLocation - sectorLocation % _baseSectorSize) + 15;
+                long modePosition = (sectorLocation - sectorLocation % Constants.CDROMSectorSize) + 15;
                 _baseStream.Seek(modePosition, SeekOrigin.Begin);
                 byte modeByte = _baseStream.ReadByteValue();
                 if (modeByte == 0)
@@ -237,13 +233,13 @@ namespace SabreTools.Data.Extensions
                     case SectorMode.MODE1:
                         _userDataStart = 16;
                         _userDataEnd = 2064;
-                        //_isoSectorSize = 2048;
+                        //_isoSectorSize = Constants.Mode1DataSize;
                         break;
 
                     case SectorMode.MODE2_FORM1:
                         _userDataStart = 24;
                         _userDataEnd = 2072;
-                        //_isoSectorSize = 2048;
+                        //_isoSectorSize = Constants.Form1DataSize;
                         break;
 
                     case SectorMode.MODE2_FORM2:
@@ -251,7 +247,7 @@ namespace SabreTools.Data.Extensions
                         _userDataEnd = 2072;
                         // TODO: Support flexible sector length
                         //_userDataEnd = 2348;
-                        //_isoSectorSize = 2324;
+                        //_isoSectorSize = Constants.Form2DataSize;
                         break;
 
                     case SectorMode.MODE0:
@@ -260,13 +256,13 @@ namespace SabreTools.Data.Extensions
                         _userDataEnd = 2064;
                         // TODO: Support flexible sector length
                         //_userDataEnd = 2352;
-                        //_isoSectorSize = 2336;
+                        //_isoSectorSize = Constants.Mode0DataSize;
                         break;
 
                     case SectorMode.UNKNOWN:
                         _userDataStart = 16;
                         _userDataEnd = 2064;
-                        //_isoSectorSize = 2048;
+                        //_isoSectorSize = Constants.Mode1DataSize;
                         break;
                 }
 
