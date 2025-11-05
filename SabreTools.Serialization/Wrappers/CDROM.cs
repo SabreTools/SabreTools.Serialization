@@ -70,11 +70,11 @@ namespace SabreTools.Serialization.Wrappers
 
             try
             {
-                // Cache the current offset
-                long currentOffset = data.Position;
-
                 // Create user data sub-stream
                 SabreTools.Data.Extensions.CDROM.ISO9660Stream userData = new(data);
+
+                // Cache the current offset
+                long currentOffset = userData.Position;
 
                 // Deserialize just the sub-stream
                 var model = new Readers.ISO9660().Deserialize(userData);
@@ -82,9 +82,9 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Reset stream
-                userData.Seek(0, SeekOrigin.Position);
+                userData.Seek(currentOffset, SeekOrigin.Begin);
 
-                return new CDROM(model, userData, userData.Begin);
+                return new CDROM(model, userData, userData.Position);
             }
             catch
             {
