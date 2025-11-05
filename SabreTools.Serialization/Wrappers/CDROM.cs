@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (model == null)
                     return null;
 
-                return new CDROM(model, data, currentOffset);
+                return new CDROM(model, userData, userData.Position);
             }
             catch
             {
