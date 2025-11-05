@@ -43,29 +43,35 @@ namespace SabreTools.Serialization.Wrappers
             if (sectorLength < 2048 || (sectorLength & (sectorLength - 1)) != 0)
                 sectorLength = 2048;
 
-            // Loop through all Base Volume Descriptors to extract files from each directory hierarchy
+            // Loop through all Volume Descriptors to extract files from each directory hierarchy
             // Note: This will prioritize the last volume descriptor directory hierarchies first (prioritises those filenames)
             for (int i = VolumeDescriptorSet.Length - 1; i >= 0; i--)
             {
-                if (VolumeDescriptorSet[i] is not BaseVolumeDescriptor bvd)
+                var vd = VolumeDescriptorSet[i];
+
+                DirectoryRecord rootDirectoryRecord;
+                if (vd is PrimaryVolumeDescriptor pvd)
+                    rootDirectoryRecord = pvd.RootDirectoryRecord;
+                else if (vd is SupplementaryVolumeDescriptor svd)
+                    rootDirectoryRecord = svd.RootDirectoryRecord;
+                else
                     continue;
 
-                var rootDir = bvd.RootDirectoryRecord;
-                var blockLength = bvd.GetLogicalBlockSize(sectorLength);
+                var blockLength = vd.GetLogicalBlockSize(sectorLength);
 
                 // TODO: Better encoding detection (EscapeSequences)
                 var encoding = Encoding.UTF8;
-                if (bvd is SupplementaryVolumeDescriptor)
+                if (vd is SupplementaryVolumeDescriptor)
                     encoding = Encoding.BigEndianUnicode;
 
                 // Extract all files within root directory hierarchy
-                allExtracted &= ExtractExtent(rootDir.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
+                allExtracted &= ExtractExtent(rootDirectoryRecord.ExtentLocation.LittleEndian, encoding, blockLength, outputDirectory, includeDebug);
 
                 // If Big Endian extent location differs from Little Endian extent location, also extract that directory hierarchy
-                if (!rootDir.ExtentLocation.IsValid)
+                if (!rootDirectoryRecord.ExtentLocation.IsValid)
                 {
                     if (includeDebug) Console.WriteLine($"Extracting from volume descriptor (big endian root dir location)");
-                    allExtracted &= ExtractExtent(rootDir.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
+                    allExtracted &= ExtractExtent(rootDirectoryRecord.ExtentLocation.BigEndian, encoding, blockLength, outputDirectory, includeDebug);
                 }
             }
 

@@ -58,8 +58,10 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (vd is BootRecordVolumeDescriptor brvd)
                     Print(builder, brvd);
-                else if (vd is BaseVolumeDescriptor bvd)
-                    Print(builder, bvd);
+                else if (vd is PrimaryVolumeDescriptor pvd)
+                    Print(builder, pvd);
+                else if (vd is SupplementaryVolumeDescriptor svd)
+                    Print(builder, svd);
                 else if (vd is VolumePartitionDescriptor vpd)
                     Print(builder, vpd);
                 else if (vd is VolumeDescriptorSetTerminator vdst)
