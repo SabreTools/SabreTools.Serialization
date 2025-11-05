@@ -268,7 +268,7 @@ namespace SabreTools.Data.Extensions
             public override long Seek(long offset, SeekOrigin origin)
             {
                 // Get the intended position for the ISO9660 stream
-                var targetPosition = origin switch
+                long targetPosition = origin switch
                 {
                     SeekOrigin.Begin => offset,
                     SeekOrigin.Current => Position + offset,
