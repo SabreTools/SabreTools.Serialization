@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.CDROM
         public byte[] Intermediate { get; set; } = new byte[8];
 
         /// <summary>
-        /// Error Correction Code, 4 bytes
+        /// Error Correction Code, 276 bytes
         /// </summary>
         public byte[] ECC { get; set; } = new byte[276];
     }
