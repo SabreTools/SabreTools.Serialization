@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Extensions;
@@ -689,10 +688,7 @@ namespace SabreTools.Serialization.Readers
                         // Start of sector should not be 0, ignore entire directory
                         int nextRecordLength = data.PeekByteValue();
                         if (nextRecordLength <= 0)
-                        {
-                            Console.WriteLine($"Debug: {nextRecordLength} <= {paddingLength}");
                             return null;
-                        }
 
                         continue;
                     }
