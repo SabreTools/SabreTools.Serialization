@@ -649,7 +649,10 @@ namespace SabreTools.Serialization.Readers
 
             // Validate extent length
             if (extentLength <= 0 || extentFinal > (long)data.Length)
+            {
+                Console.WriteLine($"ERROR0: {extentLength} <= 0 || {extentFinal} > {(long)data.Length}");
                 return null;
+            }
 
             // Move stream to directory location
             data.SeekIfPossible(extentOffset, SeekOrigin.Begin);
@@ -664,7 +667,10 @@ namespace SabreTools.Serialization.Readers
                 // Start of directory should not be 0
                 int firstRecordLength = data.PeekByteValue();
                 if (firstRecordLength == 0)
+                {
+                    Console.WriteLine($"ERROR1: {firstRecordLength} != 0");
                     return null;
+                }
 
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
@@ -688,7 +694,10 @@ namespace SabreTools.Serialization.Readers
                         // Start of sector should not be 0, ignore entire directory
                         int nextRecordLength = data.PeekByteValue();
                         if (nextRecordLength <= paddingLength)
+                        {
+                            Console.WriteLine($"ERROR2: {nextRecordLength} <= {paddingLength}");
                             return null;
+                        }
 
                         continue;
                     }
@@ -705,7 +714,10 @@ namespace SabreTools.Serialization.Readers
                     // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
                     var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField == null ? 0 : 1) + directoryRecord.SystemUse.Length;
                     if (readLength != recordLength)
+                    {
+                        Console.WriteLine($"ERROR3: {readLength} != {recordLength}");
                         return null;
+                    }
 
                     records.Add(directoryRecord);
                 }
