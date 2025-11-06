@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.CDROM
     /// A CD-ROM data sector
     /// </summary>
     /// <see href="https://ecma-international.org/wp-content/uploads/ECMA-130_2nd_edition_june_1996.pdf"/>
-    public abstract class DataSector
+    public abstract class DataSector : ISO9660.Sector
     {
         /// <summary>
         /// Sync pattern, 12 bytes
