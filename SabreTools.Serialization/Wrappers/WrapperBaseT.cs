@@ -2,17 +2,17 @@ using System.IO;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public abstract class WrapperBase<T> : WrapperBase, IWrapper<T>
+    public abstract class WrapperBase<TModel> : WrapperBase, IWrapper<TModel>
     {
         #region Properties
 
         /// <inheritdoc/>
-        public T GetModel() => Model;
+        public TModel GetModel() => Model;
 
         /// <summary>
         /// Internal model
         /// </summary>
-        public T Model { get; }
+        public TModel Model { get; }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="model">Model to be used in the wrapper</param>
         /// <param name="data">Underlying data for the wrapper</param>
-        protected WrapperBase(T model, byte[] data)
+        protected WrapperBase(TModel model, byte[] data)
             : this(model, data, 0, data.Length)
         {
         }
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="model">Model to be used in the wrapper</param>
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
-        protected WrapperBase(T model, byte[] data, int offset)
+        protected WrapperBase(TModel model, byte[] data, int offset)
             : this(model, data, offset, data.Length - offset)
         {
         }
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
         /// <param name="length">Length of the window into the data</param>
-        protected WrapperBase(T model, byte[] data, int offset, int length)
+        protected WrapperBase(TModel model, byte[] data, int offset, int length)
             : base(data, offset, length)
         {
             Model = model;
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="model">Model to be used in the wrapper</param>
         /// <param name="data">Underlying data for the wrapper</param>
         /// <remarks>Uses the current stream position as the offset</remarks>
-        protected WrapperBase(T model, Stream data)
+        protected WrapperBase(TModel model, Stream data)
             : this(model, data, data.Position, data.Length - data.Position)
         {
         }
@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="model">Model to be used in the wrapper</param>
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
-        protected WrapperBase(T model, Stream data, long offset)
+        protected WrapperBase(TModel model, Stream data, long offset)
             : this(model, data, offset, data.Length - offset)
         {
         }
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Underlying data for the wrapper</param>
         /// <param name="offset">Offset into the data to use as the window start</param>
         /// <param name="length">Length of the window into the data</param>
-        protected WrapperBase(T model, Stream data, long offset, long length)
+        protected WrapperBase(TModel model, Stream data, long offset, long length)
             : base(data, offset, length)
         {
             Model = model;
