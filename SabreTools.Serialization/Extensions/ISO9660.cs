@@ -55,7 +55,7 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Indicates if an array contains all ASCII numeric digits
         /// </summary>
-        /// TODO: Move to IO as an array extension
+        /// TODO: Remove when IO is updated
         public static bool IsNumericArray(this byte[] arr)
             => Array.TrueForAll(arr, b => b >= 0x30 && b <= 0x39);
     }

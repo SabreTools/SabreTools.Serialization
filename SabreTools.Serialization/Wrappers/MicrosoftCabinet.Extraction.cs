@@ -65,6 +65,10 @@ namespace SabreTools.Serialization.Wrappers
             // Read in the cabinet parts sequentially
             while (current.CabinetNext != null)
             {
+                // If the current and next filenames match
+                if (Path.GetFileName(filename) == current.CabinetNext)
+                    break;
+
                 // Open the next cabinet and try to parse
                 var next = current.OpenNext(filename);
                 if (next?.Header == null)
