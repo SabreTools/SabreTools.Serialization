@@ -1,6 +1,9 @@
 using System;
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.IO;
-#if NET462_OR_GREATER || NETCOREAPP
+#endif
+using SabreTools.IO.Extensions;
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Compressors.ZStandard;
 #endif
 
@@ -17,13 +20,13 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Ensure there is data to extract
-            if (Magic == null)
+            if (!Magic.EqualsExactly(Data.Models.ZSTD.Constants.SignatureBytes))
             {
                 if (includeDebug) Console.Error.WriteLine("Invalid archive detected, skipping...");
                 return false;
             }
 
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
                 // Ensure directory separators are consistent

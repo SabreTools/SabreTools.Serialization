@@ -22,16 +22,20 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var publisherIdentifier = Model.PublisherIdentifier;
-                if (string.IsNullOrEmpty(publisherIdentifier))
-                    return "Unknown";
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
 
-                if (Publishers.ContainsKey(publisherIdentifier!))
-                    return Publishers[publisherIdentifier!];
+                if (Publishers.TryGetValue(Model.PublisherIdentifier, out var publisher))
+                {
+                    field = publisher;
+                    return field;
+                }
 
-                return $"Unknown ({publisherIdentifier})";
+                field = $"Unknown ({Model.PublisherIdentifier})";
+                return field;
             }
-        }
+        } = null;
 
         /// <summary>
         /// Get the human-readable region string
@@ -40,13 +44,20 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                var regionIdentifier = Model.RegionIdentifier;
-                if (Regions.ContainsKey(regionIdentifier))
-                    return Regions[regionIdentifier];
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
 
-                return $"Unknown ({regionIdentifier})";
+                if (Regions.TryGetValue(Model.RegionIdentifier, out var region))
+                {
+                    field = region;
+                    return field;
+                }
+
+                field = $"Unknown ({Model.RegionIdentifier})";
+                return field;
             }
-        }
+        } = null;
 
         /// <summary>
         /// Get the human-readable serial string

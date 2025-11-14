@@ -94,8 +94,6 @@ namespace SabreTools.Serialization.Wrappers
 
                 return field;
             }
-
-            private set;
         } = null;
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Data.Models.WiseInstaller.Actions;
-#if NETFRAMEWORK || NETSTANDARD
+#if NETFRAMEWORK || NETSTANDARD2_0
 using SabreTools.IO.Extensions;
 #endif
 

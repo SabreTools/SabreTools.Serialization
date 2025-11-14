@@ -50,6 +50,10 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(header6.FileDataOffset, "  File data offset");
                     builder.AppendLine(header6.Dummy0, "  Dummy 0");
                     break;
+
+                default:
+                    builder.AppendLine($"  Unrecognized header type");
+                    break;
             }
 
             builder.AppendLine();

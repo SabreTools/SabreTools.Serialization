@@ -22,53 +22,57 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                long offset = 0;
+                // Use the cached data if possible
+                if (field > -1)
+                    return field;
 
-                offset += 1; // DllNameLen
+                field = 0;
+
+                field += 1; // DllNameLen
                 if (Model.DllNameLen > 0)
                 {
-                    offset += Model.DllNameLen;
-                    offset += 4; // DllSize
+                    field += Model.DllNameLen;
+                    field += 4; // DllSize
                 }
 
-                offset += 4; // Flags
-                offset += 12; // GraphicsData
-                offset += 4; // WiseScriptExitEventOffset
-                offset += 4; // WiseScriptCancelEventOffset
-                offset += 4; // WiseScriptInflatedSize
-                offset += 4; // WiseScriptDeflatedSize
-                offset += 4; // WiseDllDeflatedSize
-                offset += 4; // Ctl3d32DeflatedSize
-                offset += 4; // SomeData4DeflatedSize
-                offset += 4; // RegToolDeflatedSize
-                offset += 4; // ProgressDllDeflatedSize
-                offset += 4; // SomeData7DeflatedSize
-                offset += 4; // SomeData8DeflatedSize
-                offset += 4; // SomeData9DeflatedSize
-                offset += 4; // SomeData10DeflatedSize
-                offset += 4; // FinalFileDeflatedSize
-                offset += 4; // FinalFileInflatedSize
-                offset += 4; // EOF
+                field += 4; // Flags
+                field += 12; // GraphicsData
+                field += 4; // WiseScriptExitEventOffset
+                field += 4; // WiseScriptCancelEventOffset
+                field += 4; // WiseScriptInflatedSize
+                field += 4; // WiseScriptDeflatedSize
+                field += 4; // WiseDllDeflatedSize
+                field += 4; // Ctl3d32DeflatedSize
+                field += 4; // SomeData4DeflatedSize
+                field += 4; // RegToolDeflatedSize
+                field += 4; // ProgressDllDeflatedSize
+                field += 4; // SomeData7DeflatedSize
+                field += 4; // SomeData8DeflatedSize
+                field += 4; // SomeData9DeflatedSize
+                field += 4; // SomeData10DeflatedSize
+                field += 4; // FinalFileDeflatedSize
+                field += 4; // FinalFileInflatedSize
+                field += 4; // EOF
 
                 if (DibDeflatedSize == 0 && Model.Endianness == 0)
-                    return offset;
+                    return field;
 
-                offset += 4; // DibDeflatedSize
-                offset += 4; // DibInflatedSize
+                field += 4; // DibDeflatedSize
+                field += 4; // DibInflatedSize
 
                 if (Model.InstallScriptDeflatedSize != null)
-                    offset += 4; // InstallScriptDeflatedSize
+                    field += 4; // InstallScriptDeflatedSize
 
                 if (Model.CharacterSet != null)
-                    offset += 4; // CharacterSet
+                    field += 4; // CharacterSet
 
-                offset += 2; // Endianness
-                offset += 1; // InitTextLen
-                offset += Model.InitTextLen;
+                field += 2; // Endianness
+                field += 1; // InitTextLen
+                field += Model.InitTextLen;
 
-                return offset;
+                return field;
             }
-        }
+        } = -1;
 
         /// <summary>
         /// Installer data offset

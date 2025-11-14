@@ -89,13 +89,9 @@ namespace SabreTools.Serialization.Wrappers
             var destination = new MemoryStream();
             ExtractionStatus status;
             if (!(Version != null && Version[1] == 0x01))
-            {
                 status = ExtractStreamWithChecksum(destination, entrySize, includeDebug);
-            }
             else // hack for Codesited5.exe , very early and very strange.
-            {
                 status = ExtractStreamWithoutChecksum(destination, entrySize, includeDebug);
-            }
 
             // If the extracted data is invalid
             if (status != ExtractionStatus.GOOD || destination == null)

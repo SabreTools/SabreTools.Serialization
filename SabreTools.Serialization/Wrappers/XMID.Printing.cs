@@ -17,13 +17,13 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("Xbox Media Identifier Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine(Model.PublisherIdentifier, "Publisher identifier");
-            if (!string.IsNullOrEmpty(Model.PublisherIdentifier) && Publishers.ContainsKey(Model.PublisherIdentifier ?? string.Empty))
-                builder.AppendLine(Publishers[Model.PublisherIdentifier ?? string.Empty], "Publisher");
+            if (Publishers.TryGetValue(Model.PublisherIdentifier, out var publisher))
+                builder.AppendLine(publisher, "Publisher");
             builder.AppendLine(Model.GameID, "Game ID");
             builder.AppendLine(Model.VersionNumber, "Version number");
             builder.AppendLine(Model.RegionIdentifier, "Region identifier");
-            if (Regions.ContainsKey(Model.RegionIdentifier))
-                builder.AppendLine(Regions[Model.RegionIdentifier], "Region");
+            if (Regions.TryGetValue(Model.RegionIdentifier, out var region))
+                builder.AppendLine(region, "Region");
             builder.AppendLine();
         }
     }

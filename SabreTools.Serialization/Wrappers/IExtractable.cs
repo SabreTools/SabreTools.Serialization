@@ -3,6 +3,7 @@ namespace SabreTools.Serialization.Wrappers
     /// <summary>
     /// Represents an item that is extractable
     /// </summary>
+    /// TODO: Investigate whether it's possible to do an ExtractToStream
     public interface IExtractable
     {
         /// <summary>

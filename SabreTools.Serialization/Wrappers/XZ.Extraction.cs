@@ -1,5 +1,5 @@
 using System;
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.IO;
 using SharpCompress.Compressors.Xz;
 #endif
@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
             if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
                 // Try opening the stream

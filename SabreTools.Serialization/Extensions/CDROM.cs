@@ -138,24 +138,15 @@ namespace SabreTools.Data.Extensions
 
             /// <inheritdoc/>
             public override long Length
-            {
-                get
-                {
-                    return (_baseStream.Length / Constants.CDROMSectorSize) * _isoSectorSize;
-                }
-            }
+                => (_baseStream.Length / Constants.CDROMSectorSize) * _isoSectorSize;
 
             /// <inheritdoc/>
             public override void SetLength(long value)
-            {
-                throw new NotSupportedException("Setting the length of this stream is not supported.");
-            }
+                => throw new NotSupportedException("Setting the length of this stream is not supported.");
 
             /// <inheritdoc/>
             public override void Write(byte[] buffer, int offset, int count)
-            {
-                throw new NotSupportedException("Writing to this stream is not supported.");
-            }
+                => throw new NotSupportedException("Writing to this stream is not supported.");
 
             /// <inheritdoc/>
             protected override void Dispose(bool disposing)

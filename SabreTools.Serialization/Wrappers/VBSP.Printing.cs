@@ -22,28 +22,21 @@ namespace SabreTools.Serialization.Wrappers
             PrintLumps(builder, Model);
         }
 
-        private static void Print(StringBuilder builder, VbspHeader? header)
+        private static void Print(StringBuilder builder, VbspHeader header)
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
-            {
-                builder.AppendLine("  No header");
-                builder.AppendLine();
-                return;
-            }
-
             builder.AppendLine(header.Signature, "  Signature");
             builder.AppendLine(header.Version, "  Version");
             builder.AppendLine(header.MapRevision, "  Map revision");
             builder.AppendLine();
         }
 
-        private static void PrintLumps(StringBuilder builder, VbspFile? model)
+        private static void PrintLumps(StringBuilder builder, VbspFile model)
         {
             builder.AppendLine("  Lumps Information:");
             builder.AppendLine("  -------------------------");
-            if (model?.Header?.Lumps == null || model.Header.Lumps.Length == 0)
+            if (model.Header.Lumps.Length == 0)
             {
                 builder.AppendLine("  No lumps");
                 builder.AppendLine();

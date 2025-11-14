@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[] PreStringValues => Model.PreStringValues;
 
         /// <inheritdoc cref="SectionHeader.Strings"/>
-        public byte[][]? Strings => Model.Strings;
+        public byte[][] Strings => Model.Strings;
 
         #endregion
 

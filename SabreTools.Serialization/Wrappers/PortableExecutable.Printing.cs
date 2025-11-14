@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, SectionHeader[]? entries)
+        private static void Print(StringBuilder builder, SectionHeader[] entries)
         {
             builder.AppendLine("  Section Table Information:");
             builder.AppendLine("  -------------------------");
@@ -431,7 +431,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Create the deserializer
-            var deserializer = new Serialization.Readers.AbstractSyntaxNotationOne();
+            var deserializer = new Readers.AbstractSyntaxNotationOne();
 
             for (int i = 0; i < entries.Length; i++)
             {
@@ -486,7 +486,7 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.DelayLoad.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.DelayLoad.DirectoryTable? table, SectionHeader[] sections)
         {
             builder.AppendLine("  Delay-Load Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -513,7 +513,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.BaseRelocation.Block[]? entries, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.BaseRelocation.Block[]? entries, SectionHeader[] sections)
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
@@ -585,7 +585,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Export.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Export.DirectoryTable? table, SectionHeader[] sections)
         {
             builder.AppendLine(value: "  Export Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -615,7 +615,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Export.AddressTableEntry[]? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Export.AddressTableEntry[]? table, SectionHeader[] sections)
         {
             builder.AppendLine("  Export Address Table Information:");
             builder.AppendLine("  -------------------------");
@@ -704,7 +704,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Import.DirectoryTableEntry[]? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Import.DirectoryTableEntry[]? table, SectionHeader[] sections)
         {
             builder.AppendLine("  Import Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -734,7 +734,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<int, Data.Models.PortableExecutable.Import.LookupTableEntry[]?>? tables, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Dictionary<int, Data.Models.PortableExecutable.Import.LookupTableEntry[]?>? tables, SectionHeader[] sections)
         {
             builder.AppendLine("  Import Lookup Tables Information:");
             builder.AppendLine("  -------------------------");
@@ -780,7 +780,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Dictionary<int, Data.Models.PortableExecutable.Import.AddressTableEntry[]?>? tables, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Dictionary<int, Data.Models.PortableExecutable.Import.AddressTableEntry[]?>? tables, SectionHeader[] sections)
         {
             builder.AppendLine("  Import Address Tables Information:");
             builder.AppendLine("  -------------------------");
@@ -849,7 +849,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryTable? table, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryTable? table, SectionHeader[] sections)
         {
             builder.AppendLine("  Resource Directory Table Information:");
             builder.AppendLine("  -------------------------");
@@ -864,7 +864,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryTable table, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryTable table, int level, List<object> types, SectionHeader[] sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -901,7 +901,7 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DirectoryEntry entry, int level, List<object> types, SectionHeader[] sections)
         {
             string padding = new(' ', (level + 1) * 2);
 
@@ -922,7 +922,7 @@ namespace SabreTools.Serialization.Wrappers
                 Print(builder, entry.Subdirectory, level: level + 1, types, sections);
         }
 
-        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DataEntry entry, int level, List<object> types, SectionHeader[]? sections)
+        private static void Print(StringBuilder builder, Data.Models.PortableExecutable.Resource.DataEntry entry, int level, List<object> types, SectionHeader[] sections)
         {
             string padding = new(' ', (level + 1) * 2);
 

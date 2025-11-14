@@ -18,10 +18,10 @@ namespace SabreTools.Data.Extensions
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Physical address, 0 on error</returns>
-        public static uint ConvertVirtualAddress(this uint rva, SectionHeader[]? sections)
+        public static uint ConvertVirtualAddress(this uint rva, SectionHeader[] sections)
         {
             // If we have an invalid section table, we can't do anything
-            if (sections == null || sections.Length == 0)
+            if (sections.Length == 0)
                 return 0;
 
             // If the RVA is 0, we just return 0 because it's invalid
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Extensions
         /// <param name="rva">Relative virtual address to convert</param>
         /// <param name="sections">Array of sections to check against</param>
         /// <returns>Section index, null on error</returns>
-        public static int ContainingSectionIndex(this uint rva, SectionHeader[]? sections)
+        public static int ContainingSectionIndex(this uint rva, SectionHeader[] sections)
         {
             // If we have an invalid section table, we can't do anything
             if (sections == null || sections.Length == 0)
@@ -1282,10 +1282,10 @@ namespace SabreTools.Data.Extensions
         /// <param name="data">Data to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled ResourceHeader on success, null on error</returns>
-        public static Data.Models.PortableExecutable.Resource.ResourceHeader ParseResourceHeader(this byte[] data, ref int offset)
+        public static Models.PortableExecutable.Resource.ResourceHeader ParseResourceHeader(this byte[] data, ref int offset)
         {
             // Read in the table
-            var obj = new Data.Models.PortableExecutable.Resource.ResourceHeader();
+            var obj = new Models.PortableExecutable.Resource.ResourceHeader();
 
             obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
             obj.HeaderSize = data.ReadUInt32LittleEndian(ref offset);

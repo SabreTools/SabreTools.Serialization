@@ -31,9 +31,9 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.DirectoryDescriptors, encoding);
         }
 
-        protected static void Print(StringBuilder builder, byte[]? systemArea)
+        protected static void Print(StringBuilder builder, byte[] systemArea)
         {
-            if (systemArea == null || systemArea.Length == 0)
+            if (systemArea.Length == 0)
                 builder.AppendLine(systemArea, "  System Area");
             else if (Array.TrueForAll(systemArea, b => b == 0))
                 builder.AppendLine("Zeroed", "  System Area");

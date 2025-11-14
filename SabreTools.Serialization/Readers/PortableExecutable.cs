@@ -293,6 +293,7 @@ namespace SabreTools.Serialization.Readers
 
                 #endregion
 
+                // TODO: Pre-parse known resource types
                 #region Resource Directory Table
 
                 // Should also be in a '.rsrc' section

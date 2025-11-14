@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
                     Print(builder, v5);
                     break;
                 default:
-                    builder.AppendLine("Unrecognized header type");
+                    builder.AppendLine($"Unrecognized header type: {Model}");
                     builder.AppendLine();
                     break;
             }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Readers;
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
             if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
@@ -74,17 +74,17 @@ namespace SabreTools.Serialization.Wrappers
 
                         entry.WriteToFile(filename);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
-                        if (includeDebug) System.Console.Error.WriteLine(ex);
+                        if (includeDebug) Console.Error.WriteLine(ex);
                     }
                 }
 
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.Error.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
 #else

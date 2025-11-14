@@ -637,61 +637,171 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// "Build GUID"
         /// </summary/>
-        public string? BuildGuid => GetVersionInfoString("BuildGuid");
+        public string? BuildGuid
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("BuildGuid");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// "Build signature"
         /// </summary/>
-        public string? BuildSignature => GetVersionInfoString("BuildSignature");
+        public string? BuildSignature
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("BuildSignature");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Additional information that should be displayed for diagnostic purposes.
         /// </summary/>
-        public string? Comments => GetVersionInfoString("Comments");
+        public string? Comments
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("Comments");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Company that produced the file—for example, "Microsoft Corporation" or
         /// "Standard Microsystems Corporation, Inc." This string is required.
         /// </summary/>
-        public string? CompanyName => GetVersionInfoString("CompanyName");
+        public string? CompanyName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("CompanyName");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// "Debug version"
         /// </summary/>
-        public string? DebugVersion => GetVersionInfoString("DebugVersion");
+        public string? DebugVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("DebugVersion");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// File description to be presented to users. This string may be displayed in a
         /// list box when the user is choosing files to install—for example, "Keyboard
         /// Driver for AT-Style Keyboards". This string is required.
         /// </summary/>
-        public string? FileDescription => GetVersionInfoString("FileDescription");
+        public string? FileDescription
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("FileDescription");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Version number of the file—for example, "3.10" or "5.00.RC2". This string
         /// is required.
         /// </summary/>
-        public string? FileVersion => GetVersionInfoString("FileVersion");
+        public string? FileVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("FileVersion");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Internal name of the file, if one exists—for example, a module name if the
         /// file is a dynamic-link library. If the file has no internal name, this
         /// string should be the original filename, without extension. This string is required.
         /// </summary/>
-        public string? InternalName => GetVersionInfoString(key: "InternalName");
+        public string? InternalName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("InternalName");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Copyright notices that apply to the file. This should include the full text of
         /// all notices, legal symbols, copyright dates, and so on. This string is optional.
         /// </summary/>
-        public string? LegalCopyright => GetVersionInfoString(key: "LegalCopyright");
+        public string? LegalCopyright
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("LegalCopyright");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Trademarks and registered trademarks that apply to the file. This should include
         /// the full text of all notices, legal symbols, trademark numbers, and so on. This
         /// string is optional.
         /// </summary/>
-        public string? LegalTrademarks => GetVersionInfoString(key: "LegalTrademarks");
+        public string? LegalTrademarks
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("LegalTrademarks");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Original name of the file, not including a path. This information enables an
@@ -699,30 +809,85 @@ namespace SabreTools.Serialization.Wrappers
         /// the name depends on the file system for which the file was created. This string
         /// is required.
         /// </summary/>
-        public string? OriginalFilename => GetVersionInfoString(key: "OriginalFilename");
+        public string? OriginalFilename
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("OriginalFilename");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Information about a private version of the file—for example, "Built by TESTER1 on
         /// \TESTBED". This string should be present only if VS_FF_PRIVATEBUILD is specified in
         /// the fileflags parameter of the root block.
         /// </summary/>
-        public string? PrivateBuild => GetVersionInfoString(key: "PrivateBuild");
+        public string? PrivateBuild
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("PrivateBuild");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// "Product GUID"
         /// </summary/>
-        public string? ProductGuid => GetVersionInfoString("ProductGuid");
+        public string? ProductGuid
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("ProductGuid");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Name of the product with which the file is distributed. This string is required.
         /// </summary/>
-        public string? ProductName => GetVersionInfoString(key: "ProductName");
+        public string? ProductName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("ProductName");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Version of the product with which the file is distributed—for example, "3.10" or
         /// "5.00.RC2". This string is required.
         /// </summary/>
-        public string? ProductVersion => GetVersionInfoString(key: "ProductVersion");
+        public string? ProductVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("ProductVersion");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Text that specifies how this version of the file differs from the standard
@@ -730,12 +895,34 @@ namespace SabreTools.Serialization.Wrappers
         /// M250E computers". This string should be present only if VS_FF_SPECIALBUILD is
         /// specified in the fileflags parameter of the root block.
         /// </summary/>
-        public string? SpecialBuild => GetVersionInfoString(key: "SpecialBuild") ?? GetVersionInfoString(key: "Special Build");
+        public string? SpecialBuild
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("SpecialBuild") ?? GetVersionInfoString("Special Build");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// "Trade name"
         /// </summary/>
-        public string? TradeName => GetVersionInfoString(key: "TradeName");
+        public string? TradeName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field != null)
+                    return field;
+
+                field = GetVersionInfoString("TradeName");
+                return field;
+            }
+        } = null;
 
         /// <summary>
         /// Get the internal version as reported by the resources

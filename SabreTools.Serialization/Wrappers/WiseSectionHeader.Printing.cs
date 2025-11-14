@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.PreStringValues, "Pre-string values");
             builder.AppendLine();
             builder.AppendLine("Strings:");
-            if (Model.Strings == null || Model.Strings.Length == 0)
+            if (Model.Strings.Length == 0)
             {
                 builder.AppendLine("  No strings");
             }

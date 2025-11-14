@@ -65,9 +65,7 @@ namespace SabreTools.Serialization.Readers
         private static Record? ParseRecord(Stream data)
         {
             // The first 4 bytes are the type and length
-            RecordType type = (RecordType)data.ReadByteValue();
-            uint recordLength = data.ReadUInt24LittleEndian();
-            data.SeekIfPossible(-4, SeekOrigin.Current);
+            RecordType type = (RecordType)data.PeekByteValue();
 
             // Create a record based on the type
             return type switch

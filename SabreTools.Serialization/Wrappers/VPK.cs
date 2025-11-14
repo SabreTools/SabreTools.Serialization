@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Array of archive filenames attached to the given VPK
         /// </summary>
-        public string[]? ArchiveFilenames
+        public string[] ArchiveFilenames
         {
             get
             {
@@ -28,7 +28,10 @@ namespace SabreTools.Serialization.Wrappers
 
                 // If we don't have a source filename
                 if (string.IsNullOrEmpty(Filename))
-                    return null;
+                {
+                    field = [];
+                    return field;
+                }
 
                 // If the filename is not the right format
                 string extension = Path.GetExtension(Filename).TrimStart('.');
@@ -38,13 +41,19 @@ namespace SabreTools.Serialization.Wrappers
                     : Path.Combine(directoryName, Path.GetFileNameWithoutExtension(Filename));
 
                 if (fileName.Length < 3)
-                    return null;
+                {
+                    field = [];
+                    return field;
+                }
 #if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
                 else if (fileName[^3..] != "dir")
 #else
                 else if (fileName.Substring(fileName.Length - 3) != "dir")
 #endif
-                    return null;
+                {
+                    field = [];
+                    return field;
+                }
 
                 // Get the archive count
                 ushort archiveCount = 0;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;
 using SharpCompress.Readers;
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Wrappers
             if (_dataSource == null || !_dataSource.CanRead)
                 return false;
 
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
@@ -95,9 +95,9 @@ namespace SabreTools.Serialization.Wrappers
                     return ExtractNonSolid(sevenZip, outputDirectory, includeDebug);
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.Error.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
 #else
@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Wrappers
             return parts;
         }
 
-#if NET462_OR_GREATER || NETCOREAPP
+#if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
         /// <summary>
         /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every
         /// file individually, in order to extract all valid files from the archive.
@@ -199,9 +199,9 @@ namespace SabreTools.Serialization.Wrappers
 
                     entry.WriteToFile(filename);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    if (includeDebug) System.Console.Error.WriteLine(ex);
+                    if (includeDebug) Console.Error.WriteLine(ex);
                 }
             }
             return true;
@@ -249,9 +249,9 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                if (includeDebug) System.Console.Error.WriteLine(ex);
+                if (includeDebug) Console.Error.WriteLine(ex);
             }
 
             return true;

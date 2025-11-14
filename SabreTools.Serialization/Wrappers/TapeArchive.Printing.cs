@@ -21,11 +21,11 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.Entries);
         }
 
-        private static void Print(StringBuilder builder, Entry[]? entries)
+        private static void Print(StringBuilder builder, Entry[] entries)
         {
             builder.AppendLine("  Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries.Length == 0)
             {
                 builder.AppendLine("  No entries");
                 builder.AppendLine();

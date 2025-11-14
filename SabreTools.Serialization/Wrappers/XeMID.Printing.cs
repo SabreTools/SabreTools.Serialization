@@ -17,18 +17,18 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("Xbox Media Identifier Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine(Model.PublisherIdentifier, "Publisher identifier");
-            if (!string.IsNullOrEmpty(Model.PublisherIdentifier) && Publishers.ContainsKey(Model.PublisherIdentifier ?? string.Empty))
-                builder.AppendLine(Publishers[Model.PublisherIdentifier ?? string.Empty], "Publisher");
+            if (Publishers.TryGetValue(Model.PublisherIdentifier, out var publisher))
+                builder.AppendLine(publisher, "Publisher");
             builder.AppendLine(Model.PlatformIdentifier, "Platform identifier");
             builder.AppendLine(Model.GameID, "Game ID");
             builder.AppendLine(Model.SKU, "SKU");
             builder.AppendLine(Model.RegionIdentifier, "Region identifier");
-            if (Regions.ContainsKey(Model.RegionIdentifier))
-                builder.AppendLine(Regions[Model.RegionIdentifier], "Region");
+            if (Regions.TryGetValue(Model.RegionIdentifier, out var region))
+                builder.AppendLine(region, "Region");
             builder.AppendLine(Model.BaseVersion, "Base version");
             builder.AppendLine(Model.MediaSubtypeIdentifier, "Media subtype identifier");
-            if (MediaSubtypes.ContainsKey(Model.MediaSubtypeIdentifier))
-                builder.AppendLine(MediaSubtypes[Model.MediaSubtypeIdentifier], "Media subtype");
+            if (MediaSubtypes.TryGetValue(Model.MediaSubtypeIdentifier, out var mediaSubtype))
+                builder.AppendLine(mediaSubtype, "Media subtype");
             builder.AppendLine(Model.DiscNumberIdentifier, "Disc number identifier");
             builder.AppendLine(Model.CertificationSubmissionIdentifier, "Certification submission identifier");
             builder.AppendLine();
