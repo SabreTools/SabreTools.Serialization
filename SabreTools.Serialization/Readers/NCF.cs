@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Readers
                     long directoryNamesEnd = data.Position + directoryHeader.NameSize;
 
                     // Create the string dictionary
-                    file.DirectoryNames = new Dictionary<long, string?>();
+                    file.DirectoryNames = [];
 
                     // Loop and read the null-terminated strings
                     while (data.Position < directoryNamesEnd)

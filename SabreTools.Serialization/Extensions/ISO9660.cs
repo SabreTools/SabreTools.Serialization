@@ -1,4 +1,3 @@
-using System;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Numerics;
 
@@ -51,12 +50,5 @@ namespace SabreTools.Data.Extensions
         /// <returns>True if the block length is valid, false otherwise</returns>
         private static bool BlockSizeValid(short blockSize, short sectorLength)
             => blockSize >= 512 && blockSize <= sectorLength && (blockSize & (blockSize - 1)) == 0;
-
-        /// <summary>
-        /// Indicates if an array contains all ASCII numeric digits
-        /// </summary>
-        /// TODO: Remove when IO is updated
-        public static bool IsNumericArray(this byte[] arr)
-            => Array.TrueForAll(arr, b => b >= 0x30 && b <= 0x39);
     }
 }

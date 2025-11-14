@@ -94,7 +94,11 @@ namespace SabreTools.Serialization.Wrappers
 
             // Handle replacing characters
             char c = (char.IsUpper(input[0]) ? char.ToLower(LastChar) : char.ToUpper(LastChar));
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            string text2 = extension[..^1] + c;
+#else
             string text2 = extension.Substring(0, extension.Length - 1) + c;
+#endif
             return Path.GetFileNameWithoutExtension(input) + "." + text2;
         }
     }

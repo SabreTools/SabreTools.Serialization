@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="rangeStart">The start of where to read data from, -1 means start of source</param>
         /// <param name="length">How many bytes to read, -1 means read until end</param>
         /// <returns>Byte array representing the range, null on error</returns>
-        [Obsolete]
+        [Obsolete("Passthrough method that should not be used")]
         public byte[]? ReadArbitraryRange(int rangeStart = -1, long length = -1)
         {
             // If we have an unset range start, read from the start of the source

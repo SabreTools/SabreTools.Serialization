@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Wrappers
     internal static class ObjectExtensions
     {
         public static TClass ThrowOnNull<TClass>(this TClass? value) where TClass : class
-            => value ?? throw new ArgumentNullException();
+            => value ?? throw new ArgumentNullException(nameof(value));
     }
 }
 

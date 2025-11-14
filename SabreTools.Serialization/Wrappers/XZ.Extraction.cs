@@ -1,8 +1,6 @@
 using System;
 #if NET462_OR_GREATER || NETCOREAPP
 using System.IO;
-#endif
-#if NET462_OR_GREATER || NETCOREAPP
 using SharpCompress.Compressors.Xz;
 #endif
 

@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Xbox Package File
         /// </summary>
         XZP,
-        
+
         /// <summary>
         /// ZStandard compressed file
         /// </summary>

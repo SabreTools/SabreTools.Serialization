@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Writers
     /// <typeparam name="TModel">Type of the model to serialize</typeparam>
     /// <remarks>
     /// This class allows all inheriting types to only implement <see cref="IStreamWriter<>"/>
-    /// and still implicitly implement <see cref="IByteWriter<>"/>  and <see cref="IFileWriter<>"/> 
+    /// and still implicitly implement <see cref="IByteWriter<>"/>  and <see cref="IFileWriter<>"/>
     /// </remarks>
     public abstract class BaseBinaryWriter<TModel> :
         IByteWriter<TModel>,

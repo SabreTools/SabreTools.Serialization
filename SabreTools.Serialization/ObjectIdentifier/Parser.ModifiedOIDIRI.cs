@@ -47,7 +47,11 @@ namespace SabreTools.Data.ObjectIdentifier
                 return nameBuilder.ToString();
 
             // Add trailing items as just values
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            nameBuilder.Append('/');
+#else
             nameBuilder.Append("/");
+#endif
 
             // Get the remaining values in a new array
             var remainingValues = new ulong[values.Length - index];
@@ -3436,7 +3440,7 @@ namespace SabreTools.Data.ObjectIdentifier
 
         #endregion
 
-        // 249 
+        // 249
         #region 0.0.8.249.*
 
         oid_0_0_8_249:
@@ -3454,7 +3458,7 @@ namespace SabreTools.Data.ObjectIdentifier
 
         #endregion
 
-        // 261 
+        // 261
         #region 0.0.8.261.*
 
         oid_0_0_8_261:
@@ -3467,7 +3471,7 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // generic-capabilities 
+        // generic-capabilities
         #region 0.0.8.261.1.*
 
         oid_0_0_8_261_1:

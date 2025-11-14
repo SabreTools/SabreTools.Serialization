@@ -1,6 +1,6 @@
-using SabreTools.Serialization.CrossModel;
 using System;
 using SabreTools.Hashing;
+using SabreTools.Serialization.CrossModel;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.CrossModel

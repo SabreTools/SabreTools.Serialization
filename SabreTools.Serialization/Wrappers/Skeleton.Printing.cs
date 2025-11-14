@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // TODO: Parse the volume descriptors to print the Path Table Groups and Directory Descriptors with proper encoding
             Encoding encoding = Encoding.UTF8;
-            Print(builder, Model.PathTableGroups, encoding);
+            Print(builder, Model.PathTableGroups);
             Print(builder, Model.DirectoryDescriptors, encoding);
         }
     }

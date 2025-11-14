@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Readers
             {
                 // Version 1
                 case 0x00000000:
-                    AudioHeaderV1 v1 = new AudioHeaderV1();
+                    var v1 = new AudioHeaderV1();
 
                     v1.Signature = signature;
                     v1.Version = version;
@@ -207,7 +207,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Version 2
                 case 0x0000000A:
-                    AudioHeaderV2 v2 = new AudioHeaderV2();
+                    var v2 = new AudioHeaderV2();
 
                     v2.Signature = signature;
                     v2.Version = version;

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Writers
 
             // If we don't have any files, it's invalid
             if (obj?.Files == null)
-                throw new ArgumentNullException(nameof(obj.Files));
+                throw new InvalidDataException(nameof(obj.Files));
             else if (obj.Files.Length == 0)
                 throw new ArgumentException("No files provided to write");
 
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Writers
         {
             // If we don't have any files, it's invalid
             if (cueSheet.Files == null)
-                throw new ArgumentNullException(nameof(cueSheet.Files));
+                throw new InvalidDataException(nameof(cueSheet.Files));
             else if (cueSheet.Files.Length == 0)
                 throw new ArgumentException("No files provided to write");
 
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Writers
         {
             // If we don't have any tracks, it's invalid
             if (cueFile?.Tracks == null)
-                throw new ArgumentNullException(nameof(cueFile.Tracks));
+                throw new InvalidDataException(nameof(cueFile.Tracks));
             else if (cueFile.Tracks.Length == 0)
                 throw new ArgumentException("No tracks provided to write");
 
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Writers
         {
             // If we don't have any indices, it's invalid
             if (cueTrack?.Indices == null)
-                throw new ArgumentNullException(nameof(cueTrack.Indices));
+                throw new InvalidDataException(nameof(cueTrack.Indices));
             else if (cueTrack.Indices.Length == 0)
                 throw new ArgumentException("No indices provided to write");
 

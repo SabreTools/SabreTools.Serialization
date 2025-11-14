@@ -39,7 +39,11 @@ namespace SabreTools.Serialization.Wrappers
 
                 if (fileName.Length < 3)
                     return null;
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                else if (fileName[^3..] != "dir")
+#else
                 else if (fileName.Substring(fileName.Length - 3) != "dir")
+#endif
                     return null;
 
                 // Get the archive count
@@ -59,7 +63,11 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < archiveCount; i++)
                 {
                     // We need 5 digits to print a short, but we already have 3 for dir.
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                    string archiveFileName = $"{fileName[..^3]}{i.ToString().PadLeft(3, '0')}.{extension}";
+#else
                     string archiveFileName = $"{fileName.Substring(0, fileName.Length - 3)}{i.ToString().PadLeft(3, '0')}.{extension}";
+#endif
                     _archiveFilenames[i] = archiveFileName;
                 }
 

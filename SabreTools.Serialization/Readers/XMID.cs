@@ -36,7 +36,11 @@ namespace SabreTools.Serialization.Readers
 
             var xmid = new Data.Models.Xbox.XMID();
 
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            xmid.PublisherIdentifier = xmidString[..2];
+#else
             xmid.PublisherIdentifier = xmidString.Substring(0, 2);
+#endif
             xmid.GameID = xmidString.Substring(2, 3);
             xmid.VersionNumber = xmidString.Substring(5, 2);
             xmid.RegionIdentifier = xmidString[7];

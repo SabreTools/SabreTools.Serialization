@@ -48,9 +48,9 @@ namespace SabreTools.Serialization.Wrappers
                     else if (rarFile.Entries.Count == 0)
                         rarFile = RarArchive.Open(parts, readerOptions);
                 }
-                
-                // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether  
-                // a RAR or 7Z archive is solid or not, you must check the second file in the archive, as the first 
+
+                // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether
+                // a RAR or 7Z archive is solid or not, you must check the second file in the archive, as the first
                 // file is always marked non-solid even for solid archives. This iteration is necessary since things
                 // like directories aren't marked solid either.
                 // This is only temporary, as solid detection has been fixed in upstream SolidCompress, but they likely
@@ -147,10 +147,17 @@ namespace SabreTools.Serialization.Wrappers
                 match = Regex.Match(filename, rarOldPattern, RegexOptions.IgnoreCase);
                 nextPartFunc = (i) =>
                 {
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                    return string.Concat(
+                        match.Groups[1].Value,
+                        (char)(match.Groups[2].Value[0] + ((i - 1) / 100))
+                                + (i - 1).ToString("D4")[2..]);
+#else
                     return string.Concat(
                         match.Groups[1].Value,
                         (char)(match.Groups[2].Value[0] + ((i - 1) / 100))
                                 + (i - 1).ToString("D4").Substring(2));
+#endif
                 };
             }
             else if (Regex.IsMatch(filename, genericPattern, RegexOptions.IgnoreCase))
@@ -188,7 +195,7 @@ namespace SabreTools.Serialization.Wrappers
 
 #if NET462_OR_GREATER || NETCOREAPP
         /// <summary>
-        /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every 
+        /// Extraction method for non-solid archives. This iterates over each entry in the archive to extract every
         /// file individually, in order to extract all valid files from the archive.
         /// </summary>
         private static bool ExtractNonSolid(RarArchive rarFile, string outDir, bool includeDebug)

@@ -111,7 +111,11 @@ namespace SabreTools.Serialization.Readers
                     var sfv = new SFV
                     {
                         File = string.Join(" ", lineParts, 0, lineParts.Length - 1),
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                        Hash = lineParts[^1],
+#else
                         Hash = lineParts[lineParts.Length - 1],
+#endif
                     };
                     sfvList.Add(sfv);
                 }

@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Test.CrossModel
                 Original = original,
                 Rom = sccpluscart,
             };
-            
+
             var software = new Data.Models.OpenMSX.Software
             {
                 Title = "XXXXXX",

@@ -178,10 +178,17 @@ namespace SabreTools.Serialization.Readers
 
             // TODO: better way to figure out how far it's needed to advance?
             int versionSize;
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            if (header.Version[^1] == 0x02)
+                versionSize = header.Version[^3];
+            else
+                versionSize = header.Version[^2];
+#else
             if (header.Version[header.Version.Length - 1] == 0x02)
                 versionSize = header.Version[header.Version.Length - 3];
             else
                 versionSize = header.Version[header.Version.Length - 2];
+#endif
 
             // Third byte seems to indicate size of NonWiseVer
             if (versionSize > 1)

@@ -222,7 +222,11 @@ namespace SabreTools.Serialization.Wrappers
 
                             // Remove wildcards from end of the path
                             if (newDirectoryName.EndsWith("*.*"))
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                                newDirectoryName = newDirectoryName[..^4];
+#else
                                 newDirectoryName = newDirectoryName.Substring(0, newDirectoryName.Length - 4);
+#endif
 
                             Directory.CreateDirectory(newDirectoryName);
                         }

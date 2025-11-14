@@ -400,7 +400,6 @@ namespace SabreTools.Serialization.Readers
 
             // Break the text by ending curly braces
             string[] lumpSections = lumpText.Split('}');
-            Array.ForEach(lumpSections, s => s.Trim('{', '}'));
 
             // Loop through all sections
             for (int i = 0; i < lumpSections.Length; i++)
@@ -409,9 +408,8 @@ namespace SabreTools.Serialization.Readers
                 var attributes = new List<KeyValuePair<string, string>>();
 
                 // Split the section by newlines
-                string section = lumpSections[i];
+                string section = lumpSections[i].Trim('{', '}');
                 string[] lines = section.Split('\n');
-                Array.ForEach(lines, l => l.Trim());
 
                 // Convert each line into a key-value pair and add
                 for (int j = 0; j < lines.Length; j++)

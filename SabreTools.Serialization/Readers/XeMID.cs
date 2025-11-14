@@ -38,7 +38,11 @@ namespace SabreTools.Serialization.Readers
 
             var xemid = new Data.Models.Xbox.XeMID();
 
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+            xemid.PublisherIdentifier = xemidString[..2];
+#else
             xemid.PublisherIdentifier = xemidString.Substring(0, 2);
+#endif
             xemid.PlatformIdentifier = xemidString[2];
             if (xemid.PlatformIdentifier != '2')
                 return null;
@@ -61,9 +65,17 @@ namespace SabreTools.Serialization.Readers
             }
 
             if (xemidString.Length == 21)
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                xemid.CertificationSubmissionIdentifier = xemidString[13..];
+#else
                 xemid.CertificationSubmissionIdentifier = xemidString.Substring(13);
+#endif
             else if (xemidString.Length == 22)
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                xemid.CertificationSubmissionIdentifier = xemidString[14..];
+#else
                 xemid.CertificationSubmissionIdentifier = xemidString.Substring(14);
+#endif
 
             return xemid;
         }

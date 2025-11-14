@@ -152,7 +152,11 @@ namespace SabreTools.Serialization.Wrappers
             string filename = encoding.GetString(dr.FileIdentifier);
             int index = filename.LastIndexOf(';');
             if (index > 0)
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                filename = filename[..index];
+#else
                 filename = filename.Substring(0, index);
+#endif
 
             // Ensure the full output directory exists
             var filepath = Path.Combine(outputDirectory, filename);

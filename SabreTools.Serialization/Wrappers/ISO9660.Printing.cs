@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -26,7 +27,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // TODO: Parse the volume descriptors to print the Path Table Groups and Directory Descriptors with proper encoding
             Encoding encoding = Encoding.UTF8;
-            Print(builder, Model.PathTableGroups, encoding);
+            Print(builder, Model.PathTableGroups);
             Print(builder, Model.DirectoryDescriptors, encoding);
         }
 
@@ -164,7 +165,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(vd.OptionalPathTableLocationM, "    Optional Type-M Path Table Location");
 
             builder.AppendLine("    Root Directory Record:");
-            Print(builder, vd.RootDirectoryRecord, encoding);
+            Print(builder, vd.RootDirectoryRecord);
 
             builder.AppendLine(encoding.GetString(vd.VolumeSetIdentifier), "    Volume Set Identifier");
             builder.AppendLine(encoding.GetString(vd.PublisherIdentifier), "    Publisher Identifier");
@@ -254,7 +255,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Path Tables
 
-        protected static void Print(StringBuilder builder, PathTableGroup[] ptgs, Encoding encoding)
+        protected static void Print(StringBuilder builder, PathTableGroup[] ptgs)
         {
             builder.AppendLine("  Path Table Group(s):");
             builder.AppendLine("  -------------------------");
@@ -271,7 +272,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].PathTableL, encoding);
+                    Print(builder, ptgs[tableNum].PathTableL);
                 }
                 else
                 {
@@ -282,7 +283,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].OptionalPathTableL, encoding);
+                    Print(builder, ptgs[tableNum].OptionalPathTableL);
                 }
                 else
                 {
@@ -293,7 +294,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].PathTableM, encoding);
+                    Print(builder, ptgs[tableNum].PathTableM);
                 }
                 else
                 {
@@ -304,7 +305,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"    Optional Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
-                    Print(builder, ptgs[tableNum].OptionalPathTableM, encoding);
+                    Print(builder, ptgs[tableNum].OptionalPathTableM);
                 }
                 else
                 {
@@ -316,7 +317,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, PathTableRecord[]? records, Encoding encoding)
+        private static void Print(StringBuilder builder, PathTableRecord[]? records)
         {
             if (records == null || records.Length == 0)
             {
@@ -378,7 +379,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine($"      Directory Record {recordNum}:");
                     builder.AppendLine("      -------------------------");
-                    Print(builder, dir.DirectoryRecords[recordNum], encoding);
+                    Print(builder, dir.DirectoryRecords[recordNum]);
                     builder.AppendLine();
                 }
             }
@@ -391,7 +392,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, DirectoryRecord dr, Encoding encoding)
+        private static void Print(StringBuilder builder, DirectoryRecord dr)
         {
             builder.AppendLine(dr.DirectoryRecordLength, "      Directory Record Length");
             builder.AppendLine(dr.ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
@@ -438,7 +439,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(drdt.Hour, "        Hour");
             builder.AppendLine(drdt.Minute, "        Minute");
             builder.AppendLine(drdt.Second, "        Second");
-            string tz = $"{((drdt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((drdt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{drdt.TimezoneOffset.ToString("X2")})";
+            string tz = $"{((drdt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((drdt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{drdt.TimezoneOffset:X2})";
             builder.AppendLine(tz, "        Timezone Offset");
         }
 

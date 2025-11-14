@@ -28,7 +28,7 @@ namespace SabreTools.Data.Extensions
                 byte ch = input[p];
                 if ((ch == 0xe3 && input[p + 1] >= 0xa0) || (ch == 0xe4 && input[p + 1] < 0xa0))
                 {
-                    // UTF-8 encoding of 0x3800..0x47ff. 
+                    // UTF-8 encoding of 0x3800..0x47ff.
                     output[q++] = (byte)Mime2Utf(input[p + 2] & 0x7f);
                     output[q++] = (byte)Mime2Utf(input[p + 1] ^ 0xa0);
                     p += 3;

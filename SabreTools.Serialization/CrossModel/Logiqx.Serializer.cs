@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(Datafile item)
         {
-            var header = item.Header != null ? ConvertHeaderToInternalModel(item.Header) : new Data.Models.Metadata.Header();
+            var header = item.Header != null ? ConvertHeaderToInternalModel(item.Header) : [];
 
             header[Data.Models.Metadata.Header.BuildKey] = item.Build;
             header[Data.Models.Metadata.Header.DebugKey] = item.Debug;

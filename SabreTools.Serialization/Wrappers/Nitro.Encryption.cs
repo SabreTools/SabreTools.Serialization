@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.Wrappers
     {
         #region Encryption process variables
 
-        private uint[] _cardHash = new uint[0x412];
+        private readonly uint[] _cardHash = new uint[0x412];
         private uint[] _arg2 = new uint[3];
 
         #endregion

@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
             {
-                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
+                [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(),
             };
 
             if (item?.File != null && item.File.Length > 0)
@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <summary>
         /// Convert from <see cref="Files"/> to <see cref="Models.Metadata.Header"/>
         /// </summary>
-        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(Files item)
+        private static Data.Models.Metadata.Header ConvertHeaderToInternalModel()
         {
             var header = new Data.Models.Metadata.Header
             {

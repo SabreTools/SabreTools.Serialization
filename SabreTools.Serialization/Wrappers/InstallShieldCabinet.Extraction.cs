@@ -104,8 +104,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Set the pattern, if possible
-            if (set != null)
-                set.FilenamePattern = pattern;
+            set?.FilenamePattern = pattern;
 
             return set;
         }

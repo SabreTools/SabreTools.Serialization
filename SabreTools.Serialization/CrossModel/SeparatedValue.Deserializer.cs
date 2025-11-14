@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.CrossModel
                     Array.ConvertAll(media, m => ConvertFromInternalModel(m, item, header)));
             }
 
-            return rowItems.ToArray();
+            return [.. rowItems];
         }
 
         /// <summary>

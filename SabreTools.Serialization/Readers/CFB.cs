@@ -86,7 +86,11 @@ namespace SabreTools.Serialization.Readers
                     }
 
                     // Get the next sector from the final sector number
+#if NETCOREAPP || NETSTANDARD2_1_OR_GREATER
+                    currentSector = sectorNumbers[^1];
+#else
                     currentSector = sectorNumbers[sectorNumbers.Length - 1];
+#endif
                 }
 
                 // Assign the DIFAT sectors table

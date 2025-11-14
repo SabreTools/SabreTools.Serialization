@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void ASN1Notation_AlwaysNull()
         {
             ulong[]? values = null;
-            string? actual = Parser.ParseOIDToASN1Notation(values); 
+            string? actual = Parser.ParseOIDToASN1Notation(values);
             Assert.Null(actual);
         }
 
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void DotNotation_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = Parser.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values);
             Assert.Null(actual);
         }
 
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void DotNotation_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = Parser.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values);
             Assert.Null(actual);
         }
 
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         {
             string expected = "0.1.2.3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = Parser.ParseOIDToDotNotation(values); 
+            string? actual = Parser.ParseOIDToDotNotation(values);
             Assert.Equal(expected, actual);
         }
 
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void ModifiedOIDIRI_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values);
             Assert.Null(actual);
         }
 
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void ModifiedOIDIRI_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values);
             Assert.Null(actual);
         }
 
@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         {
             string expected = "/ITU-T/[question]/2/3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = Parser.ParseOIDToModifiedOIDIRI(values); 
+            string? actual = Parser.ParseOIDToModifiedOIDIRI(values);
             Assert.Equal(expected, actual);
         }
 
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void OIDIRI_NullValues_Null()
         {
             ulong[]? values = null;
-            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values);
             Assert.Null(actual);
         }
 
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         public void OIDIRI_EmptyValues_Null()
         {
             ulong[]? values = [];
-            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values);
             Assert.Null(actual);
         }
 
@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Test.ObjectIdentifier
         {
             string expected = "/ITU-T/1/2/3";
             ulong[]? values = [0, 1, 2, 3];
-            string? actual = Parser.ParseOIDToOIDIRINotation(values); 
+            string? actual = Parser.ParseOIDToOIDIRINotation(values);
             Assert.Equal(expected, actual);
         }
 

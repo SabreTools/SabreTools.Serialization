@@ -25,22 +25,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, byte[] data) : base(model, data) { }
+        public ZSTD(Header model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, byte[] data, int offset) : base(model, data, offset) { }
+        public ZSTD(Header model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public ZSTD(Header model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, Stream data) : base(model, data) { }
+        public ZSTD(Header model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, Stream data, long offset) : base(model, data, offset) { }
+        public ZSTD(Header model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public ZSTD(Data.Models.ZSTD.Header model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public ZSTD(Header model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

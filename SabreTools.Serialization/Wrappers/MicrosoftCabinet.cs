@@ -253,7 +253,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="blockData">Block data to be used for decompression</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Byte array representing the decompressed data, empty on error</returns>
-        private byte[] DecompressMSZIPBlock(int folderIndex, Decompressor mszip, int blockIndex, CFDATA block, byte[] blockData, bool includeDebug)
+        private static byte[] DecompressMSZIPBlock(int folderIndex, Decompressor mszip, int blockIndex, CFDATA block, byte[] blockData, bool includeDebug)
         {
             try
             {

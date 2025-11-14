@@ -6,7 +6,7 @@ using Xunit;
 namespace SabreTools.Serialization.Test.Readers
 {
     public class LZQBasicTests
-    
+
     {
         [Fact]
         public void NullArray_Null()

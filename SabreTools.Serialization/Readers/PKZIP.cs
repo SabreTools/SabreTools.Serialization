@@ -770,7 +770,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
-            if (obj.DataSize > 0)            
+            if (obj.DataSize > 0)
                 obj.Data = data.ReadBytes(ref offset, obj.DataSize);
 
             return obj;
@@ -793,28 +793,28 @@ namespace SabreTools.Serialization.Readers
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
 
             int bytesRemaining = obj.DataSize;
-            if (header.UncompressedSize == uint.MaxValue)
+            if (header.UncompressedSize == uint.MaxValue && bytesRemaining >= 8)
             {
                 obj.OriginalSize = data.ReadUInt64LittleEndian(ref offset);
                 bytesRemaining -= 8;
             }
 
-            if (header.CompressedSize == uint.MaxValue)
+            if (header.CompressedSize == uint.MaxValue && bytesRemaining >= 8)
             {
                 obj.CompressedSize = data.ReadUInt64LittleEndian(ref offset);
                 bytesRemaining -= 8;
             }
 
-            if (header.RelativeOffsetOfLocalHeader == uint.MaxValue)
+            if (header.RelativeOffsetOfLocalHeader == uint.MaxValue && bytesRemaining >= 8)
             {
                 obj.RelativeHeaderOffset = data.ReadUInt64LittleEndian(ref offset);
                 bytesRemaining -= 8;
             }
 
-            if (header.DiskNumberStart == ushort.MaxValue)
+            if (header.DiskNumberStart == ushort.MaxValue && bytesRemaining >= 4)
             {
                 obj.DiskStartNumber = data.ReadUInt32LittleEndian(ref offset);
-                bytesRemaining -= 4;
+                //bytesRemaining -= 4;
             }
 
             return obj;

@@ -37,10 +37,10 @@ namespace SabreTools.Serialization.Wrappers
 
         public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options) =>
             (JsonConverter)Activator.CreateInstance(
-                typeof(ConcreteAbstractSerializerOfType<>).MakeGenericType(new Type[] { type }),
+                typeof(ConcreteAbstractSerializerOfType<>).MakeGenericType([type]),
                 BindingFlags.Instance | BindingFlags.Public,
                 binder: null,
-                args: Array.Empty<object>(),
+                args: [],
                 culture: null).ThrowOnNull();
     }
 }

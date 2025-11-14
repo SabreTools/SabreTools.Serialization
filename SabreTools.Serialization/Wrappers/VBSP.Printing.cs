@@ -374,7 +374,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < lump.Entities.Length; i++)
             {
                 // TODO: Implement entity printing
-                var entity = lump.Entities[i];
+                //var entity = lump.Entities[i];
 
                 builder.AppendLine($"    Entity {i}: Not printed yet");
             }

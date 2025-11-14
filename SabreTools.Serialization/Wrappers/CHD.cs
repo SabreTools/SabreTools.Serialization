@@ -26,8 +26,8 @@ namespace SabreTools.Serialization.Wrappers
                     HeaderV1 v1 => v1.MD5,
                     HeaderV2 v2 => v2.MD5,
                     HeaderV3 v3 => v3.MD5,
-                    HeaderV4 v4 => null,
-                    HeaderV5 v5 => null,
+                    //HeaderV4 v4 => null,
+                    //HeaderV5 v5 => null,
                     _ => null,
                 };
             }
@@ -42,8 +42,8 @@ namespace SabreTools.Serialization.Wrappers
             {
                 return Model switch
                 {
-                    HeaderV1 v1 => null,
-                    HeaderV2 v2 => null,
+                    //HeaderV1 v1 => null,
+                    //HeaderV2 v2 => null,
                     HeaderV3 v3 => v3.SHA1,
                     HeaderV4 v4 => v4.SHA1,
                     HeaderV5 v5 => v5.SHA1,

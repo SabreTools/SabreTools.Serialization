@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/ExtractionTool/bin/Debug/net9.0/ExtractionTool.dll",
+            "program": "${workspaceFolder}/ExtractionTool/bin/Debug/net10.0/ExtractionTool.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
@@ -24,7 +24,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/InfoPrint/bin/Debug/net9.0/InfoPrint.dll",
+            "program": "${workspaceFolder}/InfoPrint/bin/Debug/net10.0/InfoPrint.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

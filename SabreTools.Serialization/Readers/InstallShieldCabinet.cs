@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Readers
                 #region File Group Offsets
 
                 // Create and fill the file group offsets
-                cabinet.FileGroupOffsets = new Dictionary<long, OffsetList?>();
+                cabinet.FileGroupOffsets = [];
                 for (int i = 0; i < (cabinet.Descriptor.FileGroupOffsets?.Length ?? 0); i++)
                 {
                     // Get the file group offset
@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Readers
                 #region Component Offsets
 
                 // Create and fill the component offsets
-                cabinet.ComponentOffsets = new Dictionary<long, OffsetList?>();
+                cabinet.ComponentOffsets = [];
                 for (int i = 0; i < (cabinet.Descriptor.ComponentOffsets?.Length ?? 0); i++)
                 {
                     // Get the component offset

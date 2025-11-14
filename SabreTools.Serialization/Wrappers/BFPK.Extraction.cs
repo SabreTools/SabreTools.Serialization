@@ -92,8 +92,8 @@ namespace SabreTools.Serialization.Wrappers
                 }
                 else
                 {
-                    using MemoryStream ms = new MemoryStream(data);
-                    using ZlibStream zs = new ZlibStream(ms, CompressionMode.Decompress);
+                    using var ms = new MemoryStream(data);
+                    using var zs = new ZlibStream(ms, CompressionMode.Decompress);
                     zs.CopyTo(fs);
                     fs.Flush();
                 }

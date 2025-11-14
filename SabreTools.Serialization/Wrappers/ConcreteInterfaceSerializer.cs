@@ -31,16 +31,16 @@ namespace SabreTools.Serialization.Wrappers
                 throw new NotImplementedException();
 #endif
 
-            public override void Write(System.Text.Json.Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
+            public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
                 JsonSerializer.Serialize<object>(writer, value!, options);
         }
 
         public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options) =>
             (JsonConverter)Activator.CreateInstance(
-                typeof(ConcreteInterfaceSerializerOfType<>).MakeGenericType(new Type[] { type }),
+                typeof(ConcreteInterfaceSerializerOfType<>).MakeGenericType([type]),
                 BindingFlags.Instance | BindingFlags.Public,
                 binder: null,
-                args: Array.Empty<object>(),
+                args: [],
                 culture: null).ThrowOnNull();
     }
 }
