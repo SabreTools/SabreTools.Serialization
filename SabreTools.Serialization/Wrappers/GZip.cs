@@ -27,11 +27,16 @@ namespace SabreTools.Serialization.Wrappers
                 if (!IsTorrentGZip)
                     return null;
 
+                // Use the cached value, if it exists
+                if (field != null)
+                    return field;
+
                 // CRC-32 is the second packed field
                 int extraIndex = 0x10;
-                return Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x04);
+                field = Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x04);
+                return field;
             }
-        }
+        } = null;
 
         /// <summary>
         /// Content MD5 as stored in the extra field
@@ -45,11 +50,16 @@ namespace SabreTools.Serialization.Wrappers
                 if (!IsTorrentGZip)
                     return null;
 
+                // Use the cached value, if it exists
+                if (field != null)
+                    return field;
+
                 // MD5 is the first packed field
                 int extraIndex = 0x00;
-                return Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x10);
+                field = Header.ExtraFieldBytes.ReadBytes(ref extraIndex, 0x10);
+                return field;
             }
-        }
+        } = null;
 
         /// <summary>
         /// Content size as stored in the extra field
@@ -63,11 +73,16 @@ namespace SabreTools.Serialization.Wrappers
                 if (!IsTorrentGZip)
                     return 0;
 
-                // MD5 is the first packed field
-                int extraIndex = 0x00;
-                return Header.ExtraFieldBytes.ReadUInt64LittleEndian(ref extraIndex);
+                // Use the cached value, if it exists
+                if (field > 0)
+                    return field;
+
+                // Size is the third packed field
+                int extraIndex = 0x14;
+                field = Header.ExtraFieldBytes.ReadUInt64LittleEndian(ref extraIndex);
+                return field;
             }
-        }
+        } = 0;
 
         /// <summary>
         /// Offset to the compressed data
@@ -77,6 +92,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
+                // Use the cached value, if it exists
                 if (field > -1)
                     return field;
 

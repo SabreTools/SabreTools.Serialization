@@ -27,13 +27,21 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
+                // Use the cached value, if it exists
+                if (field != null)
+                    return field;
+
+                // Find the type and version record, if possible
                 var record = Array.Find(Records, r => r.RecordType == RecordType.TypeAndVersion);
                 if (record is TypeAndVersionRecord tavr)
-                    return tavr.VersionNumber.ToString();
+                {
+                    field = tavr.VersionNumber.ToString();
+                    return field;
+                }
 
-                return null;
+                return field;
             }
-        }
+        } = null;
 
         #endregion
 

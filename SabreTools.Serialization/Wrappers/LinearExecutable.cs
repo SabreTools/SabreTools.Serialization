@@ -17,16 +17,49 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Executable.ObjectPageMap"/>
-        public InformationBlock? InformationBlock => Model.InformationBlock;
+        public InformationBlock InformationBlock => Model.InformationBlock;
 
         /// <inheritdoc cref="Executable.ObjectPageMap"/>
-        public ObjectPageMapEntry[]? ObjectPageMap => Model.ObjectPageMap;
+        public ObjectPageMapEntry[] ObjectPageMap => Model.ObjectPageMap;
 
         /// <inheritdoc cref="Executable.ResourceTable"/>
-        public ResourceTableEntry[]? ResourceTable => Model.ResourceTable;
+        public ResourceTableEntry[] ResourceTable => Model.ResourceTable;
 
         /// <inheritdoc cref="Executable.Stub"/>
-        public Data.Models.MSDOS.Executable? Stub => Model.Stub;
+        public Data.Models.MSDOS.Executable Stub => Model.Stub;
+
+        /// <summary>
+        /// Stub executable data, if it exists
+        /// </summary>
+        public byte[] StubExecutableData
+        {
+            get
+            {
+                lock (_stubExecutableDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field != null)
+                        return field;
+
+                    // Populate the raw stub executable data based on the source
+                    int endOfStubHeader = 0x40;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    field = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
+
+                    // Cache and return the stub executable data, even if null
+                    return field;
+                }
+            }
+        } = null;
+
+        #endregion
+
+        #region Instance Variables
+
+        /// <summary>
+        /// Lock object for <see cref="StubExecutableData"/>
+        /// </summary>
+        private readonly object _stubExecutableDataLock = new();
 
         #endregion
 

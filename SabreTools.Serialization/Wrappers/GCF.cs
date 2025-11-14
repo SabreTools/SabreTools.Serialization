@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                // Use the cached value if we have it
+                // Use the cached value, if it exists
                 if (field != null)
                     return field;
 
@@ -48,13 +48,9 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                // Use the cached value if we have it
+                // Use the cached value, if it exists
                 if (field != null)
                     return field;
-
-                // If we don't have a required property
-                if (Model.DirectoryEntries == null || Model.DirectoryMapEntries == null)
-                    return null;
 
                 // Otherwise, scan and build the files
                 var files = new List<FileInfo>();
@@ -82,7 +78,7 @@ namespace SabreTools.Serialization.Wrappers
                         Encrypted = directoryEntry.DirectoryFlags.HasFlag(Data.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
 #endif
                     };
-                    var pathParts = new List<string> { Model.DirectoryNames![directoryEntry.NameOffset] ?? string.Empty };
+                    var pathParts = new List<string> { Model.DirectoryNames[directoryEntry.NameOffset] ?? string.Empty };
                     var blockEntries = new List<Data.Models.GCF.BlockEntry>();
 
                     // Traverse the parent tree
@@ -90,7 +86,7 @@ namespace SabreTools.Serialization.Wrappers
                     while (index != 0xFFFFFFFF)
                     {
                         var parentDirectoryEntry = Model.DirectoryEntries[index];
-                        pathParts.Add(Model.DirectoryNames![parentDirectoryEntry.NameOffset] ?? string.Empty);
+                        pathParts.Add(Model.DirectoryNames[parentDirectoryEntry.NameOffset] ?? string.Empty);
                         index = parentDirectoryEntry.ParentIndex;
                     }
 

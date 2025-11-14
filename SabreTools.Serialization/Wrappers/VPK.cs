@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                // Use the cached value if we have it
+                // Use the cached value, if it exists
                 if (field != null)
                     return field;
 

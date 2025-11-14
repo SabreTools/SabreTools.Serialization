@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Wrappers
                     return field;
 
                 // If there are no directory entries
-                if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+                if (DirectoryEntries.Length == 0)
                     return [];
 
                 // Get the mini stream offset from root object
@@ -56,12 +56,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Normal sector size in bytes
         /// </summary>
-        public long SectorSize => (long)Math.Pow(2, Header?.SectorShift ?? 0);
+        public long SectorSize => (long)Math.Pow(2, Header.SectorShift);
 
         /// <summary>
         /// Mini sector size in bytes
         /// </summary>
-        public long MiniSectorSize => (long)Math.Pow(2, Header?.MiniSectorShift ?? 0);
+        public long MiniSectorSize => (long)Math.Pow(2, Header.MiniSectorShift);
 
         #endregion
 

@@ -34,19 +34,19 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_debugDataLock)
                 {
                     // Use the cached data if possible
-                    if (_debugData.Count != 0)
-                        return _debugData;
+                    if (field.Count != 0)
+                        return field;
 
                     // If we have no resource table, just return
                     if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
-                        return _debugData;
+                        return field;
 
                     // Otherwise, build and return the cached dictionary
-                    ParseDebugTable();
-                    return _debugData;
+                    field = ParseDebugTable();
+                    return field;
                 }
             }
-        }
+        } = [];
 
         /// <inheritdoc cref="Models.PortableExecutable.DebugData.Table.Table"/>
         public Data.Models.PortableExecutable.DebugData.Entry[]? DebugDirectoryTable
@@ -822,12 +822,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Instance Variables
 
         /// <summary>
-        /// Cached debug data
-        /// </summary>
-        private readonly Dictionary<int, object> _debugData = [];
-
-        /// <summary>
-        /// Lock object for <see cref="_debugData"/>
+        /// Lock object for <see cref="DebugData"/>
         /// </summary>
         private readonly object _debugDataLock = new();
 
@@ -1200,11 +1195,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Parse the debug directory table information
         /// </summary>
-        private void ParseDebugTable()
+        private Dictionary<int, object> ParseDebugTable()
         {
             // If there is no debug table
             if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
-                return;
+                return [];
+
+            // Create a new debug table
+            Dictionary<int, object> debugData = [];
 
             // Loop through all debug table entries
             for (int i = 0; i < DebugDirectoryTable.Length; i++)
@@ -1223,7 +1221,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
                 catch (EndOfStreamException)
                 {
-                    return;
+                    return debugData;
                 }
 
                 // If we have CodeView debug data, try to parse it
@@ -1242,7 +1240,7 @@ namespace SabreTools.Serialization.Wrappers
                         var nb10ProgramDatabase = entryData.ParseNB10ProgramDatabase(ref offset);
                         if (nb10ProgramDatabase != null)
                         {
-                            _debugData[i] = nb10ProgramDatabase;
+                            debugData[i] = nb10ProgramDatabase;
                             continue;
                         }
                     }
@@ -1253,16 +1251,18 @@ namespace SabreTools.Serialization.Wrappers
                         var rsdsProgramDatabase = entryData.ParseRSDSProgramDatabase(ref offset);
                         if (rsdsProgramDatabase != null)
                         {
-                            _debugData[i] = rsdsProgramDatabase;
+                            debugData[i] = rsdsProgramDatabase;
                             continue;
                         }
                     }
                 }
                 else
                 {
-                    _debugData[i] = entryData;
+                    debugData[i] = entryData;
                 }
             }
+
+            return debugData;
         }
 
         #endregion
