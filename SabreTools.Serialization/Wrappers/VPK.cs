@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value if we have it
-                if (_archiveFilenames != null)
-                    return _archiveFilenames;
+                if (field != null)
+                    return field;
 
                 // If we don't have a source filename
                 if (string.IsNullOrEmpty(Filename))
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // Build the list of archive filenames to populate
-                _archiveFilenames = new string[archiveCount];
+                field = new string[archiveCount];
 
                 // Loop through and create the archive filenames
                 for (int i = 0; i < archiveCount; i++)
@@ -68,25 +68,16 @@ namespace SabreTools.Serialization.Wrappers
 #else
                     string archiveFileName = $"{fileName.Substring(0, fileName.Length - 3)}{i.ToString().PadLeft(3, '0')}.{extension}";
 #endif
-                    _archiveFilenames[i] = archiveFileName;
+                    field[i] = archiveFileName;
                 }
 
                 // Return the array
-                return _archiveFilenames;
+                return field;
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Models.VPK.File.DirectoryItems"/>
         public Data.Models.VPK.DirectoryItem[] DirectoryItems => Model.DirectoryItems;
-
-        #endregion
-
-        #region Instance Variables
-
-        /// <summary>
-        /// Array of archive filenames attached to the given VPK
-        /// </summary>
-        private string[]? _archiveFilenames = null;
 
         #endregion
 

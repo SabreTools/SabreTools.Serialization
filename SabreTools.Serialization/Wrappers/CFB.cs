@@ -37,8 +37,8 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (_miniStreamData != null)
-                    return _miniStreamData;
+                if (field != null)
+                    return field;
 
                 // If there are no directory entries
                 if (DirectoryEntries == null || DirectoryEntries.Length == 0)
@@ -48,11 +48,10 @@ namespace SabreTools.Serialization.Wrappers
                 var startingSector = (SectorNumber)DirectoryEntries[0].StartingSectorLocation;
 
                 // Get the mini stream data
-                _miniStreamData = GetFATSectorChainData(startingSector);
-                return _miniStreamData ?? [];
+                field = GetFATSectorChainData(startingSector);
+                return field ?? [];
             }
-        }
-        private byte[]? _miniStreamData;
+        } = null;
 
         /// <summary>
         /// Normal sector size in bytes

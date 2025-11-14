@@ -14,6 +14,33 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        /// <inheritdoc cref="Models.GCF.DataBlockHeader.BlockSize"/>
+        public uint BlockSize => Model.DataBlockHeader.BlockSize;
+
+        /// <summary>
+        /// Set of all data block offsets
+        /// </summary>
+        public long[]? DataBlockOffsets
+        {
+            get
+            {
+                // Use the cached value if we have it
+                if (field != null)
+                    return field;
+
+                // Otherwise, build the data block set
+                field = new long[Model.DataBlockHeader.BlockCount];
+                for (int i = 0; i < Model.DataBlockHeader.BlockCount; i++)
+                {
+                    long dataBlockOffset = Model.DataBlockHeader.FirstBlockOffset + (i * Model.DataBlockHeader.BlockSize);
+                    field[i] = dataBlockOffset;
+                }
+
+                // Return the set of data blocks
+                return field;
+            }
+        } = null;
+
         /// <summary>
         /// Set of all files and their information
         /// </summary>
@@ -22,8 +49,8 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value if we have it
-                if (_files != null)
-                    return _files;
+                if (field != null)
+                    return field;
 
                 // If we don't have a required property
                 if (Model.DirectoryEntries == null || Model.DirectoryMapEntries == null)
@@ -69,7 +96,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Traverse the block entries
                     index = directoryMapEntry.FirstBlockIndex;
-                    while (index != Model.DataBlockHeader?.BlockCount)
+                    while (index != Model.DataBlockHeader.BlockCount)
                     {
                         var nextBlock = Model.BlockEntries[index];
                         blockEntries.Add(nextBlock);
@@ -109,55 +136,10 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // Set and return the file infos
-                _files = [.. files];
-                return _files;
+                field = [.. files];
+                return field;
             }
-        }
-
-        /// <summary>
-        /// Set of all data block offsets
-        /// </summary>
-        public long[]? DataBlockOffsets
-        {
-            get
-            {
-                // Use the cached value if we have it
-                if (_dataBlockOffsets != null)
-                    return _dataBlockOffsets;
-
-                // If we don't have a block count, offset, or size
-                if (Model.DataBlockHeader?.BlockCount == null || Model.DataBlockHeader?.FirstBlockOffset == null || Model.DataBlockHeader?.BlockSize == null)
-                    return null;
-
-                // Otherwise, build the data block set
-                _dataBlockOffsets = new long[Model.DataBlockHeader.BlockCount];
-                for (int i = 0; i < Model.DataBlockHeader.BlockCount; i++)
-                {
-                    long dataBlockOffset = Model.DataBlockHeader.FirstBlockOffset + (i * Model.DataBlockHeader.BlockSize);
-                    _dataBlockOffsets[i] = dataBlockOffset;
-                }
-
-                // Return the set of data blocks
-                return _dataBlockOffsets;
-            }
-        }
-
-        /// <inheritdoc cref="Models.GCF.DataBlockHeader.BlockSize"/>
-        public uint BlockSize => Model.DataBlockHeader?.BlockSize ?? 0;
-
-        #endregion
-
-        #region Instance Variables
-
-        /// <summary>
-        /// Set of all files and their information
-        /// </summary>
-        private FileInfo[]? _files = null;
-
-        /// <summary>
-        /// Set of all data block offsets
-        /// </summary>
-        private long[]? _dataBlockOffsets = null;
+        } = null;
 
         #endregion
 

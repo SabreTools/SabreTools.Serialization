@@ -37,15 +37,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayAddressLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayAddress != null)
-                        return _overlayAddress.Value;
+                    if (field >= 0)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlayAddress = -1;
-                        return _overlayAddress.Value;
+                        field = -1;
+                        return field;
                     }
 
                     // Search through the segments table to find the furthest
@@ -99,11 +99,11 @@ namespace SabreTools.Serialization.Wrappers
                     endOfSectionData += 705;
 
                     // Cache and return the position
-                    _overlayAddress = endOfSectionData;
-                    return _overlayAddress.Value;
+                    field = endOfSectionData;
+                    return field;
                 }
             }
-        }
+        } = -1;
 
         /// <summary>
         /// Overlay data, if it exists
@@ -117,15 +117,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayData != null)
-                        return _overlayData;
+                    if (field != null)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // Get the overlay address and size if possible
@@ -135,25 +135,25 @@ namespace SabreTools.Serialization.Wrappers
                     // If we didn't find the address or size
                     if (endOfSectionData <= 0 || overlaySize <= 0)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // Otherwise, cache and return the data
                     overlaySize = Math.Min(overlaySize, 0x10000);
 
-                    _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlaySize);
-                    return _overlayData;
+                    field = ReadRangeFromSource((int)endOfSectionData, (int)overlaySize);
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <summary>
         /// Size of the overlay data, if it exists
@@ -166,15 +166,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlaySizeLock)
                 {
                     // Use the cached data if possible
-                    if (_overlaySize >= 0)
-                        return _overlaySize;
+                    if (field >= 0)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // Get the overlay address if possible
@@ -183,23 +183,23 @@ namespace SabreTools.Serialization.Wrappers
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // Otherwise, cache and return the data
-                    _overlaySize = dataLength - endOfSectionData;
-                    return _overlaySize;
+                    field = dataLength - endOfSectionData;
+                    return field;
                 }
             }
-        }
+        } = -1;
 
         /// <summary>
         /// Overlay strings, if they exist
@@ -211,31 +211,31 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayStrings != null)
-                        return _overlayStrings;
+                    if (field != null)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlayStrings = [];
-                        return _overlayStrings;
+                        field = [];
+                        return field;
                     }
 
                     // Get the overlay data, if possible
                     var overlayData = OverlayData;
                     if (overlayData.Length == 0)
                     {
-                        _overlayStrings = [];
-                        return _overlayStrings;
+                        field = [];
+                        return field;
                     }
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
-                    return _overlayStrings;
+                    field = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.ResidentNameTable"/>
         public ResidentNameTableEntry[] ResidentNameTable => Model.ResidentNameTable;
@@ -259,71 +259,46 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_stubExecutableData != null)
-                        return _stubExecutableData;
+                    if (field != null)
+                        return field;
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
                     int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
+                    field = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
-                    return _stubExecutableData;
+                    return field;
                 }
             }
-        }
+        } = null;
 
         #endregion
 
         #region Instance Variables
 
         /// <summary>
-        /// Address of the overlay, if it exists
-        /// </summary>
-        private long? _overlayAddress = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayAddress"/>
+        /// Lock object for <see cref="OverlayAddress"/>
         /// </summary>
         private readonly object _overlayAddressLock = new();
 
         /// <summary>
-        /// Overlay data, if it exists
-        /// </summary>
-        private byte[]? _overlayData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayData"/>
+        /// Lock object for <see cref="OverlayData"/>
         /// </summary>
         private readonly object _overlayDataLock = new();
 
         /// <summary>
-        /// Size of the overlay data, if it exists
-        /// </summary>
-        private long _overlaySize = -1;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlaySize"/>
+        /// Lock object for <see cref="OverlaySize"/>
         /// </summary>
         private readonly object _overlaySizeLock = new();
 
         /// <summary>
-        /// Overlay strings, if they exist
-        /// </summary>
-        private List<string>? _overlayStrings = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayStrings"/>
+        /// Lock object for <see cref="OverlayStrings"/>
         /// </summary>
         private readonly object _overlayStringsLock = new();
 
         /// <summary>
-        /// Stub executable data, if it exists
-        /// </summary>
-        private byte[]? _stubExecutableData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_stubExecutableData"/>
+        /// Lock object for <see cref="StubExecutableData"/>
         /// </summary>
         private readonly object _stubExecutableDataLock = new();
 

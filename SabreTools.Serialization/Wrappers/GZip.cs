@@ -77,8 +77,8 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                if (_dataOffset > -1)
-                    return _dataOffset;
+                if (field > -1)
+                    return field;
 
                 // Minimum offset is 10 bytes:
                 // - ID1 (1)
@@ -88,20 +88,20 @@ namespace SabreTools.Serialization.Wrappers
                 // - LastModifiedTime (4)
                 // - ExtraFlags (1)
                 // - OperatingSystem (1)
-                _dataOffset = 10;
+                field = 10;
 
                 // Add extra lengths
-                _dataOffset += Header.ExtraLength;
+                field += Header.ExtraLength;
                 if (Header.OriginalFileName != null)
-                    _dataOffset += Header.OriginalFileName.Length + 1;
+                    field += Header.OriginalFileName.Length + 1;
                 if (Header.FileComment != null)
-                    _dataOffset += Header.FileComment.Length + 1;
+                    field += Header.FileComment.Length + 1;
                 if (Header.CRC16 != null)
-                    _dataOffset += 2;
+                    field += 2;
 
-                return _dataOffset;
+                return field;
             }
-        }
+        } = -1;
 
         /// <inheritdoc cref="Archive.Header"/>
         public Header Header => Model.Header;
@@ -149,15 +149,6 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Archive.Trailer"/>
         public Trailer Trailer => Model.Trailer;
-
-        #endregion
-
-        #region Instance Variables
-
-        /// <summary>
-        /// Offset to the compressed data
-        /// </summary>
-        private long _dataOffset = -1;
 
         #endregion
 

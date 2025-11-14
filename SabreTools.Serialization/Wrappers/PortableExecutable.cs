@@ -63,31 +63,31 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_entryPointDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_entryPointData != null)
-                        return _entryPointData;
+                    if (field != null)
+                        return field;
 
                     // If we have no entry point
                     int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
                     if (entryPointAddress == 0)
                     {
-                        _entryPointData = [];
-                        return _entryPointData;
+                        field = [];
+                        return field;
                     }
 
                     // If the entry point matches with the start of a section, use that
                     int entryPointSection = FindEntryPointSectionIndex();
                     if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection].VirtualAddress)
                     {
-                        _entryPointData = GetSectionData(entryPointSection) ?? [];
-                        return _entryPointData;
+                        field = GetSectionData(entryPointSection) ?? [];
+                        return field;
                     }
 
                     // Read the first 128 bytes of the entry point
-                    _entryPointData = ReadRangeFromSource(entryPointAddress, length: 128) ?? [];
-                    return _entryPointData;
+                    field = ReadRangeFromSource(entryPointAddress, length: 128) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.ExportAddressTable"/>
         public Data.Models.PortableExecutable.Export.AddressTableEntry[]? ExportTable => Model.ExportAddressTable;
@@ -114,8 +114,8 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_headerPaddingDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_headerPaddingData != null)
-                        return _headerPaddingData;
+                    if (field != null)
+                        return field;
 
                     // TODO: Don't scan the known header data as well
 
@@ -137,15 +137,15 @@ namespace SabreTools.Serialization.Wrappers
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
                     if (headerLength <= 0)
                     {
-                        _headerPaddingData = [];
-                        return _headerPaddingData;
+                        field = [];
+                        return field;
                     }
 
-                    _headerPaddingData = ReadRangeFromSource((int)headerStartAddress, headerLength) ?? [];
-                    return _headerPaddingData;
+                    field = ReadRangeFromSource((int)headerStartAddress, headerLength) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <summary>
         /// Header padding strings, if they exist
@@ -157,23 +157,23 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_headerPaddingStringsLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_headerPaddingStrings != null)
-                        return _headerPaddingStrings;
+                    if (field != null)
+                        return field;
 
                     // Get the header padding data, if possible
                     byte[] headerPaddingData = HeaderPaddingData;
                     if (headerPaddingData.Length == 0)
                     {
-                        _headerPaddingStrings = [];
-                        return _headerPaddingStrings;
+                        field = [];
+                        return field;
                     }
 
                     // Otherwise, cache and return the strings
-                    _headerPaddingStrings = headerPaddingData.ReadStringsFrom(charLimit: 3) ?? [];
-                    return _headerPaddingStrings;
+                    field = headerPaddingData.ReadStringsFrom(charLimit: 3) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.ImportAddressTables"/>
         public Dictionary<int, Data.Models.PortableExecutable.Import.AddressTableEntry[]?>? ImportAddressTables => Model.ImportAddressTables;
@@ -197,8 +197,8 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_matroschkaPackageLock)
                 {
                     // Use the cached data if possible
-                    if (_matroschkaPackage != null)
-                        return _matroschkaPackage;
+                    if (field != null)
+                        return field;
 
                     // Check to see if creation has already been attempted
                     if (_matroschkaPackageFailed)
@@ -249,14 +249,14 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Parse the package
-                    _matroschkaPackage = SecuROMMatroschkaPackage.Create(sectionData, 0);
-                    if (_matroschkaPackage?.Entries == null)
+                    field = SecuROMMatroschkaPackage.Create(sectionData, 0);
+                    if (field?.Entries == null)
                         _matroschkaPackageFailed = true;
 
-                    return _matroschkaPackage;
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
         public Data.Models.PortableExecutable.OptionalHeader OptionalHeader => Model.OptionalHeader;
@@ -272,15 +272,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayAddressLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayAddress != null)
-                        return _overlayAddress.Value;
+                    if (field >= 0)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlayAddress = -1;
-                        return _overlayAddress.Value;
+                        field = -1;
+                        return field;
                     }
 
                     // If we have certificate data, use that as the end
@@ -304,11 +304,11 @@ namespace SabreTools.Serialization.Wrappers
                         endOfSectionData = -1;
 
                     // Cache and return the position
-                    _overlayAddress = endOfSectionData;
-                    return _overlayAddress.Value;
+                    field = endOfSectionData;
+                    return field;
                 }
             }
-        }
+        } = -1;
 
         /// <summary>
         /// Overlay data, if it exists
@@ -322,15 +322,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayData != null)
-                        return _overlayData;
+                    if (field != null)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // If we have certificate data, use that as the end
@@ -348,25 +348,25 @@ namespace SabreTools.Serialization.Wrappers
                     // If we didn't find the address or size
                     if (endOfSectionData <= 0 || overlaySize <= 0)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
                     {
-                        _overlayData = [];
-                        return _overlayData;
+                        field = [];
+                        return field;
                     }
 
                     // Otherwise, cache and return the data
                     overlaySize = Math.Min(overlaySize, 0x10000);
 
-                    _overlayData = ReadRangeFromSource(endOfSectionData, (int)overlaySize) ?? [];
-                    return _overlayData;
+                    field = ReadRangeFromSource(endOfSectionData, (int)overlaySize) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <summary>
         /// Size of the overlay data, if it exists
@@ -379,15 +379,15 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlaySizeLock)
                 {
                     // Use the cached data if possible
-                    if (_overlaySize >= 0)
-                        return _overlaySize;
+                    if (field >= 0)
+                        return field;
 
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // If we have certificate data, use that as the end
@@ -404,23 +404,23 @@ namespace SabreTools.Serialization.Wrappers
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
                     {
-                        _overlaySize = 0;
-                        return _overlaySize;
+                        field = 0;
+                        return field;
                     }
 
                     // Otherwise, cache and return the length
-                    _overlaySize = dataLength - endOfSectionData;
-                    return _overlaySize;
+                    field = dataLength - endOfSectionData;
+                    return field;
                 }
             }
-        }
+        } = -1;
 
         /// <summary>
         /// Overlay strings, if they exist
@@ -432,23 +432,23 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
-                    if (_overlayStrings != null)
-                        return _overlayStrings;
+                    if (field != null)
+                        return field;
 
                     // Get the overlay data, if possible
                     var overlayData = OverlayData;
                     if (overlayData.Length == 0)
                     {
-                        _overlayStrings = [];
-                        return _overlayStrings;
+                        field = [];
+                        return field;
                     }
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
-                    return _overlayStrings;
+                    field = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.ResourceDirectoryTable"/>
         public Data.Models.PortableExecutable.Resource.DirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
@@ -463,23 +463,23 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sectionNamesLock)
                 {
                     // Use the cached data if possible
-                    if (_sectionNames != null)
-                        return _sectionNames;
+                    if (field != null)
+                        return field;
 
                     // Otherwise, build and return the cached array
-                    _sectionNames = new string[SectionTable.Length];
-                    for (int i = 0; i < _sectionNames.Length; i++)
+                    field = new string[SectionTable.Length];
+                    for (int i = 0; i < field.Length; i++)
                     {
                         // TODO: Handle long section names with leading `/`
                         var section = SectionTable[i];
                         string sectionNameString = Encoding.UTF8.GetString(section.Name).TrimEnd('\0');
-                        _sectionNames[i] = sectionNameString;
+                        field[i] = sectionNameString;
                     }
 
-                    return _sectionNames;
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.SectionTable"/>
         public SectionHeader[] SectionTable => Model.SectionTable;
@@ -494,8 +494,8 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sectionTableTrailerDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_sectionTableTrailerData != null)
-                        return _sectionTableTrailerData;
+                    if (field != null)
+                        return field;
 
                     // Get the offset from the end of the section table
                     long endOfSectionTable = Stub.Header.NewExeHeaderAddr
@@ -508,11 +508,11 @@ namespace SabreTools.Serialization.Wrappers
                     int trailerDataSize = alignment - (int)(endOfSectionTable % alignment);
 
                     // Cache and return the section table trailer data, even if null
-                    _sectionTableTrailerData = ReadRangeFromSource(endOfSectionTable, trailerDataSize);
-                    return _sectionTableTrailerData;
+                    field = ReadRangeFromSource(endOfSectionTable, trailerDataSize);
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <inheritdoc cref="Executable.Stub"/>
         public Data.Models.MSDOS.Executable Stub => Model.Stub;
@@ -527,19 +527,19 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_stubExecutableData != null)
-                        return _stubExecutableData;
+                    if (field != null)
+                        return field;
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
                     int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
+                    field = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
-                    return _stubExecutableData;
+                    return field;
                 }
             }
-        }
+        } = null;
 
         /// <summary>
         /// Dictionary of resource data
@@ -579,8 +579,8 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_wiseSectionHeaderLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (_wiseSectionHeader != null)
-                        return _wiseSectionHeader;
+                    if (field != null)
+                        return field;
 
                     // If the header will not be found due to missing section data
                     if (_wiseSectionHeaderMissing)
@@ -623,14 +623,14 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Parse the section header
-                    _wiseSectionHeader = WiseSectionHeader.Create(sectionData, 0);
-                    if (_wiseSectionHeader == null)
+                    field = WiseSectionHeader.Create(sectionData, 0);
+                    if (field == null)
                         _wiseSectionHeaderMissing = true;
 
-                    return _wiseSectionHeader;
+                    return field;
                 }
             }
-        }
+        } = null;
 
         #region Version Information
 
@@ -832,87 +832,47 @@ namespace SabreTools.Serialization.Wrappers
         private readonly object _debugDataLock = new();
 
         /// <summary>
-        /// Entry point data, if it exists and isn't aligned to a section
-        /// </summary>
-        private byte[]? _entryPointData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_entryPointData"/>
+        /// Lock object for <see cref="EntryPointData"/>
         /// </summary>
         private readonly object _entryPointDataLock = new();
 
         /// <summary>
-        /// Header padding data, if it exists
-        /// </summary>
-        private byte[]? _headerPaddingData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_headerPaddingData"/>
+        /// Lock object for <see cref="HeaderPaddingData"/>
         /// </summary>
         private readonly object _headerPaddingDataLock = new();
 
         /// <summary>
-        /// Header padding strings, if they exist
-        /// </summary>
-        private List<string>? _headerPaddingStrings = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_headerPaddingStrings"/>
+        /// Lock object for <see cref="HeaderPaddingStrings"/>
         /// </summary>
         private readonly object _headerPaddingStringsLock = new();
 
         /// <summary>
-        /// Matroschka Package wrapper, if it exists
-        /// </summary>
-        private SecuROMMatroschkaPackage? _matroschkaPackage = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_matroschkaPackage"/>
+        /// Lock object for <see cref="MatroschkaPackage"/>
         /// </summary>
         private readonly object _matroschkaPackageLock = new();
 
         /// <summary>
-        /// Cached attempt at creation for <see cref="_matroschkaPackage"/>
+        /// Cached attempt at creation for <see cref="MatroschkaPackage"/>
         /// </summary>
         private bool _matroschkaPackageFailed = false;
 
         /// <summary>
-        /// Address of the overlay, if it exists
-        /// </summary>
-        private long? _overlayAddress = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayAddress"/>
+        /// Lock object for <see cref="OverlayAddress"/>
         /// </summary>
         private readonly object _overlayAddressLock = new();
 
         /// <summary>
-        /// Overlay data, if it exists
-        /// </summary>
-        private byte[]? _overlayData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayData"/>
+        /// Lock object for <see cref="OverlayData"/>
         /// </summary>
         private readonly object _overlayDataLock = new();
 
         /// <summary>
-        /// Size of the overlay data, if it exists
-        /// </summary>
-        private long _overlaySize = -1;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlaySize"/>
+        /// Lock object for <see cref="OverlaySize"/>
         /// </summary>
         private readonly object _overlaySizeLock = new();
 
         /// <summary>
-        /// Overlay strings, if they exist
-        /// </summary>
-        private List<string>? _overlayStrings = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_overlayStrings"/>
+        /// Lock object for <see cref="OverlayStrings"/>
         /// </summary>
         private readonly object _overlayStringsLock = new();
 
@@ -927,12 +887,7 @@ namespace SabreTools.Serialization.Wrappers
         private readonly object _resourceDataLock = new();
 
         /// <summary>
-        /// Sanitized section names
-        /// </summary>
-        private string[]? _sectionNames = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_sectionNames"/>
+        /// Lock object for <see cref="SectionNames"/>
         /// </summary>
         private readonly object _sectionNamesLock = new();
 
@@ -952,22 +907,12 @@ namespace SabreTools.Serialization.Wrappers
         private readonly object _sectionStringDataLock = new();
 
         /// <summary>
-        /// Data after the section table, if it exists
-        /// </summary>
-        private byte[]? _sectionTableTrailerData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_sectionTableTrailerData"/>
+        /// Lock object for <see cref="SectionTableTrailerData"/>
         /// </summary>
         private readonly object _sectionTableTrailerDataLock = new();
 
         /// <summary>
-        /// Stub executable data, if it exists
-        /// </summary>
-        private byte[]? _stubExecutableData = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_stubExecutableData"/>
+        /// Lock object for <see cref="StubExecutableData"/>
         /// </summary>
         private readonly object _stubExecutableDataLock = new();
 
@@ -982,17 +927,12 @@ namespace SabreTools.Serialization.Wrappers
         private readonly List<string>?[] _tableStringData = new List<string>?[16];
 
         /// <summary>
-        /// Wise section wrapper, if it exists
-        /// </summary>
-        private WiseSectionHeader? _wiseSectionHeader = null;
-
-        /// <summary>
-        /// Lock object for <see cref="_wiseSectionHeader"/>
+        /// Lock object for <see cref="WiseSection"/>
         /// </summary>
         private readonly object _wiseSectionHeaderLock = new();
 
         /// <summary>
-        /// Indicates if <see cref="_wiseSectionHeader"/> cannot be found
+        /// Indicates if <see cref="WiseSection"/> cannot be found
         /// </summary>
         private bool _wiseSectionHeaderMissing = false;
 

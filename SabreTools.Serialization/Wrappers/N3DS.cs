@@ -30,12 +30,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Media unit size in bytes
         /// </summary>
         public uint MediaUnitSize
-        {
-            get
-            {
-                return (uint)(0x200 * Math.Pow(2, Model.Header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
-            }
-        }
+            => (uint)(0x200 * Math.Pow(2, Model.Header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
 
         /// <summary>
         /// Partitions data table

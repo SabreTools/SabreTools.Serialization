@@ -39,11 +39,11 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Return the prebuilt map
-                if (_fileDirMap != null)
-                    return _fileDirMap;
+                if (field != null)
+                    return field;
 
                 // Build the file map
-                _fileDirMap = [];
+                field = [];
 
                 int fileId = 0;
                 for (int i = 0; i < Directories.Length; i++)
@@ -51,14 +51,13 @@ namespace SabreTools.Serialization.Wrappers
                     var dir = Directories[i];
                     for (int j = 0; j < dir.FileCount; j++)
                     {
-                        _fileDirMap[fileId++] = i;
+                        field[fileId++] = i;
                     }
                 }
 
-                return _fileDirMap;
+                return field;
             }
-        }
-        private Dictionary<int, int>? _fileDirMap = null;
+        } = null;
 
         /// <summary>
         /// Map of all files found in the archive
@@ -68,11 +67,11 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Return the prebuilt map
-                if (_fileNameMap != null)
-                    return _fileNameMap;
+                if (field != null)
+                    return field;
 
                 // Build the file map
-                _fileNameMap = [];
+                field = [];
                 for (int fileIndex = 0; fileIndex < Files.Length; fileIndex++)
                 {
                     // Get the current file
@@ -90,13 +89,14 @@ namespace SabreTools.Serialization.Wrappers
                     );
 
                     // Add to the map
-                    _fileNameMap[filename] = file;
+                    field[filename] = file;
                 }
 
-                return _fileNameMap;
+                return field;
             }
-        }
-        private Dictionary<string, Data.Models.InstallShieldArchiveV3.File>? _fileNameMap = null;
+
+            private set;
+        } = null;
 
         /// <summary>
         /// Data offset for all archives
