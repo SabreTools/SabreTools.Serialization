@@ -365,8 +365,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Get all files for the current folder index
         /// </summary>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetFiles(int folderIndex)
+        private CFFILE[] GetFiles(int folderIndex, bool ignorePrev = false)
         {
             // Ignore invalid archives
             if (Files == null)
@@ -377,6 +378,15 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (string.IsNullOrEmpty(f.Name))
                     return false;
+
+                // Ignore links to previous cabinets, if required
+                if (ignorePrev)
+                {
+                    if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                        return false;
+                    else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                        return false;
+                }
 
                 int fileFolder = GetFolderIndex(f);
                 return fileFolder == folderIndex;

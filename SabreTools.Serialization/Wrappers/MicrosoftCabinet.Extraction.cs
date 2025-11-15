@@ -150,10 +150,16 @@ namespace SabreTools.Serialization.Wrappers
             // Display warning in debug runs
             if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
 
+            // Do not ignore previous links by default
+            bool ignorePrev = false;
+
             // Open the full set if possible
             var cabinet = this;
             if (Filename != null)
+            {
                 cabinet = OpenSet(Filename);
+                ignorePrev = true;
+            }
 
             // If the archive is invalid
             if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
@@ -163,10 +169,19 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Loop through the folders
                 bool allExtracted = true;
-                for (int f = 0; f < cabinet.Folders.Length; f++)
+                while (true)
                 {
-                    var folder = cabinet.Folders[f];
-                    allExtracted &= cabinet.ExtractFolder(Filename, outputDirectory, folder, f, includeDebug);
+                    // Loop through the current folders
+                    for (int f = 0; f < cabinet.Folders.Length; f++)
+                    {
+                        var folder = cabinet.Folders[f];
+                        allExtracted &= cabinet.ExtractFolder(Filename, outputDirectory, folder, f, ignorePrev, includeDebug);
+                    }
+
+                    // Move to the next cabinet, if possible
+                    cabinet = cabinet.Next;
+                    if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
+                        break;
                 }
 
                 return allExtracted;
@@ -185,12 +200,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Path to the output directory</param>
         /// <param name="folder">Folder containing the blocks to decompress</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if all files extracted, false otherwise</returns>
         private bool ExtractFolder(string? filename,
             string outputDirectory,
             CFFOLDER? folder,
             int folderIndex,
+            bool ignorePrev,
             bool includeDebug)
         {
             // Decompress the blocks, if possible
@@ -200,7 +217,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Loop through the files
             bool allExtracted = true;
-            var files = GetFiles(folderIndex);
+            var files = GetFiles(folderIndex, ignorePrev);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
