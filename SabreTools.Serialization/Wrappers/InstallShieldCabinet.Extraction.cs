@@ -3,7 +3,12 @@ using System.IO;
 using System.Text.RegularExpressions;
 using SabreTools.Data.Models.InstallShieldCabinet;
 using SabreTools.Hashing;
-using SabreTools.IO.Compression.zlib;
+#if NET20
+using SabreTools.IO.Compression.Deflate;
+#else
+using Nanook.GrindCore;
+using Nanook.GrindCore.ZLib;
+#endif
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
@@ -268,7 +273,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Save the file at the given index to the filename specified
         /// </summary>
-        public bool FileSave(int index, string filename, bool includeDebug, bool useOld = false)
+        public bool FileSave(int index, string filename, bool includeDebug)
         {
             // Get the file descriptor
             if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
@@ -276,7 +281,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // If the file is split
             if (fileDescriptor.LinkFlags == LinkFlags.LINK_PREV)
-                return FileSave((int)fileDescriptor.LinkPrevious, filename, includeDebug, useOld);
+                return FileSave((int)fileDescriptor.LinkPrevious, filename, includeDebug);
 
             // Get the reader at the index
             var reader = Reader.Create(this, index, fileDescriptor);
@@ -285,7 +290,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Create the output file and hasher
             using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-            var md5 = new HashWrapper(HashType.MD5);
+            var md5 = new HashWrapper(Hashing.HashType.MD5);
 
             long readBytesLeft = (long)GetReadableBytes(fileDescriptor);
             long writeBytesLeft = (long)GetWritableBytes(fileDescriptor);
@@ -297,7 +302,7 @@ namespace SabreTools.Serialization.Wrappers
             while (readBytesLeft > 0 && writeBytesLeft > 0)
             {
                 long bytesToWrite = BUFFER_SIZE;
-                int result;
+                bool result;
 
                 // Handle compressed files
 #if NET20 || NET35
@@ -329,18 +334,15 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Add a null byte to make inflate happy
                     inputBuffer[bytesToRead] = 0;
-                    ulong readBytes = (ulong)(bytesToRead + 1);
+                    int readBytes = bytesToRead + 1;
 
                     // Uncompress into a buffer
-                    if (useOld)
-                        result = UncompressOld(outputBuffer, ref bytesToWrite, inputBuffer, ref readBytes);
-                    else
-                        result = Uncompress(outputBuffer, ref bytesToWrite, inputBuffer, ref readBytes);
+                    result = Uncompress(outputBuffer, inputBuffer, readBytes);
 
                     // If we didn't get a positive result that's not a data error (false positives)
-                    if (result != zlibConst.Z_OK && result != zlibConst.Z_DATA_ERROR)
+                    if (!result)
                     {
-                        Console.Error.WriteLine($"Decompression failed with code {result.ToZlibConstName()}. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={readBytes}");
+                        Console.Error.WriteLine($"Decompression failed. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={readBytes}");
                         reader.Dispose();
                         fs?.Close();
                         return false;
@@ -454,74 +456,25 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
+        private static bool Uncompress(byte[] dest, byte[] source, int sourceLength)
         {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
+            try
             {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
-                    next_out = destPtr,
-                    avail_out = (uint)destLen,
-                };
-
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
-
-                err = ZLib.inflate(stream, 1);
-                if (err != zlibConst.Z_OK && err != zlibConst.Z_STREAM_END)
-                {
-                    ZLib.inflateEnd(stream);
-                    return err;
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
+                // Inflate the data into the buffer
+                using var ms = new MemoryStream(source, 0, sourceLength);
+                using var os = new MemoryStream(dest);
+#if NET20
+                using var zs = new ZlibStream(ms, CompressionMode.Decompress);
+#else
+                using var zs = new ZLibStream(ms, CompressionOptions.DefaultDecompress());
+#endif
+                zs.CopyTo(os);
+                os.Flush();
+                return true;
             }
-        }
-
-        /// <summary>
-        /// Uncompress a source byte array to a destination (old version)
-        /// </summary>
-        private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
-        {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
+            catch
             {
-                var stream = new ZLib.z_stream_s
-                {
-                    next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
-                    next_out = destPtr,
-                    avail_out = (uint)destLen,
-                };
-
-                destLen = 0;
-                sourceLen = 0;
-
-                // make second parameter negative to disable checksum verification
-                int err = ZLib.inflateInit2_(stream, -MAX_WBITS, ZLib.zlibVersion(), source.Length);
-                if (err != zlibConst.Z_OK)
-                    return err;
-
-                while (stream.avail_in > 1)
-                {
-                    err = ZLib.inflate(stream, 1);
-                    if (err != zlibConst.Z_OK)
-                    {
-                        ZLib.inflateEnd(stream);
-                        return err;
-                    }
-                }
-
-                destLen = stream.total_out;
-                sourceLen = stream.total_in;
-                return ZLib.inflateEnd(stream);
+                return false;
             }
         }
 

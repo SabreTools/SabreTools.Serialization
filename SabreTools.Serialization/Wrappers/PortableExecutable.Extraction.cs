@@ -1,8 +1,14 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Compression.BZip2;
-using SabreTools.IO.Compression.zlib;
+#if NET20
+using SabreTools.IO.Compression.Deflate;
+#else
+using Nanook.GrindCore;
+using Nanook.GrindCore.ZLib;
+#endif
 using SabreTools.IO.Extensions;
+
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -789,36 +795,16 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 // Inflate the data into the buffer
-                var zstream = new ZLib.z_stream_s();
-                byte[] data = new byte[resource.Length * 4];
-                unsafe
-                {
-                    fixed (byte* payloadPtr = resource)
-                    fixed (byte* dataPtr = data)
-                    {
-                        zstream.next_in = payloadPtr;
-                        zstream.avail_in = (uint)resource.Length;
-                        zstream.total_in = (uint)resource.Length;
-                        zstream.next_out = dataPtr;
-                        zstream.avail_out = (uint)data.Length;
-                        zstream.total_out = 0;
-
-                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), resource.Length);
-                        int zret = ZLib.inflate(zstream, 1);
-                        ZLib.inflateEnd(zstream);
-                    }
-                }
-
-                // Trim the buffer to the proper size
-                uint read = zstream.total_out;
-#if NETFRAMEWORK
-                var temp = new byte[read];
-                Array.Copy(data, temp, read);
-                data = temp;
+                using var ms = new MemoryStream(resource);
+                using var os = new MemoryStream();
+#if NET20
+                using var zs = new ZlibStream(ms, CompressionMode.Decompress);
 #else
-                data = new ReadOnlySpan<byte>(data, 0, (int)read).ToArray();
+                using var zs = new ZLibStream(ms, CompressionOptions.DefaultDecompress());
 #endif
-                return data;
+                zs.CopyTo(os);
+                os.Flush();
+                return os.ToArray();
             }
             catch
             {

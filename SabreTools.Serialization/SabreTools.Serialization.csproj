@@ -44,6 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="GrindCore" Version="0.5.3" Condition="!$(TargetFramework.StartsWith(`net2`))" />
         <PackageReference Include="GrindCore.SharpCompress" Version="0.40.4-alpha" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
         <PackageReference Include="NetLegacySupport.Numerics" Version="1.0.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />

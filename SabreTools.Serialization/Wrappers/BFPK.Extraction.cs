@@ -1,6 +1,11 @@
 ﻿using System;
 using System.IO;
+#if NET20
 using SabreTools.IO.Compression.Deflate;
+#else
+using Nanook.GrindCore;
+using Nanook.GrindCore.ZLib;
+#endif
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -93,7 +98,11 @@ namespace SabreTools.Serialization.Wrappers
                 else
                 {
                     using var ms = new MemoryStream(data);
+#if NET20
                     using var zs = new ZlibStream(ms, CompressionMode.Decompress);
+#else
+                    using var zs = new ZLibStream(ms, CompressionOptions.DefaultDecompress());
+#endif
                     zs.CopyTo(fs);
                     fs.Flush();
                 }
