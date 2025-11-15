@@ -290,10 +290,13 @@ namespace SabreTools.Serialization.Wrappers
             ulong readBytesLeft = GetReadableBytes(fileDescriptor);
             ulong writeBytesLeft = GetWritableBytes(fileDescriptor);
             byte[] outputBuffer = new byte[BUFFER_SIZE];
-            long totalWritten = 0;
+            ulong totalWritten = 0;
+
+            // Cache the expected values
+            ulong storedSize = readBytesLeft;
 
             // Read while there are bytes remaining
-            while (readBytesLeft > 0 && writeBytesLeft > 0)
+            while (readBytesLeft > 0 && readBytesLeft <= storedSize)
             {
                 uint bytesToWrite = BUFFER_SIZE;
                 int result;
@@ -372,7 +375,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // Validate the number of bytes written
-            if ((long)fileDescriptor.ExpandedSize != totalWritten)
+            if (fileDescriptor.ExpandedSize != totalWritten)
                 if (includeDebug) Console.WriteLine($"Expanded size of file {index} ({GetFileName(index)}) expected to be {fileDescriptor.ExpandedSize}, but was {totalWritten}");
 
             // Finalize output values
@@ -466,7 +469,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (err != zlibConst.Z_OK)
                     return err;
 
-                err = ZLib.inflate(stream, 1);
+                err = ZLib.inflate(stream, zlibConst.Z_FINISH);
                 if (err != zlibConst.Z_OK && err != zlibConst.Z_STREAM_END)
                 {
                     ZLib.inflateEnd(stream);
@@ -504,7 +507,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 while (stream.avail_in > 1)
                 {
-                    err = ZLib.inflate(stream, 1);
+                    err = ZLib.inflate(stream, zlibConst.Z_BLOCK);
                     if (err != zlibConst.Z_OK)
                     {
                         ZLib.inflateEnd(stream);
@@ -717,6 +720,7 @@ namespace SabreTools.Serialization.Wrappers
                         return false;
 
                     // Set the number of bytes left
+                    start += bytesToRead;
                     bytesLeft -= bytesToRead;
                     _volumeBytesLeft -= (uint)bytesToRead;
                 }
@@ -777,7 +781,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 ulong volumeBytesLeftCompressed, volumeBytesLeftExpanded;
 #if NET20 || NET35
-            if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
+                if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
 #else
                 if (_fileDescriptor.Flags.HasFlag(FileFlags.FILE_SPLIT))
 #endif
