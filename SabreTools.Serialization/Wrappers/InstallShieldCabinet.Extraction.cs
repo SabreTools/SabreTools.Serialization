@@ -466,7 +466,13 @@ namespace SabreTools.Serialization.Wrappers
 #if NET20
                 using var zs = new ZlibStream(ms, CompressionMode.Decompress);
 #else
-                using var zs = new ZLibStream(ms, CompressionOptions.DefaultDecompress());
+                var options = new CompressionOptions
+                {
+                    Type = CompressionType.Decompress,
+                    Dictionary = new CompressionDictionaryOptions { WindowBits = -MAX_WBITS }
+                };
+
+                using var zs = new ZLibStream(ms, options);
 #endif
                 zs.CopyTo(os);
                 os.Flush();
@@ -737,7 +743,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 ulong volumeBytesLeftCompressed, volumeBytesLeftExpanded;
 #if NET20 || NET35
-            if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
+                if ((_fileDescriptor.Flags & FileFlags.FILE_SPLIT) != 0)
 #else
                 if (_fileDescriptor.Flags.HasFlag(FileFlags.FILE_SPLIT))
 #endif
