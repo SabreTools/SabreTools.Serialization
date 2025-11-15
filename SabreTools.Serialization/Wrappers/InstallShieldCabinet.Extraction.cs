@@ -287,16 +287,15 @@ namespace SabreTools.Serialization.Wrappers
             using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
             var md5 = new HashWrapper(HashType.MD5);
 
-            long readBytesLeft = (long)GetReadableBytes(fileDescriptor);
-            long writeBytesLeft = (long)GetWritableBytes(fileDescriptor);
-            byte[] inputBuffer;
+            ulong readBytesLeft = GetReadableBytes(fileDescriptor);
+            ulong writeBytesLeft = GetWritableBytes(fileDescriptor);
             byte[] outputBuffer = new byte[BUFFER_SIZE];
             long totalWritten = 0;
 
             // Read while there are bytes remaining
             while (readBytesLeft > 0 && writeBytesLeft > 0)
             {
-                long bytesToWrite = BUFFER_SIZE;
+                uint bytesToWrite = BUFFER_SIZE;
                 int result;
 
                 // Handle compressed files
@@ -318,7 +317,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Attempt to read the specified number of bytes
                     uint bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
-                    inputBuffer = new byte[BUFFER_SIZE];
+                    byte[] inputBuffer = new byte[BUFFER_SIZE];
                     if (!reader.Read(inputBuffer, 0, bytesToRead))
                     {
                         Console.Error.WriteLine($"Failed to read {lengthArr.Length} bytes of file {index} ({GetFileName(index)}) from input cabinet file {fileDescriptor.Volume}");
@@ -350,7 +349,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Handle uncompressed files
                 else
                 {
-                    bytesToWrite = Math.Min(readBytesLeft, BUFFER_SIZE);
+                    bytesToWrite = (uint)Math.Min(readBytesLeft, BUFFER_SIZE);
                     if (!reader.Read(outputBuffer, 0, (int)bytesToWrite))
                     {
                         Console.Error.WriteLine($"Failed to write {bytesToWrite} bytes from input cabinet file {fileDescriptor.Volume}");
@@ -360,11 +359,11 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Set remaining bytes
-                    readBytesLeft -= (uint)bytesToWrite;
+                    readBytesLeft -= bytesToWrite;
                 }
 
                 // Hash and write the next block
-                bytesToWrite = Math.Min(bytesToWrite, writeBytesLeft);
+                bytesToWrite = (uint)Math.Min(bytesToWrite, writeBytesLeft);
                 md5.Process(outputBuffer, 0, (int)bytesToWrite);
                 fs?.Write(outputBuffer, 0, (int)bytesToWrite);
 
@@ -450,7 +449,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref uint sourceLen)
+        private unsafe static int Uncompress(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {
@@ -459,7 +458,7 @@ namespace SabreTools.Serialization.Wrappers
                     next_in = sourcePtr,
                     avail_in = sourceLen,
                     next_out = destPtr,
-                    avail_out = (uint)destLen,
+                    avail_out = destLen,
                 };
 
                 // make second parameter negative to disable checksum verification
@@ -483,7 +482,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination (old version)
         /// </summary>
-        private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref uint sourceLen)
+        private unsafe static int UncompressOld(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {
@@ -492,7 +491,7 @@ namespace SabreTools.Serialization.Wrappers
                     next_in = sourcePtr,
                     avail_in = sourceLen,
                     next_out = destPtr,
-                    avail_out = (uint)destLen,
+                    avail_out = destLen,
                 };
 
                 destLen = 0;
