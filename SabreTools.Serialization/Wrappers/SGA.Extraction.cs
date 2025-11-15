@@ -98,8 +98,7 @@ namespace SabreTools.Serialization.Wrappers
                 data = new byte[outputFileSize];
                 unsafe
                 {
-                    fixed (byte* payloadPtr = compressedData)
-                    fixed (byte* dataPtr = data)
+                    fixed (byte* payloadPtr = compressedData, dataPtr = data)
                     {
                         zstream.next_in = payloadPtr;
                         zstream.avail_in = (uint)compressedData.Length;

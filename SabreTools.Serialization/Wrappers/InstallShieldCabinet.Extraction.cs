@@ -456,8 +456,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
         {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
+            fixed (byte* sourcePtr = source, destPtr = dest)
             {
                 var stream = new ZLib.z_stream_s
                 {
@@ -490,8 +489,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
         {
-            fixed (byte* sourcePtr = source)
-            fixed (byte* destPtr = dest)
+            fixed (byte* sourcePtr = source, destPtr = dest)
             {
                 var stream = new ZLib.z_stream_s
                 {

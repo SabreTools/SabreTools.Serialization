@@ -793,8 +793,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte[] data = new byte[resource.Length * 4];
                 unsafe
                 {
-                    fixed (byte* payloadPtr = resource)
-                    fixed (byte* dataPtr = data)
+                    fixed (byte* payloadPtr = resource, dataPtr = data)
                     {
                         zstream.next_in = payloadPtr;
                         zstream.avail_in = (uint)resource.Length;
