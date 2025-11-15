@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="index">Cabinet part index to be opened</param>
         /// <param name="suffix">Cabinet files suffix (e.g. `.cab`)</param>
         /// <returns>A Stream representing the cabinet part, null on error</returns>
-        private static Stream? OpenFileForReading(string? pattern, int index, string suffix)
+        private static FileStream? OpenFileForReading(string? pattern, int index, string suffix)
         {
             // An invalid pattern means no cabinet files
             if (string.IsNullOrEmpty(pattern))
@@ -317,8 +317,8 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Attempt to read the specified number of bytes
-                    ushort bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
-                    inputBuffer = new byte[BUFFER_SIZE + 1];
+                    uint bytesToRead = BitConverter.ToUInt16(lengthArr, 0);
+                    inputBuffer = new byte[BUFFER_SIZE];
                     if (!reader.Read(inputBuffer, 0, bytesToRead))
                     {
                         Console.Error.WriteLine($"Failed to read {lengthArr.Length} bytes of file {index} ({GetFileName(index)}) from input cabinet file {fileDescriptor.Volume}");
@@ -327,20 +327,16 @@ namespace SabreTools.Serialization.Wrappers
                         return false;
                     }
 
-                    // Add a null byte to make inflate happy
-                    inputBuffer[bytesToRead] = 0;
-                    ulong readBytes = (ulong)(bytesToRead + 1);
-
                     // Uncompress into a buffer
                     if (useOld)
-                        result = UncompressOld(outputBuffer, ref bytesToWrite, inputBuffer, ref readBytes);
+                        result = UncompressOld(outputBuffer, ref bytesToWrite, inputBuffer, ref bytesToRead);
                     else
-                        result = Uncompress(outputBuffer, ref bytesToWrite, inputBuffer, ref readBytes);
+                        result = Uncompress(outputBuffer, ref bytesToWrite, inputBuffer, ref bytesToRead);
 
                     // If we didn't get a positive result that's not a data error (false positives)
                     if (result != zlibConst.Z_OK && result != zlibConst.Z_DATA_ERROR)
                     {
-                        Console.Error.WriteLine($"Decompression failed with code {result.ToZlibConstName()}. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={readBytes}");
+                        Console.Error.WriteLine($"Decompression failed with code {result.ToZlibConstName()}. bytes_to_read={bytesToRead}, volume={fileDescriptor.Volume}, read_bytes={bytesToRead}");
                         reader.Dispose();
                         fs?.Close();
                         return false;
@@ -454,14 +450,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
+        private unsafe static int Uncompress(byte[] dest, ref long destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {
                 var stream = new ZLib.z_stream_s
                 {
                     next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
+                    avail_in = sourceLen,
                     next_out = destPtr,
                     avail_out = (uint)destLen,
                 };
@@ -487,14 +483,14 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination (old version)
         /// </summary>
-        private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref ulong sourceLen)
+        private unsafe static int UncompressOld(byte[] dest, ref long destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {
                 var stream = new ZLib.z_stream_s
                 {
                     next_in = sourcePtr,
-                    avail_in = (uint)sourceLen,
+                    avail_in = sourceLen,
                     next_out = destPtr,
                     avail_out = (uint)destLen,
                 };
