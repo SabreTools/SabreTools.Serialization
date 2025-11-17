@@ -55,7 +55,7 @@ Options:
 | 7-zip archive | .NET Framework 4.6.2 and greater |
 | BFPK custom archive format | |
 | bzip2 archive | .NET Framework 4.6.2 and greater |
-| Compound File Binary (CFB) | Only CFB common pieces extractable. .NET Framework 4.0 and greater |
+| Compound File Binary (CFB) | Only CFB common pieces extractable |
 | gzip archive | |
 | Half-Life Game Cache File (GCF) | |
 | Half-Life Level (BSP) | |
