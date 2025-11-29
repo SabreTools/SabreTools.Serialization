@@ -215,7 +215,9 @@ namespace SabreTools.Serialization.Test.Readers
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
+                CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
+                CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
                 MD5 = "XXXXXX",

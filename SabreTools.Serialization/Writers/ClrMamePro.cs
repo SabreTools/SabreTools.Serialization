@@ -251,7 +251,9 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteStartElement("rom");
                 writer.WriteRequiredAttributeString("name", rom.Name, throwOnError: true);
                 writer.WriteRequiredAttributeString("size", rom.Size, throwOnError: true);
+                writer.WriteOptionalAttributeString("crc16", rom.CRC16);
                 writer.WriteOptionalAttributeString("crc", rom.CRC);
+                writer.WriteOptionalAttributeString("crc64", rom.CRC64);
                 writer.WriteOptionalAttributeString("md2", rom.MD2);
                 writer.WriteOptionalAttributeString("md4", rom.MD4);
                 writer.WriteOptionalAttributeString("md5", rom.MD5);

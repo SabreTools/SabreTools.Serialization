@@ -247,6 +247,8 @@ namespace InfoPrint.Features
                     builder.AppendLine($"CRC-16 checksum: {crc16}");
                 if (hashes.TryGetValue(HashType.CRC32, out string? crc32) && crc32 != null)
                     builder.AppendLine($"CRC-32 checksum: {crc32}");
+                if (hashes.TryGetValue(HashType.CRC64, out string? crc64) && crc64 != null)
+                    builder.AppendLine($"CRC-64 checksum: {crc64}");
                 if (hashes.TryGetValue(HashType.MD2, out string? md2) && md2 != null)
                     builder.AppendLine($"MD2 hash: {md2}");
                 if (hashes.TryGetValue(HashType.MD4, out string? md4) && md4 != null)

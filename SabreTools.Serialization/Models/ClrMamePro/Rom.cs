@@ -36,7 +36,13 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         #region Hash Extensions
 
-        /// <remarks>md2; Appears after CRC</remarks>
+        /// <remarks>crc16; Appears before CRC</remarks>
+        public string? CRC16 { get; set; }
+
+        /// <remarks>crc64; Appears after CRC</remarks>
+        public string? CRC64 { get; set; }
+
+        /// <remarks>md2; Appears after CRC64</remarks>
         public string? MD2 { get; set; }
 
         /// <remarks>md4; Appears after MD2</remarks>

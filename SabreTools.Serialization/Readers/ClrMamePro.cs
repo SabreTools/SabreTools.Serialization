@@ -473,6 +473,12 @@ namespace SabreTools.Serialization.Readers
                     case "crc":
                         rom.CRC = kvp.Value;
                         break;
+                    case "crc16":
+                        rom.CRC16 = kvp.Value;
+                        break;
+                    case "crc64":
+                        rom.CRC64 = kvp.Value;
+                        break;
                     case "md2":
                         rom.MD2 = kvp.Value;
                         break;

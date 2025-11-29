@@ -50,6 +50,12 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>string; Also "crc32" in ArchiveDotOrg.File</remarks>
         public const string CRCKey = "crc";
 
+        /// <remarks>string</remarks>
+        public const string CRC16Key = "crc16";
+
+        /// <remarks>string</remarks>
+        public const string CRC64Key = "crc64";
+
         /// <remarks>string; ArchiveDotOrg.File</remarks>
         public const string CreatorKey = "creator";
 

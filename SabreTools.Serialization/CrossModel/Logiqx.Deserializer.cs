@@ -301,7 +301,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.ReadString(Data.Models.Metadata.Rom.NameKey),
                 Size = item.ReadString(Data.Models.Metadata.Rom.SizeKey),
+                CRC16 = item.ReadString(Data.Models.Metadata.Rom.CRC16Key),
                 CRC = item.ReadString(Data.Models.Metadata.Rom.CRCKey),
+                CRC64 = item.ReadString(Data.Models.Metadata.Rom.CRC64Key),
                 MD2 = item.ReadString(Data.Models.Metadata.Rom.MD2Key),
                 MD4 = item.ReadString(Data.Models.Metadata.Rom.MD4Key),
                 MD5 = item.ReadString(Data.Models.Metadata.Rom.MD5Key),

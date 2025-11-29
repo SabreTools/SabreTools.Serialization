@@ -296,7 +296,9 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Data.Models.Metadata.Rom.NameKey] = item.Name,
                 [Data.Models.Metadata.Rom.SizeKey] = item.Size,
+                [Data.Models.Metadata.Rom.CRC16Key] = item.CRC16,
                 [Data.Models.Metadata.Rom.CRCKey] = item.CRC,
+                [Data.Models.Metadata.Rom.CRC64Key] = item.CRC64,
                 [Data.Models.Metadata.Rom.MD2Key] = item.MD2,
                 [Data.Models.Metadata.Rom.MD4Key] = item.MD4,
                 [Data.Models.Metadata.Rom.MD5Key] = item.MD5,

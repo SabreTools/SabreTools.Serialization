@@ -15,8 +15,16 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlAttribute("size")]
         public string? Size { get; set; }
 
+        /// <remarks>Hash extension</remarks>
+        [XmlAttribute("crc16")]
+        public string? CRC16 { get; set; }
+
         [XmlAttribute("crc")]
         public string? CRC { get; set; }
+
+        /// <remarks>Hash extension</remarks>
+        [XmlAttribute("crc64")]
+        public string? CRC64 { get; set; }
 
         /// <remarks>Hash extension</remarks>
         [XmlAttribute("md2")]

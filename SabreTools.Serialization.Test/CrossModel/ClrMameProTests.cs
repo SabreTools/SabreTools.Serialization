@@ -97,7 +97,9 @@ namespace SabreTools.Serialization.Test.CrossModel
             {
                 Name = "XXXXXX",
                 Size = "XXXXXX",
+                CRC16 = "XXXXXX",
                 CRC = "XXXXXX",
+                CRC64 = "XXXXXX",
                 MD2 = "XXXXXX",
                 MD4 = "XXXXXX",
                 MD5 = "XXXXXX",
@@ -350,7 +352,9 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.NotNull(rom);
             Assert.Equal("XXXXXX", rom.Name);
             Assert.Equal("XXXXXX", rom.Size);
+            Assert.Equal("XXXXXX", rom.CRC16);
             Assert.Equal("XXXXXX", rom.CRC);
+            Assert.Equal("XXXXXX", rom.CRC64);
             Assert.Equal("XXXXXX", rom.MD2);
             Assert.Equal("XXXXXX", rom.MD4);
             Assert.Equal("XXXXXX", rom.MD5);
