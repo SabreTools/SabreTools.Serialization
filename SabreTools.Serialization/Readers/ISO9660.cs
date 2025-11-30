@@ -635,7 +635,7 @@ namespace SabreTools.Serialization.Readers
 
             // Use provided extent endinanness
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            int extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
+            uint extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
             long extentOffset = (long)extentLocation * (long)blockLength;
             long extentFinal = extentOffset + (long)extentLength;
 
@@ -668,7 +668,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
-                int pos = 0;
+                uint pos = 0;
                 while (pos < extentLength)
                 {
                     // Peek next byte to check whether the next record length is not greater than the end of the dir extent

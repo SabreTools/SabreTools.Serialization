@@ -28,7 +28,7 @@ namespace SabreTools.Data.Models.ISO9660
         /// <summary>
         /// Number of bytes allocated to this extent (not including extended attribute record length)
         /// </summary>
-        public BothInt32 ExtentLength { get; set; } = 0;
+        public BothUInt32 ExtentLength { get; set; } = 0;
 
         /// <summary>
         /// Datetime of recording for the Directory Record

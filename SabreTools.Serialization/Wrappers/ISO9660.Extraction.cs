@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.Wrappers
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
-                int length = dr.ExtentLength;
+                uint length = dr.ExtentLength;
                 if (length > _dataSource.Length - _dataSource.Position)
                     return false;
 
