@@ -43,6 +43,7 @@ namespace SabreTools.Serialization.Wrappers
                         zipFile = ZipArchive.Open(parts, readerOptions);
                 }
 
+                bool encrypted = false;
                 foreach (var entry in zipFile.Entries)
                 {
                     try
@@ -58,6 +59,17 @@ namespace SabreTools.Serialization.Wrappers
                         // If the entry is partial due to an incomplete multi-part archive, skip it
                         if (!entry.IsComplete)
                             continue;
+                        
+                        // If the entry is password-protected, skip it
+                        if (entry.IsEncrypted)
+                        {
+                            if (!encrypted)
+                            {
+                                if (includeDebug) Console.WriteLine("Some or all files in zip are password-protected!");
+                                encrypted = true;
+                            }
+                            continue;
+                        }
 
                         // Ensure directory separators are consistent
                         string filename = entry.Key;

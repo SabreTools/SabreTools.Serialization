@@ -75,9 +75,17 @@ namespace SabreTools.Serialization.Wrappers
 
                         if (firstFile)
                             firstFile = false;
-                        else
+                        else if (entry.IsSolid)
                         {
-                            isSolid = entry.IsSolid;
+                            // If the RAR is solid and the first entry is password-protected, you won't be able to
+                            // extract the rest of the entries anyway, so just return early.
+                            if (entry.IsEncrypted)
+                            {
+                                if (includeDebug) Console.WriteLine("RAR is password-protected!");
+                                return false;
+                            }
+                            
+                            isSolid = true;
                             break;
                         }
                     }
@@ -200,6 +208,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private static bool ExtractNonSolid(RarArchive rarFile, string outDir, bool includeDebug)
         {
+            bool encrypted = false;
             foreach (var entry in rarFile.Entries)
             {
                 try
@@ -215,6 +224,17 @@ namespace SabreTools.Serialization.Wrappers
                     // If we have a partial entry due to an incomplete multi-part archive, skip it
                     if (!entry.IsComplete)
                         continue;
+                    
+                    // If the entry is password-protected, skip it
+                    if (entry.IsEncrypted)
+                    {
+                        if (!encrypted)
+                        {
+                            if (includeDebug) Console.WriteLine("Some or all files in RAR are password-protected!");
+                            encrypted = true;
+                        }
+                        continue;
+                    }
 
                     // Ensure directory separators are consistent
                     string filename = entry.Key;
