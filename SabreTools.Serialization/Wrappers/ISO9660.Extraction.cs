@@ -195,7 +195,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            const int chunkSize = 2048 * 1024;
+            const uint chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
                 long fileOffset = ((long)dr.ExtentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Wrappers
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
-                    uint bytesToRead = Math.Min(length, chunkSize);
+                    int bytesToRead = (int)Math.Min(length, chunkSize);
 
                     byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                     fs.Write(buffer, 0, bytesToRead);

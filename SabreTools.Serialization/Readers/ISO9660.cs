@@ -677,7 +677,7 @@ namespace SabreTools.Serialization.Readers
                     // If record length of 0x00, next record begins in next sector
                     if (recordLength == 0)
                     {
-                        uint paddingLength = (uint)sectorLength - (pos % (uint)sectorLength);
+                        int paddingLength = (int)((uint)sectorLength - (pos % (uint)sectorLength);
                         pos += paddingLength;
                         _ = data.ReadBytes(paddingLength);
 
