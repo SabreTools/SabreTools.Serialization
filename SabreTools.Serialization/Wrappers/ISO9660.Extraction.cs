@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.Wrappers
                     fs.Write(buffer, 0, bytesToRead);
                     fs.Flush();
 
-                    length -= bytesToRead;
+                    length -= (uint)bytesToRead;
                 }
 
                 // Mark the file as extracted

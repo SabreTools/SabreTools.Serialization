@@ -678,7 +678,7 @@ namespace SabreTools.Serialization.Readers
                     if (recordLength == 0)
                     {
                         int paddingLength = (int)((uint)sectorLength - (pos % (uint)sectorLength));
-                        pos += paddingLength;
+                        pos += (uint)paddingLength;
                         _ = data.ReadBytes(paddingLength);
 
                         // Finish parsing records if end reached
