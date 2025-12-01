@@ -188,7 +188,7 @@ namespace SabreTools.Serialization.Wrappers
             if (!multiExtent && (File.Exists(filepath) || Directory.Exists(filepath)))
             {
                 // If it's the last extent of a multi-extent file, continue to append
-                if (multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
+                if (!multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
                 {
                     if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
                     return false;
