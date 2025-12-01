@@ -73,8 +73,12 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         if (firstFile)
+                        {
                             firstFile = false;
-                        else if (entry.IsSolid)
+                            continue;
+                        }
+                        
+                        if (entry.IsSolid)
                         {
                             // If the 7z is solid and the first entry is password-protected, you won't be able to
                             // extract the rest of the entries anyway, so just return early.
@@ -85,8 +89,9 @@ namespace SabreTools.Serialization.Wrappers
                             }
                             
                             isSolid = true;
-                            break;
                         }
+                        
+                        break;
                     }
                     catch (Exception ex)
                     {
