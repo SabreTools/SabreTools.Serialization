@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private readonly Dictionary<int, int> extractedFiles = [];
+        private readonly Dictionary<int, uint> extractedFiles = [];
 
         /// <summary>
         /// List of multi-extent files written, by their FileIdentifier
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Wrappers
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
-                    int bytesToRead = Math.Min(length, chunkSize);
+                    uint bytesToRead = Math.Min(length, chunkSize);
 
                     byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                     fs.Write(buffer, 0, bytesToRead);
