@@ -238,6 +238,7 @@ namespace SabreTools.Serialization.Wrappers
                             if (includeDebug) Console.WriteLine("Some or all files in RAR are password-protected!");
                             encrypted = true;
                         }
+                        
                         continue;
                     }
 

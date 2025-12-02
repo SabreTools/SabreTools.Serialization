@@ -68,6 +68,7 @@ namespace SabreTools.Serialization.Wrappers
                                 if (includeDebug) Console.WriteLine("Some or all files in zip are password-protected!");
                                 encrypted = true;
                             }
+                            
                             continue;
                         }
 

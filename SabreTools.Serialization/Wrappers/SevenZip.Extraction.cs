@@ -206,6 +206,7 @@ namespace SabreTools.Serialization.Wrappers
                             if (includeDebug) Console.WriteLine("Some or all files in 7z are password-protected!");
                             encrypted = true;
                         }
+                        
                         continue;
                     }
 
