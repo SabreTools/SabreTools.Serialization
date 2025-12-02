@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private readonly Dictionary<int, int> extractedFiles = [];
+        private readonly Dictionary<int, uint> extractedFiles = [];
 
         /// <summary>
         /// List of multi-extent files written, by their FileIdentifier
@@ -188,21 +188,21 @@ namespace SabreTools.Serialization.Wrappers
             if (!multiExtent && (File.Exists(filepath) || Directory.Exists(filepath)))
             {
                 // If it's the last extent of a multi-extent file, continue to append
-                if (multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
+                if (!multiExtentFiles.Exists(item => item.EqualsExactly(dr.FileIdentifier)))
                 {
                     if (includeDebug) Console.WriteLine($"File/Folder already exists, cannot extract: {filename}");
                     return false;
                 }
             }
 
-            const int chunkSize = 2048 * 1024;
+            const uint chunkSize = 2048 * 1024;
             lock (_dataSourceLock)
             {
                 long fileOffset = ((long)dr.ExtentLocation + dr.ExtendedAttributeRecordLength) * blockLength;
                 _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                 // Get the length, and make sure it won't EOF
-                int length = dr.ExtentLength;
+                uint length = dr.ExtentLength;
                 if (length > _dataSource.Length - _dataSource.Position)
                     return false;
 
@@ -211,13 +211,13 @@ namespace SabreTools.Serialization.Wrappers
                 using var fs = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
                 while (length > 0)
                 {
-                    int bytesToRead = Math.Min(length, chunkSize);
+                    int bytesToRead = (int)Math.Min(length, chunkSize);
 
                     byte[] buffer = _dataSource.ReadBytes(bytesToRead);
                     fs.Write(buffer, 0, bytesToRead);
                     fs.Flush();
 
-                    length -= bytesToRead;
+                    length -= (uint)bytesToRead;
                 }
 
                 // Mark the file as extracted

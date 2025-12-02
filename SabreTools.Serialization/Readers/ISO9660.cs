@@ -635,7 +635,7 @@ namespace SabreTools.Serialization.Readers
 
             // Use provided extent endinanness
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
-            int extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
+            uint extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
             long extentOffset = (long)extentLocation * (long)blockLength;
             long extentFinal = extentOffset + (long)extentLength;
 
@@ -668,7 +668,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read all directory records in this directory
                 var records = new List<DirectoryRecord>();
-                int pos = 0;
+                uint pos = 0;
                 while (pos < extentLength)
                 {
                     // Peek next byte to check whether the next record length is not greater than the end of the dir extent
@@ -677,8 +677,8 @@ namespace SabreTools.Serialization.Readers
                     // If record length of 0x00, next record begins in next sector
                     if (recordLength == 0)
                     {
-                        int paddingLength = sectorLength - (pos % sectorLength);
-                        pos += paddingLength;
+                        int paddingLength = (int)((uint)sectorLength - (pos % (uint)sectorLength));
+                        pos += (uint)paddingLength;
                         _ = data.ReadBytes(paddingLength);
 
                         // Finish parsing records if end reached
@@ -786,7 +786,7 @@ namespace SabreTools.Serialization.Readers
             obj.DirectoryRecordLength = data.ReadByteValue();
             obj.ExtendedAttributeRecordLength = data.ReadByteValue();
             obj.ExtentLocation = data.ReadInt32BothEndian();
-            obj.ExtentLength = data.ReadInt32BothEndian();
+            obj.ExtentLength = data.ReadUInt32BothEndian();
 
             obj.RecordingDateTime = ParseDirectoryRecordDateTime(data);
 
