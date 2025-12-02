@@ -181,7 +181,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private static bool ExtractNonSolid(SevenZipArchive sevenZip, string outputDirectory, bool includeDebug)
         {
-            bool encrypted = false;
             foreach (var entry in sevenZip.Entries)
             {
                 try
@@ -201,11 +200,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If the entry is password-protected, skip it
                     if (entry.IsEncrypted)
                     {
-                        if (!encrypted)
-                        {
-                            if (includeDebug) Console.WriteLine("Some or all files in 7z are password-protected!");
-                            encrypted = true;
-                        }
+                        if (includeDebug) Console.WriteLine($"File {entry.Key} in 7z is password-protected!");
                         
                         continue;
                     }

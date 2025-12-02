@@ -43,7 +43,6 @@ namespace SabreTools.Serialization.Wrappers
                         zipFile = ZipArchive.Open(parts, readerOptions);
                 }
 
-                bool encrypted = false;
                 foreach (var entry in zipFile.Entries)
                 {
                     try
@@ -63,11 +62,7 @@ namespace SabreTools.Serialization.Wrappers
                         // If the entry is password-protected, skip it
                         if (entry.IsEncrypted)
                         {
-                            if (!encrypted)
-                            {
-                                if (includeDebug) Console.WriteLine("Some or all files in zip are password-protected!");
-                                encrypted = true;
-                            }
+                            if (includeDebug) Console.WriteLine($"File {entry.Key} in zip is password-protected!");
                             
                             continue;
                         }

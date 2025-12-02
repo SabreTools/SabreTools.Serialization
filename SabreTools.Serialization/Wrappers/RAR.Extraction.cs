@@ -213,7 +213,6 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private static bool ExtractNonSolid(RarArchive rarFile, string outDir, bool includeDebug)
         {
-            bool encrypted = false;
             foreach (var entry in rarFile.Entries)
             {
                 try
@@ -233,11 +232,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If the entry is password-protected, skip it
                     if (entry.IsEncrypted)
                     {
-                        if (!encrypted)
-                        {
-                            if (includeDebug) Console.WriteLine("Some or all files in RAR are password-protected!");
-                            encrypted = true;
-                        }
+                        if (includeDebug) Console.WriteLine($"File {entry.Key} in RAR is password-protected!");
                         
                         continue;
                     }
