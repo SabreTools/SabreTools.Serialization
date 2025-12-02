@@ -58,6 +58,14 @@ namespace SabreTools.Serialization.Wrappers
                         // If the entry is partial due to an incomplete multi-part archive, skip it
                         if (!entry.IsComplete)
                             continue;
+                        
+                        // If the entry is password-protected, skip it
+                        if (entry.IsEncrypted)
+                        {
+                            if (includeDebug) Console.WriteLine($"File {entry.Key} in zip is password-protected!");
+                            
+                            continue;
+                        }
 
                         // Ensure directory separators are consistent
                         string filename = entry.Key;
