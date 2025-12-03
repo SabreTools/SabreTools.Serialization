@@ -203,6 +203,9 @@ namespace SabreTools.Serialization.Wrappers
                 // Get the data to be processed
                 byte[] blockData = db.CompressedData;
 
+                var initialCompressedSize = db.CompressedSize;
+                var initialUncompressedSize = db.UncompressedSize;
+                
                 // If the block is continued, append
                 bool continuedBlock = false;
                 if (db.UncompressedSize == 0)
@@ -235,6 +238,9 @@ namespace SabreTools.Serialization.Wrappers
                 // Write the uncompressed data block
                 ms.Write(data, 0, data.Length);
                 ms.Flush();
+                
+                db.CompressedSize =  initialCompressedSize;
+                db.UncompressedSize = initialUncompressedSize;
 
                 // Increment additionally if we had a continued block
                 if (continuedBlock) i++;
@@ -337,7 +343,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     int prevFolderIndex = Prev.FolderCount;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex - 1, skipNext: true) ?? [];
                 }
             }
 
