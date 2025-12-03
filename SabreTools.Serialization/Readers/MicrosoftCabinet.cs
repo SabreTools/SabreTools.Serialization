@@ -203,7 +203,13 @@ namespace SabreTools.Serialization.Readers
             dataBlock.Checksum = data.ReadUInt32LittleEndian();
             dataBlock.CompressedSize = data.ReadUInt16LittleEndian();
             dataBlock.UncompressedSize = data.ReadUInt16LittleEndian();
+            
+            if (dataReservedSize > 0)
+                data.SeekIfPossible(data.Position + dataReservedSize, SeekOrigin.Begin);
 
+            if (dataBlock.CompressedSize > 0)
+                data.SeekIfPossible(data.Position + dataBlock.CompressedSize, SeekOrigin.Begin);
+            
             return dataBlock;
         }
 
