@@ -315,6 +315,8 @@ namespace SabreTools.Serialization.Wrappers
             if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
                 return null;
 
+            GetData(folder);
+
             // Get all files for the folder
             var files = GetFiles(folderIndex);
             if (files.Length == 0)

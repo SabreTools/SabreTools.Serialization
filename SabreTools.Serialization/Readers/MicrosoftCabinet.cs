@@ -204,12 +204,6 @@ namespace SabreTools.Serialization.Readers
             dataBlock.CompressedSize = data.ReadUInt16LittleEndian();
             dataBlock.UncompressedSize = data.ReadUInt16LittleEndian();
 
-            if (dataReservedSize > 0)
-                dataBlock.ReservedData = data.ReadBytes(dataReservedSize);
-
-            if (dataBlock.CompressedSize > 0)
-                dataBlock.CompressedData = data.ReadBytes(dataBlock.CompressedSize);
-
             return dataBlock;
         }
 
