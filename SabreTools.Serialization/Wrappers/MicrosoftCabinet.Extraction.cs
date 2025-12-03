@@ -174,12 +174,17 @@ namespace SabreTools.Serialization.Wrappers
                     // Loop through the current folders
                     for (int f = 0; f < cabinet.Folders.Length; f++)
                     {
+                        if (f == 0 && (cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT ||
+                                       cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_FROM_PREV))
+                            continue;
+                        
                         var folder = cabinet.Folders[f];
                         allExtracted &= cabinet.ExtractFolder(Filename, outputDirectory, folder, f, ignorePrev, includeDebug);
                     }
 
                     // Move to the next cabinet, if possible
                     cabinet = cabinet.Next;
+                    cabinet?.Prev = null;
                     if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
                         break;
                 }
