@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using SabreTools.Data.Models.GCF;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -62,9 +63,9 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If we have a directory, skip for now
 #if NET20 || NET35
-                    if ((directoryEntry.DirectoryFlags & Data.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE) == 0)
+                    if ((directoryEntry.DirectoryFlags & HL_GCF_FLAG.HL_GCF_FLAG_FILE) == 0)
 #else
-                    if (!directoryEntry.DirectoryFlags.HasFlag(Data.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_FILE))
+                    if (!directoryEntry.DirectoryFlags.HasFlag(HL_GCF_FLAG.HL_GCF_FLAG_FILE))
 #endif
                         continue;
 
@@ -73,13 +74,14 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         Size = directoryEntry.ItemSize,
 #if NET20 || NET35
-                        Encrypted = (directoryEntry.DirectoryFlags & Data.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED) != 0,
+                        Encrypted = (directoryEntry.DirectoryFlags & HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED) != 0,
 #else
-                        Encrypted = directoryEntry.DirectoryFlags.HasFlag(Data.Models.GCF.HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
+                        Encrypted = directoryEntry.DirectoryFlags.HasFlag(HL_GCF_FLAG.HL_GCF_FLAG_ENCRYPTED),
 #endif
                     };
+
                     var pathParts = new List<string> { Model.DirectoryNames[directoryEntry.NameOffset] ?? string.Empty };
-                    var blockEntries = new List<Data.Models.GCF.BlockEntry>();
+                    var blockEntries = new List<BlockEntry>();
 
                     // Traverse the parent tree
                     uint index = directoryEntry.ParentIndex;
@@ -121,6 +123,7 @@ namespace SabreTools.Serialization.Wrappers
                                 tempPath = Path.Combine(tempPath, pathArray[j]);
                         }
                     }
+
                     fileInfo.Path = tempPath;
 #else
                     fileInfo.Path = Path.Combine([.. pathParts]);
@@ -239,7 +242,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Array of block entries
             /// </summary>
-            public Data.Models.GCF.BlockEntry[]? BlockEntries;
+            public BlockEntry[] BlockEntries = [];
         }
 
         #endregion
