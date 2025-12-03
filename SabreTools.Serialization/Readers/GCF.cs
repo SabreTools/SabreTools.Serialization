@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.SeekIfPossible(afterMapPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.SeekIfPossible(initialOffset + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 #region Data Block Header
 
