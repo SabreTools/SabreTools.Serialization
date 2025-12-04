@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Extensions;
@@ -189,6 +190,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
                     cabinet = cabinet.Next;
                     cabinet?.Prev = null;
+                    
+                    // TODO: already-extracted data isn't being cleared from memory, at least not nearly enough.
+                    
                     if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
                         break;
                 }
@@ -226,13 +230,29 @@ namespace SabreTools.Serialization.Wrappers
 
             // Loop through the files
             bool allExtracted = true;
-            var files = GetSpannedFiles(filename, folderIndex, ignorePrev);
+            var filterFiles = GetSpannedFiles(filename, folderIndex, ignorePrev);
+            List<CFFILE> fileList = [];
+
+            // Filtering, add debug output eventually
+            for (int i = 0; i < filterFiles.Length; i++)
+            {
+                var file = filterFiles[i];
+
+                if (file.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT ||
+                    file.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                {
+                    // debug output for inconsistencies would go here
+                    continue;
+                }
+                
+                fileList.Add(file);
+            }
+            
+            CFFILE[] files = fileList.ToArray();
             blockStream.SeekIfPossible(0, SeekOrigin.Begin);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                if (file.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT || file.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
-                    continue;
                 
                 allExtracted &= ExtractFiles(outputDirectory, blockStream, file, includeDebug);
             }
