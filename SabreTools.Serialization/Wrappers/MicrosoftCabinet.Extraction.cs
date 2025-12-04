@@ -227,13 +227,59 @@ namespace SabreTools.Serialization.Wrappers
             // Loop through the files
             bool allExtracted = true;
             var files = GetSpannedFiles(filename, folderIndex, ignorePrev);
+            blockStream.SeekIfPossible(0, SeekOrigin.Begin);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                allExtracted &= ExtractFile(outputDirectory, blockStream, file, includeDebug);
+                if (file.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT || file.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                    continue;
+                
+                allExtracted &= ExtractFiles(outputDirectory, blockStream, file, includeDebug);
             }
 
             return allExtracted;
+        }
+        
+        // TODO: this will apparently improve memory usage/performance, but it's not clear if this implementation is enough for that to happen
+        /// <summary>
+        /// Extract the contents of a single file, intended to be used with all files in a straight shot
+        /// </summary>
+        /// <param name="outputDirectory">Path to the output directory</param>
+        /// <param name="blockStream">Stream representing the uncompressed block data</param>
+        /// <param name="file">File information</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if the file extracted, false otherwise</returns>
+        private static bool ExtractFiles(string outputDirectory, Stream blockStream, CFFILE file, bool includeDebug)
+        {
+            try
+            {
+                byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
+
+                // Ensure directory separators are consistent
+                string filename = file.Name;
+                if (Path.DirectorySeparatorChar == '\\')
+                    filename = filename.Replace('/', '\\');
+                else if (Path.DirectorySeparatorChar == '/')
+                    filename = filename.Replace('\\', '/');
+
+                // Ensure the full output directory exists
+                filename = Path.Combine(outputDirectory, filename);
+                var directoryName = Path.GetDirectoryName(filename);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Open the output file for writing
+                using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                fs.Write(fileData, 0, fileData.Length);
+                fs.Flush();
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
