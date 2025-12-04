@@ -183,6 +183,10 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Move to the next cabinet, if possible
+                    foreach (var folder in cabinet.Folders)
+                    {
+                        folder.DataBlocks = [];
+                    }
                     cabinet = cabinet.Next;
                     cabinet?.Prev = null;
                     if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
@@ -197,32 +201,6 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
-
-        public void GetData(CFFOLDER folder)
-        {
-            if (folder.CabStartOffset > 0)
-            {
-                uint offset = folder.CabStartOffset;
-
-                for (int i = 0; i < folder.DataCount; i++)
-                {
-                    offset += 8;
-
-                    if (Header.DataReservedSize > 0)
-                    {
-                        folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
-                        offset += Header.DataReservedSize;
-                    }
-
-                    if (folder.DataBlocks[i].CompressedSize > 0)
-                    {
-                        folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
-                        offset += folder.DataBlocks[i].CompressedSize;
-                    }
-                }
-            }
-        }
-
         
         /// <summary>
         /// Extract the contents of a single folder
