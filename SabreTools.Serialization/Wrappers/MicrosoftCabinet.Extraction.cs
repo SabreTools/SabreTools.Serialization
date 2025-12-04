@@ -226,7 +226,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Loop through the files
             bool allExtracted = true;
-            var files = GetFiles(folderIndex, ignorePrev);
+            var files = GetFiles(filename, folderIndex, ignorePrev);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];

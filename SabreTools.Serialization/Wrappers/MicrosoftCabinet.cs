@@ -318,7 +318,7 @@ namespace SabreTools.Serialization.Wrappers
             GetData(folder);
 
             // Get all files for the folder
-            var files = GetFiles(folderIndex);
+            var files = GetFiles(filename, folderIndex);
             if (files.Length == 0)
                 return folder.DataBlocks;
 
@@ -337,7 +337,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Get all blocks from Prev
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
-                    int prevFolderIndex = Prev.FolderCount;
+                    int prevFolderIndex = Prev.FolderCount - 1;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
                     prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
@@ -387,6 +387,77 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         }
+        
+        /// <summary>
+        /// Get all files for the current folder index
+        /// </summary>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <returns>Array of all files for the folder</returns>
+        private CFFILE[] GetFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
+        {
+            // Ignore invalid archives
+            if (Files == null)
+                return [];
+
+            // Get all files with a name and matching index
+            var files = Array.FindAll(Files, f =>
+            {
+                if (string.IsNullOrEmpty(f.Name))
+                    return false;
+
+                // Ignore links to previous cabinets, if required
+                if (ignorePrev)
+                {
+                    if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                        return false;
+                    else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                        return false;
+                }
+
+                int fileFolder = GetFolderIndex(f);
+                return fileFolder == folderIndex;
+            });
+            
+            // Check if the folder spans in either direction
+            bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+            bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+
+            // If the folder spans backward and Prev is not being skipped
+            CFFILE[] prevFiles = [];
+            if (!skipPrev && spanPrev)
+            {
+                // Try to get Prev if it doesn't exist
+                if (Prev?.Header == null)
+                    Prev = OpenPrevious(filename);
+
+                // Get all files from Prev
+                if (Prev?.Header != null && Prev.Folders != null)
+                {
+                    int prevFolderIndex = Prev.FolderCount - 1;
+                    prevFiles = Prev.GetFiles(filename, prevFolderIndex, skipNext: true) ?? [];
+                }
+            }
+            
+            // If the folder spans forward and Next is not being skipped
+            CFFILE[] nextFiles = [];
+            if (!skipNext && spanNext)
+            {
+                // Try to get Next if it doesn't exist
+                if (Next?.Header == null)
+                    Next = OpenNext(filename);
+
+                // Get all files from Prev
+                if (Next?.Header != null && Next.Folders != null)
+                {
+                    var nextFolder = Next.Folders[0];
+                    nextFiles = Next.GetFiles(filename, 0, skipPrev: true) ?? [];
+                }
+            }
+            
+            // Return all found files in order
+            return [.. prevFiles, .. files, .. nextFiles];
+        }
 
         /// <summary>
         /// Get all files for the current folder index
@@ -394,7 +465,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetFiles(int folderIndex, bool ignorePrev = false)
+        private CFFILE[] GetFilesOld(int folderIndex, bool ignorePrev = false)
         {
             // Ignore invalid archives
             if (Files == null)
