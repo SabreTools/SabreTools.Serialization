@@ -318,7 +318,7 @@ namespace SabreTools.Serialization.Wrappers
             GetData(folder);
 
             // Get all files for the folder
-            var files = GetFiles(filename, folderIndex);
+            var files = GetFiles(folderIndex, skipPrev);
             if (files.Length == 0)
                 return folder.DataBlocks;
 
@@ -389,12 +389,12 @@ namespace SabreTools.Serialization.Wrappers
         }
         
         /// <summary>
-        /// Get all files for the current folder index
+        /// Get all files for the current folder, plus connected spanned folders.
         /// </summary>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
+        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
         {
             // Ignore invalid archives
             if (Files == null)
@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
-                    prevFiles = Prev.GetFiles(filename, prevFolderIndex, skipNext: true) ?? [];
+                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
             
@@ -451,7 +451,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextFiles = Next.GetFiles(filename, 0, skipPrev: true) ?? [];
+                    nextFiles = Next.GetSpannedFiles(filename, 0, skipPrev: true) ?? [];
                 }
             }
             
@@ -465,7 +465,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetFilesOld(int folderIndex, bool ignorePrev = false)
+        private CFFILE[] GetFiles(int folderIndex, bool ignorePrev = false)
         {
             // Ignore invalid archives
             if (Files == null)
