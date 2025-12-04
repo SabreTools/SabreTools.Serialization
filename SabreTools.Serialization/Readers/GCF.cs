@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Cache the current offset
-                initialOffset = data.Position;
+                long afterChecksumPosition = data.Position;
 
                 #region Checksum Map Header
 
@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Seek to end of checksum section, just in case
-                data.SeekIfPossible(initialOffset + checksumHeader.ChecksumSize, SeekOrigin.Begin);
+                data.SeekIfPossible(afterChecksumPosition + checksumHeader.ChecksumSize, SeekOrigin.Begin);
 
                 #region Data Block Header
 
