@@ -315,6 +315,8 @@ namespace SabreTools.Serialization.Wrappers
             if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
                 return null;
 
+            GetData(folder);
+
             // Get all files for the folder
             var files = GetFiles(folderIndex);
             if (files.Length == 0)
@@ -335,7 +337,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Get all blocks from Prev
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
-                    int prevFolderIndex = Prev.FolderCount;
+                    int prevFolderIndex = Prev.FolderCount - 1;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
                     prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
@@ -359,6 +361,102 @@ namespace SabreTools.Serialization.Wrappers
 
             // Return all found blocks in order
             return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
+        }
+        
+        public void GetData(CFFOLDER folder)
+        {
+            if (folder.CabStartOffset > 0)
+            {
+                uint offset = folder.CabStartOffset;
+
+                for (int i = 0; i < folder.DataCount; i++)
+                {
+                    offset += 8;
+
+                    if (Header.DataReservedSize > 0)
+                    {
+                        folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
+                        offset += Header.DataReservedSize;
+                    }
+
+                    if (folder.DataBlocks[i].CompressedSize > 0)
+                    {
+                        folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
+                        offset += folder.DataBlocks[i].CompressedSize;
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Get all files for the current folder, plus connected spanned folders.
+        /// </summary>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <returns>Array of all files for the folder</returns>
+        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
+        {
+            // Ignore invalid archives
+            if (Files == null)
+                return [];
+
+            // Get all files with a name and matching index
+            var files = Array.FindAll(Files, f =>
+            {
+                if (string.IsNullOrEmpty(f.Name))
+                    return false;
+
+                // Ignore links to previous cabinets, if required
+                if (ignorePrev)
+                {
+                    if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                        return false;
+                    else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                        return false;
+                }
+
+                int fileFolder = GetFolderIndex(f);
+                return fileFolder == folderIndex;
+            });
+            
+            // Check if the folder spans in either direction
+            bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+            bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
+
+            // If the folder spans backward and Prev is not being skipped
+            CFFILE[] prevFiles = [];
+            if (!skipPrev && spanPrev)
+            {
+                // Try to get Prev if it doesn't exist
+                if (Prev?.Header == null)
+                    Prev = OpenPrevious(filename);
+
+                // Get all files from Prev
+                if (Prev?.Header != null && Prev.Folders != null)
+                {
+                    int prevFolderIndex = Prev.FolderCount - 1;
+                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, skipNext: true) ?? [];
+                }
+            }
+            
+            // If the folder spans forward and Next is not being skipped
+            CFFILE[] nextFiles = [];
+            if (!skipNext && spanNext)
+            {
+                // Try to get Next if it doesn't exist
+                if (Next?.Header == null)
+                    Next = OpenNext(filename);
+
+                // Get all files from Prev
+                if (Next?.Header != null && Next.Folders != null)
+                {
+                    var nextFolder = Next.Folders[0];
+                    nextFiles = Next.GetSpannedFiles(filename, 0, skipPrev: true) ?? [];
+                }
+            }
+            
+            // Return all found files in order
+            return [.. prevFiles, .. files, .. nextFiles];
         }
 
         /// <summary>
