@@ -1288,6 +1288,22 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse a byte array into a DirEntry
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled DirEntry on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DirEntry ParseDirEntry(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DirEntry();
+
+            obj.FontOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            obj.Entry = ParseFontDirEntry(data, ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a ExportAddressTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -1475,6 +1491,80 @@ namespace SabreTools.Serialization.Readers
             obj.FileDateLS = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a FontDirEntry
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled FontDirEntry on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.FontDirEntry ParseFontDirEntry(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.FontDirEntry();
+
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.Size = data.ReadUInt32LittleEndian(ref offset);
+            obj.Copyright = data.ReadBytes(ref offset, 60);
+            obj.Type = data.ReadUInt16LittleEndian(ref offset);
+            obj.Points = data.ReadUInt16LittleEndian(ref offset);
+            obj.VertRes = data.ReadUInt16LittleEndian(ref offset);
+            obj.HorizRes = data.ReadUInt16LittleEndian(ref offset);
+            obj.Ascent = data.ReadUInt16LittleEndian(ref offset);
+            obj.InternalLeading = data.ReadUInt16LittleEndian(ref offset);
+            obj.ExternalLeading = data.ReadUInt16LittleEndian(ref offset);
+            obj.Italic = data.ReadByte(ref offset);
+            obj.Underline = data.ReadByte(ref offset);
+            obj.StrikeOut = data.ReadByte(ref offset);
+            obj.Weight = data.ReadUInt16LittleEndian(ref offset);
+            obj.CharSet = data.ReadByte(ref offset);
+            obj.PixWidth = data.ReadUInt16LittleEndian(ref offset);
+            obj.PixHeight = data.ReadUInt16LittleEndian(ref offset);
+            obj.PitchAndFamily = data.ReadByte(ref offset);
+            obj.AvgWidth = data.ReadUInt16LittleEndian(ref offset);
+            obj.MaxWidth = data.ReadUInt16LittleEndian(ref offset);
+            obj.FirstChar = data.ReadByte(ref offset);
+            obj.LastChar = data.ReadByte(ref offset);
+            obj.DefaultChar = data.ReadByte(ref offset);
+            obj.BreakChar = data.ReadByte(ref offset);
+            obj.WidthBytes = data.ReadUInt16LittleEndian(ref offset);
+            obj.Device = data.ReadUInt32LittleEndian(ref offset);
+            obj.Face = data.ReadUInt32LittleEndian(ref offset);
+            obj.Reserved = data.ReadUInt32LittleEndian(ref offset);
+
+            // TODO: Determine how to read these two? Immediately after?
+            obj.DeviceName = data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
+            obj.FaceName = data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a FontGroupHeader
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled FontGroupHeader on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.FontGroupHeader ParseFontGroupHeader(byte[] data)
+        {
+            // Initialize the iterator
+            int offset = 0;
+
+            // Create the output object
+            var fontGroupHeader = new Data.Models.PortableExecutable.Resource.Entries.FontGroupHeader();
+
+            fontGroupHeader.NumberOfFonts = data.ReadUInt16LittleEndian(ref offset);
+            if (fontGroupHeader.NumberOfFonts > 0)
+            {
+                fontGroupHeader.DE = new Data.Models.PortableExecutable.Resource.Entries.DirEntry[fontGroupHeader.NumberOfFonts];
+                for (int i = 0; i < fontGroupHeader.NumberOfFonts; i++)
+                {
+                    fontGroupHeader.DE[i] = ParseDirEntry(data, ref offset);
+                }
+            }
+
+            // TODO: Implement entry parsing
+            return fontGroupHeader;
         }
 
         /// <summary>

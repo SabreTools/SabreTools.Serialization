@@ -174,75 +174,6 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        /// Read resource data as a font group
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a font group</param>
-        /// <returns>A filled font group on success, null on error</returns>
-        public static FontGroupHeader? AsFontGroup(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            // Initialize the iterator
-            int offset = 0;
-
-            // Create the output object
-            var fontGroupHeader = new FontGroupHeader();
-
-            fontGroupHeader.NumberOfFonts = entry.Data.ReadUInt16LittleEndian(ref offset);
-            if (fontGroupHeader.NumberOfFonts > 0)
-            {
-                fontGroupHeader.DE = new DirEntry[fontGroupHeader.NumberOfFonts];
-                for (int i = 0; i < fontGroupHeader.NumberOfFonts; i++)
-                {
-                    var dirEntry = new DirEntry();
-
-                    dirEntry.FontOrdinal = entry.Data.ReadUInt16LittleEndian(ref offset);
-
-                    dirEntry.Entry = new FontDirEntry();
-                    dirEntry.Entry.Version = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.Size = entry.Data.ReadUInt32LittleEndian(ref offset);
-                    dirEntry.Entry.Copyright = entry.Data.ReadBytes(ref offset, 60);
-                    dirEntry.Entry.Type = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.Points = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.VertRes = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.HorizRes = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.Ascent = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.InternalLeading = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.ExternalLeading = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.Italic = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.Underline = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.StrikeOut = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.Weight = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.CharSet = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.PixWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.PixHeight = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.PitchAndFamily = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.AvgWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.MaxWidth = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.FirstChar = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.LastChar = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.DefaultChar = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.BreakChar = entry.Data.ReadByte(ref offset);
-                    dirEntry.Entry.WidthBytes = entry.Data.ReadUInt16LittleEndian(ref offset);
-                    dirEntry.Entry.Device = entry.Data.ReadUInt32LittleEndian(ref offset);
-                    dirEntry.Entry.Face = entry.Data.ReadUInt32LittleEndian(ref offset);
-                    dirEntry.Entry.Reserved = entry.Data.ReadUInt32LittleEndian(ref offset);
-
-                    // TODO: Determine how to read these two? Immediately after?
-                    dirEntry.Entry.DeviceName = entry.Data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
-                    dirEntry.Entry.FaceName = entry.Data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
-
-                    fontGroupHeader.DE[i] = dirEntry;
-                }
-            }
-
-            // TODO: Implement entry parsing
-            return fontGroupHeader;
-        }
-
-        /// <summary>
         /// Read resource data as a string table resource
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
@@ -272,20 +203,6 @@ namespace SabreTools.Data.Extensions
             }
 
             return stringTable;
-        }
-
-        /// <summary>
-        /// Read resource data as a version info resource
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a version info resource</param>
-        /// <returns>A filled version info resource on success, null on error</returns>
-        public static VersionInfo? AsVersionInfo(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            return Serialization.Readers.PortableExecutable.ParseVersionInfo(entry.Data);
         }
 
         /// <summary>
