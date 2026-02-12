@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
@@ -244,84 +243,6 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        ///  Read byte data as a string file info resource
-        /// </summary>
-        /// <param name="data">Data to parse into a string file info</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled string file info resource on success, null on error</returns>
-        public static StringFileInfo? AsStringFileInfo(byte[] data, ref int offset)
-        {
-            var stringFileInfo = new StringFileInfo();
-
-            // Cache the initial offset
-            int currentOffset = offset;
-
-            stringFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
-            stringFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
-            stringFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-            stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-            if (stringFileInfo.Key != "StringFileInfo")
-            {
-                offset -= 6 + (((stringFileInfo.Key?.Length ?? 0) + 1) * 2);
-                return null;
-            }
-
-            // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
-
-            var stringFileInfoChildren = new List<Models.PortableExecutable.Resource.Entries.StringTable>();
-            while ((offset - currentOffset) < stringFileInfo.Length)
-            {
-                var stringTable = new Models.PortableExecutable.Resource.Entries.StringTable();
-
-                stringTable.Length = data.ReadUInt16LittleEndian(ref offset);
-                stringTable.ValueLength = data.ReadUInt16LittleEndian(ref offset);
-                stringTable.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                stringTable.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-
-                // Align to the DWORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 4);
-
-                var stringTableChildren = new List<StringData>();
-                while ((offset - currentOffset) < stringTable.Length)
-                {
-                    var stringData = new StringData();
-
-                    int dataStartOffset = offset;
-                    stringData.Length = data.ReadUInt16LittleEndian(ref offset);
-                    stringData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
-                    stringData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                    stringData.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-
-                    // Align to the DWORD boundary if we're not at the end
-                    data.AlignToBoundary(ref offset, 4);
-
-                    if (stringData.ValueLength > 0)
-                    {
-                        int bytesReadable = Math.Min(stringData.ValueLength * sizeof(ushort), stringData.Length - (offset - dataStartOffset));
-                        byte[] valueBytes = data.ReadBytes(ref offset, bytesReadable);
-                        stringData.Value = Encoding.Unicode.GetString(valueBytes);
-                    }
-
-                    // Align to the DWORD boundary if we're not at the end
-                    data.AlignToBoundary(ref offset, 4);
-
-                    stringTableChildren.Add(stringData);
-                    if (stringData.Length == 0 && stringData.ValueLength == 0)
-                        break;
-                }
-
-                stringTable.Children = [.. stringTableChildren];
-
-                stringFileInfoChildren.Add(stringTable);
-            }
-
-            stringFileInfo.Children = [.. stringFileInfoChildren];
-
-            return stringFileInfo;
-        }
-
-        /// <summary>
         /// Read resource data as a string table resource
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
@@ -354,67 +275,6 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
-        ///  Read byte data as a var file info resource
-        /// </summary>
-        /// <param name="data">Data to parse into a var file info</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled var file info resource on success, null on error</returns>
-        public static VarFileInfo? AsVarFileInfo(byte[] data, ref int offset)
-        {
-            var varFileInfo = new VarFileInfo();
-
-            // Cache the initial offset
-            int initialOffset = offset;
-
-            varFileInfo.Length = data.ReadUInt16LittleEndian(ref offset);
-            varFileInfo.ValueLength = data.ReadUInt16LittleEndian(ref offset);
-            varFileInfo.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-            varFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-            if (varFileInfo.Key != "VarFileInfo")
-                return null;
-
-            // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
-
-            var varFileInfoChildren = new List<VarData>();
-            while ((offset - initialOffset) < varFileInfo.Length)
-            {
-                var varData = new VarData();
-
-                varData.Length = data.ReadUInt16LittleEndian(ref offset);
-                varData.ValueLength = data.ReadUInt16LittleEndian(ref offset);
-                varData.ResourceType = (VersionResourceType)data.ReadUInt16LittleEndian(ref offset);
-                varData.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-                if (varData.Key != "Translation")
-                {
-                    offset -= 6 + (((varData.Key?.Length ?? 0) + 1) * 2);
-                    return null;
-                }
-
-                // Align to the DWORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 4);
-
-                // Cache the current offset
-                int currentOffset = offset;
-
-                var varDataValue = new List<uint>();
-                while ((offset - currentOffset) < varData.ValueLength)
-                {
-                    uint languageAndCodeIdentifierPair = data.ReadUInt32LittleEndian(ref offset);
-                    varDataValue.Add(languageAndCodeIdentifierPair);
-                }
-
-                varData.Value = [.. varDataValue];
-
-                varFileInfoChildren.Add(varData);
-            }
-
-            varFileInfo.Children = [.. varFileInfoChildren];
-
-            return varFileInfo;
-        }
-
-        /// <summary>
         /// Read resource data as a version info resource
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a version info resource</param>
@@ -425,67 +285,7 @@ namespace SabreTools.Data.Extensions
             if (entry?.Data is null)
                 return null;
 
-            // Initialize the iterator
-            int offset = 0;
-
-            // Create the output object
-            var versionInfo = new VersionInfo();
-
-            versionInfo.Length = entry.Data.ReadUInt16LittleEndian(ref offset);
-            versionInfo.ValueLength = entry.Data.ReadUInt16LittleEndian(ref offset);
-            versionInfo.ResourceType = (VersionResourceType)entry.Data.ReadUInt16LittleEndian(ref offset);
-            versionInfo.Key = entry.Data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
-            if (versionInfo.Key != "VS_VERSION_INFO")
-                return null;
-
-            while (offset < entry.Data.Length && (offset % 4) != 0)
-                versionInfo.Padding1 = entry.Data.ReadUInt16LittleEndian(ref offset);
-
-            // Read fixed file info
-            if (versionInfo.ValueLength > 0 && offset + versionInfo.ValueLength <= entry.Data.Length)
-            {
-                var fixedFileInfo = ParseFixedFileInfo(entry.Data, ref offset);
-                if (fixedFileInfo?.Signature != 0xFEEF04BD)
-                    return null;
-
-                versionInfo.Value = fixedFileInfo;
-            }
-
-            while (offset < entry.Data.Length && (offset % 4) != 0)
-                versionInfo.Padding2 = entry.Data.ReadUInt16LittleEndian(ref offset);
-
-            // Determine if we have a StringFileInfo or VarFileInfo twice
-            ReadInfoSection(entry.Data, ref offset, versionInfo);
-            ReadInfoSection(entry.Data, ref offset, versionInfo);
-
-            return versionInfo;
-        }
-
-        /// <summary>
-        /// Parse a byte array into a FixedFileInfo
-        /// </summary>
-        /// <param name="data">Data to parse</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled FixedFileInfo on success, null on error</returns>
-        public static FixedFileInfo ParseFixedFileInfo(this byte[] data, ref int offset)
-        {
-            var obj = new FixedFileInfo();
-
-            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
-            obj.StrucVersion = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileVersionMS = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileVersionLS = data.ReadUInt32LittleEndian(ref offset);
-            obj.ProductVersionMS = data.ReadUInt32LittleEndian(ref offset);
-            obj.ProductVersionLS = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileFlagsMask = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileFlags = (FixedFileInfoFlags)data.ReadUInt32LittleEndian(ref offset);
-            obj.FileOS = (FixedFileInfoOS)data.ReadUInt32LittleEndian(ref offset);
-            obj.FileType = (FixedFileInfoFileType)data.ReadUInt32LittleEndian(ref offset);
-            obj.FileSubtype = (FixedFileInfoFileSubtype)data.ReadUInt32LittleEndian(ref offset);
-            obj.FileDateMS = data.ReadUInt32LittleEndian(ref offset);
-            obj.FileDateLS = data.ReadUInt32LittleEndian(ref offset);
-
-            return obj;
+            return Serialization.Readers.PortableExecutable.ParseVersionInfo(entry.Data);
         }
 
         /// <summary>
@@ -510,38 +310,6 @@ namespace SabreTools.Data.Extensions
             obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
-        }
-
-        /// <summary>
-        /// Read either a `StringFileInfo` or `VarFileInfo` based on the key
-        /// </summary>
-        /// <param name="entry"></param>
-        /// <param name="offset"></param>
-        /// <param name="versionInfo"></param>
-        /// <returns></returns>
-        private static void ReadInfoSection(byte[] data, ref int offset, VersionInfo versionInfo)
-        {
-            // If the offset is invalid, don't move the pointer
-            if (offset < 0 || offset >= versionInfo.Length)
-                return;
-
-            // Cache the current offset for reading
-            int currentOffset = offset;
-
-            offset += 6;
-            string? nextKey = data.ReadNullTerminatedUnicodeString(ref offset);
-            offset = currentOffset;
-
-            if (nextKey == "StringFileInfo")
-            {
-                var stringFileInfo = AsStringFileInfo(data, ref offset);
-                versionInfo.StringFileInfo = stringFileInfo;
-            }
-            else if (nextKey == "VarFileInfo")
-            {
-                var varFileInfo = AsVarFileInfo(data, ref offset);
-                versionInfo.VarFileInfo = varFileInfo;
-            }
         }
 
         #endregion

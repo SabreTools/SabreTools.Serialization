@@ -1887,11 +1887,11 @@ namespace SabreTools.Serialization.Wrappers
                             break;
                         case ResourceType.RT_MENU:
                         case ResourceType.RT_NEWMENU:
-                            value = entry.AsMenu();
+                            value = Readers.PortableExecutable.ParseMenuResource(entry.Data);
                             break;
                         case ResourceType.RT_DIALOG:
                         case ResourceType.RT_NEWDIALOG:
-                            value = entry.AsDialogBox();
+                            value = Readers.PortableExecutable.ParseDialogBoxResource(entry.Data);
                             break;
                         case ResourceType.RT_STRING:
                             value = entry.AsStringTable();
@@ -1903,13 +1903,13 @@ namespace SabreTools.Serialization.Wrappers
                             value = entry.Data;
                             break;
                         case ResourceType.RT_ACCELERATOR:
-                            value = entry.AsAcceleratorTableResource();
+                            value = Readers.PortableExecutable.ParseAcceleratorTable(entry.Data);
                             break;
                         case ResourceType.RT_RCDATA:
                             value = entry.Data;
                             break;
                         case ResourceType.RT_MESSAGETABLE:
-                            value = entry.AsMessageResourceData();
+                            value = Readers.PortableExecutable.ParseMessageResourceData(entry.Data);
                             break;
                         case ResourceType.RT_GROUP_CURSOR:
                             value = entry.Data;
@@ -1918,7 +1918,7 @@ namespace SabreTools.Serialization.Wrappers
                             value = entry.Data;
                             break;
                         case ResourceType.RT_VERSION:
-                            _versionInfo = entry.AsVersionInfo();
+                            _versionInfo = Readers.PortableExecutable.ParseVersionInfo(entry.Data);
                             value = _versionInfo;
                             break;
                         case ResourceType.RT_DLGINCLUDE:

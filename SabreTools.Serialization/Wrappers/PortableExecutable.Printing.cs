@@ -1072,7 +1072,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             MenuResource? menu = null;
-            try { menu = entry.AsMenu(); } catch { }
+            try { menu = Readers.PortableExecutable.ParseMenuResource(entry.Data); } catch { }
 
             if (menu is null)
             {
@@ -1149,7 +1149,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             DialogBoxResource? dialogBox = null;
-            try { dialogBox = entry.AsDialogBox(); } catch { }
+            try { dialogBox = Readers.PortableExecutable.ParseDialogBoxResource(entry.Data); } catch { }
 
             if (dialogBox is null)
             {
@@ -1318,7 +1318,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             AcceleratorTable? acceleratorTable = null;
-            try { acceleratorTable = entry.AsAcceleratorTableResource(); } catch { }
+            try { acceleratorTable = Readers.PortableExecutable.ParseAcceleratorTable(entry.Data); } catch { }
 
             if (acceleratorTable?.Entries is null)
             {
@@ -1401,7 +1401,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             MessageResourceData? messageTable = null;
-            try { messageTable = entry.AsMessageResourceData(); } catch { }
+            try { messageTable = Readers.PortableExecutable.ParseMessageResourceData(entry.Data); } catch { }
 
             if (messageTable is null)
             {
@@ -1480,7 +1480,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             VersionInfo? versionInfo = null;
-            try { versionInfo = entry.AsVersionInfo(); } catch { }
+            try { versionInfo = Readers.PortableExecutable.ParseVersionInfo(entry.Data); } catch { }
 
             if (versionInfo is null)
             {
