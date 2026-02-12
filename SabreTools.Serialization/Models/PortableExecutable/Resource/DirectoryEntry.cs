@@ -26,17 +26,20 @@
         /// The offset of a string that gives the Type, Name, or Language ID entry,
         /// depending on level of table.
         /// </summary>
+        /// <remarks>Must be unset if <see cref="IntegerID"/> is set</remarks>
         public uint NameOffset { get; set; }
 
         /// <summary>
         /// A string that gives the Type, Name, or Language ID entry, depending on
         /// level of table.
         /// </summary>
+        /// <remarks>Only has a value if <see cref="NameOffset"/> is set</remarks>
         public DirectoryString? Name { get; set; }
 
         /// <summary>
         /// A 32-bit integer that identifies the Type, Name, or Language ID entry.
         /// </summary>
+        /// <remarks>Must be unset if <see cref="NameOffset"/> is set</remarks>
         public uint IntegerID { get; set; }
 
         #endregion
@@ -46,24 +49,28 @@
         /// <summary>
         /// High bit 0. Address of a Resource Data entry (a leaf).
         /// </summary>
+        /// <remarks>Must be unset if <see cref="SubdirectoryOffset"/> is set</remarks>
         public uint DataEntryOffset { get; set; }
-
-        /// <summary>
-        /// Resource data entry (a leaf).
-        /// </summary>
-        public DataEntry? DataEntry { get; set; }
 
         /// <summary>
         /// High bit 1. The lower 31 bits are the address of another resource
         /// directory table (the next level down).
         /// </summary>
+        /// <remarks>Must be unset if <see cref="DataEntryOffset"/> is set</remarks>
         public uint SubdirectoryOffset { get; set; }
+
+        #endregion
+
+        /// <summary>
+        /// Resource data entry (a leaf).
+        /// </summary>
+        /// <remarks>Must be null if <see cref="Subdirectory"/> is set</remarks>
+        public DataEntry? DataEntry { get; set; }
 
         /// <summary>
         /// Another resource directory table (the next level down).
         /// </summary>
+        /// <remarks>Must be null if <see cref="DataEntry"/> is set</remarks>
         public DirectoryTable? Subdirectory { get; set; }
-
-        #endregion
     }
 }
