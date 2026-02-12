@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Set the symbol and string tables
                     pex.SymbolTable = ParseSymbolTable(data, fileHeader.NumberOfSymbols);
-                    pex.StringTable = ParseStringTable(data);
+                    pex.StringTable = ParseCOFFStringTable(data);
                 }
 
                 #endregion
@@ -2739,7 +2739,7 @@ namespace SabreTools.Serialization.Readers
             var stringFileInfoChildren = new List<Data.Models.PortableExecutable.Resource.Entries.StringTable>();
             while ((offset - currentOffset) < obj.Length)
             {
-                var stringTable = ParseStringTableResource(data, ref offset, currentOffset);
+                var stringTable = ParseFileInfoStringTable(data, ref offset, currentOffset);
                 stringFileInfoChildren.Add(stringTable);
             }
 
@@ -2781,11 +2781,11 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a StringTable
+        /// Parse a Stream into a COFF StringTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled StringTable on success, null on error</returns>
-        public static StringTable ParseStringTable(Stream data)
+        public static StringTable ParseCOFFStringTable(Stream data)
         {
             var obj = new StringTable();
 
@@ -2810,12 +2810,12 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        ///  Read byte data as a StringTable resource
+        /// Read byte data as a FileInfo StringTable
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>A filled StringTable resource on success, null on error</returns>
-        public static Data.Models.PortableExecutable.Resource.Entries.StringTable ParseStringTableResource(byte[] data, ref int offset, int initialOffset)
+        public static Data.Models.PortableExecutable.Resource.Entries.StringTable ParseFileInfoStringTable(byte[] data, ref int offset, int initialOffset)
         {
             var obj = new Data.Models.PortableExecutable.Resource.Entries.StringTable();
 
@@ -2837,6 +2837,34 @@ namespace SabreTools.Serialization.Readers
             }
 
             obj.Children = [.. stringTableChildren];
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Read byte data as a StringTableResource
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled StringTableResource resource on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.StringTableResource? ParseStringTableResource(byte[] data)
+        {
+            // Initialize the iterators
+            int offset = 0, stringIndex = 0;
+
+            // Create the output table
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.StringTableResource();
+
+            // Loop through and add
+            while (offset < data.Length)
+            {
+                string? stringValue = data.ReadPrefixedUnicodeString(ref offset);
+                if (stringValue is not null)
+                {
+                    stringValue = stringValue.Replace("\n", "\\n").Replace("\r", newValue: "\\r");
+                    obj.Values[stringIndex++] = stringValue;
+                }
+            }
 
             return obj;
         }

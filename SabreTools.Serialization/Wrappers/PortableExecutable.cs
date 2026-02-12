@@ -1894,7 +1894,7 @@ namespace SabreTools.Serialization.Wrappers
                             value = Readers.PortableExecutable.ParseDialogBoxResource(entry.Data);
                             break;
                         case ResourceType.RT_STRING:
-                            value = entry.AsStringTable();
+                            value = Readers.PortableExecutable.ParseStringTableResource(entry.Data);
                             break;
                         case ResourceType.RT_FONTDIR:
                             value = entry.Data;

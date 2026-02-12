@@ -1284,8 +1284,8 @@ namespace SabreTools.Serialization.Wrappers
         {
             string padding = new(' ', (level + 1) * 2);
 
-            Dictionary<int, string?>? stringTable = null;
-            try { stringTable = entry.AsStringTable(); } catch { }
+            StringTableResource? stringTable = null;
+            try { stringTable = Readers.PortableExecutable.ParseStringTableResource(entry.Data); } catch { }
 
             if (stringTable is null)
             {
@@ -1293,7 +1293,7 @@ namespace SabreTools.Serialization.Wrappers
                 return;
             }
 
-            foreach (var kvp in stringTable)
+            foreach (var kvp in stringTable.Values)
             {
                 int index = kvp.Key;
                 string? stringValue = kvp.Value;

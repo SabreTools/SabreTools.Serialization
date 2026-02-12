@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.IO.Extensions;
@@ -147,38 +146,6 @@ namespace SabreTools.Data.Extensions
 
         // TODO: Implement other resource types from https://learn.microsoft.com/en-us/windows/win32/menurc/resource-file-formats
         #region Resources
-
-        /// <summary>
-        /// Read resource data as a string table resource
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a string table resource</param>
-        /// <returns>A filled string table resource on success, null on error</returns>
-        /// TODO: Create concrete type for this and inherit from ResourceDataType
-        public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            // Initialize the iterators
-            int offset = 0, stringIndex = 0;
-
-            // Create the output table
-            var stringTable = new Dictionary<int, string?>();
-
-            // Loop through and add
-            while (offset < entry.Data.Length)
-            {
-                string? stringValue = entry.Data.ReadPrefixedUnicodeString(ref offset);
-                if (stringValue is not null)
-                {
-                    stringValue = stringValue.Replace("\n", "\\n").Replace("\r", newValue: "\\r");
-                    stringTable[stringIndex++] = stringValue;
-                }
-            }
-
-            return stringTable;
-        }
 
         /// <summary>
         /// Parse a byte array into a ResourceHeader
