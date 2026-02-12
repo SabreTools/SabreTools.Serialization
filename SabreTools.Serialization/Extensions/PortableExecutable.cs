@@ -153,20 +153,6 @@ namespace SabreTools.Data.Extensions
         #region Resources
 
         /// <summary>
-        /// Read resource data as an accelerator table resource
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
-        /// <returns>A filled accelerator table resource on success, null on error</returns>
-        public static AcceleratorTable? AsAcceleratorTableResource(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have data that's invalid for this resource type, we can't do anything
-            if (entry?.Data is null || entry.Data.Length % 8 != 0)
-                return null;
-
-            return Serialization.Readers.PortableExecutable.ParseAcceleratorTable(entry.Data);
-        }
-
-        /// <summary>
         /// Read resource data as a side-by-side assembly manifest
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
@@ -186,20 +172,6 @@ namespace SabreTools.Data.Extensions
             {
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Read resource data as a dialog box
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a dialog box</param>
-        /// <returns>A filled dialog box on success, null on error</returns>
-        public static DialogBoxResource? AsDialogBox(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            return Serialization.Readers.PortableExecutable.ParseDialogBoxResource(entry.Data);
         }
 
         /// <summary>
@@ -269,34 +241,6 @@ namespace SabreTools.Data.Extensions
 
             // TODO: Implement entry parsing
             return fontGroupHeader;
-        }
-
-        /// <summary>
-        /// Read resource data as a menu
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a menu</param>
-        /// <returns>A filled menu on success, null on error</returns>
-        public static MenuResource? AsMenu(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            return Serialization.Readers.PortableExecutable.ParseMenuResource(entry.Data);
-        }
-
-        /// <summary>
-        /// Read resource data as a message table resource
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a message table resource</param>
-        /// <returns>A filled message table resource on success, null on error</returns>
-        public static MessageResourceData? AsMessageResourceData(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            return Serialization.Readers.PortableExecutable.ParseMessageResourceData(entry.Data);
         }
 
         /// <summary>
