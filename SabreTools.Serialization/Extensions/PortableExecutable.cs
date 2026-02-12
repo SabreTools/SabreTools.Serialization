@@ -995,6 +995,7 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into a string table resource</param>
         /// <returns>A filled string table resource on success, null on error</returns>
+        /// TODO: Create concrete type for this and inherit from ResourceDataType
         public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip

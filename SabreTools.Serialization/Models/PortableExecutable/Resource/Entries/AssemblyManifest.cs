@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
 {
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/sbscs/manifest-file-schema"/>
     [XmlRoot(ElementName = "assembly", Namespace = "urn:schemas-microsoft-com:asm.v1")]
-    public sealed class AssemblyManifest
+    public sealed class AssemblyManifest : ResourceDataType
     {
         [XmlAttribute("manifestVersion")]
         public string? ManifestVersion { get; set; }

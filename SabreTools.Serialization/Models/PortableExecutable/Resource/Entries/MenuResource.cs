@@ -7,7 +7,7 @@
     /// describe the format of extended menu resources.
     /// </summary>
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/menurc/resource-file-formats"/>
-    public sealed class MenuResource
+    public sealed class MenuResource : ResourceDataType
     {
         /// <summary>
         /// Menu header structure

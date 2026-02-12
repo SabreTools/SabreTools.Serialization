@@ -9,7 +9,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
     /// by eight. Then your application can randomly access the individual fixed-length entries.
     /// </summary>
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/menurc/acceltableentry"/>
-    public sealed class AcceleratorTable
+    public sealed class AcceleratorTable : ResourceDataType
     {
         /// <summary>
         /// Accelerator table entries

@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
     /// box in a message table resource.
     /// </summary>
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-message_resource_data"/>
-    public sealed class MessageResourceData
+    public sealed class MessageResourceData : ResourceDataType
     {
         /// <summary>
         /// The number of MESSAGE_RESOURCE_BLOCK structures.
