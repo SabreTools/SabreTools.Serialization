@@ -904,7 +904,7 @@ namespace SabreTools.Serialization.Readers
                 obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -930,7 +930,7 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -944,7 +944,7 @@ namespace SabreTools.Serialization.Readers
             #endregion
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             return obj;
         }
@@ -994,7 +994,7 @@ namespace SabreTools.Serialization.Readers
                 obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -1020,7 +1020,7 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -1034,7 +1034,7 @@ namespace SabreTools.Serialization.Readers
             #endregion
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             return obj;
         }
@@ -1080,7 +1080,7 @@ namespace SabreTools.Serialization.Readers
                 obj.MenuResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
 
                 // Read the ordinal if we have the flag set
                 if (menuResourceHasOrdinal)
@@ -1116,7 +1116,7 @@ namespace SabreTools.Serialization.Readers
                 obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
 
                 // Read the ordinal if we have the flag set
                 if (classResourcehasOrdinal)
@@ -1147,7 +1147,7 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -1168,7 +1168,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             #endregion
 
@@ -1219,7 +1219,7 @@ namespace SabreTools.Serialization.Readers
                 obj.MenuResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
 
                 // Read the ordinal if we have the flag set
                 if (menuResourceHasOrdinal)
@@ -1251,7 +1251,7 @@ namespace SabreTools.Serialization.Readers
                 obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
 
                 // Read the ordinal if we have the flag set
                 if (classResourcehasOrdinal)
@@ -1278,7 +1278,7 @@ namespace SabreTools.Serialization.Readers
                 obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
                 // Align to the WORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 2);
+                AlignToBoundary(data, ref offset, 2);
             }
 
             #endregion
@@ -1300,7 +1300,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             #endregion
 
@@ -2063,7 +2063,7 @@ namespace SabreTools.Serialization.Readers
                         extendedMenuItems.Add(extendedMenuItem);
 
                         // Align to the DWORD boundary if we're not at the end
-                        data.AlignToBoundary(ref offset, 4);
+                        AlignToBoundary(data, ref offset, 4);
                     }
                 }
 
@@ -2094,7 +2094,7 @@ namespace SabreTools.Serialization.Readers
                         menuItem = ParseNormalMenuItem(data, ref offset);
 
                     // Align to the DWORD boundary if we're not at the end
-                    data.AlignToBoundary(ref offset, 4);
+                    AlignToBoundary(data, ref offset, 4);
 
                     if (menuItem is null)
                         return null;
@@ -2734,7 +2734,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             var stringFileInfoChildren = new List<Data.Models.PortableExecutable.Resource.Entries.StringTable>();
             while ((offset - currentOffset) < obj.Length)
@@ -2765,7 +2765,7 @@ namespace SabreTools.Serialization.Readers
             obj.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             if (obj.ValueLength > 0)
             {
@@ -2775,7 +2775,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             return obj;
         }
@@ -2825,7 +2825,7 @@ namespace SabreTools.Serialization.Readers
             obj.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             var stringTableChildren = new List<Data.Models.PortableExecutable.Resource.Entries.StringData>();
             while ((offset - initialOffset) < obj.Length)
@@ -2942,7 +2942,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Align to the DWORD boundary if we're not at the end
-            data.AlignToBoundary(ref offset, 4);
+            AlignToBoundary(data, ref offset, 4);
 
             var varFileInfoChildren = new List<Data.Models.PortableExecutable.Resource.Entries.VarData>();
             while ((offset - initialOffset) < obj.Length)
@@ -2960,7 +2960,7 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 // Align to the DWORD boundary if we're not at the end
-                data.AlignToBoundary(ref offset, 4);
+                AlignToBoundary(data, ref offset, 4);
 
                 // Cache the current offset
                 int currentOffset = offset;
@@ -3041,5 +3041,37 @@ namespace SabreTools.Serialization.Readers
 
             return obj;
         }
+
+        #region Helpers
+
+        /// <summary>
+        /// Align the array position to a byte-size boundary
+        /// </summary>
+        /// <param name="input">Input array to try aligning</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <param name="alignment">Number of bytes to align on</param>
+        /// <returns>True if the array could be aligned, false otherwise</returns>
+        /// TODO: Remove when IO is updated
+        private static bool AlignToBoundary(byte[]? input, ref int offset, byte alignment)
+        {
+            // If the array is invalid
+            if (input is null || input.Length == 0)
+                return false;
+
+            // If already at the end of the array
+            if (offset >= input.Length)
+                return false;
+
+            // Align the stream position
+            while (offset % alignment != 0 && offset < input.Length)
+            {
+                _ = input.ReadByteValue(ref offset);
+            }
+
+            // Return if the alignment completed
+            return offset % alignment == 0;
+        }
+
+        #endregion
     }
 }

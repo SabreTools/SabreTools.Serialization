@@ -205,37 +205,5 @@ namespace SabreTools.Data.Extensions
         }
 
         #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Align the array position to a byte-size boundary
-        /// </summary>
-        /// <param name="input">Input array to try aligning</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <param name="alignment">Number of bytes to align on</param>
-        /// <returns>True if the array could be aligned, false otherwise</returns>
-        /// TODO: Remove when IO is updated
-        internal static bool AlignToBoundary(this byte[]? input, ref int offset, byte alignment)
-        {
-            // If the array is invalid
-            if (input is null || input.Length == 0)
-                return false;
-
-            // If already at the end of the array
-            if (offset >= input.Length)
-                return false;
-
-            // Align the stream position
-            while (offset % alignment != 0 && offset < input.Length)
-            {
-                _ = input.ReadByteValue(ref offset);
-            }
-
-            // Return if the alignment completed
-            return offset % alignment == 0;
-        }
-
-        #endregion
     }
 }
