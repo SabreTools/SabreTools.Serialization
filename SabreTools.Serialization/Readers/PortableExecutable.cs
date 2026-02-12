@@ -14,6 +14,7 @@ using static SabreTools.Data.Models.PortableExecutable.Constants;
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
+    // TODO: Implement other resource types from https://learn.microsoft.com/en-us/windows/win32/menurc/resource-file-formats
     public class PortableExecutable : BaseBinaryReader<Executable>
     {
         /// <inheritdoc/>
@@ -2578,6 +2579,30 @@ namespace SabreTools.Serialization.Readers
                     entry.Subdirectory = ParseResourceDirectoryTable(tableData, ref offset);
                 }
             }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a ResourceHeader
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled ResourceHeader on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.ResourceHeader ParseResourceHeader(byte[] data, ref int offset)
+        {
+            // Read in the table
+            var obj = new Data.Models.PortableExecutable.Resource.ResourceHeader();
+
+            obj.DataSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.HeaderSize = data.ReadUInt32LittleEndian(ref offset);
+            obj.ResourceType = (ResourceType)data.ReadUInt32LittleEndian(ref offset); // TODO: Could be a string too
+            obj.Name = data.ReadUInt32LittleEndian(ref offset); // TODO: Could be a string too
+            obj.DataVersion = data.ReadUInt32LittleEndian(ref offset);
+            obj.MemoryFlags = (MemoryFlags)data.ReadUInt16LittleEndian(ref offset);
+            obj.LanguageId = data.ReadUInt16LittleEndian(ref offset);
+            obj.Version = data.ReadUInt32LittleEndian(ref offset);
+            obj.Characteristics = data.ReadUInt32LittleEndian(ref offset);
 
             return obj;
         }
