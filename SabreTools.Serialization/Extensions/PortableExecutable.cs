@@ -611,6 +611,7 @@ namespace SabreTools.Data.Extensions
         /// <param name="offset">Offset into the byte array</param>
         /// <param name="alignment">Number of bytes to align on</param>
         /// <returns>True if the array could be aligned, false otherwise</returns>
+        /// TODO: Remove when IO is updated
         internal static bool AlignToBoundary(this byte[]? input, ref int offset, byte alignment)
         {
             // If the array is invalid
