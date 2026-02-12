@@ -157,7 +157,7 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         /// <param name="entry">Resource data entry to parse into an accelerator table resource</param>
         /// <returns>A filled accelerator table resource on success, null on error</returns>
-        public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this Models.PortableExecutable.Resource.DataEntry? entry)
+        public static AcceleratorTable? AsAcceleratorTableResource(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have data that's invalid for this resource type, we can't do anything
             if (entry?.Data is null || entry.Data.Length % 8 != 0)
@@ -170,12 +170,13 @@ namespace SabreTools.Data.Extensions
             int offset = 0;
 
             // Create the output object
-            var table = new AcceleratorTableEntry[count];
+            var table = new AcceleratorTable();
+            table.Entries = new AcceleratorTableEntry[count];
 
             // Read in the table
             for (int i = 0; i < count; i++)
             {
-                table[i] = ParseAcceleratorTableEntry(entry.Data, ref offset);
+                table.Entries[i] = ParseAcceleratorTableEntry(entry.Data, ref offset);
             }
 
             return table;

@@ -1317,18 +1317,18 @@ namespace SabreTools.Serialization.Wrappers
         {
             string padding = new(' ', (level + 1) * 2);
 
-            AcceleratorTableEntry[]? acceleratorTable = null;
+            AcceleratorTable? acceleratorTable = null;
             try { acceleratorTable = entry.AsAcceleratorTableResource(); } catch { }
 
-            if (acceleratorTable is null)
+            if (acceleratorTable?.Entries is null)
             {
                 builder.AppendLine($"{padding}Accelerator table resource found, but malformed");
                 return;
             }
 
-            for (int i = 0; i < acceleratorTable.Length; i++)
+            for (int i = 0; i < acceleratorTable.Entries.Length; i++)
             {
-                var acceleratorTableEntry = acceleratorTable[i];
+                var acceleratorTableEntry = acceleratorTable.Entries[i];
                 builder.AppendLine($"{padding}Accelerator Table Entry {i}:");
                 builder.AppendLine($"{padding}  Flags: {acceleratorTableEntry.Flags} (0x{acceleratorTableEntry.Flags:X})");
                 builder.AppendLine(acceleratorTableEntry.Ansi, $"{padding}  Ansi");
