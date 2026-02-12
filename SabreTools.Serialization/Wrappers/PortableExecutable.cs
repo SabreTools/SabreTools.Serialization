@@ -595,7 +595,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Dictionary of resource data
         /// </summary>
-        public Dictionary<string, object?> ResourceData
+        public Dictionary<string, ResourceDataType?> ResourceData
         {
             get
             {
@@ -1122,7 +1122,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached resource data
         /// </summary>
-        private readonly Dictionary<string, object?> _resourceData = [];
+        private readonly Dictionary<string, ResourceDataType?> _resourceData = [];
 
         /// <summary>
         /// Lock object for <see cref="_resourceData"/>
@@ -1588,22 +1588,22 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="entry">String entry to check for</param>
         /// <returns>List of matching resources</returns>
-        public List<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
+        public List<StringTableResource?> FindStringTableByEntry(string entry)
         {
             // Cache the resource data for easier reading
             var resourceData = ResourceData;
             if (resourceData.Count == 0)
                 return [];
 
-            var stringTables = new List<Dictionary<int, string?>?>();
+            var stringTables = new List<StringTableResource?>();
             foreach (var resource in resourceData.Values)
             {
                 if (resource is null)
                     continue;
-                if (resource is not Dictionary<int, string?> st || st is null)
+                if (resource is not StringTableResource st || st is null)
                     continue;
 
-                foreach (string? s in st.Values)
+                foreach (string? s in st.Data.Values)
                 {
 #if NETFRAMEWORK || NETSTANDARD
                     if (s is null || !s.Contains(entry))
@@ -1637,10 +1637,10 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (!kvp.Key.Contains(typeName))
                     continue;
-                if (kvp.Value is null || kvp.Value is not byte[] b || b is null)
+                if (kvp.Value is null || kvp.Value is not GenericResourceEntry b || b is null)
                     continue;
 
-                resources.Add(b);
+                resources.Add(b.Data);
             }
 
             return resources;
@@ -1663,15 +1663,15 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (resource is null)
                     continue;
-                if (resource is not byte[] b || b is null)
+                if (resource is not GenericResourceEntry b || b is null)
                     continue;
 
                 try
                 {
-                    string? arrayAsASCII = Encoding.ASCII.GetString(b!);
+                    string? arrayAsASCII = Encoding.ASCII.GetString(b!.Data);
                     if (arrayAsASCII.Contains(value))
                     {
-                        resources.Add(b);
+                        resources.Add(b.Data);
                         continue;
                     }
                 }
@@ -1679,10 +1679,10 @@ namespace SabreTools.Serialization.Wrappers
 
                 try
                 {
-                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b!);
+                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b!.Data);
                     if (arrayAsUTF8.Contains(value))
                     {
-                        resources.Add(b);
+                        resources.Add(b.Data);
                         continue;
                     }
                 }
@@ -1690,10 +1690,10 @@ namespace SabreTools.Serialization.Wrappers
 
                 try
                 {
-                    string? arrayAsUnicode = Encoding.Unicode.GetString(b!);
+                    string? arrayAsUnicode = Encoding.Unicode.GetString(b!.Data);
                     if (arrayAsUnicode.Contains(value))
                     {
-                        resources.Add(b);
+                        resources.Add(b.Data);
                         continue;
                     }
                 }
@@ -1770,9 +1770,9 @@ namespace SabreTools.Serialization.Wrappers
             bool exeResources = false;
             foreach (var kvp in resourceData)
             {
-                if (kvp.Value is null || kvp.Value is not byte[] ba)
+                if (kvp.Value is null || kvp.Value is not GenericResourceEntry ba)
                     continue;
-                if (!ba.StartsWith(Data.Models.MSDOS.Constants.SignatureBytes))
+                if (!ba.Data.StartsWith(Data.Models.MSDOS.Constants.SignatureBytes))
                     continue;
 
                 exeResources = true;
@@ -1866,7 +1866,7 @@ namespace SabreTools.Serialization.Wrappers
             // Create the key and value objects
             string key = string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
 
-            object? value = entry.Data;
+            ResourceDataType? value = Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
 
             // If we have a known resource type
             if (types.Count > 0 && types[0] is uint resourceType)
@@ -1876,14 +1876,14 @@ namespace SabreTools.Serialization.Wrappers
                     switch ((ResourceType)resourceType)
                     {
                         case ResourceType.RT_CURSOR:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_BITMAP:
                         case ResourceType.RT_NEWBITMAP:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_ICON:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_MENU:
                         case ResourceType.RT_NEWMENU:
@@ -1897,47 +1897,47 @@ namespace SabreTools.Serialization.Wrappers
                             value = Readers.PortableExecutable.ParseStringTableResource(entry.Data);
                             break;
                         case ResourceType.RT_FONTDIR:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_FONT:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_ACCELERATOR:
                             value = Readers.PortableExecutable.ParseAcceleratorTable(entry.Data);
                             break;
                         case ResourceType.RT_RCDATA:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_MESSAGETABLE:
                             value = Readers.PortableExecutable.ParseMessageResourceData(entry.Data);
                             break;
                         case ResourceType.RT_GROUP_CURSOR:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_GROUP_ICON:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_VERSION:
                             _versionInfo = Readers.PortableExecutable.ParseVersionInfo(entry.Data);
                             value = _versionInfo;
                             break;
                         case ResourceType.RT_DLGINCLUDE:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_PLUGPLAY:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_VXD:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_ANICURSOR:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_ANIICON:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_HTML:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                         case ResourceType.RT_MANIFEST:
                             _assemblyManifest = Readers.PortableExecutable.ParseAssemblyManifest(entry.Data);
@@ -1950,25 +1950,25 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Error state, ignore
                         case ResourceType.RT_ERROR:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
 
                         default:
-                            value = entry.Data;
+                            // TODO: Implement specific parsing
                             break;
                     }
                 }
                 catch
                 {
                     // Fall back on byte array data for malformed items
-                    value = entry.Data;
+                    value = Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
                 }
             }
 
             // If we have a custom resource type
             else if (types.Count > 0 && types[0] is string)
             {
-                value = entry.Data;
+                value = Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
             }
 
             // Add the key and value to the cache

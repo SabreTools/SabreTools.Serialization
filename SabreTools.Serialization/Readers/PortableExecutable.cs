@@ -1607,6 +1607,21 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse a byte array into a GenericResourceEntry
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled GenericResourceEntry on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.GenericResourceEntry ParseGenericResourceEntry(byte[] data)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.GenericResourceEntry();
+
+            obj.Data = data;
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into a HintNameTable
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -2930,7 +2945,7 @@ namespace SabreTools.Serialization.Readers
                 if (stringValue is not null)
                 {
                     stringValue = stringValue.Replace("\n", "\\n").Replace("\r", newValue: "\\r");
-                    obj.Values[stringIndex++] = stringValue;
+                    obj.Data[stringIndex++] = stringValue;
                 }
             }
 

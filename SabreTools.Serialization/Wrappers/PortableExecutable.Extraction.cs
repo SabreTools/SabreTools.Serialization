@@ -362,7 +362,7 @@ namespace SabreTools.Serialization.Wrappers
                     string resourceKey = kvp.Key;
                     var value = kvp.Value;
 
-                    if (value is null || value is not byte[] ba || ba.Length == 0)
+                    if (value is null || value is not Data.Models.PortableExecutable.Resource.Entries.GenericResourceEntry ba || ba.Data.Length == 0)
                         continue;
 
                     // Set the output variables
@@ -370,10 +370,10 @@ namespace SabreTools.Serialization.Wrappers
                     string extension = string.Empty;
 
                     // Only process the resource if it a recognized signature
-                    for (; resourceOffset < 0x400 && resourceOffset < ba.Length - 0x10; resourceOffset++)
+                    for (; resourceOffset < 0x400 && resourceOffset < ba.Data.Length - 0x10; resourceOffset++)
                     {
                         int temp = resourceOffset;
-                        byte[] resourceSample = ba.ReadBytes(ref temp, 0x10);
+                        byte[] resourceSample = ba.Data.ReadBytes(ref temp, 0x10);
 
                         if (resourceSample.StartsWith(Data.Models.SevenZip.Constants.SignatureBytes))
                         {
@@ -506,7 +506,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Write the resource data to a temp file
                         using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        tempStream.Write(ba, resourceOffset, ba.Length - resourceOffset);
+                        tempStream.Write(ba.Data, resourceOffset, ba.Data.Length - resourceOffset);
                         tempStream.Flush();
                     }
                     catch (Exception ex)

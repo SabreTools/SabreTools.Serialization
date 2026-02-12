@@ -1293,7 +1293,7 @@ namespace SabreTools.Serialization.Wrappers
                 return;
             }
 
-            foreach (var kvp in stringTable.Values)
+            foreach (var kvp in stringTable.Data)
             {
                 int index = kvp.Key;
                 string? stringValue = kvp.Value;

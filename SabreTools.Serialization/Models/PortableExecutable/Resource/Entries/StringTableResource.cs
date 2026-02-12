@@ -10,6 +10,6 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
         /// <summary>
         /// Set of integer-keyed values
         /// </summary>
-        public Dictionary<int, string?> Values { get; set; } = [];
+        public Dictionary<int, string?> Data { get; set; } = [];
     }
 }
