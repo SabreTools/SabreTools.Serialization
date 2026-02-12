@@ -17,6 +17,7 @@
     /// IMAGE_DIRECTORY_ENTRY_RESOURCE DataDirectory.
     /// </summary>
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format"/>
+    /// <see href="https://learn.microsoft.com/en-us/previous-versions/ms809762(v=msdn.10)#pe-file-resources"/>
     public sealed class DirectoryEntry
     {
         #region Offset 0x00

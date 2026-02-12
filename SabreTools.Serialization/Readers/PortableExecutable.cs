@@ -326,8 +326,9 @@ namespace SabreTools.Serialization.Readers
                             tableData,
                             ref tableOffset,
                             offset,
-                            (int)optionalHeader.ResourceTable.Size,
-                            pex.ResourceDirectoryTable, pex.SectionTable);
+                            optionalHeader.ResourceTable.Size,
+                            pex.ResourceDirectoryTable,
+                            pex.SectionTable);
 
                         #region Hidden Resources
 
@@ -1513,21 +1514,16 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
-        /// <param name="nameEntry">Indicates if the value is a name entry or not</param>
         /// <returns>Filled ResourceDirectoryEntry on success, null on error</returns>
-        public static Data.Models.PortableExecutable.Resource.DirectoryEntry ParseResourceDirectoryEntry(byte[] data, ref int offset, bool nameEntry)
+        public static Data.Models.PortableExecutable.Resource.DirectoryEntry ParseResourceDirectoryEntry(byte[] data, ref int offset)
         {
             var obj = new Data.Models.PortableExecutable.Resource.DirectoryEntry();
 
-            // TODO: Figure out why the high bit is set for names
-            // The original version of this code also had this fix, but there
-            // was no comment or documentation as to why. The official MSDN
-            // documentation makes no mention of the high bit being set here,
-            // only for the offset below.
-            if (nameEntry)
-                obj.NameOffset = data.ReadUInt32LittleEndian(ref offset) & ~0x80000000U;
+            uint nameField = data.ReadUInt32LittleEndian(ref offset);
+            if ((nameField & 0x80000000) != 0)
+                obj.NameOffset = nameField & ~0x80000000U;
             else
-                obj.IntegerID = data.ReadUInt32LittleEndian(ref offset);
+                obj.IntegerID = nameField;
 
             uint offsetField = data.ReadUInt32LittleEndian(ref offset);
             if ((offsetField & 0x80000000) != 0)
@@ -1587,11 +1583,10 @@ namespace SabreTools.Serialization.Readers
             // Perform top-level pass of data
             for (int i = 0; i < totalEntryCount; i++)
             {
-                bool nameEntry = i < obj.NumberOfNameEntries;
-                obj.Entries[i] = ParseResourceDirectoryEntry(tableData, ref offset, nameEntry);
+                obj.Entries[i] = ParseResourceDirectoryEntry(tableData, ref offset);
 
                 // Read the name from the offset, if needed
-                if (nameEntry && obj.Entries[i].NameOffset > 0 && obj.Entries[i].NameOffset < tableData.Length)
+                if (obj.Entries[i].NameOffset > 0 && obj.Entries[i].NameOffset < tableData.Length)
                 {
                     int nameOffset = (int)obj.Entries[i].NameOffset;
                     obj.Entries[i].Name = ParseResourceDirectoryString(tableData, ref nameOffset);
