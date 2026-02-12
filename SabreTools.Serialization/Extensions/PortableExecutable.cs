@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
 using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
-using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
@@ -150,28 +147,6 @@ namespace SabreTools.Data.Extensions
 
         // TODO: Implement other resource types from https://learn.microsoft.com/en-us/windows/win32/menurc/resource-file-formats
         #region Resources
-
-        /// <summary>
-        /// Read resource data as a side-by-side assembly manifest
-        /// </summary>
-        /// <param name="entry">Resource data entry to parse into a side-by-side assembly manifest</param>
-        /// <returns>A filled side-by-side assembly manifest on success, null on error</returns>
-        public static AssemblyManifest? AsAssemblyManifest(this Models.PortableExecutable.Resource.DataEntry? entry)
-        {
-            // If we have an invalid entry, just skip
-            if (entry?.Data is null)
-                return null;
-
-            try
-            {
-                var serializer = new XmlSerializer(typeof(AssemblyManifest));
-                return serializer.Deserialize(new MemoryStream(entry.Data)) as AssemblyManifest;
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
         /// <summary>
         /// Read resource data as a string table resource

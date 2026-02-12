@@ -1940,7 +1940,7 @@ namespace SabreTools.Serialization.Wrappers
                             value = entry.Data;
                             break;
                         case ResourceType.RT_MANIFEST:
-                            _assemblyManifest = entry.AsAssemblyManifest();
+                            _assemblyManifest = Readers.PortableExecutable.ParseAssemblyManifest(entry.Data);
                             value = _assemblyManifest;
                             break;
 

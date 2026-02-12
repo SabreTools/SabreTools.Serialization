@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.COFF.SymbolTableEntries;
@@ -519,6 +520,25 @@ namespace SabreTools.Serialization.Readers
             obj.Padding = data.ReadUInt16LittleEndian(ref offset);
 
             return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into an AssemblyManifest
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled AssemblyManifest on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.AssemblyManifest? ParseAssemblyManifest(byte[] data)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(Data.Models.PortableExecutable.Resource.Entries.AssemblyManifest));
+                return serializer.Deserialize(new MemoryStream(data)) as Data.Models.PortableExecutable.Resource.Entries.AssemblyManifest;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>

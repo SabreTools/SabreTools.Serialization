@@ -1645,7 +1645,7 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
 
             AssemblyManifest? assemblyManifest = null;
-            try { assemblyManifest = entry.AsAssemblyManifest(); } catch { }
+            try { assemblyManifest = Readers.PortableExecutable.ParseAssemblyManifest(entry.Data); } catch { }
 
             if (assemblyManifest is null)
             {
