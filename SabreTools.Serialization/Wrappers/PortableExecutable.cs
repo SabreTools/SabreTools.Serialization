@@ -1831,7 +1831,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < table.Entries.Length; i++)
             {
                 var entry = table.Entries[i];
-                var newTypes = new List<object>(types ?? []);
+                var newTypes = new List<object>(types);
 
                 if (entry.Name?.UnicodeString is not null)
                     newTypes.Add(Encoding.Unicode.GetString(entry.Name.UnicodeString));
@@ -1864,14 +1864,12 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseResourceDataEntry(Data.Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
         {
             // Create the key and value objects
-            string key = types is null
-                ? $"UNKNOWN_{Guid.NewGuid()}"
-                : string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
+            string key = string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
 
             object? value = entry.Data;
 
             // If we have a known resource type
-            if (types is not null && types.Count > 0 && types[0] is uint resourceType)
+            if (types.Count > 0 && types[0] is uint resourceType)
             {
                 try
                 {
@@ -1968,7 +1966,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If we have a custom resource type
-            else if (types is not null && types.Count > 0 && types[0] is string)
+            else if (types.Count > 0 && types[0] is string)
             {
                 value = entry.Data;
             }
