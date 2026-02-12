@@ -476,6 +476,52 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse a byte array into an AcceleratorTable
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>Filled AcceleratorTable on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.AcceleratorTable? ParseAcceleratorTable(byte[] data)
+        {
+            // If we have data that's invalid for this resource type, we can't do anything
+            if (data.Length % 8 != 0)
+                return null;
+
+            // Get the number of entries
+            int count = data.Length / 8;
+
+            // Create the output object
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.AcceleratorTable();
+            obj.Entries = new Data.Models.PortableExecutable.Resource.Entries.AcceleratorTableEntry[count];
+
+            // Read in the table
+            int offset = 0;
+            for (int i = 0; i < count; i++)
+            {
+                obj.Entries[i] = ParseAcceleratorTableEntry(data, ref offset);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a AcceleratorTableEntry
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled AcceleratorTableEntry on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.AcceleratorTableEntry ParseAcceleratorTableEntry(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.AcceleratorTableEntry();
+
+            obj.Flags = (AcceleratorTableFlags)data.ReadUInt16LittleEndian(ref offset);
+            obj.Ansi = data.ReadUInt16LittleEndian(ref offset);
+            obj.Id = data.ReadUInt16LittleEndian(ref offset);
+            obj.Padding = data.ReadUInt16LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a byte array into an attribute certificate table
         /// </summary>
         /// <param name="data">Byte array to parse</param>
@@ -736,6 +782,507 @@ namespace SabreTools.Serialization.Readers
             obj.Unused2 = data.ReadBytes(6);
             obj.PointerToNextFunction = data.ReadUInt32LittleEndian();
             obj.Unused3 = data.ReadUInt16LittleEndian();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a DialogBoxResource
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>A filled DialogBoxResource on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DialogBoxResource? ParseDialogBoxResource(byte[] data)
+        {
+            // Initialize the iterator
+            int offset = 0;
+
+            // Create the output object
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DialogBoxResource();
+
+            // Try to read the signature for an extended dialog box template
+            int signatureOffset = sizeof(ushort);
+            int possibleSignature = data.ReadUInt16LittleEndian(ref signatureOffset);
+            if (possibleSignature == 0xFFFF)
+            {
+                obj.ExtendedDialogTemplate = ParseDialogTemplateExtended(data, ref offset);
+
+                var dialogItemExtendedTemplates = new List<Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplateExtended>();
+                for (int i = 0; i < obj.ExtendedDialogTemplate.DialogItems; i++)
+                {
+                    var dialogItemTemplate = ParseDialogItemTemplateExtended(data, ref offset);
+                    dialogItemExtendedTemplates.Add(dialogItemTemplate);
+
+                    // If we have an invalid item count
+                    if (offset >= data.Length)
+                        break;
+                }
+
+                obj.ExtendedDialogItemTemplates = [.. dialogItemExtendedTemplates];
+            }
+            else
+            {
+                obj.DialogTemplate = ParseDialogTemplate(data, ref offset);
+
+                var dialogItemTemplates = new List<Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplate>();
+                for (int i = 0; i < obj.DialogTemplate.ItemCount; i++)
+                {
+                    var dialogItemTemplate = ParseDialogItemTemplate(data, ref offset);
+                    dialogItemTemplates.Add(dialogItemTemplate);
+
+                    // If we have an invalid item count
+                    if (offset >= data.Length)
+                        break;
+                }
+
+                obj.DialogItemTemplates = [.. dialogItemTemplates];
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a DialogItemTemplate
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled DialogItemTemplate on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplate ParseDialogItemTemplate(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplate();
+
+            obj.Style = (WindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.ExtendedStyle = (ExtendedWindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.PositionX = data.ReadInt16LittleEndian(ref offset);
+            obj.PositionY = data.ReadInt16LittleEndian(ref offset);
+            obj.WidthX = data.ReadInt16LittleEndian(ref offset);
+            obj.HeightY = data.ReadInt16LittleEndian(ref offset);
+            obj.ID = data.ReadUInt16LittleEndian(ref offset);
+
+            #region Class resource
+
+            int currentOffset = offset;
+            ushort itemClassResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0xFFFF means ordinal only
+            if (itemClassResourceIdentifier == 0xFFFF)
+            {
+                // Increment the pointer
+                _ = data.ReadUInt16LittleEndian(ref offset);
+
+                // Read the ordinal
+                obj.ClassResourceOrdinal = (DialogItemTemplateOrdinal)data.ReadUInt16LittleEndian(ref offset);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool classResourcehasOrdinal = itemClassResourceIdentifier == 0xFFFF;
+                if (classResourcehasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the class resource as a string
+                obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Title resource
+
+            currentOffset = offset;
+            ushort itemTitleResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0xFFFF means ordinal only
+            if (itemTitleResourceIdentifier == 0xFFFF)
+            {
+                // Increment the pointer
+                _ = data.ReadUInt16LittleEndian(ref offset);
+
+                // Read the ordinal
+                obj.TitleResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+            else
+            {
+                // Read the title resource as a string
+                obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Creation data
+
+            obj.CreationDataSize = data.ReadUInt16LittleEndian(ref offset);
+            if (obj.CreationDataSize != 0 && obj.CreationDataSize + offset < data.Length)
+                obj.CreationData = data.ReadBytes(ref offset, obj.CreationDataSize);
+
+            #endregion
+
+            // Align to the DWORD boundary if we're not at the end
+            data.AlignToBoundary(ref offset, 4);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a DialogItemTemplateExtended
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled DialogItemTemplateExtended on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplateExtended ParseDialogItemTemplateExtended(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DialogItemTemplateExtended();
+
+            obj.HelpID = data.ReadUInt32LittleEndian(ref offset);
+            obj.ExtendedStyle = (ExtendedWindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.Style = (WindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.PositionX = data.ReadInt16LittleEndian(ref offset);
+            obj.PositionY = data.ReadInt16LittleEndian(ref offset);
+            obj.WidthX = data.ReadInt16LittleEndian(ref offset);
+            obj.HeightY = data.ReadInt16LittleEndian(ref offset);
+            obj.ID = data.ReadUInt32LittleEndian(ref offset);
+
+            #region Class resource
+
+            int currentOffset = offset;
+            ushort itemClassResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0xFFFF means ordinal only
+            if (itemClassResourceIdentifier == 0xFFFF)
+            {
+                // Increment the pointer
+                _ = data.ReadUInt16LittleEndian(ref offset);
+
+                // Read the ordinal
+                obj.ClassResourceOrdinal = (DialogItemTemplateOrdinal)data.ReadUInt16LittleEndian(ref offset);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool classResourcehasOrdinal = itemClassResourceIdentifier == 0xFFFF;
+                if (classResourcehasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the class resource as a string
+                obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Title resource
+
+            currentOffset = offset;
+            ushort itemTitleResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0xFFFF means ordinal only
+            if (itemTitleResourceIdentifier == 0xFFFF)
+            {
+                // Increment the pointer
+                _ = data.ReadUInt16LittleEndian(ref offset);
+
+                // Read the ordinal
+                obj.TitleResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+            else
+            {
+                // Read the title resource as a string
+                obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Creation data
+
+            obj.CreationDataSize = data.ReadUInt16LittleEndian(ref offset);
+            if (obj.CreationDataSize != 0)
+                obj.CreationData = data.ReadBytes(ref offset, obj.CreationDataSize);
+
+            #endregion
+
+            // Align to the DWORD boundary if we're not at the end
+            data.AlignToBoundary(ref offset, 4);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a DialogTemplate
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled DialogTemplate on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DialogTemplate ParseDialogTemplate(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DialogTemplate();
+
+            obj.Style = (WindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.ExtendedStyle = (ExtendedWindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.ItemCount = data.ReadUInt16LittleEndian(ref offset);
+            obj.PositionX = data.ReadInt16LittleEndian(ref offset);
+            obj.PositionY = data.ReadInt16LittleEndian(ref offset);
+            obj.WidthX = data.ReadInt16LittleEndian(ref offset);
+            obj.HeightY = data.ReadInt16LittleEndian(ref offset);
+
+            #region Menu resource
+
+            int currentOffset = offset;
+            ushort menuResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (menuResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool menuResourceHasOrdinal = menuResourceIdentifier == 0xFFFF;
+                if (menuResourceHasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the menu resource as a string
+                obj.MenuResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+
+                // Read the ordinal if we have the flag set
+                if (menuResourceHasOrdinal)
+                    obj.MenuResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+
+            #endregion
+
+            #region Class resource
+
+            currentOffset = offset;
+            ushort classResourceIdentifier;
+            if (offset >= data.Length)
+                classResourceIdentifier = 0x0000;
+            else
+                classResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (classResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool classResourcehasOrdinal = classResourceIdentifier == 0xFFFF;
+                if (classResourcehasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the class resource as a string
+                obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+
+                // Read the ordinal if we have the flag set
+                if (classResourcehasOrdinal)
+                    obj.ClassResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+
+            #endregion
+
+            #region Title resource
+
+            currentOffset = offset;
+            ushort titleResourceIdentifier;
+            if (offset >= data.Length)
+                titleResourceIdentifier = 0x0000;
+            else
+                titleResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (titleResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Read the title resource as a string
+                obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Point size and typeface
+
+            // Only if DS_SETFONT is set are the values here used
+#if NET20 || NET35
+            if ((obj.Style & WindowStyles.DS_SETFONT) != 0)
+#else
+            if (obj.Style.HasFlag(WindowStyles.DS_SETFONT))
+#endif
+            {
+                obj.PointSizeValue = data.ReadUInt16LittleEndian(ref offset);
+
+                // Read the font name as a string
+                obj.Typeface = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+            }
+
+            // Align to the DWORD boundary if we're not at the end
+            data.AlignToBoundary(ref offset, 4);
+
+            #endregion
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a DialogTemplateExtended
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>Filled DialogTemplateExtended on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.DialogTemplateExtended ParseDialogTemplateExtended(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.DialogTemplateExtended();
+
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.Signature = data.ReadUInt16LittleEndian(ref offset);
+            obj.HelpID = data.ReadUInt32LittleEndian(ref offset);
+            obj.ExtendedStyle = (ExtendedWindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.Style = (WindowStyles)data.ReadUInt32LittleEndian(ref offset);
+            obj.DialogItems = data.ReadUInt16LittleEndian(ref offset);
+            obj.PositionX = data.ReadInt16LittleEndian(ref offset);
+            obj.PositionY = data.ReadInt16LittleEndian(ref offset);
+            obj.WidthX = data.ReadInt16LittleEndian(ref offset);
+            obj.HeightY = data.ReadInt16LittleEndian(ref offset);
+
+            #region Menu resource
+
+            int currentOffset = offset;
+            ushort menuResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (menuResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool menuResourceHasOrdinal = menuResourceIdentifier == 0xFFFF;
+                if (menuResourceHasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the menu resource as a string
+                obj.MenuResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+
+                // Read the ordinal if we have the flag set
+                if (menuResourceHasOrdinal)
+                    obj.MenuResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+
+            #endregion
+
+            #region Class resource
+
+            currentOffset = offset;
+            ushort classResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (classResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Flag if there's an ordinal at the end
+                bool classResourcehasOrdinal = classResourceIdentifier == 0xFFFF;
+                if (classResourcehasOrdinal)
+                    offset += sizeof(ushort);
+
+                // Read the class resource as a string
+                obj.ClassResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+
+                // Read the ordinal if we have the flag set
+                if (classResourcehasOrdinal)
+                    obj.ClassResourceOrdinal = data.ReadUInt16LittleEndian(ref offset);
+            }
+
+            #endregion
+
+            #region Title resource
+
+            currentOffset = offset;
+            ushort titleResourceIdentifier = data.ReadUInt16LittleEndian(ref offset);
+            offset = currentOffset;
+
+            // 0x0000 means no elements
+            if (titleResourceIdentifier == 0x0000)
+            {
+                // Increment the pointer if it was empty
+                offset += sizeof(ushort);
+            }
+            else
+            {
+                // Read the title resource as a string
+                obj.TitleResource = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+                // Align to the WORD boundary if we're not at the end
+                data.AlignToBoundary(ref offset, 2);
+            }
+
+            #endregion
+
+            #region Point size and typeface
+
+            // Only if DS_SETFONT is set are the values here used
+#if NET20 || NET35
+            if ((obj.Style & WindowStyles.DS_SETFONT) != 0)
+#else
+            if (obj.Style.HasFlag(WindowStyles.DS_SETFONT))
+#endif
+            {
+                obj.PointSize = data.ReadUInt16LittleEndian(ref offset);
+                obj.Weight = data.ReadUInt16LittleEndian(ref offset);
+                obj.Italic = data.ReadByte(ref offset);
+                obj.CharSet = data.ReadByte(ref offset);
+                obj.Typeface = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+            }
+
+            // Align to the DWORD boundary if we're not at the end
+            data.AlignToBoundary(ref offset, 4);
+
+            #endregion
 
             return obj;
         }
@@ -1281,6 +1828,243 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
+        /// Parse a byte array into a MenuHeaderExtended
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MenuHeaderExtended on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MenuHeaderExtended ParseMenuHeaderExtended(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MenuHeaderExtended();
+
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.Offset = data.ReadUInt16LittleEndian(ref offset);
+            obj.HelpID = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a MenuItemExtended
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MenuItemExtended on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MenuItemExtended ParseMenuItemExtended(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MenuItemExtended();
+
+            obj.ItemType = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.State = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.ID = data.ReadUInt32LittleEndian(ref offset);
+            obj.Flags = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.MenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a MenuResource
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>Filled MenuResource on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MenuResource? ParseMenuResource(byte[] data)
+        {
+            // Initialize the iterator
+            int offset = 0;
+
+            // Create the output object
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MenuResource();
+
+            // Try to read the version for an extended header
+            int versionOffset = 0;
+            int possibleVersion = data.ReadUInt16LittleEndian(ref versionOffset);
+            if (possibleVersion == 0x0001)
+            {
+                var menuHeaderExtended = ParseMenuHeaderExtended(data, ref offset);
+                obj.MenuHeader = menuHeaderExtended;
+
+                var extendedMenuItems = new List<Data.Models.PortableExecutable.Resource.Entries.MenuItemExtended>();
+                if (offset != 0)
+                {
+                    offset = menuHeaderExtended.Offset;
+
+                    while (offset < data.Length)
+                    {
+                        var extendedMenuItem = ParseMenuItemExtended(data, ref offset);
+                        extendedMenuItems.Add(extendedMenuItem);
+
+                        // Align to the DWORD boundary if we're not at the end
+                        data.AlignToBoundary(ref offset, 4);
+                    }
+                }
+
+                obj.MenuItems = [.. extendedMenuItems];
+            }
+            else
+            {
+                obj.MenuHeader = ParseNormalMenuHeader(data, ref offset);
+
+                #region Menu items
+
+                var menuItems = new List<Data.Models.PortableExecutable.Resource.Entries.MenuItem>();
+
+                while (offset < data.Length)
+                {
+                    // Determine if this is a popup
+                    int flagsOffset = offset;
+                    var initialFlags = (MenuFlags)data.ReadUInt16LittleEndian(ref flagsOffset);
+
+                    Data.Models.PortableExecutable.Resource.Entries.MenuItem? menuItem;
+#if NET20 || NET35
+                    if ((initialFlags & MenuFlags.MF_POPUP) != 0)
+#else
+                    if (initialFlags.HasFlag(MenuFlags.MF_POPUP))
+#endif
+                        menuItem = ParsePopupMenuItem(data, ref offset);
+                    else
+                        menuItem = ParseNormalMenuItem(data, ref offset);
+
+                    // Align to the DWORD boundary if we're not at the end
+                    data.AlignToBoundary(ref offset, 4);
+
+                    if (menuItem is null)
+                        return null;
+
+                    menuItems.Add(menuItem);
+                }
+
+                obj.MenuItems = [.. menuItems];
+
+                #endregion
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a MessageResourceBlock
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MessageResourceBlock on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MessageResourceBlock ParseMessageResourceBlock(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MessageResourceBlock();
+
+            obj.LowId = data.ReadUInt32LittleEndian(ref offset);
+            obj.HighId = data.ReadUInt32LittleEndian(ref offset);
+            obj.OffsetToEntries = data.ReadUInt32LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Read resource data as a MessageResourceData
+        /// </summary>
+        /// <param name="data">Byte array to parse</param>
+        /// <returns>A filled MessageResourceData on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MessageResourceData? ParseMessageResourceData(byte[] data)
+        {
+            // Initialize the iterator
+            int offset = 0;
+
+            // Create the output object
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MessageResourceData();
+
+            // Message resource blocks
+            obj.NumberOfBlocks = data.ReadUInt32LittleEndian(ref offset);
+            if (obj.NumberOfBlocks > 0)
+            {
+                var messageResourceBlocks = new List<Data.Models.PortableExecutable.Resource.Entries.MessageResourceBlock>();
+
+                for (int i = 0; i < obj.NumberOfBlocks; i++)
+                {
+                    var messageResourceBlock = ParseMessageResourceBlock(data, ref offset);
+                    messageResourceBlocks.Add(messageResourceBlock);
+                }
+
+                obj.Blocks = [.. messageResourceBlocks];
+            }
+
+            // Message resource entries
+            if (obj.Blocks.Length != 0)
+            {
+                var messageResourceEntries = new Dictionary<uint, Data.Models.PortableExecutable.Resource.Entries.MessageResourceEntry?>();
+
+                for (int i = 0; i < obj.Blocks.Length; i++)
+                {
+                    var messageResourceBlock = obj.Blocks[i];
+                    if (messageResourceBlock is null)
+                        continue;
+
+                    offset = (int)messageResourceBlock.OffsetToEntries;
+
+                    for (uint j = messageResourceBlock.LowId; j <= messageResourceBlock.HighId; j++)
+                    {
+                        messageResourceEntries[j] = ParseMessageResourceEntry(data, ref offset);
+                    }
+                }
+
+                obj.Entries = messageResourceEntries;
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a MessageResourceEntry
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled MessageResourceEntry on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.MessageResourceEntry ParseMessageResourceEntry(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.MessageResourceEntry();
+
+            obj.Length = data.ReadUInt16LittleEndian(ref offset);
+            obj.Flags = data.ReadUInt16LittleEndian(ref offset);
+
+            Encoding textEncoding = obj.Flags == 0x0001 ? Encoding.Unicode : Encoding.ASCII;
+            byte[] textArray = data.ReadBytes(ref offset, obj.Length - 4);
+            obj.Text = textEncoding.GetString(textArray);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a NormalMenuHeader
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled NormalMenuHeader on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.NormalMenuHeader ParseNormalMenuHeader(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.NormalMenuHeader();
+
+            obj.Version = data.ReadUInt16LittleEndian(ref offset);
+            obj.HeaderSize = data.ReadUInt16LittleEndian(ref offset);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a NormalMenuItem
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled NormalMenuItem on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.NormalMenuItem ParseNormalMenuItem(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.NormalMenuItem();
+
+            obj.NormalResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.NormalMenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
+
+            return obj;
+        }
+
+        /// <summary>
         /// Parse a Stream into an OptionalHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
@@ -1404,6 +2188,25 @@ namespace SabreTools.Serialization.Readers
                 obj.Reserved = data.ReadUInt64LittleEndian();
 
             #endregion
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a byte array into a PopupMenuItem
+        /// </summary>
+        /// <param name="data">Data to parse</param>
+        /// <param name="offset">Offset into the byte array</param>
+        /// <returns>A filled PopupMenuItem on success, null on error</returns>
+        public static Data.Models.PortableExecutable.Resource.Entries.PopupMenuItem ParsePopupMenuItem(byte[] data, ref int offset)
+        {
+            var obj = new Data.Models.PortableExecutable.Resource.Entries.PopupMenuItem();
+
+            obj.PopupItemType = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupState = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupID = data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupResInfo = (MenuFlags)data.ReadUInt32LittleEndian(ref offset);
+            obj.PopupMenuText = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
 
             return obj;
         }
