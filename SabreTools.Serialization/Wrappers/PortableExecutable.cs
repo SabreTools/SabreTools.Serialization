@@ -1485,7 +1485,7 @@ namespace SabreTools.Serialization.Wrappers
                     // NB10
                     if (signature == 0x3031424E)
                     {
-                        var nb10ProgramDatabase = entryData.ParseNB10ProgramDatabase(ref offset);
+                        var nb10ProgramDatabase = Readers.PortableExecutable.ParseNB10ProgramDatabase(entryData, ref offset);
                         if (nb10ProgramDatabase is not null)
                         {
                             debugData[i] = nb10ProgramDatabase;
@@ -1496,7 +1496,7 @@ namespace SabreTools.Serialization.Wrappers
                     // RSDS
                     else if (signature == 0x53445352)
                     {
-                        var rsdsProgramDatabase = entryData.ParseRSDSProgramDatabase(ref offset);
+                        var rsdsProgramDatabase = Readers.PortableExecutable.ParseRSDSProgramDatabase(entryData, ref offset);
                         if (rsdsProgramDatabase is not null)
                         {
                             debugData[i] = rsdsProgramDatabase;

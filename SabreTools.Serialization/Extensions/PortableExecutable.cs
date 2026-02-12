@@ -1,8 +1,6 @@
 using System;
 using SabreTools.Data.Models.COFF;
-using SabreTools.IO.Extensions;
 
-#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Data.Extensions
 {
     public static class PortableExecutable
@@ -95,52 +93,5 @@ namespace SabreTools.Data.Extensions
 
             return -1;
         }
-
-        #region Debug
-
-        /// <summary>
-        /// Parse a byte array into a NB10ProgramDatabase
-        /// </summary>
-        /// <param name="data">Data to parse</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled NB10ProgramDatabase on success, null on error</returns>
-        public static Models.PortableExecutable.DebugData.NB10ProgramDatabase? ParseNB10ProgramDatabase(this byte[] data, ref int offset)
-        {
-            var obj = new Models.PortableExecutable.DebugData.NB10ProgramDatabase();
-
-            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
-            if (obj.Signature != 0x3031424E)
-                return null;
-
-            obj.Offset = data.ReadUInt32LittleEndian(ref offset);
-            obj.Timestamp = data.ReadUInt32LittleEndian(ref offset);
-            obj.Age = data.ReadUInt32LittleEndian(ref offset);
-            obj.PdbFileName = data.ReadNullTerminatedAnsiString(ref offset) ?? string.Empty;
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Parse a byte array into a RSDSProgramDatabase
-        /// </summary>
-        /// <param name="data">Data to parse</param>
-        /// <param name="offset">Offset into the byte array</param>
-        /// <returns>A filled RSDSProgramDatabase on success, null on error</returns>
-        public static Models.PortableExecutable.DebugData.RSDSProgramDatabase? ParseRSDSProgramDatabase(this byte[] data, ref int offset)
-        {
-            var obj = new Models.PortableExecutable.DebugData.RSDSProgramDatabase();
-
-            obj.Signature = data.ReadUInt32LittleEndian(ref offset);
-            if (obj.Signature != 0x53445352)
-                return null;
-
-            obj.GUID = data.ReadGuid(ref offset);
-            obj.Age = data.ReadUInt32LittleEndian(ref offset);
-            obj.PathAndFileName = data.ReadNullTerminatedUTF8String(ref offset) ?? string.Empty;
-
-            return obj;
-        }
-
-        #endregion
     }
 }
