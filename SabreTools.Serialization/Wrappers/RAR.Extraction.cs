@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
-using SharpCompress.Common;
 using SharpCompress.Readers;
 #endif
 
@@ -33,7 +32,9 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                RarArchive rarFile = RarArchive.Open(_dataSource, readerOptions);
+                var rarFile = RarArchive.OpenArchive(_dataSource, readerOptions) as RarArchive;
+                if (rarFile is null)
+                    return false;
 
                 // If the file exists
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
@@ -43,11 +44,15 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If there are multiple parts
                     if (parts.Length > 1)
-                        rarFile = RarArchive.Open(parts, readerOptions);
+                        rarFile = RarArchive.OpenArchive(parts, readerOptions) as RarArchive;
 
                     // Try to read the file path if no entries are found
                     else if (rarFile.Entries.Count == 0)
-                        rarFile = RarArchive.Open(parts, readerOptions);
+                        rarFile = RarArchive.OpenArchive(parts, readerOptions) as RarArchive;
+
+                    // If the archive is somehow null
+                    if (rarFile is null)
+                        return false;
                 }
 
                 // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether
@@ -273,11 +278,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (!Directory.Exists(outDir))
                     Directory.CreateDirectory(outDir);
 
-                rarFile.WriteToDirectory(outDir, new ExtractionOptions()
-                {
-                    ExtractFullPath = true,
-                    Overwrite = true,
-                });
+                rarFile.WriteToDirectory(outDir);
 
             }
             catch (Exception ex)
