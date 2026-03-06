@@ -20,11 +20,16 @@ namespace SabreTools.Serialization.Wrappers
 
             Print(builder, Model.Header);
 
-            builder.AppendLine(Model.Trainer, "Trainer Data");
-            builder.AppendLine(Model.PRGROMData, "PRG-ROM Data");
-            builder.AppendLine(Model.CHRROMData, "CHR-ROM Data");
-            builder.AppendLine(Model.PlayChoiceINSTROM, "PlayChoice INST-ROM Data");
-            builder.AppendLine(Model.PlayChoicePROM, "PlayChoice PROM Data");
+            //builder.AppendLine(Model.Trainer, "Trainer Data");
+            builder.AppendLine(Model.Trainer.Length, "Trainer Data Length");
+            //builder.AppendLine(Model.PRGROMData, "PRG-ROM Data");
+            builder.AppendLine(Model.PRGROMData.Length, "PRG-ROM Data Length");
+            //builder.AppendLine(Model.CHRROMData, "CHR-ROM Data");
+            builder.AppendLine(Model.CHRROMData.Length, "CHR-ROM Data Length");
+            //builder.AppendLine(Model.PlayChoiceINSTROM, "PlayChoice INST-ROM Data");
+            builder.AppendLine(Model.PlayChoiceINSTROM.Length, "PlayChoice INST-ROM Data Length");
+            //builder.AppendLine(Model.PlayChoicePROM, "PlayChoice PROM Data");
+            builder.AppendLine(Model.PlayChoicePROM.Length, "PlayChoice PROM Data Length");
             builder.AppendLine(Model.Title, "Title:");
         }
 
