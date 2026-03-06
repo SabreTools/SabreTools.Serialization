@@ -1,0 +1,816 @@
+using System;
+
+namespace SabreTools.Data.Models.NES
+{
+    /// <summary>
+    /// Mapper, mirroring, battery, trainer
+    /// </summary>
+    /// <remarks>Bits 4-7 are the lower nybble of mapper number</remarks>
+    [Flags]
+    public enum Flag6 : byte
+    {
+        #region Bit 0
+
+        /// <summary>
+        /// Vertical arrangement ("horizontal mirrored") or mapper-controlled
+        /// </summary>
+        /// <remarks>CIRAM A10 = PPU A11</remarks>
+        NametableArrangementVertical = 0b00000000,
+
+        /// <summary>
+        /// Horizontal arrangement ("vertically mirrored")
+        /// </summary>
+        /// <remarks>CIRAM A10 = PPU A10</remarks>
+        NametableArrangementHorizontal = 0b00000001,
+
+        #endregion
+
+        #region Bit 1
+
+        /// <summary>
+        /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
+        /// or other persistent memory not present
+        /// </summary>
+        BatteryBackedPRGRAMNotPresent = 0b00000000,
+
+        /// <summary>
+        /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
+        /// or other persistent memory present
+        /// </summary>
+        BatteryBackedPRGRAMPresent = 0b00000010,
+
+        #endregion
+
+        #region Bit 2
+
+        /// <summary>
+        /// 512-byte trainer at $7000-$71FF
+        /// </summary>
+        TrainerNotPresent = 0b00000000,
+
+        /// <summary>
+        /// 512-byte trainer at $7000-$71FF
+        /// </summary>
+        /// <remarks>Stored before PRG data</remarks>
+        TrainerPresent = 0b00000100,
+
+        #endregion
+
+        #region Bit 3
+
+        /// <summary>
+        /// Alternative nametable layout
+        /// </summary>
+        AlternativeNametableLayout = 0b00001000,
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Mapper, VS/Playchoice, NES 2.0
+    /// </summary>
+    /// <remarks>Bits 4-7 are the upper nybble of mapper number</remarks>
+    [Flags]
+    public enum Flag7 : byte
+    {
+        #region Bits 0-1
+
+        /// <summary>
+        /// Nintendo Entertainment System/Family Computer
+        /// </summary>
+        StandardSystem = 0b00000000,
+
+        /// <summary>
+        /// VS Unisystem
+        /// </summary>
+        VSUnisystem = 0b00000001,
+
+        /// <summary>
+        /// PlayChoice-10 (8 KB of Hint Screen data stored after CHR data)
+        /// </summary>
+        PlayChoice10 = 0b00000010,
+
+        /// <summary>
+        /// Extended Console Type
+        /// </summary>
+        ExtendedConsoleType = 0b00000011,
+
+        #endregion
+
+        #region Bits 2-3
+
+        /// <summary>
+        /// If equal to 2, flags 8-15 are in NES 2.0 format
+        /// </summary>
+        NES20 = 0b00001000,
+
+        #endregion
+    }
+
+    /// <summary>
+    /// TV system (rarely used extension)
+    /// </summary>
+    [Flags]
+    public enum TVSystem : byte
+    {
+        NTSC = 0b00000000,
+        PAL = 0b00000001,
+    }
+
+    /// <summary>
+    /// TV system, PRG-RAM presence (unofficial, rarely used extension)
+    /// </summary>
+    [Flags]
+    public enum Flag10 : byte
+    {
+        #region Bits 0-1
+
+        NTSC = 0b00000000,
+        DualCompatible1 = 0b00000001,
+        PAL = 0b00000010,
+        DualCompatible2 = 0b00000011,
+
+        #endregion
+
+        #region Bit 4
+
+        /// <summary>
+        /// PRG RAM ($6000-$7FFF) present
+        /// </summary>
+        PRGRAMPresent = 0b00000000,
+
+        /// <summary>
+        /// PRG RAM ($6000-$7FFF) not present
+        /// </summary>
+        PRGRAMNotPresent = 0b00010000,
+
+        #endregion
+
+        #region Bit 5
+
+        /// <summary>
+        /// Board has no bus conflicts
+        /// </summary>
+        BoardHasNoBusConflicts = 0b00000000,
+
+        /// <summary>
+        /// Board has bus conflicts
+        /// </summary>
+        BoardHasBusConflicts = 0b00100000,
+
+        #endregion
+    }
+
+    /// <summary>
+    /// CPU/PPU Timing
+    /// </summary>
+    [Flags]
+    public enum CPUPPUTiming : byte
+    {
+        #region Bits 0-1
+
+        /// <summary>
+        /// NTSC NES
+        /// </summary>
+        RP2C02 = 0b00000000,
+
+        /// <summary>
+        /// Licensed PAL NES
+        /// </summary>
+        RP2C07 = 0b00000001,
+
+        /// <summary>
+        /// Multiple-region
+        /// </summary>
+        MultipleRegion = 0b00000010,
+
+        /// <summary>
+        /// Dendy
+        /// </summary>
+        UA6538 = 0b00000011,
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Vs. System Type and Extended Console Type
+    /// </summary>
+    [Flags]
+    public enum ExtendedSystemType : byte
+    {
+        #region Bits 0-3 (Vs. System Type)
+
+        /// <summary>
+        /// Any RP2C03/RC2C03 variant
+        /// </summary>
+        AnyRP2C03RC2C03Variant = 0x00,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReserved1 = 0x01,
+
+        /// <summary>
+        /// RP2C04-0001
+        /// </summary>
+        RP2C040001 = 0x02,
+
+        /// <summary>
+        /// RP2C04-0002
+        /// </summary>
+        RP2C040002 = 0x03,
+
+        /// <summary>
+        /// RP2C04-0003
+        /// </summary>
+        RP2C040003 = 0x04,
+
+        /// <summary>
+        /// RP2C04-0004
+        /// </summary>
+        RP2C040004 = 0x05,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved6 = 0x06,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReserved7 = 0x07,
+
+        /// <summary>
+        /// RC2C05-01 (signature unknown)
+        /// </summary>
+        RC2C0501 = 0x08,
+
+        /// <summary>
+        /// RC2C05-02 ($2002 AND $3F =$3D)
+        /// </summary>
+        RC2C0502 = 0x09,
+
+        /// <summary>
+        /// RC2C05-03 ($2002 AND $1F =$1C)
+        /// </summary>
+        RC2C0503 = 0x0A,
+
+        /// <summary>
+        /// RC2C05-04 ($2002 AND $1F =$1B)
+        /// </summary>
+        RC2C0504 = 0x0B,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReservedC = 0x0C,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReservedD = 0x0D,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReservedE = 0x0E,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        VsReservedF = 0x0F,
+
+        #endregion
+
+        #region Bits 4-7 (Vs. System Type)
+
+        /// <summary>
+        /// Vs. Unisystem (normal)
+        /// </summary>
+        VsUnisystem = 0x00,
+
+        /// <summary>
+        /// Vs. Unisystem (RBI Baseball protection)
+        /// </summary>
+        VsUnisystemRBIBaseballProtection = 0x10,
+
+        /// <summary>
+        /// Vs. Unisystem (TKO Boxing protection)
+        /// </summary>
+        VsUnisystemTKOBoxingProtection = 0x20,
+
+        /// <summary>
+        /// Vs. Unisystem (Super Xevious protection)
+        /// </summary>
+        VsUnisystemSuperXeviousProtection = 0x30,
+
+        /// <summary>
+        /// Vs. Unisystem (Vs. Ice Climber Japan protection)
+        /// </summary>
+        VsUnisystemVsIceClimberJapanProtection = 0x40,
+
+        /// <summary>
+        /// Vs. Dual System (normal)
+        /// </summary>
+        VsDualSystem = 0x50,
+
+        /// <summary>
+        /// Vs. Dual System (Raid on Bungeling Bay protection)
+        /// </summary>
+        VsDualSystemRaidOnBungelingBayProtection = 0x60,
+
+        #endregion
+
+        #region Bits 0-3 (Extended Console Type)
+
+        /// <summary>
+        /// Regular NES/Famicom/Dendy
+        /// </summary>
+        RegularSystem = 0x00,
+
+        /// <summary>
+        /// Nintendo Vs. System
+        /// </summary>
+        NintendoVsSystem = 0x01,
+
+        /// <summary>
+        /// Playchoice 10
+        /// </summary>
+        Playchoice10 = 0x02,
+
+        /// <summary>
+        /// Regular Famiclone, but with CPU that supports Decimal Mode
+        /// </summary>
+        RegularFamicloneDecimalMode = 0x03,
+
+        /// <summary>
+        /// Regular NES/Famicom with EPSM module or plug-through cartridge
+        /// </summary>
+        RegularNESWithEPSM = 0x04,
+
+        /// <summary>
+        /// V.R. Technology VT01 with red/cyan STN palette
+        /// </summary>
+        VRTechnologyVT01 = 0x05,
+
+        /// <summary>
+        /// V.R. Technology VT02
+        /// </summary>
+        VRTechnologyVT02 = 0x06,
+
+        /// <summary>
+        /// V.R. Technology VT03
+        /// </summary>
+        VRTechnologyVT03 = 0x07,
+
+        /// <summary>
+        /// V.R. Technology VT09
+        /// </summary>
+        VRTechnologyVT09 = 0x08,
+
+        /// <summary>
+        /// V.R. Technology VT32
+        /// </summary>
+        VRTechnologyVT32 = 0x09,
+
+        /// <summary>
+        /// V.R. Technology VT369
+        /// </summary>
+        VRTechnologyVT369 = 0x0A,
+
+        /// <summary>
+        /// UMC UM6578
+        /// </summary>
+        UMCUM6578 = 0x0B,
+
+        /// <summary>
+        /// Famicom Network System
+        /// </summary>
+        FamicomNetworkSystem = 0x0C,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ExtendedConsoleReservedD = 0x0D,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ExtendedConsoleReservedE = 0x0E,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ExtendedConsoleReservedF = 0x0F,
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Default Expansion Device
+    /// </summary>
+    public enum DefaultExpansionDevice : byte
+    {
+        /// <summary>
+        /// Unspecified
+        /// </summary>
+        Unspecified = 0x00,
+
+        /// <summary>
+        /// Standard NES/Famicom controllers
+        /// </summary>
+        StandardControllers = 0x01,
+
+        /// <summary>
+        /// NES Four Score/Satellite with two additional standard controllers
+        /// </summary>
+        NESFourScore = 0x02,
+
+        /// <summary>
+        /// Famicom Four Players Adapter with two additional standard controllers
+        /// using the "simple" protocol
+        /// </summary>
+        FamicomFourPlayersAdapter = 0x03,
+
+        /// <summary>
+        /// Vs. System (1P via $4016)
+        /// </summary>
+        VsSystem4016 = 0x04,
+
+        /// <summary>
+        /// Vs. System (1P via $4017)
+        /// </summary>
+        VsSystem4017 = 0x05,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved06 = 0x06,
+
+        /// <summary>
+        /// Vs. Zapper
+        /// </summary>
+        VsZapper = 0x07,
+
+        /// <summary>
+        /// Zapper ($4017)
+        /// </summary>
+        Zapper4017 = 0x08,
+
+        /// <summary>
+        /// Two Zappers
+        /// </summary>
+        TwoZappers = 0x09,
+
+        /// <summary>
+        /// Bandai Hyper Shot Lightgun
+        /// </summary>
+        BandaiHyperShotLightgun = 0x0A,
+
+        /// <summary>
+        /// Power Pad Side A
+        /// </summary>
+        PowerPadSideA = 0x0B,
+
+        /// <summary>
+        /// Power Pad Side B
+        /// </summary>
+        PowerPadSideB = 0x0C,
+
+        /// <summary>
+        /// Family Trainer Side A
+        /// </summary>
+        FamilyTrainerSideA = 0x0D,
+
+        /// <summary>
+        /// Family Trainer Side B
+        /// </summary>
+        FamilyTrainerSideB = 0x0E,
+
+        /// <summary>
+        /// Arkanoid Vaus Controller (NES)
+        /// </summary>
+        ArkanoidVausControllerNES = 0x0F,
+
+        /// <summary>
+        /// Arkanoid Vaus Controller (Famicom)
+        /// </summary>
+        ArkanoidVausControllerFamicom = 0x10,
+
+        /// <summary>
+        /// Two Vaus Controllers plus Famicom Data Recorder
+        /// </summary>
+        TwoVausControllers = 0x11,
+
+        /// <summary>
+        /// Konami Hyper Shot Controller
+        /// </summary>
+        KonamiHyperShotController = 0x12,
+
+        /// <summary>
+        /// Coconuts Pachinko Controller
+        /// </summary>
+        CoconutsPachinkoController = 0x13,
+
+        /// <summary>
+        /// Exciting Boxing Punching Bag (Blowup Doll)
+        /// </summary>
+        ExcitingBoxingPunchingBag = 0x14,
+
+        /// <summary>
+        /// Jissen Mahjong Controller
+        /// </summary>
+        JissenMahjongController = 0x15,
+
+        /// <summary>
+        /// 米澤 (Yonezawa) Party Tap
+        /// </summary>
+        YonezawaPartyTap = 0x16,
+
+        /// <summary>
+        /// Oeka Kids Tablet
+        /// </summary>
+        OekaKidsTablet = 0x17,
+
+        /// <summary>
+        /// Sunsoft Barcode Battler
+        /// </summary>
+        SunsoftBarcodeBattler = 0x18,
+
+        /// <summary>
+        /// Miracle Piano Keyboard
+        /// </summary>
+        MiraclePianoKeyboard = 0x19,
+
+        /// <summary>
+        /// Pokkun Moguraa Tap-tap Mat (Whack-a-Mole Mat and Mallet)
+        /// </summary>
+        PokkunMoguraaTapTapMat = 0x1A,
+
+        /// <summary>
+        /// Top Rider (Inflatable Bicycle)
+        /// </summary>
+        TopRider = 0x1B,
+
+        /// <summary>
+        /// Double-Fisted (Requires or allows use of two controllers by one player)
+        /// </summary>
+        DoubleFisted = 0x1C,
+
+        /// <summary>
+        /// Famicom 3D System
+        /// </summary>
+        Famicom3DSystem = 0x1D,
+
+        /// <summary>
+        /// Doremikko Keyboard
+        /// </summary>
+        DoremikkoKeyboard = 0x1E,
+
+        /// <summary>
+        /// R.O.B. Gyromite
+        /// </summary>
+        ROBGyromite = 0x1F,
+
+        /// <summary>
+        /// Famicom Data Recorder ("silent" keyboard)
+        /// </summary>
+        FamicomDataRecorder = 0x20,
+
+        /// <summary>
+        /// ASCII Turbo File
+        /// </summary>
+        ASCIITurboFile = 0x21,
+
+        /// <summary>
+        /// IGS Storage Battle Box
+        /// </summary>
+        IGSStorageBattleBox = 0x22,
+
+        /// <summary>
+        /// Family BASIC Keyboard plus Famicom Data Recorder
+        /// </summary>
+        FamilyBASICKeyboard = 0x23,
+
+        /// <summary>
+        /// 东达 (Dōngdá) PEC Keyboard
+        /// </summary>
+        DongdaPECKeyboard = 0x24,
+
+        /// <summary>
+        /// 普澤 (Pǔzé, a.k.a. Bit Corp.) Bit-79 Keyboard
+        /// </summary>
+        BitCorpBit79Keyboard = 0x25,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard
+        /// </summary>
+        SuborKeyboard = 0x26,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus Macro Winners Mouse
+        /// </summary>
+        SuborKeyboardPlusMacroWinnersMouse = 0x27,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus Subor Mouse via $4016
+        /// </summary>
+        SuborKeyboardPlusSuborMouse4016 = 0x28,
+
+        /// <summary>
+        /// SNES Mouse ($4016)
+        /// </summary>
+        SNESMouse4016 = 0x29,
+
+        /// <summary>
+        /// Multicart
+        /// </summary>
+        Multicart = 0x2A,
+
+        /// <summary>
+        /// Two SNES controllers replacing the two standard NES controllers
+        /// </summary>
+        TwoSNESControllers = 0x2B,
+
+        /// <summary>
+        /// RacerMate Bicycle
+        /// </summary>
+        RacerMateBicycle = 0x2C,
+
+        /// <summary>
+        /// U-Force
+        /// </summary>
+        UForce = 0x2D,
+
+        /// <summary>
+        /// R.O.B. Stack-Up
+        /// </summary>
+        ROBStackUp = 0x2E,
+
+        /// <summary>
+        /// City Patrolman Lightgun
+        /// </summary>
+        CityPatrolmanLightgun = 0x2F,
+
+        /// <summary>
+        /// Sharp C1 Cassette Interface
+        /// </summary>
+        SharpC1CassetteInterface = 0x30,
+
+        /// <summary>
+        /// Standard Controller with swapped Left-Right/Up-Down/B-A
+        /// </summary>
+        StandardControllerWithSwappedInputs = 0x31,
+
+        /// <summary>
+        /// Excalibur Sudoku Pad
+        /// </summary>
+        ExcaliburSudokuPad = 0x32,
+
+        /// <summary>
+        /// ABL Pinball
+        /// </summary>
+        ABLPinball = 0x33,
+
+        /// <summary>
+        /// Golden Nugget Casino extra buttons
+        /// </summary>
+        GoldenNuggetCasinoExtraButtons = 0x34,
+
+        /// <summary>
+        /// 科达 (Kēdá) Keyboard
+        /// </summary>
+        KedaKeyboard = 0x35,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus Subor Mouse via $4017
+        /// </summary>
+        SuborKeyboardPlusSuborMouse4017 = 0x36,
+
+        /// <summary>
+        /// Port test controller
+        /// </summary>
+        PortTestController = 0x37,
+
+        /// <summary>
+        /// Bandai Multi Game Player Gamepad buttons
+        /// </summary>
+        BandaiMultiGamePlayerGamepad = 0x38,
+
+        /// <summary>
+        /// Venom TV Dance Mat
+        /// </summary>
+        VenomTVDanceMat = 0x39,
+
+        /// <summary>
+        /// LG TV Remote Control
+        /// </summary>
+        LGTVRemoteControl = 0x3A,
+
+        /// <summary>
+        /// Famicom Network Controller
+        /// </summary>
+        FamicomNetworkController = 0x3B,
+
+        /// <summary>
+        /// King Fishing Controller
+        /// </summary>
+        KingFishingController = 0x3C,
+
+        /// <summary>
+        /// Croaky Karaoke Controller
+        /// </summary>
+        CroakyKaraokeController = 0x3D,
+
+        /// <summary>
+        /// 科王 (Kēwáng, a.k.a. Kingwon) Keyboard
+        /// </summary>
+        KingwonKeyboard = 0x3E,
+
+        /// <summary>
+        /// 泽诚 (Zéchéng) Keyboard
+        /// </summary>
+        ZechengKeyboard = 0x3F,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus L90-rotated PS/2 mouse in $4017
+        /// </summary>
+        SuborKeyboardPlusL90RotatedPS2Mouse4017 = 0x40,
+
+        /// <summary>
+        /// PS/2 Keyboard in UM6578 PS/2 port, PS/2 Mouse via $4017
+        /// </summary>
+        PS2KeyboardInUM6578PS2Port = 0x41,
+
+        /// <summary>
+        /// PS/2 Mouse in UM6578 PS/2 port
+        /// </summary>
+        PS2MouseInUM6578PS2Port = 0x42,
+
+        /// <summary>
+        /// 裕兴 (Yùxìng) Mouse via $4016
+        /// </summary>
+        YuxingMouse = 0x43,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus 裕兴 (Yùxìng)
+        /// Mouse mouse in $4016
+        /// </summary>
+        SuborKeyboardPlusYuxingMouse = 0x44,
+
+        /// <summary>
+        /// Gigggle TV Pump
+        /// </summary>
+        GigggleTVPump = 0x45,
+
+        /// <summary>
+        /// 步步高 (Bùbùgāo, a.k.a. BBK) Keyboard plus R90-rotated PS/2 mouse in $4017
+        /// </summary>
+        BBKKeyboardPlusR90RotatedPS2Mouse = 0x46,
+
+        /// <summary>
+        /// Magical Cooking
+        /// </summary>
+        MagicalCooking = 0x47,
+
+        /// <summary>
+        /// SNES Mouse ($4017)
+        /// </summary>
+        SNESMouse4017 = 0x48,
+
+        /// <summary>
+        /// Zapper ($4016)
+        /// </summary>
+        Zapper4016 = 0x49,
+
+        /// <summary>
+        /// Arkanoid Vaus Controller (Prototype)
+        /// </summary>
+        ArkanoidVausControllerPrototype = 0x4A,
+
+        /// <summary>
+        /// TV 麻雀 Game (TV Mahjong Game) Controller
+        /// </summary>
+        TVMahjongGameController = 0x4B,
+
+        /// <summary>
+        /// 麻雀激闘伝説 (Mahjong Gekitou Densetsu) Controller
+        /// </summary>
+        MahjongGekitouDensetsuController = 0x4C,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus X-inverted PS/2 mouse in $4017
+        /// </summary>
+        SuborKeyboardPlusXInvertedPS2Mouse = 0x4D,
+
+        /// <summary>
+        /// IBM PC/XT Keyboard
+        /// </summary>
+        IBMPCXTKeyboard = 0x4E,
+
+        /// <summary>
+        /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus Mega Book Mouse
+        /// </summary>
+        SuborKeyboardPlusMegaBookMouse = 0x4F,
+    }
+}
