@@ -36,6 +36,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [Matthew Russotto](http://www.russotto.net/quantumcomp.html) | Compression/Quantum |
 | [Microsoft Learn](https://learn.microsoft.com/en-us/) | BMP, CFB, Compression/LZX, Compression/MSZIP, MicrosoftCabinet, OLE, PortableExecutable, SecuROM, WiseInstaller |
 | [msitools](https://github.com/GNOME/msitools/) | CFB |
+| [Nesdev Wiki](https://www.nesdev.org/wiki/Nesdev_Wiki) | NESCart |
 | [OSDev.org](https://wiki.osdev.org/Expanded_Main_Page) | MSDOS, NewExecutable |
 | [PInvoke.net](http://www.pinvoke.net/index.aspx) | MSDOS |
 | [PKWARE(?)](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT) | PKZIP |
