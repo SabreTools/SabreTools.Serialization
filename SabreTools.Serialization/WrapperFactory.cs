@@ -39,6 +39,7 @@ namespace SabreTools.Serialization
                 WrapperType.MoPaQ => MoPaQ.Create(data),
                 WrapperType.N3DS => N3DS.Create(data),
                 WrapperType.NCF => NCF.Create(data),
+                WrapperType.NESCart => NESCart.Create(data),
                 WrapperType.Nitro => Nitro.Create(data),
                 WrapperType.PAK => PAK.Create(data),
                 WrapperType.PFF => PFF.Create(data),
@@ -433,6 +434,18 @@ namespace SabreTools.Serialization
 
             if (extension.Equals("ncf", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.NCF;
+
+            #endregion
+
+            #region NESCart
+
+            // NES 1.0 and 2.0 image with header
+            if (magic.StartsWith(Data.Models.NES.Constants.SignatureBytes))
+                return WrapperType.NESCart;
+
+            // NES 1.0 and 2.0 image
+            if (extension.Equals("nes", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.NESCart;
 
             #endregion
 

@@ -138,6 +138,11 @@ namespace SabreTools.Serialization.Wrappers
         NCF,
 
         /// <summary>
+        /// Nintendo Entertainment System cart image
+        /// </summary>
+        NESCart,
+
+        /// <summary>
         /// Nintendo DS/DSi cart image
         /// </summary>
         Nitro,
