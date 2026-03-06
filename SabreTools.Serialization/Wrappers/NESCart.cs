@@ -281,7 +281,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (ConsoleType != ConsoleType.ExtendedConsoleType)
                     return ExtendedConsoleType.RegularSystem;
 
-                return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
+                return header2.ExtendedConsoleType;
             }
         }
 
@@ -347,7 +347,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (ConsoleType != ConsoleType.VSUnisystem)
                     return VsHardwareType.VsUnisystem;
 
-                return (VsHardwareType)(header2.ExtendedSystemType >> 4);
+                return header2.VsHardwareType;
             }
         }
 
@@ -367,7 +367,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (ConsoleType != ConsoleType.VSUnisystem)
                     return VsSystemType.AnyRP2C03RC2C03Variant;
 
-                return (VsSystemType)(header2.ExtendedSystemType & 0x0F);
+                return header2.VsSystemType;
             }
         }
 

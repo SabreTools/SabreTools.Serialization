@@ -464,6 +464,7 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// Extended Console Type
     /// </summary>
+    /// <remarks>Actually only 4 bits (bits 0-3 of flag 13)</remarks>
     public enum ExtendedConsoleType : byte
     {
         /// <summary>
@@ -601,7 +602,7 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// Vs. Hardware Type
     /// </summary>
-    /// <remarks>Actually only 4 bits</remarks>
+    /// <remarks>Actually only 4 bits (bits 4-7 of flag 13)</remarks>
     public enum VsHardwareType : byte
     {
         /// <summary>
@@ -643,7 +644,7 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// Vs. System Type
     /// </summary>
-    /// <remarks>Actually only 4 bits</remarks>
+    /// <remarks>Actually only 4 bits (bits 0-3 of flag 13)</remarks>
     public enum VsSystemType : byte
     {
         /// <summary>

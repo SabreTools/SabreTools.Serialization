@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(tvSystemExtended, "    TV System Extended");
 
                 // Bits 2-3
-                builder.AppendLine(header1.ReservedBits23, "    Reserved bits 1-2");
+                builder.AppendLine(header1.Byte10ReservedBits23, "    Reserved bits 1-2");
 
                 // Bit 4
                 string prgRamPresent = header1.PrgRamPresent ? "Present" : "Not present";
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header1.HasBusConflicts, "    Has Bus Conflicts");
 
                 // Bits 6-7
-                builder.AppendLine(header1.ReservedBits67, "    Reserved bits 6-7");
+                builder.AppendLine(header1.Byte10ReservedBits67, "    Reserved bits 6-7");
 
                 #endregion
 
@@ -166,19 +166,22 @@ namespace SabreTools.Serialization.Wrappers
                 // Byte 13
                 if (header.ConsoleType == ConsoleType.ExtendedConsoleType)
                 {
-                    ExtendedConsoleType extendedConsoleType = (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
-                    string extendedConsoleTypeString = extendedConsoleType.FromExtendedConsoleType();
+                    string extendedConsoleTypeString = header2.ExtendedConsoleType.FromExtendedConsoleType();
                     builder.AppendLine(extendedConsoleTypeString, "  Extended console type");
+
+                    builder.AppendLine(extendedConsoleTypeString, "  Reserved bits");
                 }
                 else if (header.ConsoleType == ConsoleType.VSUnisystem)
                 {
-                    VsSystemType vsSystemType = (VsSystemType)(header2.ExtendedSystemType & 0x0F);
-                    string vsSystemTypeString = vsSystemType.FromVsSystemType();
+                    string vsSystemTypeString = header2.VsSystemType.FromVsSystemType();
                     builder.AppendLine(vsSystemTypeString, "  Vs. system type");
 
-                    VsHardwareType vsHardwareType = (VsHardwareType)(header2.ExtendedSystemType >> 4);
-                    string vsHardwareTypeString = vsHardwareType.FromVsHardwareType();
+                    string vsHardwareTypeString = header2.VsHardwareType.FromVsHardwareType();
                     builder.AppendLine(vsHardwareTypeString, "  Vs. hardware type");
+                }
+                else
+                {
+                    builder.AppendLine(header2.Reserved13, "  Reserved");
                 }
 
                 // Byte 14

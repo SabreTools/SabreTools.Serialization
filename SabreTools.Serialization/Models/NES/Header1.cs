@@ -58,7 +58,7 @@ namespace SabreTools.Data.Models.NES
         /// This byte is not part of the official specification, and relatively
         /// few emulators honor it.
         /// </remarks>
-        public byte ReservedBits23 { get; set; }
+        public byte Byte10ReservedBits23 { get; set; }
 
         /// <summary>
         /// PRG RAM ($6000-$7FFF) present
@@ -91,7 +91,7 @@ namespace SabreTools.Data.Models.NES
         /// This byte is not part of the official specification, and relatively
         /// few emulators honor it.
         /// </remarks>
-        public byte ReservedBits67 { get; set; }
+        public byte Byte10ReservedBits67 { get; set; }
 
         #endregion
 

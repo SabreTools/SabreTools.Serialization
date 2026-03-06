@@ -101,14 +101,66 @@ namespace SabreTools.Data.Models.NES
         /// </summary>
         public CPUPPUTiming CPUPPUTiming { get; set; }
 
+        #region Byte 13
+
+        #region Standard System and PlayChoice-10
+
         /// <summary>
-        /// Vs. System Type and Extended Console Type
+        /// Reserved byte, unused
         /// </summary>
         /// <remarks>
-        /// When Byte 7 AND 3 =1: Vs. System Type
-        /// When Byte 7 AND 3 =3: Extended Console Type
+        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.StandardSystem"/>.
+        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.PlayChoice10"/>.
         /// </remarks>
-        public byte ExtendedSystemType { get; set; }
+        public byte Reserved13 { get; set; }
+
+        #endregion
+
+        #region Vs. Unisystem
+
+        /// <summary>
+        /// Vs. System Type
+        /// </summary>
+        /// <remarks>
+        /// Byte 13, Bits 0-3
+        ///
+        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
+        /// </remarks>
+        public VsSystemType VsSystemType { get; set; }
+
+        /// <summary>
+        /// Vs. Hardware Type
+        /// </summary>
+        /// <remarks>
+        /// Byte 13, Bits 4-7
+        ///
+        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
+        /// </remarks>
+        public VsHardwareType VsHardwareType { get; set; }
+
+        #endregion
+
+        #region Extended Console Type
+
+        /// <summary>
+        /// Extended Console Type
+        /// </summary>
+        /// <remarks>
+        /// Byte 13, Bits 0-3
+        ///
+        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.ExtendedConsoleType"/>
+        /// </remarks>
+        public ExtendedConsoleType ExtendedConsoleType { get; set; }
+
+        /// <summary>
+        /// Unknown reserved bits
+        /// </summary>
+        /// <remarks>Byte 13, Bits 4-7</remarks>
+        public byte Byte13ReservedBits47 { get; set; }
+
+        #endregion
+
+        #endregion
 
         /// <summary>
         /// Number of miscellaneous ROMs present

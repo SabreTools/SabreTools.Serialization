@@ -147,7 +147,24 @@ namespace SabreTools.Serialization.Readers
                 obj.ChrNvramShiftCount = (byte)((byte11 >> 4) & 0x0F);
 
                 obj.CPUPPUTiming = (CPUPPUTiming)data.ReadByteValue();
-                obj.ExtendedSystemType = data.ReadByteValue();
+
+                // Byte 13
+                byte byte13 = data.ReadByteValue();
+                if (obj.ConsoleType == ConsoleType.VSUnisystem)
+                {
+                    obj.VsSystemType = (VsSystemType)(byte13 & 0x0F);
+                    obj.VsHardwareType = (VsHardwareType)((byte13 >> 4) & 0x0F);
+                }
+                else if (obj.ConsoleType == ConsoleType.ExtendedConsoleType)
+                {
+                    obj.ExtendedConsoleType = (ExtendedConsoleType)(byte13 & 0x0F);
+                    obj.Byte13ReservedBits47 = (byte)((byte13 >> 4) & 0x0F);
+                }
+                else
+                {
+                    obj.Reserved13 = byte13;
+                }
+
                 obj.MiscellaneousROMs = data.ReadByteValue();
                 obj.DefaultExpansionDevice = (DefaultExpansionDevice)data.ReadByteValue();
 
@@ -181,10 +198,10 @@ namespace SabreTools.Serialization.Readers
                 // Byte 10
                 byte byte10 = data.ReadByteValue();
                 obj.TVSystemExtended = (TVSystemExtended)(byte10 & 0x03);
-                obj.ReservedBits23 = (byte)((byte10 >> 2) & 0x03);
+                obj.Byte10ReservedBits23 = (byte)((byte10 >> 2) & 0x03);
                 obj.PrgRamPresent = ((byte10 >> 4) & 0x01) == 0x01;
                 obj.HasBusConflicts = ((byte10 >> 5) & 0x01) == 0x01;
-                obj.ReservedBits67 = (byte)((byte10 >> 6) & 0x03);
+                obj.Byte10ReservedBits67 = (byte)((byte10 >> 6) & 0x03);
 
                 obj.Padding = data.ReadBytes(5);
 
