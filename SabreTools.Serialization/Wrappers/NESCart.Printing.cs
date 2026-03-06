@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.Wrappers
 
         private static void Print(StringBuilder builder, Header? header)
         {
-            builder.AppendLine("  Header Information:");
+            builder.AppendLine("  Common Header Information:");
             builder.AppendLine("  -------------------------");
             if (header is null)
             {
@@ -83,10 +83,14 @@ namespace SabreTools.Serialization.Wrappers
             #endregion
 
             byte mapperNumber = (byte)((header.MapperUpperNibble << 4) | header.MapperLowerNibble);
-            builder.AppendLine(mapperNumber, "  Mapper number");
+            builder.AppendLine(mapperNumber, "  Mapper");
+            builder.AppendLine();
 
             if (header is Header1 header1)
             {
+                builder.AppendLine("  NES 1.0 Header Information:");
+                builder.AppendLine("  -------------------------");
+
                 // Byte 8
                 builder.AppendLine(header1.PrgRamSize, prefixString: "  PRG-RAM size in 8KiB units");
 
@@ -123,6 +127,9 @@ namespace SabreTools.Serialization.Wrappers
             }
             else if (header is Header2 header2)
             {
+                builder.AppendLine("  NES 2.0 Header Information:");
+                builder.AppendLine("  -------------------------");
+
                 // Byte 8
                 ushort extendedMapperNumber = (ushort)((header2.MapperMSB << 8)
                     | (byte)((header.MapperUpperNibble << 4)
