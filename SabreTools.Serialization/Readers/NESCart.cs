@@ -44,12 +44,12 @@ namespace SabreTools.Serialization.Readers
                 int chrRomSize = cart.Header.CHRROMSize * 8192;
                 if (cart.Header is Header2 header2)
                 {
-                    byte msb = (byte)(header2.PRGCHRMSB & 0x0F);
-                    ushort extendedSize = (ushort)((msb << 8) | header.PRGROMSize);
+                    ushort extendedSize = (ushort)((header2.PRGROMSizeMSB << 8)
+                        | header.PRGROMSize);
                     prgRomSize = extendedSize * 16384;
 
-                    msb = (byte)(header2.PRGCHRMSB >> 4);
-                    extendedSize = (ushort)((msb << 8) | header.CHRROMSize);
+                    extendedSize = (ushort)((header2.CHRROMSizeMSB << 8)
+                        | header.CHRROMSize);
                     chrRomSize = extendedSize * 8192;
                 }
 
@@ -114,22 +114,38 @@ namespace SabreTools.Serialization.Readers
                 obj.PRGROMSize = prgRomSize;
                 obj.CHRROMSize = chrRomSize;
 
-                // Flag 6
+                // Byte 6
                 obj.NametableArrangement = nametableArrangement;
                 obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
                 obj.TrainerPresent = trainerPresent;
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
 
-                // Flag 7
+                // Byte 7
                 obj.ConsoleType = consoleType;
                 obj.NES20 = nes20;
                 obj.MapperUpperNibble = mapperUpperNibble;
 
-                obj.MapperMSBSubmapper = data.ReadByteValue();
-                obj.PRGCHRMSB = data.ReadByteValue();
-                obj.PRGRAMEEPROMSize = data.ReadByteValue();
-                obj.CHRRAMSize = data.ReadByteValue();
+                // Byte 8
+                byte byte8 = data.ReadByteValue();
+                obj.MapperMSB = (byte)(byte8 & 0x0F);
+                obj.Submapper = (byte)((byte8 >> 4) & 0x0F);
+
+                // Byte 9
+                byte byte9 = data.ReadByteValue();
+                obj.PRGROMSizeMSB = (byte)(byte9 & 0x0F);
+                obj.CHRROMSizeMSB = (byte)((byte9 >> 4) & 0x0F);
+
+                // Byte 10
+                byte byte10 = data.ReadByteValue();
+                obj.PRGRAMShiftCount = (byte)(byte10 & 0x0F);
+                obj.PRGNVRAMEEPROMShiftCount = (byte)((byte10 >> 4) & 0x0F);
+
+                // Byte 11
+                byte byte11 = data.ReadByteValue();
+                obj.CHRRAMShiftCount = (byte)(byte11 & 0x0F);
+                obj.CHRNVRAMShiftCount = (byte)((byte11 >> 4) & 0x0F);
+
                 obj.CPUPPUTiming = (CPUPPUTiming)data.ReadByteValue();
                 obj.ExtendedSystemType = data.ReadByteValue();
                 obj.MiscellaneousROMs = data.ReadByteValue();

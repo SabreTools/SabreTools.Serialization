@@ -124,47 +124,39 @@ namespace SabreTools.Serialization.Wrappers
             else if (header is Header2 header2)
             {
                 // Byte 8
-                byte mapperMsb = (byte)(header2.MapperMSBSubmapper & 0x0F);
-                ushort extendedMapperNumber = (ushort)((mapperMsb << 8)
+                ushort extendedMapperNumber = (ushort)((header2.MapperMSB << 8)
                     | (byte)((header.MapperUpperNibble << 4)
                     | header.MapperLowerNibble));
-                byte submapperNumber = (byte)(header2.MapperMSBSubmapper >> 4);
 
-                builder.AppendLine(mapperMsb, "  Mapper MSB");
+                builder.AppendLine(header2.MapperMSB, "  Mapper MSB");
                 builder.AppendLine(extendedMapperNumber, "  Extended mapper number");
-                builder.AppendLine(submapperNumber, "  Submapper number");
+                builder.AppendLine(header2.Submapper, "  Submapper");
 
                 // Byte 9
-                byte prgRomMsb = (byte)(header2.PRGCHRMSB & 0x0F);
-                ushort extendedPrgRomSize = (ushort)((prgRomMsb << 8) | header.PRGROMSize);
-                byte chrRomMsb = (byte)(header2.PRGCHRMSB >> 4);
-                ushort extendedChrRomSize = (ushort)((chrRomMsb << 8) | header.CHRROMSize);
+                ushort extendedPrgRomSize = (ushort)((header2.PRGROMSizeMSB << 8) | header.PRGROMSize);
+                ushort extendedChrRomSize = (ushort)((header2.CHRROMSizeMSB << 8) | header.CHRROMSize);
 
-                builder.AppendLine(prgRomMsb, "  PRG-ROM size MSB");
+                builder.AppendLine(header2.PRGROMSizeMSB, "  PRG-ROM size MSB");
                 builder.AppendLine(extendedPrgRomSize, "  Extended PRG-ROM size");
-                builder.AppendLine(chrRomMsb, "  CHR-ROM size MSB");
+                builder.AppendLine(header2.CHRROMSizeMSB, "  CHR-ROM size MSB");
                 builder.AppendLine(extendedChrRomSize, "  Extended CHR-ROM size");
 
                 // Byte 10
-                byte prgRamShiftCount = (byte)(header2.PRGRAMEEPROMSize & 0x0F);
-                int prgRamSize = prgRamShiftCount > 0 ? 64 << prgRamShiftCount : 0;
-                byte eepromShiftCount = (byte)(header2.PRGRAMEEPROMSize >> 4);
-                int eepromSize = eepromShiftCount > 0 ? 64 << eepromShiftCount : 0;
+                int prgRamSize = header2.PRGRAMShiftCount > 0 ? 64 << header2.PRGRAMShiftCount : 0;
+                int eepromSize = header2.PRGNVRAMEEPROMShiftCount > 0 ? 64 << header2.PRGNVRAMEEPROMShiftCount : 0;
 
-                builder.AppendLine(prgRamShiftCount, "  PRG-RAM shift count");
+                builder.AppendLine(header2.PRGRAMShiftCount, "  PRG-RAM shift count");
                 builder.AppendLine(prgRamSize, "  PRG-RAM size");
-                builder.AppendLine(eepromShiftCount, "  PRG-NVRAM/EEPROM shift count");
+                builder.AppendLine(header2.PRGNVRAMEEPROMShiftCount, "  PRG-NVRAM/EEPROM shift count");
                 builder.AppendLine(eepromSize, "  PRG-NVRAM/EEPROM size");
 
                 // Byte 11
-                byte chrRamShiftCount = (byte)(header2.CHRRAMSize & 0x0F);
-                int chrRamSize = chrRamShiftCount > 0 ? 64 << chrRamShiftCount : 0;
-                byte chrNvramShiftCount = (byte)(header2.CHRRAMSize >> 4);
-                int chrNvramSize = chrNvramShiftCount > 0 ? 64 << chrNvramShiftCount : 0;
+                int chrRamSize = header2.CHRRAMShiftCount > 0 ? 64 << header2.CHRRAMShiftCount : 0;
+                int chrNvramSize = header2.CHRNVRAMShiftCount > 0 ? 64 << header2.CHRNVRAMShiftCount : 0;
 
-                builder.AppendLine(chrRamShiftCount, "  CHR-RAM shift count");
+                builder.AppendLine(header2.CHRRAMShiftCount, "  CHR-RAM shift count");
                 builder.AppendLine(chrRamSize, "  CHR-RAM size");
-                builder.AppendLine(chrNvramShiftCount, "  CHR-NVRAM shift count");
+                builder.AppendLine(header2.CHRNVRAMShiftCount, "  CHR-NVRAM shift count");
                 builder.AppendLine(chrNvramSize, "  CHR-NVRAM size");
 
                 // Byte 12

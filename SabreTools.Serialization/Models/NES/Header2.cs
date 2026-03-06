@@ -8,49 +8,93 @@ namespace SabreTools.Data.Models.NES
     {
         // All common header parts take up bytes 0-7
 
-        /// <summary>
-        /// Mapper MSB/Submapper
-        /// </summary>
-        /// <remarks>
-        /// Bits 0-3 - Mapper number bits 8-11
-        /// Bits 4-7 - Submapper number
-        /// </remarks>
-        public byte MapperMSBSubmapper { get; set; }
+        #region Byte 8
 
         /// <summary>
-        /// PRG-ROM/CHR-ROM size MSB
+        /// Mapper MSB bits 8-11
         /// </summary>
-        /// <remarks>
-        /// Bits 0-3 - PRG-ROM size MSB
-        /// Bits 4-7 - CHR-ROM size MSB
-        /// </remarks>
-        public byte PRGCHRMSB { get; set; }
+        /// <remarks>Byte 8, Bits 0-3</remarks>
+        public byte MapperMSB { get; set; }
 
         /// <summary>
-        /// PRG-RAM/EEPROM size
+        /// Submapper
+        /// </summary>
+        /// <remarks>Byte 8, Bits 4-7</remarks>
+        public byte Submapper { get; set; }
+
+        #endregion
+
+        #region Byte 9
+
+        /// <summary>
+        /// PRG-ROM size MSB bits 8-11
+        /// </summary>
+        /// <remarks>Byte 9, Bits 0-3</remarks>
+        public byte PRGROMSizeMSB { get; set; }
+
+        /// <summary>
+        /// CHR-ROM size MSB bits 8-11
+        /// </summary>
+        /// <remarks>Byte 9, Bits 4-7</remarks>
+        public byte CHRROMSizeMSB { get; set; }
+
+        #endregion
+
+        #region Byte 10
+
+        /// <summary>
+        /// PRG-RAM (volatile) shift count
         /// </summary>
         /// <remarks>
-        /// Bits 0-3 - PRG-RAM (volatile) shift count
-        /// Bits 4-7 - PRG-NVRAM/EEPROM (non-volatile) shift count
+        /// Byte 10, Bits 0-3
         ///
-        /// If the shift count is zero, there is no CHR-(NV)RAM.
+        /// If the shift count is zero, there is no RAM.
         /// If the shift count is non-zero, the actual size is
         /// "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
         /// </remarks>
-        public byte PRGRAMEEPROMSize { get; set; }
+        public byte PRGRAMShiftCount { get; set; }
 
         /// <summary>
-        /// CHR-RAM size
+        /// PRG-NVRAM/EEPROM (non-volatile) shift count
         /// </summary>
         /// <remarks>
-        /// Bits 0-3 - CHR-RAM size (volatile) shift count
-        /// Bits 4-7 - CHR-NVRAM size (non-volatile) shift count
+        /// Byte 10, Bits 4-7
         ///
-        /// If the shift count is zero, there is no CHR-(NV)RAM.
+        /// If the shift count is zero, there is no NVRAM.
         /// If the shift count is non-zero, the actual size is
         /// "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
         /// </remarks>
-        public byte CHRRAMSize { get; set; }
+        public byte PRGNVRAMEEPROMShiftCount { get; set; }
+
+        #endregion
+
+        #region Byte 11
+
+        /// <summary>
+        /// CHR-RAM size (volatile) shift count
+        /// </summary>
+        /// <remarks>
+        /// Byte 11, Bits 0-3
+        ///
+        /// If the shift count is zero, there is no RAM.
+        /// If the shift count is non-zero, the actual size is
+        /// "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
+        /// </remarks>
+        public byte CHRRAMShiftCount { get; set; }
+
+        /// <summary>
+        /// CHR-NVRAM size (non-volatile) shift count
+        /// </summary>
+        /// <remarks>
+        /// Byte 11, Bits 4-7
+        ///
+        /// If the shift count is zero, there is no NVRAM.
+        /// If the shift count is non-zero, the actual size is
+        /// "64 << shift count" bytes, i.e. 8192 bytes for a shift count of 7.
+        /// </remarks>
+        public byte CHRNVRAMShiftCount { get; set; }
+
+        #endregion
 
         /// <summary>
         /// CPU/PPU timing mode

@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 int chrRomSize = Header.CHRROMSize * 8192;
                 if (Header is Header2 header2)
-                    chrRomSize = ((header2.PRGCHRMSB >> 4) << 8) | chrRomSize;
+                    chrRomSize = (header2.CHRROMSizeMSB << 8) | chrRomSize;
 
                 return chrRomSize;
             }
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 int mapperNumber = (Header.MapperUpperNibble << 4) | Header.MapperLowerNibble;
                 if (Header is Header2 header2)
-                    mapperNumber = ((header2.MapperMSBSubmapper & 0x0F) << 8) | mapperNumber;
+                    mapperNumber = (header2.MapperMSB << 8) | mapperNumber;
 
                 return mapperNumber;
             }
@@ -90,18 +90,11 @@ namespace SabreTools.Serialization.Wrappers
                     return 0;
 
                 if (Header is Header1 header1)
-                {
                     return header1.PRGRAMSize > 0 ? header1.PRGRAMSize * 8192 : 8192;
-                }
                 else if (Header is Header2 header2)
-                {
-                    byte shift = (byte)(header2.PRGRAMEEPROMSize & 0x0F);
-                    return shift > 0 ? 64 << shift : 0;
-                }
+                    return header2.PRGRAMShiftCount > 0 ? 64 << header2.PRGRAMShiftCount : 0;
                 else
-                {
                     return 0;
-                }
             }
         }
 
@@ -119,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 int prgRomSize = Header.PRGROMSize * 16384;
                 if (Header is Header2 header2)
-                    prgRomSize = ((header2.PRGCHRMSB & 0x0F) << 8) | prgRomSize;
+                    prgRomSize = (header2.PRGROMSizeMSB << 8) | prgRomSize;
 
                 return prgRomSize;
             }
@@ -219,8 +212,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                byte shift = (byte)(header2.CHRRAMSize >> 4);
-                return shift > 0 ? 64 << shift : 0;
+                return header2.CHRNVRAMShiftCount > 0 ? 64 << header2.CHRNVRAMShiftCount : 0;
             }
         }
 
@@ -236,8 +228,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                byte shift = (byte)(header2.CHRRAMSize & 0x0F);
-                return shift > 0 ? 64 << shift : 0;
+                return header2.CHRRAMShiftCount > 0 ? 64 << header2.CHRRAMShiftCount : 0;
             }
         }
 
@@ -322,8 +313,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                byte shift = (byte)(header2.PRGRAMEEPROMSize >> 4);
-                return shift > 0 ? 64 << shift : 0;
+                return header2.PRGNVRAMEEPROMShiftCount > 0 ? 64 << header2.PRGNVRAMEEPROMShiftCount : 0;
             }
         }
 
@@ -339,7 +329,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                return header2.MapperMSBSubmapper >> 4;
+                return header2.Submapper;
             }
         }
 
