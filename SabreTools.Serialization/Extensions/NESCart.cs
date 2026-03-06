@@ -5,6 +5,21 @@ namespace SabreTools.Data.Extensions
     public static class NESCart
     {
         /// <summary>
+        /// Convert a <see cref="CPUPPConsoleTypeUTiming"/> value to string
+        /// </summary>
+        public static string FromConsoleType(this ConsoleType type)
+        {
+            return type switch
+            {
+                ConsoleType.StandardSystem => "Nintendo Entertainment System/Family Computer",
+                ConsoleType.VSUnisystem => "VS Unisystem",
+                ConsoleType.PlayChoice10 => "PlayChoice-10 (8 KB of Hint Screen data stored after CHR data)",
+                ConsoleType.ExtendedConsoleType => "Extended Console Type",
+                _ => $"Unknown {(byte)type}",
+            };
+        }
+
+        /// <summary>
         /// Convert a <see cref="CPUPPUTiming"/> value to string
         /// </summary>
         public static string FromCPUPPUTiming(this CPUPPUTiming timing)

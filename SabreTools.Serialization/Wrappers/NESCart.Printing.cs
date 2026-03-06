@@ -74,40 +74,15 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("  Flag 7:");
 
             // Bits 0-1
-#if NET20 || NET35
-            if ((header.Flag7 & Flag7.ExtendedConsoleType) != 0)
-#else
-            if (header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
-#endif
-                builder.AppendLine("    System Type: Extended Console Type");
-#if NET20 || NET35
-            else if ((header.Flag7 & Flag7.PlayChoice10) != 0)
-#else
-            else if (header.Flag7.HasFlag(Flag7.PlayChoice10))
-#endif
-                builder.AppendLine("    System Type: PlayChoice-10");
-#if NET20 || NET35
-            else if ((header.Flag7 & Flag7.VSUnisystem) != 0)
-#else
-            else if (header.Flag7.HasFlag(Flag7.VSUnisystem))
-#endif
-                builder.AppendLine("    System Type: Vs. Unisystem");
-            else
-                builder.AppendLine("    System Type: Nintendo Entertainment System/Family Computer");
+            string consoleType = header.ConsoleType.FromConsoleType();
+            builder.AppendLine(consoleType, "    System Type");
 
             // Bits 2-3
-#if NET20 || NET35
-            if ((header.Flag7 & Flag7.NES20) != 0)
-#else
-            if (header.Flag7.HasFlag(Flag7.NES20))
-#endif
-                builder.AppendLine("    NES 2.0: True");
-            else
-                builder.AppendLine("    NES 2.0: False");
+            builder.AppendLine(header.NES20, "    NES 2.0");
 
             #endregion
 
-            byte mapperNumber = (byte)((((byte)header.Flag7 >> 4) << 4) | header.MapperLowerNibble);
+            byte mapperNumber = (byte)((header.MapperUpperNibble << 4) | header.MapperLowerNibble);
             builder.AppendLine(mapperNumber, "  Mapper number");
 
             if (header is Header1 header1)
@@ -175,7 +150,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Byte 8
                 byte mapperMsb = (byte)(header2.MapperMSBSubmapper & 0x0F);
                 ushort extendedMapperNumber = (ushort)((mapperMsb << 8)
-                    | (byte)((((byte)header.Flag7 >> 4) << 4)
+                    | (byte)((header.MapperUpperNibble << 4)
                     | header.MapperLowerNibble));
                 byte submapperNumber = (byte)(header2.MapperMSBSubmapper >> 4);
 
@@ -221,21 +196,13 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(cpuTiming, "  CPU timing");
 
                 // Byte 13
-#if NET20 || NET35
-                if ((header.Flag7 & Flag7.ExtendedConsoleType) != 0)
-#else
-                if (header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
-#endif
+                if (header.ConsoleType == ConsoleType.ExtendedConsoleType)
                 {
                     ExtendedConsoleType extendedConsoleType = (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
                     string extendedConsoleTypeString = extendedConsoleType.FromExtendedConsoleType();
                     builder.AppendLine(extendedConsoleTypeString, "  Extended console type");
                 }
-#if NET20 || NET35
-                else if ((header.Flag7 & Flag7.VSUnisystem) != 0)
-#else
-                else if (header.Flag7.HasFlag(Flag7.VSUnisystem))
-#endif
+                else if (header.ConsoleType == ConsoleType.VSUnisystem)
                 {
                     VsSystemType vsSystemType = (VsSystemType)(header2.ExtendedSystemType & 0x0F);
                     string vsSystemTypeString = vsSystemType.FromVsSystemType();

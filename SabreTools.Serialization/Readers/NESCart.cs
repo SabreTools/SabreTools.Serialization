@@ -60,13 +60,7 @@ namespace SabreTools.Serialization.Readers
                     cart.CHRROMData = data.ReadBytes(chrRomSize);
 
                 // Read the PlayChoice INST-ROM and PROM data, if necessary
-#if NET20 || NET35
-                if ((cart.Header.Flag7 & Flag7.PlayChoice10) != 0
-                    && (cart.Header.Flag7 & Flag7.VSUnisystem) == 0)
-#else
-                if (cart.Header.Flag7.HasFlag(Flag7.PlayChoice10)
-                    && !cart.Header.Flag7.HasFlag(Flag7.VSUnisystem))
-#endif
+                if (cart.Header.ConsoleType == ConsoleType.PlayChoice10)
                 {
                     cart.PlayChoiceINSTROM = data.ReadBytes(8192);
                     cart.PlayChoicePROM = data.ReadBytes(32);
@@ -106,14 +100,13 @@ namespace SabreTools.Serialization.Readers
             bool alternativeNametableLayout = ((flag6 >> 3) & 0x01) != 0;
             byte mapperLowerNibble = (byte)(flag6 >> 4);
 
-            Flag7 flag7 = (Flag7)data.ReadByteValue();
+            byte flag7 = data.ReadByteValue();
+            ConsoleType consoleType = (ConsoleType)(flag7 & 0x03);
+            bool nes20 = ((flag7 >> 2) & 0x02) == 0x02;
+            byte mapperUpperNibble = (byte)(flag7 >> 4);
 
             // NES 2.0
-#if NET20 || NET35
-            if ((flag7 & Flag7.NES20) != 0)
-#else
-            if (flag7.HasFlag(Flag7.NES20))
-#endif
+            if (nes20)
             {
                 var obj = new Header2();
 
@@ -128,7 +121,11 @@ namespace SabreTools.Serialization.Readers
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
 
-                obj.Flag7 = flag7;
+                // Flag 7
+                obj.ConsoleType = consoleType;
+                obj.NES20 = nes20;
+                obj.MapperUpperNibble = mapperUpperNibble;
+
                 obj.MapperMSBSubmapper = data.ReadByteValue();
                 obj.PRGCHRMSB = data.ReadByteValue();
                 obj.PRGRAMEEPROMSize = data.ReadByteValue();
@@ -157,7 +154,11 @@ namespace SabreTools.Serialization.Readers
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
 
-                obj.Flag7 = flag7;
+                // Flag 7
+                obj.ConsoleType = consoleType;
+                obj.NES20 = nes20;
+                obj.MapperUpperNibble = mapperUpperNibble;
+
                 obj.PRGRAMSize = data.ReadByteValue();
                 obj.TVSystem = (TVSystem)data.ReadByteValue();
                 obj.Flag10 = (Flag10)data.ReadByteValue();

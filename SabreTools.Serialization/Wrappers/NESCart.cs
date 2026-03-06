@@ -48,107 +48,8 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <summary>
-        /// Indicates if the game is meant for an extended console type
-        /// </summary>
-        /// <remarks>Possibly only valid for NES 2.0</remarks>
-        public bool IsExtendedConsole
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag7 & Flag7.ExtendedConsoleType) != 0;
-#else
-                return Header.Flag7.HasFlag(Flag7.ExtendedConsoleType);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if the cart is using an NES 2.0 header
-        /// </summary>
-        public bool IsNES20
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag7 & Flag7.NES20) != 0;
-#else
-                return Header.Flag7.HasFlag(Flag7.NES20);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if the game is meant for PlayChoice-10
-        /// </summary>
-        public bool IsPlayChoice10
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag7 & Flag7.PlayChoice10) != 0
-                    && (Header.Flag7 & Flag7.VSUnisystem) == 0;
-#else
-                return Header.Flag7.HasFlag(Flag7.PlayChoice10)
-                    && !Header.Flag7.HasFlag(Flag7.VSUnisystem);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if the game is meant for a standard console
-        /// </summary>
-        public bool IsStandardConsole
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag7 & Flag7.PlayChoice10) == 0
-                    && (Header.Flag7 & Flag7.VSUnisystem) == 0;
-#else
-                return !Header.Flag7.HasFlag(Flag7.PlayChoice10)
-                    && !Header.Flag7.HasFlag(Flag7.VSUnisystem);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if the game is meant for Vs. Unisystem
-        /// </summary>
-        public bool IsVsUnisystem
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag7 & Flag7.PlayChoice10) == 0
-                    && (Header.Flag7 & Flag7.VSUnisystem) != 0;
-#else
-                return !Header.Flag7.HasFlag(Flag7.PlayChoice10)
-                    && Header.Flag7.HasFlag(Flag7.VSUnisystem);
-#endif
-            }
-        }
+        /// <inheritdoc cref="Header.ConsoleType"/>
+        public ConsoleType ConsoleType => Header?.ConsoleType ?? ConsoleType.StandardSystem;
 
         /// <summary>
         /// Mapper number
@@ -162,7 +63,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null)
                     return 0;
 
-                int mapperNumber = (((byte)Header.Flag7 >> 4) << 4) | Header.MapperLowerNibble;
+                int mapperNumber = (Header.MapperUpperNibble << 4) | Header.MapperLowerNibble;
                 if (Header is Header2 header2)
                     mapperNumber = ((header2.MapperMSBSubmapper & 0x0F) << 8) | mapperNumber;
 
@@ -173,6 +74,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Header.NametableArrangement"/>
         public NametableArrangement NametableArrangement
             => Header?.NametableArrangement ?? NametableArrangement.Vertical;
+
+        /// <inheritdoc cref="Header.NES20"/>
+        public bool NES20 => Header?.NES20 ?? false;
 
         /// <summary>
         /// PRG-RAM size in bytes
@@ -366,15 +270,11 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return ExtendedConsoleType.RegularSystem;
 
-#if NET20 || NET35
-                if ((Header.Flag7 & Flag7.ExtendedConsoleType) != 0)
-#else
-                if (Header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
-#endif
-                    return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
+                // Invalid console type
+                if (ConsoleType != ConsoleType.ExtendedConsoleType)
+                    return ExtendedConsoleType.RegularSystem;
 
-                // If flag is unset
-                return ExtendedConsoleType.RegularSystem;
+                return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
             }
         }
 
@@ -440,15 +340,11 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return VsHardwareType.VsUnisystem;
 
-#if NET20 || NET35
-                else if ((Header.Flag7 & Flag7.VSUnisystem) != 0)
-#else
-                else if (Header.Flag7.HasFlag(Flag7.VSUnisystem))
-#endif
-                    return (VsHardwareType)(header2.ExtendedSystemType >> 4);
+                // Invalid console type
+                if (ConsoleType != ConsoleType.VSUnisystem)
+                    return VsHardwareType.VsUnisystem;
 
-                // If flag is unset
-                return VsHardwareType.VsUnisystem;
+                return (VsHardwareType)(header2.ExtendedSystemType >> 4);
             }
         }
 
@@ -465,15 +361,11 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return VsSystemType.AnyRP2C03RC2C03Variant;
 
-#if NET20 || NET35
-                else if ((Header.Flag7 & Flag7.VSUnisystem) != 0)
-#else
-                else if (Header.Flag7.HasFlag(Flag7.VSUnisystem))
-#endif
-                    return (VsSystemType)(header2.ExtendedSystemType & 0x0F);
+                // Invalid console type
+                if (ConsoleType != ConsoleType.VSUnisystem)
+                    return VsSystemType.AnyRP2C03RC2C03Variant;
 
-                // If flag is unset
-                return VsSystemType.AnyRP2C03RC2C03Variant;
+                return (VsSystemType)(header2.ExtendedSystemType & 0x0F);
             }
         }
 

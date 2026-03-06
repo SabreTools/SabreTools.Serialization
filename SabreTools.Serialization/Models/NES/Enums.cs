@@ -3,47 +3,6 @@ using System;
 namespace SabreTools.Data.Models.NES
 {
     /// <summary>
-    /// Mapper, VS/Playchoice, NES 2.0
-    /// </summary>
-    /// <remarks>Bits 4-7 are the upper nybble of mapper number</remarks>
-    [Flags]
-    public enum Flag7 : byte
-    {
-        #region Bits 0-1
-
-        /// <summary>
-        /// Nintendo Entertainment System/Family Computer
-        /// </summary>
-        StandardSystem = 0b0000,
-
-        /// <summary>
-        /// VS Unisystem
-        /// </summary>
-        VSUnisystem = 0b0001,
-
-        /// <summary>
-        /// PlayChoice-10 (8 KB of Hint Screen data stored after CHR data)
-        /// </summary>
-        PlayChoice10 = 0b0010,
-
-        /// <summary>
-        /// Extended Console Type
-        /// </summary>
-        ExtendedConsoleType = 0b0011,
-
-        #endregion
-
-        #region Bits 2-3
-
-        /// <summary>
-        /// If equal to 2, flags 8-15 are in NES 2.0 format
-        /// </summary>
-        NES20 = 0b1000,
-
-        #endregion
-    }
-
-    /// <summary>
     /// TV system, PRG-RAM presence (unofficial, rarely used extension)
     /// </summary>
     [Flags]
