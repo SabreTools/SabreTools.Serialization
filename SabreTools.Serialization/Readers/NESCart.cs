@@ -42,16 +42,24 @@ namespace SabreTools.Serialization.Readers
 #endif
                     cart.Trainer = data.ReadBytes(512);
 
-                // Read the PRG-ROM data
+                // Derive the PRG-ROM and CHR-ROM data sizes
                 // TODO: Make model for PRG-ROM data blocks
-                // TODO: Use combined size from 2.0
                 int prgRomSize = cart.Header.PRGROMSize * 16384;
+                int chrRomSize = cart.Header.CHRROMSize * 8192;
+                if (cart.Header is Header2 header2)
+                {
+                    byte msb = (byte)(header2.PRGCHRMSB & 0x0F);
+                    ushort extendedSize = (ushort)((msb << 8) | header.PRGROMSize);
+                    prgRomSize = extendedSize * 16384;
+
+                    msb = (byte)(header2.PRGCHRMSB >> 4);
+                    extendedSize = (ushort)((msb << 8) | header.CHRROMSize);
+                    chrRomSize = extendedSize * 8192;
+                }
+
+                // Read the PRG-ROM and CHR-ROM data
                 if (prgRomSize > 0)
                     cart.PRGROMData = data.ReadBytes(prgRomSize);
-
-                // Read the CHR-ROM data, if necessary
-                // TODO: Use combined size from 2.0
-                int chrRomSize = cart.Header.CHRROMSize * 8192;
                 if (chrRomSize > 0)
                     cart.CHRROMData = data.ReadBytes(chrRomSize);
 
