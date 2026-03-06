@@ -19,6 +19,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Cart.Header"/>
         public Header? Header => Model.Header;
 
+        /// <inheritdoc cref="Header.AlternativeNametableLayout"/>
+        public bool AlternativeNametableLayout => Header?.AlternativeNametableLayout ?? false;
+
+        /// <inheritdoc cref="Header.BatteryBackedPRGRAM"/>
+        public bool BatteryBackedPRGRAM => Header?.BatteryBackedPRGRAM ?? false;
+
         /// <inheritdoc cref="Cart.CHRROMData"/>
         public byte[] CHRROMData => Model.CHRROMData;
 
@@ -39,63 +45,6 @@ namespace SabreTools.Serialization.Wrappers
                     chrRomSize = ((header2.PRGCHRMSB >> 4) << 8) | chrRomSize;
 
                 return chrRomSize;
-            }
-        }
-
-        /// <summary>
-        /// Indicates if an alternative nametable layout is in use
-        /// </summary>
-        public bool HasAlternativeNametableLayout
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag6 & Flag6.AlternativeNametableLayout) != 0;
-#else
-                return Header.Flag6.HasFlag(Flag6.AlternativeNametableLayout);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if battery-backed PRG RAM is present
-        /// </summary>
-        public bool HasBatteryBackedPRGRAM
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag6 & Flag6.BatteryBackedPRGRAMPresent) != 0;
-#else
-                return Header.Flag6.HasFlag(Flag6.BatteryBackedPRGRAMPresent);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if trainer data is present
-        /// </summary>
-        public bool HasTrainer
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag6 & Flag6.TrainerPresent) != 0;
-#else
-                return Header.Flag6.HasFlag(Flag6.TrainerPresent);
-#endif
             }
         }
 
@@ -213,13 +162,17 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null)
                     return 0;
 
-                int mapperNumber = (((byte)Header.Flag7 >> 4) << 4) | ((byte)Header.Flag6 >> 4);
+                int mapperNumber = (((byte)Header.Flag7 >> 4) << 4) | Header.MapperLowerNibble;
                 if (Header is Header2 header2)
                     mapperNumber = ((header2.MapperMSBSubmapper & 0x0F) << 8) | mapperNumber;
 
                 return mapperNumber;
             }
         }
+
+        /// <inheritdoc cref="Header.NametableArrangement"/>
+        public NametableArrangement NametableArrangement
+            => Header?.NametableArrangement ?? NametableArrangement.Vertical;
 
         /// <summary>
         /// PRG-RAM size in bytes
@@ -283,43 +236,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Cart.Trainer"/>
         public byte[] Trainer => Model.Trainer;
 
-        /// <summary>
-        /// Indicates if horizontal nametable arrangement is in use
-        /// </summary>
-        public bool UsesHorizontalNametableArrangement
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag6 & Flag6.NametableArrangementHorizontal) != 0;
-#else
-                return Header.Flag6.HasFlag(Flag6.NametableArrangementHorizontal);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Indicates if vertical nametable arrangement is in use
-        /// </summary>
-        public bool UsesVerticalNametableArrangement
-        {
-            get
-            {
-                // Missing header
-                if (Header is null)
-                    return false;
-
-#if NET20 || NET35
-                return (Header.Flag6 & Flag6.NametableArrangementHorizontal) == 0;
-#else
-                return !Header.Flag6.HasFlag(Flag6.NametableArrangementHorizontal);
-#endif
-            }
-        }
+        /// <inheritdoc cref="Header.TrainerPresent"/>
+        public bool TrainerPresent => Header?.TrainerPresent ?? false;
 
         #endregion
 

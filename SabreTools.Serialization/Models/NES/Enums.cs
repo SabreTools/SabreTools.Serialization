@@ -3,70 +3,6 @@ using System;
 namespace SabreTools.Data.Models.NES
 {
     /// <summary>
-    /// Mapper, mirroring, battery, trainer
-    /// </summary>
-    /// <remarks>Bits 4-7 are the lower nybble of mapper number</remarks>
-    [Flags]
-    public enum Flag6 : byte
-    {
-        #region Bit 0
-
-        /// <summary>
-        /// Vertical arrangement ("horizontal mirrored") or mapper-controlled
-        /// </summary>
-        /// <remarks>CIRAM A10 = PPU A11</remarks>
-        NametableArrangementVertical = 0b0000,
-
-        /// <summary>
-        /// Horizontal arrangement ("vertically mirrored")
-        /// </summary>
-        /// <remarks>CIRAM A10 = PPU A10</remarks>
-        NametableArrangementHorizontal = 0b0001,
-
-        #endregion
-
-        #region Bit 1
-
-        /// <summary>
-        /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
-        /// or other persistent memory not present
-        /// </summary>
-        BatteryBackedPRGRAMNotPresent = 0b0000,
-
-        /// <summary>
-        /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
-        /// or other persistent memory present
-        /// </summary>
-        BatteryBackedPRGRAMPresent = 0b0010,
-
-        #endregion
-
-        #region Bit 2
-
-        /// <summary>
-        /// 512-byte trainer at $7000-$71FF
-        /// </summary>
-        TrainerNotPresent = 0b0000,
-
-        /// <summary>
-        /// 512-byte trainer at $7000-$71FF
-        /// </summary>
-        /// <remarks>Stored before PRG data</remarks>
-        TrainerPresent = 0b0100,
-
-        #endregion
-
-        #region Bit 3
-
-        /// <summary>
-        /// Alternative nametable layout
-        /// </summary>
-        AlternativeNametableLayout = 0b1000,
-
-        #endregion
-    }
-
-    /// <summary>
     /// Mapper, VS/Playchoice, NES 2.0
     /// </summary>
     /// <remarks>Bits 4-7 are the upper nybble of mapper number</remarks>
@@ -105,15 +41,6 @@ namespace SabreTools.Data.Models.NES
         NES20 = 0b1000,
 
         #endregion
-    }
-
-    /// <summary>
-    /// TV system (rarely used extension)
-    /// </summary>
-    public enum TVSystem : byte
-    {
-        NTSC = 0x00,
-        PAL = 0x01,
     }
 
     /// <summary>
@@ -161,6 +88,33 @@ namespace SabreTools.Data.Models.NES
     }
 
     /// <summary>
+    /// Console Type
+    /// </summary>
+    /// <remarks>Actually only 2 bits (bits 0-1 of flag 7)</remarks>
+    public enum ConsoleType : byte
+    {
+        /// <summary>
+        /// Nintendo Entertainment System/Family Computer
+        /// </summary>
+        StandardSystem = 0x00,
+
+        /// <summary>
+        /// VS Unisystem
+        /// </summary>
+        VSUnisystem = 0x01,
+
+        /// <summary>
+        /// PlayChoice-10 (8 KB of Hint Screen data stored after CHR data)
+        /// </summary>
+        PlayChoice10 = 0x02,
+
+        /// <summary>
+        /// Extended Console Type
+        /// </summary>
+        ExtendedConsoleType = 0x03,
+    }
+
+    /// <summary>
     /// CPU/PPU Timing
     /// </summary>
     public enum CPUPPUTiming : byte
@@ -184,221 +138,6 @@ namespace SabreTools.Data.Models.NES
         /// Dendy
         /// </summary>
         UA6538 = 0x03,
-    }
-
-    /// <summary>
-    /// Vs. System Type
-    /// </summary>
-    /// <remarks>Actually only 4 bits</remarks>
-    public enum VsSystemType : byte
-    {
-        /// <summary>
-        /// Any RP2C03/RC2C03 variant
-        /// </summary>
-        AnyRP2C03RC2C03Variant = 0x00,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved1 = 0x01,
-
-        /// <summary>
-        /// RP2C04-0001
-        /// </summary>
-        RP2C040001 = 0x02,
-
-        /// <summary>
-        /// RP2C04-0002
-        /// </summary>
-        RP2C040002 = 0x03,
-
-        /// <summary>
-        /// RP2C04-0003
-        /// </summary>
-        RP2C040003 = 0x04,
-
-        /// <summary>
-        /// RP2C04-0004
-        /// </summary>
-        RP2C040004 = 0x05,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved6 = 0x06,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved7 = 0x07,
-
-        /// <summary>
-        /// RC2C05-01 (signature unknown)
-        /// </summary>
-        RC2C0501 = 0x08,
-
-        /// <summary>
-        /// RC2C05-02 ($2002 AND $3F =$3D)
-        /// </summary>
-        RC2C0502 = 0x09,
-
-        /// <summary>
-        /// RC2C05-03 ($2002 AND $1F =$1C)
-        /// </summary>
-        RC2C0503 = 0x0A,
-
-        /// <summary>
-        /// RC2C05-04 ($2002 AND $1F =$1B)
-        /// </summary>
-        RC2C0504 = 0x0B,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedC = 0x0C,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedD = 0x0D,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedE = 0x0E,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedF = 0x0F,
-    }
-
-    /// <summary>
-    /// Vs. Hardware Type
-    /// </summary>
-    /// <remarks>Actually only 4 bits</remarks>
-    public enum VsHardwareType : byte
-    {
-        /// <summary>
-        /// Vs. Unisystem (normal)
-        /// </summary>
-        VsUnisystem = 0x00,
-
-        /// <summary>
-        /// Vs. Unisystem (RBI Baseball protection)
-        /// </summary>
-        VsUnisystemRBIBaseballProtection = 0x01,
-
-        /// <summary>
-        /// Vs. Unisystem (TKO Boxing protection)
-        /// </summary>
-        VsUnisystemTKOBoxingProtection = 0x02,
-
-        /// <summary>
-        /// Vs. Unisystem (Super Xevious protection)
-        /// </summary>
-        VsUnisystemSuperXeviousProtection = 0x03,
-
-        /// <summary>
-        /// Vs. Unisystem (Vs. Ice Climber Japan protection)
-        /// </summary>
-        VsUnisystemVsIceClimberJapanProtection = 0x04,
-
-        /// <summary>
-        /// Vs. Dual System (normal)
-        /// </summary>
-        VsDualSystem = 0x05,
-
-        /// <summary>
-        /// Vs. Dual System (Raid on Bungeling Bay protection)
-        /// </summary>
-        VsDualSystemRaidOnBungelingBayProtection = 0x06,
-    }
-
-    /// <summary>
-    /// Extended Console Type
-    /// </summary>
-    public enum ExtendedConsoleType : byte
-    {
-        /// <summary>
-        /// Regular NES/Famicom/Dendy
-        /// </summary>
-        RegularSystem = 0x00,
-
-        /// <summary>
-        /// Nintendo Vs. System
-        /// </summary>
-        NintendoVsSystem = 0x01,
-
-        /// <summary>
-        /// Playchoice 10
-        /// </summary>
-        Playchoice10 = 0x02,
-
-        /// <summary>
-        /// Regular Famiclone, but with CPU that supports Decimal Mode
-        /// </summary>
-        RegularFamicloneDecimalMode = 0x03,
-
-        /// <summary>
-        /// Regular NES/Famicom with EPSM module or plug-through cartridge
-        /// </summary>
-        RegularNESWithEPSM = 0x04,
-
-        /// <summary>
-        /// V.R. Technology VT01 with red/cyan STN palette
-        /// </summary>
-        VRTechnologyVT01 = 0x05,
-
-        /// <summary>
-        /// V.R. Technology VT02
-        /// </summary>
-        VRTechnologyVT02 = 0x06,
-
-        /// <summary>
-        /// V.R. Technology VT03
-        /// </summary>
-        VRTechnologyVT03 = 0x07,
-
-        /// <summary>
-        /// V.R. Technology VT09
-        /// </summary>
-        VRTechnologyVT09 = 0x08,
-
-        /// <summary>
-        /// V.R. Technology VT32
-        /// </summary>
-        VRTechnologyVT32 = 0x09,
-
-        /// <summary>
-        /// V.R. Technology VT369
-        /// </summary>
-        VRTechnologyVT369 = 0x0A,
-
-        /// <summary>
-        /// UMC UM6578
-        /// </summary>
-        UMCUM6578 = 0x0B,
-
-        /// <summary>
-        /// Famicom Network System
-        /// </summary>
-        FamicomNetworkSystem = 0x0C,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedD = 0x0D,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedE = 0x0E,
-
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        ReservedF = 0x0F,
     }
 
     /// <summary>
@@ -807,5 +546,258 @@ namespace SabreTools.Data.Models.NES
         /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus Mega Book Mouse
         /// </summary>
         SuborKeyboardPlusMegaBookMouse = 0x4F,
+    }
+
+    /// <summary>
+    /// Extended Console Type
+    /// </summary>
+    public enum ExtendedConsoleType : byte
+    {
+        /// <summary>
+        /// Regular NES/Famicom/Dendy
+        /// </summary>
+        RegularSystem = 0x00,
+
+        /// <summary>
+        /// Nintendo Vs. System
+        /// </summary>
+        NintendoVsSystem = 0x01,
+
+        /// <summary>
+        /// Playchoice 10
+        /// </summary>
+        Playchoice10 = 0x02,
+
+        /// <summary>
+        /// Regular Famiclone, but with CPU that supports Decimal Mode
+        /// </summary>
+        RegularFamicloneDecimalMode = 0x03,
+
+        /// <summary>
+        /// Regular NES/Famicom with EPSM module or plug-through cartridge
+        /// </summary>
+        RegularNESWithEPSM = 0x04,
+
+        /// <summary>
+        /// V.R. Technology VT01 with red/cyan STN palette
+        /// </summary>
+        VRTechnologyVT01 = 0x05,
+
+        /// <summary>
+        /// V.R. Technology VT02
+        /// </summary>
+        VRTechnologyVT02 = 0x06,
+
+        /// <summary>
+        /// V.R. Technology VT03
+        /// </summary>
+        VRTechnologyVT03 = 0x07,
+
+        /// <summary>
+        /// V.R. Technology VT09
+        /// </summary>
+        VRTechnologyVT09 = 0x08,
+
+        /// <summary>
+        /// V.R. Technology VT32
+        /// </summary>
+        VRTechnologyVT32 = 0x09,
+
+        /// <summary>
+        /// V.R. Technology VT369
+        /// </summary>
+        VRTechnologyVT369 = 0x0A,
+
+        /// <summary>
+        /// UMC UM6578
+        /// </summary>
+        UMCUM6578 = 0x0B,
+
+        /// <summary>
+        /// Famicom Network System
+        /// </summary>
+        FamicomNetworkSystem = 0x0C,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedD = 0x0D,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedE = 0x0E,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedF = 0x0F,
+    }
+
+    /// <summary>
+    /// Nametable arrangement
+    /// </summary>
+    /// <remarks>Actually only 1 bit (bit 0 of flag 6)</remarks>
+    public enum NametableArrangement : byte
+    {
+        /// <summary>
+        /// Vertical arrangement ("horizontal mirrored") or mapper-controlled
+        /// </summary>
+        /// <remarks>CIRAM A10 = PPU A11</remarks>
+        Vertical = 0x00,
+
+        /// <summary>
+        /// Horizontal arrangement ("vertically mirrored")
+        /// </summary>
+        /// <remarks>CIRAM A10 = PPU A10</remarks>
+        Horizontal = 0x01,
+    }
+
+    /// <summary>
+    /// PRG RAM ($6000-$7FFF)
+    /// </summary>
+    /// <remarks>Actually only 1 bit (bit 4 of flag 10)</remarks>
+    public enum PRGRAMPresent : byte
+    {
+        Present = 0x00,
+        NotPresent = 0x01,
+    }
+
+    /// <summary>
+    /// TV system (rarely used extension)
+    /// </summary>
+    public enum TVSystem : byte
+    {
+        NTSC = 0x00,
+        PAL = 0x01,
+    }
+
+    /// <summary>
+    /// Vs. Hardware Type
+    /// </summary>
+    /// <remarks>Actually only 4 bits</remarks>
+    public enum VsHardwareType : byte
+    {
+        /// <summary>
+        /// Vs. Unisystem (normal)
+        /// </summary>
+        VsUnisystem = 0x00,
+
+        /// <summary>
+        /// Vs. Unisystem (RBI Baseball protection)
+        /// </summary>
+        VsUnisystemRBIBaseballProtection = 0x01,
+
+        /// <summary>
+        /// Vs. Unisystem (TKO Boxing protection)
+        /// </summary>
+        VsUnisystemTKOBoxingProtection = 0x02,
+
+        /// <summary>
+        /// Vs. Unisystem (Super Xevious protection)
+        /// </summary>
+        VsUnisystemSuperXeviousProtection = 0x03,
+
+        /// <summary>
+        /// Vs. Unisystem (Vs. Ice Climber Japan protection)
+        /// </summary>
+        VsUnisystemVsIceClimberJapanProtection = 0x04,
+
+        /// <summary>
+        /// Vs. Dual System (normal)
+        /// </summary>
+        VsDualSystem = 0x05,
+
+        /// <summary>
+        /// Vs. Dual System (Raid on Bungeling Bay protection)
+        /// </summary>
+        VsDualSystemRaidOnBungelingBayProtection = 0x06,
+    }
+
+    /// <summary>
+    /// Vs. System Type
+    /// </summary>
+    /// <remarks>Actually only 4 bits</remarks>
+    public enum VsSystemType : byte
+    {
+        /// <summary>
+        /// Any RP2C03/RC2C03 variant
+        /// </summary>
+        AnyRP2C03RC2C03Variant = 0x00,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved1 = 0x01,
+
+        /// <summary>
+        /// RP2C04-0001
+        /// </summary>
+        RP2C040001 = 0x02,
+
+        /// <summary>
+        /// RP2C04-0002
+        /// </summary>
+        RP2C040002 = 0x03,
+
+        /// <summary>
+        /// RP2C04-0003
+        /// </summary>
+        RP2C040003 = 0x04,
+
+        /// <summary>
+        /// RP2C04-0004
+        /// </summary>
+        RP2C040004 = 0x05,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved6 = 0x06,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved7 = 0x07,
+
+        /// <summary>
+        /// RC2C05-01 (signature unknown)
+        /// </summary>
+        RC2C0501 = 0x08,
+
+        /// <summary>
+        /// RC2C05-02 ($2002 AND $3F =$3D)
+        /// </summary>
+        RC2C0502 = 0x09,
+
+        /// <summary>
+        /// RC2C05-03 ($2002 AND $1F =$1C)
+        /// </summary>
+        RC2C0503 = 0x0A,
+
+        /// <summary>
+        /// RC2C05-04 ($2002 AND $1F =$1B)
+        /// </summary>
+        RC2C0504 = 0x0B,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedC = 0x0C,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedD = 0x0D,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedE = 0x0E,
+
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        ReservedF = 0x0F,
     }
 }

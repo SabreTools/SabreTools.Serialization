@@ -23,10 +23,40 @@ namespace SabreTools.Data.Models.NES
         /// <remarks>Value 0 means the board uses CHR RAM</remarks>
         public byte CHRROMSize { get; set; }
 
+        #region Flag 6
+
         /// <summary>
-        /// Mapper, mirroring, battery, trainer
+        /// Nametable arrangement
         /// </summary>
-        public Flag6 Flag6 { get; set; }
+        /// <remarks>Flag 6, Bit 0</remarks>
+        public NametableArrangement NametableArrangement { get; set; }
+
+        /// <summary>
+        /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
+        /// or other persistent memory
+        /// </summary>
+        /// <remarks>Flag 6, Bit 1</remarks>
+        public bool BatteryBackedPRGRAM { get; set; }
+
+        /// <summary>
+        /// 512-byte trainer at $7000-$71FF
+        /// </summary>
+        /// <remarks>Flag 6, Bit 2</remarks>
+        public bool TrainerPresent { get; set; }
+
+        /// <summary>
+        /// Alternative nametable layout
+        /// </summary>
+        /// <remarks>Flag 6, Bit 3</remarks>
+        public bool AlternativeNametableLayout { get; set; }
+
+        /// <summary>
+        /// Lower nibble of Mapper number
+        /// </summary>
+        /// <remarks>Flag 6, Bits 4-7</remarks>
+        public byte MapperLowerNibble { get; set; }
+
+        #endregion
 
         /// <summary>
         /// Mapper, VS/Playchoice, NES 2.0

@@ -138,6 +138,19 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Convert a <see cref="NametableArrangement"/> value to string
+        /// </summary>
+        public static string FromNametableArrangement(this NametableArrangement type)
+        {
+            return type switch
+            {
+                NametableArrangement.Vertical => "Vertical",
+                NametableArrangement.Horizontal => "Horizontal",
+                _ => $"Unknown {(byte)type}",
+            };
+        }
+
+        /// <summary>
         /// Convert a <see cref="VsHardwareType"/> value to string
         /// </summary>
         public static string FromVsHardwareType(this VsHardwareType type)

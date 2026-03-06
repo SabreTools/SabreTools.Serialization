@@ -53,44 +53,19 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("  Flag 6:");
 
             // Bit 0
-#if NET20 || NET35
-            if ((header.Flag6 & Flag6.NametableArrangementHorizontal) != 0)
-#else
-            if (header.Flag6.HasFlag(Flag6.NametableArrangementHorizontal))
-#endif
-                builder.AppendLine("    Nametable Arrangement: Horizontal");
-            else
-                builder.AppendLine("    Nametable Arrangement: Vertical");
+            string nametableArrangement = header.NametableArrangement.FromNametableArrangement();
+            builder.AppendLine(nametableArrangement, "    Nametable Arrangement");
 
             // Bit 1
-#if NET20 || NET35
-            if ((header.Flag6 & Flag6.BatteryBackedPRGRAMPresent) != 0)
-#else
-            if (header.Flag6.HasFlag(Flag6.BatteryBackedPRGRAMPresent))
-#endif
-                builder.AppendLine("    Battery-Backed PRG RAM: Present");
-            else
-                builder.AppendLine("    Battery-Backed PRG RAM: Not present");
+            string batteryBackedPrgRam = header.BatteryBackedPRGRAM ? "Present" : "Not present";
+            builder.AppendLine(batteryBackedPrgRam, "    Battery-Backed PRG RAM");
 
             // Bit 2
-#if NET20 || NET35
-            if ((header.Flag6 & Flag6.TrainerPresent) != 0)
-#else
-            if (header.Flag6.HasFlag(Flag6.TrainerPresent))
-#endif
-                builder.AppendLine("    Trainer: Present");
-            else
-                builder.AppendLine("    Trainer: Not present");
+            string trainerPresent = header.TrainerPresent ? "Present" : "Not present";
+            builder.AppendLine(trainerPresent, "    Trainer");
 
             // Bit 3
-#if NET20 || NET35
-            if ((header.Flag6 & Flag6.AlternativeNametableLayout) != 0)
-#else
-            if (header.Flag6.HasFlag(Flag6.AlternativeNametableLayout))
-#endif
-                builder.AppendLine("    Alternative Nametable Layout: True");
-            else
-                builder.AppendLine("    Alternative Nametable Layout: False");
+            builder.AppendLine(header.AlternativeNametableLayout, "    Alternative Nametable Layout");
 
             #endregion
 
@@ -132,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #endregion
 
-            byte mapperNumber = (byte)((((byte)header.Flag7 >> 4) << 4) | (byte)((byte)header.Flag6 >> 4));
+            byte mapperNumber = (byte)((((byte)header.Flag7 >> 4) << 4) | header.MapperLowerNibble);
             builder.AppendLine(mapperNumber, "  Mapper number");
 
             if (header is Header1 header1)
@@ -201,7 +176,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte mapperMsb = (byte)(header2.MapperMSBSubmapper & 0x0F);
                 ushort extendedMapperNumber = (ushort)((mapperMsb << 8)
                     | (byte)((((byte)header.Flag7 >> 4) << 4)
-                    | (byte)((byte)header.Flag6 >> 4)));
+                    | header.MapperLowerNibble));
                 byte submapperNumber = (byte)(header2.MapperMSBSubmapper >> 4);
 
                 builder.AppendLine(mapperMsb, "  Mapper MSB");

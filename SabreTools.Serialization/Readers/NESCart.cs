@@ -35,11 +35,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Read the trainer data, if necessary
-#if NET20 || NET35
-                if ((cart.Header.Flag6 & Flag6.TrainerPresent) != 0)
-#else
-                if (cart.Header.Flag6.HasFlag(Flag6.TrainerPresent))
-#endif
+                if (cart.Header.TrainerPresent)
                     cart.Trainer = data.ReadBytes(512);
 
                 // Derive the PRG-ROM and CHR-ROM data sizes
@@ -102,7 +98,14 @@ namespace SabreTools.Serialization.Readers
 
             byte prgRomSize = data.ReadByteValue();
             byte chrRomSize = data.ReadByteValue();
-            Flag6 flag6 = (Flag6)data.ReadByteValue();
+
+            byte flag6 = data.ReadByteValue();
+            NametableArrangement nametableArrangement = (NametableArrangement)(flag6 & 0x01);
+            bool batteryBackedPrgRam = ((flag6 >> 1) & 0x01) != 0;
+            bool trainerPresent = ((flag6 >> 2) & 0x01) != 0;
+            bool alternativeNametableLayout = ((flag6 >> 3) & 0x01) != 0;
+            byte mapperLowerNibble = (byte)(flag6 >> 4);
+
             Flag7 flag7 = (Flag7)data.ReadByteValue();
 
             // NES 2.0
@@ -117,7 +120,14 @@ namespace SabreTools.Serialization.Readers
                 obj.IdentificationString = identificationString;
                 obj.PRGROMSize = prgRomSize;
                 obj.CHRROMSize = chrRomSize;
-                obj.Flag6 = flag6;
+
+                // Flag 6
+                obj.NametableArrangement = nametableArrangement;
+                obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
+                obj.TrainerPresent = trainerPresent;
+                obj.AlternativeNametableLayout = alternativeNametableLayout;
+                obj.MapperLowerNibble = mapperLowerNibble;
+
                 obj.Flag7 = flag7;
                 obj.MapperMSBSubmapper = data.ReadByteValue();
                 obj.PRGCHRMSB = data.ReadByteValue();
@@ -139,7 +149,14 @@ namespace SabreTools.Serialization.Readers
                 obj.IdentificationString = identificationString;
                 obj.PRGROMSize = prgRomSize;
                 obj.CHRROMSize = chrRomSize;
-                obj.Flag6 = flag6;
+
+                // Flag 6
+                obj.NametableArrangement = nametableArrangement;
+                obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
+                obj.TrainerPresent = trainerPresent;
+                obj.AlternativeNametableLayout = alternativeNametableLayout;
+                obj.MapperLowerNibble = mapperLowerNibble;
+
                 obj.Flag7 = flag7;
                 obj.PRGRAMSize = data.ReadByteValue();
                 obj.TVSystem = (TVSystem)data.ReadByteValue();
