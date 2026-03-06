@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Readers
                 obj.PRGRAMEEPROMSize = data.ReadByteValue();
                 obj.CHRRAMSize = data.ReadByteValue();
                 obj.CPUPPUTiming = (CPUPPUTiming)data.ReadByteValue();
-                obj.ExtendedSystemType = (ExtendedSystemType)data.ReadByteValue();
+                obj.ExtendedSystemType = data.ReadByteValue();
                 obj.MiscellaneousROMs = data.ReadByteValue();
                 obj.DefaultExpansionDevice = (DefaultExpansionDevice)data.ReadByteValue();
 

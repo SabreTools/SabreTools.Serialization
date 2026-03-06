@@ -64,7 +64,7 @@ namespace SabreTools.Data.Models.NES
         /// When Byte 7 AND 3 =1: Vs. System Type
         /// When Byte 7 AND 3 =3: Extended Console Type
         /// </remarks>
-        public ExtendedSystemType ExtendedSystemType { get; set; }
+        public byte ExtendedSystemType { get; set; }
 
         /// <summary>
         /// Number of miscellaneous ROMs present

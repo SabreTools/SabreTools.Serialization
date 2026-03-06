@@ -164,42 +164,35 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// CPU/PPU Timing
     /// </summary>
-    [Flags]
     public enum CPUPPUTiming : byte
     {
-        #region Bits 0-1
-
         /// <summary>
         /// NTSC NES
         /// </summary>
-        RP2C02 = 0b00000000,
+        RP2C02 = 0x00,
 
         /// <summary>
         /// Licensed PAL NES
         /// </summary>
-        RP2C07 = 0b00000001,
+        RP2C07 = 0x01,
 
         /// <summary>
         /// Multiple-region
         /// </summary>
-        MultipleRegion = 0b00000010,
+        MultipleRegion = 0x02,
 
         /// <summary>
         /// Dendy
         /// </summary>
-        UA6538 = 0b00000011,
-
-        #endregion
+        UA6538 = 0x03,
     }
 
     /// <summary>
-    /// Vs. System Type and Extended Console Type
+    /// Vs. System Type
     /// </summary>
-    [Flags]
-    public enum ExtendedSystemType : byte
+    /// <remarks>Actually only 4 bits</remarks>
+    public enum VsSystemType : byte
     {
-        #region Bits 0-3 (Vs. System Type)
-
         /// <summary>
         /// Any RP2C03/RC2C03 variant
         /// </summary>
@@ -208,7 +201,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReserved1 = 0x01,
+        Reserved1 = 0x01,
 
         /// <summary>
         /// RP2C04-0001
@@ -238,7 +231,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReserved7 = 0x07,
+        Reserved7 = 0x07,
 
         /// <summary>
         /// RC2C05-01 (signature unknown)
@@ -263,27 +256,30 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReservedC = 0x0C,
+        ReservedC = 0x0C,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReservedD = 0x0D,
+        ReservedD = 0x0D,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReservedE = 0x0E,
+        ReservedE = 0x0E,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        VsReservedF = 0x0F,
+        ReservedF = 0x0F,
+    }
 
-        #endregion
-
-        #region Bits 4-7 (Vs. System Type)
-
+    /// <summary>
+    /// Vs. Hardware Type
+    /// </summary>
+    /// <remarks>Actually only 4 bits</remarks>
+    public enum VsHardwareType : byte
+    {
         /// <summary>
         /// Vs. Unisystem (normal)
         /// </summary>
@@ -292,37 +288,39 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Vs. Unisystem (RBI Baseball protection)
         /// </summary>
-        VsUnisystemRBIBaseballProtection = 0x10,
+        VsUnisystemRBIBaseballProtection = 0x01,
 
         /// <summary>
         /// Vs. Unisystem (TKO Boxing protection)
         /// </summary>
-        VsUnisystemTKOBoxingProtection = 0x20,
+        VsUnisystemTKOBoxingProtection = 0x02,
 
         /// <summary>
         /// Vs. Unisystem (Super Xevious protection)
         /// </summary>
-        VsUnisystemSuperXeviousProtection = 0x30,
+        VsUnisystemSuperXeviousProtection = 0x03,
 
         /// <summary>
         /// Vs. Unisystem (Vs. Ice Climber Japan protection)
         /// </summary>
-        VsUnisystemVsIceClimberJapanProtection = 0x40,
+        VsUnisystemVsIceClimberJapanProtection = 0x04,
 
         /// <summary>
         /// Vs. Dual System (normal)
         /// </summary>
-        VsDualSystem = 0x50,
+        VsDualSystem = 0x05,
 
         /// <summary>
         /// Vs. Dual System (Raid on Bungeling Bay protection)
         /// </summary>
-        VsDualSystemRaidOnBungelingBayProtection = 0x60,
+        VsDualSystemRaidOnBungelingBayProtection = 0x06,
+    }
 
-        #endregion
-
-        #region Bits 0-3 (Extended Console Type)
-
+    /// <summary>
+    /// Extended Console Type
+    /// </summary>
+    public enum ExtendedConsoleType : byte
+    {
         /// <summary>
         /// Regular NES/Famicom/Dendy
         /// </summary>
@@ -391,19 +389,17 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Reserved
         /// </summary>
-        ExtendedConsoleReservedD = 0x0D,
+        ReservedD = 0x0D,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        ExtendedConsoleReservedE = 0x0E,
+        ReservedE = 0x0E,
 
         /// <summary>
         /// Reserved
         /// </summary>
-        ExtendedConsoleReservedF = 0x0F,
-
-        #endregion
+        ReservedF = 0x0F,
     }
 
     /// <summary>
@@ -500,7 +496,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Two Vaus Controllers plus Famicom Data Recorder
         /// </summary>
-        TwoVausControllers = 0x11,
+        TwoVausControllersPlusFamicomDataRecorder = 0x11,
 
         /// <summary>
         /// Konami Hyper Shot Controller
@@ -590,7 +586,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Family BASIC Keyboard plus Famicom Data Recorder
         /// </summary>
-        FamilyBASICKeyboard = 0x23,
+        FamilyBASICKeyboardPlusFamicomDataRecorder = 0x23,
 
         /// <summary>
         /// 东达 (Dōngdá) PEC Keyboard
@@ -740,7 +736,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// PS/2 Keyboard in UM6578 PS/2 port, PS/2 Mouse via $4017
         /// </summary>
-        PS2KeyboardInUM6578PS2Port = 0x41,
+        PS2KeyboardInUM6578PS2PortPS2Mouse4017 = 0x41,
 
         /// <summary>
         /// PS/2 Mouse in UM6578 PS/2 port
@@ -750,13 +746,13 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// 裕兴 (Yùxìng) Mouse via $4016
         /// </summary>
-        YuxingMouse = 0x43,
+        YuxingMouse4016 = 0x43,
 
         /// <summary>
         /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus 裕兴 (Yùxìng)
         /// Mouse mouse in $4016
         /// </summary>
-        SuborKeyboardPlusYuxingMouse = 0x44,
+        SuborKeyboardPlusYuxingMouse4016 = 0x44,
 
         /// <summary>
         /// Gigggle TV Pump
@@ -766,7 +762,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// 步步高 (Bùbùgāo, a.k.a. BBK) Keyboard plus R90-rotated PS/2 mouse in $4017
         /// </summary>
-        BBKKeyboardPlusR90RotatedPS2Mouse = 0x46,
+        BBKKeyboardPlusR90RotatedPS2Mouse4017 = 0x46,
 
         /// <summary>
         /// Magical Cooking
@@ -801,7 +797,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// 小霸王 (Xiǎobàwáng, a.k.a. Subor) Keyboard plus X-inverted PS/2 mouse in $4017
         /// </summary>
-        SuborKeyboardPlusXInvertedPS2Mouse = 0x4D,
+        SuborKeyboardPlusXInvertedPS2Mouse4017 = 0x4D,
 
         /// <summary>
         /// IBM PC/XT Keyboard
