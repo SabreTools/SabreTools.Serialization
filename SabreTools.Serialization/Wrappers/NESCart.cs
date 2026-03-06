@@ -3,6 +3,8 @@ using SabreTools.Data.Models.NES;
 
 namespace SabreTools.Serialization.Wrappers
 {
+    // TODO: Add printer class
+    // TODO: Add extension properties
     public class NESCart : WrapperBase<Cart>
     {
         #region Descriptive Properties
