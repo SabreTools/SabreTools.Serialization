@@ -3,13 +3,38 @@ using SabreTools.Data.Models.NES;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Add extension properties
+    // TODO: Add better extension properties
     public partial class NESCart : WrapperBase<Cart>
     {
         #region Descriptive Properties
 
         /// <inheritdoc/>
         public override string DescriptionString => "Nintendo Entertainment System Cart Image";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Cart.Header"/>
+        public Header? Header => Model.Header;
+
+        /// <inheritdoc cref="Cart.Trainer"/>
+        public byte[] Trainer => Model.Trainer;
+
+        /// <inheritdoc cref="Cart.PRGROMData"/>
+        public byte[] PRGROMData => Model.PRGROMData;
+
+        /// <inheritdoc cref="Cart.CHRROMData"/>
+        public byte[] CHRROMData => Model.CHRROMData;
+
+        /// <inheritdoc cref="Cart.PlayChoiceINSTROM"/>
+        public byte[] PlayChoiceINSTROM => Model.PlayChoiceINSTROM;
+
+        /// <inheritdoc cref="Cart.PlayChoicePROM"/>
+        public byte[] PlayChoicePROM => Model.PlayChoicePROM;
+
+        /// <inheritdoc cref="Cart.Title"/>
+        public byte[] Title => Model.Title;
 
         #endregion
 
