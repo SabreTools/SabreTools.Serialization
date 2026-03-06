@@ -70,7 +70,7 @@ namespace SabreTools.Data.Models.NES
         /// Number of miscellaneous ROMs present
         /// </summary>
         /// <remarks>Only bits 0-1 are used</remarks>
-        public bool MiscellaneousROMs { get; set; }
+        public byte MiscellaneousROMs { get; set; }
 
         /// <summary>
         /// Default Expansion Device

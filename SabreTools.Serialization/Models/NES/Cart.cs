@@ -35,7 +35,12 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// PlayChoice PROM, if present (16 bytes Data, 16 bytes CounterOut)
         /// </summary>
-        /// <remarks>This is often missing; see PC10 ROM-Images for details</remarks>
+        /// <remarks>
+        /// This is often missing; see PC10 ROM-Images for details
+        /// 16 bytes RP5H01 PROM Data output (needed to decrypt the INST ROM)
+        /// 16 bytes RP5H01 PROM CounterOut output (needed to decrypt the INST ROM) (usually constant: 00,00,00,00,FF,FF,FF,FF,00,00,00,00,FF,FF,FF,FF)
+        /// </remarks>
+        /// TODO: Split into 2 parts
         public byte[] PlayChoicePROM { get; set; } = [];
 
         /// <summary>
