@@ -147,9 +147,7 @@ namespace SabreTools.Serialization.Wrappers
 
         #region NES 1.0
 
-        /// <summary>
-        /// Indicates if the board has bus conflicts
-        /// </summary>
+        /// <inheritdoc cref="Header1.HasBusConflicts"/>
         /// <remarks>Defined only for NES 1.0</remarks>
         public bool HasBusConflicts
         {
@@ -159,19 +157,13 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header1 header1)
                     return false;
 
-#if NET20 || NET35
-                return (header1.Flag10 & Flag10.BoardHasBusConflicts) != 0;
-#else
-                return header1.Flag10.HasFlag(Flag10.BoardHasBusConflicts);
-#endif
+                return header1.HasBusConflicts;
             }
         }
 
-        /// <summary>
-        /// Indicates if PRG RAM at $6000-$7FFF is present
-        /// </summary>
+        /// <inheritdoc cref="Header1.PRGRAMPresent"/>
         /// <remarks>Defined only for NES 1.0</remarks>
-        public bool HasPRGRAM
+        public bool PRGRAMPresent
         {
             get
             {
@@ -179,11 +171,35 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header1 header1)
                     return false;
 
-#if NET20 || NET35
-                return (header1.Flag10 & Flag10.PRGRAMNotPresent) == 0;
-#else
-                return !header1.Flag10.HasFlag(Flag10.PRGRAMNotPresent);
-#endif
+                return header1.PRGRAMPresent;
+            }
+        }
+
+        /// <inheritdoc cref="Header1.TVSystem"/>
+        /// <remarks>Defined only for NES 1.0</remarks>
+        public TVSystem TVSystem
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header1 header1)
+                    return TVSystem.NTSC;
+
+                return header1.TVSystem;
+            }
+        }
+
+        /// <inheritdoc cref="Header1.TVSystemExtended"/>
+        /// <remarks>Defined only for NES 1.0</remarks>
+        public TVSystemExtended TVSystemExtended
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header1 header1)
+                    return TVSystemExtended.NTSC;
+
+                return header1.TVSystemExtended;
             }
         }
 

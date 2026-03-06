@@ -166,6 +166,34 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Convert a <see cref="TVSystem"/> value to string
+        /// </summary>
+        public static string FromTVSystem(this TVSystem system)
+        {
+            return system switch
+            {
+                TVSystem.NTSC => "NTSC",
+                TVSystem.PAL => "PAL",
+                _ => $"Unknown {(byte)system}",
+            };
+        }
+
+         /// <summary>
+        /// Convert a <see cref="TVSystemExtended"/> value to string
+        /// </summary>
+        public static string FromTVSystemExtended(this TVSystemExtended system)
+        {
+            return system switch
+            {
+                TVSystemExtended.NTSC => "NTSC",
+                TVSystemExtended.DualCompatible1 => "Dual-compatible (0x01)",
+                TVSystemExtended.PAL => "PAL",
+                TVSystemExtended.DualCompatible3 => "Dual-compatible (0x03)",
+                _ => $"Unknown {(byte)system}",
+            };
+        }
+
+        /// <summary>
         /// Convert a <see cref="VsHardwareType"/> value to string
         /// </summary>
         public static string FromVsHardwareType(this VsHardwareType type)

@@ -36,14 +36,64 @@ namespace SabreTools.Data.Models.NES
         /// </remarks>
         public TVSystem TVSystem { get; set; }
 
+        #region Byte 10
+
         /// <summary>
-        /// TV system, PRG-RAM presence (unofficial, rarely used extension)
+        /// TV system with extended values
         /// </summary>
         /// <remarks>
+        /// Byte 10, Bits 0-1
+        ///
         /// This byte is not part of the official specification, and relatively
         /// few emulators honor it.
         /// </remarks>
-        public Flag10 Flag10 { get; set; }
+        public TVSystemExtended TVSystemExtended { get; set; }
+
+        /// <summary>
+        /// Unknown reserved bits
+        /// </summary>
+        /// <remarks>
+        /// Byte 10, Bits 2-3
+        ///
+        /// This byte is not part of the official specification, and relatively
+        /// few emulators honor it.
+        /// </remarks>
+        public byte ReservedBits23 { get; set; }
+
+        /// <summary>
+        /// PRG RAM ($6000-$7FFF) present
+        /// </summary>
+        /// <remarks>
+        /// Byte 10, Bit 4
+        ///
+        /// This byte is not part of the official specification, and relatively
+        /// few emulators honor it.
+        /// </remarks>
+        public bool PRGRAMPresent { get; set; }
+
+        /// <summary>
+        /// Board has bus conflicts
+        /// </summary>
+        /// <remarks>
+        /// Byte 10, Bit 5
+        ///
+        /// This byte is not part of the official specification, and relatively
+        /// few emulators honor it.
+        /// </remarks>
+        public bool HasBusConflicts { get; set; }
+
+        /// <summary>
+        /// Unknown reserved bits
+        /// </summary>
+        /// <remarks>
+        /// Byte 10, Bits 6-7
+        ///
+        /// This byte is not part of the official specification, and relatively
+        /// few emulators honor it.
+        /// </remarks>
+        public byte ReservedBits67 { get; set; }
+
+        #endregion
 
         /// <summary>
         /// Unused padding to align to 16 bytes

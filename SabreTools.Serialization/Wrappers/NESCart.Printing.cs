@@ -91,7 +91,8 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header1.PRGRAMSize, prefixString: "  PRG-RAM size in 8KiB units");
 
                 // Byte 9
-                builder.AppendLine($"  TV system: {header1.TVSystem} (0x{header1.TVSystem:X})");
+                string tvSystem = header1.TVSystem.FromTVSystem();
+                builder.AppendLine(tvSystem, "  TV system");
 
                 // Byte 10
                 #region Flag 10
@@ -99,46 +100,21 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("  Flag 10:");
 
                 // Bits 0-1
-#if NET20 || NET35
-                if ((header1.Flag10 & Flag10.DualCompatible2) != 0)
-#else
-                if (header1.Flag10.HasFlag(Flag10.DualCompatible2))
-#endif
-                    builder.AppendLine("    TV System: Dual-compatible");
-#if NET20 || NET35
-                else if ((header1.Flag10 & Flag10.PAL) != 0)
-#else
-                else if (header1.Flag10.HasFlag(Flag10.PAL))
-#endif
-                    builder.AppendLine("    TV System: PAL");
-#if NET20 || NET35
-                else if ((header1.Flag10 & Flag10.DualCompatible1) != 0)
-#else
-                else if (header1.Flag10.HasFlag(Flag10.DualCompatible1))
-#endif
-                    builder.AppendLine("    TV System: Dual-compatible");
-                else
-                    builder.AppendLine("    TV System: NTSC");
+                string tvSystemExtended = header1.TVSystemExtended.FromTVSystemExtended();
+                builder.AppendLine(tvSystemExtended, "    TV System Extended");
+
+                // Bits 2-3
+                builder.AppendLine(header1.ReservedBits23, "    Reserved bits 1-2");
 
                 // Bit 4
-#if NET20 || NET35
-                if ((header1.Flag10 & Flag10.PRGRAMNotPresent) != 0)
-#else
-                if (header1.Flag10.HasFlag(Flag10.PRGRAMNotPresent))
-#endif
-                    builder.AppendLine("    PRG-RAM: Not present");
-                else
-                    builder.AppendLine("    PRG-RAM: Present");
+                string prgRamPresent = header1.PRGRAMPresent ? "Present" : "Not present";
+                builder.AppendLine(prgRamPresent, "    PRG-RAM");
 
                 // Bit 5
-#if NET20 || NET35
-                if ((header1.Flag10 & Flag10.BoardHasBusConflicts) != 0)
-#else
-                if (header1.Flag10.HasFlag(Flag10.BoardHasBusConflicts))
-#endif
-                    builder.AppendLine("    Has Bus Conflicts: True");
-                else
-                    builder.AppendLine("    Has Bus Conflicts: False");
+                builder.AppendLine(header1.HasBusConflicts, "    Has Bus Conflicts");
+
+                // Bits 6-7
+                builder.AppendLine(header1.ReservedBits67, "    Reserved bits 6-7");
 
                 #endregion
 

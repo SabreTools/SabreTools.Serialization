@@ -93,17 +93,17 @@ namespace SabreTools.Serialization.Readers
             byte prgRomSize = data.ReadByteValue();
             byte chrRomSize = data.ReadByteValue();
 
-            byte flag6 = data.ReadByteValue();
-            NametableArrangement nametableArrangement = (NametableArrangement)(flag6 & 0x01);
-            bool batteryBackedPrgRam = ((flag6 >> 1) & 0x01) != 0;
-            bool trainerPresent = ((flag6 >> 2) & 0x01) != 0;
-            bool alternativeNametableLayout = ((flag6 >> 3) & 0x01) != 0;
-            byte mapperLowerNibble = (byte)(flag6 >> 4);
+            byte byte6 = data.ReadByteValue();
+            NametableArrangement nametableArrangement = (NametableArrangement)(byte6 & 0x01);
+            bool batteryBackedPrgRam = ((byte6 >> 1) & 0x01) != 0;
+            bool trainerPresent = ((byte6 >> 2) & 0x01) != 0;
+            bool alternativeNametableLayout = ((byte6 >> 3) & 0x01) != 0;
+            byte mapperLowerNibble = (byte)(byte6 >> 4);
 
-            byte flag7 = data.ReadByteValue();
-            ConsoleType consoleType = (ConsoleType)(flag7 & 0x03);
-            bool nes20 = ((flag7 >> 2) & 0x02) == 0x02;
-            byte mapperUpperNibble = (byte)(flag7 >> 4);
+            byte byte7 = data.ReadByteValue();
+            ConsoleType consoleType = (ConsoleType)(byte7 & 0x03);
+            bool nes20 = ((byte7 >> 2) & 0x02) == 0x02;
+            byte mapperUpperNibble = (byte)(byte7 >> 4);
 
             // NES 2.0
             if (nes20)
@@ -147,21 +147,29 @@ namespace SabreTools.Serialization.Readers
                 obj.PRGROMSize = prgRomSize;
                 obj.CHRROMSize = chrRomSize;
 
-                // Flag 6
+                // Byte 6
                 obj.NametableArrangement = nametableArrangement;
                 obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
                 obj.TrainerPresent = trainerPresent;
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
 
-                // Flag 7
+                // Byte 7
                 obj.ConsoleType = consoleType;
                 obj.NES20 = nes20;
                 obj.MapperUpperNibble = mapperUpperNibble;
 
                 obj.PRGRAMSize = data.ReadByteValue();
                 obj.TVSystem = (TVSystem)data.ReadByteValue();
-                obj.Flag10 = (Flag10)data.ReadByteValue();
+
+                // Byte 10
+                byte byte10 = data.ReadByteValue();
+                obj.TVSystemExtended = (TVSystemExtended)(byte10 & 0x03);
+                obj.ReservedBits23 = (byte)((byte10 >> 2) & 0x03);
+                obj.PRGRAMPresent = ((byte10 >> 4) & 0x01) == 0x01;
+                obj.HasBusConflicts = ((byte10 >> 5) & 0x01) == 0x01;
+                obj.ReservedBits67 = (byte)((byte10 >> 6) & 0x03);
+
                 obj.Padding = data.ReadBytes(5);
 
                 return obj;

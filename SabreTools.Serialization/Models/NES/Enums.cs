@@ -1,51 +1,5 @@
-using System;
-
 namespace SabreTools.Data.Models.NES
 {
-    /// <summary>
-    /// TV system, PRG-RAM presence (unofficial, rarely used extension)
-    /// </summary>
-    [Flags]
-    public enum Flag10 : byte
-    {
-        #region Bits 0-1
-
-        NTSC = 0b000000,
-        DualCompatible1 = 0b000001,
-        PAL = 0b000010,
-        DualCompatible2 = 0b000011,
-
-        #endregion
-
-        #region Bit 4
-
-        /// <summary>
-        /// PRG RAM ($6000-$7FFF) present
-        /// </summary>
-        PRGRAMPresent = 0b000000,
-
-        /// <summary>
-        /// PRG RAM ($6000-$7FFF) not present
-        /// </summary>
-        PRGRAMNotPresent = 0b010000,
-
-        #endregion
-
-        #region Bit 5
-
-        /// <summary>
-        /// Board has no bus conflicts
-        /// </summary>
-        BoardHasNoBusConflicts = 0b000000,
-
-        /// <summary>
-        /// Board has bus conflicts
-        /// </summary>
-        BoardHasBusConflicts = 0b100000,
-
-        #endregion
-    }
-
     /// <summary>
     /// Console Type
     /// </summary>
@@ -625,10 +579,23 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// TV system (rarely used extension)
     /// </summary>
+    /// <remarks>Byte 9</remarks>
     public enum TVSystem : byte
     {
         NTSC = 0x00,
         PAL = 0x01,
+    }
+
+    /// <summary>
+    /// TV system with extended values
+    /// </summary>
+    /// <remarks>Actually only 2 bits (bits 0-1 of flag 10)</remarks>
+    public enum TVSystemExtended : byte
+    {
+        NTSC = 0x00,
+        DualCompatible1 = 0x01,
+        PAL = 0x02,
+        DualCompatible3 = 0x03,
     }
 
     /// <summary>
