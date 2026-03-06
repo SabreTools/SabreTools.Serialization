@@ -3,7 +3,6 @@ using SabreTools.Data.Models.NES;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Add extension properties for more 1.0 and 2.0 header pieces
     public partial class NESCart : WrapperBase<Cart>
     {
         #region Descriptive Properties
@@ -15,6 +14,8 @@ namespace SabreTools.Serialization.Wrappers
 
         #region Extension Properties
 
+        #region Common
+
         /// <inheritdoc cref="Cart.Header"/>
         public Header? Header => Model.Header;
 
@@ -22,40 +23,9 @@ namespace SabreTools.Serialization.Wrappers
         public byte[] CHRROMData => Model.CHRROMData;
 
         /// <summary>
-        /// CHR-NVRAM size in bytes
-        /// </summary>
-        public int CHRNVRAMSize
-        {
-            get
-            {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
-                    return 0;
-
-                byte shift = (byte)(header2.CHRRAMSize >> 4);
-                return shift > 0 ? 64 << shift : 0;
-            }
-        }
-
-        /// <summary>
-        /// CHR-RAM size in bytes
-        /// </summary>
-        public int CHRRAMSize
-        {
-            get
-            {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
-                    return 0;
-
-                byte shift = (byte)(header2.CHRRAMSize & 0x0F);
-                return shift > 0 ? 64 << shift : 0;
-            }
-        }
-
-        /// <summary>
         /// CHR-ROM size in bytes
         /// </summary>
+        /// <remarks>Extended by NES 2.0</remarks>
         public int CHRROMSize
         {
             get
@@ -69,30 +39,6 @@ namespace SabreTools.Serialization.Wrappers
                     chrRomSize = ((header2.PRGCHRMSB >> 4) << 8) | chrRomSize;
 
                 return chrRomSize;
-            }
-        }
-
-        /// <summary>
-        /// Extended console type
-        /// </summary>
-        /// <remarks>Only valid if <see cref="Flag7.ExtendedConsoleType"/> is set</remarks>
-        public ExtendedConsoleType ExtendedConsoleType
-        {
-            get
-            {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
-                    return ExtendedConsoleType.RegularSystem;
-
-#if NET20 || NET35
-                if ((Header.Flag7 & Flag7.ExtendedConsoleType) != 0)
-#else
-                if (Header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
-#endif
-                    return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
-
-                // If flag is unset
-                return ExtendedConsoleType.RegularSystem;
             }
         }
 
@@ -156,6 +102,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Indicates if the game is meant for an extended console type
         /// </summary>
+        /// <remarks>Possibly only valid for NES 2.0</remarks>
         public bool IsExtendedConsole
         {
             get
@@ -257,6 +204,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Mapper number
         /// </summary>
+        /// <remarks>Extended by NES 2.0</remarks>
         public int MapperNumber
         {
             get
@@ -274,40 +222,36 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// PRG-NVRAM/EEPROM size in bytes
-        /// </summary>
-        public int PRGRAMEEPROMSize
-        {
-            get
-            {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
-                    return 0;
-
-                byte shift = (byte)(header2.PRGRAMEEPROMSize >> 4);
-                return shift > 0 ? 64 << shift : 0;
-            }
-        }
-
-        /// <summary>
         /// PRG-RAM size in bytes
         /// </summary>
         public int PRGRAMSize
         {
             get
             {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
+                // Missing header
+                if (Header is null)
                     return 0;
 
-                byte shift = (byte)(header2.PRGRAMEEPROMSize & 0x0F);
-                return shift > 0 ? 64 << shift : 0;
+                if (Header is Header1 header1)
+                {
+                    return header1.PRGRAMSize > 0 ? header1.PRGRAMSize * 8192 : 8192;
+                }
+                else if (Header is Header2 header2)
+                {
+                    byte shift = (byte)(header2.PRGRAMEEPROMSize & 0x0F);
+                    return shift > 0 ? 64 << shift : 0;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
         /// <summary>
         /// PRG-ROM size in bytes
         /// </summary>
+        /// <remarks>Extended by NES 2.0</remarks>
         public int PRGROMSize
         {
             get
@@ -332,21 +276,6 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Cart.PlayChoicePROM"/>
         public byte[] PlayChoicePROM => Model.PlayChoicePROM;
-
-        /// <summary>
-        /// Submapper number
-        /// </summary>
-        public int SubmapperNumber
-        {
-            get
-            {
-                // Missing or invalid header
-                if (Header is null || Header is not Header2 header2)
-                    return 0;
-
-                return header2.MapperMSBSubmapper >> 4;
-            }
-        }
 
         /// <inheritdoc cref="Cart.Title"/>
         public byte[] Title => Model.Title;
@@ -392,9 +321,198 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
+        #endregion
+
+        #region NES 1.0
+
+        /// <summary>
+        /// Indicates if the board has bus conflicts
+        /// </summary>
+        /// <remarks>Defined only for NES 1.0</remarks>
+        public bool HasBusConflicts
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header1 header1)
+                    return false;
+
+#if NET20 || NET35
+                return (header1.Flag10 & Flag10.BoardHasBusConflicts) != 0;
+#else
+                return header1.Flag10.HasFlag(Flag10.BoardHasBusConflicts);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if PRG RAM at $6000-$7FFF is present
+        /// </summary>
+        /// <remarks>Defined only for NES 1.0</remarks>
+        public bool HasPRGRAM
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header1 header1)
+                    return false;
+
+#if NET20 || NET35
+                return (header1.Flag10 & Flag10.PRGRAMNotPresent) == 0;
+#else
+                return !header1.Flag10.HasFlag(Flag10.PRGRAMNotPresent);
+#endif
+            }
+        }
+
+        #endregion
+
+        #region NES 2.0
+
+        /// <summary>
+        /// CHR-NVRAM size in bytes
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public int CHRNVRAMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.CHRRAMSize >> 4);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// CHR-RAM size in bytes
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public int CHRRAMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.CHRRAMSize & 0x0F);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// CPU/PPU Timing
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public CPUPPUTiming CPUPPUTiming
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return CPUPPUTiming.RP2C02;
+
+                return header2.CPUPPUTiming;
+            }
+        }
+
+        /// <summary>
+        /// Default expansion device
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public DefaultExpansionDevice DefaultExpansionDevice
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return DefaultExpansionDevice.Unspecified;
+
+                return header2.DefaultExpansionDevice;
+            }
+        }
+
+        /// <summary>
+        /// Extended console type
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        /// <remarks>Only valid if <see cref="Flag7.ExtendedConsoleType"/> is set</remarks>
+        public ExtendedConsoleType ExtendedConsoleType
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return ExtendedConsoleType.RegularSystem;
+
+#if NET20 || NET35
+                if ((Header.Flag7 & Flag7.ExtendedConsoleType) != 0)
+#else
+                if (Header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
+#endif
+                    return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
+
+                // If flag is unset
+                return ExtendedConsoleType.RegularSystem;
+            }
+        }
+
+        /// <summary>
+        /// Number of miscellaneous ROMs present
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public int MiscellaneousROMs
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                return header2.MiscellaneousROMs;
+            }
+        }
+
+        /// <summary>
+        /// PRG-NVRAM/EEPROM size in bytes
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public int PRGRAMEEPROMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.PRGRAMEEPROMSize >> 4);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// Submapper number
+        /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
+        public int SubmapperNumber
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                return header2.MapperMSBSubmapper >> 4;
+            }
+        }
+
         /// <summary>
         /// Vs. Hardware Type
         /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
         /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
         public VsHardwareType VsHardwareType
         {
@@ -419,6 +537,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Vs. System Type
         /// </summary>
+        /// <remarks>Defined only for NES 2.0</remarks>
         /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
         public VsSystemType VsSystemType
         {
@@ -439,6 +558,8 @@ namespace SabreTools.Serialization.Wrappers
                 return VsSystemType.AnyRP2C03RC2C03Variant;
             }
         }
+
+        #endregion
 
         #endregion
 
