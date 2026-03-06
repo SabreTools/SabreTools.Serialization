@@ -23,13 +23,13 @@ namespace SabreTools.Serialization.Wrappers
             //builder.AppendLine(Model.Trainer, "Trainer Data");
             builder.AppendLine(Model.Trainer.Length, "Trainer Data Length");
             //builder.AppendLine(Model.PRGROMData, "PRG-ROM Data");
-            builder.AppendLine(Model.PRGROMData.Length, "PRG-ROM Data Length");
+            builder.AppendLine(Model.PrgRomData.Length, "PRG-ROM Data Length");
             //builder.AppendLine(Model.CHRROMData, "CHR-ROM Data");
-            builder.AppendLine(Model.CHRROMData.Length, "CHR-ROM Data Length");
+            builder.AppendLine(Model.ChrRomData.Length, "CHR-ROM Data Length");
             //builder.AppendLine(Model.PlayChoiceINSTROM, "PlayChoice INST-ROM Data");
-            builder.AppendLine(Model.PlayChoiceINSTROM.Length, "PlayChoice INST-ROM Data Length");
+            builder.AppendLine(Model.PlayChoiceInstRom.Length, "PlayChoice INST-ROM Data Length");
             //builder.AppendLine(Model.PlayChoicePROM, "PlayChoice PROM Data");
-            builder.AppendLine(Model.PlayChoicePROM.Length, "PlayChoice PROM Data Length");
+            builder.AppendLine(Model.PlayChoiceProm.Length, "PlayChoice PROM Data Length");
             builder.AppendLine(Model.Title, "Title");
         }
 
@@ -45,8 +45,8 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             builder.AppendLine(header.IdentificationString, "  Identification string");
-            builder.AppendLine(header.PRGROMSize, "  PRG-ROM size in 16KiB units");
-            builder.AppendLine(header.CHRROMSize, "  CHR-ROM size in 8KiB units");
+            builder.AppendLine(header.PrgRomSize, "  PRG-ROM size in 16KiB units");
+            builder.AppendLine(header.ChrRomSize, "  CHR-ROM size in 8KiB units");
 
             #region Flag 6
 
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(nametableArrangement, "    Nametable Arrangement");
 
             // Bit 1
-            string batteryBackedPrgRam = header.BatteryBackedPRGRAM ? "Present" : "Not present";
+            string batteryBackedPrgRam = header.BatteryBackedPrgRam ? "Present" : "Not present";
             builder.AppendLine(batteryBackedPrgRam, "    Battery-Backed PRG RAM");
 
             // Bit 2
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Wrappers
             if (header is Header1 header1)
             {
                 // Byte 8
-                builder.AppendLine(header1.PRGRAMSize, prefixString: "  PRG-RAM size in 8KiB units");
+                builder.AppendLine(header1.PrgRamSize, prefixString: "  PRG-RAM size in 8KiB units");
 
                 // Byte 9
                 string tvSystem = header1.TVSystem.FromTVSystem();
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header1.ReservedBits23, "    Reserved bits 1-2");
 
                 // Bit 4
-                string prgRamPresent = header1.PRGRAMPresent ? "Present" : "Not present";
+                string prgRamPresent = header1.PrgRamPresent ? "Present" : "Not present";
                 builder.AppendLine(prgRamPresent, "    PRG-RAM");
 
                 // Bit 5
@@ -133,30 +133,30 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header2.Submapper, "  Submapper");
 
                 // Byte 9
-                ushort extendedPrgRomSize = (ushort)((header2.PRGROMSizeMSB << 8) | header.PRGROMSize);
-                ushort extendedChrRomSize = (ushort)((header2.CHRROMSizeMSB << 8) | header.CHRROMSize);
+                ushort extendedPrgRomSize = (ushort)((header2.PrgRomSizeMSB << 8) | header.PrgRomSize);
+                ushort extendedChrRomSize = (ushort)((header2.ChrRomSizeMSB << 8) | header.ChrRomSize);
 
-                builder.AppendLine(header2.PRGROMSizeMSB, "  PRG-ROM size MSB");
+                builder.AppendLine(header2.PrgRomSizeMSB, "  PRG-ROM size MSB");
                 builder.AppendLine(extendedPrgRomSize, "  Extended PRG-ROM size");
-                builder.AppendLine(header2.CHRROMSizeMSB, "  CHR-ROM size MSB");
+                builder.AppendLine(header2.ChrRomSizeMSB, "  CHR-ROM size MSB");
                 builder.AppendLine(extendedChrRomSize, "  Extended CHR-ROM size");
 
                 // Byte 10
-                int prgRamSize = header2.PRGRAMShiftCount > 0 ? 64 << header2.PRGRAMShiftCount : 0;
-                int eepromSize = header2.PRGNVRAMEEPROMShiftCount > 0 ? 64 << header2.PRGNVRAMEEPROMShiftCount : 0;
+                int prgRamSize = header2.PrgRamShiftCount > 0 ? 64 << header2.PrgRamShiftCount : 0;
+                int eepromSize = header2.PrgNvramEepromShiftCount > 0 ? 64 << header2.PrgNvramEepromShiftCount : 0;
 
-                builder.AppendLine(header2.PRGRAMShiftCount, "  PRG-RAM shift count");
+                builder.AppendLine(header2.PrgRamShiftCount, "  PRG-RAM shift count");
                 builder.AppendLine(prgRamSize, "  PRG-RAM size");
-                builder.AppendLine(header2.PRGNVRAMEEPROMShiftCount, "  PRG-NVRAM/EEPROM shift count");
+                builder.AppendLine(header2.PrgNvramEepromShiftCount, "  PRG-NVRAM/EEPROM shift count");
                 builder.AppendLine(eepromSize, "  PRG-NVRAM/EEPROM size");
 
                 // Byte 11
-                int chrRamSize = header2.CHRRAMShiftCount > 0 ? 64 << header2.CHRRAMShiftCount : 0;
-                int chrNvramSize = header2.CHRNVRAMShiftCount > 0 ? 64 << header2.CHRNVRAMShiftCount : 0;
+                int chrRamSize = header2.ChrRamShiftCount > 0 ? 64 << header2.ChrRamShiftCount : 0;
+                int chrNvramSize = header2.ChrNvramShiftCount > 0 ? 64 << header2.ChrNvramShiftCount : 0;
 
-                builder.AppendLine(header2.CHRRAMShiftCount, "  CHR-RAM shift count");
+                builder.AppendLine(header2.ChrRamShiftCount, "  CHR-RAM shift count");
                 builder.AppendLine(chrRamSize, "  CHR-RAM size");
-                builder.AppendLine(header2.CHRNVRAMShiftCount, "  CHR-NVRAM shift count");
+                builder.AppendLine(header2.ChrNvramShiftCount, "  CHR-NVRAM shift count");
                 builder.AppendLine(chrNvramSize, "  CHR-NVRAM size");
 
                 // Byte 12

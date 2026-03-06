@@ -20,17 +20,17 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// PRG ROM data (16384 * x bytes)
         /// </summary>
-        public byte[] PRGROMData { get; set; } = [];
+        public byte[] PrgRomData { get; set; } = [];
 
         /// <summary>
         /// CHR ROM data, if present (8192 * y bytes)
         /// </summary>
-        public byte[] CHRROMData { get; set; } = [];
+        public byte[] ChrRomData { get; set; } = [];
 
         /// <summary>
         /// PlayChoice INST-ROM, if present (0 or 8192 bytes)
         /// </summary>
-        public byte[] PlayChoiceINSTROM { get; set; } = [];
+        public byte[] PlayChoiceInstRom { get; set; } = [];
 
         /// <summary>
         /// PlayChoice PROM, if present (16 bytes Data, 16 bytes CounterOut)
@@ -41,7 +41,7 @@ namespace SabreTools.Data.Models.NES
         /// 16 bytes RP5H01 PROM CounterOut output (needed to decrypt the INST ROM) (usually constant: 00,00,00,00,FF,FF,FF,FF,00,00,00,00,FF,FF,FF,FF)
         /// </remarks>
         /// TODO: Split into 2 parts
-        public byte[] PlayChoicePROM { get; set; } = [];
+        public byte[] PlayChoiceProm { get; set; } = [];
 
         /// <summary>
         /// Some ROM-Images additionally contain a 128-byte (or sometimes 127-byte)

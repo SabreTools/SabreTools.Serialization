@@ -15,13 +15,13 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Size of PRG ROM in 16 KB units
         /// </summary>
-        public byte PRGROMSize { get; set; }
+        public byte PrgRomSize { get; set; }
 
         /// <summary>
         /// Size of CHR ROM in 8 KB units
         /// </summary>
         /// <remarks>Value 0 means the board uses CHR RAM</remarks>
-        public byte CHRROMSize { get; set; }
+        public byte ChrRomSize { get; set; }
 
         #region Byte 6
 
@@ -36,7 +36,7 @@ namespace SabreTools.Data.Models.NES
         /// or other persistent memory
         /// </summary>
         /// <remarks>Byte 6, Bit 1</remarks>
-        public bool BatteryBackedPRGRAM { get; set; }
+        public bool BatteryBackedPrgRam { get; set; }
 
         /// <summary>
         /// 512-byte trainer at $7000-$71FF

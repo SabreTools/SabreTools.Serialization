@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.NES
         /// This was a later extension to the iNES format and not widely used.
         /// NES 2.0 is recommended for specifying PRG RAM size instead.
         /// </remarks>
-        public byte PRGRAMSize { get; set; }
+        public byte PrgRamSize { get; set; }
 
         /// <summary>
         /// TV system (rarely used extension)
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Models.NES
         /// This byte is not part of the official specification, and relatively
         /// few emulators honor it.
         /// </remarks>
-        public bool PRGRAMPresent { get; set; }
+        public bool PrgRamPresent { get; set; }
 
         /// <summary>
         /// Board has bus conflicts

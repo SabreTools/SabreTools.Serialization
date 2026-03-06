@@ -22,17 +22,17 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Header.AlternativeNametableLayout"/>
         public bool AlternativeNametableLayout => Header?.AlternativeNametableLayout ?? false;
 
-        /// <inheritdoc cref="Header.BatteryBackedPRGRAM"/>
-        public bool BatteryBackedPRGRAM => Header?.BatteryBackedPRGRAM ?? false;
+        /// <inheritdoc cref="Header.BatteryBackedPrgRam"/>
+        public bool BatteryBackedPrgRam => Header?.BatteryBackedPrgRam ?? false;
 
-        /// <inheritdoc cref="Cart.CHRROMData"/>
-        public byte[] CHRROMData => Model.CHRROMData;
+        /// <inheritdoc cref="Cart.ChrRomData"/>
+        public byte[] ChrRomData => Model.ChrRomData;
 
         /// <summary>
         /// CHR-ROM size in bytes
         /// </summary>
         /// <remarks>Extended by NES 2.0</remarks>
-        public int CHRROMSize
+        public int ChrRomSize
         {
             get
             {
@@ -40,9 +40,9 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null)
                     return 0;
 
-                int chrRomSize = Header.CHRROMSize * 8192;
+                int chrRomSize = Header.ChrRomSize * 8192;
                 if (Header is Header2 header2)
-                    chrRomSize = (header2.CHRROMSizeMSB << 8) | chrRomSize;
+                    chrRomSize = (header2.ChrRomSizeMSB << 8) | chrRomSize;
 
                 return chrRomSize;
             }
@@ -52,10 +52,10 @@ namespace SabreTools.Serialization.Wrappers
         public ConsoleType ConsoleType => Header?.ConsoleType ?? ConsoleType.StandardSystem;
 
         /// <summary>
-        /// Mapper number
+        /// Mapper ID
         /// </summary>
         /// <remarks>Extended by NES 2.0</remarks>
-        public int MapperNumber
+        public int Mapper
         {
             get
             {
@@ -81,7 +81,8 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// PRG-RAM size in bytes
         /// </summary>
-        public int PRGRAMSize
+        /// <remarks>Extended by NES 2.0</remarks>
+        public int PrgRamSize
         {
             get
             {
@@ -90,9 +91,9 @@ namespace SabreTools.Serialization.Wrappers
                     return 0;
 
                 if (Header is Header1 header1)
-                    return header1.PRGRAMSize > 0 ? header1.PRGRAMSize * 8192 : 8192;
+                    return header1.PrgRamSize > 0 ? header1.PrgRamSize * 8192 : 8192;
                 else if (Header is Header2 header2)
-                    return header2.PRGRAMShiftCount > 0 ? 64 << header2.PRGRAMShiftCount : 0;
+                    return header2.PrgRamShiftCount > 0 ? 64 << header2.PrgRamShiftCount : 0;
                 else
                     return 0;
             }
@@ -102,7 +103,7 @@ namespace SabreTools.Serialization.Wrappers
         /// PRG-ROM size in bytes
         /// </summary>
         /// <remarks>Extended by NES 2.0</remarks>
-        public int PRGROMSize
+        public int PrgRomSize
         {
             get
             {
@@ -110,22 +111,22 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null)
                     return 0;
 
-                int prgRomSize = Header.PRGROMSize * 16384;
+                int prgRomSize = Header.PrgRomSize * 16384;
                 if (Header is Header2 header2)
-                    prgRomSize = (header2.PRGROMSizeMSB << 8) | prgRomSize;
+                    prgRomSize = (header2.PrgRomSizeMSB << 8) | prgRomSize;
 
                 return prgRomSize;
             }
         }
 
-        /// <inheritdoc cref="Cart.PRGROMData"/>
-        public byte[] PRGROMData => Model.PRGROMData;
+        /// <inheritdoc cref="Cart.PrgRomData"/>
+        public byte[] PrgRomData => Model.PrgRomData;
 
-        /// <inheritdoc cref="Cart.PlayChoiceINSTROM"/>
-        public byte[] PlayChoiceINSTROM => Model.PlayChoiceINSTROM;
+        /// <inheritdoc cref="Cart.PlayChoiceInstRom"/>
+        public byte[] PlayChoiceInstRom => Model.PlayChoiceInstRom;
 
-        /// <inheritdoc cref="Cart.PlayChoicePROM"/>
-        public byte[] PlayChoicePROM => Model.PlayChoicePROM;
+        /// <inheritdoc cref="Cart.PlayChoiceProm"/>
+        public byte[] PlayChoiceProm => Model.PlayChoiceProm;
 
         /// <inheritdoc cref="Cart.Title"/>
         public byte[] Title => Model.Title;
@@ -154,9 +155,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
 
-        /// <inheritdoc cref="Header1.PRGRAMPresent"/>
+        /// <inheritdoc cref="Header1.PrgRamPresent"/>
         /// <remarks>Defined only for NES 1.0</remarks>
-        public bool PRGRAMPresent
+        public bool PrgRamPresent
         {
             get
             {
@@ -164,7 +165,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header1 header1)
                     return false;
 
-                return header1.PRGRAMPresent;
+                return header1.PrgRamPresent;
             }
         }
 
@@ -204,7 +205,7 @@ namespace SabreTools.Serialization.Wrappers
         /// CHR-NVRAM size in bytes
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        public int CHRNVRAMSize
+        public int ChrNvramSize
         {
             get
             {
@@ -212,7 +213,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                return header2.CHRNVRAMShiftCount > 0 ? 64 << header2.CHRNVRAMShiftCount : 0;
+                return header2.ChrNvramShiftCount > 0 ? 64 << header2.ChrNvramShiftCount : 0;
             }
         }
 
@@ -220,7 +221,7 @@ namespace SabreTools.Serialization.Wrappers
         /// CHR-RAM size in bytes
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        public int CHRRAMSize
+        public int ChrRamSize
         {
             get
             {
@@ -228,7 +229,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                return header2.CHRRAMShiftCount > 0 ? 64 << header2.CHRRAMShiftCount : 0;
+                return header2.ChrRamShiftCount > 0 ? 64 << header2.ChrRamShiftCount : 0;
             }
         }
 
@@ -268,7 +269,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Extended console type
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        /// <remarks>Only valid if <see cref="Flag7.ExtendedConsoleType"/> is set</remarks>
         public ExtendedConsoleType ExtendedConsoleType
         {
             get
@@ -305,7 +305,7 @@ namespace SabreTools.Serialization.Wrappers
         /// PRG-NVRAM/EEPROM size in bytes
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        public int PRGRAMEEPROMSize
+        public int PrgNvramEepromSize
         {
             get
             {
@@ -313,15 +313,13 @@ namespace SabreTools.Serialization.Wrappers
                 if (Header is null || Header is not Header2 header2)
                     return 0;
 
-                return header2.PRGNVRAMEEPROMShiftCount > 0 ? 64 << header2.PRGNVRAMEEPROMShiftCount : 0;
+                return header2.PrgNvramEepromShiftCount > 0 ? 64 << header2.PrgNvramEepromShiftCount : 0;
             }
         }
 
-        /// <summary>
-        /// Submapper number
-        /// </summary>
+        /// <inheritdoc cref="Header2.Submapper"/>
         /// <remarks>Defined only for NES 2.0</remarks>
-        public int SubmapperNumber
+        public int Submapper
         {
             get
             {
@@ -337,7 +335,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Vs. Hardware Type
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
         public VsHardwareType VsHardwareType
         {
             get
@@ -358,7 +355,6 @@ namespace SabreTools.Serialization.Wrappers
         /// Vs. System Type
         /// </summary>
         /// <remarks>Defined only for NES 2.0</remarks>
-        /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
         public VsSystemType VsSystemType
         {
             get

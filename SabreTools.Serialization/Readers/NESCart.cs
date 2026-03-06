@@ -40,30 +40,30 @@ namespace SabreTools.Serialization.Readers
 
                 // Derive the PRG-ROM and CHR-ROM data sizes
                 // TODO: Make model for PRG-ROM data blocks
-                int prgRomSize = cart.Header.PRGROMSize * 16384;
-                int chrRomSize = cart.Header.CHRROMSize * 8192;
+                int prgRomSize = cart.Header.PrgRomSize * 16384;
+                int chrRomSize = cart.Header.ChrRomSize * 8192;
                 if (cart.Header is Header2 header2)
                 {
-                    ushort extendedSize = (ushort)((header2.PRGROMSizeMSB << 8)
-                        | header.PRGROMSize);
+                    ushort extendedSize = (ushort)((header2.PrgRomSizeMSB << 8)
+                        | header.PrgRomSize);
                     prgRomSize = extendedSize * 16384;
 
-                    extendedSize = (ushort)((header2.CHRROMSizeMSB << 8)
-                        | header.CHRROMSize);
+                    extendedSize = (ushort)((header2.ChrRomSizeMSB << 8)
+                        | header.ChrRomSize);
                     chrRomSize = extendedSize * 8192;
                 }
 
                 // Read the PRG-ROM and CHR-ROM data
                 if (prgRomSize > 0)
-                    cart.PRGROMData = data.ReadBytes(prgRomSize);
+                    cart.PrgRomData = data.ReadBytes(prgRomSize);
                 if (chrRomSize > 0)
-                    cart.CHRROMData = data.ReadBytes(chrRomSize);
+                    cart.ChrRomData = data.ReadBytes(chrRomSize);
 
                 // Read the PlayChoice INST-ROM and PROM data, if necessary
                 if (cart.Header.ConsoleType == ConsoleType.PlayChoice10)
                 {
-                    cart.PlayChoiceINSTROM = data.ReadBytes(8192);
-                    cart.PlayChoicePROM = data.ReadBytes(32);
+                    cart.PlayChoiceInstRom = data.ReadBytes(8192);
+                    cart.PlayChoiceProm = data.ReadBytes(32);
                 }
 
                 // Read the cart title, if it exists
@@ -111,12 +111,12 @@ namespace SabreTools.Serialization.Readers
                 var obj = new Header2();
 
                 obj.IdentificationString = identificationString;
-                obj.PRGROMSize = prgRomSize;
-                obj.CHRROMSize = chrRomSize;
+                obj.PrgRomSize = prgRomSize;
+                obj.ChrRomSize = chrRomSize;
 
                 // Byte 6
                 obj.NametableArrangement = nametableArrangement;
-                obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
+                obj.BatteryBackedPrgRam = batteryBackedPrgRam;
                 obj.TrainerPresent = trainerPresent;
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
@@ -133,18 +133,18 @@ namespace SabreTools.Serialization.Readers
 
                 // Byte 9
                 byte byte9 = data.ReadByteValue();
-                obj.PRGROMSizeMSB = (byte)(byte9 & 0x0F);
-                obj.CHRROMSizeMSB = (byte)((byte9 >> 4) & 0x0F);
+                obj.PrgRomSizeMSB = (byte)(byte9 & 0x0F);
+                obj.ChrRomSizeMSB = (byte)((byte9 >> 4) & 0x0F);
 
                 // Byte 10
                 byte byte10 = data.ReadByteValue();
-                obj.PRGRAMShiftCount = (byte)(byte10 & 0x0F);
-                obj.PRGNVRAMEEPROMShiftCount = (byte)((byte10 >> 4) & 0x0F);
+                obj.PrgRamShiftCount = (byte)(byte10 & 0x0F);
+                obj.PrgNvramEepromShiftCount = (byte)((byte10 >> 4) & 0x0F);
 
                 // Byte 11
                 byte byte11 = data.ReadByteValue();
-                obj.CHRRAMShiftCount = (byte)(byte11 & 0x0F);
-                obj.CHRNVRAMShiftCount = (byte)((byte11 >> 4) & 0x0F);
+                obj.ChrRamShiftCount = (byte)(byte11 & 0x0F);
+                obj.ChrNvramShiftCount = (byte)((byte11 >> 4) & 0x0F);
 
                 obj.CPUPPUTiming = (CPUPPUTiming)data.ReadByteValue();
                 obj.ExtendedSystemType = data.ReadByteValue();
@@ -160,12 +160,12 @@ namespace SabreTools.Serialization.Readers
                 var obj = new Header1();
 
                 obj.IdentificationString = identificationString;
-                obj.PRGROMSize = prgRomSize;
-                obj.CHRROMSize = chrRomSize;
+                obj.PrgRomSize = prgRomSize;
+                obj.ChrRomSize = chrRomSize;
 
                 // Byte 6
                 obj.NametableArrangement = nametableArrangement;
-                obj.BatteryBackedPRGRAM = batteryBackedPrgRam;
+                obj.BatteryBackedPrgRam = batteryBackedPrgRam;
                 obj.TrainerPresent = trainerPresent;
                 obj.AlternativeNametableLayout = alternativeNametableLayout;
                 obj.MapperLowerNibble = mapperLowerNibble;
@@ -175,14 +175,14 @@ namespace SabreTools.Serialization.Readers
                 obj.NES20 = nes20;
                 obj.MapperUpperNibble = mapperUpperNibble;
 
-                obj.PRGRAMSize = data.ReadByteValue();
+                obj.PrgRamSize = data.ReadByteValue();
                 obj.TVSystem = (TVSystem)data.ReadByteValue();
 
                 // Byte 10
                 byte byte10 = data.ReadByteValue();
                 obj.TVSystemExtended = (TVSystemExtended)(byte10 & 0x03);
                 obj.ReservedBits23 = (byte)((byte10 >> 2) & 0x03);
-                obj.PRGRAMPresent = ((byte10 >> 4) & 0x01) == 0x01;
+                obj.PrgRamPresent = ((byte10 >> 4) & 0x01) == 0x01;
                 obj.HasBusConflicts = ((byte10 >> 5) & 0x01) == 0x01;
                 obj.ReservedBits67 = (byte)((byte10 >> 6) & 0x03);
 
