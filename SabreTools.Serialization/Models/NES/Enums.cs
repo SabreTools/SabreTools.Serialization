@@ -568,16 +568,6 @@ namespace SabreTools.Data.Models.NES
     }
 
     /// <summary>
-    /// PRG RAM ($6000-$7FFF)
-    /// </summary>
-    /// <remarks>Actually only 1 bit (bit 4 of flag 10)</remarks>
-    public enum PRGRAMPresent : byte
-    {
-        Present = 0x00,
-        NotPresent = 0x01,
-    }
-
-    /// <summary>
     /// TV system (rarely used extension)
     /// </summary>
     /// <remarks>Byte 9</remarks>
