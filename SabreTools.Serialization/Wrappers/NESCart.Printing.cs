@@ -229,7 +229,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte chrRamShiftCount = (byte)(header2.CHRRAMSize & 0x0F);
                 int chrRamSize = chrRamShiftCount > 0 ? 64 << chrRamShiftCount : 0;
                 byte chrNvramShiftCount = (byte)(header2.CHRRAMSize >> 4);
-                int chrNvramSize = eepromShiftCount > 0 ? 64 << chrNvramShiftCount : 0;
+                int chrNvramSize = chrNvramShiftCount > 0 ? 64 << chrNvramShiftCount : 0;
 
                 builder.AppendLine(chrRamShiftCount, "  CHR-RAM shift count");
                 builder.AppendLine(chrRamSize, "  CHR-RAM size");

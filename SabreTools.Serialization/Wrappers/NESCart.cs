@@ -3,7 +3,7 @@ using SabreTools.Data.Models.NES;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    // TODO: Add better extension properties
+    // TODO: Add extension properties for more 1.0 and 2.0 header pieces
     public partial class NESCart : WrapperBase<Cart>
     {
         #region Descriptive Properties
@@ -18,14 +18,314 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Cart.Header"/>
         public Header? Header => Model.Header;
 
-        /// <inheritdoc cref="Cart.Trainer"/>
-        public byte[] Trainer => Model.Trainer;
+        /// <inheritdoc cref="Cart.CHRROMData"/>
+        public byte[] CHRROMData => Model.CHRROMData;
+
+        /// <summary>
+        /// CHR-NVRAM size in bytes
+        /// </summary>
+        public int CHRNVRAMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.CHRRAMSize >> 4);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// CHR-RAM size in bytes
+        /// </summary>
+        public int CHRRAMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.CHRRAMSize & 0x0F);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// CHR-ROM size in bytes
+        /// </summary>
+        public int CHRROMSize
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return 0;
+
+                int chrRomSize = Header.CHRROMSize * 8192;
+                if (Header is Header2 header2)
+                    chrRomSize = ((header2.PRGCHRMSB >> 4) << 8) | chrRomSize;
+
+                return chrRomSize;
+            }
+        }
+
+        /// <summary>
+        /// Extended console type
+        /// </summary>
+        /// <remarks>Only valid if <see cref="Flag7.ExtendedConsoleType"/> is set</remarks>
+        public ExtendedConsoleType ExtendedConsoleType
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return ExtendedConsoleType.RegularSystem;
+
+#if NET20 || NET35
+                if ((Header.Flag7 & Flag7.ExtendedConsoleType) != 0)
+#else
+                if (Header.Flag7.HasFlag(Flag7.ExtendedConsoleType))
+#endif
+                    return (ExtendedConsoleType)(header2.ExtendedSystemType & 0x0F);
+
+                // If flag is unset
+                return ExtendedConsoleType.RegularSystem;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if an alternative nametable layout is in use
+        /// </summary>
+        public bool HasAlternativeNametableLayout
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag6 & Flag6.AlternativeNametableLayout) != 0;
+#else
+                return Header.Flag6.HasFlag(Flag6.AlternativeNametableLayout);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if battery-backed PRG RAM is present
+        /// </summary>
+        public bool HasBatteryBackedPRGRAM
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag6 & Flag6.BatteryBackedPRGRAMPresent) != 0;
+#else
+                return Header.Flag6.HasFlag(Flag6.BatteryBackedPRGRAMPresent);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if trainer data is present
+        /// </summary>
+        public bool HasTrainer
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag6 & Flag6.TrainerPresent) != 0;
+#else
+                return Header.Flag6.HasFlag(Flag6.TrainerPresent);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the game is meant for an extended console type
+        /// </summary>
+        public bool IsExtendedConsole
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag7 & Flag7.ExtendedConsoleType) != 0;
+#else
+                return Header.Flag7.HasFlag(Flag7.ExtendedConsoleType);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the cart is using an NES 2.0 header
+        /// </summary>
+        public bool IsNES20
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag7 & Flag7.NES20) != 0;
+#else
+                return Header.Flag7.HasFlag(Flag7.NES20);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the game is meant for PlayChoice-10
+        /// </summary>
+        public bool IsPlayChoice10
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag7 & Flag7.PlayChoice10) != 0
+                    && (Header.Flag7 & Flag7.VSUnisystem) == 0;
+#else
+                return Header.Flag7.HasFlag(Flag7.PlayChoice10)
+                    && !Header.Flag7.HasFlag(Flag7.VSUnisystem);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the game is meant for a standard console
+        /// </summary>
+        public bool IsStandardConsole
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag7 & Flag7.PlayChoice10) == 0
+                    && (Header.Flag7 & Flag7.VSUnisystem) == 0;
+#else
+                return !Header.Flag7.HasFlag(Flag7.PlayChoice10)
+                    && !Header.Flag7.HasFlag(Flag7.VSUnisystem);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the game is meant for Vs. Unisystem
+        /// </summary>
+        public bool IsVsUnisystem
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag7 & Flag7.PlayChoice10) == 0
+                    && (Header.Flag7 & Flag7.VSUnisystem) != 0;
+#else
+                return !Header.Flag7.HasFlag(Flag7.PlayChoice10)
+                    && Header.Flag7.HasFlag(Flag7.VSUnisystem);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Mapper number
+        /// </summary>
+        public int MapperNumber
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return 0;
+
+                int mapperNumber = (((byte)Header.Flag7 >> 4) << 4) | ((byte)Header.Flag6 >> 4);
+                if (Header is Header2 header2)
+                    mapperNumber = ((header2.MapperMSBSubmapper & 0x0F) << 8) | mapperNumber;
+
+                return mapperNumber;
+            }
+        }
+
+        /// <summary>
+        /// PRG-NVRAM/EEPROM size in bytes
+        /// </summary>
+        public int PRGRAMEEPROMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.PRGRAMEEPROMSize >> 4);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// PRG-RAM size in bytes
+        /// </summary>
+        public int PRGRAMSize
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                byte shift = (byte)(header2.PRGRAMEEPROMSize & 0x0F);
+                return shift > 0 ? 64 << shift : 0;
+            }
+        }
+
+        /// <summary>
+        /// PRG-ROM size in bytes
+        /// </summary>
+        public int PRGROMSize
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return 0;
+
+                int prgRomSize = Header.PRGROMSize * 16384;
+                if (Header is Header2 header2)
+                    prgRomSize = ((header2.PRGCHRMSB & 0x0F) << 8) | prgRomSize;
+
+                return prgRomSize;
+            }
+        }
 
         /// <inheritdoc cref="Cart.PRGROMData"/>
         public byte[] PRGROMData => Model.PRGROMData;
-
-        /// <inheritdoc cref="Cart.CHRROMData"/>
-        public byte[] CHRROMData => Model.CHRROMData;
 
         /// <inheritdoc cref="Cart.PlayChoiceINSTROM"/>
         public byte[] PlayChoiceINSTROM => Model.PlayChoiceINSTROM;
@@ -33,8 +333,112 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Cart.PlayChoicePROM"/>
         public byte[] PlayChoicePROM => Model.PlayChoicePROM;
 
+        /// <summary>
+        /// Submapper number
+        /// </summary>
+        public int SubmapperNumber
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return 0;
+
+                return header2.MapperMSBSubmapper >> 4;
+            }
+        }
+
         /// <inheritdoc cref="Cart.Title"/>
         public byte[] Title => Model.Title;
+
+        /// <inheritdoc cref="Cart.Trainer"/>
+        public byte[] Trainer => Model.Trainer;
+
+        /// <summary>
+        /// Indicates if horizontal nametable arrangement is in use
+        /// </summary>
+        public bool UsesHorizontalNametableArrangement
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag6 & Flag6.NametableArrangementHorizontal) != 0;
+#else
+                return Header.Flag6.HasFlag(Flag6.NametableArrangementHorizontal);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Indicates if vertical nametable arrangement is in use
+        /// </summary>
+        public bool UsesVerticalNametableArrangement
+        {
+            get
+            {
+                // Missing header
+                if (Header is null)
+                    return false;
+
+#if NET20 || NET35
+                return (Header.Flag6 & Flag6.NametableArrangementHorizontal) == 0;
+#else
+                return !Header.Flag6.HasFlag(Flag6.NametableArrangementHorizontal);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Vs. Hardware Type
+        /// </summary>
+        /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
+        public VsHardwareType VsHardwareType
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return VsHardwareType.VsUnisystem;
+
+#if NET20 || NET35
+                else if ((Header.Flag7 & Flag7.VSUnisystem) != 0)
+#else
+                else if (Header.Flag7.HasFlag(Flag7.VSUnisystem))
+#endif
+                    return (VsHardwareType)(header2.ExtendedSystemType >> 4);
+
+                // If flag is unset
+                return VsHardwareType.VsUnisystem;
+            }
+        }
+
+        /// <summary>
+        /// Vs. System Type
+        /// </summary>
+        /// <remarks>Only valid if <see cref="Flag7.VSUnisystem"/> is set</remarks>
+        public VsSystemType VsSystemType
+        {
+            get
+            {
+                // Missing or invalid header
+                if (Header is null || Header is not Header2 header2)
+                    return VsSystemType.AnyRP2C03RC2C03Variant;
+
+#if NET20 || NET35
+                else if ((Header.Flag7 & Flag7.VSUnisystem) != 0)
+#else
+                else if (Header.Flag7.HasFlag(Flag7.VSUnisystem))
+#endif
+                    return (VsSystemType)(header2.ExtendedSystemType & 0x0F);
+
+                // If flag is unset
+                return VsSystemType.AnyRP2C03RC2C03Variant;
+            }
+        }
 
         #endregion
 
