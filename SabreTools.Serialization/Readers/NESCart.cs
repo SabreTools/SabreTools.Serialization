@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Readers
         {
             // Cache data until NES 2.0 flag determined
             byte[] identificationString = data.ReadBytes(4);
-            if (identificationString.EqualsExactly(SignatureBytes))
+            if (!identificationString.EqualsExactly(SignatureBytes))
                 return null;
 
             byte prgRomSize = data.ReadByteValue();
