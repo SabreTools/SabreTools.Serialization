@@ -15,13 +15,13 @@ namespace SabreTools.Data.Models.NES
         /// Vertical arrangement ("horizontal mirrored") or mapper-controlled
         /// </summary>
         /// <remarks>CIRAM A10 = PPU A11</remarks>
-        NametableArrangementVertical = 0b00000000,
+        NametableArrangementVertical = 0b0000,
 
         /// <summary>
         /// Horizontal arrangement ("vertically mirrored")
         /// </summary>
         /// <remarks>CIRAM A10 = PPU A10</remarks>
-        NametableArrangementHorizontal = 0b00000001,
+        NametableArrangementHorizontal = 0b0001,
 
         #endregion
 
@@ -31,13 +31,13 @@ namespace SabreTools.Data.Models.NES
         /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
         /// or other persistent memory not present
         /// </summary>
-        BatteryBackedPRGRAMNotPresent = 0b00000000,
+        BatteryBackedPRGRAMNotPresent = 0b0000,
 
         /// <summary>
         /// Cartridge contains battery-backed PRG RAM ($6000-7FFF)
         /// or other persistent memory present
         /// </summary>
-        BatteryBackedPRGRAMPresent = 0b00000010,
+        BatteryBackedPRGRAMPresent = 0b0010,
 
         #endregion
 
@@ -46,13 +46,13 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// 512-byte trainer at $7000-$71FF
         /// </summary>
-        TrainerNotPresent = 0b00000000,
+        TrainerNotPresent = 0b0000,
 
         /// <summary>
         /// 512-byte trainer at $7000-$71FF
         /// </summary>
         /// <remarks>Stored before PRG data</remarks>
-        TrainerPresent = 0b00000100,
+        TrainerPresent = 0b0100,
 
         #endregion
 
@@ -61,7 +61,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Alternative nametable layout
         /// </summary>
-        AlternativeNametableLayout = 0b00001000,
+        AlternativeNametableLayout = 0b1000,
 
         #endregion
     }
@@ -78,22 +78,22 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Nintendo Entertainment System/Family Computer
         /// </summary>
-        StandardSystem = 0b00000000,
+        StandardSystem = 0b0000,
 
         /// <summary>
         /// VS Unisystem
         /// </summary>
-        VSUnisystem = 0b00000001,
+        VSUnisystem = 0b0001,
 
         /// <summary>
         /// PlayChoice-10 (8 KB of Hint Screen data stored after CHR data)
         /// </summary>
-        PlayChoice10 = 0b00000010,
+        PlayChoice10 = 0b0010,
 
         /// <summary>
         /// Extended Console Type
         /// </summary>
-        ExtendedConsoleType = 0b00000011,
+        ExtendedConsoleType = 0b0011,
 
         #endregion
 
@@ -102,7 +102,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// If equal to 2, flags 8-15 are in NES 2.0 format
         /// </summary>
-        NES20 = 0b00001000,
+        NES20 = 0b1000,
 
         #endregion
     }
@@ -110,11 +110,10 @@ namespace SabreTools.Data.Models.NES
     /// <summary>
     /// TV system (rarely used extension)
     /// </summary>
-    [Flags]
     public enum TVSystem : byte
     {
-        NTSC = 0b00000000,
-        PAL = 0b00000001,
+        NTSC = 0x00,
+        PAL = 0x01,
     }
 
     /// <summary>
@@ -125,10 +124,10 @@ namespace SabreTools.Data.Models.NES
     {
         #region Bits 0-1
 
-        NTSC = 0b00000000,
-        DualCompatible1 = 0b00000001,
-        PAL = 0b00000010,
-        DualCompatible2 = 0b00000011,
+        NTSC = 0b000000,
+        DualCompatible1 = 0b000001,
+        PAL = 0b000010,
+        DualCompatible2 = 0b000011,
 
         #endregion
 
@@ -137,12 +136,12 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// PRG RAM ($6000-$7FFF) present
         /// </summary>
-        PRGRAMPresent = 0b00000000,
+        PRGRAMPresent = 0b000000,
 
         /// <summary>
         /// PRG RAM ($6000-$7FFF) not present
         /// </summary>
-        PRGRAMNotPresent = 0b00010000,
+        PRGRAMNotPresent = 0b010000,
 
         #endregion
 
@@ -151,12 +150,12 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// Board has no bus conflicts
         /// </summary>
-        BoardHasNoBusConflicts = 0b00000000,
+        BoardHasNoBusConflicts = 0b000000,
 
         /// <summary>
         /// Board has bus conflicts
         /// </summary>
-        BoardHasBusConflicts = 0b00100000,
+        BoardHasBusConflicts = 0b100000,
 
         #endregion
     }
