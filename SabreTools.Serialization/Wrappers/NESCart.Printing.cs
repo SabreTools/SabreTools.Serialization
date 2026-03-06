@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.PlayChoiceINSTROM.Length, "PlayChoice INST-ROM Data Length");
             //builder.AppendLine(Model.PlayChoicePROM, "PlayChoice PROM Data");
             builder.AppendLine(Model.PlayChoicePROM.Length, "PlayChoice PROM Data Length");
-            builder.AppendLine(Model.Title, "Title:");
+            builder.AppendLine(Model.Title, "Title");
         }
 
         private static void Print(StringBuilder builder, Header? header)
