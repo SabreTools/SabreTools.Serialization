@@ -68,6 +68,7 @@ Options:
 | Microsoft LZ-compressed files | KWAJ, QBasic, and SZDD variants |
 | MoPaQ game data archive (MPQ) | Windows only |
 | New Exectuable | Embedded archives and executables in the overlay and Wise installer |
+| Nintendo Entertainment System (NES) Cart Image | Header, Trainer data, PRG-ROM, CHR-ROM, Unheadered ROM, and PlayChoice-10 INST-ROM |
 | NovaLogic Game Archive Format (PFF) | |
 | PKZIP and derived files (ZIP, etc.) | .NET Framework 4.6.2 and greater |
 | Portable Executable | Embedded archives and executables in the resources and overlay, CExe-packed data, SFX archives (7-zip, PKZIP, and RAR), and Wise installer |

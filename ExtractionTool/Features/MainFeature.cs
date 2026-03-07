@@ -230,6 +230,11 @@ namespace ExtractionTool.Features
                     nex.Extract(OutputPath, Debug);
                     break;
 
+                // NES Cart
+                case NESCart nes:
+                    nes.Extract(OutputPath, Debug);
+                    break;
+
                 // PAK
                 case PAK pak:
                     pak.Extract(OutputPath, Debug);
