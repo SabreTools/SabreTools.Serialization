@@ -32,8 +32,8 @@ namespace SabreTools.Data.Models.Atari7800
         /// Endianness possibly varies by version?
         /// Version 1 - Big-endian
         /// Version 2 - ?????
-        /// Version 3 - ?????
-        /// Version 4 - ?????
+        /// Version 3 - Documented as little-endian (unconfirmed)
+        /// Version 4 - Documented as little-endian (unconfirmed)
         /// </remarks>
         public uint RomSizeWithoutHeader { get; set; }
 

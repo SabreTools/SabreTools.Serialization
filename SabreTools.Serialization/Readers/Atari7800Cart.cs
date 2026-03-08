@@ -66,7 +66,11 @@ namespace SabreTools.Serialization.Readers
             obj.HeaderVersion = data.ReadByteValue();
             obj.MagicText = data.ReadBytes(16);
             obj.CartTitle = data.ReadBytes(32);
-            obj.RomSizeWithoutHeader = data.ReadUInt32BigEndian();
+            if (obj.HeaderVersion == 1)
+                obj.RomSizeWithoutHeader = data.ReadUInt32BigEndian();
+            else
+                obj.RomSizeWithoutHeader = data.ReadUInt32LittleEndian();
+
             obj.CartType = (CartType)data.ReadUInt16LittleEndian();
             obj.Controller1Type = (ControllerType)data.ReadByteValue();
             obj.Controller2Type = (ControllerType)data.ReadByteValue();
