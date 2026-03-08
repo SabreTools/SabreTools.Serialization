@@ -15,6 +15,7 @@ namespace SabreTools.Serialization
             return fileType switch
             {
                 WrapperType.AACSMediaKeyBlock => AACSMediaKeyBlock.Create(data),
+                WrapperType.Atari7800Cart => Atari7800Cart.Create(data),
                 WrapperType.BDPlusSVM => BDPlusSVM.Create(data),
                 WrapperType.BFPK => BFPK.Create(data),
                 WrapperType.BSP => BSP.Create(data),
@@ -165,6 +166,30 @@ namespace SabreTools.Serialization
             // HD-DVD
             if (extension.Equals("aacs", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.AACSMediaKeyBlock;
+
+            #endregion
+
+            // TODO: Figure out how to use constants here
+            #region Atari7800Cart
+
+            // Version 1 header
+            if (magic.StartsWith([0x01, 0x41, 0x54, 0x41, 0x52, 0x49, 0x37, 0x38, 0x30, 0x30]))
+                return WrapperType.Atari7800Cart;
+
+            // Version 2 header
+            if (magic.StartsWith([0x02, 0x41, 0x54, 0x41, 0x52, 0x49, 0x37, 0x38, 0x30, 0x30]))
+                return WrapperType.Atari7800Cart;
+
+            // Version 3 header
+            if (magic.StartsWith([0x03, 0x41, 0x54, 0x41, 0x52, 0x49, 0x37, 0x38, 0x30, 0x30]))
+                return WrapperType.Atari7800Cart;
+
+            // Version 4 header
+            if (magic.StartsWith([0x04, 0x41, 0x54, 0x41, 0x52, 0x49, 0x37, 0x38, 0x30, 0x30]))
+                return WrapperType.Atari7800Cart;
+
+            if (extension.Equals("a78", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.Atari7800Cart;
 
             #endregion
 

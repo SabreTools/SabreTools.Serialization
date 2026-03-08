@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the header
                 var header = ParseHeader(data);
-                if (header == null)
+                if (header is null)
                     return null;
 
                 // Set the header

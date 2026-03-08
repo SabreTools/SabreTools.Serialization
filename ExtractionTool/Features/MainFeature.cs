@@ -150,6 +150,11 @@ namespace ExtractionTool.Features
                     sz.Extract(OutputPath, Debug);
                     break;
 
+                // Atari 78800 Cart
+                case Atari7800Cart a7800:
+                    a7800.Extract(OutputPath, Debug);
+                    break;
+
                 // BFPK archive
                 case BFPK bfpk:
                     bfpk.Extract(OutputPath, Debug);

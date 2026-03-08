@@ -5,7 +5,7 @@ namespace SabreTools.Data.Extensions
     public static class NESCart
     {
         /// <summary>
-        /// Convert a <see cref="CPUPPConsoleTypeUTiming"/> value to string
+        /// Convert a <see cref="ConsoleType"/> value to string
         /// </summary>
         public static string FromConsoleType(this ConsoleType type)
         {

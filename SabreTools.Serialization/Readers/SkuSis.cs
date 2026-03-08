@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Readers
         public override Data.Models.VDF.SkuSis? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -39,12 +39,12 @@ namespace SabreTools.Serialization.Readers
                 data.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
                 var jsonBytes = ParseSkuSis(data);
-                if (jsonBytes == null)
+                if (jsonBytes is null)
                     return null;
 
                 var deserializer = new SkuSisJson();
                 var skuSisJson = deserializer.Deserialize(jsonBytes, 0);
-                if (skuSisJson == null)
+                if (skuSisJson is null)
                     return null;
 
                 return skuSisJson;
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Readers
             while (!reader.EndOfStream)
             {
                 string? line = reader.ReadLine();
-                if (line == null)
+                if (line is null)
                     continue;
 
                 // Curly braces are always on their own lines

@@ -11,6 +11,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [3DBrew](https://www.3dbrew.org/wiki/Main_Page) | N3DS |
 | [Aaru Data Preservation Suite](https://github.com/aaru-dps) | PIC |
 | [Advanced Access Content System Licensing Administrator (AACS LA)](https://aacsla.com/) | AACS |
+| [Atari 7800 Development Wiki](https://7800.8bitdev.org/index.php/Main_Page) | Atari7800Cart |
 | [BYTE*](https://web.archive.org/web/20240703222951/https://bytepointer.com/index.htm) | NewExecutable |
 | [cabextract/libmspack](https://www.cabextract.org.uk/) | LZ |
 | [DBox](https://dbox.tools/) | Xbox |

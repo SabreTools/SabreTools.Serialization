@@ -16,6 +16,11 @@ namespace SabreTools.Serialization.Wrappers
         AACSMediaKeyBlock,
 
         /// <summary>
+        /// Atari7800 cart image
+        /// </summary>
+        Atari7800Cart,
+
+        /// <summary>
         /// BD+ SVM
         /// </summary>
         BDPlusSVM,
