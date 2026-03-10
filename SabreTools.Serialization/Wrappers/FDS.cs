@@ -15,10 +15,10 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Data.Models.NES.FDS.Header"/>
-        public FDSHeader Header => Model.Header;
+        public FDSHeader? Header => Model.Header;
 
         /// <inheritdoc cref="FDSHeader.DiskSides"/>
-        public byte DiskSides => Header.DiskSides;
+        public byte DiskSides => Header?.DiskSides ?? 0;
 
         #endregion
 
