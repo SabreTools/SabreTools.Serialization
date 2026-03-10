@@ -22,21 +22,27 @@ namespace SabreTools.Serialization.Readers
                 // Create a new FDS file to fill
                 var fds = new Data.Models.NES.FDS();
 
-                #region Header
+                // If the size indicates no header
+                if ((data.Length - data.Position) > 0 && (data.Length - data.Position) % 65500 == 0)
+                {
+                    fds.Data = data.ReadBytes((int)(data.Length - data.Position));
+                }
 
-                // Try to parse the header
-                var header = ParseHeader(data);
-                if (header is null)
-                    return null;
+                // Otherwise, assume a header is present
+                else
+                {
+                    // Try to parse the header
+                    var header = ParseHeader(data);
+                    if (header is null)
+                        return null;
 
-                // Set the header
-                fds.Header = header;
+                    // Set the header
+                    fds.Header = header;
 
-                #endregion
-
-                // Read the disk data
-                if (fds.Header.DiskSides > 0)
-                    fds.Data = data.ReadBytes(65500 * fds.Header.DiskSides);
+                    // Read the disk data
+                    if (fds.Header.DiskSides > 0)
+                        fds.Data = data.ReadBytes(65500 * fds.Header.DiskSides);
+                }
 
                 return fds;
             }
