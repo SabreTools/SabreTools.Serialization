@@ -50,6 +50,7 @@ namespace SabreTools.Serialization
                 WrapperType.PKZIP => PKZIP.Create(data),
                 WrapperType.PlayJAudioFile => PlayJAudioFile.Create(data),
                 WrapperType.PlayJPlaylist => PlayJPlaylist.Create(data),
+                WrapperType.QD => QD.Create(data),
                 WrapperType.Quantum => Quantum.Create(data),
                 WrapperType.RAR => RAR.Create(data),
                 WrapperType.RealArcadeInstaller => RealArcadeInstaller.Create(data),
@@ -670,6 +671,13 @@ namespace SabreTools.Serialization
             // https://www.iana.org/assignments/media-types/audio/vnd.everad.plj
             if (extension.Equals("plj", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.PlayJAudioFile;
+
+            #endregion
+
+            #region QD
+
+            if (extension.Equals("qd", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.QD;
 
             #endregion
 

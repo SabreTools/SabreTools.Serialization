@@ -198,6 +198,11 @@ namespace SabreTools.Serialization.Wrappers
         Quantum,
 
         /// <summary>
+        /// Quick Disk Famicom Disk System image
+        /// </summary>
+        QD,
+
+        /// <summary>
         /// RAR archive
         /// </summary>
         RAR,

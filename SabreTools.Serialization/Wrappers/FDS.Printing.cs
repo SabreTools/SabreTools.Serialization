@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public void PrintInformation(StringBuilder builder)
         {
-            builder.AppendLine("Nintendo Entertainment System Cart Information:");
+            builder.AppendLine("fwNES FDS File Information:");
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
