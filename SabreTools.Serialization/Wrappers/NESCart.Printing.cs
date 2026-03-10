@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.Title, "Title");
         }
 
-        private static void Print(StringBuilder builder, Header? header)
+        private static void Print(StringBuilder builder, CartHeader? header)
         {
             builder.AppendLine("  Common Header Information:");
             builder.AppendLine("  -------------------------");
@@ -86,7 +86,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(mapperNumber, "  Mapper");
             builder.AppendLine();
 
-            if (header is Header1 header1)
+            if (header is CartHeader1 header1)
             {
                 builder.AppendLine("  NES 1.0 Header Information:");
                 builder.AppendLine("  -------------------------");
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Bytes 11-15
                 builder.AppendLine(header1.Padding, "  Padding");
             }
-            else if (header is Header2 header2)
+            else if (header is CartHeader2 header2)
             {
                 builder.AppendLine("  NES 2.0 Header Information:");
                 builder.AppendLine("  -------------------------");

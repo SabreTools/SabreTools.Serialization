@@ -477,7 +477,7 @@ namespace SabreTools.Serialization
             #region NESCart
 
             // NES 1.0 and 2.0 image with header
-            if (magic.StartsWith(Data.Models.NES.Constants.SignatureBytes))
+            if (magic.StartsWith(Data.Models.NES.Constants.CartSignatureBytes))
                 return WrapperType.NESCart;
 
             // NES 1.0 and 2.0 image

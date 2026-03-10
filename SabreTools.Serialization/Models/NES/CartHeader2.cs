@@ -4,7 +4,7 @@ namespace SabreTools.Data.Models.NES
     /// NES 2.0 header information
     /// </summary>
     /// <see href="https://www.nesdev.org/wiki/NES_2.0"/>
-    public class Header2 : Header
+    public class CartHeader2 : CartHeader
     {
         // All common header parts take up bytes 0-7
 
@@ -109,8 +109,8 @@ namespace SabreTools.Data.Models.NES
         /// Reserved byte, unused
         /// </summary>
         /// <remarks>
-        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.StandardSystem"/>.
-        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.PlayChoice10"/>.
+        /// Valid when <see cref="CartHeader.ConsoleType"/> == <see cref="ConsoleType.StandardSystem"/>.
+        /// Valid when <see cref="CartHeader.ConsoleType"/> == <see cref="ConsoleType.PlayChoice10"/>.
         /// </remarks>
         public byte Reserved13 { get; set; }
 
@@ -124,7 +124,7 @@ namespace SabreTools.Data.Models.NES
         /// <remarks>
         /// Byte 13, Bits 0-3
         ///
-        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
+        /// Valid when <see cref="CartHeader.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
         /// </remarks>
         public VsSystemType VsSystemType { get; set; }
 
@@ -134,7 +134,7 @@ namespace SabreTools.Data.Models.NES
         /// <remarks>
         /// Byte 13, Bits 4-7
         ///
-        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
+        /// Valid when <see cref="CartHeader.ConsoleType"/> == <see cref="ConsoleType.VSUnisystem"/>
         /// </remarks>
         public VsHardwareType VsHardwareType { get; set; }
 
@@ -148,7 +148,7 @@ namespace SabreTools.Data.Models.NES
         /// <remarks>
         /// Byte 13, Bits 0-3
         ///
-        /// Valid when <see cref="Header.ConsoleType"/> == <see cref="ConsoleType.ExtendedConsoleType"/>
+        /// Valid when <see cref="CartHeader.ConsoleType"/> == <see cref="ConsoleType.ExtendedConsoleType"/>
         /// </remarks>
         public ExtendedConsoleType ExtendedConsoleType { get; set; }
 

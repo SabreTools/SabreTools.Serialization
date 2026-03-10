@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Readers
                 // TODO: Make model for PRG-ROM data blocks
                 int prgRomSize = cart.Header.PrgRomSize * 16384;
                 int chrRomSize = cart.Header.ChrRomSize * 8192;
-                if (cart.Header is Header2 header2)
+                if (cart.Header is CartHeader2 header2)
                 {
                     ushort extendedSize = (ushort)((header2.PrgRomSizeMSB << 8)
                         | header.PrgRomSize);
@@ -83,11 +83,11 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Header on success, null on error</returns>
-        public static Header? ParseHeader(Stream data)
+        public static CartHeader? ParseHeader(Stream data)
         {
             // Cache data until NES 2.0 flag determined
             byte[] identificationString = data.ReadBytes(4);
-            if (!identificationString.EqualsExactly(SignatureBytes))
+            if (!identificationString.EqualsExactly(CartSignatureBytes))
                 return null;
 
             byte prgRomSize = data.ReadByteValue();
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Readers
             // NES 2.0
             if (nes20)
             {
-                var obj = new Header2();
+                var obj = new CartHeader2();
 
                 obj.IdentificationString = identificationString;
                 obj.PrgRomSize = prgRomSize;
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Readers
             // NES 1.0
             else
             {
-                var obj = new Header1();
+                var obj = new CartHeader1();
 
                 obj.IdentificationString = identificationString;
                 obj.PrgRomSize = prgRomSize;

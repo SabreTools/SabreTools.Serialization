@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
                     fs.Write(byte7);
                     fs.Flush();
 
-                    if (Header is Header1 header1)
+                    if (Header is CartHeader1 header1)
                     {
                         // Byte 8
                         fs.Write(header1.PrgRamSize);
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Wrappers
                         fs.Write(header1.Padding);
                         fs.Flush();
                     }
-                    else if (Header is Header2 header2)
+                    else if (Header is CartHeader2 header2)
                     {
                         // Byte 8
                         byte byte8 = 0;

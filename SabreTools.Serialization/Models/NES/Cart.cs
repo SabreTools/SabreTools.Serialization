@@ -10,7 +10,7 @@ namespace SabreTools.Data.Models.NES
         /// <summary>
         /// NES 1.0 or 2.0 header
         /// </summary>
-        public Header? Header { get; set; }
+        public CartHeader? Header { get; set; }
 
         /// <summary>
         /// Trainer, if present (0 or 512 bytes)

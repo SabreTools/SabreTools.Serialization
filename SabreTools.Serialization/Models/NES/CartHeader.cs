@@ -5,7 +5,7 @@ namespace SabreTools.Data.Models.NES
     /// </summary>
     /// <see href="https://www.nesdev.org/wiki/INES"/>
     /// <see href="https://www.nesdev.org/wiki/NES_2.0"/>
-    public abstract class Header
+    public abstract class CartHeader
     {
         /// <summary>
         /// Constant $4E $45 $53 $1A (ASCII "NES" followed by MS-DOS end-of-file)

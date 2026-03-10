@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.NES
     /// not marked for NES 2.0 format, an emulator should either mask off the upper 4 bits
     /// of the mapper number or simply refuse to load the ROM.
     /// </remarks>
-    public class Header1 : Header
+    public class CartHeader1 : CartHeader
     {
         // All common header parts take up bytes 0-7
 
