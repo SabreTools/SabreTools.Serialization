@@ -35,7 +35,8 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // Read the disk data
-                fds.Data = data.ReadBytes((int)(data.Length - data.Position));
+                if (fds.Header.DiskSides > 0)
+                    fds.Data = data.ReadBytes(65500 * fds.Header.DiskSides);
 
                 return fds;
             }
