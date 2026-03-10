@@ -72,6 +72,11 @@ namespace SabreTools.Serialization.Wrappers
         Executable,
 
         /// <summary>
+        /// fwNES FDS file
+        /// </summary>
+        FDS,
+
+        /// <summary>
         /// Half-Life Game Cache File
         /// </summary>
         GCF,

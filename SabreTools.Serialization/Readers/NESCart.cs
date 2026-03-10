@@ -79,10 +79,10 @@ namespace SabreTools.Serialization.Readers
         }
 
         /// <summary>
-        /// Parse a Stream into a Header
+        /// Parse a Stream into a CartHeader
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <returns>Filled Header on success, null on error</returns>
+        /// <returns>Filled CartHeader on success, null on error</returns>
         public static CartHeader? ParseHeader(Stream data)
         {
             // Cache data until NES 2.0 flag determined

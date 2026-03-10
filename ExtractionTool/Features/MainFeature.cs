@@ -185,6 +185,11 @@ namespace ExtractionTool.Features
                     cfb.Extract(OutputPath, Debug);
                     break;
 
+                // fwNES FDS file
+                case FDS fds:
+                    fds.Extract(OutputPath, Debug);
+                    break;
+
                 // GCF
                 case GCF gcf:
                     gcf.Extract(OutputPath, Debug);

@@ -26,6 +26,7 @@ namespace SabreTools.Serialization
                 WrapperType.CHD => CHD.Create(data),
                 WrapperType.CIA => CIA.Create(data),
                 WrapperType.Executable => CreateExecutableWrapper(data),
+                WrapperType.FDS => FDS.Create(data),
                 WrapperType.GCF => GCF.Create(data),
                 WrapperType.GZip => GZip.Create(data),
                 WrapperType.IniFile => null,// TODO: Implement wrapper
@@ -339,6 +340,18 @@ namespace SabreTools.Serialization
             // DOS MZ library file format (and descendants)
             if (extension.Equals("dll", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Executable;
+
+            #endregion
+
+            #region FDS
+
+            // fwNES FDS file with header
+            if (magic.StartsWith(Data.Models.NES.Constants.FDSSignatureBytes))
+                return WrapperType.FDS;
+
+            // fwNES FDS file with header
+            if (extension.Equals("fds", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.FDS;
 
             #endregion
 
