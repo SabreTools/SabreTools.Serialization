@@ -24,6 +24,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [faydoc.tripod.com](https://faydoc.tripod.com/formats/) | LinearExecutable |
 | [GuitarGame_ChartFormats](https://github.com/TheNathannator/GuitarGame_ChartFormats/) | Charts |
 | [HandWiki](https://handwiki.org/wiki/Start) | Quantum |
+| [Handy SDL](https://github.com/mozzwald/handy-sdl) | AtariLynxCart |
 | [HLLib](https://github.com/RavuAlHemio/hllib/) | BSP, GCF, NCF, PAK, SGA, VPK, WAD3, XZP |
 | [IBM Documentation](https://www.ibm.com/docs/en) | TAR |
 | [IETF](https://www.ietf.org/) | GZIP |

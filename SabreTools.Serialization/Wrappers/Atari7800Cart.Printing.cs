@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Wrappers
 
             Print(builder, Model.Header);
 
-            //builder.AppendLine(Model.Trainer, "Trainer Data");
+            //builder.AppendLine(Model.Data, "ROM Data");
             builder.AppendLine(Model.Data.Length, "ROM Data Length");
         }
 

@@ -16,6 +16,7 @@ namespace SabreTools.Serialization
             {
                 WrapperType.AACSMediaKeyBlock => AACSMediaKeyBlock.Create(data),
                 WrapperType.Atari7800Cart => Atari7800Cart.Create(data),
+                WrapperType.AtariLynxCart => AtariLynxCart.Create(data),
                 WrapperType.BDPlusSVM => BDPlusSVM.Create(data),
                 WrapperType.BFPK => BFPK.Create(data),
                 WrapperType.BSP => BSP.Create(data),
@@ -190,6 +191,17 @@ namespace SabreTools.Serialization
 
             if (extension.Equals("a78", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.Atari7800Cart;
+
+            #endregion
+
+            #region AtariLynxCart
+
+            // LNX header
+            if (magic.StartsWith(Data.Models.AtariLynx.Constants.MagicBytes))
+                return WrapperType.AtariLynxCart;
+
+            if (extension.Equals("lnx", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.AtariLynxCart;
 
             #endregion
 

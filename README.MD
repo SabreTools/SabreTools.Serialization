@@ -54,6 +54,7 @@ Options:
 | --- | --- |
 | 7-zip archive | .NET Framework 4.6.2 and greater |
 | Atari 7800 (A78) Cart Image | Header and ROM data |
+| Atari Lynx (LNX) Cart Image | Header and ROM data |
 | BFPK custom archive format | |
 | bzip2 archive | .NET Framework 4.6.2 and greater |
 | Compound File Binary (CFB) | Only CFB common pieces extractable |
