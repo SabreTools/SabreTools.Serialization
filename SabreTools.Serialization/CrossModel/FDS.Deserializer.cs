@@ -4,6 +4,7 @@ using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
+    /// <see href="https://www.nesdev.org/wiki/FDS_disk_format"/>
     /// <see href="https://gist.github.com/einstein95/6545066905680466cdf200c4cc8ca4f0"/>
     public partial class FamicomDiskSystem : ICrossModel<FDS, QD>
     {
