@@ -44,6 +44,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [PKWARE(?)](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT) | PKZIP |
 | [PS3 Developer Wiki](https://www.psdevwiki.com/ps3/) | IRD, PlayStation3 |
 | [RanseiLink](https://github.com/Deijin27/RanseiLink) | Nitro |
+| [raphnet](https://www.raphnet.net/divers/documentation/Sneskart.txt) | SNES |
 | [Reverse Engineering Wise](https://codeberg.org/CYBERDEV/REWise) | WiseInstaller |
 | [SharpCompress](https://github.com/adamhathcock/sharpcompress) | PKZIP |
 | [Source SDK 2013](https://github.com/ValveSoftware/source-sdk-2013) | BSP |
