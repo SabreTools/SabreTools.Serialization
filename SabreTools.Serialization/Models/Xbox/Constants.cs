@@ -5,6 +5,7 @@ namespace SabreTools.Data.Models.Xbox
     /// <see href="https://xboxdevwiki.net/Xbe"/>
     /// <see href="http://wiki.redump.org/index.php?title=Xbox_Title_IDs"/>
     /// <see href="https://dbox.tools/publishers/"/>
+    /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     public static class Constants
     {
         /// <summary>
@@ -197,5 +198,20 @@ namespace SabreTools.Data.Models.Xbox
             { 'L', "USA / Europe" },
             { 'W', "World" },
         };
+
+        /// <summary>
+        /// XBox Executable magic number ("XBEH")
+        /// </summary>
+        public static readonly byte[] XbeMagicBytes = [0x58, 0x42, 0x45, 0x48];
+
+        /// <summary>
+        /// XBox Executable magic number ("XBEH")
+        /// </summary>
+        public const string XbeMagicString = "XBEH";
+
+        /// <summary>
+        /// XBox Executable magic number ("XBEH")
+        /// </summary>
+        public const uint XbeMagicUInt32 = 0x48454258;
     }
 }
