@@ -6,6 +6,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// Allowed media types for this .XBE
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     [Flags]
     public enum AllowedMediaTypes : uint
     {
@@ -28,6 +29,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// Game region for this .XBE
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     [Flags]
     public enum GameRegion : uint
     {
@@ -41,6 +43,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// Various flags for this .XBE file
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     [Flags]
     public enum InitializationFlags : uint
     {
@@ -54,6 +57,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// Various flags for this library
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     [Flags]
     public enum LibraryFlags : ushort
     {
@@ -71,6 +75,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// Various flags for this .XBE section
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     [Flags]
     public enum SectionFlags : uint
     {

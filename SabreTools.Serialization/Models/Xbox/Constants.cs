@@ -5,7 +5,6 @@ namespace SabreTools.Data.Models.Xbox
     /// <see href="https://xboxdevwiki.net/Xbe"/>
     /// <see href="http://wiki.redump.org/index.php?title=Xbox_Title_IDs"/>
     /// <see href="https://dbox.tools/publishers/"/>
-    /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     public static class Constants
     {
         /// <summary>

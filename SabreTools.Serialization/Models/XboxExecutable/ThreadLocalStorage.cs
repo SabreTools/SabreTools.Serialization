@@ -4,6 +4,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// XBox Executable thread-local storage
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     public class ThreadLocalStorage
     {
         /// <summary>

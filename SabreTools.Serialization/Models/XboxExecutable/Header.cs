@@ -4,6 +4,7 @@ namespace SabreTools.Data.Models.XboxExecutable
     /// XBox Executable format header
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     public class Header
     {
         /// <summary>

@@ -1,6 +1,7 @@
 namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
+    /// <see href="https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h"/>
     public static class Constants
     {
         /// <summary>
