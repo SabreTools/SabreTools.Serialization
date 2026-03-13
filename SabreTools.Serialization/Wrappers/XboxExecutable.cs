@@ -23,8 +23,24 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Header.DigitalSignature"/>
         public byte[] DigitalSignature => Model.Header?.DigitalSignature ?? [];
 
+        /// <inheritdoc cref="Header.EntryPoint"/>
+        /// <remarks>Adjusted with debug shift</remarks>
+        public uint EntryPointDebug => (Model.Header?.EntryPoint ?? 0) ^ 0x94859D4B;
+
+        /// <inheritdoc cref="Header.EntryPoint"/>
+        /// <remarks>Adjusted with debug shift</remarks>
+        public uint EntryPointRetail => (Model.Header?.EntryPoint ?? 0) ^ 0xA8FC57AB;
+
         /// <inheritdoc cref="Executable.KernelLibraryVersion"/>
         public LibraryVersion? KernelLibraryVersion => Model.KernelLibraryVersion;
+
+        /// <inheritdoc cref="Header.KernelImageThunkAddress"/>
+        /// <remarks>Adjusted with debug shift</remarks>
+        public uint KernelImageThunkAddressDebug => (Model.Header?.KernelImageThunkAddress ?? 0) ^ 0xEFB1F152;
+
+        /// <inheritdoc cref="Header.KernelImageThunkAddress"/>
+        /// <remarks>Adjusted with debug shift</remarks>
+        public uint KernelImageThunkAddressRetail => (Model.Header?.KernelImageThunkAddress ?? 0) ^ 0x5B6D40B6;
 
         /// <inheritdoc cref="Executable.LibraryVersions"/>
         public LibraryVersion[] LibraryVersions => Model.LibraryVersions;
