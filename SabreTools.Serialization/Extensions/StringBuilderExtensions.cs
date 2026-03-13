@@ -276,6 +276,24 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Append a line containing a UInt8[][] value to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, byte[][]? value, string prefixString)
+        {
+            string valueString = "[NULL]";
+            if (value is not null)
+            {
+                var valueArr = Array.ConvertAll(value, ba => ba is null ? "[NULL]" : BitConverter.ToString(ba).Replace('-', ' '));
+                valueString = string.Join(", ", valueArr);
+            }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
         /// Append a line containing a Char[] value to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, char[]? value, string prefixString)

@@ -284,6 +284,11 @@ namespace SabreTools.Serialization.Wrappers
         WiseScript,
 
         /// <summary>
+        /// XBox Executable
+        /// </summary>
+        XboxExecutable,
+
+        /// <summary>
         /// xz archive
         /// </summary>
         XZ,

@@ -66,6 +66,7 @@ namespace SabreTools.Serialization
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
                 WrapperType.WAD => WAD3.Create(data),
+                WrapperType.XboxExecutable => XboxExecutable.Create(data),
                 WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
                 WrapperType.ZSTD => ZSTD.Create(data),
@@ -910,6 +911,16 @@ namespace SabreTools.Serialization
             // Common extension so this cannot be used accurately
             // if (extension.Equals("wad", StringComparison.OrdinalIgnoreCase))
             //     return WrapperType.WAD;
+
+            #endregion
+
+            #region XboxExecutable
+
+            if (magic.StartsWith(Data.Models.XboxExecutable.Constants.MagicBytes))
+                return WrapperType.XboxExecutable;
+
+            if (extension.Equals("xbe", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.XboxExecutable;
 
             #endregion
 
