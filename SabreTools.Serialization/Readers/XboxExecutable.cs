@@ -37,37 +37,99 @@ namespace SabreTools.Serialization.Readers
 
                 #region Certificate
 
-                // TODO: Seek to and parse certificate
+                // Get the certificate address
+                long certificateOffset = initialOffset + (header.CertificateAddress - header.BaseAddress);
+                if (certificateOffset >= initialOffset && certificateOffset < data.Length)
+                {
+                    // Seek to the certificate
+                    data.SeekIfPossible(certificateOffset, SeekOrigin.Begin);
+
+                    // Set the certificate
+                    xbe.Certificate = ParseCertificate(data);
+                }
 
                 #endregion
 
                 #region Section Headers
 
-                // TODO: Seek to and parse section headers
+                // Get the section table address
+                long sectionTableOffset = initialOffset + (header.SectionHeadersAddress - header.BaseAddress);
+                if (sectionTableOffset >= initialOffset && sectionTableOffset < data.Length)
+                {
+                    // Seek to the section table
+                    data.SeekIfPossible(sectionTableOffset, SeekOrigin.Begin);
+
+                    // Set the section table
+                    xbe.SectionHeaders = new SectionHeader[xbe.Header.NumberOfSections];
+                    for (int i = 0; i < xbe.Header.NumberOfSections; i++)
+                    {
+                        xbe.SectionHeaders[i] = ParseSectionHeader(data);
+                    }
+                }
 
                 #endregion
 
                 #region TLS
 
-                // TODO: Seek to and parse TLS
+                // Get the TLS address
+                long tlsOffset = initialOffset + (header.TLSAddress - header.BaseAddress);
+                if (tlsOffset >= initialOffset && tlsOffset < data.Length)
+                {
+                    // Seek to the TLS
+                    data.SeekIfPossible(tlsOffset, SeekOrigin.Begin);
+
+                    // Set the TLS
+                    xbe.ThreadLocalStorage = ParseThreadLocalStorage(data);
+                }
 
                 #endregion
 
                 #region Library Versions
 
-                // TODO: Seek to and parse library versions
+                // Get the library versions table address
+                long libraryVersionsOffset = initialOffset + (header.LibraryVersionsAddress - header.BaseAddress);
+                if (libraryVersionsOffset >= initialOffset && libraryVersionsOffset < data.Length)
+                {
+                    // Seek to the library versions table
+                    data.SeekIfPossible(libraryVersionsOffset, SeekOrigin.Begin);
+
+                    // Set the library versions table
+                    xbe.LibraryVersions = new LibraryVersion[xbe.Header.NumberOfLibraryVersions];
+                    for (int i = 0; i < xbe.Header.NumberOfLibraryVersions; i++)
+                    {
+                        xbe.LibraryVersions[i] = ParseLibraryVersion(data);
+                    }
+                }
 
                 #endregion
 
                 #region Kernel Library Version
 
-                // TODO: Seek to and parse kernel library version
+                // Get the kernel library version address
+                long klvOffset = initialOffset + (header.KernelLibraryVersionAddress - header.BaseAddress);
+                if (klvOffset >= initialOffset && klvOffset < data.Length)
+                {
+                    // Seek to the kernel library version
+                    data.SeekIfPossible(klvOffset, SeekOrigin.Begin);
+
+                    // Set the kernel library version
+                    xbe.KernelLibraryVersion = ParseLibraryVersion(data);
+                }
 
                 #endregion
 
                 #region XAPI Library Version
 
-                // TODO: Seek to and parse XAPI library version
+                // Get the XAPI library version address
+                long xapiOffset = initialOffset + (header.XAPILibraryVersionAddress - header.BaseAddress);
+                if (xapiOffset >= initialOffset && xapiOffset < data.Length)
+                {
+                    // Seek to the XAPI library version
+                    data.SeekIfPossible(xapiOffset, SeekOrigin.Begin);
+
+                    // Set the XAPI library version
+                    xbe.XAPILibraryVersion = ParseLibraryVersion(data);
+                }
 
                 #endregion
 
