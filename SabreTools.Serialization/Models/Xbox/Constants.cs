@@ -198,20 +198,5 @@ namespace SabreTools.Data.Models.Xbox
             { 'L', "USA / Europe" },
             { 'W', "World" },
         };
-
-        /// <summary>
-        /// XBox Executable magic number ("XBEH")
-        /// </summary>
-        public static readonly byte[] XbeMagicBytes = [0x58, 0x42, 0x45, 0x48];
-
-        /// <summary>
-        /// XBox Executable magic number ("XBEH")
-        /// </summary>
-        public const string XbeMagicString = "XBEH";
-
-        /// <summary>
-        /// XBox Executable magic number ("XBEH")
-        /// </summary>
-        public const uint XbeMagicUInt32 = 0x48454258;
     }
 }

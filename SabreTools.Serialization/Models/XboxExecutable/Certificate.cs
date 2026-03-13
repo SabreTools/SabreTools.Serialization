@@ -1,10 +1,10 @@
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
     /// XBox Executable certificate
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
-    public class XBECertificate
+    public class Certificate
     {
         /// <summary>
         /// Number of bytes that should be reserved for this certificate.
@@ -38,12 +38,12 @@ namespace SabreTools.Data.Models.Xbox
         /// <summary>
         /// Allowed media types for this .XBE.
         /// </summary>
-        public XbeAllowedMediaTypes AllowedMediaTypes { get; set; }
+        public AllowedMediaTypes AllowedMediaTypes { get; set; }
 
         /// <summary>
         /// Game region for this .XBE.
         /// </summary>
-        public XbeGameRegion GameRegion { get; set; }
+        public GameRegion GameRegion { get; set; }
 
         /// <summary>
         /// Game ratings for this .XBE. It is typically safe to set this to 0xFFFFFFFF.
@@ -73,6 +73,6 @@ namespace SabreTools.Data.Models.Xbox
         /// <summary>
         /// 16 x 16-byte Signature Keys. An unsigned .XBE can just zero these out.
         /// </summary>
-        public byte[,] AlternateSignatureKeys { get; set; } = new byte[16, 16];
+        public byte[][] AlternateSignatureKeys { get; set; } = new byte[16][];
     }
 }

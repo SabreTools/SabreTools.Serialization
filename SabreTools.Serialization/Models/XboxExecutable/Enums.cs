@@ -1,13 +1,13 @@
 using System;
 
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
     /// Allowed media types for this .XBE
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     [Flags]
-    public enum XbeAllowedMediaTypes : uint
+    public enum AllowedMediaTypes : uint
     {
         XBEIMAGE_MEDIA_TYPE_HARD_DISK = 0x00000001,
         XBEIMAGE_MEDIA_TYPE_DVD_X2 = 0x00000002,
@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.Xbox
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     [Flags]
-    public enum XbeGameRegion : uint
+    public enum GameRegion : uint
     {
         XBEIMAGE_GAME_REGION_NA = 0x00000001,
         XBEIMAGE_GAME_REGION_JAPAN = 0x00000002,
@@ -42,7 +42,7 @@ namespace SabreTools.Data.Models.Xbox
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     [Flags]
-    public enum XbeInitializationFlags : uint
+    public enum InitializationFlags : uint
     {
         MountUtilityDrive = 0x00000001,
         FormatUtilityDrive = 0x00000002,
@@ -55,7 +55,7 @@ namespace SabreTools.Data.Models.Xbox
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     [Flags]
-    public enum XbeLibraryFlags : uint
+    public enum LibraryFlags : uint
     {
         /// <remarks>13-Bit Mask</remarks>
         QFEVersion = 0x1FFF,
@@ -72,7 +72,7 @@ namespace SabreTools.Data.Models.Xbox
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     [Flags]
-    public enum XbeSectionFlags : uint
+    public enum SectionFlags : uint
     {
         Writable = 0x00000001,
         Preload = 0x00000002,

@@ -1,10 +1,10 @@
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
     /// XBox Executable library version
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
-    public class XBELibraryVersion
+    public class LibraryVersion
     {
         /// <summary>
         /// 8-byte name of this library. (i.e. "XAPILIB")
@@ -29,6 +29,6 @@ namespace SabreTools.Data.Models.Xbox
         /// <summary>
         /// Various flags for this library.
         /// </summary>
-        public XbeLibraryFlags LibraryFlags { get; set; }
+        public LibraryFlags LibraryFlags { get; set; }
     }
 }

@@ -14,6 +14,7 @@ Not all of this information was able to be gathered directly from the files in q
 | [Atari 7800 Development Wiki](https://7800.8bitdev.org/index.php/Main_Page) | Atari7800Cart |
 | [BYTE*](https://web.archive.org/web/20240703222951/https://bytepointer.com/index.htm) | NewExecutable |
 | [cabextract/libmspack](https://www.cabextract.org.uk/) | LZ |
+| [cxbx](https://www.caustik.com/cxbx/) | XboxExecutable |
 | [DBox](https://dbox.tools/) | Xbox |
 | [DebugInfo.com](https://www.debuginfo.com/index.html) | PortableExecutable |
 | [Devilsclaw](https://devilsclaws.net/) | PFF |

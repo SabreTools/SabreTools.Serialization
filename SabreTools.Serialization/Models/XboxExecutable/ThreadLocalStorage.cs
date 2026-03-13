@@ -1,10 +1,10 @@
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
-    /// XBox Executable TLS
+    /// XBox Executable thread-local storage
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
-    public class XBEThreadLocalStorage
+    public class ThreadLocalStorage
     {
         /// <summary>
         /// Address, after the .XBE is loaded into memory, of this .XBE's TLS Data.

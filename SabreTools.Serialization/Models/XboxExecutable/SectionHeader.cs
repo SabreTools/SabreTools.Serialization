@@ -1,16 +1,16 @@
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
     /// XBox Executable format section header
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
     /// <see cref="COFF.SectionHeader"/>
-    public class XBESectionHeader
+    public class SectionHeader
     {
         /// <summary>
         /// Various flags for this .XBE section.
         /// </summary>
-        public XbeSectionFlags SectionFlags { get; set; }
+        public SectionFlags SectionFlags { get; set; }
 
         /// <summary>
         /// Address of memory to load this section at.

@@ -1,10 +1,10 @@
-namespace SabreTools.Data.Models.Xbox
+namespace SabreTools.Data.Models.XboxExecutable
 {
     /// <summary>
     /// XBox Executable format header
     /// </summary>
     /// <see href="https://www.caustik.com/cxbx/download/xbe.htm"/>
-    public class XBEHeader
+    public class Header
     {
         /// <summary>
         /// "XBEH"
@@ -60,7 +60,7 @@ namespace SabreTools.Data.Models.Xbox
         /// <summary>
         /// Various flags for this .XBE file.
         /// </summary>
-        public XbeInitializationFlags InitializationFlags { get; set; }
+        public InitializationFlags InitializationFlags { get; set; }
 
         /// <summary>
         /// Address to the Image entry point, after the .XBE is loaded into memory. This is where execution starts.
