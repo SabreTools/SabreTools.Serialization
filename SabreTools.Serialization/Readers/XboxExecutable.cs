@@ -176,6 +176,11 @@ namespace SabreTools.Serialization.Readers
                 obj.AlternateSignatureKeys[i] = data.ReadBytes(16);
             }
 
+            obj.OriginalCertificateSize = data.ReadUInt32LittleEndian();
+            obj.OnlineService = data.ReadUInt32LittleEndian();
+            obj.SecurityFlags = data.ReadUInt32LittleEndian();
+            obj.CodeEncKey = data.ReadBytes(16);
+
             return obj;
         }
 

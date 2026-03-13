@@ -75,6 +75,24 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// </summary>
         public byte[][] AlternateSignatureKeys { get; set; } = new byte[16][];
 
-        // TODO: Add optional fields from https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h
+        /// <summary>
+        /// Original Certificate Size?
+        /// </summary>
+        public uint OriginalCertificateSize { get; set; }
+
+        /// <summary>
+        /// Online Service ID
+        /// </summary>
+        public uint OnlineService { get; set; }
+
+        /// <summary>
+        /// Extra Security Flags
+        /// </summary>
+        public uint SecurityFlags { get; set; }
+
+        /// <summary>
+        /// Code Encryption Key?
+        /// </summary>
+        public byte[] CodeEncKey { get; set; } = new byte[16];
     }
 }

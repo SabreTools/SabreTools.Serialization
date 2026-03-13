@@ -52,6 +52,10 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(certificate.LANKey, "  LAN key");
             builder.AppendLine(certificate.SignatureKey, "  Signature key");
             builder.AppendLine(certificate.AlternateSignatureKeys, "  Alternate signature keys");
+            builder.AppendLine(certificate.OriginalCertificateSize, "  Original certificate size");
+            builder.AppendLine(certificate.OnlineService, "  Online service ID");
+            builder.AppendLine(certificate.SecurityFlags, "  Extra security flags");
+            builder.AppendLine(certificate.CodeEncKey, "  Code encryption key");
             builder.AppendLine();
         }
 
