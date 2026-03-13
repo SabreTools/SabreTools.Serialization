@@ -74,5 +74,7 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// 16 x 16-byte Signature Keys. An unsigned .XBE can just zero these out.
         /// </summary>
         public byte[][] AlternateSignatureKeys { get; set; } = new byte[16][];
+
+        // TODO: Add optional fields from https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h
     }
 }

@@ -23,8 +23,8 @@ namespace SabreTools.Serialization.Wrappers
             Print(builder, Model.SectionHeaders);
             Print(builder, Model.ThreadLocalStorage);
             Print(builder, Model.LibraryVersions);
-            Print(builder, Model.KernelLibraryVersion, "Kernel ", 2);
-            Print(builder, Model.XAPILibraryVersion, "XAPI ", 2);
+            Print(builder, Model.KernelLibraryVersion, "Kernel ", string.Empty, 2);
+            Print(builder, Model.XAPILibraryVersion, "XAPI ", string.Empty, 2);
         }
 
         private static void Print(StringBuilder builder, Certificate? certificate)
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(certificate.TimeDate, "  Time/Date stamp");
             builder.AppendLine(certificate.TitleID, "  Title ID");
             builder.AppendLine(certificate.TitleName, "  Title name");
-            builder.AppendLine(Encoding.Unicode.GetString(certificate.TitleName), "  Title name (Unicode)");
+            builder.AppendLine(Encoding.Unicode.GetString(certificate.TitleName).TrimEnd('\0'), "  Title name (Unicode)");
             builder.AppendLine(certificate.AlternativeTitleIDs, "  Alternative title IDs");
             builder.AppendLine($"  Allowed media types: {certificate.AllowedMediaTypes} (0x{certificate.AllowedMediaTypes:X})");
             builder.AppendLine($"  Game region: {certificate.GameRegion} (0x{certificate.GameRegion:X})");
@@ -100,9 +100,9 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
         }
 
-        private static void Print(StringBuilder builder, LibraryVersion? libraryVersion, string prefix, int padding)
+        private static void Print(StringBuilder builder, LibraryVersion? libraryVersion, string prefix, string postfix, int padding)
         {
-            builder.AppendLine($"{"".PadLeft(padding)}{prefix}Library Version Information:");
+            builder.AppendLine($"{"".PadLeft(padding)}{prefix}Library Version Information{postfix}:");
             builder.AppendLine($"{"".PadLeft(padding)}-------------------------");
             if (libraryVersion is null)
             {
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             builder.AppendLine(libraryVersion.LibraryName, $"{"".PadLeft(padding)}Library name");
-            builder.AppendLine(Encoding.ASCII.GetString(libraryVersion.LibraryName), $"{"".PadLeft(padding)}Library name (ASCII)");
+            builder.AppendLine(Encoding.ASCII.GetString(libraryVersion.LibraryName).TrimEnd('\0'), $"{"".PadLeft(padding)}Library name (ASCII)");
             builder.AppendLine(libraryVersion.MajorVersion, $"{"".PadLeft(padding)}Major version");
             builder.AppendLine(libraryVersion.MinorVersion, $"{"".PadLeft(padding)}Minor version");
             builder.AppendLine(libraryVersion.BuildVersion, $"{"".PadLeft(padding)}Build version");
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < entries!.Length; i++)
             {
                 var entry = entries[i];
-                Print(builder, entry, string.Empty, 4);
+                Print(builder, entry, string.Empty, $" {i}", 4);
             }
 
             builder.AppendLine();

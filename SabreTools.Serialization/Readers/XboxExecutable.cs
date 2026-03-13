@@ -236,7 +236,7 @@ namespace SabreTools.Serialization.Readers
             obj.MajorVersion = data.ReadUInt16LittleEndian();
             obj.MinorVersion = data.ReadUInt16LittleEndian();
             obj.BuildVersion = data.ReadUInt16LittleEndian();
-            obj.LibraryFlags = (LibraryFlags)data.ReadUInt32LittleEndian();
+            obj.LibraryFlags = (LibraryFlags)data.ReadUInt16LittleEndian();
 
             return obj;
         }
