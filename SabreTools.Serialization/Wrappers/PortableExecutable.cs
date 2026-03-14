@@ -343,12 +343,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Search through all sections and find the furthest a section goes
-                    long endOfSectionData = OptionalHeader.SizeOfHeaders;
-
-                    // For UPX-packed executables, OptionalHeader.SizeOfHeaders is consistently 4096 and wrong,
-                    // wheras PointerToRawData is consistently 1024 and correct.
-                    if (SectionNames[0] == "UPX0")
-                        endOfSectionData = SectionTable[0].PointerToRawData;
+                    // OptionalHeader.SizeOfHeaders is inconsistent here so first section is used instead
+                    // TODO: Investigate cases where first section pointer does not work
+                   long endOfSectionData = SectionTable[0].PointerToRawData;
 
                     Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
 
