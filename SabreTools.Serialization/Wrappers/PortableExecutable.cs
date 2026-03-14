@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -343,9 +343,9 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Search through all sections and find the furthest a section goes
-                    // OptionalHeader.SizeOfHeaders is inconsistent here so first section is used instead
                     // TODO: Investigate cases where first section pointer does not work
-                   long endOfSectionData = SectionTable[0].PointerToRawData;
+                    var firstSection = Array.Find(SectionTable, s => s.SizeOfRawData != 0);
+                    long endOfSectionData = firstSection.PointerToRawData;
 
                     Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
 
