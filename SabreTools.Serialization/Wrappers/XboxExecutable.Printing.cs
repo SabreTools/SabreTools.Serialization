@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XboxExecutable;
@@ -45,6 +46,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(certificate.TitleName, "  Title name");
             builder.AppendLine(Encoding.Unicode.GetString(certificate.TitleName).TrimEnd('\0'), "  Title name (Unicode)");
             builder.AppendLine(certificate.AlternativeTitleIDs, "  Alternative title IDs");
+            builder.AppendLine(Array.ConvertAll(certificate.AlternativeTitleIDs, b => b.ToFormattedXBETitleID()), "  Alternative title IDs (Formatted)");
             builder.AppendLine($"  Allowed media types: {certificate.AllowedMediaTypes} (0x{certificate.AllowedMediaTypes:X})");
             builder.AppendLine($"  Game region: {certificate.GameRegion} (0x{certificate.GameRegion:X})");
             builder.AppendLine(certificate.GameRatings, "  Game ratings");

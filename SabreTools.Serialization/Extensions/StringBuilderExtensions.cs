@@ -456,6 +456,24 @@ namespace SabreTools.Data.Extensions
         }
 
         /// <summary>
+        /// Append a line containing a String[] value to a StringBuilder
+        /// </summary>
+        public static StringBuilder AppendLine(this StringBuilder sb, string?[]? value, string prefixString)
+        {
+            string valueString = "[NULL]";
+            if (value is not null)
+            {
+                var valueArr = Array.ConvertAll(value, s => s is null ? "[NULL]" : s);
+                valueString = string.Join(", ", valueArr);
+            }
+
+            if (valueString.Length == 0)
+                return sb.AppendLine($"{prefixString}: [EMPTY]");
+
+            return sb.AppendLine($"{prefixString}: {valueString}");
+        }
+
+        /// <summary>
         /// Append a line containing a UInt64[] value to a StringBuilder
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, Guid[]? value, string prefixString)

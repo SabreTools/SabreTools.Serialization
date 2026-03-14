@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Extensions;
@@ -15,6 +16,22 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
 
         #region Extension Properties
+
+        /// <inheritdoc cref="Certificate.AlternativeTitleIDs"/>
+        public byte[][]? AlternativeTitleIDsBytes => Certificate?.AlternativeTitleIDs;
+
+        /// <inheritdoc cref="Certificate.AlternativeTitleIDs"/>
+        public string[]? AlternativeTitleIDsStrings
+        {
+            get
+            {
+                // Ignore invalid alternative title IDs
+                if (AlternativeTitleIDsBytes is null)
+                    return null;
+
+                return Array.ConvertAll(AlternativeTitleIDsBytes, ba => ba.ToFormattedXBETitleID() ?? "[NULL]");
+            }
+        }
 
         /// <inheritdoc cref="Header.BaseAddress"/>
         public uint BaseAddress => Model.Header?.BaseAddress ?? 0;

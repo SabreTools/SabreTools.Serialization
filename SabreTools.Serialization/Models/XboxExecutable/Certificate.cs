@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// to matter with unsigned code (or signed code, for that matter), so they can all
         /// be set to zero.
         /// </summary>
-        public uint[] AlternativeTitleIDs { get; set; } = new uint[16];
+        public byte[][] AlternativeTitleIDs { get; set; } = new byte[16][];
 
         /// <summary>
         /// Allowed media types for this .XBE.
