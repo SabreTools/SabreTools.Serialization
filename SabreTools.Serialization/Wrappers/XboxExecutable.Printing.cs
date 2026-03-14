@@ -41,6 +41,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(certificate.SizeOfCertificate, "  Size of certificate");
             builder.AppendLine(certificate.TimeDate, "  Time/Date stamp");
             builder.AppendLine(certificate.TitleID, "  Title ID");
+            builder.AppendLine(certificate.TitleID.ToFormattedXBETitleID(), "  Title ID (Formatted)");
             builder.AppendLine(certificate.TitleName, "  Title name");
             builder.AppendLine(Encoding.Unicode.GetString(certificate.TitleName).TrimEnd('\0'), "  Title name (Unicode)");
             builder.AppendLine(certificate.AlternativeTitleIDs, "  Alternative title IDs");

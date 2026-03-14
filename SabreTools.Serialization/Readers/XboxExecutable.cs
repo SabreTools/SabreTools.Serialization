@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.SizeOfCertificate = data.ReadUInt32LittleEndian();
             obj.TimeDate = data.ReadUInt32LittleEndian();
-            obj.TitleID = data.ReadUInt32LittleEndian();
+            obj.TitleID = data.ReadBytes(4);
             obj.TitleName = data.ReadBytes(0x50);
 
             obj.AlternativeTitleIDs = new uint[16];

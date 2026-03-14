@@ -1,4 +1,6 @@
 using System.IO;
+using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XboxExecutable;
 
 namespace SabreTools.Serialization.Wrappers
@@ -50,6 +52,25 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="Executable.ThreadLocalStorage"/>
         public ThreadLocalStorage? ThreadLocalStorage => Model.ThreadLocalStorage;
+
+        /// <inheritdoc cref="Certificate.TitleID"/>
+        public byte[]? TitleIDBytes => Certificate?.TitleID;
+
+        /// <inheritdoc cref="Certificate.TitleID"/>
+        public string? TitleIDString => TitleIDBytes.ToFormattedXBETitleID();
+
+        /// <inheritdoc cref="Certificate.TitleName"/>
+        public string? TitleName
+        {
+            get
+            {
+                // Ignore invalid certificates
+                if (Certificate is null)
+                    return null;
+
+                return Encoding.Unicode.GetString(Certificate.TitleName);
+            }
+        }
 
         /// <inheritdoc cref="Executable.XAPILibraryVersion"/>
         public LibraryVersion? XAPILibraryVersion => Model.XAPILibraryVersion;

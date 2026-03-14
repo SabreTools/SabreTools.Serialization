@@ -21,7 +21,8 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// Title ID for this application. This field doesn't appear to matter with
         /// unsigned code, so it can be set to zero.
         /// </summary>
-        public uint TitleID { get; set; }
+        /// <remarks>4 bytes</remarks>
+        public byte[] TitleID { get; set; } = new byte[4];
 
         /// <summary>
         /// Title name for this application (i.e. L"The Simpsons Road Rage").
