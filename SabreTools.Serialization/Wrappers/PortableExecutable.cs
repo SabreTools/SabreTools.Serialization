@@ -343,7 +343,10 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Search through all sections and find the furthest a section goes
-                    long endOfSectionData = OptionalHeader.SizeOfHeaders;
+                    // OptionalHeader.SizeOfHeaders is inconsistent here so first section is used instead
+                    // TODO: Investigate cases where first section pointer does not work
+                   long endOfSectionData = SectionTable[0].PointerToRawData;
+
                     Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
 
                     // If we didn't find the end of section data
