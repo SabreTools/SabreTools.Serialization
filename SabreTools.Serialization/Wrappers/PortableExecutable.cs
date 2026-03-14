@@ -345,7 +345,7 @@ namespace SabreTools.Serialization.Wrappers
                     // Start from the first section with a valid raw data size and add all section sizes
                     // TODO: Investigate cases where first section pointer does not work
                     var firstSection = Array.Find(SectionTable, s => s.SizeOfRawData != 0);
-                    long endOfSectionData = firstSection.PointerToRawData;
+                    long endOfSectionData = firstSection?.PointerToRawData ?? 0;
                     Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
 
                     // If we didn't find the end of section data
