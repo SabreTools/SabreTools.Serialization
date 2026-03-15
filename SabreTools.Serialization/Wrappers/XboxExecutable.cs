@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         #region Extension Properties
 
         /// <inheritdoc cref="Certificate.AlternativeTitleIDs"/>
-        public byte[][]? AlternativeTitleIDsBytes => Certificate?.AlternativeTitleIDs;
+        public uint[]? AlternativeTitleIDs => Certificate?.AlternativeTitleIDs;
 
         /// <inheritdoc cref="Certificate.AlternativeTitleIDs"/>
         public string[]? AlternativeTitleIDsStrings
@@ -26,10 +26,10 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Ignore invalid alternative title IDs
-                if (AlternativeTitleIDsBytes is null)
+                if (AlternativeTitleIDs is null)
                     return null;
 
-                return Array.ConvertAll(AlternativeTitleIDsBytes, ba => ba.ToFormattedXBETitleID() ?? "[NULL]");
+                return Array.ConvertAll(AlternativeTitleIDs, ba => ba.ToFormattedXBETitleID() ?? "[NULL]");
             }
         }
 
@@ -71,10 +71,10 @@ namespace SabreTools.Serialization.Wrappers
         public ThreadLocalStorage? ThreadLocalStorage => Model.ThreadLocalStorage;
 
         /// <inheritdoc cref="Certificate.TitleID"/>
-        public byte[]? TitleIDBytes => Certificate?.TitleID;
+        public uint TitleID => Certificate?.TitleID ?? 0;
 
         /// <inheritdoc cref="Certificate.TitleID"/>
-        public string? TitleIDString => TitleIDBytes.ToFormattedXBETitleID();
+        public string? TitleIDString => TitleID.ToFormattedXBETitleID();
 
         /// <inheritdoc cref="Certificate.TitleName"/>
         public string? TitleName

@@ -153,13 +153,13 @@ namespace SabreTools.Serialization.Readers
 
             obj.SizeOfCertificate = data.ReadUInt32LittleEndian();
             obj.TimeDate = data.ReadUInt32LittleEndian();
-            obj.TitleID = data.ReadBytes(4);
+            obj.TitleID = data.ReadUInt32LittleEndian();
             obj.TitleName = data.ReadBytes(0x50);
 
-            obj.AlternativeTitleIDs = new byte[16][];
+            obj.AlternativeTitleIDs = new uint[16];
             for (int i = 0; i < obj.AlternativeTitleIDs.Length; i++)
             {
-                obj.AlternativeTitleIDs[i] = data.ReadBytes(4);
+                obj.AlternativeTitleIDs[i] = data.ReadUInt32LittleEndian();
             }
 
             obj.AllowedMediaTypes = (AllowedMediaTypes)data.ReadUInt32LittleEndian();

@@ -21,8 +21,7 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// Title ID for this application. This field doesn't appear to matter with
         /// unsigned code, so it can be set to zero.
         /// </summary>
-        /// <remarks>4 bytes</remarks>
-        public byte[] TitleID { get; set; } = new byte[4];
+        public uint TitleID { get; set; }
 
         /// <summary>
         /// Title name for this application (i.e. L"The Simpsons Road Rage").
@@ -35,7 +34,7 @@ namespace SabreTools.Data.Models.XboxExecutable
         /// to matter with unsigned code (or signed code, for that matter), so they can all
         /// be set to zero.
         /// </summary>
-        public byte[][] AlternativeTitleIDs { get; set; } = new byte[16][];
+        public uint[] AlternativeTitleIDs { get; set; } = new uint[16];
 
         /// <summary>
         /// Allowed media types for this .XBE.
