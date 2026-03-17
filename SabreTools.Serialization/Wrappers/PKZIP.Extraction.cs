@@ -27,9 +27,7 @@ namespace SabreTools.Serialization.Wrappers
             try
             {
                 var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                var zipFile = ZipArchive.OpenArchive(_dataSource, readerOptions) as ZipArchive;
-                if (zipFile is null)
-                    return false;
+                var zipFile = (ZipArchive)ZipArchive.OpenArchive(_dataSource, readerOptions);
 
                 // If the file exists
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
@@ -39,11 +37,11 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If there are multiple parts
                     if (parts.Length > 1)
-                        zipFile = ZipArchive.OpenArchive(parts, readerOptions) as ZipArchive;
+                        zipFile = (ZipArchive)ZipArchive.OpenArchive(parts, readerOptions);
 
                     // Try to read the file path if no entries are found
                     else if (zipFile.Entries.Count == 0)
-                        zipFile = ZipArchive.OpenArchive(parts, readerOptions) as ZipArchive;
+                        zipFile = (ZipArchive)ZipArchive.OpenArchive(parts, readerOptions);
 
                     // If the archive is somehow null
                     if (zipFile is null)

@@ -31,10 +31,13 @@ namespace SabreTools.Serialization.Wrappers
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
-                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                var rarFile = RarArchive.OpenArchive(_dataSource, readerOptions) as RarArchive;
-                if (rarFile is null)
-                    return false;
+                var readerOptions = new ReaderOptions()
+                {
+                    LookForHeader = lookForHeader,
+                    ExtractFullPath = true,
+                    Overwrite = true
+                };
+                var rarFile = (RarArchive)RarArchive.OpenArchive(_dataSource, readerOptions);
 
                 // If the file exists
                 if (!string.IsNullOrEmpty(Filename) && File.Exists(Filename!))
@@ -44,15 +47,11 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If there are multiple parts
                     if (parts.Length > 1)
-                        rarFile = RarArchive.OpenArchive(parts, readerOptions) as RarArchive;
+                        rarFile = (RarArchive)RarArchive.OpenArchive(parts, readerOptions);
 
                     // Try to read the file path if no entries are found
                     else if (rarFile.Entries.Count == 0)
-                        rarFile = RarArchive.OpenArchive(parts, readerOptions) as RarArchive;
-
-                    // If the archive is somehow null
-                    if (rarFile is null)
-                        return false;
+                        rarFile = (RarArchive)RarArchive.OpenArchive(parts, readerOptions);
                 }
 
                 // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether

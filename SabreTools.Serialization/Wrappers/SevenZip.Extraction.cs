@@ -31,8 +31,13 @@ namespace SabreTools.Serialization.Wrappers
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             try
             {
-                var readerOptions = new ReaderOptions() { LookForHeader = lookForHeader };
-                var sevenZip = SevenZipArchive.OpenArchive(_dataSource, readerOptions) as SevenZipArchive;
+                var readerOptions = new ReaderOptions()
+                {
+                    LookForHeader = lookForHeader,
+                    ExtractFullPath = true,
+                    Overwrite = true
+                };
+                var sevenZip = (SevenZipArchive)SevenZipArchive.OpenArchive(_dataSource, readerOptions);
                 if (sevenZip is null)
                     return false;
 
@@ -44,15 +49,11 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If there are multiple parts
                     if (parts.Length > 1)
-                        sevenZip = SevenZipArchive.OpenArchive(parts, readerOptions) as SevenZipArchive;
+                        sevenZip = (SevenZipArchive)SevenZipArchive.OpenArchive(parts, readerOptions);
 
                     // Try to read the file path if no entries are found
                     else if (sevenZip.Entries.Count == 0)
-                        sevenZip = SevenZipArchive.OpenArchive(parts, readerOptions) as SevenZipArchive;
-
-                    // If the archive is somehow null
-                    if (sevenZip is null)
-                        return false;
+                        sevenZip = (SevenZipArchive)SevenZipArchive.OpenArchive(parts, readerOptions);
                 }
 
                 // Explained in https://github.com/adamhathcock/sharpcompress/pull/661. in order to determine whether
