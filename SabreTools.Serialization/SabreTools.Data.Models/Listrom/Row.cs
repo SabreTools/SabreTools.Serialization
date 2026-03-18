@@ -1,4 +1,3 @@
-using SabreTools.Data.Attributes;
 
 namespace SabreTools.Data.Models.Listrom
 {

@@ -1,5 +1,3 @@
-using SabreTools.Data.Attributes;
-
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>archive</remarks>

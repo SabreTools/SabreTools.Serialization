@@ -114,7 +114,6 @@ Below is a table of all namespaces within the library and what they represent
 
 | Namespace | Description |
 | --- | --- |
-| `SabreTools.Data.Attributes` | Common attributes for data marking and manipulation |
 | `SabreTools.Data.Extensions` | Extension methods related to models |
 | `SabreTools.Data.Models` | Models representing different file and structure types |
 | `SabreTools.ObjectIdentifier` | Object Identifier (OID) parsing |

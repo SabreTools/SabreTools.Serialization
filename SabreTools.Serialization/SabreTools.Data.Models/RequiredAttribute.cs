@@ -1,4 +1,4 @@
-namespace SabreTools.Data.Attributes
+namespace SabreTools.Data.Models
 {
     /// <summary>
     /// Marks a property as required on write

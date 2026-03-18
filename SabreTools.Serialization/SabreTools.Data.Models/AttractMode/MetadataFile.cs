@@ -1,5 +1,3 @@
-using SabreTools.Data.Attributes;
-
 namespace SabreTools.Data.Models.AttractMode
 {
     /// <summary>

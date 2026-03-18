@@ -1,6 +1,5 @@
 using System.Xml;
 using System.Xml.Serialization;
-using SabreTools.Data.Attributes;
 
 namespace SabreTools.Data.Models.OpenMSX
 {
