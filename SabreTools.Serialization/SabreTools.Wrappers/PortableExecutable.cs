@@ -1813,7 +1813,7 @@ namespace SabreTools.Wrappers
 
                 // Parse the executable and recurse
                 _dataSource.SeekIfPossible(resourceOffset, SeekOrigin.Begin);
-                var resourceExe = Serialization.WrapperFactory.CreateExecutableWrapper(_dataSource);
+                var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
                 if (resourceExe is not PortableExecutable resourcePex)
                     return -1;
 

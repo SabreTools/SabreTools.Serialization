@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Wrappers;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Wrappers
 {
     public static class WrapperFactory
     {

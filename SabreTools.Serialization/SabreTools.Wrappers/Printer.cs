@@ -1,8 +1,7 @@
 using System;
 using System.Text;
-using SabreTools.Wrappers;
 
-namespace SabreTools.Serialization
+namespace SabreTools.Wrappers
 {
     /// <summary>
     /// Generic wrapper around printing methods
@@ -15,7 +14,7 @@ namespace SabreTools.Serialization
         /// </summary>
         public static void PrintToConsole(this IWrapper wrapper)
         {
-            var sb = ExportStringBuilder(wrapper);
+            var sb = wrapper.ExportStringBuilder();
             if (sb is null)
             {
                 Console.WriteLine("No item information could be generated");
