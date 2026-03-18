@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.CrossModel
 {
     /// <summary>
     /// Defines how to convert between two model types

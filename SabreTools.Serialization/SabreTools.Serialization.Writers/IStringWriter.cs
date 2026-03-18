@@ -1,9 +1,9 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Writers
 {
     /// <summary>
-    /// Defines how to write to byte arrays
+    /// Defines how to write to strings
     /// </summary>
-    public interface IByteWriter<TModel>
+    public interface IStringWriter<TModel>
     {
         /// <summary>
         /// Enable outputting debug information
@@ -11,11 +11,11 @@ namespace SabreTools.Serialization.Interfaces
         public bool Debug { get; set; }
 
         /// <summary>
-        /// Serialize a <typeparamref name="TModel"/> into a byte array
+        /// Serialize a <typeparamref name="TModel"/> into a string
         /// </summary>
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
-        /// <returns>Filled object on success, null on error</returns>
-        public byte[]? SerializeArray(TModel? obj);
+        /// <returns>Filled string on successful serialization, null otherwise</returns>
+        public string? Serialize(TModel? obj);
     }
 }

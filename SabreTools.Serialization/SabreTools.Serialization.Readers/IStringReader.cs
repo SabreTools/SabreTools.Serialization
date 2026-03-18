@@ -1,9 +1,9 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Readers
 {
     /// <summary>
-    /// Defines how to read from files
+    /// Defines how to read from strings
     /// </summary>
-    public interface IFileReader<TModel>
+    public interface IStringReader<TModel>
     {
         /// <summary>
         /// Enable outputting debug information
@@ -11,11 +11,11 @@ namespace SabreTools.Serialization.Interfaces
         public bool Debug { get; set; }
 
         /// <summary>
-        /// Deserialize a file into <typeparamref name="TModel"/>
+        /// Deserialize a string into <typeparamref name="TModel"/>
         /// </summary>
         /// <typeparam name="T">Type of object to deserialize to</typeparam>
-        /// <param name="path">Path to deserialize from</param>
+        /// <param name="str">String to deserialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-        public TModel? Deserialize(string? path);
+        public TModel? Deserialize(string? str);
     }
 }

@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Readers
 {
     /// <summary>
     /// Defines how to read from byte arrays

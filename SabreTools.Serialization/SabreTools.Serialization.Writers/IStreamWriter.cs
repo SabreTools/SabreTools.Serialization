@@ -1,4 +1,4 @@
-namespace SabreTools.Serialization.Interfaces
+namespace SabreTools.Serialization.Writers
 {
     /// <summary>
     /// Defines how to write to Streams

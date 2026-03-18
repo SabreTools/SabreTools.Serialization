@@ -89,15 +89,15 @@ Below is a table representing the various conversion interfaces that are impleme
 
 | Interface Name | Source Type | Destination Type |
 | --- | --- | --- |
-| `SabreTools.Serialization.Interfaces.IByteReader<TModel>` | `byte[]?` | `TModel` |
-| `SabreTools.Serialization.Interfaces.IByteWriter<TModel>` | `TModel` | `byte[]?` |
-| `SabreTools.Serialization.Interfaces.ICrossModel<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
-| `SabreTools.Serialization.Interfaces.IFileReader<TModel>` | `string?` path | `TModel` |
-| `SabreTools.Serialization.Interfaces.IFileWriter<TModel>` | `TModel` | `string?` path |
-| `SabreTools.Serialization.Interfaces.IStreamReader<TModel>` | `Stream?` | `TModel` |
-| `SabreTools.Serialization.Interfaces.IStreamWriter<TModel>` | `TModel` | `Stream?` |
-| `SabreTools.Serialization.Interfaces.IStringReader<TModel>` | `string?` representation | `TModel` |
-| `SabreTools.Serialization.Interfaces.IStringWriter<TModel>` | `TModel` | `string?` representation |
+| `SabreTools.Serialization.CrossModel.ICrossModel<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
+| `SabreTools.Serialization.Readers.IByteReader<TModel>` | `byte[]?` | `TModel` |
+| `SabreTools.Serialization.Readers.IFileReader<TModel>` | `string?` path | `TModel` |
+| `SabreTools.Serialization.Readers.IStreamReader<TModel>` | `Stream?` | `TModel` |
+| `SabreTools.Serialization.Readers.IStringReader<TModel>` | `string?` representation | `TModel` |
+| `SabreTools.Serialization.Writers.IByteWriter<TModel>` | `TModel` | `byte[]?` |
+| `SabreTools.Serialization.Writers.IFileWriter<TModel>` | `TModel` | `string?` path |
+| `SabreTools.Serialization.Writers.IStreamWriter<TModel>` | `TModel` | `Stream?` |
+| `SabreTools.Serialization.Writers.IStringWriter<TModel>` | `TModel` | `string?` representation |
 
 Below is a table representing the various non-conversion interfaces that are implemented within this library.
 
@@ -119,7 +119,6 @@ Below is a table of all namespaces within the library and what they represent
 | `SabreTools.Data.Models` | Models representing different file and structure types |
 | `SabreTools.Data.ObjectIdentifier` | Object Identifier (OID) parsing |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
-| `SabreTools.Serialization.Interfaces` | Interfaces used commonly throughout the library |
 | `SabreTools.Serialization.Readers` | Convert from external sources to models |
 | `SabreTools.Serialization.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |
 | `SabreTools.Serialization.Writers` | Convert from models to external sources |

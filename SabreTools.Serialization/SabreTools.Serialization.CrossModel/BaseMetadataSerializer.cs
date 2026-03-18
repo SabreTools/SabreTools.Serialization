@@ -1,5 +1,4 @@
 using SabreTools.Data.Models.Metadata;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using SabreTools.Data.Models.NES;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.CrossModel
 {
