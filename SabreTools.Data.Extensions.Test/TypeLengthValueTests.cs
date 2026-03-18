@@ -1,10 +1,9 @@
 using System;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ASN1;
 using Xunit;
 
 #pragma warning disable IDE0230 // Use UTF-8 string literal
-namespace SabreTools.Serialization.Test.Extensions
+namespace SabreTools.Data.Extensions.Test
 {
     public class TypeLengthValueTests
     {
