@@ -1,0 +1,78 @@
+using System;
+using System.IO;
+using System.Linq;
+using Xunit;
+
+#pragma warning disable xUnit1004 // Test methods should not be skipped
+namespace SabreTools.Wrappers.Test
+{
+    public class RARTests
+    {
+        [Fact]
+        public void NullArray_Null()
+        {
+            byte[]? data = null;
+            int offset = 0;
+            var actual = RAR.Create(data, offset);
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void EmptyArray_Null()
+        {
+            byte[]? data = [];
+            int offset = 0;
+            var actual = RAR.Create(data, offset);
+            Assert.Null(actual);
+        }
+
+        [Fact(Skip = "This will never pass with the current code")]
+        public void InvalidArray_Null()
+        {
+            byte[]? data = [.. Enumerable.Repeat<byte>(0xFF, 1024)];
+            int offset = 0;
+            var actual = RAR.Create(data, offset);
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void NullStream_Null()
+        {
+            Stream? data = null;
+            var actual = RAR.Create(data);
+            Assert.Null(actual);
+        }
+
+        [Fact(Skip = "This will never pass with the current code")]
+        public void EmptyStream_Null()
+        {
+            Stream? data = new MemoryStream([]);
+            var actual = RAR.Create(data);
+            Assert.Null(actual);
+        }
+
+        [Fact(Skip = "This will never pass with the current code")]
+        public void InvalidStream_Null()
+        {
+            Stream? data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
+            var actual = RAR.Create(data);
+            Assert.Null(actual);
+        }
+
+        #region FindParts
+
+        [Theory]
+        [InlineData("single.rar", 1)]
+        [InlineData("multi-old.rar", 4)]
+        [InlineData("multi-new.part01.rar", 3)]
+        [InlineData("multi-split.rar.001", 3)]
+        public void FindPartsTest(string filename, int expectedParts)
+        {
+            string firstPart = Path.Combine(Environment.CurrentDirectory, "TestData", "RAR", filename);
+            var actual = RAR.FindParts(firstPart);
+            Assert.Equal(expectedParts, actual.Count);
+        }
+
+        #endregion
+    }
+}

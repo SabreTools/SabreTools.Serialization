@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using SabreTools.Serialization.Wrappers;
+using SabreTools.Wrappers;
 
 namespace SabreTools.Serialization
 {

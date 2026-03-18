@@ -103,10 +103,10 @@ Below is a table representing the various non-conversion interfaces that are imp
 
 | Interface Name | Purpose |
 | --- | --- |
-| `SabreTools.Serialization.Wrappers.IExtractable` | Marks a wrapper as able to be extracted |
-| `SabreTools.Serialization.Wrappers.IPrintable` | Marks a wrapper as able to print model information |
-| `SabreTools.Serialization.Wrappers.IWrapper` | Represents an item with a description and JSON serializable state, allowing for extensions |
-| `SabreTools.Serialization.Wrappers.IWrapper<TModel>` | Wraps a model with source data, allowing for extensions |
+| `SabreTools.Wrappers.IExtractable` | Marks a wrapper as able to be extracted |
+| `SabreTools.Wrappers.IPrintable` | Marks a wrapper as able to print model information |
+| `SabreTools.Wrappers.IWrapper` | Represents an item with a description and JSON serializable state, allowing for extensions |
+| `SabreTools.Wrappers.IWrapper<TModel>` | Wraps a `TModel` with source data, allowing for extensions |
 
 ## Namespaces
 
@@ -120,5 +120,5 @@ Below is a table of all namespaces within the library and what they represent
 | `SabreTools.ObjectIdentifier` | Object Identifier (OID) parsing |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
 | `SabreTools.Serialization.Readers` | Convert from external sources to models |
-| `SabreTools.Serialization.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |
 | `SabreTools.Serialization.Writers` | Convert from models to external sources |
+| `SabreTools.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |

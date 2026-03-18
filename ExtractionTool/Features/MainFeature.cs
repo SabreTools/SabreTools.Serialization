@@ -4,7 +4,7 @@ using SabreTools.CommandLine;
 using SabreTools.CommandLine.Inputs;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
-using SabreTools.Serialization.Wrappers;
+using SabreTools.Wrappers;
 
 namespace ExtractionTool.Features
 {

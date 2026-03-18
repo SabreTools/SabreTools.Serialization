@@ -6,7 +6,7 @@ using SabreTools.CommandLine.Inputs;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 using SabreTools.Serialization;
-using SabreTools.Serialization.Wrappers;
+using SabreTools.Wrappers;
 
 namespace InfoPrint.Features
 {

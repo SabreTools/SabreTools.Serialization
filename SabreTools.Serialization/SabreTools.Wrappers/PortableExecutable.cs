@@ -1,0 +1,2357 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using SabreTools.Data.Extensions;
+using SabreTools.Data.Models.COFF;
+using SabreTools.Data.Models.PortableExecutable;
+using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
+using SabreTools.IO.Extensions;
+
+#pragma warning disable IDE0330 // Use 'System.Threading.Lock'
+namespace SabreTools.Wrappers
+{
+    public partial class PortableExecutable : WrapperBase<Executable>
+    {
+        #region Descriptive Properties
+
+        /// <inheritdoc/>
+        public override string DescriptionString => "Portable Executable (PE)";
+
+        #endregion
+
+        #region Extension Properties
+
+        /// <inheritdoc cref="Executable.FileHeader"/>
+        public FileHeader COFFFileHeader => Model.FileHeader;
+
+        /// <summary>
+        /// Dictionary of debug data
+        /// </summary>
+        public Dictionary<int, object> DebugData
+        {
+            get
+            {
+                lock (_debugDataLock)
+                {
+                    // Use the cached data if possible
+                    if (field.Count != 0)
+                        return field;
+
+                    // If we have no resource table, just return
+                    if (DebugDirectoryTable is null || DebugDirectoryTable.Length == 0)
+                        return field;
+
+                    // Otherwise, build and return the cached dictionary
+                    field = ParseDebugTable();
+                    return field;
+                }
+            }
+        } = [];
+
+        /// <inheritdoc cref="Models.PortableExecutable.DebugData.Table.Table"/>
+        public Data.Models.PortableExecutable.DebugData.Entry[]? DebugDirectoryTable
+            => Model.DebugTable?.DebugDirectoryTable;
+
+        /// <summary>
+        /// Entry point data, if it exists
+        /// </summary>
+        /// <remarks>Caches up to 128 bytes</remarks>
+        public byte[] EntryPointData
+        {
+            get
+            {
+                lock (_entryPointDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // If we have no entry point
+                    int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
+                    if (entryPointAddress == 0)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // If the entry point matches with the start of a section, use that
+                    int entryPointSection = FindEntryPointSectionIndex();
+                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection].VirtualAddress)
+                    {
+                        field = GetSectionData(entryPointSection) ?? [];
+                        return field;
+                    }
+
+                    // Read the first 128 bytes of the entry point
+                    field = ReadRangeFromSource(entryPointAddress, length: 128) ?? [];
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.ExportAddressTable"/>
+        public Data.Models.PortableExecutable.Export.AddressTableEntry[]? ExportTable => Model.ExportAddressTable;
+
+        /// <inheritdoc cref="Executable.ExportDirectoryTable"/>
+        public Data.Models.PortableExecutable.Export.DirectoryTable? ExportDirectoryTable => Model.ExportDirectoryTable;
+
+        /// <inheritdoc cref="Executable.NamePointerTable"/>
+        public Data.Models.PortableExecutable.Export.NamePointerTable? ExportNamePointerTable => Model.NamePointerTable;
+
+        /// <inheritdoc cref="Executable.ExportNameTable"/>
+        public Data.Models.PortableExecutable.Export.NameTable? ExportNameTable => Model.ExportNameTable;
+
+        /// <inheritdoc cref="Executable.OrdinalTable"/>
+        public Data.Models.PortableExecutable.Export.OrdinalTable? ExportOrdinalTable => Model.OrdinalTable;
+
+        /// <summary>
+        /// Header padding data, if it exists
+        /// </summary>
+        public byte[] HeaderPaddingData
+        {
+            get
+            {
+                lock (_headerPaddingDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // TODO: Don't scan the known header data as well
+
+                    // Populate the raw header padding data based on the source
+                    uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
+                    uint firstSectionAddress = uint.MaxValue;
+                    foreach (var section in SectionTable)
+                    {
+                        if (section.PointerToRawData == 0)
+                            continue;
+                        if (section.PointerToRawData < headerStartAddress)
+                            continue;
+
+                        if (section.PointerToRawData < firstSectionAddress)
+                            firstSectionAddress = section.PointerToRawData;
+                    }
+
+                    // Check if the header length is more than 0 before reading data
+                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
+                    if (headerLength <= 0)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    field = ReadRangeFromSource((int)headerStartAddress, headerLength) ?? [];
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <summary>
+        /// Header padding strings, if they exist
+        /// </summary>
+        public List<string> HeaderPaddingStrings
+        {
+            get
+            {
+                lock (_headerPaddingStringsLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // Get the header padding data, if possible
+                    byte[] headerPaddingData = HeaderPaddingData;
+                    if (headerPaddingData.Length == 0)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // Otherwise, cache and return the strings
+                    field = headerPaddingData.ReadStringsFrom(charLimit: 3) ?? [];
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.ImportAddressTables"/>
+        public Dictionary<int, Data.Models.PortableExecutable.Import.AddressTableEntry[]?>? ImportAddressTables => Model.ImportAddressTables;
+
+        /// <inheritdoc cref="Executable.ImportDirectoryTable"/>
+        public Data.Models.PortableExecutable.Import.DirectoryTableEntry[]? ImportDirectoryTable => Model.ImportDirectoryTable;
+
+        /// <inheritdoc cref="Executable.HintNameTable"/>
+        public Data.Models.PortableExecutable.Import.HintNameTableEntry[]? ImportHintNameTable => Model.HintNameTable;
+
+        /// <inheritdoc cref="Executable.ImportLookupTables"/>
+        public Dictionary<int, Data.Models.PortableExecutable.Import.LookupTableEntry[]?>? ImportLookupTables => Model.ImportLookupTables;
+
+        /// <summary>
+        /// SecuROM Matroschka package wrapper, if it exists
+        /// </summary>
+        public SecuROMMatroschkaPackage? MatroschkaPackage
+        {
+            get
+            {
+                lock (_matroschkaPackageLock)
+                {
+                    // Use the cached data if possible
+                    if (field is not null)
+                        return field;
+
+                    // Check to see if creation has already been attempted
+                    if (_matroschkaPackageFailed)
+                        return null;
+
+                    // Get the available source length, if possible
+                    var dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // Find the matrosch or rcpacker section
+                    SectionHeader? section = null;
+                    foreach (var searchedSection in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(searchedSection.Name).TrimEnd('\0');
+                        if (sectionName != "matrosch" && sectionName != "rcpacker")
+                            continue;
+
+                        section = searchedSection;
+                        break;
+                    }
+
+                    // Otherwise, it could not be found
+                    if (section is null)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // Get the offset
+                    long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    if (offset < 0 || offset >= Length)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // Read the section into a local array
+                    var sectionLength = (int)section.VirtualSize;
+                    var sectionData = ReadRangeFromSource(offset, sectionLength);
+                    if (sectionData.Length == 0)
+                    {
+                        _matroschkaPackageFailed = true;
+                        return null;
+                    }
+
+                    // Parse the package
+                    field = SecuROMMatroschkaPackage.Create(sectionData, 0);
+                    if (field?.Entries is null)
+                        _matroschkaPackageFailed = true;
+
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <summary>
+        /// InstallShield Executable wrapper, if it exists
+        /// </summary>
+        public InstallShieldExecutable? ISEXE
+        {
+            get
+            {
+                lock (_installshieldExecutableLock)
+                {
+                    // Use the cached data if possible
+                    if (field is not null)
+                        return field;
+
+                    // Check to see if creation has already been attempted
+                    if (_installshieldExecutableFailed)
+                        return null;
+
+                    // Get the available source length, if possible
+                    var dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+
+                    // Check if there's a valid OverlayAddress
+                    if (OverlayAddress < 0 || OverlayAddress > dataLength)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+
+                    // Parse the package
+                    lock (_dataSourceLock)
+                    {
+                        _dataSource.SeekIfPossible(OverlayAddress, SeekOrigin.Begin);
+                        field = InstallShieldExecutable.Create(_dataSource);
+                    }
+
+                    if (field?.Entries.Length == 0)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.OptionalHeader"/>
+        public Data.Models.PortableExecutable.OptionalHeader OptionalHeader => Model.OptionalHeader;
+
+        /// <summary>
+        /// Address of the overlay, if it exists
+        /// </summary>
+        /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
+        public long OverlayAddress
+        {
+            get
+            {
+                lock (_overlayAddressLock)
+                {
+                    // Use the cached data if possible
+                    if (field >= 0)
+                        return field;
+
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        field = -1;
+                        return field;
+                    }
+
+                    // If we have certificate data, use that as the end
+                    if (OptionalHeader.CertificateTable is not null)
+                    {
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
+                    }
+
+                    // Start from the first section with a valid raw data size and add all section sizes
+                    // TODO: Handle cases where sections are overlapping
+                    var firstSection = Array.Find(SectionTable, s => s.SizeOfRawData != 0);
+                    long endOfSectionData = firstSection?.PointerToRawData ?? 0;
+                    Array.ForEach(SectionTable, s => endOfSectionData += s.SizeOfRawData);
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                        endOfSectionData = -1;
+
+                    // If the section data is followed by the end of the data
+                    if (endOfSectionData >= dataLength)
+                        endOfSectionData = -1;
+
+                    // Cache and return the position
+                    field = endOfSectionData;
+                    return field;
+                }
+            }
+        } = -1;
+
+        /// <summary>
+        /// Overlay data, if it exists
+        /// </summary>
+        /// <remarks>Caches up to 0x10000 bytes</remarks>
+        /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
+        public byte[] OverlayData
+        {
+            get
+            {
+                lock (_overlayDataLock)
+                {
+                    // Use the cached data if possible
+                    if (field is not null)
+                        return field;
+
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // If we have certificate data, use that as the end
+                    if (OptionalHeader.CertificateTable is not null)
+                    {
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
+                    }
+
+                    // Get the overlay address and size if possible
+                    long endOfSectionData = OverlayAddress;
+                    long overlaySize = OverlaySize;
+
+                    // If we didn't find the address or size
+                    if (endOfSectionData <= 0 || overlaySize <= 0)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // If we're at the end of the file, cache an empty byte array
+                    if (endOfSectionData >= dataLength)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // Otherwise, cache and return the data
+                    overlaySize = Math.Min(overlaySize, 0x10000);
+
+                    field = ReadRangeFromSource(endOfSectionData, (int)overlaySize) ?? [];
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <summary>
+        /// Size of the overlay data, if it exists
+        /// </summary>
+        /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
+        public long OverlaySize
+        {
+            get
+            {
+                lock (_overlaySizeLock)
+                {
+                    // Use the cached data if possible
+                    if (field >= 0)
+                        return field;
+
+                    // Get the available source length, if possible
+                    long dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        field = 0;
+                        return field;
+                    }
+
+                    // If we have certificate data, use that as the end
+                    if (OptionalHeader.CertificateTable is not null)
+                    {
+                        long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
+                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
+                            dataLength = certificateTableAddress;
+                    }
+
+                    // Get the overlay address if possible
+                    long endOfSectionData = OverlayAddress;
+
+                    // If we didn't find the end of section data
+                    if (endOfSectionData <= 0)
+                    {
+                        field = 0;
+                        return field;
+                    }
+
+                    // If we're at the end of the file, cache an empty byte array
+                    if (endOfSectionData >= dataLength)
+                    {
+                        field = 0;
+                        return field;
+                    }
+
+                    // Otherwise, cache and return the length
+                    field = dataLength - endOfSectionData;
+                    return field;
+                }
+            }
+        } = -1;
+
+        /// <summary>
+        /// Overlay strings, if they exist
+        /// </summary>
+        public List<string> OverlayStrings
+        {
+            get
+            {
+                lock (_overlayStringsLock)
+                {
+                    // Use the cached data if possible
+                    if (field is not null)
+                        return field;
+
+                    // Get the overlay data, if possible
+                    var overlayData = OverlayData;
+                    if (overlayData.Length == 0)
+                    {
+                        field = [];
+                        return field;
+                    }
+
+                    // Otherwise, cache and return the strings
+                    field = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.ResourceDirectoryTable"/>
+        public Data.Models.PortableExecutable.Resource.DirectoryTable? ResourceDirectoryTable => Model.ResourceDirectoryTable;
+
+        /// <summary>
+        /// Sanitized section names
+        /// </summary>
+        public string[] SectionNames
+        {
+            get
+            {
+                lock (_sectionNamesLock)
+                {
+                    // Use the cached data if possible
+                    if (field is not null)
+                        return field;
+
+                    // Otherwise, build and return the cached array
+                    field = new string[SectionTable.Length];
+                    for (int i = 0; i < field.Length; i++)
+                    {
+                        // TODO: Handle long section names with leading `/`
+                        var section = SectionTable[i];
+                        string sectionNameString = Encoding.UTF8.GetString(section.Name).TrimEnd('\0');
+                        field[i] = sectionNameString;
+                    }
+
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.SectionTable"/>
+        public SectionHeader[] SectionTable => Model.SectionTable;
+
+        /// <summary>
+        /// Data after the section table, if it exists
+        /// </summary>
+        public byte[] SectionTableTrailerData
+        {
+            get
+            {
+                lock (_sectionTableTrailerDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // Get the offset from the end of the section table
+                    long endOfSectionTable = Stub.Header.NewExeHeaderAddr
+                        + 24 // Signature size + file header size
+                        + COFFFileHeader.SizeOfOptionalHeader
+                        + (COFFFileHeader.NumberOfSections * 40); // Size of a section header
+
+                    // Assume the extra data aligns to 512-byte segments
+                    int alignment = (int)(OptionalHeader?.FileAlignment ?? 0x200);
+                    int trailerDataSize = alignment - (int)(endOfSectionTable % alignment);
+
+                    // Cache and return the section table trailer data, even if null
+                    field = ReadRangeFromSource(endOfSectionTable, trailerDataSize);
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <inheritdoc cref="Executable.Stub"/>
+        public Data.Models.MSDOS.Executable Stub => Model.Stub;
+
+        /// <summary>
+        /// Stub executable data, if it exists
+        /// </summary>
+        public byte[] StubExecutableData
+        {
+            get
+            {
+                lock (_stubExecutableDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // Populate the raw stub executable data based on the source
+                    int endOfStubHeader = 0x40;
+                    int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
+                    field = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
+
+                    // Cache and return the stub executable data, even if null
+                    return field;
+                }
+            }
+        } = null;
+
+        /// <summary>
+        /// Dictionary of resource data
+        /// </summary>
+        public Dictionary<string, ResourceDataType?> ResourceData
+        {
+            get
+            {
+                lock (_resourceDataLock)
+                {
+                    // Use the cached data if possible
+                    if (_resourceData.Count != 0)
+                        return _resourceData;
+
+                    // If we have no resource table, just return
+                    if (OptionalHeader.ResourceTable is null
+                        || OptionalHeader.ResourceTable.VirtualAddress == 0
+                        || ResourceDirectoryTable is null)
+                    {
+                        return _resourceData;
+                    }
+
+                    // Otherwise, build and return the cached dictionary
+                    ParseResourceDirectoryTable(ResourceDirectoryTable, types: []);
+                    return _resourceData;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Wise section wrapper, if it exists
+        /// </summary>
+        public WiseSectionHeader? WiseSection
+        {
+            get
+            {
+                lock (_wiseSectionHeaderLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (field is not null)
+                        return field;
+
+                    // If the header will not be found due to missing section data
+                    if (_wiseSectionHeaderMissing)
+                        return null;
+
+                    // Find the .WISE section
+                    SectionHeader? wiseSection = null;
+                    foreach (var section in SectionTable)
+                    {
+                        string sectionName = Encoding.ASCII.GetString(section.Name).TrimEnd('\0');
+                        if (sectionName != ".WISE")
+                            continue;
+
+                        wiseSection = section;
+                        break;
+                    }
+
+                    // If the section cannot be found
+                    if (wiseSection is null)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Get the physical offset of the section
+                    long offset = wiseSection.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    if (offset < 0 || offset >= Length)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Read the section into a local array
+                    int sectionLength = (int)wiseSection.VirtualSize;
+                    byte[] sectionData = ReadRangeFromSource(offset, sectionLength);
+                    if (sectionData.Length == 0)
+                    {
+                        _wiseSectionHeaderMissing = true;
+                        return null;
+                    }
+
+                    // Parse the section header
+                    field = WiseSectionHeader.Create(sectionData, 0);
+                    if (field is null)
+                        _wiseSectionHeaderMissing = true;
+
+                    return field;
+                }
+            }
+        } = null;
+
+        #region Version Information
+
+        /// <summary>
+        /// "Build GUID"
+        /// </summary/>
+        public string? BuildGuid
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("BuildGuid");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// "Build signature"
+        /// </summary/>
+        public string? BuildSignature
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("BuildSignature");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Additional information that should be displayed for diagnostic purposes.
+        /// </summary/>
+        public string? Comments
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("Comments");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Company that produced the file—for example, "Microsoft Corporation" or
+        /// "Standard Microsystems Corporation, Inc." This string is required.
+        /// </summary/>
+        public string? CompanyName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("CompanyName");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// "Debug version"
+        /// </summary/>
+        public string? DebugVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("DebugVersion");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// File description to be presented to users. This string may be displayed in a
+        /// list box when the user is choosing files to install—for example, "Keyboard
+        /// Driver for AT-Style Keyboards". This string is required.
+        /// </summary/>
+        public string? FileDescription
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("FileDescription");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Version number of the file—for example, "3.10" or "5.00.RC2". This string
+        /// is required.
+        /// </summary/>
+        public string? FileVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("FileVersion");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Internal name of the file, if one exists—for example, a module name if the
+        /// file is a dynamic-link library. If the file has no internal name, this
+        /// string should be the original filename, without extension. This string is required.
+        /// </summary/>
+        public string? InternalName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("InternalName");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Copyright notices that apply to the file. This should include the full text of
+        /// all notices, legal symbols, copyright dates, and so on. This string is optional.
+        /// </summary/>
+        public string? LegalCopyright
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("LegalCopyright");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Trademarks and registered trademarks that apply to the file. This should include
+        /// the full text of all notices, legal symbols, trademark numbers, and so on. This
+        /// string is optional.
+        /// </summary/>
+        public string? LegalTrademarks
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("LegalTrademarks");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Original name of the file, not including a path. This information enables an
+        /// application to determine whether a file has been renamed by a user. The format of
+        /// the name depends on the file system for which the file was created. This string
+        /// is required.
+        /// </summary/>
+        public string? OriginalFilename
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("OriginalFilename");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Information about a private version of the file—for example, "Built by TESTER1 on
+        /// \TESTBED". This string should be present only if VS_FF_PRIVATEBUILD is specified in
+        /// the fileflags parameter of the root block.
+        /// </summary/>
+        public string? PrivateBuild
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("PrivateBuild");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// "Product GUID"
+        /// </summary/>
+        public string? ProductGuid
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("ProductGuid");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Name of the product with which the file is distributed. This string is required.
+        /// </summary/>
+        public string? ProductName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("ProductName");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Version of the product with which the file is distributed—for example, "3.10" or
+        /// "5.00.RC2". This string is required.
+        /// </summary/>
+        public string? ProductVersion
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("ProductVersion");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Text that specifies how this version of the file differs from the standard
+        /// version—for example, "Private build for TESTER1 solving mouse problems on M250 and
+        /// M250E computers". This string should be present only if VS_FF_SPECIALBUILD is
+        /// specified in the fileflags parameter of the root block.
+        /// </summary/>
+        public string? SpecialBuild
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("SpecialBuild") ?? GetVersionInfoString("Special Build");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// "Trade name"
+        /// </summary/>
+        public string? TradeName
+        {
+            get
+            {
+                // Use the cached data if possible
+                if (field is not null)
+                    return field;
+
+                field = GetVersionInfoString("TradeName");
+                return field;
+            }
+        } = null;
+
+        /// <summary>
+        /// Get the internal version as reported by the resources
+        /// </summary>
+        /// <returns>Version string, null on error</returns>
+        /// <remarks>The internal version is either the file version, product version, or assembly version, in that order</remarks>
+        public string? GetInternalVersion()
+        {
+            string? version = FileVersion;
+            if (!string.IsNullOrEmpty(version))
+                return version!.Replace(", ", ".");
+
+            version = ProductVersion;
+            if (!string.IsNullOrEmpty(version))
+                return version!.Replace(", ", ".");
+
+            version = AssemblyVersion;
+            if (!string.IsNullOrEmpty(version))
+                return version;
+
+            return null;
+        }
+
+        #endregion
+
+        #region Manifest Information
+
+        /// <summary>
+        /// Description as derived from the assembly manifest
+        /// </summary>
+        public string? AssemblyDescription
+        {
+            get
+            {
+                var manifest = GetAssemblyManifest();
+                return manifest?
+                    .Description?
+                    .Value;
+            }
+        }
+
+        /// <summary>
+        /// Name as derived from the assembly manifest
+        /// </summary>
+        /// <remarks>
+        /// If there are multiple identities included in the manifest,
+        /// this will only retrieve the value from the first that doesn't
+        /// have a null or empty name.
+        /// </remarks>
+        public string? AssemblyName
+        {
+            get
+            {
+                var manifest = GetAssemblyManifest();
+                var identities = manifest?.AssemblyIdentities ?? [];
+                var nameIdentity = Array.Find(identities, ai => !string.IsNullOrEmpty(ai?.Name));
+                return nameIdentity?.Name;
+            }
+        }
+
+        /// <summary>
+        /// Version as derived from the assembly manifest
+        /// </summary>
+        /// <remarks>
+        /// If there are multiple identities included in the manifest,
+        /// this will only retrieve the value from the first that doesn't
+        /// have a null or empty version.
+        /// </remarks>
+        public string? AssemblyVersion
+        {
+            get
+            {
+                var manifest = GetAssemblyManifest();
+                var identities = manifest?.AssemblyIdentities ?? [];
+                var versionIdentity = Array.Find(identities, ai => !string.IsNullOrEmpty(ai?.Version));
+                return versionIdentity?.Version;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Instance Variables
+
+        /// <summary>
+        /// Lock object for <see cref="DebugData"/>
+        /// </summary>
+        private readonly object _debugDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="EntryPointData"/>
+        /// </summary>
+        private readonly object _entryPointDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="HeaderPaddingData"/>
+        /// </summary>
+        private readonly object _headerPaddingDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="HeaderPaddingStrings"/>
+        /// </summary>
+        private readonly object _headerPaddingStringsLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="InstallShieldExecutable"/>
+        /// </summary>
+        private readonly object _installshieldExecutableLock = new();
+
+        /// <summary>
+        /// Cached attempt at creation for <see cref="InstallShieldExecutable"/>
+        /// </summary>
+        private bool _installshieldExecutableFailed = false;
+
+        /// <summary>
+        /// Lock object for <see cref="MatroschkaPackage"/>
+        /// </summary>
+        private readonly object _matroschkaPackageLock = new();
+
+        /// <summary>
+        /// Cached attempt at creation for <see cref="MatroschkaPackage"/>
+        /// </summary>
+        private bool _matroschkaPackageFailed = false;
+
+        /// <summary>
+        /// Lock object for <see cref="OverlayAddress"/>
+        /// </summary>
+        private readonly object _overlayAddressLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="OverlayData"/>
+        /// </summary>
+        private readonly object _overlayDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="OverlaySize"/>
+        /// </summary>
+        private readonly object _overlaySizeLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="OverlayStrings"/>
+        /// </summary>
+        private readonly object _overlayStringsLock = new();
+
+        /// <summary>
+        /// Cached resource data
+        /// </summary>
+        private readonly Dictionary<string, ResourceDataType?> _resourceData = [];
+
+        /// <summary>
+        /// Lock object for <see cref="_resourceData"/>
+        /// </summary>
+        private readonly object _resourceDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="SectionNames"/>
+        /// </summary>
+        private readonly object _sectionNamesLock = new();
+
+        /// <summary>
+        /// Cached raw section data
+        /// </summary>
+        private byte[][]? _sectionData = null;
+
+        /// <summary>
+        /// Cached found string data in sections
+        /// </summary>
+        private List<string>?[]? _sectionStringData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_sectionStringData"/>
+        /// </summary>
+        private readonly object _sectionStringDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="SectionTableTrailerData"/>
+        /// </summary>
+        private readonly object _sectionTableTrailerDataLock = new();
+
+        /// <summary>
+        /// Lock object for <see cref="StubExecutableData"/>
+        /// </summary>
+        private readonly object _stubExecutableDataLock = new();
+
+        /// <summary>
+        /// Cached raw table data
+        /// </summary>
+        private readonly byte[][] _tableData = new byte[16][];
+
+        /// <summary>
+        /// Cached found string data in tables
+        /// </summary>
+        private readonly List<string>?[] _tableStringData = new List<string>?[16];
+
+        /// <summary>
+        /// Lock object for <see cref="WiseSection"/>
+        /// </summary>
+        private readonly object _wiseSectionHeaderLock = new();
+
+        /// <summary>
+        /// Indicates if <see cref="WiseSection"/> cannot be found
+        /// </summary>
+        private bool _wiseSectionHeaderMissing = false;
+
+        #region Version Information
+
+        /// <summary>
+        /// Cached version info data
+        /// </summary>
+        private VersionInfo? _versionInfo = null;
+
+        #endregion
+
+        #region Manifest Information
+
+        /// <summary>
+        /// Cached assembly manifest data
+        /// </summary>
+        private AssemblyManifest? _assemblyManifest = null;
+
+        #endregion
+
+        #endregion
+
+        #region Constructors
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, byte[] data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, byte[] data, int offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data) : base(model, data) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data, long offset) : base(model, data, offset) { }
+
+        /// <inheritdoc/>
+        public PortableExecutable(Executable model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+
+        #endregion
+
+        #region Static Constructors
+
+        /// <summary>
+        /// Create a PE executable from a byte array and offset
+        /// </summary>
+        /// <param name="data">Byte array representing the executable</param>
+        /// <param name="offset">Offset within the array to parse</param>
+        /// <returns>A PE executable wrapper on success, null on failure</returns>
+        public static PortableExecutable? Create(byte[]? data, int offset)
+        {
+            // If the data is invalid
+            if (data is null || data.Length == 0)
+                return null;
+
+            // If the offset is out of bounds
+            if (offset < 0 || offset >= data.Length)
+                return null;
+
+            // Create a memory stream and use that
+            var dataStream = new MemoryStream(data, offset, data.Length - offset);
+            return Create(dataStream);
+        }
+
+        /// <summary>
+        /// Create a PE executable from a Stream
+        /// </summary>
+        /// <param name="data">Stream representing the executable</param>
+        /// <returns>A PE executable wrapper on success, null on failure</returns>
+        public static PortableExecutable? Create(Stream? data)
+        {
+            // If the data is invalid
+            if (data is null || !data.CanRead)
+                return null;
+
+            try
+            {
+                // Cache the current offset
+                long currentOffset = data.Position;
+
+                var model = new Serialization.Readers.PortableExecutable().Deserialize(data);
+                if (model is null)
+                    return null;
+
+                return new PortableExecutable(model, data, currentOffset);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Data
+
+        // TODO: Cache all certificate objects
+
+        /// <summary>
+        /// Get the version info string associated with a key, if possible
+        /// </summary>
+        /// <param name="key">Case-insensitive key to find in the version info</param>
+        /// <returns>String representing the data, null on error</returns>
+        /// <remarks>
+        /// This code does not take into account the locale and will find and return
+        /// the first available value. This may not actually matter for version info,
+        /// but it is worth mentioning.
+        /// </remarks>
+        public string? GetVersionInfoString(string key)
+        {
+            // If we have an invalid key, we can't do anything
+            if (string.IsNullOrEmpty(key))
+                return null;
+
+            // Ensure the resource table has been parsed
+            if (ResourceData is null)
+                return null;
+
+            // If we don't have string version info in this executable
+            var stringTable = _versionInfo?.StringFileInfo?.Children;
+            if (stringTable is null || stringTable.Length == 0)
+                return null;
+
+            // Try to find a key that matches
+            StringData? match = null;
+            foreach (var st in stringTable)
+            {
+                if (st.Length == 0)
+                    continue;
+
+                // Return the match if found
+                match = Array.Find(st.Children, sd => key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
+                if (match is not null)
+                    return match.Value?.TrimEnd('\0');
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get the assembly manifest, if possible
+        /// </summary>
+        /// <returns>Assembly manifest object, null on error</returns>
+        private AssemblyManifest? GetAssemblyManifest()
+        {
+            // Use the cached data if possible
+            if (_assemblyManifest is not null)
+                return _assemblyManifest;
+
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return null;
+
+            // Return the now-cached assembly manifest
+            return _assemblyManifest;
+        }
+
+        #endregion
+
+        #region Debug Data
+
+        /// <summary>
+        /// Find CodeView debug data by path
+        /// </summary>
+        /// <param name="path">Partial path to check for</param>
+        /// <returns>List of matching debug data</returns>
+        public List<object?> FindCodeViewDebugTableByPath(string path)
+        {
+            // Cache the debug data for easier reading
+            var debugData = DebugData;
+            if (debugData.Count == 0)
+                return [];
+
+            var debugFound = new List<object?>();
+            foreach (var data in debugData.Values)
+            {
+                if (data is null)
+                    continue;
+
+                if (data is Data.Models.PortableExecutable.DebugData.NB10ProgramDatabase n)
+                {
+                    if (n.PdbFileName is null || !n.PdbFileName.Contains(path))
+                        continue;
+
+                    debugFound.Add(n);
+                }
+                else if (data is Data.Models.PortableExecutable.DebugData.RSDSProgramDatabase r)
+                {
+                    if (r.PathAndFileName is null || !r.PathAndFileName.Contains(path))
+                        continue;
+
+                    debugFound.Add(r);
+                }
+            }
+
+            return debugFound;
+        }
+
+        /// <summary>
+        /// Find unparsed debug data by string value
+        /// </summary>
+        /// <param name="value">String value to check for</param>
+        /// <returns>List of matching debug data</returns>
+        public List<byte[]?> FindGenericDebugTableByValue(string value)
+        {
+            // Cache the debug data for easier reading
+            var debugData = DebugData;
+            if (debugData.Count == 0)
+                return [];
+
+            var table = new List<byte[]?>();
+            foreach (var data in debugData.Values)
+            {
+                if (data is null)
+                    continue;
+                if (data is not byte[] b || b is null)
+                    continue;
+
+                try
+                {
+                    string? arrayAsASCII = Encoding.ASCII.GetString(b);
+                    if (arrayAsASCII.Contains(value))
+                    {
+                        table.Add(b);
+                        continue;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b);
+                    if (arrayAsUTF8.Contains(value))
+                    {
+                        table.Add(b);
+                        continue;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    string? arrayAsUnicode = Encoding.Unicode.GetString(b);
+                    if (arrayAsUnicode.Contains(value))
+                    {
+                        table.Add(b);
+                        continue;
+                    }
+                }
+                catch { }
+            }
+
+            return table;
+        }
+
+        #endregion
+
+        #region Debug Parsing
+
+        /// <summary>
+        /// Parse the debug directory table information
+        /// </summary>
+        private Dictionary<int, object> ParseDebugTable()
+        {
+            // If there is no debug table
+            if (DebugDirectoryTable is null || DebugDirectoryTable.Length == 0)
+                return [];
+
+            // Create a new debug table
+            Dictionary<int, object> debugData = [];
+
+            // Loop through all debug table entries
+            for (int i = 0; i < DebugDirectoryTable.Length; i++)
+            {
+                var entry = DebugDirectoryTable[i];
+                uint address = entry.PointerToRawData;
+                uint size = entry.SizeOfData;
+
+                // Read the entry data until we have the end of the stream
+                byte[]? entryData;
+                try
+                {
+                    entryData = ReadRangeFromSource((int)address, (int)size);
+                    if (entryData.Length < 4)
+                        continue;
+                }
+                catch (EndOfStreamException)
+                {
+                    return debugData;
+                }
+
+                // If we have CodeView debug data, try to parse it
+                if (entry.DebugType == DebugType.IMAGE_DEBUG_TYPE_CODEVIEW)
+                {
+                    // Read the signature
+                    int offset = 0;
+                    uint signature = entryData.ReadUInt32LittleEndian(ref offset);
+
+                    // Reset the offset
+                    offset = 0;
+
+                    // NB10
+                    if (signature == 0x3031424E)
+                    {
+                        var nb10ProgramDatabase = Serialization.Readers.PortableExecutable.ParseNB10ProgramDatabase(entryData, ref offset);
+                        if (nb10ProgramDatabase is not null)
+                        {
+                            debugData[i] = nb10ProgramDatabase;
+                            continue;
+                        }
+                    }
+
+                    // RSDS
+                    else if (signature == 0x53445352)
+                    {
+                        var rsdsProgramDatabase = Serialization.Readers.PortableExecutable.ParseRSDSProgramDatabase(entryData, ref offset);
+                        if (rsdsProgramDatabase is not null)
+                        {
+                            debugData[i] = rsdsProgramDatabase;
+                            continue;
+                        }
+                    }
+                }
+                else
+                {
+                    debugData[i] = entryData;
+                }
+            }
+
+            return debugData;
+        }
+
+        #endregion
+
+        #region Resource Data
+
+        /// <summary>
+        /// Find dialog box resources by title
+        /// </summary>
+        /// <param name="title">Dialog box title to check for</param>
+        /// <returns>List of matching resources</returns>
+        public List<DialogBoxResource?> FindDialogByTitle(string title)
+        {
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return [];
+
+            var resources = new List<DialogBoxResource?>();
+            foreach (var resource in resourceData.Values)
+            {
+                if (resource is null)
+                    continue;
+                if (resource is not DialogBoxResource dbr || dbr is null)
+                    continue;
+
+                if (dbr.DialogTemplate?.TitleResource?.Contains(title) ?? false)
+                    resources.Add(dbr);
+                else if (dbr.ExtendedDialogTemplate?.TitleResource?.Contains(title) ?? false)
+                    resources.Add(dbr);
+            }
+
+            return resources;
+        }
+
+        /// <summary>
+        /// Find dialog box resources by contained item title
+        /// </summary>
+        /// <param name="title">Dialog box item title to check for</param>
+        /// <returns>List of matching resources</returns>
+        public List<DialogBoxResource?> FindDialogBoxByItemTitle(string title)
+        {
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return [];
+
+            var resources = new List<DialogBoxResource?>();
+            foreach (var resource in resourceData.Values)
+            {
+                if (resource is null)
+                    continue;
+                if (resource is not DialogBoxResource dbr || dbr is null)
+                    continue;
+
+                if (dbr.DialogItemTemplates is not null)
+                {
+                    var templates = Array.FindAll(dbr.DialogItemTemplates, dit => dit?.TitleResource is not null);
+                    if (Array.FindIndex(templates, dit => dit?.TitleResource?.Contains(title) == true) > -1)
+                        resources.Add(dbr);
+                }
+                else if (dbr.ExtendedDialogItemTemplates is not null)
+                {
+                    var templates = Array.FindAll(dbr.ExtendedDialogItemTemplates, edit => edit?.TitleResource is not null);
+                    if (Array.FindIndex(templates, edit => edit?.TitleResource?.Contains(title) == true) > -1)
+                        resources.Add(dbr);
+                }
+            }
+
+            return resources;
+        }
+
+        /// <summary>
+        /// Find string table resources by contained string entry
+        /// </summary>
+        /// <param name="entry">String entry to check for</param>
+        /// <returns>List of matching resources</returns>
+        public List<StringTableResource?> FindStringTableByEntry(string entry)
+        {
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return [];
+
+            var stringTables = new List<StringTableResource?>();
+            foreach (var resource in resourceData.Values)
+            {
+                if (resource is null)
+                    continue;
+                if (resource is not StringTableResource st || st is null)
+                    continue;
+
+                foreach (string? s in st.Data.Values)
+                {
+#if NETFRAMEWORK || NETSTANDARD
+                    if (s is null || !s.Contains(entry))
+#else
+                    if (s is null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
+#endif
+                        continue;
+
+                    stringTables.Add(st);
+                    break;
+                }
+            }
+
+            return stringTables;
+        }
+
+        /// <summary>
+        /// Find unparsed resources by type name
+        /// </summary>
+        /// <param name="typeName">Type name to check for</param>
+        /// <returns>List of matching resources</returns>
+        public List<byte[]?> FindResourceByNamedType(string typeName)
+        {
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return [];
+
+            var resources = new List<byte[]?>();
+            foreach (var kvp in resourceData)
+            {
+                if (!kvp.Key.Contains(typeName))
+                    continue;
+                if (kvp.Value is null || kvp.Value is not GenericResourceEntry b || b is null)
+                    continue;
+
+                resources.Add(b.Data);
+            }
+
+            return resources;
+        }
+
+        /// <summary>
+        /// Find unparsed resources by string value
+        /// </summary>
+        /// <param name="value">String value to check for</param>
+        /// <returns>List of matching resources</returns>
+        public List<byte[]?> FindGenericResource(string value)
+        {
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return [];
+
+            var resources = new List<byte[]?>();
+            foreach (var resource in resourceData.Values)
+            {
+                if (resource is null)
+                    continue;
+                if (resource is not GenericResourceEntry b || b is null)
+                    continue;
+
+                try
+                {
+                    string? arrayAsASCII = Encoding.ASCII.GetString(b!.Data);
+                    if (arrayAsASCII.Contains(value))
+                    {
+                        resources.Add(b.Data);
+                        continue;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    string? arrayAsUTF8 = Encoding.UTF8.GetString(b!.Data);
+                    if (arrayAsUTF8.Contains(value))
+                    {
+                        resources.Add(b.Data);
+                        continue;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    string? arrayAsUnicode = Encoding.Unicode.GetString(b!.Data);
+                    if (arrayAsUnicode.Contains(value))
+                    {
+                        resources.Add(b.Data);
+                        continue;
+                    }
+                }
+                catch { }
+            }
+
+            return resources;
+        }
+
+        /// <summary>
+        /// Find the location of a Wise overlay header, if it exists
+        /// </summary>
+        /// <returns>Offset to the overlay header on success, -1 otherwise</returns>
+        public long FindWiseOverlayHeader()
+        {
+            // Get the overlay offset
+            long overlayOffset = OverlayAddress;
+
+            lock (_dataSourceLock)
+            {
+                // Attempt to get the overlay header
+                if (overlayOffset >= 0 && overlayOffset < Length)
+                {
+                    _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
+                    var header = WiseOverlayHeader.Create(_dataSource);
+                    if (header is not null)
+                        return overlayOffset;
+                }
+
+                // Check section data
+                foreach (var section in SectionTable)
+                {
+                    string sectionName = Encoding.ASCII.GetString(section.Name).TrimEnd('\0');
+                    long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    _dataSource.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
+
+                    var header = WiseOverlayHeader.Create(_dataSource);
+                    if (header is not null)
+                        return sectionOffset;
+
+                    // Check after the resource table
+                    if (sectionName == ".rsrc")
+                    {
+                        // Data immediately following
+                        long afterResourceOffset = sectionOffset + section.SizeOfRawData;
+                        _dataSource.SeekIfPossible(afterResourceOffset, SeekOrigin.Begin);
+
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header is not null)
+                            return afterResourceOffset;
+
+                        // Data following padding data
+                        _dataSource.SeekIfPossible(afterResourceOffset, SeekOrigin.Begin);
+                        _ = _dataSource.ReadNullTerminatedAnsiString();
+
+                        afterResourceOffset = _dataSource.Position;
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header is not null)
+                            return afterResourceOffset;
+                    }
+                }
+            }
+
+            // If there are no resources
+            if (OptionalHeader.ResourceTable is null)
+                return -1;
+
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
+                return -1;
+
+            // Get the resources that have an executable signature
+            bool exeResources = false;
+            foreach (var kvp in resourceData)
+            {
+                if (kvp.Value is null || kvp.Value is not GenericResourceEntry ba)
+                    continue;
+                if (!ba.Data.StartsWith(Data.Models.MSDOS.Constants.SignatureBytes))
+                    continue;
+
+                exeResources = true;
+                break;
+            }
+
+            // If there are no executable resources
+            if (!exeResources)
+                return -1;
+
+            // Get the raw resource table offset
+            long resourceTableOffset = OptionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
+            if (resourceTableOffset <= 0)
+                return -1;
+
+            lock (_dataSourceLock)
+            {
+                // Search the resource table data for the offset
+                long resourceOffset = -1;
+                _dataSource.SeekIfPossible(resourceTableOffset, SeekOrigin.Begin);
+                while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
+                {
+                    ushort possibleSignature = _dataSource.ReadUInt16LittleEndian();
+                    if (possibleSignature == Data.Models.MSDOS.Constants.SignatureUInt16)
+                    {
+                        resourceOffset = _dataSource.Position - 2;
+                        break;
+                    }
+
+                    _dataSource.SeekIfPossible(-1, SeekOrigin.Current);
+                }
+
+                // If there was no valid offset, somehow
+                if (resourceOffset == -1)
+                    return -1;
+
+                // Parse the executable and recurse
+                _dataSource.SeekIfPossible(resourceOffset, SeekOrigin.Begin);
+                var resourceExe = Serialization.WrapperFactory.CreateExecutableWrapper(_dataSource);
+                if (resourceExe is not PortableExecutable resourcePex)
+                    return -1;
+
+                return resourcePex.FindWiseOverlayHeader();
+            }
+        }
+
+        #endregion
+
+        #region Resource Parsing
+
+        /// <summary>
+        /// Parse the resource directory table information
+        /// </summary>
+        private void ParseResourceDirectoryTable(Data.Models.PortableExecutable.Resource.DirectoryTable table, List<object> types)
+        {
+            for (int i = 0; i < table.Entries.Length; i++)
+            {
+                var entry = table.Entries[i];
+                var newTypes = new List<object>(types);
+
+                if (entry.Name?.UnicodeString is not null)
+                    newTypes.Add(Encoding.Unicode.GetString(entry.Name.UnicodeString));
+                else
+                    newTypes.Add(entry.IntegerID);
+
+                ParseResourceDirectoryEntry(entry, newTypes);
+            }
+        }
+
+        /// <summary>
+        /// Parse the name resource directory entry information
+        /// </summary>
+        private void ParseResourceDirectoryEntry(Data.Models.PortableExecutable.Resource.DirectoryEntry entry, List<object> types)
+        {
+            if (entry.DataEntry is not null)
+                ParseResourceDataEntry(entry.DataEntry, types);
+            else if (entry.Subdirectory is not null)
+                ParseResourceDirectoryTable(entry.Subdirectory, types);
+        }
+
+        /// <summary>
+        /// Parse the resource data entry information
+        /// </summary>
+        /// <remarks>
+        /// When caching the version information and assembly manifest, this code assumes that there is only one of each
+        /// of those resources in the entire exectuable. This means that only the last found version or manifest will
+        /// ever be cached.
+        /// </remarks>
+        private void ParseResourceDataEntry(Data.Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
+        {
+            // Create the key and value objects
+            string key = string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
+
+            ResourceDataType? value = Serialization.Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
+
+            // If we have a known resource type
+            if (types.Count > 0 && types[0] is uint resourceType)
+            {
+                try
+                {
+                    switch ((ResourceType)resourceType)
+                    {
+                        case ResourceType.RT_CURSOR:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_BITMAP:
+                        case ResourceType.RT_NEWBITMAP:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_ICON:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_MENU:
+                        case ResourceType.RT_NEWMENU:
+                            value = Serialization.Readers.PortableExecutable.ParseMenuResource(entry.Data);
+                            break;
+                        case ResourceType.RT_DIALOG:
+                        case ResourceType.RT_NEWDIALOG:
+                            value = Serialization.Readers.PortableExecutable.ParseDialogBoxResource(entry.Data);
+                            break;
+                        case ResourceType.RT_STRING:
+                            value = Serialization.Readers.PortableExecutable.ParseStringTableResource(entry.Data);
+                            break;
+                        case ResourceType.RT_FONTDIR:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_FONT:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_ACCELERATOR:
+                            value = Serialization.Readers.PortableExecutable.ParseAcceleratorTable(entry.Data);
+                            break;
+                        case ResourceType.RT_RCDATA:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_MESSAGETABLE:
+                            value = Serialization.Readers.PortableExecutable.ParseMessageResourceData(entry.Data);
+                            break;
+                        case ResourceType.RT_GROUP_CURSOR:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_GROUP_ICON:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_VERSION:
+                            _versionInfo = Serialization.Readers.PortableExecutable.ParseVersionInfo(entry.Data);
+                            value = _versionInfo;
+                            break;
+                        case ResourceType.RT_DLGINCLUDE:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_PLUGPLAY:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_VXD:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_ANICURSOR:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_ANIICON:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_HTML:
+                            // TODO: Implement specific parsing
+                            break;
+                        case ResourceType.RT_MANIFEST:
+                            _assemblyManifest = Serialization.Readers.PortableExecutable.ParseAssemblyManifest(entry.Data);
+                            value = _assemblyManifest;
+                            break;
+
+                        // Bitflag, ignore
+                        case ResourceType.RT_NEWRESOURCE:
+                            break;
+
+                        // Error state, ignore
+                        case ResourceType.RT_ERROR:
+                            // TODO: Implement specific parsing
+                            break;
+
+                        default:
+                            // TODO: Implement specific parsing
+                            break;
+                    }
+                }
+                catch
+                {
+                    // Fall back on byte array data for malformed items
+                    value = Serialization.Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
+                }
+            }
+
+            // If we have a custom resource type
+            else if (types.Count > 0 && types[0] is string)
+            {
+                value = Serialization.Readers.PortableExecutable.ParseGenericResourceEntry(entry.Data);
+            }
+
+            // Add the key and value to the cache
+            _resourceData[key] = value;
+        }
+
+        #endregion
+
+        #region Sections
+
+        /// <summary>
+        /// Determine if a section is contained within the section table
+        /// </summary>
+        /// <param name="sectionName">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>True if the section is in the executable, false otherwise</returns>
+        public bool ContainsSection(string? sectionName, bool exact = false)
+        {
+            // If no section name is provided
+            if (sectionName is null)
+                return false;
+
+            // Get all section names first
+            if (SectionNames.Length == 0)
+                return false;
+
+            // If we're checking exactly, return only exact matches
+            if (exact)
+                return Array.FindIndex(SectionNames, n => n.Equals(sectionName)) > -1;
+
+            // Otherwise, check if section name starts with the value
+            else
+                return Array.FindIndex(SectionNames, n => n.StartsWith(sectionName)) > -1;
+        }
+
+        /// <summary>
+        /// Get the section index corresponding to the entry point, if possible
+        /// </summary>
+        /// <returns>Section index on success, null on error</returns>
+        public int FindEntryPointSectionIndex()
+        {
+            // If we don't have an entry point
+            if (OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable) == 0)
+                return -1;
+
+            // Otherwise, find the section it exists within
+            return OptionalHeader.AddressOfEntryPoint.ContainingSectionIndex(SectionTable);
+        }
+
+        /// <summary>
+        /// Get the first section based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section data on success, null on error</returns>
+        public SectionHeader? GetFirstSection(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the first index of the section
+            int index = Array.IndexOf(SectionNames, name);
+            if (index == -1)
+                return null;
+
+            // Return the section
+            return SectionTable[index];
+        }
+
+        /// <summary>
+        /// Get the last section based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section data on success, null on error</returns>
+        public SectionHeader? GetLastSection(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the last index of the section
+            int index = Array.LastIndexOf(SectionNames, name);
+            if (index == -1)
+                return null;
+
+            // Return the section
+            return SectionTable[index];
+        }
+
+        /// <summary>
+        /// Get the section based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the section to check for</param>
+        /// <returns>Section data on success, null on error</returns>
+        public SectionHeader? GetSection(int index)
+        {
+            // If we have no sections
+            if (SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (index < 0 || index >= SectionTable.Length)
+                return null;
+
+            // Return the section
+            return SectionTable[index];
+        }
+
+        /// <summary>
+        /// Get the first section data based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section data on success, null on error</returns>
+        public byte[]? GetFirstSectionData(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the first index of the section
+            int index = Array.IndexOf(SectionNames, name);
+            return GetSectionData(index);
+        }
+
+        /// <summary>
+        /// Get the last section data based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section data on success, null on error</returns>
+        public byte[]? GetLastSectionData(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the last index of the section
+            int index = Array.LastIndexOf(SectionNames, name);
+            return GetSectionData(index);
+        }
+
+        /// <summary>
+        /// Get the section data based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the section to check for</param>
+        /// <returns>Section data on success, null on error</returns>
+        public byte[]? GetSectionData(int index)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (index < 0 || index >= SectionTable.Length)
+                return null;
+
+            // Get the section data from the table
+            var section = SectionTable[index];
+            uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+            if (address == 0)
+                return null;
+
+            // Set the section size
+            uint size = section.SizeOfRawData;
+
+            // Create the section data array if we have to
+            _sectionData ??= new byte[SectionNames.Length][];
+
+            // If we already have cached data, just use that immediately
+            if (_sectionData[index] is not null && _sectionData[index].Length > 0)
+                return _sectionData[index];
+
+            // Populate the raw section data based on the source
+            var sectionData = ReadRangeFromSource((int)address, (int)size);
+
+            // Cache and return the section data
+            _sectionData[index] = sectionData;
+            return sectionData;
+        }
+
+        /// <summary>
+        /// Get the first section strings based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section strings on success, null on error</returns>
+        public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the first index of the section
+            int index = Array.IndexOf(SectionNames, name);
+            return GetSectionStrings(index);
+        }
+
+        /// <summary>
+        /// Get the last section strings based on name, if possible
+        /// </summary>
+        /// <param name="name">Name of the section to check for</param>
+        /// <param name="exact">True to enable exact matching of names, false for starts-with</param>
+        /// <returns>Section strings on success, null on error</returns>
+        public List<string>? GetLastSectionStrings(string? name, bool exact = false)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (!ContainsSection(name, exact))
+                return null;
+
+            // Get the last index of the section
+            int index = Array.LastIndexOf(SectionNames, name);
+            return GetSectionStrings(index);
+        }
+
+        /// <summary>
+        /// Get the section strings based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the section to check for</param>
+        /// <returns>Section strings on success, null on error</returns>
+        public List<string>? GetSectionStrings(int index)
+        {
+            // If we have no sections
+            if (SectionNames.Length == 0 || SectionTable.Length == 0)
+                return null;
+
+            // If the section doesn't exist
+            if (index < 0 || index >= SectionTable.Length)
+                return null;
+
+            lock (_sectionStringDataLock)
+            {
+                // Create the section string array if we have to
+                _sectionStringData ??= new List<string>?[SectionNames.Length];
+
+                // If we already have cached data, just use that immediately
+                if (_sectionStringData[index] is not null)
+                    return _sectionStringData[index];
+
+                // Get the section data, if possible
+                byte[]? sectionData = GetSectionData(index);
+                if (sectionData is null || sectionData.Length == 0)
+                {
+                    _sectionStringData[index] = [];
+                    return _sectionStringData[index];
+                }
+
+                // Otherwise, cache and return the strings
+                _sectionStringData[index] = sectionData.ReadStringsFrom(charLimit: 3) ?? [];
+                return _sectionStringData[index];
+            }
+        }
+
+        #endregion
+
+        #region Tables
+
+        /// <summary>
+        /// Get the table based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the table to check for</param>
+        /// <returns>Table on success, null on error</returns>
+        public DataDirectory? GetTable(int index)
+        {
+            // If the table doesn't exist
+            if (index < 0 || index > 16)
+                return null;
+
+            return index switch
+            {
+                1 => OptionalHeader.ExportTable,
+                2 => OptionalHeader.ImportTable,
+                3 => OptionalHeader.ResourceTable,
+                4 => OptionalHeader.ExceptionTable,
+                5 => OptionalHeader.CertificateTable,
+                6 => OptionalHeader.BaseRelocationTable,
+                7 => OptionalHeader.Debug,
+                8 => null, // Architecture Table
+                9 => OptionalHeader.GlobalPtr,
+                10 => OptionalHeader.ThreadLocalStorageTable,
+                11 => OptionalHeader.LoadConfigTable,
+                12 => OptionalHeader.BoundImport,
+                13 => OptionalHeader.ImportAddressTable,
+                14 => OptionalHeader.DelayImportDescriptor,
+                15 => OptionalHeader.CLRRuntimeHeader,
+                16 => null, // Reserved
+
+                // Should never be possible
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the table data based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the table to check for</param>
+        /// <returns>Table data on success, null on error</returns>
+        public byte[]? GetTableData(int index)
+        {
+            // If the table doesn't exist
+            if (index < 0 || index > 16)
+                return null;
+
+            // If we already have cached data, just use that immediately
+            if (_tableData[index] is not null && _tableData[index].Length > 0)
+                return _tableData[index];
+
+            // Get the table from the optional header
+            var table = GetTable(index);
+
+            // Get the virtual address and size from the entries
+            uint virtualAddress = table?.VirtualAddress ?? 0;
+            uint size = table?.Size ?? 0;
+
+            // Get the physical address from the virtual one
+            uint address = virtualAddress.ConvertVirtualAddress(SectionTable);
+            if (address == 0 || size == 0)
+                return null;
+
+            // Populate the raw table data based on the source
+            var tableData = ReadRangeFromSource((int)address, (int)size);
+
+            // Cache and return the table data
+            _tableData[index] = tableData;
+            return tableData;
+        }
+
+        /// <summary>
+        /// Get the table strings based on index, if possible
+        /// </summary>
+        /// <param name="index">Index of the table to check for</param>
+        /// <returns>Table strings on success, null on error</returns>
+        public List<string>? GetTableStrings(int index)
+        {
+            // If the table doesn't exist
+            if (index < 0 || index > 16)
+                return null;
+
+            // If we already have cached data, just use that immediately
+            if (_tableStringData[index] is not null)
+                return _tableStringData[index];
+
+            // Get the table data, if possible
+            byte[]? tableData = GetTableData(index);
+            if (tableData is null || tableData.Length == 0)
+            {
+                _tableStringData[index] = [];
+                return _tableStringData[index];
+            }
+
+            // Otherwise, cache and return the strings
+            _tableStringData[index] = tableData.ReadStringsFrom(charLimit: 5) ?? [];
+            return _tableStringData[index];
+        }
+
+        #endregion
+    }
+}
