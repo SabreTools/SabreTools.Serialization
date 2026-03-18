@@ -117,7 +117,7 @@ Below is a table of all namespaces within the library and what they represent
 | `SabreTools.Data.Attributes` | Common attributes for data marking and manipulation |
 | `SabreTools.Data.Extensions` | Extension methods related to models |
 | `SabreTools.Data.Models` | Models representing different file and structure types |
-| `SabreTools.Data.ObjectIdentifier` | Object Identifier (OID) parsing |
+| `SabreTools.ObjectIdentifier` | Object Identifier (OID) parsing |
 | `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
 | `SabreTools.Serialization.Readers` | Convert from external sources to models |
 | `SabreTools.Serialization.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |

@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using System.Text;
 using SabreTools.Data.Models.ASN1;
-using SabreTools.Data.ObjectIdentifier;
+using SabreTools.ObjectIdentifier;
 
 namespace SabreTools.Data.Extensions
 {

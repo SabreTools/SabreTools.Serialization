@@ -1,4 +1,4 @@
-using SabreTools.Data.ObjectIdentifier;
+using SabreTools.ObjectIdentifier;
 using Xunit;
 
 namespace SabreTools.Serialization.Test.ObjectIdentifier

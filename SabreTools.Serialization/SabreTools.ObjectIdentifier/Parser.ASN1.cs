@@ -1,5 +1,5 @@
 #pragma warning disable IDE0060 // Remove unused parameter
-namespace SabreTools.Data.ObjectIdentifier
+namespace SabreTools.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID) and ASN.1 notation

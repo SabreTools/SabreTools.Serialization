@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SabreTools.Data.ObjectIdentifier
+namespace SabreTools.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID)

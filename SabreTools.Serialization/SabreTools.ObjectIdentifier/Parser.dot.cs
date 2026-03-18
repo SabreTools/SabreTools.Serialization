@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Data.ObjectIdentifier
+namespace SabreTools.ObjectIdentifier
 {
     /// <summary>
     /// Methods related to Object Identifiers (OID) and dot notation
