@@ -1,7 +1,6 @@
-using SabreTools.ObjectIdentifier;
 using Xunit;
 
-namespace SabreTools.Serialization.Test.ObjectIdentifier
+namespace SabreTools.ObjectIdentifier.Test
 {
     // These tests are known to be incomplete due to the sheer number
     // of possible OIDs that exist. The tests below are a minimal
