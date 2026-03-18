@@ -2,7 +2,7 @@ using SabreTools.Data.Models.NewExecutable;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class NewExecutable
+    public static class NewExecutableExtensions
     {
         /// <summary>
         /// Determine if a resource type information entry is an integer or offset

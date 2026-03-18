@@ -3,7 +3,7 @@ using SabreTools.Data.Models.COFF;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class PortableExecutable
+    public static class PortableExecutableExtensions
     {
         /// <summary>
         /// Convert a relative virtual address to a physical one

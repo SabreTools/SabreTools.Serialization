@@ -3,7 +3,7 @@ using SabreTools.Numerics;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class ISO9660
+    public static class ISO9660Extensions
     {
         /// <summary>
         /// Get the logical block size from a sector length

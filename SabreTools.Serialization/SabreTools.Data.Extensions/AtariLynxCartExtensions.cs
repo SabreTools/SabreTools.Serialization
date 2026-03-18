@@ -2,7 +2,7 @@ using SabreTools.Data.Models.AtariLynx;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class AtariLynxCart
+    public static class AtariLynxCartExtensions
     {
         /// <summary>
         /// Convert a <see cref="Rotation"/> value to string

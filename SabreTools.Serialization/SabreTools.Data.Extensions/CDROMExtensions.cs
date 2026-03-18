@@ -5,7 +5,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class CDROM
+    public static class CDROMExtensions
     {
         /// <summary>
         /// Get the sector mode for a CD-ROM stream

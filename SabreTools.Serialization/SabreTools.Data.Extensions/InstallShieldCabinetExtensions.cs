@@ -2,7 +2,7 @@ using SabreTools.Data.Models.InstallShieldCabinet;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class InstallShieldCabinet
+    public static class InstallShieldCabinetExtensions
     {
         #region File Descriptors
 

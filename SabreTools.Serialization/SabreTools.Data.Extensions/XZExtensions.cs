@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class XZ
+    public static class XZExtensions
     {
         /// <summary>
         /// Decode a value from a variable-length integer

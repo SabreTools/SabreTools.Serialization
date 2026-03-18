@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 #pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Data.Extensions
 {
-    public static class WiseScript
+    public static class WiseScriptExtensions
     {
         /// <summary>
         /// Convert a Wise function ID to the formal action name

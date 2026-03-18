@@ -3,7 +3,7 @@ using SabreTools.Data.Models.Atari7800;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class Atari7800Cart
+    public static class Atari7800CartExtensions
     {
         /// <summary>
         /// Convert a <see cref="AudioDevice"/> value to string

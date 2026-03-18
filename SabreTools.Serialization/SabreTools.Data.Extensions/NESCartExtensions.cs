@@ -2,7 +2,7 @@ using SabreTools.Data.Models.NES;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class NESCart
+    public static class NESCartExtensions
     {
         /// <summary>
         /// Convert a <see cref="ConsoleType"/> value to string

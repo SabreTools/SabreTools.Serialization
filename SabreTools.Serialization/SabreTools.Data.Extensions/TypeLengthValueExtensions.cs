@@ -6,14 +6,14 @@ using SabreTools.ObjectIdentifier;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class TypeLengthValue
+    public static class TypeLengthValueExtensions
     {
         /// <summary>
         /// Format a TypeLengthValue as a string
         /// </summary>
         /// <param name="paddingLevel">Padding level of the item when formatting</param>
         /// <returns>String representing the TypeLengthValue, if possible</returns>
-        public static string Format(this Models.ASN1.TypeLengthValue tlv, int paddingLevel = 0)
+        public static string Format(this TypeLengthValue tlv, int paddingLevel = 0)
         {
             // Create the left-padding string
             string padding = new(' ', paddingLevel);
@@ -38,7 +38,7 @@ namespace SabreTools.Data.Extensions
             if (tlv.Type.HasFlag(ASN1Type.V_ASN1_CONSTRUCTED))
 #endif
             {
-                if (tlv.Value is not Models.ASN1.TypeLengthValue[] valueAsObjectArray)
+                if (tlv.Value is not TypeLengthValue[] valueAsObjectArray)
                 {
                     formatBuilder.Append(", Value: [INVALID DATA TYPE]");
                     return formatBuilder.ToString();

@@ -3,7 +3,7 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class XboxExecutable
+    public static class XboxExecutableExtensions
     {
         /// <summary>
         /// Convert a UInt32 to a formatted XBE title ID

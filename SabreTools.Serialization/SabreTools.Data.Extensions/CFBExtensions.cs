@@ -2,7 +2,7 @@ using System.Text;
 
 namespace SabreTools.Data.Extensions
 {
-    public static class CFB
+    public static class CFBExtensions
     {
         /// <summary>
         /// Decode a MIME-encoded stream name stored as a byte array
