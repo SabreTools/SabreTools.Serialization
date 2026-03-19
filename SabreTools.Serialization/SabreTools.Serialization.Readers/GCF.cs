@@ -253,7 +253,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the checksum header
                 var checksumHeader = ParseChecksumHeader(data);
-                if (checksumHeader?.Dummy0 != 0x00000001)
+                if (checksumHeader?.Dummy0 != 0x00000000 && checksumHeader?.Dummy0 != 0x00000001)
                     return null;
 
                 // Set the game cache checksum header
