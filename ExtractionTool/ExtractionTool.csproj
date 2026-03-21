@@ -29,14 +29,14 @@
 
     <!-- These are needed for dealing with native Windows DLLs -->
     <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x86'">
-        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x86\native\StormLib.dll">
+        <ContentWithTargetPath Include="..\runtimes\win-x86\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>StormLib.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
-        <ContentWithTargetPath Include="..\SabreTools.Serialization\runtimes\win-x64\native\StormLib.dll">
+        <ContentWithTargetPath Include="..\runtimes\win-x64\native\StormLib.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
             <TargetPath>StormLib.dll</TargetPath>
@@ -44,7 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SabreTools.Serialization\SabreTools.Serialization.csproj" />
+        <ProjectReference Include="..\SabreTools.Wrappers\SabreTools.Wrappers.csproj" />
     </ItemGroup>
 
     <ItemGroup>

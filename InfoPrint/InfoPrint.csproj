@@ -28,7 +28,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SabreTools.Serialization\SabreTools.Serialization.csproj" />
+        <ProjectReference Include="..\SabreTools.Wrappers\SabreTools.Wrappers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
