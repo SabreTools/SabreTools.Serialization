@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
 
                 ird.TitleLength = data.ReadByteValue();
                 byte[] title = data.ReadBytes(ird.TitleLength);
-                ird.Title = Encoding.ASCII.GetString(title);
+                ird.Title = Encoding.UTF8.GetString(title);
 
                 byte[] systemVersion = data.ReadBytes(4);
                 ird.SystemVersion = Encoding.ASCII.GetString(systemVersion);
