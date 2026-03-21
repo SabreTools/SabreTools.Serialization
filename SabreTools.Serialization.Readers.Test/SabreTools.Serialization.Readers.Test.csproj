@@ -15,7 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj" />
+        <ProjectReference Include="..\SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj" />
+        <ProjectReference Include="..\SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj" />
     </ItemGroup>
 
 </Project>

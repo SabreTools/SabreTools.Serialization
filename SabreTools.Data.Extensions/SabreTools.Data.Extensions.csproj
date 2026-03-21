@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Assembly Properties -->
+        <TargetFrameworks>net20;net35;net40;net452;net462;net472;net48;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <IncludeSymbols>true</IncludeSymbols>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <Version>2.3.0</Version>
+
+        <!-- Package Properties -->
+        <Authors>Matt Nadareski</Authors>
+        <Description>Extension methods related to models</Description>
+        <Copyright>Copyright (c) Matt Nadareski 2019-2026</Copyright>
+        <PackageProjectUrl>https://github.com/SabreTools/</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/SabreTools/SabreTools.Serialization</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>models extensions conversion</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="SabreTools.Wrappers" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NetLegacySupport.Numerics" Version="1.0.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
+        <PackageReference Include="SabreTools.IO" Version="[1.9.1]" />
+     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
+      <ProjectReference Include="..\SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj" />
+    </ItemGroup>
+
+</Project>

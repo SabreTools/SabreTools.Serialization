@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <!-- Assembly Properties -->
@@ -16,13 +16,13 @@
 
         <!-- Package Properties -->
         <Authors>Matt Nadareski</Authors>
-        <Description>Serialization and deserialization helpers for various types</Description>
+        <Description>Classes that wrap serialization and models to allow for including extension properties</Description>
         <Copyright>Copyright (c) Matt Nadareski 2019-2026</Copyright>
         <PackageProjectUrl>https://github.com/SabreTools/</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/SabreTools/SabreTools.Serialization</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>serialization reader writer conversion models wrappers printers oid asn1</PackageTags>
+        <PackageTags>serialization models wrappers printers</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
@@ -35,27 +35,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="../README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Include="..\SabreTools.Data.Extensions\*.cs" />
-        <Compile Include="..\SabreTools.Data.Models\**\*.cs" Exclude="..\SabreTools.Data.Models\obj\**\*.cs" />
-        <Compile Include="..\SabreTools.ObjectIdentifier\*.cs" />
-        <Compile Include="..\SabreTools.Serialization.CrossModel\*.cs" Exclude="..\SabreTools.Serialization.CrossModel\ExtensionAttribute.cs" />
-        <Compile Include="..\SabreTools.Serialization.Readers\*.cs" />
-        <Compile Include="..\SabreTools.Serialization.Writers\*.cs" Exclude="..\SabreTools.Serialization.Writers\ExtensionAttribute.cs" />
-        <Compile Include="..\SabreTools.Wrappers\*.cs" Exclude="..\SabreTools.Wrappers\ExtensionAttribute.cs" />
-        <Compile Include="..\SabreTools.Wrappers\_EXTERNAL\StormLibSharp\**\*.cs" />
+        <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="GrindCore" Version="0.7.0" />
         <PackageReference Include="GrindCore.SharpCompress" Version="0.46.2" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
-        <PackageReference Include="NetLegacySupport.Numerics" Version="1.0.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="SabreTools.Hashing" Version="[1.6.1]" />
         <PackageReference Include="SabreTools.IO" Version="[1.9.1]" />
      </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
+      <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
+      <ProjectReference Include="..\SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj" />
+      <ProjectReference Include="..\SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj" />
+    </ItemGroup>
 
 </Project>
