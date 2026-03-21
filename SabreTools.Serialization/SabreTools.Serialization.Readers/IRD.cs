@@ -47,9 +47,9 @@ namespace SabreTools.Serialization.Readers
                 if (ird.Version == 7)
                     ird.UID = data.ReadUInt32LittleEndian();
 
-                ird.HeaderLength = data.ReadByteValue();
+                ird.HeaderLength = data.ReadUInt32LittleEndian();
                 ird.Header = data.ReadBytes((int)ird.HeaderLength);
-                ird.FooterLength = data.ReadByteValue();
+                ird.FooterLength = data.ReadUInt32LittleEndian();
                 ird.Footer = data.ReadBytes((int)ird.FooterLength);
 
                 ird.RegionCount = data.ReadByteValue();
