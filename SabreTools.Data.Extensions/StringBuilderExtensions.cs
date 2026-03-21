@@ -5,6 +5,7 @@ using SabreTools.Numerics;
 namespace SabreTools.Data.Extensions
 {
     // TODO: Add extension for printing enums, if possible
+    // TODO: Remove when IO is updated (SabreTools.IO.Extensions)
     internal static class StringBuilderExtensions
     {
         /// <summary>
