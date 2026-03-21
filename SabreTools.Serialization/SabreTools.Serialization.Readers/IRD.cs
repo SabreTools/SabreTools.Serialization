@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.Readers
                     ird.RegionHashes[i] = data.ReadBytes(16) ?? [];
                 }
 
-                ird.FileCount = data.ReadByteValue();
+                ird.FileCount = data.ReadUInt32LittleEndian();
                 ird.FileKeys = new ulong[ird.FileCount];
                 ird.FileHashes = new byte[ird.FileCount][];
                 for (int i = 0; i < ird.FileCount; i++)
