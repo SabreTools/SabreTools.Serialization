@@ -6,16 +6,6 @@ This meta-library comprises of serializers that both read and write from files a
 
 Find the link to the Nuget package [here](https://www.nuget.org/packages/SabreTools.Serialization).
 
-The following non-project libraries (or ports thereof) are used for file handling:
-
-- [GrindCore.SharpCompress](https://github.com/Nanook/GrindCore.SharpCompress) - Common archive format extraction
-- [StormLibSharp](https://github.com/robpaveza/stormlibsharp) - MoPaQ extraction [Unused in non-Windows builds due to Windows-specific libraries]
-
-The following projects have influenced this library:
-
-- [libmspack](https://github.com/kyz/libmspack) - Documentation around the MS-CAB format and associated compression methods.
-- [Unshield](https://github.com/twogood/unshield/) - InstallShield CAB extraction tool that influenced internal handling
-
 ## Releases
 
 For the most recent stable build, download the latest release here: [Releases Page](https://github.com/SabreTools/SabreTools.Serialization/releases)
@@ -83,41 +73,14 @@ Options:
 | XBox Package File (XZP) | |
 | xz archive (XZ) | .NET Framework 4.6.2 and greater |
 
-## Interfaces
-
-Below is a table representing the various conversion interfaces that are implemented within this library.
-
-| Interface Name | Source Type | Destination Type |
-| --- | --- | --- |
-| `SabreTools.Serialization.CrossModel.ICrossModel<TSource, TDest>` | `TSource`/`TDest` | `TDest`/`TSource` |
-| `SabreTools.Serialization.Readers.IByteReader<TModel>` | `byte[]?` | `TModel` |
-| `SabreTools.Serialization.Readers.IFileReader<TModel>` | `string?` path | `TModel` |
-| `SabreTools.Serialization.Readers.IStreamReader<TModel>` | `Stream?` | `TModel` |
-| `SabreTools.Serialization.Readers.IStringReader<TModel>` | `string?` representation | `TModel` |
-| `SabreTools.Serialization.Writers.IByteWriter<TModel>` | `TModel` | `byte[]?` |
-| `SabreTools.Serialization.Writers.IFileWriter<TModel>` | `TModel` | `string?` path |
-| `SabreTools.Serialization.Writers.IStreamWriter<TModel>` | `TModel` | `Stream?` |
-| `SabreTools.Serialization.Writers.IStringWriter<TModel>` | `TModel` | `string?` representation |
-
-Below is a table representing the various non-conversion interfaces that are implemented within this library.
-
-| Interface Name | Purpose |
-| --- | --- |
-| `SabreTools.Wrappers.IExtractable` | Marks a wrapper as able to be extracted |
-| `SabreTools.Wrappers.IPrintable` | Marks a wrapper as able to print model information |
-| `SabreTools.Wrappers.IWrapper` | Represents an item with a description and JSON serializable state, allowing for extensions |
-| `SabreTools.Wrappers.IWrapper<TModel>` | Wraps a `TModel` with source data, allowing for extensions |
-
 ## Namespaces
 
-Below is a table of all namespaces within the library and what they represent
+Below are a list of the included namespaces with links to their README files:
 
-| Namespace | Description |
-| --- | --- |
-| `SabreTools.Data.Extensions` | Extension methods related to models |
-| `SabreTools.Data.Models` | Models representing different file and structure types |
-| `SabreTools.ObjectIdentifier` | Object Identifier (OID) parsing |
-| `SabreTools.Serialization.CrossModel` | Convert between models; mainly used for metadata files converting to and from a common, `Dictionary`-based model |
-| `SabreTools.Serialization.Readers` | Convert from external sources to models |
-| `SabreTools.Serialization.Writers` | Convert from models to external sources |
-| `SabreTools.Wrappers` | Classes that wrap serialization and models to allow for including extension properties |
+- [SabreTools.Data.Extensions](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Data.Extensions)
+- [SabreTools.Data.Models](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Data.Models)
+- [SabreTools.ObjectIdentifier](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.ObjectIdentifier)
+- [SabreTools.Serialization.CrossModel](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Serialization.CrossModel)
+- [SabreTools.Serialization.Readers](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Serialization.Readers)
+- [SabreTools.Serialization.Writers](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Serialization.Writers)
+- [SabreTools.Wrappers](https://github.com/SabreTools/SabreTools.Serialization/tree/main/SabreTools.Wrappers)
