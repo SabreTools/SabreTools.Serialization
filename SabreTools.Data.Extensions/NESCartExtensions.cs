@@ -155,13 +155,13 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Convert a <see cref="NametableArrangement"/> value to string
         /// </summary>
-        public static string FromNametableArrangement(this NametableArrangement type)
+        public static string FromNametableArrangement(this NametableArrangement arrangement)
         {
-            return type switch
+            return arrangement switch
             {
                 NametableArrangement.Vertical => "Vertical",
                 NametableArrangement.Horizontal => "Horizontal",
-                _ => $"Unknown {(byte)type}",
+                _ => $"Unknown {(byte)arrangement}",
             };
         }
 

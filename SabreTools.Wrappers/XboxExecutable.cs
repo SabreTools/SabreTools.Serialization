@@ -29,7 +29,7 @@ namespace SabreTools.Wrappers
                 if (AlternativeTitleIDs is null)
                     return null;
 
-                return Array.ConvertAll(AlternativeTitleIDs, ba => ba.ToFormattedXBETitleID() ?? "[NULL]");
+                return Array.ConvertAll(AlternativeTitleIDs, ba => ba.ToFormattedXBETitleID());
             }
         }
 
@@ -74,7 +74,7 @@ namespace SabreTools.Wrappers
         public uint TitleID => Certificate?.TitleID ?? 0;
 
         /// <inheritdoc cref="Certificate.TitleID"/>
-        public string? TitleIDString => TitleID.ToFormattedXBETitleID();
+        public string TitleIDString => TitleID.ToFormattedXBETitleID();
 
         /// <inheritdoc cref="Certificate.TitleName"/>
         public string? TitleName

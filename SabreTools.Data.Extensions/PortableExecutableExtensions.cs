@@ -3,6 +3,7 @@ using SabreTools.Data.Models.COFF;
 
 namespace SabreTools.Data.Extensions
 {
+    // TODO: Add tests
     public static class PortableExecutableExtensions
     {
         /// <summary>

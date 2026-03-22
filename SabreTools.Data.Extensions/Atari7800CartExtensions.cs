@@ -12,7 +12,7 @@ namespace SabreTools.Data.Extensions
         {
             string[] devices = new string[4];
 
-            byte pokey = (byte)((byte)audio & 0x0F);
+            byte pokey = (byte)((byte)audio & 0x07);
             devices[0] = pokey switch
             {
                 0 => "POKEY - none",
@@ -24,7 +24,7 @@ namespace SabreTools.Data.Extensions
                 _ => $"Unknown {pokey}",
             };
 
-            byte ym2151 = (byte)(((byte)audio >> 1) & 0x01);
+            byte ym2151 = (byte)(((byte)audio >> 3) & 0x01);
             devices[1] = ym2151 switch
             {
                 0 => "No YM2151 @460",
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Extensions
                 _ => $"Unknown {ym2151}",
             };
 
-            byte covox = (byte)(((byte)audio >> 2) & 0x01);
+            byte covox = (byte)(((byte)audio >> 4) & 0x01);
             devices[2] = covox switch
             {
                 0 => "No COVOX @430",
@@ -40,7 +40,7 @@ namespace SabreTools.Data.Extensions
                 _ => $"Unknown {covox}",
             };
 
-            byte adpcm = (byte)(((byte)audio >> 3) & 0x01);
+            byte adpcm = (byte)(((byte)audio >> 5) & 0x01);
             devices[3] = adpcm switch
             {
                 0 => "No ADPCM Audio Stream @420",
@@ -239,7 +239,7 @@ namespace SabreTools.Data.Extensions
         {
             string[] romOptions = new string[2];
 
-            byte option4000 = (byte)((byte)options & 0x0F);
+            byte option4000 = (byte)((byte)options & 0x07);
             romOptions[0] = option4000 switch
             {
                 0 => "Option at @4000 - none",

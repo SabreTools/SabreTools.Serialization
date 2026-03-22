@@ -8,7 +8,7 @@ namespace SabreTools.Data.Extensions
         /// <summary>
         /// Convert a UInt32 to a formatted XBE title ID
         /// </summary>
-        public static string? ToFormattedXBETitleID(this uint value)
+        public static string ToFormattedXBETitleID(this uint value)
         {
             // Convert to a byte array
             byte[] data = BitConverter.GetBytes(value);
