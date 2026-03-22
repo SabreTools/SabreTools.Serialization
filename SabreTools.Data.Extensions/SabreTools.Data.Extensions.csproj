@@ -31,10 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="SabreTools.Wrappers" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="NetLegacySupport.Numerics" Version="1.0.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
         <PackageReference Include="SabreTools.IO" Version="[1.9.1]" />
      </ItemGroup>

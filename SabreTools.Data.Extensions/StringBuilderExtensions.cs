@@ -6,7 +6,7 @@ namespace SabreTools.Data.Extensions
 {
     // TODO: Add extension for printing enums, if possible
     // TODO: Remove when IO is updated (SabreTools.IO.Extensions)
-    internal static class StringBuilderExtensions
+    public static class StringBuilderExtensions
     {
         /// <summary>
         /// Append a line containing a boolean to a StringBuilder
