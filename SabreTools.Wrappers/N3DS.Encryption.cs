@@ -9,6 +9,8 @@ namespace SabreTools.Wrappers
 {
     public partial class N3DS
     {
+        #region Common
+
         /// <summary>
         /// Get the initial value for the ExeFS counter
         /// </summary>
@@ -65,8 +67,6 @@ namespace SabreTools.Wrappers
             Array.Reverse(partitionIdBytes);
             return [.. partitionIdBytes, .. RomfsCounter];
         }
-
-        #region Common
 
         /// <summary>
         /// Get KeyX value for a crypto method and development status combination
