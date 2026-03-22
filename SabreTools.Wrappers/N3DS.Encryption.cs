@@ -244,9 +244,14 @@ namespace SabreTools.Wrappers
             CryptoMethod method = GetCryptoMethod(index);
 
             // Get the partition keys
+#if NET20 || NET35
+            bool fixedCryptoKey = (masks & BitMasks.FixedCryptoKey) > 0;
+#else
+            bool fixedCryptoKey = masks.HasFlag(BitMasks.FixedCryptoKey);
+#endif
             byte[] keyX = GetKeyXForCryptoMethod(settings, method);
             byte[] keyX0x2C = settings.Development ? settings.DevKeyX0x2C : settings.KeyX0x2C;
-            return new PartitionKeys(signature, masks, settings.AESHardwareConstant, keyX, keyX0x2C);
+            return new PartitionKeys(signature, fixedCryptoKey, settings.AESHardwareConstant, keyX, keyX0x2C);
         }
 
         /// <summary>
@@ -669,9 +674,14 @@ namespace SabreTools.Wrappers
             CryptoMethod method = backupHeader.Flags.CryptoMethod;
 
             // Get the partition keys
+#if NET20 || NET35
+            bool fixedCryptoKey = (masks & BitMasks.FixedCryptoKey) > 0;
+#else
+            bool fixedCryptoKey = masks.HasFlag(BitMasks.FixedCryptoKey);
+#endif
             byte[] keyX = GetKeyXForCryptoMethod(settings, method);
             byte[] keyX0x2C = settings.Development ? settings.DevKeyX0x2C : settings.KeyX0x2C;
-            return new PartitionKeys(signature, masks, settings.AESHardwareConstant, keyX, keyX0x2C);
+            return new PartitionKeys(signature, fixedCryptoKey, settings.AESHardwareConstant, keyX, keyX0x2C);
         }
 
         /// <summary>
@@ -904,7 +914,13 @@ namespace SabreTools.Wrappers
             if (index > 0)
             {
                 var backupHeader = BackupHeader;
-                keys.SetRomFSValues(backupHeader.Flags.BitMasks,
+#if NET20 || NET35
+                bool fixedCryptoKey = (backupHeader.Flags.BitMasks & BitMasks.FixedCryptoKey) > 0;
+#else
+                bool fixedCryptoKey = backupHeader.Flags.BitMasks.HasFlag(BitMasks.FixedCryptoKey);
+#endif
+
+                keys.SetRomFSValues(fixedCryptoKey,
                     settings.AESHardwareConstant,
                     settings.Development ? settings.DevKeyX0x2C : settings.KeyX0x2C);
             }
@@ -1338,11 +1354,11 @@ namespace SabreTools.Wrappers
             /// Create a new set of keys for a given partition
             /// </summary>
             /// <param name="signature">RSA-2048 signature from the partition</param>
-            /// <param name="masks">BitMasks from the partition or backup header</param>
+            /// <param name="fixedCryptoKey">Flag indicating if the FixedCryptoKey bit mask was set</param>
             /// <param name="hardwareConstant">AES hardware constant to use</param>
             /// <param name="keyX">KeyX value to assign based on crypto method and development status</param>
             /// <param name="keyX0x2C">KeyX2C value to assign based on development status</param>
-            public PartitionKeys(byte[]? signature, BitMasks masks, byte[] hardwareConstant, byte[] keyX, byte[] keyX0x2C)
+            public PartitionKeys(byte[]? signature, bool fixedCryptoKey, byte[] hardwareConstant, byte[] keyX, byte[] keyX0x2C)
             {
                 // Validate inputs
                 if (signature is not null && signature.Length < 16)
@@ -1354,11 +1370,7 @@ namespace SabreTools.Wrappers
                     Array.Copy(signature, KeyY, 16);
 
                 // Special case for zero-key
-#if NET20 || NET35
-                if ((masks & BitMasks.FixedCryptoKey) > 0)
-#else
-                if (masks.HasFlag(BitMasks.FixedCryptoKey))
-#endif
+                if (fixedCryptoKey)
                 {
                     Console.WriteLine("Encryption Method: Zero Key");
                     NormalKey = new byte[16];
@@ -1374,17 +1386,13 @@ namespace SabreTools.Wrappers
             /// <summary>
             /// Set RomFS values based on the bit masks
             /// </summary>
-            /// <param name="masks">BitMasks from the partition or backup header</param>
+            /// <param name="fixedCryptoKey">Flag indicating if the FixedCryptoKey bit mask was set</param>
             /// <param name="hardwareConstant">AES hardware constant to use</param>
             /// <param name="keyX0x2C">KeyX2C value to assign based on development status</param>
-            public void SetRomFSValues(BitMasks masks, byte[] hardwareConstant, byte[] keyX0x2C)
+            public void SetRomFSValues(bool fixedCryptoKey, byte[] hardwareConstant, byte[] keyX0x2C)
             {
                 // NormalKey has a constant value for zero-key
-#if NET20 || NET35
-                if ((masks & BitMasks.FixedCryptoKey) > 0)
-#else
-                if (masks.HasFlag(BitMasks.FixedCryptoKey))
-#endif
+                if (fixedCryptoKey)
                 {
                     NormalKey = new byte[16];
                     return;
