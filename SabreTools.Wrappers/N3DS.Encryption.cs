@@ -980,7 +980,7 @@ namespace SabreTools.Wrappers
         #region Helper Classes
 
         /// <summary>
-        /// Encryption settings to be passed around during processing
+        /// 3DS Encryption settings to be passed around during processing
         /// </summary>
         private class EncryptionSettings
         {
@@ -1003,18 +1003,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedKeyX0x18))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateKeyX0x18(value))
+                        field = value;
                 }
             } = [];
 
@@ -1026,18 +1016,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedDevKeyX0x18))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateDevKeyX0x18(value))
+                        field = value;
                 }
             } = [];
 
@@ -1049,18 +1029,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedKeyX0x1B))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateKeyX0x1B(value))
+                        field = value;
                 }
             } = [];
 
@@ -1072,18 +1042,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedDevKeyX0x1B))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateDevKeyX0x1B(value))
+                        field = value;
                 }
             } = [];
 
@@ -1095,18 +1055,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedKeyX0x25))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateKeyX0x25(value))
+                        field = value;
                 }
             } = [];
 
@@ -1118,18 +1068,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedDevKeyX0x25))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateDevKeyX0x25(value))
+                        field = value;
                 }
             } = [];
 
@@ -1141,18 +1081,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedKeyX0x2C))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateKeyX0x2C(value))
+                        field = value;
                 }
             } = [];
 
@@ -1164,18 +1094,8 @@ namespace SabreTools.Wrappers
                 get;
                 set
                 {
-                    // Ignore missing key data
-                    if (value.Length == 0)
-                        return;
-
-                    // Validate the key data
-                    var cipher = AESCTR.CreateEncryptionCipher(value, TestIV);
-                    byte[] actual = cipher.ProcessBytes(TestPattern);
-                    if (!actual.EqualsExactly(ExpectedDevKeyX0x2C))
-                        return;
-
-                    // Assign the validated value
-                    field = value;
+                    if (ValidateDevKeyX0x2C(value))
+                        field = value;
                 }
             } = [];
 
@@ -1324,6 +1244,146 @@ namespace SabreTools.Wrappers
                 0xE6, 0x9A, 0x0D, 0xF7, 0xD0, 0x1E, 0xC2, 0xEC,
                 0xC1, 0xE2, 0x8E, 0xEE, 0x89, 0xB9, 0xB1, 0x97,
             ];
+
+            #endregion
+
+            #region Validation Methods
+
+            /// <summary>
+            /// Validate a possible KeyX0x18 value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateKeyX0x18(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedKeyX0x18);
+            }
+
+            /// <summary>
+            /// Validate a possible DevKeyX0x18 value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateDevKeyX0x18(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedDevKeyX0x18);
+            }
+
+            /// <summary>
+            /// Validate a possible KeyX0x1B value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateKeyX0x1B(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedKeyX0x1B);
+            }
+
+            /// <summary>
+            /// Validate a possible DevKeyX0x1B value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateDevKeyX0x1B(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedDevKeyX0x1B);
+            }
+
+            /// <summary>
+            /// Validate a possible KeyX0x25 value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateKeyX0x25(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedKeyX0x25);
+            }
+
+            /// <summary>
+            /// Validate a possible DevKeyX0x25 value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateDevKeyX0x25(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedDevKeyX0x25);
+            }
+
+            /// <summary>
+            /// Validate a possible KeyX0x2C value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateKeyX0x2C(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedKeyX0x2C);
+            }
+
+            /// <summary>
+            /// Validate a possible DevKeyX0x2C value
+            /// </summary>
+            /// <param name="key">Key to test</param>
+            /// <returns>True if the key was valid, false otherwise</returns>
+            public bool ValidateDevKeyX0x2C(byte[]? key)
+            {
+                // Missing key data is considered invalid
+                if (key is null || key.Length == 0)
+                    return false;
+
+                // Validate the key data
+                var cipher = AESCTR.CreateEncryptionCipher(key, TestIV);
+                byte[] actual = cipher.ProcessBytes(TestPattern);
+                return actual.EqualsExactly(ExpectedDevKeyX0x2C);
+            }
 
             #endregion
         }
