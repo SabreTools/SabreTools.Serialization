@@ -112,6 +112,40 @@ namespace SabreTools.Data.Extensions.Test
 
         #endregion
 
+        #region ConditionalHashEquals
+
+        [Theory]
+        [InlineData(null, null, true)]
+        [InlineData(new byte[0], new byte[0], true)]
+        [InlineData(new byte[] { 0x01 }, new byte[0], true)]
+        [InlineData(new byte[0], new byte[] { 0x01 }, true)]
+        [InlineData(new byte[] { 0x01 }, new byte[] { 0x01 }, true)]
+        [InlineData(new byte[] { 0x01, 0x02 }, new byte[] { 0x01 }, false)]
+        [InlineData(new byte[] { 0x01 }, new byte[] { 0x01, 0x02 }, false)]
+        [InlineData(new byte[] { 0x01, 0x02 }, new byte[] { 0x02, 0x01 }, false)]
+        public void ConditionalHashEquals_Array(byte[]? firstHash, byte[]? secondHash, bool expected)
+        {
+            bool actual = MetadataExtensions.ConditionalHashEquals(firstHash, secondHash);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null, true)]
+        [InlineData("", "", true)]
+        [InlineData("01", "", true)]
+        [InlineData("", "01", true)]
+        [InlineData("01", "01", true)]
+        [InlineData("0102", "01", false)]
+        [InlineData("01", "0102", false)]
+        [InlineData("0102", "0201", false)]
+        public void ConditionalHashEquals_String(string? firstHash, string? secondHash, bool expected)
+        {
+            bool actual = MetadataExtensions.ConditionalHashEquals(firstHash, secondHash);
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
         #region HashMatch
 
         [Fact]
