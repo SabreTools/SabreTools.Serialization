@@ -579,10 +579,10 @@ namespace SabreTools.Data.Extensions
         private static bool HasZeroHash(this Disk disk)
         {
             string? md5 = disk.ReadString(Disk.MD5Key);
-            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, ZeroHash.MD5Str, StringComparison.OrdinalIgnoreCase);
+            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha1 = disk.ReadString(Disk.SHA1Key);
-            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, ZeroHash.SHA1Str, StringComparison.OrdinalIgnoreCase);
+            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return md5Null
                 && sha1Null;
@@ -594,16 +594,16 @@ namespace SabreTools.Data.Extensions
         private static bool HasZeroHash(this Media media)
         {
             string? md5 = media.ReadString(Media.MD5Key);
-            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, ZeroHash.MD5Str, StringComparison.OrdinalIgnoreCase);
+            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha1 = media.ReadString(Media.SHA1Key);
-            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, ZeroHash.SHA1Str, StringComparison.OrdinalIgnoreCase);
+            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha256 = media.ReadString(Media.SHA256Key);
-            bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, ZeroHash.SHA256Str, StringComparison.OrdinalIgnoreCase);
+            bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, HashType.SHA256.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? spamsum = media.ReadString(Media.SpamSumKey);
-            bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, ZeroHash.SpamSumStr, StringComparison.OrdinalIgnoreCase);
+            bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return md5Null
                 && sha1Null
@@ -617,37 +617,37 @@ namespace SabreTools.Data.Extensions
         private static bool HasZeroHash(this Rom rom)
         {
             string? crc = rom.ReadString(Rom.CRCKey);
-            bool crcNull = string.IsNullOrEmpty(crc) || string.Equals(crc, ZeroHash.CRC32Str, StringComparison.OrdinalIgnoreCase);
+            bool crcNull = string.IsNullOrEmpty(crc) || string.Equals(crc, HashType.CRC32.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? md2 = rom.ReadString(Rom.MD2Key);
-            bool md2Null = string.IsNullOrEmpty(md2) || string.Equals(md2, ZeroHash.GetString(HashType.MD2), StringComparison.OrdinalIgnoreCase);
+            bool md2Null = string.IsNullOrEmpty(md2) || string.Equals(md2, HashType.MD2.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? md4 = rom.ReadString(Rom.MD4Key);
-            bool md4Null = string.IsNullOrEmpty(md4) || string.Equals(md4, ZeroHash.GetString(HashType.MD4), StringComparison.OrdinalIgnoreCase);
+            bool md4Null = string.IsNullOrEmpty(md4) || string.Equals(md4, HashType.MD4.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? md5 = rom.ReadString(Rom.MD5Key);
-            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, ZeroHash.MD5Str, StringComparison.OrdinalIgnoreCase);
+            bool md5Null = string.IsNullOrEmpty(md5) || string.Equals(md5, HashType.MD5.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? ripeMD128 = rom.ReadString(Rom.RIPEMD128Key);
-            bool ripeMD128Null = string.IsNullOrEmpty(value: ripeMD128) || string.Equals(ripeMD128, ZeroHash.GetString(HashType.RIPEMD128), StringComparison.OrdinalIgnoreCase);
+            bool ripeMD128Null = string.IsNullOrEmpty(value: ripeMD128) || string.Equals(ripeMD128, HashType.RIPEMD128.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? ripeMD160 = rom.ReadString(Rom.RIPEMD160Key);
-            bool ripeMD160Null = string.IsNullOrEmpty(ripeMD160) || string.Equals(ripeMD160, ZeroHash.GetString(HashType.RIPEMD160), StringComparison.OrdinalIgnoreCase);
+            bool ripeMD160Null = string.IsNullOrEmpty(ripeMD160) || string.Equals(ripeMD160, HashType.RIPEMD160.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha1 = rom.ReadString(Rom.SHA1Key);
-            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, ZeroHash.SHA1Str, StringComparison.OrdinalIgnoreCase);
+            bool sha1Null = string.IsNullOrEmpty(sha1) || string.Equals(sha1, HashType.SHA1.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha256 = rom.ReadString(Rom.SHA256Key);
-            bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, ZeroHash.SHA256Str, StringComparison.OrdinalIgnoreCase);
+            bool sha256Null = string.IsNullOrEmpty(sha256) || string.Equals(sha256, HashType.SHA256.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha384 = rom.ReadString(Rom.SHA384Key);
-            bool sha384Null = string.IsNullOrEmpty(sha384) || string.Equals(sha384, ZeroHash.SHA384Str, StringComparison.OrdinalIgnoreCase);
+            bool sha384Null = string.IsNullOrEmpty(sha384) || string.Equals(sha384, HashType.SHA384.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? sha512 = rom.ReadString(Rom.SHA512Key);
-            bool sha512Null = string.IsNullOrEmpty(sha512) || string.Equals(sha512, ZeroHash.SHA512Str, StringComparison.OrdinalIgnoreCase);
+            bool sha512Null = string.IsNullOrEmpty(sha512) || string.Equals(sha512, HashType.SHA512.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? spamsum = rom.ReadString(Rom.SpamSumKey);
-            bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, ZeroHash.SpamSumStr, StringComparison.OrdinalIgnoreCase);
+            bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             return crcNull
                 && md2Null

@@ -850,7 +850,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = ZeroHash.MD5Str,
+                [Disk.MD5Key] = HashType.MD5.ZeroString,
                 [Disk.SHA1Key] = string.Empty,
             };
 
@@ -864,7 +864,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Disk
             {
                 [Disk.MD5Key] = string.Empty,
-                [Disk.SHA1Key] = ZeroHash.SHA1Str,
+                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -876,8 +876,8 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Disk
             {
-                [Disk.MD5Key] = ZeroHash.MD5Str,
-                [Disk.SHA1Key] = ZeroHash.SHA1Str,
+                [Disk.MD5Key] = HashType.MD5.ZeroString,
+                [Disk.SHA1Key] = HashType.SHA1.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -912,7 +912,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = ZeroHash.MD5Str,
+                [Media.MD5Key] = HashType.MD5.ZeroString,
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = string.Empty,
                 [Media.SpamSumKey] = string.Empty,
@@ -928,7 +928,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Media
             {
                 [Media.MD5Key] = string.Empty,
-                [Media.SHA1Key] = ZeroHash.SHA1Str,
+                [Media.SHA1Key] = HashType.SHA1.ZeroString,
                 [Media.SHA256Key] = string.Empty,
                 [Media.SpamSumKey] = string.Empty,
             };
@@ -944,7 +944,7 @@ namespace SabreTools.Data.Extensions.Test
             {
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = string.Empty,
-                [Media.SHA256Key] = ZeroHash.SHA256Str,
+                [Media.SHA256Key] = HashType.SHA256.ZeroString,
                 [Media.SpamSumKey] = string.Empty,
             };
 
@@ -960,7 +960,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Media.MD5Key] = string.Empty,
                 [Media.SHA1Key] = string.Empty,
                 [Media.SHA256Key] = string.Empty,
-                [Media.SpamSumKey] = ZeroHash.SpamSumStr,
+                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -972,10 +972,10 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Media
             {
-                [Media.MD5Key] = ZeroHash.MD5Str,
-                [Media.SHA1Key] = ZeroHash.SHA1Str,
-                [Media.SHA256Key] = ZeroHash.SHA256Str,
-                [Media.SpamSumKey] = ZeroHash.SpamSumStr,
+                [Media.MD5Key] = HashType.MD5.ZeroString,
+                [Media.SHA1Key] = HashType.SHA1.ZeroString,
+                [Media.SHA256Key] = HashType.SHA256.ZeroString,
+                [Media.SpamSumKey] = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1017,7 +1017,7 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
-                [Rom.CRCKey] = ZeroHash.CRC32Str,
+                [Rom.CRCKey] = HashType.CRC32.ZeroString,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1040,7 +1040,7 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Rom
             {
                 [Rom.CRCKey] = string.Empty,
-                [Rom.MD2Key] = ZeroHash.GetString(HashType.MD2),
+                [Rom.MD2Key] = HashType.MD2.ZeroString,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
                 [Rom.RIPEMD128Key] = string.Empty,
@@ -1063,7 +1063,7 @@ namespace SabreTools.Data.Extensions.Test
             {
                 [Rom.CRCKey] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
-                [Rom.MD4Key] = ZeroHash.GetString(HashType.MD4),
+                [Rom.MD4Key] = HashType.MD4.ZeroString,
                 [Rom.MD5Key] = string.Empty,
                 [Rom.RIPEMD128Key] = string.Empty,
                 [Rom.RIPEMD160Key] = string.Empty,
@@ -1086,7 +1086,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.CRCKey] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
-                [Rom.MD5Key] = ZeroHash.MD5Str,
+                [Rom.MD5Key] = HashType.MD5.ZeroString,
                 [Rom.RIPEMD128Key] = string.Empty,
                 [Rom.RIPEMD160Key] = string.Empty,
                 [Rom.SHA1Key] = string.Empty,
@@ -1109,7 +1109,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
-                [Rom.RIPEMD128Key] = ZeroHash.GetString(HashType.RIPEMD128),
+                [Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
                 [Rom.RIPEMD160Key] = string.Empty,
                 [Rom.SHA1Key] = string.Empty,
                 [Rom.SHA256Key] = string.Empty,
@@ -1132,7 +1132,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
                 [Rom.RIPEMD128Key] = string.Empty,
-                [Rom.RIPEMD160Key] = ZeroHash.GetString(HashType.RIPEMD160),
+                [Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
                 [Rom.SHA1Key] = string.Empty,
                 [Rom.SHA256Key] = string.Empty,
                 [Rom.SHA384Key] = string.Empty,
@@ -1155,7 +1155,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.MD5Key] = string.Empty,
                 [Rom.RIPEMD128Key] = string.Empty,
                 [Rom.RIPEMD160Key] = string.Empty,
-                [Rom.SHA1Key] = ZeroHash.SHA1Str,
+                [Rom.SHA1Key] = HashType.SHA1.ZeroString,
                 [Rom.SHA256Key] = string.Empty,
                 [Rom.SHA384Key] = string.Empty,
                 [Rom.SHA512Key] = string.Empty,
@@ -1178,7 +1178,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.RIPEMD128Key] = string.Empty,
                 [Rom.RIPEMD160Key] = string.Empty,
                 [Rom.SHA1Key] = string.Empty,
-                [Rom.SHA256Key] = ZeroHash.SHA256Str,
+                [Rom.SHA256Key] = HashType.SHA256.ZeroString,
                 [Rom.SHA384Key] = string.Empty,
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
@@ -1201,7 +1201,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.RIPEMD160Key] = string.Empty,
                 [Rom.SHA1Key] = string.Empty,
                 [Rom.SHA256Key] = string.Empty,
-                [Rom.SHA384Key] = ZeroHash.SHA384Str,
+                [Rom.SHA384Key] = HashType.SHA384.ZeroString,
                 [Rom.SHA512Key] = string.Empty,
                 [Rom.SpamSumKey] = string.Empty,
             };
@@ -1224,7 +1224,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.SHA1Key] = string.Empty,
                 [Rom.SHA256Key] = string.Empty,
                 [Rom.SHA384Key] = string.Empty,
-                [Rom.SHA512Key] = ZeroHash.SHA512Str,
+                [Rom.SHA512Key] = HashType.SHA512.ZeroString,
                 [Rom.SpamSumKey] = string.Empty,
             };
 
@@ -1247,7 +1247,7 @@ namespace SabreTools.Data.Extensions.Test
                 [Rom.SHA256Key] = string.Empty,
                 [Rom.SHA384Key] = string.Empty,
                 [Rom.SHA512Key] = string.Empty,
-                [Rom.SpamSumKey] = ZeroHash.SpamSumStr,
+                [Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();
@@ -1259,17 +1259,17 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
-                [Rom.CRCKey] = ZeroHash.CRC32Str,
-                [Rom.MD2Key] = ZeroHash.GetString(HashType.MD2),
-                [Rom.MD4Key] = ZeroHash.GetString(HashType.MD4),
-                [Rom.MD5Key] = ZeroHash.MD5Str,
-                [Rom.RIPEMD128Key] = ZeroHash.GetString(HashType.RIPEMD128),
-                [Rom.RIPEMD160Key] = ZeroHash.GetString(HashType.RIPEMD160),
-                [Rom.SHA1Key] = ZeroHash.SHA1Str,
-                [Rom.SHA256Key] = ZeroHash.SHA256Str,
-                [Rom.SHA384Key] = ZeroHash.SHA384Str,
-                [Rom.SHA512Key] = ZeroHash.SHA512Str,
-                [Rom.SpamSumKey] = ZeroHash.SpamSumStr,
+                [Rom.CRCKey] = HashType.CRC32.ZeroString,
+                [Rom.MD2Key] = HashType.MD2.ZeroString,
+                [Rom.MD4Key] = HashType.MD4.ZeroString,
+                [Rom.MD5Key] = HashType.MD5.ZeroString,
+                [Rom.RIPEMD128Key] = HashType.RIPEMD128.ZeroString,
+                [Rom.RIPEMD160Key] = HashType.RIPEMD160.ZeroString,
+                [Rom.SHA1Key] = HashType.SHA1.ZeroString,
+                [Rom.SHA256Key] = HashType.SHA256.ZeroString,
+                [Rom.SHA384Key] = HashType.SHA384.ZeroString,
+                [Rom.SHA512Key] = HashType.SHA512.ZeroString,
+                [Rom.SpamSumKey] = HashType.SpamSum.ZeroString,
             };
 
             bool actual = self.HasZeroHash();

@@ -105,8 +105,8 @@ namespace SabreTools.Serialization.Readers.Test
                 Name = "XXXXXX",
                 Size = "12345",
                 Bad = false,
-                CRC = Hashing.ZeroHash.CRC32Str,
-                SHA1 = Hashing.ZeroHash.SHA1Str,
+                CRC = Hashing.HashType.CRC32.ZeroString,
+                SHA1 = Hashing.HashType.SHA1.ZeroString,
                 NoGoodDumpKnown = false,
             };
 
@@ -115,8 +115,8 @@ namespace SabreTools.Serialization.Readers.Test
                 Name = "XXXXXX",
                 Size = "12345",
                 Bad = true,
-                CRC = Hashing.ZeroHash.CRC32Str,
-                SHA1 = Hashing.ZeroHash.SHA1Str,
+                CRC = Hashing.HashType.CRC32.ZeroString,
+                SHA1 = Hashing.HashType.SHA1.ZeroString,
                 NoGoodDumpKnown = false,
             };
 
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "XXXXXX",
                 Bad = false,
-                MD5 = Hashing.ZeroHash.MD5Str,
+                MD5 = Hashing.HashType.MD5.ZeroString,
                 SHA1 = null,
                 NoGoodDumpKnown = false,
             };
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Name = "XXXXXX",
                 Bad = false,
                 MD5 = null,
-                SHA1 = Hashing.ZeroHash.SHA1Str,
+                SHA1 = Hashing.HashType.SHA1.ZeroString,
                 NoGoodDumpKnown = false,
             };
 
@@ -142,8 +142,8 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "XXXXXX",
                 Bad = false,
-                MD5 = Hashing.ZeroHash.MD5Str,
-                SHA1 = Hashing.ZeroHash.SHA1Str,
+                MD5 = Hashing.HashType.MD5.ZeroString,
+                SHA1 = Hashing.HashType.SHA1.ZeroString,
                 NoGoodDumpKnown = true,
             };
 
@@ -205,8 +205,8 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", row.Name);
             Assert.Equal("12345", row.Size);
             Assert.False(row.Bad);
-            Assert.Equal(Hashing.ZeroHash.CRC32Str, row.CRC);
-            Assert.Equal(Hashing.ZeroHash.SHA1Str, row.SHA1);
+            Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
+            Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);
             Assert.False(row.NoGoodDumpKnown);
         }
 
@@ -219,8 +219,8 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", row.Name);
             Assert.Equal("12345", row.Size);
             Assert.True(row.Bad);
-            Assert.Equal(Hashing.ZeroHash.CRC32Str, row.CRC);
-            Assert.Equal(Hashing.ZeroHash.SHA1Str, row.SHA1);
+            Assert.Equal(Hashing.HashType.CRC32.ZeroString, row.CRC);
+            Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);
             Assert.False(row.NoGoodDumpKnown);
         }
 
@@ -232,7 +232,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(row);
             Assert.Equal("XXXXXX", row.Name);
             Assert.False(row.Bad);
-            Assert.Equal(Hashing.ZeroHash.MD5Str, row.MD5);
+            Assert.Equal(Hashing.HashType.MD5.ZeroString, row.MD5);
             Assert.Null(row.SHA1);
             Assert.False(row.NoGoodDumpKnown);
         }
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", row.Name);
             Assert.False(row.Bad);
             Assert.Null(row.MD5);
-            Assert.Equal(Hashing.ZeroHash.SHA1Str, row.SHA1);
+            Assert.Equal(Hashing.HashType.SHA1.ZeroString, row.SHA1);
             Assert.False(row.NoGoodDumpKnown);
         }
 

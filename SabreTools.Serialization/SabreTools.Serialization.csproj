@@ -41,6 +41,10 @@
     <ItemGroup>
         <Compile Include="..\SabreTools.Data.Extensions\*.cs" />
         <Compile Include="..\SabreTools.Data.Models\**\*.cs" Exclude="..\SabreTools.Data.Models\obj\**\*.cs" />
+        <Compile Include="..\SabreTools.Metadata\*.cs" />
+        <Compile Include="..\SabreTools.Metadata.DatFiles\*.cs" />
+        <Compile Include="..\SabreTools.Metadata.DatItems\*.cs" />
+        <Compile Include="..\SabreTools.Metadata.Filter\*.cs" />
         <Compile Include="..\SabreTools.ObjectIdentifier\*.cs" />
         <Compile Include="..\SabreTools.Serialization.CrossModel\*.cs" Exclude="..\SabreTools.Serialization.CrossModel\ExtensionAttribute.cs" />
         <Compile Include="..\SabreTools.Serialization.Readers\*.cs" />
@@ -52,10 +56,11 @@
     <ItemGroup>
         <PackageReference Include="GrindCore" Version="0.7.0" />
         <PackageReference Include="GrindCore.SharpCompress" Version="0.46.2" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
+        <PackageReference Include="Net30.LinqBridge" Version="1.6.0.2" Condition="$(TargetFramework.StartsWith(`net2`))" />
         <PackageReference Include="NetLegacySupport.Numerics" Version="1.0.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="SabreTools.Hashing" Version="[1.6.1]" />
-        <PackageReference Include="SabreTools.IO" Version="[1.9.1]" />
+        <PackageReference Include="SabreTools.Hashing" Version="[2.0.0]" />
+        <PackageReference Include="SabreTools.IO" Version="[2.0.0]" />
      </ItemGroup>
 
 </Project>
