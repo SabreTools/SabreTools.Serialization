@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NCF;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

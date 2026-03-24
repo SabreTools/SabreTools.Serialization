@@ -204,9 +204,7 @@ namespace SabreTools.Metadata.DatFiles
         public void ClearMarked()
         {
             string[] keys = [.. SortedKeys];
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.ForEach(keys, Core.Globals.ParallelOptions, key =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.ForEach(keys, key =>
 #else
             foreach (var key in keys)
@@ -386,9 +384,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public void Deduplicate()
         {
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.ForEach(SortedKeys, Core.Globals.ParallelOptions, key =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.ForEach(SortedKeys, key =>
 #else
             foreach (var key in SortedKeys)
@@ -741,9 +737,7 @@ namespace SabreTools.Metadata.DatFiles
             // First do the initial sort of all of the roms inplace
             List<string> oldkeys = [.. SortedKeys];
 
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, oldkeys.Count, Core.Globals.ParallelOptions, k =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.For(0, oldkeys.Count, k =>
 #else
             for (int k = 0; k < oldkeys.Count; k++)
@@ -794,9 +788,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         private void PerformSorting(bool norename)
         {
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.ForEach(SortedKeys, Core.Globals.ParallelOptions, key =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.ForEach(SortedKeys, key =>
 #else
             foreach (var key in SortedKeys)

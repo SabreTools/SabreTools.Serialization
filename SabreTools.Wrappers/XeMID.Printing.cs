@@ -1,5 +1,5 @@
 using System.Text;
-using SabreTools.Data.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.Xbox.Constants;
 
 namespace SabreTools.Wrappers

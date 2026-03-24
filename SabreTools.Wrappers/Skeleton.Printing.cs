@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using SabreTools.Data.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

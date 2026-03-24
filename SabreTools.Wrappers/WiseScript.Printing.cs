@@ -2,6 +2,7 @@ using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Data.Models.WiseInstaller.Actions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Wrappers

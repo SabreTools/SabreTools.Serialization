@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

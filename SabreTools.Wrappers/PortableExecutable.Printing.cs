@@ -10,6 +10,7 @@ using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

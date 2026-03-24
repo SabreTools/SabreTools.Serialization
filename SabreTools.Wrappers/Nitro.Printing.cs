@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Nitro;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

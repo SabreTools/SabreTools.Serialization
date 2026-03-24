@@ -7,6 +7,7 @@ using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 

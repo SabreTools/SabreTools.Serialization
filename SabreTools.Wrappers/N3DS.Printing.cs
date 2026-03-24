@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.N3DS;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

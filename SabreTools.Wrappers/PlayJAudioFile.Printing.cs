@@ -1,6 +1,6 @@
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.PlayJ;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
 {

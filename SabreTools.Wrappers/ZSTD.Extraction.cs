@@ -1,6 +1,7 @@
 using System;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.IO;
+using SabreTools.IO.Extensions;
 #endif
 using SabreTools.Matching;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
