@@ -1,5 +1,5 @@
 using System;
-using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Data.Extensions
 {

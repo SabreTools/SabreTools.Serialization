@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.ASN1;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable CA1822 // Mark members as static
 #pragma warning disable IDE0017 // Simplify object initialization

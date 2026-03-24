@@ -42,7 +42,7 @@ namespace SabreTools.Wrappers
 
                 // Extract the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                xzFile.CopyTo(fs);
+                xzFile.BlockCopy(fs);
                 fs.Flush();
 
                 return true;

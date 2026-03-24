@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.N3DS;
-using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Security.Cryptography;
 using static SabreTools.Data.Models.N3DS.Constants;
 
 namespace SabreTools.Wrappers

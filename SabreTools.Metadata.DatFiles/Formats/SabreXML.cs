@@ -5,8 +5,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
+using SabreTools.Metadata.Filter;
 
 #pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Metadata.DatFiles.Formats

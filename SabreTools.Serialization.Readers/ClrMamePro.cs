@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.ClrMamePro;
-using SabreTools.IO.Readers;
+using SabreTools.Text.ClrMamePro;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new ClrMameProReader(data, Encoding.UTF8) { Quotes = quotes };
+                var reader = new Reader(data, Encoding.UTF8) { Quotes = quotes };
                 var dat = new MetadataFile();
 
                 // Loop through and parse out the values
@@ -437,9 +437,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Release object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Release object created from the reader context</returns>
-        private static Release? CreateRelease(ClrMameProReader reader)
+        private static Release? CreateRelease(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -477,9 +477,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a BiosSet object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>BiosSet object created from the reader context</returns>
-        private static BiosSet? CreateBiosSet(ClrMameProReader reader)
+        private static BiosSet? CreateBiosSet(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -510,9 +510,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Rom object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Rom object created from the reader context</returns>
-        private static Rom? CreateRom(ClrMameProReader reader)
+        private static Rom? CreateRom(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -615,9 +615,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Disk object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Disk object created from the reader context</returns>
-        private static Disk? CreateDisk(ClrMameProReader reader)
+        private static Disk? CreateDisk(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -657,9 +657,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Media object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Media object created from the reader context</returns>
-        private static Media? CreateMedia(ClrMameProReader reader)
+        private static Media? CreateMedia(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -696,9 +696,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Sample object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Sample object created from the reader context</returns>
-        private static Sample? CreateSample(ClrMameProReader reader)
+        private static Sample? CreateSample(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -723,9 +723,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Archive object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Archive object created from the reader context</returns>
-        private static Archive? CreateArchive(ClrMameProReader reader)
+        private static Archive? CreateArchive(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -750,9 +750,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Chip object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Chip object created from the reader context</returns>
-        private static Chip? CreateChip(ClrMameProReader reader)
+        private static Chip? CreateChip(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -786,9 +786,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Video object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Video object created from the reader context</returns>
-        private static Video? CreateVideo(ClrMameProReader reader)
+        private static Video? CreateVideo(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -831,9 +831,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Sound object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Sound object created from the reader context</returns>
-        private static Sound? CreateSound(ClrMameProReader reader)
+        private static Sound? CreateSound(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -858,9 +858,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Input object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Input object created from the reader context</returns>
-        private static Input? CreateInput(ClrMameProReader reader)
+        private static Input? CreateInput(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -900,9 +900,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a DipSwitch object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>DipSwitch object created from the reader context</returns>
-        private static DipSwitch? CreateDipSwitch(ClrMameProReader reader)
+        private static DipSwitch? CreateDipSwitch(Reader reader)
         {
             if (reader.Internal is null)
                 return null;
@@ -935,9 +935,9 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Create a Driver object from the current reader context
         /// </summary>
-        /// <param name="reader">ClrMameProReader representing the metadata file</param>
+        /// <param name="reader">Reader representing the metadata file</param>
         /// <returns>Driver object created from the reader context</returns>
-        private static Driver? CreateDriver(ClrMameProReader reader)
+        private static Driver? CreateDriver(Reader reader)
         {
             if (reader.Internal is null)
                 return null;

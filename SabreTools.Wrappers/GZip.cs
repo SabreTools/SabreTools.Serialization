@@ -1,6 +1,7 @@
 using System.IO;
 using SabreTools.Data.Models.GZIP;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

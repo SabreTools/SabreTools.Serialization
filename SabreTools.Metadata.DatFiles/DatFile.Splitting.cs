@@ -717,7 +717,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Now that every device reference is accounted for, add the new list of device references, if they don't already exist
-                    foreach (string deviceReference in newDeviceReferences)
+                    foreach (var deviceReference in newDeviceReferences)
                     {
                         if (!deviceReferences.Contains(deviceReference))
                         {
@@ -767,7 +767,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Now that every device is accounted for, add the new list of slot options, if they don't already exist
-                    foreach (string slotOption in newSlotOptions)
+                    foreach (var slotOption in newSlotOptions)
                     {
                         if (!slotOptions.Contains(slotOption))
                         {
@@ -884,7 +884,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Now that every device reference is accounted for, add the new list of device references, if they don't already exist
-                    foreach (string deviceReference in newDeviceReferences)
+                    foreach (var deviceReference in newDeviceReferences)
                     {
                         if (!deviceReferences.Contains(deviceReference))
                         {
@@ -940,7 +940,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // Now that every device is accounted for, add the new list of slot options, if they don't already exist
-                    foreach (string slotOption in newSlotOptions)
+                    foreach (var slotOption in newSlotOptions)
                     {
                         if (!slotOptions.Contains(slotOption))
                         {

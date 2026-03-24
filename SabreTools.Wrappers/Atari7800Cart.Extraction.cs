@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.Atari7800;
-using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

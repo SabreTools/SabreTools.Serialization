@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.SecuROM.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

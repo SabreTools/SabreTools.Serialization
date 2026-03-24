@@ -2,8 +2,9 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.MoPaQ;
-using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Security.Cryptography;
 using static SabreTools.Data.Models.MoPaQ.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

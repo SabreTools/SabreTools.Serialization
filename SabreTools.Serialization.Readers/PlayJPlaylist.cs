@@ -1,6 +1,7 @@
 using System.IO;
 using SabreTools.Data.Models.PlayJ;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers

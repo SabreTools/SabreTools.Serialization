@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.VPK.Constants;
 
 namespace SabreTools.Wrappers

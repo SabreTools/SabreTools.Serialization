@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.CFB;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
-using SabreTools.Metadata.Tools;
+using SabreTools.Text.Extensions;
 
 // TODO: Add item mappings for all fields
 namespace SabreTools.Metadata.DatItems.Formats

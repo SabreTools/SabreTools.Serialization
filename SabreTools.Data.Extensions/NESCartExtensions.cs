@@ -178,7 +178,7 @@ namespace SabreTools.Data.Extensions
             };
         }
 
-         /// <summary>
+        /// <summary>
         /// Convert a <see cref="TVSystemExtended"/> value to string
         /// </summary>
         public static string FromTVSystemExtended(this TVSystemExtended system)

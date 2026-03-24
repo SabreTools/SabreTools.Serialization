@@ -51,7 +51,7 @@ namespace SabreTools.Wrappers
             }
 
             builder.AppendLine($"    Record type: {record.RecordType} (0x{record.RecordType:X})");
-            builder.AppendLine(record.RecordLength, "    Record length");
+            builder.AppendLine((uint)record.RecordLength, "    Record length");
 
             switch (record)
             {

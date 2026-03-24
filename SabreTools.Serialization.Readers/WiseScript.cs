@@ -4,6 +4,8 @@ using System.IO;
 using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Data.Models.WiseInstaller.Actions;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable CA1866 // Use char overload
 #pragma warning disable IDE0017 // Simplify object initialization

@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.Hashing;
 using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

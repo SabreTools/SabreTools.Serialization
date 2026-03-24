@@ -4,6 +4,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.PKZIP;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.PKZIP.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

@@ -2,6 +2,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.MicrosoftCabinet.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

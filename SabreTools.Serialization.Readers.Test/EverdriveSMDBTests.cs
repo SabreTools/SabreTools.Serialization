@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new EverdriveSMDB();
-            var serializer = new Serialization.Writers.EverdriveSMDB();
+            var serializer = new Writers.EverdriveSMDB();
 
             // Build the data
             Data.Models.EverdriveSMDB.MetadataFile mf = Build();

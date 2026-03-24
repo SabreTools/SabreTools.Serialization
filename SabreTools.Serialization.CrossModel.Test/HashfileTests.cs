@@ -218,21 +218,26 @@ namespace SabreTools.Serialization.CrossModel.Test
         /// </summary>
         private static Data.Models.Hashfile.Hashfile Build(HashType hashType)
         {
-#pragma warning disable IDE0072
-            return hashType switch
-            {
-                HashType.CRC32 => new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] },
-                HashType.MD2 => new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.MD4 => new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.MD5 => new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA1 => new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA256 => new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA384 => new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA512 => new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SpamSum => new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] },
-                _ => throw new ArgumentOutOfRangeException(nameof(hashType)),
-            };
-#pragma warning restore IDE0072
+            if (hashType == HashType.CRC32)
+                return new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] };
+            else if (hashType == HashType.MD2)
+                return new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.MD4)
+                return new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.MD5)
+                return new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA1)
+                return new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA256)
+                return new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA384)
+                return new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA512)
+                return new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SpamSum)
+                return new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else
+                throw new ArgumentOutOfRangeException(nameof(hashType));
         }
 
         /// <summary>

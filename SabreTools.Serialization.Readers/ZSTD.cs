@@ -1,6 +1,8 @@
 using System.IO;
 using SabreTools.Data.Models.ZSTD;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.ZSTD.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

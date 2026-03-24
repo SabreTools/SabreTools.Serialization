@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.PAK;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.PAK.Constants;
 
 namespace SabreTools.Serialization.Readers

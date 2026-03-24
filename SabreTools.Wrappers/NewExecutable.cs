@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.NewExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Wrappers

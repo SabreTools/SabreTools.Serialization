@@ -3,6 +3,8 @@ using System.IO;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XZ;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.XZ.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
+using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatFiles.Formats
 {

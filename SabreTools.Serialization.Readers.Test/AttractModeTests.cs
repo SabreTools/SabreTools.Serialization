@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new AttractMode();
-            var serializer = new Serialization.Writers.AttractMode();
+            var serializer = new Writers.AttractMode();
 
             // Build the data
             Data.Models.AttractMode.MetadataFile mf = Build();
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new AttractMode();
-            var serializer = new Serialization.Writers.AttractMode();
+            var serializer = new Writers.AttractMode();
 
             // Build the data
             Data.Models.AttractMode.MetadataFile mf = Build();
@@ -167,9 +167,9 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(header);
             if (longHeader)
-                Assert.True(Serialization.Writers.AttractMode.HeaderArrayWithRomname.SequenceEqual(header));
+                Assert.True(Writers.AttractMode.HeaderArrayWithRomname.SequenceEqual(header));
             else
-                Assert.True(Serialization.Writers.AttractMode.HeaderArrayWithoutRomname.SequenceEqual(header));
+                Assert.True(Writers.AttractMode.HeaderArrayWithoutRomname.SequenceEqual(header));
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 using System.IO;
 using SabreTools.Data.Models.AtariLynx;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.AtariLynx.Constants;
 
 namespace SabreTools.Serialization.Readers

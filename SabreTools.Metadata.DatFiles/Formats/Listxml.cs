@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
+using SabreTools.Metadata.Filter;
 
 namespace SabreTools.Metadata.DatFiles.Formats
 {

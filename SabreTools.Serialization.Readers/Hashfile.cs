@@ -69,24 +69,30 @@ namespace SabreTools.Serialization.Readers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Data.Models.Hashfile.Hashfile? Deserialize(Stream? data, HashType hash)
         {
-#pragma warning disable IDE0072
-            return hash switch
-            {
-                HashType.CRC32 => DeserializeSFV(data),
-                HashType.MD2 => DeserializeMD2(data),
-                HashType.MD4 => DeserializeMD4(data),
-                HashType.MD5 => DeserializeMD5(data),
-                HashType.RIPEMD128 => DeserializeRIPEMD128(data),
-                HashType.RIPEMD160 => DeserializeRIPEMD160(data),
-                HashType.SHA1 => DeserializeSHA1(data),
-                HashType.SHA256 => DeserializeSHA256(data),
-                HashType.SHA384 => DeserializeSHA384(data),
-                HashType.SHA512 => DeserializeSHA512(data),
-                HashType.SpamSum => DeserializeSpamSum(data),
-
-                _ => null,
-            };
-#pragma warning restore IDE0072
+            if (hash == HashType.CRC32)
+                return DeserializeSFV(data);
+            else if (hash == HashType.MD2)
+                return DeserializeMD2(data);
+            else if (hash == HashType.MD4)
+                return DeserializeMD4(data);
+            else if (hash == HashType.MD5)
+                return DeserializeMD5(data);
+            else if (hash == HashType.RIPEMD128)
+                return DeserializeRIPEMD128(data);
+            else if (hash == HashType.RIPEMD160)
+                return DeserializeRIPEMD160(data);
+            else if (hash == HashType.SHA1)
+                return DeserializeSHA1(data);
+            else if (hash == HashType.SHA256)
+                return DeserializeSHA256(data);
+            else if (hash == HashType.SHA384)
+                return DeserializeSHA384(data);
+            else if (hash == HashType.SHA512)
+                return DeserializeSHA512(data);
+            else if (hash == HashType.SpamSum)
+                return DeserializeSpamSum(data);
+            else
+                return null;
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

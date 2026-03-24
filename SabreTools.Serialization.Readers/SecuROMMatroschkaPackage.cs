@@ -2,6 +2,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.SecuROM.Constants;
 
 namespace SabreTools.Serialization.Readers

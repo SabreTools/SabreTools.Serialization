@@ -2,6 +2,7 @@ using System.IO;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.CDROM;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers

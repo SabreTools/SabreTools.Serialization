@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using SabreTools.IO.Compression.Deflate;
-#if NET20 || NET35
-using SabreTools.Serialization;
-#endif
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -97,7 +95,7 @@ namespace SabreTools.Wrappers
                 {
                     using var ms = new MemoryStream(data);
                     using var zs = new ZlibStream(ms, CompressionMode.Decompress);
-                    zs.CopyTo(fs);
+                    zs.BlockCopy(fs);
                     fs.Flush();
                 }
             }

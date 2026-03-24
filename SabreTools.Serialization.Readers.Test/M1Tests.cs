@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new M1();
-            var serializer = new Serialization.Writers.M1();
+            var serializer = new Writers.M1();
 
             // Build the data
             Data.Models.Listxml.M1 m1 = Build(game: true);
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new M1();
-            var serializer = new Serialization.Writers.M1();
+            var serializer = new Writers.M1();
 
             // Build the data
             Data.Models.Listxml.M1 m1 = Build(game: false);

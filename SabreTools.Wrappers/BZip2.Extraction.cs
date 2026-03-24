@@ -1,9 +1,7 @@
 using System;
 using System.IO;
 using SabreTools.IO.Compression.BZip2;
-#if NET20 || NET35
-using SabreTools.Serialization;
-#endif
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Wrappers
 {
@@ -40,7 +38,7 @@ namespace SabreTools.Wrappers
 
                 // Extract the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                bz2File.CopyTo(fs);
+                bz2File.BlockCopy(fs);
                 fs.Flush();
 
                 return true;

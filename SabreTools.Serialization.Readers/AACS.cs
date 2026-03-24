@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.AACS;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
@@ -106,9 +107,9 @@ namespace SabreTools.Serialization.Readers
 
             obj.RecordType = (RecordType)data.ReadByteValue();
             obj.RecordLength = data.ReadUInt24LittleEndian();
-            if (obj.RecordLength > 4)
+            if ((uint)obj.RecordLength > 4)
             {
-                byte[] copyright = data.ReadBytes((int)(obj.RecordLength - 4));
+                byte[] copyright = data.ReadBytes((int)((uint)obj.RecordLength - 4));
                 obj.Copyright = Encoding.ASCII.GetString(copyright).TrimEnd('\0');
             }
 
@@ -149,7 +150,7 @@ namespace SabreTools.Serialization.Readers
             // Try to parse the signature blocks
             var blocks = new List<DriveRevocationSignatureBlock>();
             uint entryCount = 0;
-            while (entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + obj.RecordLength)
+            while (entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + (uint)obj.RecordLength)
             {
                 var block = ParseDriveRevocationSignatureBlock(data);
                 entryCount += block.NumberOfEntries;
@@ -164,8 +165,8 @@ namespace SabreTools.Serialization.Readers
             obj.SignatureBlocks = [.. blocks];
 
             // If there's any data left, discard it
-            if (data.Position < initialOffset + obj.RecordLength)
-                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+            if (data.Position < initialOffset + (uint)obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + (uint)obj.RecordLength - data.Position));
 
             return obj;
         }
@@ -200,8 +201,8 @@ namespace SabreTools.Serialization.Readers
 
             obj.RecordType = (RecordType)data.ReadByteValue();
             obj.RecordLength = data.ReadUInt24LittleEndian();
-            if (obj.RecordLength > 4)
-                obj.SignatureData = data.ReadBytes((int)(obj.RecordLength - 4));
+            if ((uint)obj.RecordLength > 4)
+                obj.SignatureData = data.ReadBytes((int)((uint)obj.RecordLength - 4));
 
             return obj;
         }
@@ -223,7 +224,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the subset differences
             var subsetDifferences = new List<SubsetDifference>();
-            while (data.Position < initialOffset + obj.RecordLength - 5)
+            while (data.Position < initialOffset + (uint)obj.RecordLength - 5)
             {
                 var subsetDifference = ParseSubsetDifference(data);
                 subsetDifferences.Add(subsetDifference);
@@ -233,8 +234,8 @@ namespace SabreTools.Serialization.Readers
             obj.SubsetDifferences = [.. subsetDifferences];
 
             // If there's any data left, discard it
-            if (data.Position < initialOffset + obj.RecordLength)
-                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+            if (data.Position < initialOffset + (uint)obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + (uint)obj.RecordLength - data.Position));
 
             return obj;
         }
@@ -288,7 +289,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the signature blocks
             var blocks = new List<HostRevocationSignatureBlock>();
-            for (uint entryCount = 0; entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + obj.RecordLength;)
+            for (uint entryCount = 0; entryCount < obj.TotalNumberOfEntries && data.Position < initialOffset + (uint)obj.RecordLength;)
             {
                 var block = ParseHostRevocationSignatureBlock(data);
                 entryCount += block.NumberOfEntries;
@@ -303,8 +304,8 @@ namespace SabreTools.Serialization.Readers
             obj.SignatureBlocks = [.. blocks];
 
             // If there's any data left, discard it
-            if (data.Position < initialOffset + obj.RecordLength)
-                _ = data.ReadBytes((int)(initialOffset + obj.RecordLength - data.Position));
+            if (data.Position < initialOffset + (uint)obj.RecordLength)
+                _ = data.ReadBytes((int)(initialOffset + (uint)obj.RecordLength - data.Position));
 
             return obj;
         }
@@ -345,7 +346,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the media keys
             var mediaKeys = new List<byte[]>();
-            while (data.Position < initialOffset + obj.RecordLength)
+            while (data.Position < initialOffset + (uint)obj.RecordLength)
             {
                 byte[] mediaKey = data.ReadBytes(0x10);
                 mediaKeys.Add(mediaKey);
@@ -390,7 +391,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the offsets
             var offsets = new List<uint>();
-            while (data.Position < initialOffset + obj.RecordLength)
+            while (data.Position < initialOffset + (uint)obj.RecordLength)
             {
                 uint offset = data.ReadUInt32BigEndian();
                 offsets.Add(offset);

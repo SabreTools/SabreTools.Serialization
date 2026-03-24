@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.DosCenter;
-using SabreTools.IO.Readers;
+using SabreTools.Text.ClrMamePro;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new ClrMameProReader(data, Encoding.UTF8) { DosCenter = true };
+                var reader = new Reader(data, Encoding.UTF8) { DosCenter = true };
                 var dat = new MetadataFile();
 
                 // Loop through and parse out the values
@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="reader">ClrMameProReader representing the metadata file</param>
         /// <returns>File object created from the reader context</returns>
-        private static Data.Models.DosCenter.File? CreateFile(ClrMameProReader reader)
+        private static Data.Models.DosCenter.File? CreateFile(Reader reader)
         {
             if (reader.Internal is null)
                 return null;

@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.LinearExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.LinearExecutable.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

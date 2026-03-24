@@ -41,9 +41,9 @@
      </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
-      <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
-      <ProjectReference Include="..\SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
+        <ProjectReference Include="..\SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj" />
     </ItemGroup>
 
 </Project>

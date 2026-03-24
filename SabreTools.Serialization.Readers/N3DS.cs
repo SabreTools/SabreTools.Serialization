@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.N3DS;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.N3DS.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

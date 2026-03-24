@@ -2,6 +2,7 @@ using System;
 using SabreTools.Data.Models.Metadata;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 
 namespace SabreTools.Data.Extensions
 {

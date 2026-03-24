@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.DosCenter;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Writers;
+using SabreTools.Text.ClrMamePro;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new ClrMameProWriter(stream, Encoding.UTF8)
+            var writer = new Writer(stream, Encoding.UTF8)
             {
                 Quotes = false,
             };
@@ -37,8 +37,8 @@ namespace SabreTools.Serialization.Writers
         /// Write header information to the current writer
         /// </summary>
         /// <param name="header">DosCenter representing the header information</param>
-        /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteHeader(Data.Models.DosCenter.DosCenter? header, ClrMameProWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteHeader(Data.Models.DosCenter.DosCenter? header, Writer writer)
         {
             // If the header information is missing, we can't do anything
             if (header is null)
@@ -62,8 +62,8 @@ namespace SabreTools.Serialization.Writers
         /// Write games information to the current writer
         /// </summary>
         /// <param name="games">Array of Game objects representing the games information</param>
-        /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteGames(Game[]? games, ClrMameProWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteGames(Game[]? games, Writer writer)
         {
             // If the games information is missing, we can't do anything
             if (games is null || games.Length == 0)
@@ -81,8 +81,8 @@ namespace SabreTools.Serialization.Writers
         /// Write game information to the current writer
         /// </summary>
         /// <param name="game">Game object representing the game information</param>
-        /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteGame(Game game, ClrMameProWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteGame(Game game, Writer writer)
         {
             // If the game information is missing, we can't do anything
             if (game is null)
@@ -103,8 +103,8 @@ namespace SabreTools.Serialization.Writers
         /// Write files information to the current writer
         /// </summary>
         /// <param name="files">Array of File objects to write</param>
-        /// <param name="writer">ClrMameProWriter representing the output</param>
-        private static void WriteFiles(Data.Models.DosCenter.File[]? files, ClrMameProWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteFiles(Data.Models.DosCenter.File[]? files, Writer writer)
         {
             // If the array is missing, we can't do anything
             if (files is null)

@@ -2,7 +2,7 @@ using System;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.IO;
 #endif
-using SabreTools.IO.Extensions;
+using SabreTools.Matching;
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using SharpCompress.Compressors.ZStandard;
 #endif
@@ -43,11 +43,11 @@ namespace SabreTools.Wrappers
                     Directory.CreateDirectory(directoryName);
 
                 // Open the source as a zStandard stream
-                var zstdStream = new ZStandardStream(_dataSource, false);
+                var zstdStream = new ZStandardStream(_dataSource, leaveOpen: false);
 
                 // Write the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                zstdStream.CopyTo(fs);
+                zstdStream.BlockCopy(fs);
                 fs.Flush();
 
                 return true;

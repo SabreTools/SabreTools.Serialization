@@ -2,6 +2,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.GCF;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers

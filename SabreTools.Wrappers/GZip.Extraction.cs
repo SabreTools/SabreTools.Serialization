@@ -3,9 +3,6 @@ using System.IO;
 using SabreTools.Data.Models.GZIP;
 using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Extensions;
-#if NET20 || NET35
-using SabreTools.Serialization;
-#endif
 
 namespace SabreTools.Wrappers
 {
@@ -59,7 +56,7 @@ namespace SabreTools.Wrappers
 
                 // Write the file
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                deflateStream.CopyTo(fs);
+                deflateStream.BlockCopy(fs);
                 fs.Flush();
 
                 return true;

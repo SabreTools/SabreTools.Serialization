@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.LZ;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.LZ.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

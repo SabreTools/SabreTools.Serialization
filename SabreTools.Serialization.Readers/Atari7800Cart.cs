@@ -1,6 +1,8 @@
 using System.IO;
 using SabreTools.Data.Models.Atari7800;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.Atari7800.Constants;
 
 namespace SabreTools.Serialization.Readers

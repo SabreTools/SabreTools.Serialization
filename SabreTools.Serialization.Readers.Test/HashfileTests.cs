@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.CRC32);
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD2);
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD4);
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD5);
@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA1);
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA256);
@@ -220,7 +220,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA384);
@@ -244,7 +244,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA512);
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new Serialization.Writers.Hashfile();
+            var serializer = new Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SpamSum);
@@ -292,21 +292,26 @@ namespace SabreTools.Serialization.Readers.Test
         /// </summary>
         private static Data.Models.Hashfile.Hashfile Build(HashType hashType)
         {
-#pragma warning disable IDE0072
-            return hashType switch
-            {
-                HashType.CRC32 => new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] },
-                HashType.MD2 => new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.MD4 => new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.MD5 => new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA1 => new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA256 => new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA384 => new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SHA512 => new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] },
-                HashType.SpamSum => new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] },
-                _ => throw new ArgumentOutOfRangeException(nameof(hashType)),
-            };
-#pragma warning restore IDE0072
+            if (hashType == HashType.CRC32)
+                return new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] };
+            else if (hashType == HashType.MD2)
+                return new Data.Models.Hashfile.Hashfile { MD2 = [new Data.Models.Hashfile.MD2 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.MD4)
+                return new Data.Models.Hashfile.Hashfile { MD4 = [new Data.Models.Hashfile.MD4 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.MD5)
+                return new Data.Models.Hashfile.Hashfile { MD5 = [new Data.Models.Hashfile.MD5 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA1)
+                return new Data.Models.Hashfile.Hashfile { SHA1 = [new Data.Models.Hashfile.SHA1 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA256)
+                return new Data.Models.Hashfile.Hashfile { SHA256 = [new Data.Models.Hashfile.SHA256 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA384)
+                return new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SHA512)
+                return new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else if (hashType == HashType.SpamSum)
+                return new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] };
+            else
+                throw new ArgumentOutOfRangeException(nameof(hashType));
         }
 
         /// <summary>

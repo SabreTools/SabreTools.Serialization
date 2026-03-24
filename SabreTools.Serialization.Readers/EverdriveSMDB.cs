@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.EverdriveSMDB;
-using SabreTools.IO.Readers;
+using SabreTools.Text.SeparatedValue;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new SeparatedValueReader(data, Encoding.UTF8)
+                var reader = new Reader(data, Encoding.UTF8)
                 {
                     Header = false,
                     Separator = '\t',

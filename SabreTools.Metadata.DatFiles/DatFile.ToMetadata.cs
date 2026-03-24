@@ -80,7 +80,7 @@ namespace SabreTools.Metadata.DatFiles
                 // Handle Trurip object, if it exists
                 if (machine.ContainsKey(Data.Models.Metadata.Machine.TruripKey))
                 {
-                    var trurip = machine.Read<DatItems.Trurip>(Data.Models.Metadata.Machine.TruripKey);
+                    var trurip = machine.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
                     if (trurip is not null)
                     {
                         var truripItem = trurip.ConvertToLogiqx();
@@ -294,6 +294,9 @@ namespace SabreTools.Metadata.DatFiles
                             EnsureMachineKey<Data.Models.Metadata.Sound?>(machine, Data.Models.Metadata.Machine.SoundKey);
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.SoundKey, soundItem);
                             break;
+                        default:
+                            // This should never happen
+                            break;
                     }
                 }
 
@@ -506,7 +509,7 @@ namespace SabreTools.Metadata.DatFiles
                 // Handle Trurip object, if it exists
                 if (machine.ContainsKey(Data.Models.Metadata.Machine.TruripKey))
                 {
-                    var trurip = machine.Read<DatItems.Trurip>(Data.Models.Metadata.Machine.TruripKey);
+                    var trurip = machine.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
                     if (trurip is not null)
                     {
                         var truripItem = trurip.ConvertToLogiqx();
@@ -716,6 +719,9 @@ namespace SabreTools.Metadata.DatFiles
                             var soundItem = sound.GetInternalClone();
                             EnsureMachineKey<Data.Models.Metadata.Sound?>(machine, Data.Models.Metadata.Machine.SoundKey);
                             AppendToMachineKey(machine, Data.Models.Metadata.Machine.SoundKey, soundItem);
+                            break;
+                        default:
+                            // This should never happen
                             break;
                     }
                 }
@@ -944,6 +950,9 @@ namespace SabreTools.Metadata.DatFiles
                     case 270:
                         videoItem[Data.Models.Metadata.Video.OrientationKey] = "vertical";
                         break;
+                    default:
+                        // This should never happen
+                        break;
                 }
 
                 EnsureMachineKey<Data.Models.Metadata.Video?>(machine, Data.Models.Metadata.Machine.VideoKey);
@@ -1051,6 +1060,11 @@ namespace SabreTools.Metadata.DatFiles
 
                     EnsureMachineKey<Data.Models.Metadata.Dump?>(machine, Data.Models.Metadata.Machine.DumpKey);
                     AppendToMachineKey(machine, Data.Models.Metadata.Machine.DumpKey, dumpSccPlusCart);
+                    break;
+                case OpenMSXSubType.NULL:
+                    break;
+                default:
+                    // This should never happen
                     break;
             }
 

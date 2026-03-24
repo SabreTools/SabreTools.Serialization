@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Writers;
+using SabreTools.Text.SeparatedValue;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Writers
@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
-            stream.CopyTo(fs);
+            stream.BlockCopy(fs);
             fs.Flush();
 
             return true;
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new SeparatedValueWriter(stream, Encoding.UTF8)
+            var writer = new Writer(stream, Encoding.UTF8)
             {
                 Separator = delim,
                 Quotes = true
@@ -132,9 +132,9 @@ namespace SabreTools.Serialization.Writers
         /// <summary>
         /// Write header information to the current writer
         /// </summary>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        /// <param name="writer">Writer representing the output</param>
         /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
-        private static void WriteHeader(SeparatedValueWriter writer, bool longHeader)
+        private static void WriteHeader(Writer writer, bool longHeader)
         {
             string[] headerArray = longHeader ? HeaderArrayExtended : HeaderArrayStandard;
             writer.WriteHeader(headerArray);
@@ -145,9 +145,9 @@ namespace SabreTools.Serialization.Writers
         /// Write rows information to the current writer
         /// </summary>
         /// <param name="rows">Array of Row objects representing the rows information</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
+        /// <param name="writer">Writer representing the output</param>
         /// <param name="longHeader">True if the long variant of the row should be written, false otherwise</param>
-        private static void WriteRows(Row[]? rows, SeparatedValueWriter writer, bool longHeader)
+        private static void WriteRows(Row[]? rows, Writer writer, bool longHeader)
         {
             // If the games information is missing, we can't do anything
             if (rows is null || rows.Length == 0)

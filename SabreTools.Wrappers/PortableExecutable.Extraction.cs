@@ -3,6 +3,8 @@ using System.IO;
 using SabreTools.IO.Compression.BZip2;
 using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

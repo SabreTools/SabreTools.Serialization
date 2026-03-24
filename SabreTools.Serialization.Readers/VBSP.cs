@@ -4,6 +4,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.BSP;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.BSP.Constants;
 
 // TODO: Finish replacing ReadType

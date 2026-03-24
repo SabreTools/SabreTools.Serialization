@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using SabreTools.Hashing;
-using SabreTools.IO.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.Tools
 {
@@ -34,14 +34,14 @@ namespace SabreTools.Metadata.Tools
                 return null;
 
             // If the hash isn't the right size, then we return null
-            if (hash!.Length != Constants.SHA1Length)
+            if (hash!.Length != HashType.SHA1.ZeroString.Length)
                 return null;
 
             // Cap the depth between 0 and 20, for now
             if (depth < 0)
                 depth = 0;
-            else if (depth > ZeroHash.SHA1Arr.Length)
-                depth = ZeroHash.SHA1Arr.Length;
+            else if (depth > HashType.SHA1.ZeroBytes.Length)
+                depth = HashType.SHA1.ZeroBytes.Length;
 
             // Loop through and generate the subdirectory
             string path = string.Empty;

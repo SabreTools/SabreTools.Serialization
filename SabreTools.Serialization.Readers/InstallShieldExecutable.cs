@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.InstallShieldExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.InstallShieldExecutable.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

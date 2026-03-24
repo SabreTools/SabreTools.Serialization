@@ -4,6 +4,7 @@ using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.NewExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.NewExecutable.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

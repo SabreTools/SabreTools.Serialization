@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new OfflineList();
-            var serializer = new Serialization.Writers.OfflineList();
+            var serializer = new Writers.OfflineList();
 
             // Build the data
             Data.Models.OfflineList.Dat dat = Build();

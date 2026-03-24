@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Nitro;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers

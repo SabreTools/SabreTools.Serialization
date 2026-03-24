@@ -2,6 +2,7 @@
 using System.IO;
 using SabreTools.Data.Models.LinearExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Wrappers

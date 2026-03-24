@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
+using SabreTools.Metadata.Filter;
 
 #pragma warning disable IDE0290 // Use primary constructor
 namespace SabreTools.Metadata.DatFiles.Formats
@@ -138,54 +138,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
 
             _logger.User($"'{outfile}' written!{Environment.NewLine}");
             return true;
-        }
-    }
-
-    /// <summary>
-    /// Represents a comma-separated value file
-    /// </summary>
-    public sealed class CommaSeparatedValue : SeparatedValue
-    {
-        /// <summary>
-        /// Constructor designed for casting a base DatFile
-        /// </summary>
-        /// <param name="datFile">Parent DatFile to copy from</param>
-        public CommaSeparatedValue(DatFile? datFile) : base(datFile)
-        {
-            _delim = ',';
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.CSV);
-        }
-    }
-
-    /// <summary>
-    /// Represents a semicolon-separated value file
-    /// </summary>
-    public sealed class SemicolonSeparatedValue : SeparatedValue
-    {
-        /// <summary>
-        /// Constructor designed for casting a base DatFile
-        /// </summary>
-        /// <param name="datFile">Parent DatFile to copy from</param>
-        public SemicolonSeparatedValue(DatFile? datFile) : base(datFile)
-        {
-            _delim = ';';
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.SSV);
-        }
-    }
-
-    /// <summary>
-    /// Represents a tab-separated value file
-    /// </summary>
-    public sealed class TabSeparatedValue : SeparatedValue
-    {
-        /// <summary>
-        /// Constructor designed for casting a base DatFile
-        /// </summary>
-        /// <param name="datFile">Parent DatFile to copy from</param>
-        public TabSeparatedValue(DatFile? datFile) : base(datFile)
-        {
-            _delim = '\t';
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.TSV);
         }
     }
 }

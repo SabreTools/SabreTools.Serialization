@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.SGA;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.SGA.Constants;
 
 #pragma warning disable IDE0017 // Simplify object initialization

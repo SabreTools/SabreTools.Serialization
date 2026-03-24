@@ -3,6 +3,9 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.WiseInstaller.Constants;
 
 namespace SabreTools.Serialization.Readers

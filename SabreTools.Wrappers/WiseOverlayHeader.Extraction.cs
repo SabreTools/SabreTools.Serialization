@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using SabreTools.Data.Models.WiseInstaller.Actions;
+using SabreTools.IO;
 using SabreTools.IO.Compression.Deflate;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Streams;
 
 namespace SabreTools.Wrappers
 {

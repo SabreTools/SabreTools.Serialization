@@ -7,6 +7,8 @@ using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 
 #pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Wrappers

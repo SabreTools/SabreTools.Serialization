@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Logiqx();
-            var serializer = new Serialization.Writers.Logiqx();
+            var serializer = new Writers.Logiqx();
 
             // Build the data
             Data.Models.Logiqx.Datafile df = Build(game: true);
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Logiqx();
-            var serializer = new Serialization.Writers.Logiqx();
+            var serializer = new Writers.Logiqx();
 
             // Build the data
             Data.Models.Logiqx.Datafile df = Build(game: false);

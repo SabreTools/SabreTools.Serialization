@@ -4,6 +4,7 @@ using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Compression.MSZIP;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Wrappers

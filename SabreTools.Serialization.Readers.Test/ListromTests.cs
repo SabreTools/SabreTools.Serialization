@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new Listrom();
-            var serializer = new Serialization.Writers.Listrom();
+            var serializer = new Writers.Listrom();
 
             // Build the data
             Data.Models.Listrom.MetadataFile mf = Build();

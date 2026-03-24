@@ -36,7 +36,7 @@
      </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Models\SabreTools.Data.Models.csproj" />
     </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.RomCenter;
-using SabreTools.IO.Readers;
+using SabreTools.Text.INI;
 
 #pragma warning disable CA1847 // Use char literal for a single character lookup
 namespace SabreTools.Serialization.Readers
@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Setup the reader and output
-                var reader = new IniReader(data, Encoding.UTF8)
+                var reader = new Reader(data, Encoding.UTF8)
                 {
                     ValidateRows = false,
                 };
@@ -36,11 +36,11 @@ namespace SabreTools.Serialization.Readers
                     // Ignore certain row types
                     switch (reader.RowType)
                     {
-                        case IniRowType.None:
-                        case IniRowType.Comment:
+                        case RowType.None:
+                        case RowType.Comment:
                             continue;
 
-                        case IniRowType.SectionHeader:
+                        case RowType.SectionHeader:
                             switch (reader.Section?.ToLowerInvariant())
                             {
                                 case "credits":
@@ -61,8 +61,8 @@ namespace SabreTools.Serialization.Readers
 
                             continue;
 
-                        case IniRowType.KeyValue:
-                        case IniRowType.Invalid:
+                        case RowType.KeyValue:
+                        case RowType.Invalid:
                         default:
                             break;
                     }

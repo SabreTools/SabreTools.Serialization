@@ -1,4 +1,5 @@
 using System.IO;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -47,7 +48,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
-            stream.CopyTo(fs);
+            stream.BlockCopy(fs);
             fs.Flush();
 
             return true;

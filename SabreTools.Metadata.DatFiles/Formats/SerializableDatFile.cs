@@ -1,6 +1,6 @@
 ﻿using System;
-using SabreTools.Metadata.Filter;
 using SabreTools.Data.Models.Metadata;
+using SabreTools.Metadata.Filter;
 using SabreTools.Serialization.CrossModel;
 using SabreTools.Serialization.Readers;
 using SabreTools.Serialization.Writers;

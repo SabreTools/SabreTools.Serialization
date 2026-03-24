@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CHD;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {

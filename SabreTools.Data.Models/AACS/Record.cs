@@ -1,3 +1,5 @@
+using SabreTools.Numerics;
+
 namespace SabreTools.Data.Models.AACS
 {
     /// <summary>
@@ -23,6 +25,6 @@ namespace SabreTools.Data.Models.AACS
         /// fields themselves. Record lengths are always multiples of 4 bytes.
         /// </summary>
         // <remarks>UInt24 not UInt32</remarks>
-        public uint RecordLength { get; set; }
+        public UInt24 RecordLength { get; set; } = new();
     }
 }

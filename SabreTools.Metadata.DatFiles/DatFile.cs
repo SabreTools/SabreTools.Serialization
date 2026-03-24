@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Filter;
-using SabreTools.Metadata.Tools;
+using SabreTools.Hashing;
+using SabreTools.Logging;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
-using SabreTools.Hashing;
-using SabreTools.IO.Logging;
+using SabreTools.Metadata.Filter;
+using SabreTools.Metadata.Tools;
 using SabreTools.Text.Compare;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatFiles
 {

@@ -35,19 +35,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
-      <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
-      <ProjectReference Include="..\SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj" />
-      <ProjectReference Include="..\SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj" />
-      <ProjectReference Include="..\SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj" />
-      <ProjectReference Include="..\SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj" />
-      <ProjectReference Include="..\SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj" />
+        <ProjectReference Include="..\SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj" />
+        <ProjectReference Include="..\SabreTools.Metadata\SabreTools.Metadata.csproj" />
+        <ProjectReference Include="..\SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj" />
+        <ProjectReference Include="..\SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj" />
+        <ProjectReference Include="..\SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj" />
+        <ProjectReference Include="..\SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj" />
+        <ProjectReference Include="..\SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-      <PackageReference Include="SabreTools.Hashing" Version="[2.0.0]" />
-      <PackageReference Include="SabreTools.IO" Version="[2.0.0]" />
+        <PackageReference Include="MinValueTupleBridge" Version="0.2.1" Condition="$(TargetFramework.StartsWith(`net2`)) OR $(TargetFramework.StartsWith(`net3`))" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="SabreTools.Hashing" Version="[2.0.0]" />
+        <PackageReference Include="SabreTools.IO" Version="[2.0.0]" />
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" Condition="$(TargetFramework.StartsWith(`net40`)) OR $(TargetFramework.StartsWith(`net45`))" />
+        <PackageReference Include="System.ValueTuple" Version="4.6.1" Condition="$(TargetFramework.StartsWith(`net46`)) OR $(TargetFramework.StartsWith(`net47`)) OR $(TargetFramework.StartsWith(`net48`))" />
     </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.RomCenter;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Writers;
+using SabreTools.Text.INI;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new IniWriter(stream, Encoding.UTF8);
+            var writer = new Writer(stream, Encoding.UTF8);
 
             // Write out the credits section
             WriteCredits(obj.Credits, writer);
@@ -40,8 +40,8 @@ namespace SabreTools.Serialization.Writers
         /// Write credits information to the current writer
         /// </summary>
         /// <param name="credits">Credits object representing the credits information</param>
-        /// <param name="writer">IniWriter representing the output</param>
-        private static void WriteCredits(Credits? credits, IniWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteCredits(Credits? credits, Writer writer)
         {
             // If the credits information is missing, we can't do anything
             if (credits is null)
@@ -72,8 +72,8 @@ namespace SabreTools.Serialization.Writers
         /// Write dat information to the current writer
         /// </summary>
         /// <param name="dat">Dat object representing the dat information</param>
-        /// <param name="writer">IniWriter representing the output</param>
-        private static void WriteDat(Dat? dat, IniWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteDat(Dat? dat, Writer writer)
         {
             // If the dat information is missing, we can't do anything
             if (dat is null)
@@ -98,8 +98,8 @@ namespace SabreTools.Serialization.Writers
         /// Write emulator information to the current writer
         /// </summary>
         /// <param name="emulator">Emulator object representing the emulator information</param>
-        /// <param name="writer">IniWriter representing the output</param>
-        private static void WriteEmulator(Emulator? emulator, IniWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteEmulator(Emulator? emulator, Writer writer)
         {
             // If the emulator information is missing, we can't do anything
             if (emulator is null)
@@ -120,8 +120,8 @@ namespace SabreTools.Serialization.Writers
         /// Write games information to the current writer
         /// </summary>
         /// <param name="games">Games object representing the games information</param>
-        /// <param name="writer">IniWriter representing the output</param>
-        private static void WriteGames(Games? games, IniWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteGames(Games? games, Writer writer)
         {
             // If the games information is missing, we can't do anything
             if (games?.Rom is null || games.Rom.Length == 0)

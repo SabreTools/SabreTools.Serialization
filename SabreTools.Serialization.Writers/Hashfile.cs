@@ -4,7 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Writers;
+using SabreTools.Text.SeparatedValue;
 
 #pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Writers
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
-            stream.CopyTo(fs);
+            stream.BlockCopy(fs);
             fs.Flush();
 
             return true;
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new SeparatedValueWriter(stream, Encoding.UTF8)
+            var writer = new Writer(stream, Encoding.UTF8)
             {
                 Separator = ' ',
                 Quotes = false,
@@ -79,46 +79,30 @@ namespace SabreTools.Serialization.Writers
             };
 
             // Write out the items, if they exist
-#pragma warning disable IDE0010
-            switch (hash)
-            {
-                case HashType.CRC32:
-                    WriteSFV(obj.SFV, writer);
-                    break;
-                case HashType.MD2:
-                    WriteMD2(obj.MD2, writer);
-                    break;
-                case HashType.MD4:
-                    WriteMD4(obj.MD4, writer);
-                    break;
-                case HashType.MD5:
-                    WriteMD5(obj.MD5, writer);
-                    break;
-                case HashType.RIPEMD128:
-                    WriteRIPEMD128(obj.RIPEMD128, writer);
-                    break;
-                case HashType.RIPEMD160:
-                    WriteRIPEMD160(obj.RIPEMD160, writer);
-                    break;
-                case HashType.SHA1:
-                    WriteSHA1(obj.SHA1, writer);
-                    break;
-                case HashType.SHA256:
-                    WriteSHA256(obj.SHA256, writer);
-                    break;
-                case HashType.SHA384:
-                    WriteSHA384(obj.SHA384, writer);
-                    break;
-                case HashType.SHA512:
-                    WriteSHA512(obj.SHA512, writer);
-                    break;
-                case HashType.SpamSum:
-                    WriteSpamSum(obj.SpamSum, writer);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(hash));
-            }
-#pragma warning restore IDE0010
+            if (hash == HashType.CRC32)
+                WriteSFV(obj.SFV, writer);
+            else if (hash == HashType.MD2)
+                WriteMD2(obj.MD2, writer);
+            else if (hash == HashType.MD4)
+                WriteMD4(obj.MD4, writer);
+            else if (hash == HashType.MD5)
+                WriteMD5(obj.MD5, writer);
+            else if (hash == HashType.RIPEMD128)
+                WriteRIPEMD128(obj.RIPEMD128, writer);
+            else if (hash == HashType.RIPEMD160)
+                WriteRIPEMD160(obj.RIPEMD160, writer);
+            else if (hash == HashType.SHA1)
+                WriteSHA1(obj.SHA1, writer);
+            else if (hash == HashType.SHA256)
+                WriteSHA256(obj.SHA256, writer);
+            else if (hash == HashType.SHA384)
+                WriteSHA384(obj.SHA384, writer);
+            else if (hash == HashType.SHA512)
+                WriteSHA512(obj.SHA512, writer);
+            else if (hash == HashType.SpamSum)
+                WriteSpamSum(obj.SpamSum, writer);
+            else
+                throw new ArgumentOutOfRangeException(nameof(hash));
 
             // Return the stream
             stream.SeekIfPossible(0, SeekOrigin.Begin);
@@ -129,8 +113,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SFV information to the current writer
         /// </summary>
         /// <param name="sfvs">Array of SFV objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSFV(SFV[]? sfvs, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSFV(SFV[]? sfvs, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (sfvs is null || sfvs.Length == 0)
@@ -151,8 +135,8 @@ namespace SabreTools.Serialization.Writers
         /// Write MD2 information to the current writer
         /// </summary>
         /// <param name="md2s">Array of MD2 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteMD2(MD2[]? md2s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteMD2(MD2[]? md2s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (md2s is null || md2s.Length == 0)
@@ -173,8 +157,8 @@ namespace SabreTools.Serialization.Writers
         /// Write MD4 information to the current writer
         /// </summary>
         /// <param name="md4s">Array of MD4 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteMD4(MD4[]? md4s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteMD4(MD4[]? md4s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (md4s is null || md4s.Length == 0)
@@ -195,8 +179,8 @@ namespace SabreTools.Serialization.Writers
         /// Write MD5 information to the current writer
         /// </summary>
         /// <param name="md5s">Array of MD5 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteMD5(MD5[]? md5s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteMD5(MD5[]? md5s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (md5s is null || md5s.Length == 0)
@@ -217,8 +201,8 @@ namespace SabreTools.Serialization.Writers
         /// Write RIPEMD128 information to the current writer
         /// </summary>
         /// <param name="ripemd128s">Array of RIPEMD128 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteRIPEMD128(RIPEMD128[]? ripemd128s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteRIPEMD128(RIPEMD128[]? ripemd128s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (ripemd128s is null || ripemd128s.Length == 0)
@@ -239,8 +223,8 @@ namespace SabreTools.Serialization.Writers
         /// Write RIPEMD160 information to the current writer
         /// </summary>
         /// <param name="ripemd160s">Array of RIPEMD160 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteRIPEMD160(RIPEMD160[]? ripemd160s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteRIPEMD160(RIPEMD160[]? ripemd160s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (ripemd160s is null || ripemd160s.Length == 0)
@@ -261,8 +245,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SHA1 information to the current writer
         /// </summary>
         /// <param name="sha1s">Array of SHA1 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSHA1(SHA1[]? sha1s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSHA1(SHA1[]? sha1s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (sha1s is null || sha1s.Length == 0)
@@ -283,8 +267,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SHA256 information to the current writer
         /// </summary>
         /// <param name="sha256s">Array of SHA256 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSHA256(SHA256[]? sha256s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSHA256(SHA256[]? sha256s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (sha256s is null || sha256s.Length == 0)
@@ -305,8 +289,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SHA384 information to the current writer
         /// </summary>
         /// <param name="sha384s">Array of SHA384 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSHA384(SHA384[]? sha384s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSHA384(SHA384[]? sha384s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (sha384s is null || sha384s.Length == 0)
@@ -327,8 +311,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SHA512 information to the current writer
         /// </summary>
         /// <param name="sha512s">Array of SHA512 objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSHA512(SHA512[]? sha512s, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSHA512(SHA512[]? sha512s, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (sha512s is null || sha512s.Length == 0)
@@ -349,8 +333,8 @@ namespace SabreTools.Serialization.Writers
         /// Write SpamSum information to the current writer
         /// </summary>
         /// <param name="spamsums">Array of SpamSum objects representing the files</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteSpamSum(SpamSum[]? spamsums, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteSpamSum(SpamSum[]? spamsums, Writer writer)
         {
             // If the item information is missing, we can't do anything
             if (spamsums is null || spamsums.Length == 0)

@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new SeparatedValue();
-            var serializer = new Serialization.Writers.SeparatedValue();
+            var serializer = new Writers.SeparatedValue();
 
             // Build the data
             Data.Models.SeparatedValue.MetadataFile mf = Build();
@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             // Get the serializer and deserializer
             var deserializer = new SeparatedValue();
-            var serializer = new Serialization.Writers.SeparatedValue();
+            var serializer = new Writers.SeparatedValue();
 
             // Build the data
             Data.Models.SeparatedValue.MetadataFile mf = Build();
@@ -196,9 +196,9 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(header);
             if (longHeader)
-                Assert.True(Serialization.Writers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
+                Assert.True(Writers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
             else
-                Assert.True(Serialization.Writers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
+                Assert.True(Writers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
         }
 
         /// <summary>

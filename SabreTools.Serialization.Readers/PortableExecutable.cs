@@ -8,6 +8,8 @@ using SabreTools.Data.Models.COFF;
 using SabreTools.Data.Models.COFF.SymbolTableEntries;
 using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
+using SabreTools.Text.Extensions;
 using static SabreTools.Data.Models.COFF.Constants;
 using static SabreTools.Data.Models.PortableExecutable.Constants;
 

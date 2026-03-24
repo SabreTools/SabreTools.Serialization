@@ -1,4 +1,3 @@
-using SabreTools.Serialization.Writers;
 using Xunit;
 
 namespace SabreTools.Serialization.Writers.Test

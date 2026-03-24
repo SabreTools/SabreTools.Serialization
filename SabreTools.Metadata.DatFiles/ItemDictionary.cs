@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 #endif
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Tools;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Hashing;
-using SabreTools.IO.Logging;
+using SabreTools.Logging;
 using SabreTools.Text.Compare;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatFiles
 {

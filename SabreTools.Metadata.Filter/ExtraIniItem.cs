@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.IO.Logging;
-using SabreTools.IO.Readers;
+using SabreTools.Logging;
+using SabreTools.Text.INI;
 
 namespace SabreTools.Metadata.Filter
 {
@@ -63,7 +63,7 @@ namespace SabreTools.Metadata.Filter
                 return false;
 
             // Prepare all internal variables
-            var ir = new IniReader(iniPath) { ValidateRows = false };
+            var ir = new Reader(iniPath) { ValidateRows = false };
             bool foundRootFolder = false;
 
             // If we got a null reader, just return
@@ -79,11 +79,11 @@ namespace SabreTools.Metadata.Filter
                     ir.ReadNextLine();
 
                     // We don't care about whitespace or comments
-                    if (ir.RowType == IniRowType.None || ir.RowType == IniRowType.Comment)
+                    if (ir.RowType == RowType.None || ir.RowType == RowType.Comment)
                         continue;
 
                     // If we have a section, just read it in
-                    if (ir.RowType == IniRowType.SectionHeader)
+                    if (ir.RowType == RowType.SectionHeader)
                     {
                         // If we've found the start of the extras, set the flag
                         if (string.Equals(ir.Section, "ROOT_FOLDER", StringComparison.OrdinalIgnoreCase))

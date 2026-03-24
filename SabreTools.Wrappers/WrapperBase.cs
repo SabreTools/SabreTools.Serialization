@@ -1,7 +1,7 @@
 using System;
 using System.IO;
+using SabreTools.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Streams;
 
 namespace SabreTools.Wrappers
 {
@@ -21,10 +21,10 @@ namespace SabreTools.Wrappers
 
         #region Properties
 
-        /// <inheritdoc cref="ViewStream.Filename"/>
+        /// <inheritdoc cref="ReadOnlyViewStream.Filename"/>
         public string? Filename => _dataSource.Filename;
 
-        /// <inheritdoc cref="ViewStream.Length"/>
+        /// <inheritdoc cref="ReadOnlyViewStream.Length"/>
         public long Length => _dataSource.Length;
 
         #endregion
@@ -34,7 +34,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// Source of the original data
         /// </summary>
-        protected readonly ViewStream _dataSource;
+        protected readonly ReadOnlyViewStream _dataSource;
 
 #if NETCOREAPP
 #pragma warning disable IDE1006 // Naming Styles
@@ -100,7 +100,7 @@ namespace SabreTools.Wrappers
             if (length < 0 || offset + length > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            _dataSource = new ViewStream(data, offset, length);
+            _dataSource = new ReadOnlyViewStream(data, offset, length);
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace SabreTools.Wrappers
             if (length < 0 || offset + length > data.Length)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            _dataSource = new ViewStream(data, offset, length);
+            _dataSource = new ReadOnlyViewStream(data, offset, length);
         }
 
         #endregion

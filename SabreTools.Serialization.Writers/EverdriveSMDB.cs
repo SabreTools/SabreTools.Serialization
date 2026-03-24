@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.EverdriveSMDB;
 using SabreTools.IO.Extensions;
-using SabreTools.IO.Writers;
+using SabreTools.Text.SeparatedValue;
 
 namespace SabreTools.Serialization.Writers
 {
@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new SeparatedValueWriter(stream, Encoding.UTF8) { Separator = '\t', Quotes = false };
+            var writer = new Writer(stream, Encoding.UTF8) { Separator = '\t', Quotes = false };
 
             // Write out the rows, if they exist
             WriteRows(obj.Row, writer);
@@ -32,8 +32,8 @@ namespace SabreTools.Serialization.Writers
         /// Write rows information to the current writer
         /// </summary>
         /// <param name="rows">Array of Row objects representing the rows information</param>
-        /// <param name="writer">SeparatedValueWriter representing the output</param>
-        private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
+        /// <param name="writer">Writer representing the output</param>
+        private static void WriteRows(Row[]? rows, Writer writer)
         {
             // If the games information is missing, we can't do anything
             if (rows is null || rows.Length == 0)

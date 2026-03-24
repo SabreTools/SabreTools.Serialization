@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.BDPlus;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.BDPlus.Constants;
 
 namespace SabreTools.Serialization.Readers

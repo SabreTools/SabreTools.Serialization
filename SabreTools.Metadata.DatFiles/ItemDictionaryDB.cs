@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 #endif
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Tools;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Hashing;
-using SabreTools.IO.Logging;
+using SabreTools.Logging;
 using SabreTools.Text.Compare;
+using SabreTools.Text.Extensions;
 
 /*
  * Planning Notes:
@@ -685,9 +685,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public void Deduplicate()
         {
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.ForEach(SortedKeys, Core.Globals.ParallelOptions, key =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.ForEach(SortedKeys, key =>
 #else
             foreach (var key in SortedKeys)
@@ -1067,9 +1065,7 @@ namespace SabreTools.Metadata.DatFiles
             // Get the current list of item indicies
             long[] itemIndicies = [.. _items.Keys];
 
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, itemIndicies.Length, Core.Globals.ParallelOptions, i =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.For(0, itemIndicies.Length, i =>
 #else
             for (int i = 0; i < itemIndicies.Length; i++)
@@ -1116,9 +1112,7 @@ namespace SabreTools.Metadata.DatFiles
             // Get the current list of bucket keys
             string[] bucketKeys = [.. _buckets.Keys];
 
-#if NET452_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            Parallel.For(0, bucketKeys.Length, Core.Globals.ParallelOptions, i =>
-#elif NET40_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             Parallel.For(0, bucketKeys.Length, i =>
 #else
             for (int i = 0; i < bucketKeys.Length; i++)

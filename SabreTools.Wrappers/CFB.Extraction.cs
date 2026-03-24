@@ -2,9 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.Data.Models.CFB;
-#if NETFRAMEWORK || NETSTANDARD2_0
-using SabreTools.IO.Extensions;
-#endif
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using SabreTools.Data.Models.CDROM;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Data.Extensions
 {

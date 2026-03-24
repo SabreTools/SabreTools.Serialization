@@ -5,6 +5,8 @@ using System.Text;
 using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
 {

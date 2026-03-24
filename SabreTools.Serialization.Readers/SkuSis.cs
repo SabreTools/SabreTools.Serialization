@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
+using SabreTools.Matching;
+using SabreTools.Numerics.Extensions;
 using static SabreTools.Data.Models.VDF.Constants;
 
 namespace SabreTools.Serialization.Readers
