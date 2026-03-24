@@ -1,0 +1,34 @@
+﻿using System.Xml.Serialization;
+using Newtonsoft.Json;
+
+namespace SabreTools.Metadata.DatItems.Formats
+{
+    /// <summary>
+    /// SoftwareList diskarea information
+    /// </summary>
+    /// <remarks>One DiskArea can contain multiple Disk items</remarks>
+    [JsonObject("diskarea"), XmlRoot("diskarea")]
+    public sealed class DiskArea : DatItem<Data.Models.Metadata.DiskArea>
+    {
+        #region Fields
+
+        /// <inheritdoc>/>
+        protected override ItemType ItemType => ItemType.DiskArea;
+
+        #endregion
+
+        #region Constructors
+
+        public DiskArea() : base() { }
+
+        public DiskArea(Data.Models.Metadata.DiskArea item) : base(item) { }
+
+        public DiskArea(Data.Models.Metadata.DiskArea item, Machine machine, Source source) : this(item)
+        {
+            SetFieldValue<Source?>(SourceKey, source);
+            CopyMachineInformation(machine);
+        }
+
+        #endregion
+    }
+}
