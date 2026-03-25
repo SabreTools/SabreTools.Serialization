@@ -729,6 +729,8 @@ namespace SabreTools.Metadata.DatFiles.Test
                 [Data.Models.Metadata.Rom.CollectionCatalogNumberKey] = "collection-catalog-number",
                 [Data.Models.Metadata.Rom.CommentKey] = "comment",
                 [Data.Models.Metadata.Rom.CRCKey] = HashType.CRC32.ZeroString,
+                [Data.Models.Metadata.Rom.CRC16Key] = HashType.CRC16.ZeroString,
+                [Data.Models.Metadata.Rom.CRC64Key] = HashType.CRC64.ZeroString,
                 [Data.Models.Metadata.Rom.CreatorKey] = "creator",
                 [Data.Models.Metadata.Rom.DateKey] = "date",
                 [Data.Models.Metadata.Rom.DisposeKey] = "yes",
@@ -1395,6 +1397,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("collection-catalog-number", rom.GetStringFieldValue(Data.Models.Metadata.Rom.CollectionCatalogNumberKey));
             Assert.Equal("comment", rom.GetStringFieldValue(Data.Models.Metadata.Rom.CommentKey));
             Assert.Equal(HashType.CRC32.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(HashType.CRC16.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
+            Assert.Equal(HashType.CRC64.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Equal("creator", rom.GetStringFieldValue(Data.Models.Metadata.Rom.CreatorKey));
             Assert.Equal("date", rom.GetStringFieldValue(Data.Models.Metadata.Rom.DateKey));
             Assert.True(rom.GetBoolFieldValue(Data.Models.Metadata.Rom.DisposeKey));

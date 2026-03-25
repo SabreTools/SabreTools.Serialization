@@ -589,7 +589,9 @@ namespace SabreTools.Metadata.DatFiles
                 publisher = machine?.GetStringFieldValue(Data.Models.Metadata.Machine.PublisherKey) ?? string.Empty,
                 category = machine?.GetStringFieldValue(Data.Models.Metadata.Machine.CategoryKey) ?? string.Empty,
                 name = item.GetName() ?? type.AsItemType().AsStringValue() ?? string.Empty,
+                crc16 = string.Empty,
                 crc = string.Empty,
+                crc64 = string.Empty,
                 md2 = string.Empty,
                 md4 = string.Empty,
                 md5 = string.Empty,
@@ -626,7 +628,9 @@ namespace SabreTools.Metadata.DatFiles
             }
             else if (item is Rom rom)
             {
+                crc16 = rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key) ?? string.Empty;
                 crc = rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey) ?? string.Empty;
+                crc64 = rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key) ?? string.Empty;
                 md2 = rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key) ?? string.Empty;
                 md4 = rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key) ?? string.Empty;
                 md5 = rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key) ?? string.Empty;
@@ -648,7 +652,9 @@ namespace SabreTools.Metadata.DatFiles
                 .Replace("%manufacturer%", manufacturer)
                 .Replace("%publisher%", publisher)
                 .Replace("%category%", category)
+                .Replace("%crc16%", crc16)
                 .Replace("%crc%", crc)
+                .Replace("%crc64%", crc64)
                 .Replace("%md2%", md2)
                 .Replace("%md4%", md4)
                 .Replace("%md5%", md5)
@@ -686,8 +692,12 @@ namespace SabreTools.Metadata.DatFiles
             // If the Rom has "null" characteristics, ensure all fields
             rom.SetName(rom.GetName() == "null" ? "-" : rom.GetName());
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
+            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key,
+                rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key) == "null" ? HashType.CRC16.ZeroString : null);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey,
                 rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey) == "null" ? HashType.CRC32.ZeroString : null);
+            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key,
+                rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key) == "null" ? HashType.CRC64.ZeroString : null);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key,
                 rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key) == "null" ? HashType.MD2.ZeroString : null);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD4Key,
@@ -1087,9 +1097,17 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         private static string GetDuplicateSuffix(Rom datItem)
         {
+            string? crc16 = datItem.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key);
+            if (!string.IsNullOrEmpty(crc16))
+                return $"_{crc16}";
+
             string? crc = datItem.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey);
             if (!string.IsNullOrEmpty(crc))
                 return $"_{crc}";
+
+            string? crc64 = datItem.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key);
+            if (!string.IsNullOrEmpty(crc64))
+                return $"_{crc64}";
 
             string? md2 = datItem.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key);
             if (!string.IsNullOrEmpty(md2))

@@ -292,10 +292,18 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.Machine, false, true, "Machine")]
         [InlineData(ItemKey.Machine, true, false, "0000000000-machine")]
         [InlineData(ItemKey.Machine, true, true, "machine")]
+        [InlineData(ItemKey.CRC16, false, false, "0000")]
+        [InlineData(ItemKey.CRC16, false, true, "0000")]
+        [InlineData(ItemKey.CRC16, true, false, "0000")]
+        [InlineData(ItemKey.CRC16, true, true, "0000")]
         [InlineData(ItemKey.CRC, false, false, "00000000")]
         [InlineData(ItemKey.CRC, false, true, "00000000")]
         [InlineData(ItemKey.CRC, true, false, "00000000")]
         [InlineData(ItemKey.CRC, true, true, "00000000")]
+        [InlineData(ItemKey.CRC64, false, false, "0000000000000000")]
+        [InlineData(ItemKey.CRC64, false, true, "0000000000000000")]
+        [InlineData(ItemKey.CRC64, true, false, "0000000000000000")]
+        [InlineData(ItemKey.CRC64, true, true, "0000000000000000")]
         [InlineData(ItemKey.MD2, false, false, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, false, true, "8350e5a3e24c153df2275c9f80692773")]
         [InlineData(ItemKey.MD2, true, false, "8350e5a3e24c153df2275c9f80692773")]
@@ -358,10 +366,18 @@ namespace SabreTools.Metadata.DatItems.Test
         [InlineData(ItemKey.Machine, false, true, "Machine")]
         [InlineData(ItemKey.Machine, true, false, "0000000000-machine")]
         [InlineData(ItemKey.Machine, true, true, "machine")]
+        [InlineData(ItemKey.CRC16, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.CRC16, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.CRC16, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC16, true, true, "deadbeef")]
         [InlineData(ItemKey.CRC, false, false, "DEADBEEF")]
         [InlineData(ItemKey.CRC, false, true, "DEADBEEF")]
         [InlineData(ItemKey.CRC, true, false, "deadbeef")]
         [InlineData(ItemKey.CRC, true, true, "deadbeef")]
+        [InlineData(ItemKey.CRC64, false, false, "DEADBEEF")]
+        [InlineData(ItemKey.CRC64, false, true, "DEADBEEF")]
+        [InlineData(ItemKey.CRC64, true, false, "deadbeef")]
+        [InlineData(ItemKey.CRC64, true, true, "deadbeef")]
         [InlineData(ItemKey.MD2, false, false, "DEADBEEF")]
         [InlineData(ItemKey.MD2, false, true, "DEADBEEF")]
         [InlineData(ItemKey.MD2, true, false, "deadbeef")]
@@ -410,7 +426,9 @@ namespace SabreTools.Metadata.DatItems.Test
             machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "Machine");
 
             DatItem datItem = new Rom();
+            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
             datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
             datItem.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
             datItem.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
             datItem.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");

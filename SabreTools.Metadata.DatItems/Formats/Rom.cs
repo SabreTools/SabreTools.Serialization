@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Tools;
@@ -138,8 +138,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process hash values
             if (GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.SizeKey, GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey).ToString());
+            // TODO: This should be normalized to CRC-16
+            if (GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key) is not null)
+                SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key, NormalizeHashData(GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key), 4));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, TextHelper.NormalizeCRC32(GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)));
+            // TODO: This should be normalized to CRC-64
+            if (GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key) is not null)
+                SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key, NormalizeHashData(GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key), 16));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key, TextHelper.NormalizeMD2(GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key)));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key) is not null)
@@ -185,8 +191,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process hash values
             if (GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.SizeKey, GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey).ToString());
+            // TODO: This should be normalized to CRC-16
+            if (GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key) is not null)
+                SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key, NormalizeHashData(GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key), 4));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, TextHelper.NormalizeCRC32(GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)));
+            // TODO: This should be normalized to CRC-64
+            if (GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key) is not null)
+                SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key, NormalizeHashData(GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key), 16));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key) is not null)
                 SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key, TextHelper.NormalizeMD2(GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key)));
             if (GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key) is not null)
@@ -212,6 +224,87 @@ namespace SabreTools.Metadata.DatItems.Formats
             SetFieldValue<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
+
+        /// <summary>
+        /// Normalize a hash string and pad to the correct size
+        /// </summary>
+        /// TODO: Remove when IO is updated
+        private static string? NormalizeHashData(string? hash, int expectedLength)
+        {
+            // If we have a known blank hash, return blank
+            if (hash is null)
+                return null;
+            else if (hash == string.Empty || hash == "-" || hash == "_")
+                return string.Empty;
+
+            // Check to see if it's a "hex" hash
+            hash = hash!.Trim().Replace("0x", string.Empty);
+
+            // If we have a blank hash now, return blank
+            if (string.IsNullOrEmpty(hash))
+                return string.Empty;
+
+            // If the hash shorter than the required length, pad it
+            if (hash.Length < expectedLength)
+                hash = hash.PadLeft(expectedLength, '0');
+
+            // If the hash is longer than the required length, it's invalid
+            else if (hash.Length > expectedLength)
+                return string.Empty;
+
+            // Now normalize the hash
+            hash = hash.ToLowerInvariant();
+
+            // Otherwise, make sure that every character is a proper match
+            for (int i = 0; i < hash.Length; i++)
+            {
+                char c = hash[i];
+#if NET7_0_OR_GREATER
+                if (!char.IsAsciiHexDigit(c))
+#else
+                if (!IsAsciiHexDigit(c))
+#endif
+                {
+                    hash = string.Empty;
+                    break;
+                }
+            }
+
+            return hash;
+        }
+
+#if NETFRAMEWORK || NETCOREAPP3_1 || NET5_0 || NET6_0 || NETSTANDARD2_0_OR_GREATER
+        /// <summary>
+        /// Indicates whether a character is categorized as an ASCII hexademical digit.
+        /// </summary>
+        /// <param name="c">The character to evaluate.</param>
+        /// <returns>true if c is a hexademical digit; otherwise, false.</returns>
+        /// <remarks>This method determines whether the character is in the range '0' through '9', inclusive, 'A' through 'F', inclusive, or 'a' through 'f', inclusive.</remarks>
+        /// TODO: Remove when IO is updated
+        internal static bool IsAsciiHexDigit(char c)
+        {
+            return char.ToLowerInvariant(c) switch
+            {
+                '0' => true,
+                '1' => true,
+                '2' => true,
+                '3' => true,
+                '4' => true,
+                '5' => true,
+                '6' => true,
+                '7' => true,
+                '8' => true,
+                '9' => true,
+                'a' => true,
+                'b' => true,
+                'c' => true,
+                'd' => true,
+                'e' => true,
+                'f' => true,
+                _ => false,
+            };
+        }
+#endif
 
         #endregion
 
@@ -250,8 +343,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
+                case ItemKey.CRC16:
+                    key = GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key);
+                    break;
+
                 case ItemKey.CRC:
                     key = GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey);
+                    break;
+
+                case ItemKey.CRC64:
+                    key = GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key);
                     break;
 
                 case ItemKey.MD2:

@@ -283,8 +283,16 @@ namespace SabreTools.Metadata.DatItems
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
+                case ItemKey.CRC16:
+                    key = HashType.CRC16.ZeroString;
+                    break;
+
                 case ItemKey.CRC:
                     key = HashType.CRC32.ZeroString;
+                    break;
+
+                case ItemKey.CRC64:
+                    key = HashType.CRC64.ZeroString;
                     break;
 
                 case ItemKey.Machine:

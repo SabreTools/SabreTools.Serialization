@@ -301,7 +301,9 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Good.AsStringValue());
             rom.SetFieldValue<long>(Data.Models.Metadata.Rom.SizeKey, 1);
+            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key, HashType.CRC16.ZeroString);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
+            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key, HashType.CRC64.ZeroString);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key, HashType.MD2.ZeroString);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD4Key, HashType.MD4.ZeroString);
             rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);

@@ -342,9 +342,17 @@ namespace SabreTools.Data.Extensions
                 return false;
 
             // Return if all hashes match according to merge rules
+            string? selfCrc16 = self.ReadString(Rom.CRC16Key);
+            string? otherCrc16 = other.ReadString(Rom.CRC16Key);
+            bool conditionalCrc16 = ConditionalHashEquals(selfCrc16, otherCrc16);
+
             string? selfCrc = self.ReadString(Rom.CRCKey);
             string? otherCrc = other.ReadString(Rom.CRCKey);
             bool conditionalCrc = ConditionalHashEquals(selfCrc, otherCrc);
+
+            string? selfCrc64 = self.ReadString(Rom.CRC64Key);
+            string? otherCrc64 = other.ReadString(Rom.CRC64Key);
+            bool conditionalCrc64 = ConditionalHashEquals(selfCrc64, otherCrc64);
 
             string? selfMd2 = self.ReadString(Rom.MD2Key);
             string? otherMd2 = other.ReadString(Rom.MD2Key);
@@ -386,7 +394,9 @@ namespace SabreTools.Data.Extensions
             string? otherSpamSum = other.ReadString(Rom.SpamSumKey);
             bool conditionalSpamSum = ConditionalHashEquals(selfSpamSum, otherSpamSum);
 
-            return conditionalCrc
+            return conditionalCrc16
+                && conditionalCrc
+                && conditionalCrc64
                 && conditionalMd2
                 && conditionalMd4
                 && conditionalMd5
@@ -470,8 +480,14 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasCommonHash(this Rom self, Rom other)
         {
+            bool crc16Null = string.IsNullOrEmpty(self.ReadString(Rom.CRC16Key));
+            crc16Null ^= string.IsNullOrEmpty(other.ReadString(Rom.CRC16Key));
+
             bool crcNull = string.IsNullOrEmpty(self.ReadString(Rom.CRCKey));
             crcNull ^= string.IsNullOrEmpty(other.ReadString(Rom.CRCKey));
+
+            bool crc64Null = string.IsNullOrEmpty(self.ReadString(Rom.CRC64Key));
+            crc64Null ^= string.IsNullOrEmpty(other.ReadString(Rom.CRC64Key));
 
             bool md2Null = string.IsNullOrEmpty(self.ReadString(Rom.MD2Key));
             md2Null ^= string.IsNullOrEmpty(other.ReadString(Rom.MD2Key));
@@ -503,7 +519,9 @@ namespace SabreTools.Data.Extensions
             bool spamsumNull = string.IsNullOrEmpty(self.ReadString(Rom.SpamSumKey));
             spamsumNull ^= string.IsNullOrEmpty(other.ReadString(Rom.SpamSumKey));
 
-            return !crcNull
+            return !crc16Null
+                || !crcNull
+                || !crc64Null
                 || !md2Null
                 || !md4Null
                 || !md5Null
@@ -549,7 +567,9 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasHashes(this Rom rom)
         {
+            bool crc16Null = string.IsNullOrEmpty(rom.ReadString(Rom.CRC16Key));
             bool crcNull = string.IsNullOrEmpty(rom.ReadString(Rom.CRCKey));
+            bool crc64Null = string.IsNullOrEmpty(rom.ReadString(Rom.CRC64Key));
             bool md2Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD2Key));
             bool md4Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD4Key));
             bool md5Null = string.IsNullOrEmpty(rom.ReadString(Rom.MD5Key));
@@ -561,7 +581,9 @@ namespace SabreTools.Data.Extensions
             bool sha512Null = string.IsNullOrEmpty(rom.ReadString(Rom.SHA512Key));
             bool spamsumNull = string.IsNullOrEmpty(rom.ReadString(Rom.SpamSumKey));
 
-            return !crcNull
+            return !crc16Null
+                || !crcNull
+                || !crc64Null
                 || !md2Null
                 || !md4Null
                 || !md5Null
@@ -617,8 +639,14 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         private static bool HasZeroHash(this Rom rom)
         {
+            string? crc16 = rom.ReadString(Rom.CRC16Key);
+            bool crc16Null = string.IsNullOrEmpty(crc16) || string.Equals(crc16, HashType.CRC16.ZeroString, StringComparison.OrdinalIgnoreCase);
+
             string? crc = rom.ReadString(Rom.CRCKey);
             bool crcNull = string.IsNullOrEmpty(crc) || string.Equals(crc, HashType.CRC32.ZeroString, StringComparison.OrdinalIgnoreCase);
+
+            string? crc64 = rom.ReadString(Rom.CRC64Key);
+            bool crc64Null = string.IsNullOrEmpty(crc64) || string.Equals(crc64, HashType.CRC64.ZeroString, StringComparison.OrdinalIgnoreCase);
 
             string? md2 = rom.ReadString(Rom.MD2Key);
             bool md2Null = string.IsNullOrEmpty(md2) || string.Equals(md2, HashType.MD2.ZeroString, StringComparison.OrdinalIgnoreCase);
@@ -650,7 +678,9 @@ namespace SabreTools.Data.Extensions
             string? spamsum = rom.ReadString(Rom.SpamSumKey);
             bool spamsumNull = string.IsNullOrEmpty(spamsum) || string.Equals(spamsum, HashType.SpamSum.ZeroString, StringComparison.OrdinalIgnoreCase);
 
-            return crcNull
+            return crc16Null
+                && crcNull
+                && crc64Null
                 && md2Null
                 && md4Null
                 && md5Null
@@ -762,10 +792,20 @@ namespace SabreTools.Data.Extensions
             if (selfSize is null && otherSize is not null)
                 self[Rom.SizeKey] = otherSize;
 
+            string? selfCrc16 = self.ReadString(Rom.CRC16Key);
+            string? otherCrc16 = other.ReadString(Rom.CRC16Key);
+            if (string.IsNullOrEmpty(selfCrc16) && !string.IsNullOrEmpty(otherCrc16))
+                self[Rom.CRC16Key] = otherCrc16;
+
             string? selfCrc = self.ReadString(Rom.CRCKey);
             string? otherCrc = other.ReadString(Rom.CRCKey);
             if (string.IsNullOrEmpty(selfCrc) && !string.IsNullOrEmpty(otherCrc))
                 self[Rom.CRCKey] = otherCrc;
+
+            string? selfCrc64 = self.ReadString(Rom.CRC64Key);
+            string? otherCrc64 = other.ReadString(Rom.CRC64Key);
+            if (string.IsNullOrEmpty(selfCrc64) && !string.IsNullOrEmpty(otherCrc64))
+                self[Rom.CRC64Key] = otherCrc64;
 
             string? selfMd2 = self.ReadString(Rom.MD2Key);
             string? otherMd2 = other.ReadString(Rom.MD2Key);

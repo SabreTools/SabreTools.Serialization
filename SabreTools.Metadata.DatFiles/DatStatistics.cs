@@ -472,7 +472,9 @@ namespace SabreTools.Metadata.DatFiles
             if (rom.GetStringFieldValue(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump)
             {
                 TotalSize += rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
+                AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
                 AddHashCount(HashType.MD2, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
                 AddHashCount(HashType.MD4, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
                 AddHashCount(HashType.MD5, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);
@@ -500,7 +502,9 @@ namespace SabreTools.Metadata.DatFiles
             if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump)
             {
                 TotalSize += rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                AddHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 AddHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
+                AddHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
                 AddHashCount(HashType.MD2, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
                 AddHashCount(HashType.MD4, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
                 AddHashCount(HashType.MD5, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);
@@ -655,7 +659,9 @@ namespace SabreTools.Metadata.DatFiles
             if (rom.GetStringFieldValue(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump)
             {
                 TotalSize -= rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
+                RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD2, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD4, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);
@@ -683,7 +689,9 @@ namespace SabreTools.Metadata.DatFiles
             if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump)
             {
                 TotalSize -= rom.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? 0;
+                RemoveHashCount(HashType.CRC16, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key)) ? 0 : 1);
                 RemoveHashCount(HashType.CRC32, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) ? 0 : 1);
+                RemoveHashCount(HashType.CRC64, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD2, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD4, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD4Key)) ? 0 : 1);
                 RemoveHashCount(HashType.MD5, string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)) ? 0 : 1);

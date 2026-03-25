@@ -1,4 +1,4 @@
-﻿#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Collections.Concurrent;
 #endif
 using System.Collections.Generic;
@@ -149,7 +149,9 @@ namespace SabreTools.Metadata.DatFiles
                     && (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)) || rom.HasZeroHash()))
                 {
                     rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
+                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key, null); // HashType.CRC16.ZeroString
                     rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
+                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key, null); // HashType.CRC64.ZeroString
                     rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key, null); // HashType.MD2.ZeroString
                     rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD4Key, null); // HashType.MD4.ZeroString
                     rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
@@ -693,6 +695,15 @@ namespace SabreTools.Metadata.DatFiles
             // If all items are supposed to have a MD2, we bucket by that
             else if (diskCount + mediaCount + romCount - nodumpCount == DatStatistics.GetHashCount(HashType.MD2))
                 return ItemKey.MD2;
+
+            // If all items are supposed to have a CRC64, we bucket by that
+            else if (diskCount + mediaCount + romCount - nodumpCount == DatStatistics.GetHashCount(HashType.CRC64))
+                return ItemKey.CRC64;
+
+            // If all items are supposed to have a CRC16, we bucket by that
+            // TODO: This should really come after normal CRC
+            else if (diskCount + mediaCount + romCount - nodumpCount == DatStatistics.GetHashCount(HashType.CRC16))
+                return ItemKey.CRC16;
 
             // Otherwise, we bucket by CRC
             else

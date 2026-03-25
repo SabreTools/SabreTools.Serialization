@@ -997,6 +997,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("collection-catalog-number", rom.ReadString(Data.Models.Metadata.Rom.CollectionCatalogNumberKey));
             Assert.Equal("comment", rom.ReadString(Data.Models.Metadata.Rom.CommentKey));
             Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(HashType.CRC16.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
+            Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Equal("creator", rom.ReadString(Data.Models.Metadata.Rom.CreatorKey));
             Assert.Equal("date", rom.ReadString(Data.Models.Metadata.Rom.DateKey));
             Assert.True(rom.ReadBool(Data.Models.Metadata.Rom.DisposeKey));

@@ -271,7 +271,9 @@ namespace SabreTools.Metadata.Test
                 [Rom.StatusKey] = "nodump",
                 [Rom.NameKey] = "XXXXXX",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -288,7 +290,9 @@ namespace SabreTools.Metadata.Test
                 [Rom.StatusKey] = "NODUMP",
                 [Rom.NameKey] = "XXXXXX",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -312,7 +316,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX",
                 [Rom.SizeKey] = 12345,
-                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = string.Empty,
@@ -328,7 +334,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX",
                 [Rom.SizeKey] = 12345,
-                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = "XXXXXX",
@@ -351,7 +359,9 @@ namespace SabreTools.Metadata.Test
             DictionaryBase self = new Rom
             {
                 [Rom.NameKey] = "XXXXXX1",
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -367,7 +377,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -391,7 +403,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -406,7 +420,53 @@ namespace SabreTools.Metadata.Test
             DictionaryBase other = new Rom
             {
                 [Rom.NameKey] = "XXXXXX2",
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = "XXXXXX",
+                [Rom.MD4Key] = "XXXXXX",
+                [Rom.MD5Key] = "XXXXXX",
+                [Rom.RIPEMD128Key] = "XXXXXX",
+                [Rom.RIPEMD160Key] = "XXXXXX",
+                [Rom.SHA1Key] = "XXXXXX",
+                [Rom.SHA256Key] = "XXXXXX",
+                [Rom.SHA384Key] = "XXXXXX",
+                [Rom.SHA512Key] = "XXXXXX",
+                [Rom.SpamSumKey] = "XXXXXX",
+            };
+
+            bool actual = self.EqualTo(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void EqualTo_Rom_PartialCRC16_True()
+        {
+            DictionaryBase self = new Rom
+            {
+                [Rom.NameKey] = "XXXXXX1",
+                [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+            DictionaryBase other = new Rom
+            {
+                [Rom.NameKey] = "XXXXXX2",
+                [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -430,7 +490,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -446,7 +508,53 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = "XXXXXX",
+                [Rom.MD4Key] = "XXXXXX",
+                [Rom.MD5Key] = "XXXXXX",
+                [Rom.RIPEMD128Key] = "XXXXXX",
+                [Rom.RIPEMD160Key] = "XXXXXX",
+                [Rom.SHA1Key] = "XXXXXX",
+                [Rom.SHA256Key] = "XXXXXX",
+                [Rom.SHA384Key] = "XXXXXX",
+                [Rom.SHA512Key] = "XXXXXX",
+                [Rom.SpamSumKey] = "XXXXXX",
+            };
+
+            bool actual = self.EqualTo(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void EqualTo_Rom_PartialCRC64_True()
+        {
+            DictionaryBase self = new Rom
+            {
+                [Rom.NameKey] = "XXXXXX1",
+                [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+            DictionaryBase other = new Rom
+            {
+                [Rom.NameKey] = "XXXXXX2",
+                [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -470,7 +578,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -486,7 +596,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -510,7 +622,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = string.Empty,
@@ -526,7 +640,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -550,7 +666,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = "XXXXXX",
@@ -566,7 +684,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -590,7 +710,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -606,7 +728,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -630,7 +754,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -646,7 +772,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -670,7 +798,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -686,7 +816,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -710,7 +842,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -726,7 +860,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -750,7 +886,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -766,7 +904,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -790,7 +930,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -806,7 +948,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -830,7 +974,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -846,7 +992,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -870,7 +1018,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX1",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -886,7 +1036,9 @@ namespace SabreTools.Metadata.Test
             {
                 [Rom.NameKey] = "XXXXXX2",
                 [Rom.SizeKey] = 12345,
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",

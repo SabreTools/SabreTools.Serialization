@@ -1371,7 +1371,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
             item.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "crc64");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "md2");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "md4");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "md5");
@@ -1390,8 +1392,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void FormatPrefixPostfix_Disk()
         {
-            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc%_%md2%_%md4%_%md5%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
-            string expected = "machine_machine_name_manufacturer_publisher_category____md5_sha1_____";
+            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
+            string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_____";
 
             Machine machine = new Machine();
             machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
@@ -1411,8 +1413,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void FormatPrefixPostfix_File()
         {
-            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc%_%md2%_%md4%_%md5%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
-            string expected = "machine_machine_name.bin_manufacturer_publisher_category_00000000___d41d8cd98f00b204e9800998ecf8427e_da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
+            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
+            string expected = "machine_machine_name.bin_manufacturer_publisher_category__00000000____d41d8cd98f00b204e9800998ecf8427e___da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
 
             Machine machine = new Machine();
             machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
@@ -1438,8 +1440,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void FormatPrefixPostfix_Media()
         {
-            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc%_%md2%_%md4%_%md5%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
-            string expected = "machine_machine_name_manufacturer_publisher_category____md5_sha1_sha256____spamsum";
+            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
+            string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_sha256____spamsum";
 
             Machine machine = new Machine();
             machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
@@ -1461,8 +1463,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         [Fact]
         public void FormatPrefixPostfix_Rom()
         {
-            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
-            string expected = "machine_machine_name_manufacturer_publisher_category_crc_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
+            string fix = "%game%_%machine%_%name%_%manufacturer%_%publisher%_%category%_%crc16%_%crc%_%crc64%_%md2%_%md4%_%md5%_%ripemd128%_%ripemd160%_%sha1%_%sha256%_%sha384%_%sha512%_%size%_%spamsum%";
+            string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
             Machine machine = new Machine();
             machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
@@ -1473,7 +1475,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem item = new Rom();
             item.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
             item.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "crc16");
             item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "crc64");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "md2");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "md4");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "md5");
@@ -1502,7 +1506,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Sample? sample = actual as Sample;
             Assert.NotNull(sample);
             Assert.Null(sample.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
             Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
             Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
@@ -1525,7 +1531,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
             Assert.Equal(12345, rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
             Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
             Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
@@ -1565,7 +1573,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ProcessNullifiedItem_AllNull()
         {
             DatItem item = new Rom();
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "null");
             item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "null");
+            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "null");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "null");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "null");
             item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "null");
@@ -1581,7 +1591,9 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
             Assert.Equal(0, rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(HashType.CRC16.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
             Assert.Equal(HashType.CRC32.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(HashType.CRC64.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
             Assert.Equal(HashType.MD2.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
             Assert.Equal(HashType.MD4.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
             Assert.Equal(HashType.MD5.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
@@ -1771,11 +1783,33 @@ namespace SabreTools.Metadata.DatFiles.Test
         }
 
         [Fact]
+        public void GetDuplicateSuffix_Rom_CRC16()
+        {
+            string hash = "XXXXXX";
+            DatItem datItem = new Rom();
+            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, hash);
+
+            string actual = DatFile.GetDuplicateSuffix(datItem);
+            Assert.Equal($"_{hash}", actual);
+        }
+
+        [Fact]
         public void GetDuplicateSuffix_Rom_CRC()
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
             datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, hash);
+
+            string actual = DatFile.GetDuplicateSuffix(datItem);
+            Assert.Equal($"_{hash}", actual);
+        }
+
+        [Fact]
+        public void GetDuplicateSuffix_Rom_CRC64()
+        {
+            string hash = "XXXXXX";
+            DatItem datItem = new Rom();
+            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);

@@ -357,7 +357,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
-                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = string.Empty,
@@ -371,7 +373,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
-                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = "XXXXXX",
@@ -389,11 +393,13 @@ namespace SabreTools.Data.Extensions.Test
         }
 
         [Fact]
-        public void HashMatch_Rom_PartialCRC_True()
+        public void HashMatch_Rom_PartialCRC16_True()
         {
             Rom self = new Rom
             {
-                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -407,7 +413,89 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = "XXXXXX",
+                [Rom.MD4Key] = "XXXXXX",
+                [Rom.MD5Key] = "XXXXXX",
+                [Rom.RIPEMD128Key] = "XXXXXX",
+                [Rom.RIPEMD160Key] = "XXXXXX",
+                [Rom.SHA1Key] = "XXXXXX",
+                [Rom.SHA256Key] = "XXXXXX",
+                [Rom.SHA384Key] = "XXXXXX",
+                [Rom.SHA512Key] = "XXXXXX",
+                [Rom.SpamSumKey] = "XXXXXX",
+            };
+
+            bool actual = self.HashMatch(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HashMatch_Rom_PartialCRC_True()
+        {
+            Rom self = new Rom
+            {
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = string.Empty,
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+            Rom other = new Rom
+            {
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = "XXXXXX",
+                [Rom.MD4Key] = "XXXXXX",
+                [Rom.MD5Key] = "XXXXXX",
+                [Rom.RIPEMD128Key] = "XXXXXX",
+                [Rom.RIPEMD160Key] = "XXXXXX",
+                [Rom.SHA1Key] = "XXXXXX",
+                [Rom.SHA256Key] = "XXXXXX",
+                [Rom.SHA384Key] = "XXXXXX",
+                [Rom.SHA512Key] = "XXXXXX",
+                [Rom.SpamSumKey] = "XXXXXX",
+            };
+
+            bool actual = self.HashMatch(other);
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HashMatch_Rom_PartialCRC64_True()
+        {
+            Rom self = new Rom
+            {
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = "XXXXXX",
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+            Rom other = new Rom
+            {
+                [Rom.CRC16Key] = "XXXXXX",
+                [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -429,7 +517,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -443,7 +533,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -465,7 +557,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = string.Empty,
@@ -479,7 +573,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -501,7 +597,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = "XXXXXX",
@@ -515,7 +613,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -537,7 +637,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -551,7 +653,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -573,7 +677,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -587,7 +693,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -609,7 +717,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -623,7 +733,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -645,7 +757,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -659,7 +773,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -681,7 +797,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -695,7 +813,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -717,7 +837,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -731,7 +853,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -753,7 +877,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -767,7 +893,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -789,7 +917,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             Rom self = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -803,7 +933,9 @@ namespace SabreTools.Data.Extensions.Test
             };
             Rom other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -995,7 +1127,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
@@ -1013,11 +1147,61 @@ namespace SabreTools.Data.Extensions.Test
         }
 
         [Fact]
+        public void HasZeroHash_Rom_ZeroCRC16_True()
+        {
+            DictionaryBase self = new Rom
+            {
+                [Rom.CRC16Key] = HashType.CRC16.ZeroString,
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+
+            bool actual = self.HasZeroHash();
+            Assert.True(actual);
+        }
+
+        [Fact]
         public void HasZeroHash_Rom_ZeroCRC_True()
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = HashType.CRC32.ZeroString,
+                [Rom.CRC64Key] = string.Empty,
+                [Rom.MD2Key] = string.Empty,
+                [Rom.MD4Key] = string.Empty,
+                [Rom.MD5Key] = string.Empty,
+                [Rom.RIPEMD128Key] = string.Empty,
+                [Rom.RIPEMD160Key] = string.Empty,
+                [Rom.SHA1Key] = string.Empty,
+                [Rom.SHA256Key] = string.Empty,
+                [Rom.SHA384Key] = string.Empty,
+                [Rom.SHA512Key] = string.Empty,
+                [Rom.SpamSumKey] = string.Empty,
+            };
+
+            bool actual = self.HasZeroHash();
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void HasZeroHash_Rom_ZeroCRC64_True()
+        {
+            DictionaryBase self = new Rom
+            {
+                [Rom.CRC16Key] = string.Empty,
+                [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = HashType.CRC64.ZeroString,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1039,7 +1223,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = HashType.MD2.ZeroString,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1061,7 +1247,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = HashType.MD4.ZeroString,
                 [Rom.MD5Key] = string.Empty,
@@ -1083,7 +1271,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = HashType.MD5.ZeroString,
@@ -1105,7 +1295,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1127,7 +1319,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1149,7 +1343,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1171,7 +1367,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1193,7 +1391,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1215,7 +1415,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1237,7 +1439,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = string.Empty,
                 [Rom.CRCKey] = string.Empty,
+                [Rom.CRC64Key] = string.Empty,
                 [Rom.MD2Key] = string.Empty,
                 [Rom.MD4Key] = string.Empty,
                 [Rom.MD5Key] = string.Empty,
@@ -1259,7 +1463,9 @@ namespace SabreTools.Data.Extensions.Test
         {
             DictionaryBase self = new Rom
             {
+                [Rom.CRC16Key] = HashType.CRC16.ZeroString,
                 [Rom.CRCKey] = HashType.CRC32.ZeroString,
+                [Rom.CRC64Key] = HashType.CRC64.ZeroString,
                 [Rom.MD2Key] = HashType.MD2.ZeroString,
                 [Rom.MD4Key] = HashType.MD4.ZeroString,
                 [Rom.MD5Key] = HashType.MD5.ZeroString,
@@ -1350,7 +1556,9 @@ namespace SabreTools.Data.Extensions.Test
             DictionaryBase self = new Rom();
             DictionaryBase other = new Rom
             {
+                [Rom.CRC16Key] = "XXXXXX",
                 [Rom.CRCKey] = "XXXXXX",
+                [Rom.CRC64Key] = "XXXXXX",
                 [Rom.MD2Key] = "XXXXXX",
                 [Rom.MD4Key] = "XXXXXX",
                 [Rom.MD5Key] = "XXXXXX",
