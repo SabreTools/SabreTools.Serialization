@@ -107,15 +107,19 @@ namespace SabreTools.Wrappers
                         continue;
 
                     // Append directory name
-                    string outDirTemp = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
-                    if (includeDebug) Console.WriteLine($"Extracting to directory: {outDirTemp}");
+                    string outputPath = Path.Combine(outputDirectory, encoding.GetString(dr.FileIdentifier));
+                    if (includeDebug) Console.WriteLine($"Extracting to directory: {outputPath}");
+
+                    // Create directory (even if empty)
+                    if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath))
+                        Directory.CreateDirectory(outputPath);
 
                     // Recursively extract from LittleEndian extent location
-                    ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outDirTemp, includeDebug);
+                    ExtractExtent(dr.ExtentLocation.LittleEndian, encoding, blockLength, outputPath, includeDebug);
 
                     // Also extract from BigEndian values if ambiguous
                     if (!dr.ExtentLocation.IsValid)
-                        ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outDirTemp, includeDebug);
+                        ExtractExtent(dr.ExtentLocation.BigEndian, encoding, blockLength, outputPath, includeDebug);
                 }
                 else
                 {
@@ -160,11 +164,8 @@ namespace SabreTools.Wrappers
                 filename = filename.Substring(0, index);
 #endif
 
-            // Ensure the full output directory exists
+            // Get the output file path
             var filepath = Path.Combine(outputDirectory, filename);
-            var directoryName = Path.GetDirectoryName(filepath);
-            if (directoryName is not null && !Directory.Exists(directoryName))
-                Directory.CreateDirectory(directoryName);
 
             bool multiExtent = false;
 
