@@ -60,8 +60,21 @@ if (!$NO_BUILD.IsPresent) {
     Write-Host "Restoring Nuget packages"
     dotnet restore
 
-    # Create Nuget Package
+    # Create published Nuget Package
     dotnet pack SabreTools.Serialization\SabreTools.Serialization.csproj --output $BUILD_FOLDER
+
+    # Create unpublished Nuget Packages
+    dotnet pack SabreTools.Data.Extensions\SabreTools.Data.Extensions.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Data.Models\SabreTools.Data.Models.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Metadata\SabreTools.Metadata.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Metadata.DatFiles\SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Metadata.DatItems\SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Metadata.Filter\SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.ObjectIdentifier\SabreTools.ObjectIdentifier.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Serialization.CrossModel\SabreTools.Serialization.CrossModel.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Serialization.Readers\SabreTools.Serialization.Readers.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Serialization.Writers\SabreTools.Serialization.Writers.csproj --output $BUILD_FOLDER
+    dotnet pack SabreTools.Wrappers\SabreTools.Wrappers.csproj --output $BUILD_FOLDER
 
     # Build ExtractionTool
     foreach ($FRAMEWORK in $FRAMEWORKS) {
