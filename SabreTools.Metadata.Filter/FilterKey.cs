@@ -1,6 +1,5 @@
 using System;
 using SabreTools.Data.Models.Metadata;
-using SabreTools.Metadata.Tools;
 
 namespace SabreTools.Metadata.Filter
 {

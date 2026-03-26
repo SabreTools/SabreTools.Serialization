@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SabreTools.Metadata.DatItems;
-using SabreTools.Metadata.Tools;
 
 namespace SabreTools.Metadata.DatFiles
 {

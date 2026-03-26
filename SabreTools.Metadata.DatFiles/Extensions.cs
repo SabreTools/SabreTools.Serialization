@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SabreTools.Metadata.Tools;
 
 namespace SabreTools.Metadata.DatFiles
 {

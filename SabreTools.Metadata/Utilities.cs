@@ -2,7 +2,7 @@
 using SabreTools.Hashing;
 using SabreTools.Text.Extensions;
 
-namespace SabreTools.Metadata.Tools
+namespace SabreTools.Metadata
 {
     /// <summary>
     /// Static utility functions used throughout the library

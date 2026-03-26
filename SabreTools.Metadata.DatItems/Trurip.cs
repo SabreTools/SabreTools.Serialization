@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Metadata.Tools;
 
 namespace SabreTools.Metadata.DatItems
 {

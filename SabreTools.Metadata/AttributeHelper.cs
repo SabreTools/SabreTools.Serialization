@@ -1,6 +1,6 @@
 using System;
 
-namespace SabreTools.Metadata.Tools
+namespace SabreTools.Metadata
 {
     public static class AttributeHelper<T>
     {

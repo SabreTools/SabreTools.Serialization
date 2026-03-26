@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace SabreTools.Metadata.Tools.Test
+namespace SabreTools.Metadata.Test
 {
     public class UtilitiesTests
     {

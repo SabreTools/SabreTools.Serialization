@@ -1,4 +1,3 @@
-using SabreTools.Metadata.Tools;
 using Xunit;
 
 namespace SabreTools.Metadata.DatItems.Test

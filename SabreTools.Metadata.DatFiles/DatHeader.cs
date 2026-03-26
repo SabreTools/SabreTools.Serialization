@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Metadata.Filter;
-using SabreTools.Metadata.Tools;
 
 namespace SabreTools.Metadata.DatFiles
 {

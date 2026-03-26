@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using SabreTools.Data.Models;
 using SabreTools.Data.Models.Metadata;
 
-namespace SabreTools.Metadata.Tools
+namespace SabreTools.Metadata
 {
     public static class TypeHelper
     {

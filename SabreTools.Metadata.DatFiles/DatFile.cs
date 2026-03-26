@@ -8,7 +8,6 @@ using SabreTools.Logging;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Metadata.Filter;
-using SabreTools.Metadata.Tools;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
 

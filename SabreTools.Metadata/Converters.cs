@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SabreTools.Metadata.Tools
+namespace SabreTools.Metadata
 {
     public static class Converters
     {
