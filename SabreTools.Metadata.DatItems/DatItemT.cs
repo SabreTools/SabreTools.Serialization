@@ -18,8 +18,8 @@ namespace SabreTools.Metadata.DatItems
             _internal = Activator.CreateInstance<T>();
 
             SetName(string.Empty);
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
-            SetFieldValue(MachineKey, new Machine());
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(MachineKey, new Machine());
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace SabreTools.Metadata.DatItems
         {
             _internal = item;
 
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
-            SetFieldValue(MachineKey, new Machine());
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(MachineKey, new Machine());
         }
 
         #endregion
@@ -96,8 +96,8 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Get the types for comparison
-            ItemType selfType = GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-            ItemType otherType = other.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            ItemType selfType = ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            ItemType otherType = other.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
 
             // If we don't have a matched type, return false
             if (selfType != otherType)

@@ -26,7 +26,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md5File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD5;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpMD5);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD5);
         }
 
         /// <inheritdoc/>
@@ -41,17 +41,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.GetStringFieldValue(Data.Models.Metadata.Disk.MD5Key)))
+                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key)))
                         missingFields.Add(Data.Models.Metadata.Disk.MD5Key);
                     break;
 
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.GetStringFieldValue(Data.Models.Metadata.Media.MD5Key)))
+                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.MD5Key)))
                         missingFields.Add(Data.Models.Metadata.Media.MD5Key);
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD5Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.MD5Key);
                     break;
 

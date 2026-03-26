@@ -28,7 +28,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SabreJSON(DatFile? datFile) : base(datFile)
         {
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.SabreJSON);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.SabreJSON);
         }
 
         /// <inheritdoc/>
@@ -398,7 +398,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     return;
 
                 datItem.CopyMachineInformation(machine);
-                datItem.SetFieldValue<Source?>(DatItem.SourceKey, source);
+                datItem.Write<Source?>(DatItem.SourceKey, source);
                 AddItem(datItem, statsOnly);
                 AddItemDB(datItem, machineIndex, sourceIndex, statsOnly);
             }

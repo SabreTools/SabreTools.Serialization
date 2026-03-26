@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SpamSumFile(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SpamSum;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSpamSum);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSpamSum);
         }
 
         /// <inheritdoc/>
@@ -40,12 +40,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.GetStringFieldValue(Data.Models.Metadata.Media.SpamSumKey)))
+                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
                         missingFields.Add(Data.Models.Metadata.Media.SpamSumKey);
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SpamSumKey)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey)))
                         missingFields.Add(Data.Models.Metadata.Rom.SpamSumKey);
                     break;
 

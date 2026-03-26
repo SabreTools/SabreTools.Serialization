@@ -152,7 +152,7 @@ namespace SabreTools.Metadata.DatItems
                 return;
 
             if (machine.Clone() is Machine cloned)
-                SetFieldValue(MachineKey, cloned);
+                Write(MachineKey, cloned);
         }
 
         #endregion
@@ -221,8 +221,8 @@ namespace SabreTools.Metadata.DatItems
                 return false;
 
             // Get the types for comparison
-            ItemType selfType = GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
-            ItemType otherType = other.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            ItemType selfType = ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
+            ItemType otherType = other.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType();
 
             // If we don't have a matched type, return false
             if (selfType != otherType)

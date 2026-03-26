@@ -11,7 +11,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
         public void ConvertToRomTest()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "XXXXXX");
 
             Source source = new Source(0, "XXXXXX");
 
@@ -26,30 +26,30 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
                 SHA256 = "DEADBEEF",
                 Format = "XXXXXX"
             };
-            file.SetFieldValue(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
-            file.SetFieldValue(DatItem.MachineKey, machine);
-            file.SetFieldValue(DatItem.RemoveKey, (bool?)false);
-            file.SetFieldValue(DatItem.SourceKey, source);
-            file.SetFieldValue(DatItem.MachineKey, machine);
-            file.SetFieldValue(DatItem.SourceKey, source);
+            file.Write(DatItem.DupeTypeKey, DupeType.All | DupeType.External);
+            file.Write(DatItem.MachineKey, machine);
+            file.Write(DatItem.RemoveKey, (bool?)false);
+            file.Write(DatItem.SourceKey, source);
+            file.Write(DatItem.MachineKey, machine);
+            file.Write(DatItem.SourceKey, source);
 
             Rom actual = file.ConvertToRom();
 
             Assert.Equal("XXXXXX.XXXXXX", actual.GetName());
-            Assert.Equal(12345, actual.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("deadbeef", actual.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal("000000000000000000000000deadbeef", actual.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal("00000000000000000000000000000000deadbeef", actual.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(DupeType.All | DupeType.External, actual.GetFieldValue<DupeType>(DatItem.DupeTypeKey));
+            Assert.Equal(12345, actual.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("deadbeef", actual.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal("000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Equal("00000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Equal("00000000000000000000000000000000000000000000000000000000deadbeef", actual.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Equal(DupeType.All | DupeType.External, actual.Read<DupeType>(DatItem.DupeTypeKey));
 
             Machine? actualMachine = actual.GetMachine();
             Assert.NotNull(actualMachine);
             Assert.Equal("XXXXXX", actualMachine.GetName());
 
-            Assert.Equal(false, actual.GetBoolFieldValue(DatItem.RemoveKey));
+            Assert.Equal(false, actual.ReadBool(DatItem.RemoveKey));
 
-            Source? actualSource = actual.GetFieldValue<Source?>(DatItem.SourceKey);
+            Source? actualSource = actual.Read<Source?>(DatItem.SourceKey);
             Assert.NotNull(actualSource);
             Assert.Equal(0, actualSource.Index);
             Assert.Equal("XXXXXX", actualSource.Name);
@@ -341,7 +341,7 @@ namespace SabreTools.Metadata.DatItems.Formats.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
 
             DatItem datItem = new File
             {

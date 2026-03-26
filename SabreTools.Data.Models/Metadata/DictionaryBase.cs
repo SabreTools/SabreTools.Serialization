@@ -7,6 +7,8 @@ namespace SabreTools.Data.Models.Metadata
     /// </summary>
     public abstract class DictionaryBase : Dictionary<string, object?>
     {
+        #region Read
+
         /// <summary>
         /// Read a key as the specified type, returning null on error
         /// </summary>
@@ -14,7 +16,7 @@ namespace SabreTools.Data.Models.Metadata
         {
             try
             {
-                if (!ValidateKey(key))
+                if (!ValidateReadKey(key))
                     return default;
                 if (this[key] is not T)
                     return default;
@@ -31,7 +33,7 @@ namespace SabreTools.Data.Models.Metadata
         /// </summary>
         public bool? ReadBool(string key)
         {
-            if (!ValidateKey(key))
+            if (!ValidateReadKey(key))
                 return null;
 
             bool? asBool = Read<bool?>(key);
@@ -52,12 +54,22 @@ namespace SabreTools.Data.Models.Metadata
         /// </summary>
         public double? ReadDouble(string key)
         {
-            if (!ValidateKey(key))
+            if (!ValidateReadKey(key))
                 return null;
 
             double? asDouble = Read<double?>(key);
             if (asDouble is not null)
                 return asDouble;
+
+            float? asFloat = Read<float?>(key);
+            if (asFloat is not null)
+                return asFloat;
+
+#if NET5_0_OR_GREATER
+            System.Half? asHalf = Read<System.Half?>(key);
+            if (asHalf is not null)
+                return (double?)asHalf;
+#endif
 
             string? asString = Read<string>(key);
             if (asString is not null && double.TryParse(asString, out double asStringDouble))
@@ -72,12 +84,20 @@ namespace SabreTools.Data.Models.Metadata
         /// <remarks>TODO: Add logic to convert SI suffixes and hex</remarks>
         public long? ReadLong(string key)
         {
-            if (!ValidateKey(key))
+            if (!ValidateReadKey(key))
                 return null;
 
             long? asLong = Read<long?>(key);
             if (asLong is not null)
                 return asLong;
+
+            int? asInt = Read<int?>(key);
+            if (asInt is not null)
+                return asInt;
+
+            short? asShort = Read<short?>(key);
+            if (asShort is not null)
+                return asShort;
 
             string? asString = Read<string>(key);
             if (asString is not null && long.TryParse(asString, out long asStringLong))
@@ -91,7 +111,7 @@ namespace SabreTools.Data.Models.Metadata
         /// </summary>
         public string? ReadString(string key)
         {
-            if (!ValidateKey(key))
+            if (!ValidateReadKey(key))
                 return null;
 
             string? asString = Read<string>(key);
@@ -117,7 +137,7 @@ namespace SabreTools.Data.Models.Metadata
         /// </summary>
         public string[]? ReadStringArray(string key)
         {
-            if (!ValidateKey(key))
+            if (!ValidateReadKey(key))
                 return null;
 
             string[]? asArray = Read<string[]>(key);
@@ -136,9 +156,9 @@ namespace SabreTools.Data.Models.Metadata
         }
 
         /// <summary>
-        /// Check if a key is valid
+        /// Check if a key is valid for read
         /// </summary>
-        private bool ValidateKey(string key)
+        private bool ValidateReadKey(string key)
         {
             if (string.IsNullOrEmpty(key))
                 return false;
@@ -149,5 +169,72 @@ namespace SabreTools.Data.Models.Metadata
 
             return true;
         }
+
+        #endregion
+
+        #region Write
+
+        /// <summary>
+        /// Remove a key, if possible
+        /// </summary>
+        public new bool Remove(string? fieldName)
+        {
+            // If the item or field name are missing, we can't do anything
+            if (string.IsNullOrEmpty(fieldName))
+                return false;
+
+            // If the key doesn't exist, then it's already removed
+            if (!ContainsKey(fieldName!))
+                return true;
+
+            // Remove the key
+            base.Remove(fieldName!);
+            return true;
+        }
+
+        /// <summary>
+        /// Replace a field from another item
+        /// </summary>
+        public bool Replace(DictionaryBase? from, string fieldName)
+        {
+            // If the source item is invalid
+            if (from is null)
+                return false;
+
+            // If the field name is missing, we can't do anything
+            if (string.IsNullOrEmpty(fieldName))
+                return false;
+
+            // If the types of the items are not the same, we can't do anything
+            if (from.GetType() != GetType())
+                return false;
+
+            // If the key doesn't exist in the source, we can't do anything
+            if (!from.TryGetValue(fieldName!, out var value))
+                return false;
+
+            // Set the key
+            this[fieldName!] = value;
+            return true;
+        }
+
+        /// <summary>
+        /// Write a key as the specified type, returning false on error
+        /// </summary>
+        /// <param name="fieldName">Field to set</param>
+        /// <param name="value">Value to set</param>
+        /// <returns>True if the value was set, false otherwise</returns>
+        public bool Write<T>(string fieldName, T? value)
+        {
+            // Invalid field cannot be processed
+            if (fieldName is null)
+                return false;
+
+            // Set the value based on the type
+            this[fieldName] = value;
+            return true;
+        }
+
+        #endregion
     }
 }

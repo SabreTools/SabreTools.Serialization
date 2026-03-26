@@ -19,7 +19,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get
             {
-                var conditions = GetFieldValue<Condition[]?>(Data.Models.Metadata.ConfSetting.ConditionKey);
+                var conditions = Read<Condition[]?>(Data.Models.Metadata.ConfSetting.ConditionKey);
                 return conditions is not null && conditions.Length > 0;
             }
         }
@@ -33,18 +33,18 @@ namespace SabreTools.Metadata.DatItems.Formats
         public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.ConfSetting.DefaultKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, GetBoolFieldValue(Data.Models.Metadata.ConfSetting.DefaultKey).FromYesNo());
+            if (ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey) is not null)
+                Write<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey).FromYesNo());
 
             // Handle subitems
-            var condition = GetFieldValue<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
+            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
             if (condition is not null)
-                SetFieldValue<Condition?>(Data.Models.Metadata.ConfSetting.ConditionKey, new Condition(condition));
+                Write<Condition?>(Data.Models.Metadata.ConfSetting.ConditionKey, new Condition(condition));
         }
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 
@@ -58,7 +58,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             var confSettingItem = base.GetInternalClone();
 
             // Handle subitems
-            var condition = GetFieldValue<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
+            var condition = Read<Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
             if (condition is not null)
                 confSettingItem[Data.Models.Metadata.ConfSetting.ConditionKey] = condition.GetInternalClone();
 

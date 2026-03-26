@@ -13,7 +13,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SemicolonSeparatedValue(DatFile? datFile) : base(datFile)
         {
             _delim = ';';
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.SSV);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.SSV);
         }
     }
 }

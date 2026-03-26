@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Md2File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.MD2;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpMD2);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpMD2);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.MD2Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.MD2Key);
                     break;
 

@@ -115,7 +115,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         public ReleaseDetails()
         {
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
         }
 
         #endregion
@@ -143,11 +143,11 @@ namespace SabreTools.Metadata.DatItems.Formats
                 Region = this.Region,
                 Origin = this.Origin,
             };
-            releaseDetails.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            releaseDetails.SetFieldValue(MachineKey, GetMachine());
-            releaseDetails.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            releaseDetails.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
-            releaseDetails.SetFieldValue<string?>(Data.Models.Metadata.DatItem.TypeKey, GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
+            releaseDetails.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            releaseDetails.Write(MachineKey, GetMachine());
+            releaseDetails.Write(RemoveKey, ReadBool(RemoveKey));
+            releaseDetails.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            releaseDetails.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
 
             return releaseDetails;
         }
@@ -160,7 +160,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override bool Equals(DatItem? other)
         {
             // If we don't have a Details, return false
-            if (GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey) != other?.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey))
+            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
                 return false;
 
             // Otherwise, treat it as a Details

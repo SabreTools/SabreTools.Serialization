@@ -23,17 +23,17 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Feature(Data.Models.Metadata.Feature item) : base(item)
         {
             // Process flag values
-            if (GetStringFieldValue(Data.Models.Metadata.Feature.OverallKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Feature.OverallKey, GetStringFieldValue(Data.Models.Metadata.Feature.OverallKey).AsFeatureStatus().AsStringValue());
-            if (GetStringFieldValue(Data.Models.Metadata.Feature.StatusKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Feature.StatusKey, GetStringFieldValue(Data.Models.Metadata.Feature.StatusKey).AsFeatureStatus().AsStringValue());
-            if (GetStringFieldValue(Data.Models.Metadata.Feature.FeatureTypeKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, GetStringFieldValue(Data.Models.Metadata.Feature.FeatureTypeKey).AsFeatureType().AsStringValue());
+            if (ReadString(Data.Models.Metadata.Feature.OverallKey) is not null)
+                Write<string?>(Data.Models.Metadata.Feature.OverallKey, ReadString(Data.Models.Metadata.Feature.OverallKey).AsFeatureStatus().AsStringValue());
+            if (ReadString(Data.Models.Metadata.Feature.StatusKey) is not null)
+                Write<string?>(Data.Models.Metadata.Feature.StatusKey, ReadString(Data.Models.Metadata.Feature.StatusKey).AsFeatureStatus().AsStringValue());
+            if (ReadString(Data.Models.Metadata.Feature.FeatureTypeKey) is not null)
+                Write<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, ReadString(Data.Models.Metadata.Feature.FeatureTypeKey).AsFeatureType().AsStringValue());
         }
 
         public Feature(Data.Models.Metadata.Feature item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

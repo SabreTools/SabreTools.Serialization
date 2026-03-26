@@ -1,7 +1,6 @@
 using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata
 {
@@ -33,102 +32,48 @@ namespace SabreTools.Metadata
         /// <typeparam name="U">Type of the value to get from the internal model</typeparam>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public U? GetFieldValue<U>(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Get the value based on the type
-            return _internal.Read<U>(fieldName);
-        }
+        public U? Read<U>(string fieldName)
+            => _internal.Read<U>(fieldName);
 
         /// <summary>
         /// Get the value from a field based on the type provided
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public bool? GetBoolFieldValue(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Get the value based on the type
-            return _internal.ReadBool(fieldName);
-        }
+        public bool? ReadBool(string fieldName)
+            => _internal.ReadBool(fieldName);
 
         /// <summary>
         /// Get the value from a field based on the type provided
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public double? GetDoubleFieldValue(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Try to parse directly
-            double? doubleValue = _internal.ReadDouble(fieldName);
-            if (doubleValue is not null)
-                return doubleValue;
-
-            // Try to parse from the string
-            string? stringValue = _internal.ReadString(fieldName);
-            return NumberHelper.ConvertToDouble(stringValue);
-        }
+        public double? ReadDouble(string fieldName)
+            => _internal.ReadDouble(fieldName);
 
         /// <summary>
         /// Get the value from a field based on the type provided
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public long? GetInt64FieldValue(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Try to parse directly
-            long? longValue = _internal.ReadLong(fieldName);
-            if (longValue is not null)
-                return longValue;
-
-            // Try to parse from the string
-            string? stringValue = _internal.ReadString(fieldName);
-            return NumberHelper.ConvertToInt64(stringValue);
-        }
+        public long? ReadLong(string fieldName)
+            => _internal.ReadLong(fieldName);
 
         /// <summary>
         /// Get the value from a field based on the type provided
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public string? GetStringFieldValue(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Get the value based on the type
-            return _internal.ReadString(fieldName);
-        }
+        public string? ReadString(string fieldName)
+            => _internal.ReadString(fieldName);
 
         /// <summary>
         /// Get the value from a field based on the type provided
         /// </summary>
         /// <param name="fieldName">Field to retrieve</param>
         /// <returns>Value from the field, if possible</returns>
-        public string[]? GetStringArrayFieldValue(string fieldName)
-        {
-            // Invalid field cannot be processed
-            if (!_internal.ContainsKey(fieldName))
-                return default;
-
-            // Get the value based on the type
-            return _internal.ReadStringArray(fieldName);
-        }
+        public string[]? ReadStringArray(string fieldName)
+            => _internal.ReadStringArray(fieldName);
 
         /// <summary>
         /// Set the value from a field based on the type provided
@@ -137,72 +82,14 @@ namespace SabreTools.Metadata
         /// <param name="fieldName">Field to set</param>
         /// <param name="value">Value to set</param>
         /// <returns>True if the value was set, false otherwise</returns>
-        public bool SetFieldValue<U>(string fieldName, U? value)
-        {
-            // Invalid field cannot be processed
-            if (fieldName is null)
-                return false;
-
-            // Set the value based on the type
-            _internal[fieldName] = value;
-            return true;
-        }
-
-        #endregion
-
-        #region Comparision Methods
-
-        /// <inheritdoc/>
-        public abstract bool Equals(ModelBackedItem<T>? other);
-
-        #endregion
-
-        #region Manipulation
+        public bool Write<U>(string fieldName, U? value)
+            => _internal.Write(fieldName, value);
 
         /// <summary>
-        /// Remove a field from the backing item
+        /// Set a field from the backing item validating the field is expected
         /// </summary>
-        public bool RemoveField(string fieldName)
-        {
-            // If the item or field name are missing, we can't do anything
-            if (string.IsNullOrEmpty(fieldName))
-                return false;
-
-            // If the key doesn't exist, then it's already removed
-            if (!_internal.ContainsKey(fieldName!))
-                return true;
-
-            // Remove the key
-            _internal.Remove(fieldName!);
-            return true;
-        }
-
-        /// <summary>
-        /// Replace a field from another ModelBackedItem
-        /// </summary>
-        public bool ReplaceField(ModelBackedItem<T>? from, string fieldName)
-        {
-            // If the items or field name are missing, we can't do anything
-            if (from?._internal is null || string.IsNullOrEmpty(fieldName))
-                return false;
-
-            // If the types of the items are not the same, we can't do anything
-            if (from._internal.GetType() != _internal.GetType())
-                return false;
-
-            // If the key doesn't exist in the source, we can't do anything
-            if (!from._internal.ContainsKey(fieldName!))
-                return false;
-
-            // Set the key
-            _internal[fieldName!] = from._internal[fieldName!];
-            return true;
-        }
-
-        /// <summary>
-        /// Set a field from the backing item
-        /// </summary>
-        public bool SetField(string fieldName, object value)
+        /// TODO: Figure out how to add this to DictionaryBase
+        public bool WriteWithValidation(string fieldName, object value)
         {
             // If the item or field name are missing, we can't do anything
             if (string.IsNullOrEmpty(fieldName))
@@ -219,9 +106,31 @@ namespace SabreTools.Metadata
                 return false;
 
             // Set the field with the new value
-            _internal[realField] = value;
-            return true;
+            return _internal.Write(realField, value);
         }
+
+        #endregion
+
+        #region Comparision Methods
+
+        /// <inheritdoc/>
+        public abstract bool Equals(ModelBackedItem<T>? other);
+
+        #endregion
+
+        #region Manipulation
+
+        /// <summary>
+        /// Remove a field from the backing item
+        /// </summary>
+        public bool Remove(string fieldName)
+            => _internal.Remove(fieldName);
+
+        /// <summary>
+        /// Replace a field from another ModelBackedItem
+        /// </summary>
+        public bool Replace(ModelBackedItem<T>? from, string fieldName)
+            => _internal.Replace(from?._internal, fieldName);
 
         #endregion
     }

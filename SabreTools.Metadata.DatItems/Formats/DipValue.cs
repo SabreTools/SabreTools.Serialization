@@ -19,7 +19,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get
             {
-                var conditions = GetFieldValue<Condition[]?>(Data.Models.Metadata.DipValue.ConditionKey);
+                var conditions = Read<Condition[]?>(Data.Models.Metadata.DipValue.ConditionKey);
                 return conditions is not null && conditions.Length > 0;
             }
         }
@@ -33,18 +33,18 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipValue(Data.Models.Metadata.DipValue item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.DipValue.DefaultKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.DipValue.DefaultKey, GetBoolFieldValue(Data.Models.Metadata.DipValue.DefaultKey).FromYesNo());
+            if (ReadBool(Data.Models.Metadata.DipValue.DefaultKey) is not null)
+                Write<string?>(Data.Models.Metadata.DipValue.DefaultKey, ReadBool(Data.Models.Metadata.DipValue.DefaultKey).FromYesNo());
 
             // Handle subitems
-            var condition = GetFieldValue<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
+            var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
             if (condition is not null)
-                SetFieldValue<Condition?>(Data.Models.Metadata.DipValue.ConditionKey, new Condition(condition));
+                Write<Condition?>(Data.Models.Metadata.DipValue.ConditionKey, new Condition(condition));
         }
 
         public DipValue(Data.Models.Metadata.DipValue item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 
@@ -58,7 +58,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             var dipValueItem = base.GetInternalClone();
 
             // Handle subitems
-            var subCondition = GetFieldValue<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
+            var subCondition = Read<Condition>(Data.Models.Metadata.DipValue.ConditionKey);
             if (subCondition is not null)
                 dipValueItem[Data.Models.Metadata.DipValue.ConditionKey] = subCondition.GetInternalClone();
 

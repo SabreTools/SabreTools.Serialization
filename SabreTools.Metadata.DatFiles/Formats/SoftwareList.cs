@@ -96,7 +96,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SoftwareList(DatFile? datFile) : base(datFile)
         {
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.SoftwareList);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.SoftwareList);
         }
 
         /// <inheritdoc/>
@@ -114,24 +114,24 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(dipSwitch.GetFieldValue<Part?>(DipSwitch.PartKey)!.GetName()))
+                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.GetName()))
                             missingFields.Add(Data.Models.Metadata.Part.NameKey);
-                        if (string.IsNullOrEmpty(dipSwitch.GetFieldValue<Part?>(DipSwitch.PartKey)!.GetStringFieldValue(Data.Models.Metadata.Part.InterfaceKey)))
+                        if (string.IsNullOrEmpty(dipSwitch.Read<Part?>(DipSwitch.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
                             missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
                     }
 
                     if (string.IsNullOrEmpty(dipSwitch.GetName()))
                         missingFields.Add(Data.Models.Metadata.DipSwitch.NameKey);
-                    if (string.IsNullOrEmpty(dipSwitch.GetStringFieldValue(Data.Models.Metadata.DipSwitch.TagKey)))
+                    if (string.IsNullOrEmpty(dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey)))
                         missingFields.Add(Data.Models.Metadata.DipSwitch.TagKey);
-                    if (string.IsNullOrEmpty(dipSwitch.GetStringFieldValue(Data.Models.Metadata.DipSwitch.MaskKey)))
+                    if (string.IsNullOrEmpty(dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey)))
                         missingFields.Add(Data.Models.Metadata.DipSwitch.MaskKey);
                     if (dipSwitch.ValuesSpecified)
                     {
-                        var dipValues = dipSwitch.GetFieldValue<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
+                        var dipValues = dipSwitch.Read<DipValue[]?>(Data.Models.Metadata.DipSwitch.DipValueKey);
                         if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.GetName())) is not null)
                             missingFields.Add(Data.Models.Metadata.DipValue.NameKey);
-                        if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.GetStringFieldValue(Data.Models.Metadata.DipValue.ValueKey))) is not null)
+                        if (Array.Find(dipValues!, dv => string.IsNullOrEmpty(dv.ReadString(Data.Models.Metadata.DipValue.ValueKey))) is not null)
                             missingFields.Add(Data.Models.Metadata.DipValue.ValueKey);
                     }
 
@@ -145,9 +145,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(disk.GetFieldValue<Part?>(Disk.PartKey)!.GetName()))
+                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.GetName()))
                             missingFields.Add(Data.Models.Metadata.Part.NameKey);
-                        if (string.IsNullOrEmpty(disk.GetFieldValue<Part?>(Disk.PartKey)!.GetStringFieldValue(Data.Models.Metadata.Part.InterfaceKey)))
+                        if (string.IsNullOrEmpty(disk.Read<Part?>(Disk.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
                             missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
                     }
 
@@ -157,7 +157,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(disk.GetFieldValue<DiskArea?>(Disk.DiskAreaKey)!.GetName()))
+                        if (string.IsNullOrEmpty(disk.Read<DiskArea?>(Disk.DiskAreaKey)!.GetName()))
                             missingFields.Add(Data.Models.Metadata.DiskArea.NameKey);
                     }
 
@@ -178,9 +178,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(rom.GetFieldValue<Part?>(Rom.PartKey)!.GetName()))
+                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.GetName()))
                             missingFields.Add(Data.Models.Metadata.Part.NameKey);
-                        if (string.IsNullOrEmpty(rom.GetFieldValue<Part?>(Rom.PartKey)!.GetStringFieldValue(Data.Models.Metadata.Part.InterfaceKey)))
+                        if (string.IsNullOrEmpty(rom.Read<Part?>(Rom.PartKey)!.ReadString(Data.Models.Metadata.Part.InterfaceKey)))
                             missingFields.Add(Data.Models.Metadata.Part.InterfaceKey);
                     }
 
@@ -191,9 +191,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(rom.GetFieldValue<DataArea?>(Rom.DataAreaKey)!.GetName()))
+                        if (string.IsNullOrEmpty(rom.Read<DataArea?>(Rom.DataAreaKey)!.GetName()))
                             missingFields.Add(Data.Models.Metadata.DataArea.NameKey);
-                        if (rom.GetFieldValue<DataArea?>(Rom.DataAreaKey)!.GetInt64FieldValue(Data.Models.Metadata.DataArea.SizeKey) is null)
+                        if (rom.Read<DataArea?>(Rom.DataAreaKey)!.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is null)
                             missingFields.Add(Data.Models.Metadata.DataArea.SizeKey);
                     }
 

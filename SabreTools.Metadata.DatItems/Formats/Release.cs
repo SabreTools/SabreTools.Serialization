@@ -23,13 +23,13 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Release(Data.Models.Metadata.Release item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.Release.DefaultKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Release.DefaultKey, GetBoolFieldValue(Data.Models.Metadata.Release.DefaultKey).FromYesNo());
+            if (ReadBool(Data.Models.Metadata.Release.DefaultKey) is not null)
+                Write<string?>(Data.Models.Metadata.Release.DefaultKey, ReadBool(Data.Models.Metadata.Release.DefaultKey).FromYesNo());
         }
 
         public Release(Data.Models.Metadata.Release item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

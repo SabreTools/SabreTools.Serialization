@@ -26,7 +26,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha1File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA1;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSHA1);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA1);
         }
 
         /// <inheritdoc/>
@@ -41,17 +41,17 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Disk disk:
-                    if (string.IsNullOrEmpty(disk.GetStringFieldValue(Data.Models.Metadata.Disk.SHA1Key)))
+                    if (string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                         missingFields.Add(Data.Models.Metadata.Disk.SHA1Key);
                     break;
 
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.GetStringFieldValue(Data.Models.Metadata.Media.SHA1Key)))
+                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SHA1Key)))
                         missingFields.Add(Data.Models.Metadata.Media.SHA1Key);
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
                     break;
 

@@ -95,14 +95,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DatHeader item = new DatHeader(CreateMetadataHeader());
 
-            item.SetFieldValue<string[]>(Data.Models.Metadata.Header.CanOpenKey, ["ext"]);
-            item.SetFieldValue(Data.Models.Metadata.Header.ImagesKey,
+            item.Write<string[]>(Data.Models.Metadata.Header.CanOpenKey, ["ext"]);
+            item.Write(Data.Models.Metadata.Header.ImagesKey,
                 new Data.Models.OfflineList.Images() { Height = "height" });
-            item.SetFieldValue(Data.Models.Metadata.Header.InfosKey,
+            item.Write(Data.Models.Metadata.Header.InfosKey,
                 new Data.Models.OfflineList.Infos() { Comment = new Data.Models.OfflineList.Comment() });
-            item.SetFieldValue(Data.Models.Metadata.Header.NewDatKey,
+            item.Write(Data.Models.Metadata.Header.NewDatKey,
                 new Data.Models.OfflineList.NewDat() { DatUrl = new Data.Models.OfflineList.DatUrl() });
-            item.SetFieldValue(Data.Models.Metadata.Header.SearchKey,
+            item.Write(Data.Models.Metadata.Header.SearchKey,
                 new Data.Models.OfflineList.Search() { To = [] });
 
             return item;
@@ -111,7 +111,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static Machine CreateMachine()
         {
             Machine item = new Machine(CreateMetadataMachine());
-            item.SetFieldValue(Data.Models.Metadata.Machine.TruripKey, CreateTrurip());
+            item.Write(Data.Models.Metadata.Machine.TruripKey, CreateTrurip());
             return item;
         }
 
@@ -182,7 +182,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             DipSwitch item = new DipSwitch(CreateMetadataDipSwitch());
             item.CopyMachineInformation(machine);
-            item.SetFieldValue(DipSwitch.PartKey, CreatePart(machine));
+            item.Write(DipSwitch.PartKey, CreatePart(machine));
             return item;
         }
 
@@ -197,8 +197,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Disk item = new Disk(CreateMetadataDisk());
             item.CopyMachineInformation(machine);
-            item.SetFieldValue(Disk.DiskAreaKey, CreateDiskArea(machine));
-            item.SetFieldValue(Disk.PartKey, CreatePart(machine));
+            item.Write(Disk.DiskAreaKey, CreateDiskArea(machine));
+            item.Write(Disk.PartKey, CreatePart(machine));
             return item;
         }
 
@@ -262,7 +262,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             PartFeature item = new PartFeature(CreateMetadataFeature());
             item.CopyMachineInformation(machine);
-            item.SetFieldValue(PartFeature.PartKey, CreatePart(machine));
+            item.Write(PartFeature.PartKey, CreatePart(machine));
             return item;
         }
 
@@ -299,8 +299,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Rom item = new Rom(CreateMetadataRom());
             item.CopyMachineInformation(machine);
-            item.SetFieldValue(Rom.DataAreaKey, CreateDataArea(machine));
-            item.SetFieldValue(Rom.PartKey, CreatePart(machine));
+            item.Write(Rom.DataAreaKey, CreateDataArea(machine));
+            item.Write(Rom.PartKey, CreatePart(machine));
             return item;
         }
 

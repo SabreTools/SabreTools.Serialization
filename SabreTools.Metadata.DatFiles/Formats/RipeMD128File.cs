@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public RipeMD128File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.RIPEMD128;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpRIPEMD128);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpRIPEMD128);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.RIPEMD128Key);
                     break;
 

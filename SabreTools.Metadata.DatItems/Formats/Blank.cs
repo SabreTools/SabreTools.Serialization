@@ -23,7 +23,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         public Blank()
         {
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
         }
 
         #endregion
@@ -34,10 +34,10 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override object Clone()
         {
             var blank = new Blank();
-            blank.SetFieldValue(MachineKey, GetMachine());
-            blank.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            blank.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
-            blank.SetFieldValue<string?>(Data.Models.Metadata.DatItem.TypeKey, GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
+            blank.Write(MachineKey, GetMachine());
+            blank.Write(RemoveKey, ReadBool(RemoveKey));
+            blank.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            blank.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
 
             return blank;
         }
@@ -80,7 +80,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override bool Equals(DatItem? other)
         {
             // If we don't have a blank, return false
-            if (GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey) != other?.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey))
+            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
                 return false;
 
             // Otherwise, treat it as a Blank

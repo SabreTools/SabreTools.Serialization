@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha512File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA512;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSHA512);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA512);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA512Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA512Key);
                     break;
 

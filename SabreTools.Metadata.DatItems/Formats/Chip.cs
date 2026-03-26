@@ -23,15 +23,15 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Chip(Data.Models.Metadata.Chip item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.Chip.SoundOnlyKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Chip.SoundOnlyKey, GetBoolFieldValue(Data.Models.Metadata.Chip.SoundOnlyKey).FromYesNo());
-            if (GetStringFieldValue(Data.Models.Metadata.Chip.ChipTypeKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Chip.ChipTypeKey, GetStringFieldValue(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType().AsStringValue());
+            if (ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey) is not null)
+                Write<string?>(Data.Models.Metadata.Chip.SoundOnlyKey, ReadBool(Data.Models.Metadata.Chip.SoundOnlyKey).FromYesNo());
+            if (ReadString(Data.Models.Metadata.Chip.ChipTypeKey) is not null)
+                Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType().AsStringValue());
         }
 
         public Chip(Data.Models.Metadata.Chip item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

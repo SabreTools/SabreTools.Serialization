@@ -35,12 +35,12 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             DatItem rom = new Rom();
             rom.SetName("rom");
-            rom.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
-            rom.SetFieldValue(DatItem.SourceKey, source);
-            rom.SetFieldValue(DatItem.MachineKey, machine);
+            rom.Write(Data.Models.Metadata.Rom.CRCKey, "deadbeef");
+            rom.Write(DatItem.SourceKey, source);
+            rom.Write(DatItem.MachineKey, machine);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "name");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "name");
             datFile.AddItem(rom, statsOnly: false);
 
             long sourceIndex = datFile.AddSourceDB(source);
@@ -51,7 +51,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             created.BucketBy(ItemKey.Machine);
 
             Assert.NotNull(created.Header);
-            Assert.Equal("name", created.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", created.Header.ReadString(Data.Models.Metadata.Header.NameKey));
 
             Assert.NotNull(created.Items);
             DatItem datItem = Assert.Single(created.GetItemsForBucket("key"));
@@ -76,8 +76,8 @@ namespace SabreTools.Metadata.DatFiles.Test
             machine.SetName("game-1");
 
             DatItem datItem = new Rom();
-            datItem.SetFieldValue<Source?>(DatItem.SourceKey, source);
-            datItem.SetFieldValue<Machine?>(DatItem.MachineKey, machine);
+            datItem.Write<Source?>(DatItem.SourceKey, source);
+            datItem.Write<Machine?>(DatItem.MachineKey, machine);
 
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
             datFile.AddItem(datItem, statsOnly: false);
@@ -113,120 +113,120 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void FillHeaderFromPath_NoNameNoDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Filename (1980-01-01)", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Filename (1980-01-01)", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Filename (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Filename (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NoNameNoDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Filename", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Filename", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Filename", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Filename", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NoNameDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, "Description");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Description (1980-01-01)", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Description", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NoNameDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, "Description");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Description", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Description", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NameNoDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "Name");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Name (1980-01-01)", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name (1980-01-01)", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NameNoDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "Name");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, string.Empty);
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NameDesc_NotBare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "Name");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, "Description");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name");
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description");
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, false);
 
-            Assert.Equal("Name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Description", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         [Fact]
         public void FillHeaderFromPath_NameDesc_Bare()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "Name ");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DescriptionKey, "Description ");
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.DateKey, "1980-01-01");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "Name ");
+            datFile.Header.Write(Data.Models.Metadata.Header.DescriptionKey, "Description ");
+            datFile.Header.Write(Data.Models.Metadata.Header.DateKey, "1980-01-01");
 
             string path = Path.Combine("Fake", "Path", "Filename");
             datFile.FillHeaderFromPath(path, true);
 
-            Assert.Equal("Name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
-            Assert.Equal("Description", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.DescriptionKey));
+            Assert.Equal("Name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("Description", datFile.Header.ReadString(Data.Models.Metadata.Header.DescriptionKey));
         }
 
         #endregion
@@ -237,14 +237,14 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void SetHeaderTest()
         {
             DatHeader datHeader = new DatHeader();
-            datHeader.SetFieldValue(Data.Models.Metadata.Header.NameKey, "name");
+            datHeader.Write(Data.Models.Metadata.Header.NameKey, "name");
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "notname");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "notname");
 
             datFile.SetHeader(datHeader);
             Assert.NotNull(datFile.Header);
-            Assert.Equal("name", datFile.Header.GetStringFieldValue(Data.Models.Metadata.Header.NameKey));
+            Assert.Equal("name", datFile.Header.ReadString(Data.Models.Metadata.Header.NameKey));
         }
 
         #endregion
@@ -273,7 +273,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResetDictionaryTest()
         {
             DatFile datFile = new Logiqx(datFile: null, useGame: false);
-            datFile.Header.SetFieldValue(Data.Models.Metadata.Header.NameKey, "name");
+            datFile.Header.Write(Data.Models.Metadata.Header.NameKey, "name");
             datFile.AddItem(new Rom(), statsOnly: false);
             datFile.AddItemDB(new Rom(), 0, 0, false);
 
@@ -1329,11 +1329,11 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected)
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
+            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.Write(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
 
             DatFile? datFile = new Logiqx(datFile: null, useGame: false);
             datFile.Modifiers.Prefix = fix;
@@ -1363,27 +1363,27 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = string.Empty;
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.PublisherKey, "publisher");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.CategoryKey, "category");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
+            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "crc16");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "crc64");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "md2");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "md4");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "md5");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, "ripemd128");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, "ripemd160");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, "sha1");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, "sha256");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, "sha384");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, "sha512");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, "spamsum");
+            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
+            item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
+            item.Write(Data.Models.Metadata.Rom.MD2Key, "md2");
+            item.Write(Data.Models.Metadata.Rom.MD4Key, "md4");
+            item.Write(Data.Models.Metadata.Rom.MD5Key, "md5");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "ripemd128");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "ripemd160");
+            item.Write(Data.Models.Metadata.Rom.SHA1Key, "sha1");
+            item.Write(Data.Models.Metadata.Rom.SHA256Key, "sha256");
+            item.Write(Data.Models.Metadata.Rom.SHA384Key, "sha384");
+            item.Write(Data.Models.Metadata.Rom.SHA512Key, "sha512");
+            item.Write(Data.Models.Metadata.Rom.SpamSumKey, "spamsum");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1396,15 +1396,15 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_____";
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.PublisherKey, "publisher");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.CategoryKey, "category");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
+            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Disk();
-            item.SetFieldValue(Data.Models.Metadata.Disk.NameKey, "name");
-            item.SetFieldValue(Data.Models.Metadata.Disk.MD5Key, "md5");
-            item.SetFieldValue(Data.Models.Metadata.Disk.SHA1Key, "sha1");
+            item.Write(Data.Models.Metadata.Disk.NameKey, "name");
+            item.Write(Data.Models.Metadata.Disk.MD5Key, "md5");
+            item.Write(Data.Models.Metadata.Disk.SHA1Key, "sha1");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1417,10 +1417,10 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name.bin_manufacturer_publisher_category__00000000____d41d8cd98f00b204e9800998ecf8427e___da39a3ee5e6b4b0d3255bfef95601890afd80709_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855___12345_";
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.PublisherKey, "publisher");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.CategoryKey, "category");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
+            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new DatItems.Formats.File
             {
@@ -1444,17 +1444,17 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category______md5___sha1_sha256____spamsum";
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.PublisherKey, "publisher");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.CategoryKey, "category");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
+            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Media();
-            item.SetFieldValue(Data.Models.Metadata.Media.NameKey, "name");
-            item.SetFieldValue(Data.Models.Metadata.Media.MD5Key, "md5");
-            item.SetFieldValue(Data.Models.Metadata.Media.SHA1Key, "sha1");
-            item.SetFieldValue(Data.Models.Metadata.Media.SHA256Key, "sha256");
-            item.SetFieldValue(Data.Models.Metadata.Media.SpamSumKey, "spamsum");
+            item.Write(Data.Models.Metadata.Media.NameKey, "name");
+            item.Write(Data.Models.Metadata.Media.MD5Key, "md5");
+            item.Write(Data.Models.Metadata.Media.SHA1Key, "sha1");
+            item.Write(Data.Models.Metadata.Media.SHA256Key, "sha256");
+            item.Write(Data.Models.Metadata.Media.SpamSumKey, "spamsum");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1467,27 +1467,27 @@ namespace SabreTools.Metadata.DatFiles.Test
             string expected = "machine_machine_name_manufacturer_publisher_category_crc16_crc_crc64_md2_md4_md5_ripemd128_ripemd160_sha1_sha256_sha384_sha512_12345_spamsum";
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.PublisherKey, "publisher");
-            machine.SetFieldValue(Data.Models.Metadata.Machine.CategoryKey, "category");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.ManufacturerKey, "manufacturer");
+            machine.Write(Data.Models.Metadata.Machine.PublisherKey, "publisher");
+            machine.Write(Data.Models.Metadata.Machine.CategoryKey, "category");
 
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "crc16");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "crc64");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "md2");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "md4");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "md5");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, "ripemd128");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, "ripemd160");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, "sha1");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, "sha256");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, "sha384");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, "sha512");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, "spamsum");
+            item.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            item.Write(Data.Models.Metadata.Rom.CRC16Key, "crc16");
+            item.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            item.Write(Data.Models.Metadata.Rom.CRC64Key, "crc64");
+            item.Write(Data.Models.Metadata.Rom.MD2Key, "md2");
+            item.Write(Data.Models.Metadata.Rom.MD4Key, "md4");
+            item.Write(Data.Models.Metadata.Rom.MD5Key, "md5");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "ripemd128");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "ripemd160");
+            item.Write(Data.Models.Metadata.Rom.SHA1Key, "sha1");
+            item.Write(Data.Models.Metadata.Rom.SHA256Key, "sha256");
+            item.Write(Data.Models.Metadata.Rom.SHA384Key, "sha384");
+            item.Write(Data.Models.Metadata.Rom.SHA512Key, "sha512");
+            item.Write(Data.Models.Metadata.Rom.SpamSumKey, "spamsum");
 
             string actual = DatFile.FormatPrefixPostfix(item, machine, fix);
             Assert.Equal(expected, actual);
@@ -1505,105 +1505,105 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Sample? sample = actual as Sample;
             Assert.NotNull(sample);
-            Assert.Null(sample.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Null(sample.GetStringFieldValue(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Null(sample.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRC16Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.CRC64Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.MD2Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.MD4Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.SHA384Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.SHA512Key));
+            Assert.Null(sample.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
         }
 
         [Fact]
         public void ProcessNullifiedItem_SizeNonNull()
         {
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
+            item.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Equal(12345, rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Equal(12345, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
         }
 
         [Fact]
         public void ProcessNullifiedItem_CrcNonNull()
         {
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
+            item.Write(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Null(rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal(HashType.CRC32.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Null(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Null(rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
+            Assert.Null(rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
         }
 
         [Fact]
         public void ProcessNullifiedItem_AllNull()
         {
             DatItem item = new Rom();
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, "null");
-            item.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, "null");
+            item.Write(Data.Models.Metadata.Rom.CRC16Key, "null");
+            item.Write(Data.Models.Metadata.Rom.CRCKey, "null");
+            item.Write(Data.Models.Metadata.Rom.CRC64Key, "null");
+            item.Write(Data.Models.Metadata.Rom.MD2Key, "null");
+            item.Write(Data.Models.Metadata.Rom.MD4Key, "null");
+            item.Write(Data.Models.Metadata.Rom.MD5Key, "null");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "null");
+            item.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "null");
+            item.Write(Data.Models.Metadata.Rom.SHA1Key, "null");
+            item.Write(Data.Models.Metadata.Rom.SHA256Key, "null");
+            item.Write(Data.Models.Metadata.Rom.SHA384Key, "null");
+            item.Write(Data.Models.Metadata.Rom.SHA512Key, "null");
+            item.Write(Data.Models.Metadata.Rom.SpamSumKey, "null");
 
             DatItem actual = DatFile.ProcessNullifiedItem(item);
             Rom? rom = actual as Rom;
             Assert.NotNull(rom);
-            Assert.Equal(0, rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal(HashType.CRC16.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC16Key));
-            Assert.Equal(HashType.CRC32.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
-            Assert.Equal(HashType.CRC64.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRC64Key));
-            Assert.Equal(HashType.MD2.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD2Key));
-            Assert.Equal(HashType.MD4.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD4Key));
-            Assert.Equal(HashType.MD5.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.MD5Key));
-            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key));
-            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key));
-            Assert.Equal(HashType.SHA1.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key));
-            Assert.Equal(HashType.SHA256.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key));
-            Assert.Equal(HashType.SHA384.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA384Key));
-            Assert.Equal(HashType.SHA512.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA512Key));
-            Assert.Equal(HashType.SpamSum.ZeroString, rom.GetStringFieldValue(Data.Models.Metadata.Rom.SpamSumKey));
+            Assert.Equal(0, rom.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal(HashType.CRC16.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC16Key));
+            Assert.Equal(HashType.CRC32.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(HashType.CRC64.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.CRC64Key));
+            Assert.Equal(HashType.MD2.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD2Key));
+            Assert.Equal(HashType.MD4.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD4Key));
+            Assert.Equal(HashType.MD5.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.MD5Key));
+            Assert.Equal(HashType.RIPEMD128.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD128Key));
+            Assert.Equal(HashType.RIPEMD160.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.RIPEMD160Key));
+            Assert.Equal(HashType.SHA1.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
+            Assert.Equal(HashType.SHA256.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA256Key));
+            Assert.Equal(HashType.SHA384.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA384Key));
+            Assert.Equal(HashType.SHA512.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SHA512Key));
+            Assert.Equal(HashType.SpamSum.ZeroString, rom.ReadString(Data.Models.Metadata.Rom.SpamSumKey));
         }
 
         #endregion
@@ -1657,7 +1657,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Disk();
-            datItem.SetFieldValue(Data.Models.Metadata.Disk.MD5Key, hash);
+            datItem.Write(Data.Models.Metadata.Disk.MD5Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1668,7 +1668,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Disk();
-            datItem.SetFieldValue(Data.Models.Metadata.Disk.SHA1Key, hash);
+            datItem.Write(Data.Models.Metadata.Disk.SHA1Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1735,7 +1735,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Media();
-            datItem.SetFieldValue(Data.Models.Metadata.Media.MD5Key, hash);
+            datItem.Write(Data.Models.Metadata.Media.MD5Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1746,7 +1746,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Media();
-            datItem.SetFieldValue(Data.Models.Metadata.Media.SHA1Key, hash);
+            datItem.Write(Data.Models.Metadata.Media.SHA1Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1757,7 +1757,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Media();
-            datItem.SetFieldValue(Data.Models.Metadata.Media.SHA256Key, hash);
+            datItem.Write(Data.Models.Metadata.Media.SHA256Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1768,7 +1768,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Media();
-            datItem.SetFieldValue(Data.Models.Metadata.Media.SpamSumKey, hash);
+            datItem.Write(Data.Models.Metadata.Media.SpamSumKey, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1787,7 +1787,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.CRC16Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1798,7 +1798,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, hash);
+            datItem.Write(Data.Models.Metadata.Rom.CRCKey, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1809,7 +1809,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.CRC64Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1820,7 +1820,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.MD2Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1831,7 +1831,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.MD4Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1842,7 +1842,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.MD5Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1853,7 +1853,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1864,7 +1864,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1875,7 +1875,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1886,7 +1886,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1897,7 +1897,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1908,7 +1908,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, hash);
+            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1919,7 +1919,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             string hash = "XXXXXX";
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, hash);
+            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, hash);
 
             string actual = DatFile.GetDuplicateSuffix(datItem);
             Assert.Equal($"_{hash}", actual);
@@ -1952,16 +1952,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNames_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("name");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA];
 
@@ -1972,31 +1972,31 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
         public void ResolveNames_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("romA");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("romB");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 23456);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romB.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
+            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
 
@@ -2008,37 +2008,37 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.GetName());
-            Assert.Equal(23456, actualRomB.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc2", actualRomB.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
         public void ResolveNames_AllDuplicate_Single()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romB.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romB.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
 
@@ -2049,31 +2049,31 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
         public void ResolveNames_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 23456);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romB.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
+            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<DatItem> datItems = [romA, romB];
 
@@ -2085,14 +2085,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0] as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1] as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.GetName());
-            Assert.Equal(23456, actualRomB.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc2", actualRomB.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         #endregion
@@ -2114,16 +2114,16 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ResolveNamesDB_SingleItem_Single()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("name");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =
             [
@@ -2136,31 +2136,31 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("name", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
         public void ResolveNamesDB_NonDuplicate_AllUntouched()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("romA");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("romB");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 23456);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romB.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
+            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =
             [
@@ -2175,14 +2175,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("romA", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("romB", actualRomB.GetName());
-            Assert.Equal(23456, actualRomB.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc2", actualRomB.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
@@ -2191,7 +2191,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             DatFile datFile = new Logiqx(null, useGame: false);
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
             long machineIndex = datFile.AddMachineDB(machine);
 
             Source source = new Source(0);
@@ -2199,14 +2199,14 @@ namespace SabreTools.Metadata.DatFiles.Test
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romAIndex = datFile.AddItemDB(romA, machineIndex, sourceIndex, statsOnly: false);
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             long romBIndex = datFile.AddItemDB(romB, machineIndex, sourceIndex, statsOnly: false);
 
             List<KeyValuePair<long, DatItem>> mappings =
@@ -2220,31 +2220,31 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actualItemA.Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         [Fact]
         public void ResolveNamesDB_NameMatch_SingleRenamed()
         {
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "machine");
 
             Source source = new Source(0);
 
             Rom romA = new Rom();
             romA.SetName("rom");
-            romA.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            romA.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            romA.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romA.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romA.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            romA.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            romA.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romA.Write(DatItem.SourceKey, (Source)source.Clone());
 
             Rom romB = new Rom();
             romB.SetName("rom");
-            romB.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 23456);
-            romB.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc2");
-            romB.SetFieldValue(DatItem.MachineKey, (Machine)machine.Clone());
-            romB.SetFieldValue(DatItem.SourceKey, (Source)source.Clone());
+            romB.Write(Data.Models.Metadata.Rom.SizeKey, 23456);
+            romB.Write(Data.Models.Metadata.Rom.CRCKey, "crc2");
+            romB.Write(DatItem.MachineKey, (Machine)machine.Clone());
+            romB.Write(DatItem.SourceKey, (Source)source.Clone());
 
             List<KeyValuePair<long, DatItem>> mappings =
             [
@@ -2259,14 +2259,14 @@ namespace SabreTools.Metadata.DatFiles.Test
             Rom? actualRomA = actual[0].Value as Rom;
             Assert.NotNull(actualRomA);
             Assert.Equal("rom", actualRomA.GetName());
-            Assert.Equal(12345, actualRomA.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc", actualRomA.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(12345, actualRomA.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc", actualRomA.ReadString(Data.Models.Metadata.Rom.CRCKey));
 
             Rom? actualRomB = actual[1].Value as Rom;
             Assert.NotNull(actualRomB);
             Assert.Equal("rom_crc2", actualRomB.GetName());
-            Assert.Equal(23456, actualRomB.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey));
-            Assert.Equal("crc2", actualRomB.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey));
+            Assert.Equal(23456, actualRomB.ReadLong(Data.Models.Metadata.Rom.SizeKey));
+            Assert.Equal("crc2", actualRomB.ReadString(Data.Models.Metadata.Rom.CRCKey));
         }
 
         #endregion
@@ -2287,7 +2287,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_RemoveSet_True()
         {
             DatItem? datItem = new Rom();
-            datItem.SetFieldValue(DatItem.RemoveKey, true);
+            datItem.Write(DatItem.RemoveKey, true);
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);
@@ -2318,9 +2318,9 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_NoIgnoreBlanksZeroRom_False()
         {
             DatItem? datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: false);
@@ -2341,8 +2341,8 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_MissingRequired_True()
         {
             DatItem? datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
+            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);
@@ -2353,19 +2353,19 @@ namespace SabreTools.Metadata.DatFiles.Test
         public void ShouldIgnore_AllVerified_False()
         {
             DatItem? datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.NameKey, "name");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, 12345);
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, "crc");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.NameKey, "name");
+            datItem.Write(Data.Models.Metadata.Rom.SizeKey, 12345);
+            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.MD2Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.MD4Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.MD5Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, "crc");
+            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, "crc");
             DatFile datFile = new Logiqx(null, useGame: false);
 
             bool actual = datFile.ShouldIgnore(datItem, ignoreBlanks: true);

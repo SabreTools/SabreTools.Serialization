@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get
             {
-                var slotOptions = GetFieldValue<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
+                var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
                 return slotOptions is not null && slotOptions.Length > 0;
             }
         }
@@ -39,13 +39,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (slotOptions is not null)
             {
                 SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => new SlotOption(slotOption));
-                SetFieldValue<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, slotOptionItems);
+                Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, slotOptionItems);
             }
         }
 
         public Slot(Data.Models.Metadata.Slot item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 
@@ -58,7 +58,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var slotItem = base.GetInternalClone();
 
-            var slotOptions = GetFieldValue<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
+            var slotOptions = Read<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey);
             if (slotOptions is not null)
             {
                 Data.Models.Metadata.SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => slotOption.GetInternalClone());

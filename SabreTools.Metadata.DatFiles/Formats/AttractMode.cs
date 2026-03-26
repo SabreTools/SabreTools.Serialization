@@ -20,7 +20,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public AttractMode(DatFile? datFile) : base(datFile)
         {
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.AttractMode);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.AttractMode);
         }
 
         /// <inheritdoc/>

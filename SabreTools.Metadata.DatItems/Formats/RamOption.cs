@@ -23,13 +23,13 @@ namespace SabreTools.Metadata.DatItems.Formats
         public RamOption(Data.Models.Metadata.RamOption item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.RamOption.DefaultKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.RamOption.DefaultKey, GetBoolFieldValue(Data.Models.Metadata.RamOption.DefaultKey).FromYesNo());
+            if (ReadBool(Data.Models.Metadata.RamOption.DefaultKey) is not null)
+                Write<string?>(Data.Models.Metadata.RamOption.DefaultKey, ReadBool(Data.Models.Metadata.RamOption.DefaultKey).FromYesNo());
         }
 
         public RamOption(Data.Models.Metadata.RamOption item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

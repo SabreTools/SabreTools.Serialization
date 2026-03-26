@@ -27,7 +27,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         /// <param name="datFile">Parent DatFile to copy from</param>
         public SabreXML(DatFile? datFile) : base(datFile)
         {
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.SabreXML);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.SabreXML);
         }
 
         /// <inheritdoc/>
@@ -219,7 +219,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                             }
 
                             item.CopyMachineInformation(machine);
-                            item.SetFieldValue<Source?>(DatItem.SourceKey, source);
+                            item.Write<Source?>(DatItem.SourceKey, source);
                             AddItem(item, statsOnly);
                             // AddItemDB(item, machineIndex, sourceIndex, statsOnly);
                         }

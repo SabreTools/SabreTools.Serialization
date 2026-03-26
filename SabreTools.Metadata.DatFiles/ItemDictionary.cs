@@ -97,12 +97,12 @@ namespace SabreTools.Metadata.DatFiles
             if (item is Disk disk)
             {
                 // If the file has aboslutely no hashes, skip and log
-                if (disk.GetStringFieldValue(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() != ItemStatus.Nodump
-                    && string.IsNullOrEmpty(disk.GetStringFieldValue(Data.Models.Metadata.Disk.MD5Key))
-                    && string.IsNullOrEmpty(disk.GetStringFieldValue(Data.Models.Metadata.Disk.SHA1Key)))
+                if (disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() != ItemStatus.Nodump
+                    && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.MD5Key))
+                    && string.IsNullOrEmpty(disk.ReadString(Data.Models.Metadata.Disk.SHA1Key)))
                 {
                     _logger.Verbose($"Incomplete entry for '{disk.GetName()}' will be output as nodump");
-                    disk.SetFieldValue<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    disk.Write<string?>(Data.Models.Metadata.Disk.StatusKey, ItemStatus.Nodump.AsStringValue());
                 }
 
                 item = disk;
@@ -123,10 +123,10 @@ namespace SabreTools.Metadata.DatFiles
             else if (item is Media media)
             {
                 // If the file has aboslutely no hashes, skip and log
-                if (string.IsNullOrEmpty(media.GetStringFieldValue(Data.Models.Metadata.Media.MD5Key))
-                    && string.IsNullOrEmpty(media.GetStringFieldValue(Data.Models.Metadata.Media.SHA1Key))
-                    && string.IsNullOrEmpty(media.GetStringFieldValue(Data.Models.Metadata.Media.SHA256Key))
-                    && string.IsNullOrEmpty(media.GetStringFieldValue(Data.Models.Metadata.Media.SpamSumKey)))
+                if (string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.MD5Key))
+                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA1Key))
+                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SHA256Key))
+                    && string.IsNullOrEmpty(media.ReadString(Data.Models.Metadata.Media.SpamSumKey)))
                 {
                     _logger.Verbose($"Incomplete entry for '{media.GetName()}' will be output as nodump");
                 }
@@ -135,10 +135,10 @@ namespace SabreTools.Metadata.DatFiles
             }
             else if (item is Rom rom)
             {
-                long? size = rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey);
+                long? size = rom.ReadLong(Data.Models.Metadata.Rom.SizeKey);
 
                 // If we have the case where there is SHA-1 and nothing else, we don't fill in any other part of the data
-                if (size is null && !string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
+                if (size is null && !string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
                 {
                     // No-op, just catch it so it doesn't go further
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Entry with only SHA-1 found - '{rom.GetName()}'");
@@ -146,38 +146,38 @@ namespace SabreTools.Metadata.DatFiles
 
                 // If we have a rom and it's missing size AND the hashes match a 0-byte file, fill in the rest of the info
                 else if ((size == 0 || size is null)
-                    && (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)) || rom.HasZeroHash()))
+                    && (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)) || rom.HasZeroHash()))
                 {
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC16Key, null); // HashType.CRC16.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRC64Key, null); // HashType.CRC64.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD2Key, null); // HashType.MD2.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD4Key, null); // HashType.MD4.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, null); // HashType.RIPEMD128.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, null); // HashType.RIPEMD160.ZeroString
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA256Key, null); // HashType.SHA256.ZeroString;
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA384Key, null); // HashType.SHA384.ZeroString;
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA512Key, null); // HashType.SHA512.ZeroString;
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SpamSumKey, null); // HashType.SpamSum.ZeroString;
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SizeKey, "0");
+                    rom.Write<string?>(Data.Models.Metadata.Rom.CRC16Key, null); // HashType.CRC16.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, HashType.CRC32.ZeroString);
+                    rom.Write<string?>(Data.Models.Metadata.Rom.CRC64Key, null); // HashType.CRC64.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.MD2Key, null); // HashType.MD2.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.MD4Key, null); // HashType.MD4.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, HashType.MD5.ZeroString);
+                    rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD128Key, null); // HashType.RIPEMD128.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.RIPEMD160Key, null); // HashType.RIPEMD160.ZeroString
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, HashType.SHA1.ZeroString);
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, null); // HashType.SHA256.ZeroString;
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA384Key, null); // HashType.SHA384.ZeroString;
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SHA512Key, null); // HashType.SHA512.ZeroString;
+                    rom.Write<string?>(Data.Models.Metadata.Rom.SpamSumKey, null); // HashType.SpamSum.ZeroString;
                 }
 
                 // If the file has no size and it's not the above case, skip and log
-                else if (rom.GetStringFieldValue(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump && (size == 0 || size is null))
+                else if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump && (size == 0 || size is null))
                 {
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
                 }
 
                 // If the file has a size but aboslutely no hashes, skip and log
-                else if (rom.GetStringFieldValue(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump
+                else if (rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() != ItemStatus.Nodump
                     && size is not null && size > 0
                     && !rom.HasHashes())
                 {
                     //logger.Verbose($"{Header.GetStringFieldValue(DatHeader.FileNameKey)}: Incomplete entry for '{rom.GetName()}' will be output as nodump");
-                    rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
+                    rom.Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.Nodump.AsStringValue());
                 }
 
                 item = rom;
@@ -249,7 +249,7 @@ namespace SabreTools.Metadata.DatFiles
             var datItems = new List<DatItem>();
             foreach (DatItem item in items)
             {
-                if (item.GetBoolFieldValue(DatItem.RemoveKey) != true)
+                if (item.ReadBool(DatItem.RemoveKey) != true)
                     datItems.Add(item);
             }
 
@@ -428,8 +428,8 @@ namespace SabreTools.Metadata.DatFiles
                 return output;
 
             // Get the sources for comparison
-            var selfSource = self.GetFieldValue<Source?>(DatItem.SourceKey);
-            var lastSource = last.GetFieldValue<Source?>(DatItem.SourceKey);
+            var selfSource = self.Read<Source?>(DatItem.SourceKey);
+            var lastSource = last.Read<Source?>(DatItem.SourceKey);
 
             // Get the machines for comparison
             var selfMachine = self.GetMachine();
@@ -439,9 +439,9 @@ namespace SabreTools.Metadata.DatFiles
 
             // If the duplicate is external already
 #if NET20 || NET35
-            if ((last.GetFieldValue<DupeType>(DatItem.DupeTypeKey) & DupeType.External) != 0)
+            if ((last.Read<DupeType>(DatItem.DupeTypeKey) & DupeType.External) != 0)
 #else
-            if (last.GetFieldValue<DupeType>(DatItem.DupeTypeKey).HasFlag(DupeType.External))
+            if (last.Read<DupeType>(DatItem.DupeTypeKey).HasFlag(DupeType.External))
 #endif
                 output |= DupeType.External;
 
@@ -491,13 +491,13 @@ namespace SabreTools.Metadata.DatFiles
                     continue;
 
                 // If it's a nodump, add and skip
-                if (datItem is Rom rom && rom.GetStringFieldValue(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() == ItemStatus.Nodump)
+                if (datItem is Rom rom && rom.ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus() == ItemStatus.Nodump)
                 {
                     output.Add(datItem);
                     nodumpCount++;
                     continue;
                 }
-                else if (datItem is Disk disk && disk.GetStringFieldValue(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() == ItemStatus.Nodump)
+                else if (datItem is Disk disk && disk.ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus() == ItemStatus.Nodump)
                 {
                     output.Add(datItem);
                     nodumpCount++;
@@ -534,11 +534,11 @@ namespace SabreTools.Metadata.DatFiles
                     savedRom.FillMissingInformation(romItem);
 
                 // Set the duplicate type on the saved item
-                savedItem.SetFieldValue(DatItem.DupeTypeKey, dupetype);
+                savedItem.Write(DatItem.DupeTypeKey, dupetype);
 
                 // Get the sources associated with the items
-                var savedSource = savedItem.GetFieldValue<Source?>(DatItem.SourceKey);
-                var itemSource = datItem.GetFieldValue<Source?>(DatItem.SourceKey);
+                var savedSource = savedItem.Read<Source?>(DatItem.SourceKey);
+                var itemSource = datItem.Read<Source?>(DatItem.SourceKey);
 
                 // Get the machines associated with the items
                 var savedMachine = savedItem.GetMachine();
@@ -547,14 +547,14 @@ namespace SabreTools.Metadata.DatFiles
                 // If the current source has a lower ID than the saved, use the saved source
                 if (itemSource?.Index < savedSource?.Index)
                 {
-                    datItem.SetFieldValue<Source?>(DatItem.SourceKey, savedSource.Clone() as Source);
+                    datItem.Write<Source?>(DatItem.SourceKey, savedSource.Clone() as Source);
                     savedItem.CopyMachineInformation(datItem);
                     savedItem.SetName(datItem.GetName());
                 }
 
                 // If the saved machine is a child of the current machine, use the current machine instead
-                if (savedMachine?.GetStringFieldValue(Data.Models.Metadata.Machine.CloneOfKey) == itemMachine?.GetName()
-                    || savedMachine?.GetStringFieldValue(Data.Models.Metadata.Machine.RomOfKey) == itemMachine?.GetName())
+                if (savedMachine?.ReadString(Data.Models.Metadata.Machine.CloneOfKey) == itemMachine?.GetName()
+                    || savedMachine?.ReadString(Data.Models.Metadata.Machine.RomOfKey) == itemMachine?.GetName())
                 {
                     savedItem.CopyMachineInformation(datItem);
                     savedItem.SetName(datItem.GetName());
@@ -596,13 +596,13 @@ namespace SabreTools.Metadata.DatFiles
             foreach (DatItem other in items)
             {
                 // Skip items marked for removal
-                if (other.GetBoolFieldValue(DatItem.RemoveKey) == true)
+                if (other.ReadBool(DatItem.RemoveKey) == true)
                     continue;
 
                 // Mark duplicates for future removal
                 if (datItem.Equals(other))
                 {
-                    other.SetFieldValue<bool?>(DatItem.RemoveKey, true);
+                    other.Write<bool?>(DatItem.RemoveKey, true);
                     output.Add(other);
                 }
             }
@@ -728,7 +728,7 @@ namespace SabreTools.Metadata.DatFiles
 
             // Get the machine and source
             var machine = datItem.GetMachine();
-            var source = datItem.GetFieldValue<Source?>(DatItem.SourceKey);
+            var source = datItem.Read<Source?>(DatItem.SourceKey);
 
             // Get the bucket key
             return datItem.GetKey(bucketBy, machine, source, lower, norename);
@@ -762,12 +762,12 @@ namespace SabreTools.Metadata.DatFiles
                 for (int i = 0; i < GetItemsForBucket(key).Count; i++)
                 {
                     DatItem item = GetItemsForBucket(key)[i];
-                    if (item is null || item.GetBoolFieldValue(DatItem.RemoveKey) == true)
+                    if (item is null || item.ReadBool(DatItem.RemoveKey) == true)
                         continue;
 
                     // Get the machine and source
                     var machine = item.GetMachine();
-                    var source = item.GetFieldValue<Source?>(DatItem.SourceKey);
+                    var source = item.Read<Source?>(DatItem.SourceKey);
 
                     // We want to get the key most appropriate for the given sorting type
                     string newkey = item.GetKey(bucketBy, machine, source, lower, norename);
@@ -840,8 +840,8 @@ namespace SabreTools.Metadata.DatFiles
                     // Compare on source if renaming
                     if (!norename)
                     {
-                        int xSourceIndex = x.GetFieldValue<Source?>(DatItem.SourceKey)?.Index ?? 0;
-                        int ySourceIndex = y.GetFieldValue<Source?>(DatItem.SourceKey)?.Index ?? 0;
+                        int xSourceIndex = x.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
+                        int ySourceIndex = y.Read<Source?>(DatItem.SourceKey)?.Index ?? 0;
                         if (xSourceIndex != ySourceIndex)
                             return xSourceIndex - ySourceIndex;
                     }
@@ -857,8 +857,8 @@ namespace SabreTools.Metadata.DatFiles
                         return nc.Compare(xMachineName, yMachineName);
 
                     // If types don't match
-                    string? xType = x.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey);
-                    string? yType = y.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey);
+                    string? xType = x.ReadString(Data.Models.Metadata.DatItem.TypeKey);
+                    string? yType = y.ReadString(Data.Models.Metadata.DatItem.TypeKey);
                     if (xType != yType)
                         return xType.AsItemType() - yType.AsItemType();
 

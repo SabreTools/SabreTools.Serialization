@@ -21,7 +21,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             get
             {
-                var analogs = GetFieldValue<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
+                var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
                 return analogs is not null && analogs.Length > 0;
             }
         }
@@ -39,13 +39,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (analogs is not null)
             {
                 Analog[] analogItems = Array.ConvertAll(analogs, analog => new Analog(analog));
-                SetFieldValue<Analog[]?>(Data.Models.Metadata.Port.AnalogKey, analogItems);
+                Write<Analog[]?>(Data.Models.Metadata.Port.AnalogKey, analogItems);
             }
         }
 
         public Port(Data.Models.Metadata.Port item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 
@@ -58,7 +58,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var portItem = base.GetInternalClone();
 
-            var analogs = GetFieldValue<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
+            var analogs = Read<Analog[]?>(Data.Models.Metadata.Port.AnalogKey);
             if (analogs is not null)
             {
                 Data.Models.Metadata.Analog[] analogItems = Array.ConvertAll(analogs, analog => analog.GetInternalClone());

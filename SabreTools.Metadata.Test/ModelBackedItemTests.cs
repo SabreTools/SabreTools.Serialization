@@ -133,10 +133,10 @@ namespace SabreTools.Metadata.Test
         public void Equals_DifferentModels_False()
         {
             ModelBackedItem<TestDictionaryBase> self = new TestModelBackedItem();
-            self.SetFieldValue(TestDictionaryBase.NameKey, "self");
+            self.Write(TestDictionaryBase.NameKey, "self");
 
             ModelBackedItem<TestDictionaryBase>? other = new TestModelBackedItem();
-            other.SetFieldValue(TestDictionaryBase.NameKey, "other");
+            other.Write(TestDictionaryBase.NameKey, "other");
 
             bool actual = self.Equals(other);
             Assert.False(actual);
@@ -146,10 +146,10 @@ namespace SabreTools.Metadata.Test
         public void Equals_EqualModels_True()
         {
             ModelBackedItem<TestDictionaryBase> self = new TestModelBackedItem();
-            self.SetFieldValue(TestDictionaryBase.NameKey, "name");
+            self.Write(TestDictionaryBase.NameKey, "name");
 
             ModelBackedItem<TestDictionaryBase>? other = new TestModelBackedItem();
-            other.SetFieldValue(TestDictionaryBase.NameKey, "name");
+            other.Write(TestDictionaryBase.NameKey, "name");
 
             bool actual = self.Equals(other);
             Assert.True(actual);
@@ -157,159 +157,159 @@ namespace SabreTools.Metadata.Test
 
         #endregion
 
-        #region RemoveField
+        #region Remove
 
         [Fact]
-        public void RemoveField_NullItem_False()
+        public void Remove_NullItem_False()
         {
             TestModelBackedItem? modelBackedItem = null;
             string? fieldName = TestDictionaryBase.NameKey;
-            bool? actual = modelBackedItem?.RemoveField(fieldName);
+            bool? actual = modelBackedItem?.Remove(fieldName);
             Assert.Null(actual);
         }
 
         [Fact]
-        public void RemoveField_EmptyFieldName_False()
+        public void Remove_EmptyFieldName_False()
         {
             var modelBackedItem = new TestModelBackedItem();
             string? fieldName = string.Empty;
-            bool actual = modelBackedItem.RemoveField(fieldName);
+            bool actual = modelBackedItem.Remove(fieldName);
             Assert.False(actual);
         }
 
         [Fact]
-        public void RemoveField_MissingKey_True()
+        public void Remove_MissingKey_True()
         {
             var modelBackedItem = new TestModelBackedItem();
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = modelBackedItem.RemoveField(fieldName);
+            bool actual = modelBackedItem.Remove(fieldName);
             Assert.True(actual);
-            Assert.Null(modelBackedItem.GetStringFieldValue(fieldName));
+            Assert.Null(modelBackedItem.ReadString(fieldName));
         }
 
         [Fact]
-        public void RemoveField_ValidKey_True()
+        public void Remove_ValidKey_True()
         {
             var modelBackedItem = new TestModelBackedItem();
-            modelBackedItem.SetFieldValue(TestDictionaryBase.NameKey, "value");
+            modelBackedItem.Write(TestDictionaryBase.NameKey, "value");
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = modelBackedItem.RemoveField(fieldName);
+            bool actual = modelBackedItem.Remove(fieldName);
             Assert.True(actual);
-            Assert.Null(modelBackedItem.GetStringFieldValue(fieldName));
+            Assert.Null(modelBackedItem.ReadString(fieldName));
         }
 
         #endregion
 
-        #region ReplaceField
+        #region Replace
 
         [Fact]
-        public void ReplaceField_NullFrom_False()
+        public void Replace_NullFrom_False()
         {
             TestModelBackedItem? from = null;
             var to = new TestModelBackedItem();
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = to.ReplaceField(from, fieldName);
+            bool actual = to.Replace(from, fieldName);
             Assert.False(actual);
         }
 
         [Fact]
-        public void ReplaceField_NullTo_False()
+        public void Replace_NullTo_False()
         {
             TestModelBackedItem? from = null;
             TestModelBackedItem? to = new TestModelBackedItem();
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = to.ReplaceField(from, fieldName);
+            bool actual = to.Replace(from, fieldName);
             Assert.False(actual);
         }
 
         [Fact]
-        public void ReplaceField_EmptyFieldName_False()
+        public void Replace_EmptyFieldName_False()
         {
             TestModelBackedItem? from = new TestModelBackedItem();
             TestModelBackedItem? to = new TestModelBackedItem();
             string? fieldName = string.Empty;
-            bool actual = to.ReplaceField(from, fieldName);
+            bool actual = to.Replace(from, fieldName);
             Assert.False(actual);
         }
 
         [Fact]
-        public void ReplaceField_MissingKey_False()
+        public void Replace_MissingKey_False()
         {
             TestModelBackedItem? from = new TestModelBackedItem();
             TestModelBackedItem? to = new TestModelBackedItem();
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = to.ReplaceField(from, fieldName);
+            bool actual = to.Replace(from, fieldName);
             Assert.False(actual);
         }
 
         [Fact]
-        public void ReplaceField_ValidKey_True()
+        public void Replace_ValidKey_True()
         {
             TestModelBackedItem? from = new TestModelBackedItem();
-            from.SetFieldValue(TestDictionaryBase.NameKey, "value");
+            from.Write(TestDictionaryBase.NameKey, "value");
             TestModelBackedItem? to = new TestModelBackedItem();
             string? fieldName = TestDictionaryBase.NameKey;
-            bool actual = to.ReplaceField(from, fieldName);
+            bool actual = to.Replace(from, fieldName);
             Assert.True(actual);
-            Assert.Equal("value", to.GetStringFieldValue(TestDictionaryBase.NameKey));
+            Assert.Equal("value", to.ReadString(TestDictionaryBase.NameKey));
         }
 
         #endregion
 
-        #region SetField
+        #region WriteWithValidation
 
         [Fact]
-        public void SetField_NullItem_False()
+        public void WriteWithValidation_NullItem_False()
         {
             TestModelBackedItem? modelBackedItem = null;
             string? fieldName = TestDictionaryBase.NameKey;
             object value = "value";
-            bool? actual = modelBackedItem?.SetField(fieldName, value);
+            bool? actual = modelBackedItem?.WriteWithValidation(fieldName, value);
             Assert.Null(actual);
         }
 
         [Fact]
-        public void SetField_EmptyFieldName_False()
+        public void WriteWithValidation_EmptyFieldName_False()
         {
             TestModelBackedItem? modelBackedItem = new TestModelBackedItem();
             string? fieldName = string.Empty;
             object value = "value";
-            bool actual = modelBackedItem.SetField(fieldName, value);
+            bool actual = modelBackedItem.WriteWithValidation(fieldName, value);
             Assert.False(actual);
         }
 
         [Fact]
-        public void SetField_MissingKey_False()
+        public void WriteWithValidation_MissingKey_False()
         {
             TestModelBackedItem? modelBackedItem = new TestModelBackedItem();
             string? fieldName = Rom.SHA1Key;
             object value = "value";
-            bool actual = modelBackedItem.SetField(fieldName, value);
+            bool actual = modelBackedItem.WriteWithValidation(fieldName, value);
             Assert.False(actual);
         }
 
         [Fact]
-        public void SetField_InvalidKey_True()
+        public void WriteWithValidation_InvalidKey_True()
         {
             TestModelBackedItem? modelBackedItem = new TestModelBackedItem();
-            modelBackedItem.SetFieldValue(TestDictionaryBase.NameKey, "old");
+            modelBackedItem.Write(TestDictionaryBase.NameKey, "old");
             string? fieldName = "INVALID";
             object value = "value";
-            bool actual = modelBackedItem.SetField(fieldName, value);
+            bool actual = modelBackedItem.WriteWithValidation(fieldName, value);
             Assert.False(actual);
-            Assert.Null(modelBackedItem.GetStringFieldValue(fieldName));
+            Assert.Null(modelBackedItem.ReadString(fieldName));
         }
 
         [Fact]
-        public void SetField_ValidKey_True()
+        public void WriteWithValidation_ValidKey_True()
         {
             TestModelBackedItem? modelBackedItem = new TestModelBackedItem();
-            modelBackedItem.SetFieldValue(TestDictionaryBase.NameKey, "old");
+            modelBackedItem.Write(TestDictionaryBase.NameKey, "old");
             string? fieldName = TestDictionaryBase.NameKey;
             object value = "value";
-            bool actual = modelBackedItem.SetField(fieldName, value);
+            bool actual = modelBackedItem.WriteWithValidation(fieldName, value);
             Assert.True(actual);
-            Assert.Equal(value, modelBackedItem.GetStringFieldValue(fieldName));
+            Assert.Equal(value, modelBackedItem.ReadString(fieldName));
         }
 
         #endregion

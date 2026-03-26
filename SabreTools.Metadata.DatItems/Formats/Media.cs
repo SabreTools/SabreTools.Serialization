@@ -22,25 +22,25 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Media() : base()
         {
-            SetFieldValue<DupeType>(DupeTypeKey, 0x00);
+            Write<DupeType>(DupeTypeKey, 0x00);
         }
 
         public Media(Data.Models.Metadata.Media item) : base(item)
         {
-            SetFieldValue<DupeType>(DupeTypeKey, 0x00);
+            Write<DupeType>(DupeTypeKey, 0x00);
 
             // Process hash values
-            if (GetStringFieldValue(Data.Models.Metadata.Media.MD5Key) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(GetStringFieldValue(Data.Models.Metadata.Media.MD5Key)));
-            if (GetStringFieldValue(Data.Models.Metadata.Media.SHA1Key) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(GetStringFieldValue(Data.Models.Metadata.Media.SHA1Key)));
-            if (GetStringFieldValue(Data.Models.Metadata.Media.SHA256Key) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(GetStringFieldValue(Data.Models.Metadata.Media.SHA256Key)));
+            if (ReadString(Data.Models.Metadata.Media.MD5Key) is not null)
+                Write<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(ReadString(Data.Models.Metadata.Media.MD5Key)));
+            if (ReadString(Data.Models.Metadata.Media.SHA1Key) is not null)
+                Write<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(ReadString(Data.Models.Metadata.Media.SHA1Key)));
+            if (ReadString(Data.Models.Metadata.Media.SHA256Key) is not null)
+                Write<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(ReadString(Data.Models.Metadata.Media.SHA256Key)));
         }
 
         public Media(Data.Models.Metadata.Media item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 
@@ -56,10 +56,10 @@ namespace SabreTools.Metadata.DatItems.Formats
         {
             var rom = new Rom(_internal.ConvertToRom()!);
 
-            rom.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            rom.SetFieldValue(MachineKey, GetMachine());
-            rom.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            rom.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
+            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            rom.Write(MachineKey, GetMachine());
+            rom.Write(RemoveKey, ReadBool(RemoveKey));
+            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
 
             return rom;
         }
@@ -102,19 +102,19 @@ namespace SabreTools.Metadata.DatItems.Formats
             switch (bucketedBy)
             {
                 case ItemKey.MD5:
-                    key = GetStringFieldValue(Data.Models.Metadata.Media.MD5Key);
+                    key = ReadString(Data.Models.Metadata.Media.MD5Key);
                     break;
 
                 case ItemKey.SHA1:
-                    key = GetStringFieldValue(Data.Models.Metadata.Media.SHA1Key);
+                    key = ReadString(Data.Models.Metadata.Media.SHA1Key);
                     break;
 
                 case ItemKey.SHA256:
-                    key = GetStringFieldValue(Data.Models.Metadata.Media.SHA256Key);
+                    key = ReadString(Data.Models.Metadata.Media.SHA256Key);
                     break;
 
                 case ItemKey.SpamSum:
-                    key = GetStringFieldValue(Data.Models.Metadata.Media.SpamSumKey);
+                    key = ReadString(Data.Models.Metadata.Media.SpamSumKey);
                     break;
 
                 // Let the base handle generic stuff

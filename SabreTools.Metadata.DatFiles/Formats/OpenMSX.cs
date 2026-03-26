@@ -60,7 +60,7 @@ The softwaredb.xml file contains information about rom mapper types
         /// <param name="datFile">Parent DatFile to copy from</param>
         public OpenMSX(DatFile? datFile) : base(datFile)
         {
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.OpenMSX);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.OpenMSX);
         }
 
         /// <inheritdoc/>
@@ -75,7 +75,7 @@ The softwaredb.xml file contains information about rom mapper types
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA1Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
                     break;
 

@@ -25,7 +25,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha256File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA256;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSHA256);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA256);
         }
 
         /// <inheritdoc/>
@@ -40,12 +40,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Media medium:
-                    if (string.IsNullOrEmpty(medium.GetStringFieldValue(Data.Models.Metadata.Media.SHA256Key)))
+                    if (string.IsNullOrEmpty(medium.ReadString(Data.Models.Metadata.Media.SHA256Key)))
                         missingFields.Add(Data.Models.Metadata.Media.SHA256Key);
                     break;
 
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA256Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA256Key);
                     break;
 

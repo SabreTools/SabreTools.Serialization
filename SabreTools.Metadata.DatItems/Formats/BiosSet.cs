@@ -23,13 +23,13 @@ namespace SabreTools.Metadata.DatItems.Formats
         public BiosSet(Data.Models.Metadata.BiosSet item) : base(item)
         {
             // Process flag values
-            if (GetBoolFieldValue(Data.Models.Metadata.BiosSet.DefaultKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.BiosSet.DefaultKey, GetBoolFieldValue(Data.Models.Metadata.BiosSet.DefaultKey).FromYesNo());
+            if (ReadBool(Data.Models.Metadata.BiosSet.DefaultKey) is not null)
+                Write<string?>(Data.Models.Metadata.BiosSet.DefaultKey, ReadBool(Data.Models.Metadata.BiosSet.DefaultKey).FromYesNo());
         }
 
         public BiosSet(Data.Models.Metadata.BiosSet item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

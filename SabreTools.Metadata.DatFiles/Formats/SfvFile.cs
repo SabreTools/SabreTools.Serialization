@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public SfvFile(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.CRC32;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSFV);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSFV);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.CRCKey)))
                         missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
                     break;
 

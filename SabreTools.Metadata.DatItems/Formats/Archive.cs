@@ -91,7 +91,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Archive(Data.Models.Metadata.Archive item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

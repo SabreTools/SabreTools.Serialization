@@ -108,7 +108,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         public Serials()
         {
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
         }
 
         #endregion
@@ -135,11 +135,11 @@ namespace SabreTools.Metadata.DatItems.Formats
                 MediaStamp = this.MediaStamp,
                 BoxBarcode = this.BoxBarcode,
             };
-            serials.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            serials.SetFieldValue(MachineKey, GetMachine());
-            serials.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            serials.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
-            serials.SetFieldValue<string?>(Data.Models.Metadata.DatItem.TypeKey, GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
+            serials.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            serials.Write(MachineKey, GetMachine());
+            serials.Write(RemoveKey, ReadBool(RemoveKey));
+            serials.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            serials.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
 
             return serials;
         }
@@ -152,7 +152,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override bool Equals(DatItem? other)
         {
             // If we don't have a Serials, return false
-            if (GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey) != other?.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey))
+            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
                 return false;
 
             // Otherwise, treat it as a Serials

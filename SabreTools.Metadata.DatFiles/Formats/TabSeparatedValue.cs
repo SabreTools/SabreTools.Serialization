@@ -13,7 +13,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public TabSeparatedValue(DatFile? datFile) : base(datFile)
         {
             _delim = '\t';
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.TSV);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.TSV);
         }
     }
 }

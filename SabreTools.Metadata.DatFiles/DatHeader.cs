@@ -32,7 +32,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             get
             {
-                var canOpen = GetStringArrayFieldValue(Data.Models.Metadata.Header.CanOpenKey);
+                var canOpen = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey);
                 return canOpen is not null && canOpen.Length > 0;
             }
         }
@@ -42,7 +42,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             get
             {
-                return GetFieldValue<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey) is not null;
+                return Read<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey) is not null;
             }
         }
 
@@ -51,7 +51,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             get
             {
-                return GetFieldValue<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey) is not null;
+                return Read<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey) is not null;
             }
         }
 
@@ -60,7 +60,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             get
             {
-                return GetFieldValue<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey) is not null;
+                return Read<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey) is not null;
             }
         }
 
@@ -69,7 +69,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             get
             {
-                return GetFieldValue<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey) is not null;
+                return Read<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey) is not null;
             }
         }
 
@@ -137,7 +137,7 @@ namespace SabreTools.Metadata.DatFiles
         {
             var header = new DatHeader();
 
-            header.SetFieldValue(DatFormatKey, GetFieldValue<DatFormat>(DatFormatKey));
+            header.Write(DatFormatKey, Read<DatFormat>(DatFormatKey));
 
             return header;
         }
@@ -165,15 +165,15 @@ namespace SabreTools.Metadata.DatFiles
 
             // Convert subheader values
             if (CanOpenSpecified)
-                header[Data.Models.Metadata.Header.CanOpenKey] = new Data.Models.OfflineList.CanOpen { Extension = GetStringArrayFieldValue(Data.Models.Metadata.Header.CanOpenKey) };
+                header[Data.Models.Metadata.Header.CanOpenKey] = new Data.Models.OfflineList.CanOpen { Extension = ReadStringArray(Data.Models.Metadata.Header.CanOpenKey) };
             if (ImagesSpecified)
-                header[Data.Models.Metadata.Header.ImagesKey] = GetFieldValue<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+                header[Data.Models.Metadata.Header.ImagesKey] = Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
             if (InfosSpecified)
-                header[Data.Models.Metadata.Header.InfosKey] = GetFieldValue<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+                header[Data.Models.Metadata.Header.InfosKey] = Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
             if (NewDatSpecified)
-                header[Data.Models.Metadata.Header.NewDatKey] = GetFieldValue<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+                header[Data.Models.Metadata.Header.NewDatKey] = Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
             if (SearchSpecified)
-                header[Data.Models.Metadata.Header.SearchKey] = GetFieldValue<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+                header[Data.Models.Metadata.Header.SearchKey] = Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
 
             return header;
         }

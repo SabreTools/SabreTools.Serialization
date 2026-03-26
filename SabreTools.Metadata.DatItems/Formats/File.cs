@@ -102,7 +102,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         public File()
         {
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType);
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
         }
 
         #endregion
@@ -123,10 +123,10 @@ namespace SabreTools.Metadata.DatItems.Formats
                 _sha256 = this._sha256,
                 Format = this.Format,
             };
-            file.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            file.SetFieldValue(MachineKey, GetMachine()!.Clone() as Machine ?? new Machine());
-            file.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            file.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
+            file.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            file.Write(MachineKey, GetMachine()!.Clone() as Machine ?? new Machine());
+            file.Write(RemoveKey, ReadBool(RemoveKey));
+            file.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
 
             return file;
         }
@@ -140,16 +140,16 @@ namespace SabreTools.Metadata.DatItems.Formats
             var rom = new Rom();
 
             rom.SetName($"{Id}.{Extension}");
-            rom.SetFieldValue(Data.Models.Metadata.Rom.SizeKey, Size);
-            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.CRCKey, CRC);
-            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.MD5Key, MD5);
-            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA1Key, SHA1);
-            rom.SetFieldValue<string?>(Data.Models.Metadata.Rom.SHA256Key, SHA256);
+            rom.Write(Data.Models.Metadata.Rom.SizeKey, Size);
+            rom.Write<string?>(Data.Models.Metadata.Rom.CRCKey, CRC);
+            rom.Write<string?>(Data.Models.Metadata.Rom.MD5Key, MD5);
+            rom.Write<string?>(Data.Models.Metadata.Rom.SHA1Key, SHA1);
+            rom.Write<string?>(Data.Models.Metadata.Rom.SHA256Key, SHA256);
 
-            rom.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            rom.SetFieldValue(MachineKey, GetMachine()?.Clone() as Machine);
-            rom.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            rom.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
+            rom.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            rom.Write(MachineKey, GetMachine()?.Clone() as Machine);
+            rom.Write(RemoveKey, ReadBool(RemoveKey));
+            rom.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
 
             return rom;
         }
@@ -164,7 +164,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             bool dupefound = false;
 
             // If we don't have a file, return false
-            if (GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey) != other?.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey))
+            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
                 return dupefound;
 
             // Otherwise, treat it as a File

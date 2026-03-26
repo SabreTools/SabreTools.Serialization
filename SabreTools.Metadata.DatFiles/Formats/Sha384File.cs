@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
         public Sha384File(DatFile? datFile) : base(datFile)
         {
             _hash = HashType.SHA384;
-            Header.SetFieldValue(DatHeader.DatFormatKey, DatFormat.RedumpSHA384);
+            Header.Write(DatHeader.DatFormatKey, DatFormat.RedumpSHA384);
         }
 
         /// <inheritdoc/>
@@ -39,7 +39,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
             switch (datItem)
             {
                 case Rom rom:
-                    if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA384Key)))
+                    if (string.IsNullOrEmpty(rom.ReadString(Data.Models.Metadata.Rom.SHA384Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA384Key);
                     break;
 

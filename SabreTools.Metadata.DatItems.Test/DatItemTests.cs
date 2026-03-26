@@ -52,7 +52,7 @@ namespace SabreTools.Metadata.DatItems.Test
             var romA = new Rom();
 
             var romB = new Rom();
-            romB.RemoveField(DatItem.MachineKey);
+            romB.Remove(DatItem.MachineKey);
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
@@ -67,10 +67,10 @@ namespace SabreTools.Metadata.DatItems.Test
             machineA.SetName("machineA");
 
             var romA = new Rom();
-            romA.SetFieldValue(DatItem.MachineKey, machineA);
+            romA.Write(DatItem.MachineKey, machineA);
 
             var romB = new Rom();
-            romB.RemoveField(DatItem.MachineKey);
+            romB.Remove(DatItem.MachineKey);
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
@@ -87,10 +87,10 @@ namespace SabreTools.Metadata.DatItems.Test
             Machine? machineB = null;
 
             var romA = new Rom();
-            romA.SetFieldValue(DatItem.MachineKey, machineA);
+            romA.Write(DatItem.MachineKey, machineA);
 
             var romB = new Rom();
-            romB.SetFieldValue(DatItem.MachineKey, machineB);
+            romB.Write(DatItem.MachineKey, machineB);
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
@@ -107,10 +107,10 @@ namespace SabreTools.Metadata.DatItems.Test
             Machine? machineB = new Machine();
 
             var romA = new Rom();
-            romA.SetFieldValue(DatItem.MachineKey, machineA);
+            romA.Write(DatItem.MachineKey, machineA);
 
             var romB = new Rom();
-            romB.SetFieldValue(DatItem.MachineKey, machineB);
+            romB.Write(DatItem.MachineKey, machineB);
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
@@ -128,10 +128,10 @@ namespace SabreTools.Metadata.DatItems.Test
             machineB.SetName("machineB");
 
             var romA = new Rom();
-            romA.SetFieldValue(DatItem.MachineKey, machineA);
+            romA.Write(DatItem.MachineKey, machineA);
 
             var romB = new Rom();
-            romB.SetFieldValue(DatItem.MachineKey, machineB);
+            romB.Write(DatItem.MachineKey, machineB);
 
             romA.CopyMachineInformation(romB);
             var actualMachineA = romA.GetMachine();
@@ -149,10 +149,10 @@ namespace SabreTools.Metadata.DatItems.Test
             machineB.SetName("machineB");
 
             var romA = new Rom();
-            romA.SetFieldValue(DatItem.MachineKey, machineA);
+            romA.Write(DatItem.MachineKey, machineA);
 
             var diskB = new Disk();
-            diskB.SetFieldValue(DatItem.MachineKey, machineB);
+            diskB.Write(DatItem.MachineKey, machineB);
 
             romA.CopyMachineInformation(diskB);
             var actualMachineA = romA.GetMachine();
@@ -208,11 +208,11 @@ namespace SabreTools.Metadata.DatItems.Test
         {
             DatItem self = new Rom();
             self.SetName(selfName);
-            self.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            self.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
 
             DatItem? other = new Rom();
             other.SetName(otherName);
-            other.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            other.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
 
             int actual = self.CompareTo(other);
             Assert.Equal(expected, actual);
@@ -349,7 +349,7 @@ namespace SabreTools.Metadata.DatItems.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
 
             DatItem datItem = new Blank();
 
@@ -423,22 +423,22 @@ namespace SabreTools.Metadata.DatItems.Test
             Source source = new Source(0);
 
             Machine machine = new Machine();
-            machine.SetFieldValue(Data.Models.Metadata.Machine.NameKey, "Machine");
+            machine.Write(Data.Models.Metadata.Machine.NameKey, "Machine");
 
             DatItem datItem = new Rom();
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD128Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.RIPEMD160Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA1Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA256Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA384Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SHA512Key, "DEADBEEF");
-            datItem.SetFieldValue(Data.Models.Metadata.Rom.SpamSumKey, "BASE64");
+            datItem.Write(Data.Models.Metadata.Rom.CRC16Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.CRCKey, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.CRC64Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.MD2Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.MD4Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.MD5Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD128Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.RIPEMD160Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.SHA1Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.SHA256Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.SHA384Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.SHA512Key, "DEADBEEF");
+            datItem.Write(Data.Models.Metadata.Rom.SpamSumKey, "BASE64");
 
             string actual = datItem.GetKey(bucketedBy, machine, source, lower, norename);
             Assert.Equal(expected, actual);
@@ -452,7 +452,7 @@ namespace SabreTools.Metadata.DatItems.Test
         public void GetName_NoNameKey_Null()
         {
             DatItem item = new TestDatItem(nameKey: null);
-            item.SetFieldValue(TestDatItemModel.NameKey, "name");
+            item.Write(TestDatItemModel.NameKey, "name");
 
             string? actual = item.GetName();
             Assert.Null(actual);
@@ -462,7 +462,7 @@ namespace SabreTools.Metadata.DatItems.Test
         public void GetName_EmptyNameKey_Null()
         {
             DatItem item = new TestDatItem(nameKey: string.Empty);
-            item.SetFieldValue(TestDatItemModel.NameKey, "name");
+            item.Write(TestDatItemModel.NameKey, "name");
 
             string? actual = item.GetName();
             Assert.Null(actual);
@@ -472,7 +472,7 @@ namespace SabreTools.Metadata.DatItems.Test
         public void GetName_NameKeyNotExists_Null()
         {
             DatItem item = new TestDatItem(nameKey: "INVALID");
-            item.SetFieldValue(TestDatItemModel.NameKey, "name");
+            item.Write(TestDatItemModel.NameKey, "name");
 
             string? actual = item.GetName();
             Assert.Null(actual);
@@ -482,7 +482,7 @@ namespace SabreTools.Metadata.DatItems.Test
         public void GetName_NameKeyExists_Filled()
         {
             DatItem item = new TestDatItem(nameKey: TestDatItemModel.NameKey);
-            item.SetFieldValue(TestDatItemModel.NameKey, "name");
+            item.Write(TestDatItemModel.NameKey, "name");
 
             string? actual = item.GetName();
             Assert.Equal("name", actual);

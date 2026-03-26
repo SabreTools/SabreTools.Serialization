@@ -24,7 +24,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SharedFeat(Data.Models.Metadata.SharedFeat item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

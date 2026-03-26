@@ -23,8 +23,8 @@ namespace SabreTools.Metadata.DatItems.Formats
         public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item)
         {
             // Process flag values
-            if (GetStringFieldValue(Data.Models.Metadata.SoftwareList.StatusKey) is not null)
-                SetFieldValue<string?>(Data.Models.Metadata.SoftwareList.StatusKey, GetStringFieldValue(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus().AsStringValue());
+            if (ReadString(Data.Models.Metadata.SoftwareList.StatusKey) is not null)
+                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus().AsStringValue());
 
             // Handle subitems
             // TODO: Handle the Software subitem
@@ -32,7 +32,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public SoftwareList(Data.Models.Metadata.SoftwareList item, Machine machine, Source source) : this(item)
         {
-            SetFieldValue<Source?>(SourceKey, source);
+            Write<Source?>(SourceKey, source);
             CopyMachineInformation(machine);
         }
 

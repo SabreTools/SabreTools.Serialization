@@ -145,7 +145,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         /// </summary>
         public SourceDetails()
         {
-            SetFieldValue(Data.Models.Metadata.DatItem.TypeKey, ItemType.SourceDetails);
+            Write(Data.Models.Metadata.DatItem.TypeKey, ItemType.SourceDetails);
         }
 
         #endregion
@@ -178,11 +178,11 @@ namespace SabreTools.Metadata.DatItems.Formats
                 Link2 = this.Link2,
                 Link3 = this.Link3,
             };
-            sourceDetails.SetFieldValue(DupeTypeKey, GetFieldValue<DupeType>(DupeTypeKey));
-            sourceDetails.SetFieldValue(MachineKey, GetMachine());
-            sourceDetails.SetFieldValue(RemoveKey, GetBoolFieldValue(RemoveKey));
-            sourceDetails.SetFieldValue<Source?>(SourceKey, GetFieldValue<Source?>(SourceKey));
-            sourceDetails.SetFieldValue<string?>(Data.Models.Metadata.DatItem.TypeKey, GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
+            sourceDetails.Write(DupeTypeKey, Read<DupeType>(DupeTypeKey));
+            sourceDetails.Write(MachineKey, GetMachine());
+            sourceDetails.Write(RemoveKey, ReadBool(RemoveKey));
+            sourceDetails.Write<Source?>(SourceKey, Read<Source?>(SourceKey));
+            sourceDetails.Write<string?>(Data.Models.Metadata.DatItem.TypeKey, ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType().AsStringValue());
 
             return sourceDetails;
         }
@@ -195,7 +195,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public override bool Equals(DatItem? other)
         {
             // If we don't have a SourceDetails, return false
-            if (GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey) != other?.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey))
+            if (ReadString(Data.Models.Metadata.DatItem.TypeKey) != other?.ReadString(Data.Models.Metadata.DatItem.TypeKey))
                 return false;
 
             // Otherwise, treat it as a SourceDetails
