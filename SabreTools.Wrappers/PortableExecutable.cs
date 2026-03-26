@@ -244,7 +244,7 @@ namespace SabreTools.Wrappers
                     }
 
                     // Read the section into a local array
-                    var sectionLength = (int)section.VirtualSize;
+                    var sectionLength = (int)section.SizeOfRawData;
                     var sectionData = ReadRangeFromSource(offset, sectionLength);
                     if (sectionData.Length == 0)
                     {
