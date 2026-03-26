@@ -57,59 +57,57 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(lump.Offset, "    Offset");
                 builder.AppendLine(lump.Length, "    Length");
 
-#pragma warning disable IDE0010
-                switch ((LumpType)i)
+                switch ((BspLumpType)i)
                 {
-                    case LumpType.LUMP_ENTITIES:
+                    case BspLumpType.LUMP_ENTITIES:
                         Print(builder, model.Entities);
                         break;
-                    case LumpType.LUMP_PLANES:
+                    case BspLumpType.LUMP_PLANES:
                         Print(builder, model.PlanesLump);
                         break;
-                    case LumpType.LUMP_TEXTURES:
+                    case BspLumpType.LUMP_TEXTURES:
                         Print(builder, model.TextureLump);
                         break;
-                    case LumpType.LUMP_VERTICES:
+                    case BspLumpType.LUMP_VERTICES:
                         Print(builder, model.VerticesLump);
                         break;
-                    case LumpType.LUMP_VISIBILITY:
+                    case BspLumpType.LUMP_VISIBILITY:
                         Print(builder, model.VisibilityLump);
                         break;
-                    case LumpType.LUMP_NODES:
+                    case BspLumpType.LUMP_NODES:
                         Print(builder, model.NodesLump);
                         break;
-                    case LumpType.LUMP_TEXINFO:
+                    case BspLumpType.LUMP_TEXINFO:
                         Print(builder, model.TexinfoLump);
                         break;
-                    case LumpType.LUMP_FACES:
+                    case BspLumpType.LUMP_FACES:
                         Print(builder, model.FacesLump);
                         break;
-                    case LumpType.LUMP_LIGHTING:
+                    case BspLumpType.LUMP_LIGHTING:
                         Print(builder, model.LightmapLump);
                         break;
-                    case LumpType.LUMP_CLIPNODES:
+                    case BspLumpType.LUMP_CLIPNODES:
                         Print(builder, model.ClipnodesLump);
                         break;
-                    case LumpType.LUMP_LEAVES:
+                    case BspLumpType.LUMP_LEAVES:
                         Print(builder, model.LeavesLump);
                         break;
-                    case LumpType.LUMP_MARKSURFACES:
+                    case BspLumpType.LUMP_MARKSURFACES:
                         Print(builder, model.MarksurfacesLump);
                         break;
-                    case LumpType.LUMP_EDGES:
+                    case BspLumpType.LUMP_EDGES:
                         Print(builder, model.EdgesLump);
                         break;
-                    case LumpType.LUMP_SURFEDGES:
+                    case BspLumpType.LUMP_SURFEDGES:
                         Print(builder, model.SurfedgesLump);
                         break;
-                    case LumpType.LUMP_MODELS:
+                    case BspLumpType.LUMP_MODELS:
                         Print(builder, model.ModelsLump);
                         break;
                     default:
-                        builder.AppendLine($"    Unsupported lump type: {(LumpType)i} (0x{i:X4})");
+                        builder.AppendLine($"    Unsupported lump type: {(BspLumpType)i} (0x{i:X4})");
                         break;
                 }
-#pragma warning restore IDE0010
             }
 
             builder.AppendLine();
@@ -117,27 +115,25 @@ namespace SabreTools.Wrappers
 
         private static string GetLumpName(int i)
         {
-#pragma warning disable IDE0072
-            return (LumpType)i switch
+            return (BspLumpType)i switch
             {
-                LumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
-                LumpType.LUMP_PLANES => " - LUMP_PLANES",
-                LumpType.LUMP_TEXTURES => " - LUMP_TEXTURES",
-                LumpType.LUMP_VERTICES => " - LUMP_VERTICES",
-                LumpType.LUMP_VISIBILITY => " - LUMP_VISIBILITY",
-                LumpType.LUMP_NODES => " - LUMP_NODES",
-                LumpType.LUMP_TEXINFO => " - LUMP_TEXINFO",
-                LumpType.LUMP_FACES => " - LUMP_FACES",
-                LumpType.LUMP_LIGHTING => " - LUMP_LIGHTING",
-                LumpType.LUMP_CLIPNODES => " - LUMP_CLIPNODES",
-                LumpType.LUMP_LEAVES => " - LUMP_LEAVES",
-                LumpType.LUMP_MARKSURFACES => " - LUMP_MARKSURFACES",
-                LumpType.LUMP_EDGES => " - LUMP_EDGES",
-                LumpType.LUMP_SURFEDGES => " - LUMP_SURFEDGES",
-                LumpType.LUMP_MODELS => " - LUMP_MODELS",
+                BspLumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
+                BspLumpType.LUMP_PLANES => " - LUMP_PLANES",
+                BspLumpType.LUMP_TEXTURES => " - LUMP_TEXTURES",
+                BspLumpType.LUMP_VERTICES => " - LUMP_VERTICES",
+                BspLumpType.LUMP_VISIBILITY => " - LUMP_VISIBILITY",
+                BspLumpType.LUMP_NODES => " - LUMP_NODES",
+                BspLumpType.LUMP_TEXINFO => " - LUMP_TEXINFO",
+                BspLumpType.LUMP_FACES => " - LUMP_FACES",
+                BspLumpType.LUMP_LIGHTING => " - LUMP_LIGHTING",
+                BspLumpType.LUMP_CLIPNODES => " - LUMP_CLIPNODES",
+                BspLumpType.LUMP_LEAVES => " - LUMP_LEAVES",
+                BspLumpType.LUMP_MARKSURFACES => " - LUMP_MARKSURFACES",
+                BspLumpType.LUMP_EDGES => " - LUMP_EDGES",
+                BspLumpType.LUMP_SURFEDGES => " - LUMP_SURFEDGES",
+                BspLumpType.LUMP_MODELS => " - LUMP_MODELS",
                 _ => string.Empty,
             };
-#pragma warning restore IDE0072
         }
 
         private static void Print(StringBuilder builder, EntitiesLump lump)

@@ -61,203 +61,203 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
 
                     // Read according to the lump type
-                    switch ((LumpType)l)
+                    switch ((VbspLumpType)l)
                     {
-                        case LumpType.LUMP_ENTITIES:
+                        case VbspLumpType.LUMP_ENTITIES:
                             file.Entities = ParseEntitiesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_PLANES:
+                        case VbspLumpType.LUMP_PLANES:
                             file.PlanesLump = ParsePlanesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXTURES:
+                        case VbspLumpType.LUMP_TEXTURES:
                             file.TexdataLump = ParseTexdataLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_VERTICES:
+                        case VbspLumpType.LUMP_VERTICES:
                             file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_VISIBILITY:
+                        case VbspLumpType.LUMP_VISIBILITY:
                             file.VisibilityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_NODES:
+                        case VbspLumpType.LUMP_NODES:
                             file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXINFO:
+                        case VbspLumpType.LUMP_TEXINFO:
                             file.TexinfoLump = ParseTexinfoLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_FACES:
+                        case VbspLumpType.LUMP_FACES:
                             file.FacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LIGHTING:
+                        case VbspLumpType.LUMP_LIGHTING:
                             file.LightmapLump = ParseLightmapLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_CLIPNODES:
+                        case VbspLumpType.LUMP_CLIPNODES:
                             file.OcclusionLump = ParseOcclusionLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAVES:
+                        case VbspLumpType.LUMP_LEAVES:
                             file.LeavesLump = ParseLeavesLump(data, lumpEntry.Version, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_MARKSURFACES:
+                        case VbspLumpType.LUMP_MARKSURFACES:
                             file.MarksurfacesLump = ParseMarksurfacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_EDGES:
+                        case VbspLumpType.LUMP_EDGES:
                             file.EdgesLump = ParseEdgesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_SURFEDGES:
+                        case VbspLumpType.LUMP_SURFEDGES:
                             file.SurfedgesLump = ParseSurfedgesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_MODELS:
+                        case VbspLumpType.LUMP_MODELS:
                             file.ModelsLump = ParseModelsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_WORLDLIGHTS:
+                        case VbspLumpType.LUMP_WORLDLIGHTS:
                             file.LDRWorldLightsLump = ParseWorldLightsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAFFACES:
+                        case VbspLumpType.LUMP_LEAFFACES:
                             file.LeafFacesLump = ParseLeafFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAFBRUSHES:
+                        case VbspLumpType.LUMP_LEAFBRUSHES:
                             file.LeafBrushesLump = ParseLeafBrushesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_BRUSHES:
+                        case VbspLumpType.LUMP_BRUSHES:
                             file.BrushesLump = ParseBrushesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_BRUSHSIDES:
+                        case VbspLumpType.LUMP_BRUSHSIDES:
                             file.BrushsidesLump = ParseBrushsidesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_AREAS:
+                        case VbspLumpType.LUMP_AREAS:
                             // TODO: Support LUMP_AREAS [20] when in Models
                             break;
-                        case LumpType.LUMP_AREAPORTALS:
+                        case VbspLumpType.LUMP_AREAPORTALS:
                             // TODO: Support LUMP_AREAPORTALS [21] when in Models
                             break;
-                        case LumpType.LUMP_PORTALS:
+                        case VbspLumpType.LUMP_PORTALS:
                             // TODO: Support LUMP_PORTALS / LUMP_UNUSED0 / LUMP_PROPCOLLISION [22] when in Models
                             break;
-                        case LumpType.LUMP_CLUSTERS:
+                        case VbspLumpType.LUMP_CLUSTERS:
                             // TODO: Support LUMP_CLUSTERS / LUMP_UNUSED1 / LUMP_PROPHULLS [23] when in Models
                             break;
-                        case LumpType.LUMP_PORTALVERTS:
+                        case VbspLumpType.LUMP_PORTALVERTS:
                             // TODO: Support LUMP_PORTALVERTS / LUMP_UNUSED2 / LUMP_FAKEENTITIES / LUMP_PROPHULLVERTS [24] when in Models
                             break;
-                        case LumpType.LUMP_CLUSTERPORTALS:
+                        case VbspLumpType.LUMP_CLUSTERPORTALS:
                             // TODO: Support LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS [25] when in Models
                             break;
-                        case LumpType.LUMP_DISPINFO:
+                        case VbspLumpType.LUMP_DISPINFO:
                             file.DispInfosLump = ParseDispInfosLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_ORIGINALFACES:
+                        case VbspLumpType.LUMP_ORIGINALFACES:
                             file.OriginalFacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_PHYSDISP:
+                        case VbspLumpType.LUMP_PHYSDISP:
                             // TODO: Support LUMP_PHYSDISP [28] when in Models
                             break;
-                        case LumpType.LUMP_PHYSCOLLIDE:
+                        case VbspLumpType.LUMP_PHYSCOLLIDE:
                             file.PhysCollideLump = ParsePhysCollideLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_VERTNORMALS:
+                        case VbspLumpType.LUMP_VERTNORMALS:
                             // TODO: Support LUMP_VERTNORMALS [30] when in Models
                             break;
-                        case LumpType.LUMP_VERTNORMALINDICES:
+                        case VbspLumpType.LUMP_VERTNORMALINDICES:
                             // TODO: Support LUMP_VERTNORMALINDICES [31] when in Models
                             break;
-                        case LumpType.LUMP_DISP_LIGHTMAP_ALPHAS:
+                        case VbspLumpType.LUMP_DISP_LIGHTMAP_ALPHAS:
                             // TODO: Support LUMP_DISP_LIGHTMAP_ALPHAS [32] when in Models
                             break;
-                        case LumpType.LUMP_DISP_VERTS:
+                        case VbspLumpType.LUMP_DISP_VERTS:
                             file.DispVertsLump = ParseDispVertsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
+                        case VbspLumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
                             // TODO: Support LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34] when in Models
                             break;
-                        case LumpType.LUMP_GAME_LUMP:
+                        case VbspLumpType.LUMP_GAME_LUMP:
                             file.GameLump = ParseGameLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAFWATERDATA:
+                        case VbspLumpType.LUMP_LEAFWATERDATA:
                             // TODO: Support LUMP_LEAFWATERDATA [36] when in Models
                             break;
-                        case LumpType.LUMP_PRIMITIVES:
+                        case VbspLumpType.LUMP_PRIMITIVES:
                             // TODO: Support LUMP_PRIMITIVES [37] when in Models
                             break;
-                        case LumpType.LUMP_PRIMVERTS:
+                        case VbspLumpType.LUMP_PRIMVERTS:
                             // TODO: Support LUMP_PRIMVERTS [38] when in Models
                             break;
-                        case LumpType.LUMP_PRIMINDICES:
+                        case VbspLumpType.LUMP_PRIMINDICES:
                             // TODO: Support LUMP_PRIMINDICES [39] when in Models
                             break;
-                        case LumpType.LUMP_PAKFILE:
+                        case VbspLumpType.LUMP_PAKFILE:
                             file.PakfileLump = ParsePakfileLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_CLIPPORTALVERTS:
+                        case VbspLumpType.LUMP_CLIPPORTALVERTS:
                             // TODO: Support LUMP_CLIPPORTALVERTS [41] when in Models
                             break;
-                        case LumpType.LUMP_CUBEMAPS:
+                        case VbspLumpType.LUMP_CUBEMAPS:
                             file.CubemapsLump = ParseCubemapsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXDATA_STRING_DATA:
+                        case VbspLumpType.LUMP_TEXDATA_STRING_DATA:
                             file.TexdataStringData = ParseTexdataStringData(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXDATA_STRING_TABLE:
+                        case VbspLumpType.LUMP_TEXDATA_STRING_TABLE:
                             file.TexdataStringTable = ParseTexdataStringTable(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_OVERLAYS:
+                        case VbspLumpType.LUMP_OVERLAYS:
                             file.OverlaysLump = ParseOverlaysLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAFMINDISTTOWATER:
+                        case VbspLumpType.LUMP_LEAFMINDISTTOWATER:
                             // TODO: Support LUMP_LEAFMINDISTTOWATER [46] when in Models
                             break;
-                        case LumpType.LUMP_FACE_MACRO_TEXTURE_INFO:
+                        case VbspLumpType.LUMP_FACE_MACRO_TEXTURE_INFO:
                             // TODO: Support LUMP_FACE_MACRO_TEXTURE_INFO [47] when in Models
                             break;
-                        case LumpType.LUMP_DISP_TRIS:
+                        case VbspLumpType.LUMP_DISP_TRIS:
                             file.DispTrisLump = ParseDispTrisLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_PHYSCOLLIDESURFACE:
+                        case VbspLumpType.LUMP_PHYSCOLLIDESURFACE:
                             // TODO: Support LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB [49] when in Models
                             break;
-                        case LumpType.LUMP_WATEROVERLAYS:
+                        case VbspLumpType.LUMP_WATEROVERLAYS:
                             // TODO: Support LUMP_WATEROVERLAYS [50] when in Models
                             break;
-                        case LumpType.LUMP_LIGHTMAPPAGES:
+                        case VbspLumpType.LUMP_LIGHTMAPPAGES:
                             file.HDRAmbientIndexLump = ParseAmbientIndexLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LIGHTMAPPAGEINFOS:
+                        case VbspLumpType.LUMP_LIGHTMAPPAGEINFOS:
                             file.LDRAmbientIndexLump = ParseAmbientIndexLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LIGHTING_HDR:
+                        case VbspLumpType.LUMP_LIGHTING_HDR:
                             // TODO: Support LUMP_LIGHTING_HDR [53] when in Models
                             break;
-                        case LumpType.LUMP_WORLDLIGHTS_HDR:
+                        case VbspLumpType.LUMP_WORLDLIGHTS_HDR:
                             file.HDRWorldLightsLump = ParseWorldLightsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
+                        case VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
                             file.HDRAmbientLightingLump = ParseAmbientLightingLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAF_AMBIENT_LIGHTING:
+                        case VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING:
                             file.LDRAmbientLightingLump = ParseAmbientLightingLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_XZIPPAKFILE:
+                        case VbspLumpType.LUMP_XZIPPAKFILE:
                             // TODO: Support LUMP_XZIPPAKFILE [57] when in Models
                             break;
-                        case LumpType.LUMP_FACES_HDR:
+                        case VbspLumpType.LUMP_FACES_HDR:
                             // TODO: Support LUMP_FACES_HDR [58] when in Models
                             break;
-                        case LumpType.LUMP_MAP_FLAGS:
+                        case VbspLumpType.LUMP_MAP_FLAGS:
                             // TODO: Support LUMP_MAP_FLAGS [59] when in Models
                             break;
-                        case LumpType.LUMP_OVERLAY_FADES:
+                        case VbspLumpType.LUMP_OVERLAY_FADES:
                             // TODO: Support LUMP_OVERLAY_FADES [60] when in Models
                             break;
-                        case LumpType.LUMP_OVERLAY_SYSTEM_LEVELS:
+                        case VbspLumpType.LUMP_OVERLAY_SYSTEM_LEVELS:
                             // TODO: Support LUMP_OVERLAY_SYSTEM_LEVELS [61] when in Models
                             break;
-                        case LumpType.LUMP_PHYSLEVEL:
+                        case VbspLumpType.LUMP_PHYSLEVEL:
                             // TODO: Support LUMP_PHYSLEVEL [62] when in Models
                             break;
-                        case LumpType.LUMP_DISP_MULTIBLEND:
+                        case VbspLumpType.LUMP_DISP_MULTIBLEND:
                             // TODO: Support LUMP_DISP_MULTIBLEND [63] when in Models
                             break;
 
                         default:
-                            // Unsupported LumpType value, ignore
+                            // Unsupported VbspLumpType value, ignore
                             break;
                     }
                 }

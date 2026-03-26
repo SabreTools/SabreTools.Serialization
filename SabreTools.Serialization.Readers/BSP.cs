@@ -54,63 +54,61 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
 
                     // Read according to the lump type
-#pragma warning disable IDE0010
-                    switch ((LumpType)l)
+                    switch ((BspLumpType)l)
                     {
-                        case LumpType.LUMP_ENTITIES:
+                        case BspLumpType.LUMP_ENTITIES:
                             file.Entities = ParseEntitiesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_PLANES:
+                        case BspLumpType.LUMP_PLANES:
                             file.PlanesLump = ParsePlanesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXTURES:
+                        case BspLumpType.LUMP_TEXTURES:
                             file.TextureLump = ParseTextureLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_VERTICES:
+                        case BspLumpType.LUMP_VERTICES:
                             file.VerticesLump = ParseVerticesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_VISIBILITY:
+                        case BspLumpType.LUMP_VISIBILITY:
                             var visiblityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
                             if (visiblityLump is not null)
                                 file.VisibilityLump = visiblityLump;
 
                             break;
-                        case LumpType.LUMP_NODES:
+                        case BspLumpType.LUMP_NODES:
                             file.NodesLump = ParseNodesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_TEXINFO:
+                        case BspLumpType.LUMP_TEXINFO:
                             file.TexinfoLump = ParseTexinfoLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_FACES:
+                        case BspLumpType.LUMP_FACES:
                             file.FacesLump = ParseFacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LIGHTING:
+                        case BspLumpType.LUMP_LIGHTING:
                             file.LightmapLump = ParseLightmapLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_CLIPNODES:
+                        case BspLumpType.LUMP_CLIPNODES:
                             file.ClipnodesLump = ParseClipnodesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_LEAVES:
+                        case BspLumpType.LUMP_LEAVES:
                             file.LeavesLump = ParseLeavesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_MARKSURFACES:
+                        case BspLumpType.LUMP_MARKSURFACES:
                             file.MarksurfacesLump = ParseMarksurfacesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_EDGES:
+                        case BspLumpType.LUMP_EDGES:
                             file.EdgesLump = ParseEdgesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_SURFEDGES:
+                        case BspLumpType.LUMP_SURFEDGES:
                             file.SurfedgesLump = ParseSurfedgesLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
-                        case LumpType.LUMP_MODELS:
+                        case BspLumpType.LUMP_MODELS:
                             file.ModelsLump = ParseModelsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
 
                         default:
-                            // Unsupported LumpType value, ignore
+                            // Unsupported BspLumpType value, ignore
                             break;
                     }
-#pragma warning restore IDE0010
                 }
 
                 #endregion

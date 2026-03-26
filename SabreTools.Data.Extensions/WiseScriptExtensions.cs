@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 
-#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Data.Extensions
 {
     public static class WiseScriptExtensions
@@ -58,7 +57,9 @@ namespace SabreTools.Data.Extensions
 
                 // External DLL
                 null => null,
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
                 _ => Regex.IsMatch(functionId, @"^f[0-9]{1,2}$") ? $"UNDEFINED {functionId}" : $"External: {functionId}",
+#pragma warning restore SYSLIB1045
             };
         }
     }

@@ -52,231 +52,231 @@ namespace SabreTools.Wrappers
                 builder.AppendLine(lump.Offset, "    Offset");
                 builder.AppendLine(lump.Length, "    Length");
 
-                switch ((LumpType)i)
+                switch ((VbspLumpType)i)
                 {
-                    case LumpType.LUMP_ENTITIES:
+                    case VbspLumpType.LUMP_ENTITIES:
                         Print(builder, model.Entities);
                         break;
-                    case LumpType.LUMP_PLANES:
+                    case VbspLumpType.LUMP_PLANES:
                         Print(builder, model.PlanesLump);
                         break;
-                    case LumpType.LUMP_TEXTURES:
+                    case VbspLumpType.LUMP_TEXTURES:
                         Print(builder, model.TexdataLump);
                         break;
-                    case LumpType.LUMP_VERTICES:
+                    case VbspLumpType.LUMP_VERTICES:
                         Print(builder, model.VerticesLump);
                         break;
-                    case LumpType.LUMP_VISIBILITY:
+                    case VbspLumpType.LUMP_VISIBILITY:
                         Print(builder, model.VisibilityLump);
                         break;
-                    case LumpType.LUMP_NODES:
+                    case VbspLumpType.LUMP_NODES:
                         Print(builder, model.NodesLump);
                         break;
-                    case LumpType.LUMP_TEXINFO:
+                    case VbspLumpType.LUMP_TEXINFO:
                         Print(builder, model.TexinfoLump);
                         break;
-                    case LumpType.LUMP_FACES:
+                    case VbspLumpType.LUMP_FACES:
                         Print(builder, model.FacesLump);
                         break;
-                    case LumpType.LUMP_LIGHTING:
+                    case VbspLumpType.LUMP_LIGHTING:
                         Print(builder, model.LightmapLump);
                         break;
-                    case LumpType.LUMP_CLIPNODES:
+                    case VbspLumpType.LUMP_CLIPNODES:
                         Print(builder, model.OcclusionLump);
                         break;
-                    case LumpType.LUMP_LEAVES:
+                    case VbspLumpType.LUMP_LEAVES:
                         Print(builder, model.LeavesLump, lump.Version);
                         break;
-                    case LumpType.LUMP_MARKSURFACES:
+                    case VbspLumpType.LUMP_MARKSURFACES:
                         Print(builder, model.MarksurfacesLump);
                         break;
-                    case LumpType.LUMP_EDGES:
+                    case VbspLumpType.LUMP_EDGES:
                         Print(builder, model.EdgesLump);
                         break;
-                    case LumpType.LUMP_SURFEDGES:
+                    case VbspLumpType.LUMP_SURFEDGES:
                         Print(builder, model.SurfedgesLump);
                         break;
-                    case LumpType.LUMP_MODELS:
+                    case VbspLumpType.LUMP_MODELS:
                         Print(builder, model.ModelsLump);
                         break;
-                    case LumpType.LUMP_WORLDLIGHTS:
+                    case VbspLumpType.LUMP_WORLDLIGHTS:
                         Print(builder, model.LDRWorldLightsLump);
                         break;
-                    case LumpType.LUMP_LEAFFACES:
+                    case VbspLumpType.LUMP_LEAFFACES:
                         Print(builder, model.LeafFacesLump);
                         break;
-                    case LumpType.LUMP_LEAFBRUSHES:
+                    case VbspLumpType.LUMP_LEAFBRUSHES:
                         Print(builder, model.LeafBrushesLump);
                         break;
-                    case LumpType.LUMP_BRUSHES:
+                    case VbspLumpType.LUMP_BRUSHES:
                         Print(builder, model.BrushesLump);
                         break;
-                    case LumpType.LUMP_BRUSHSIDES:
+                    case VbspLumpType.LUMP_BRUSHSIDES:
                         Print(builder, model.BrushsidesLump);
                         break;
-                    case LumpType.LUMP_AREAS:
+                    case VbspLumpType.LUMP_AREAS:
                         // TODO: Support LUMP_AREAS [20] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_AREAPORTALS:
+                    case VbspLumpType.LUMP_AREAPORTALS:
                         // TODO: Support LUMP_AREAPORTALS [21] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PORTALS:
+                    case VbspLumpType.LUMP_PORTALS:
                         // TODO: Support LUMP_PORTALS / LUMP_UNUSED0 / LUMP_PROPCOLLISION [22] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_CLUSTERS:
+                    case VbspLumpType.LUMP_CLUSTERS:
                         // TODO: Support LUMP_CLUSTERS / LUMP_UNUSED1 / LUMP_PROPHULLS [23] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PORTALVERTS:
+                    case VbspLumpType.LUMP_PORTALVERTS:
                         // TODO: Support LUMP_PORTALVERTS / LUMP_UNUSED2 / LUMP_FAKEENTITIES / LUMP_PROPHULLVERTS [24] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_CLUSTERPORTALS:
+                    case VbspLumpType.LUMP_CLUSTERPORTALS:
                         // TODO: Support LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS [25] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_DISPINFO:
+                    case VbspLumpType.LUMP_DISPINFO:
                         Print(builder, model.DispInfosLump);
                         break;
-                    case LumpType.LUMP_ORIGINALFACES:
+                    case VbspLumpType.LUMP_ORIGINALFACES:
                         Print(builder, model.OriginalFacesLump);
                         break;
-                    case LumpType.LUMP_PHYSDISP:
+                    case VbspLumpType.LUMP_PHYSDISP:
                         // TODO: Support LUMP_PHYSDISP [28] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PHYSCOLLIDE:
+                    case VbspLumpType.LUMP_PHYSCOLLIDE:
                         Print(builder, model.PhysCollideLump);
                         break;
-                    case LumpType.LUMP_VERTNORMALS:
+                    case VbspLumpType.LUMP_VERTNORMALS:
                         // TODO: Support LUMP_VERTNORMALS [30] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_VERTNORMALINDICES:
+                    case VbspLumpType.LUMP_VERTNORMALINDICES:
                         // TODO: Support LUMP_VERTNORMALINDICES [31] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_DISP_LIGHTMAP_ALPHAS:
+                    case VbspLumpType.LUMP_DISP_LIGHTMAP_ALPHAS:
                         // TODO: Support LUMP_DISP_LIGHTMAP_ALPHAS [32] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_DISP_VERTS:
+                    case VbspLumpType.LUMP_DISP_VERTS:
                         Print(builder, model.DispVertsLump);
                         break;
-                    case LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
+                    case VbspLumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS:
                         // TODO: Support LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS [34] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_GAME_LUMP:
+                    case VbspLumpType.LUMP_GAME_LUMP:
                         Print(builder, model.GameLump);
                         break;
-                    case LumpType.LUMP_LEAFWATERDATA:
+                    case VbspLumpType.LUMP_LEAFWATERDATA:
                         // TODO: Support LUMP_LEAFWATERDATA [36] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PRIMITIVES:
+                    case VbspLumpType.LUMP_PRIMITIVES:
                         // TODO: Support LUMP_PRIMITIVES [37] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PRIMVERTS:
+                    case VbspLumpType.LUMP_PRIMVERTS:
                         // TODO: Support LUMP_PRIMVERTS [38] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PRIMINDICES:
+                    case VbspLumpType.LUMP_PRIMINDICES:
                         // TODO: Support LUMP_PRIMINDICES [39] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PAKFILE:
+                    case VbspLumpType.LUMP_PAKFILE:
                         Print(builder, model.PakfileLump);
                         break;
-                    case LumpType.LUMP_CLIPPORTALVERTS:
+                    case VbspLumpType.LUMP_CLIPPORTALVERTS:
                         // TODO: Support LUMP_CLIPPORTALVERTS [41] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_CUBEMAPS:
+                    case VbspLumpType.LUMP_CUBEMAPS:
                         Print(builder, model.CubemapsLump);
                         break;
-                    case LumpType.LUMP_TEXDATA_STRING_DATA:
+                    case VbspLumpType.LUMP_TEXDATA_STRING_DATA:
                         Print(builder, model.TexdataStringData);
                         break;
-                    case LumpType.LUMP_TEXDATA_STRING_TABLE:
+                    case VbspLumpType.LUMP_TEXDATA_STRING_TABLE:
                         Print(builder, model.TexdataStringTable);
                         break;
-                    case LumpType.LUMP_OVERLAYS:
+                    case VbspLumpType.LUMP_OVERLAYS:
                         Print(builder, model.OverlaysLump);
                         break;
-                    case LumpType.LUMP_LEAFMINDISTTOWATER:
+                    case VbspLumpType.LUMP_LEAFMINDISTTOWATER:
                         // TODO: Support LUMP_LEAFMINDISTTOWATER [46] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_FACE_MACRO_TEXTURE_INFO:
+                    case VbspLumpType.LUMP_FACE_MACRO_TEXTURE_INFO:
                         // TODO: Support LUMP_FACE_MACRO_TEXTURE_INFO [47] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_DISP_TRIS:
+                    case VbspLumpType.LUMP_DISP_TRIS:
                         Print(builder, model.DispTrisLump);
                         break;
-                    case LumpType.LUMP_PHYSCOLLIDESURFACE:
+                    case VbspLumpType.LUMP_PHYSCOLLIDESURFACE:
                         // TODO: Support LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB [49] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_WATEROVERLAYS:
+                    case VbspLumpType.LUMP_WATEROVERLAYS:
                         // TODO: Support LUMP_WATEROVERLAYS [50] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_LIGHTMAPPAGES:
+                    case VbspLumpType.LUMP_LIGHTMAPPAGES:
                         Print(builder, model.HDRAmbientIndexLump);
                         break;
-                    case LumpType.LUMP_LIGHTMAPPAGEINFOS:
+                    case VbspLumpType.LUMP_LIGHTMAPPAGEINFOS:
                         Print(builder, model.LDRAmbientIndexLump);
                         break;
-                    case LumpType.LUMP_LIGHTING_HDR:
+                    case VbspLumpType.LUMP_LIGHTING_HDR:
                         // TODO: Support LUMP_LIGHTING_HDR [53] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_WORLDLIGHTS_HDR:
+                    case VbspLumpType.LUMP_WORLDLIGHTS_HDR:
                         Print(builder, model.HDRWorldLightsLump);
                         break;
-                    case LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
+                    case VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR:
                         Print(builder, model.HDRAmbientLightingLump);
                         break;
-                    case LumpType.LUMP_LEAF_AMBIENT_LIGHTING:
+                    case VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING:
                         Print(builder, model.LDRAmbientLightingLump);
                         break;
-                    case LumpType.LUMP_XZIPPAKFILE:
+                    case VbspLumpType.LUMP_XZIPPAKFILE:
                         // TODO: Support LUMP_XZIPPAKFILE [57] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_FACES_HDR:
+                    case VbspLumpType.LUMP_FACES_HDR:
                         // TODO: Support LUMP_FACES_HDR [58] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_MAP_FLAGS:
+                    case VbspLumpType.LUMP_MAP_FLAGS:
                         // TODO: Support LUMP_MAP_FLAGS [59] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_OVERLAY_FADES:
+                    case VbspLumpType.LUMP_OVERLAY_FADES:
                         // TODO: Support LUMP_OVERLAY_FADES [60] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_OVERLAY_SYSTEM_LEVELS:
+                    case VbspLumpType.LUMP_OVERLAY_SYSTEM_LEVELS:
                         // TODO: Support LUMP_OVERLAY_SYSTEM_LEVELS [61] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_PHYSLEVEL:
+                    case VbspLumpType.LUMP_PHYSLEVEL:
                         // TODO: Support LUMP_PHYSLEVEL [62] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
-                    case LumpType.LUMP_DISP_MULTIBLEND:
+                    case VbspLumpType.LUMP_DISP_MULTIBLEND:
                         // TODO: Support LUMP_DISP_MULTIBLEND [63] when in Models
                         builder.AppendLine("    Data not parsed...");
                         break;
 
                     default:
-                        builder.AppendLine($"    Unsupported lump type: {(LumpType)i} (0x{i:X4})");
+                        builder.AppendLine($"    Unsupported lump type: {(VbspLumpType)i} (0x{i:X4})");
                         break;
                 }
             }
@@ -286,72 +286,72 @@ namespace SabreTools.Wrappers
 
         private static string GetLumpName(int i)
         {
-            return (LumpType)i switch
+            return (VbspLumpType)i switch
             {
-                LumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
-                LumpType.LUMP_PLANES => " - LUMP_PLANES",
-                LumpType.LUMP_TEXTURES => " - LUMP_TEXDATA",
-                LumpType.LUMP_VERTICES => " - LUMP_VERTEXES",
-                LumpType.LUMP_VISIBILITY => " - LUMP_VISIBILITY",
-                LumpType.LUMP_NODES => " - LUMP_NODES",
-                LumpType.LUMP_TEXINFO => " - LUMP_TEXINFO",
-                LumpType.LUMP_FACES => " - LUMP_FACES",
-                LumpType.LUMP_LIGHTING => " - LUMP_LIGHTING",
-                LumpType.LUMP_CLIPNODES => " - LUMP_OCCLUSION",
-                LumpType.LUMP_LEAVES => " - LUMP_LEAVES",
-                LumpType.LUMP_MARKSURFACES => " - LUMP_FACEIDS",
-                LumpType.LUMP_EDGES => " - LUMP_EDGES",
-                LumpType.LUMP_SURFEDGES => " - LUMP_SURFEDGES",
-                LumpType.LUMP_MODELS => " - LUMP_MODELS",
-                LumpType.LUMP_WORLDLIGHTS => " - LUMP_WORLDLIGHTS",
-                LumpType.LUMP_LEAFFACES => " - LUMP_LEAFFACES",
-                LumpType.LUMP_LEAFBRUSHES => " - LUMP_LEAFBRUSHES",
-                LumpType.LUMP_BRUSHES => " - LUMP_BRUSHES",
-                LumpType.LUMP_BRUSHSIDES => " - LUMP_BRUSHSIDES",
-                LumpType.LUMP_AREAS => " - LUMP_AREAS",
-                LumpType.LUMP_AREAPORTALS => " - LUMP_AREAPORTALS",
-                LumpType.LUMP_PORTALS => " - LUMP_PORTALS / LUMP_UNUSED0 / LUMP_PROPCOLLISION",
-                LumpType.LUMP_CLUSTERS => " - LUMP_CLUSTERS / LUMP_UNUSED1 / LUMP_PROPHULLS",
-                LumpType.LUMP_PORTALVERTS => " - LUMP_PORTALVERTS / LUMP_UNUSED2 / LUMP_FAKEENTITIES / LUMP_PROPHULLVERTS",
-                LumpType.LUMP_CLUSTERPORTALS => " - LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS",
-                LumpType.LUMP_DISPINFO => " - LUMP_DISPINFO",
-                LumpType.LUMP_ORIGINALFACES => " - LUMP_ORIGINALFACES",
-                LumpType.LUMP_PHYSDISP => " - LUMP_PHYSDISP",
-                LumpType.LUMP_PHYSCOLLIDE => " - LUMP_PHYSCOLLIDE",
-                LumpType.LUMP_VERTNORMALS => " - LUMP_VERTNORMALS",
-                LumpType.LUMP_VERTNORMALINDICES => " - LUMP_VERTNORMALINDICES",
-                LumpType.LUMP_DISP_LIGHTMAP_ALPHAS => " - LUMP_DISP_LIGHTMAP_ALPHAS",
-                LumpType.LUMP_DISP_VERTS => " - LUMP_DISP_VERTS",
-                LumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS => " - LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS",
-                LumpType.LUMP_GAME_LUMP => " - LUMP_GAME_LUMP",
-                LumpType.LUMP_LEAFWATERDATA => " - LUMP_LEAFWATERDATA",
-                LumpType.LUMP_PRIMITIVES => " - LUMP_PRIMITIVES",
-                LumpType.LUMP_PRIMVERTS => " - LUMP_PRIMVERTS",
-                LumpType.LUMP_PRIMINDICES => " - LUMP_PRIMINDICES",
-                LumpType.LUMP_PAKFILE => " - LUMP_PAKFILE",
-                LumpType.LUMP_CLIPPORTALVERTS => " - LUMP_CLIPPORTALVERTS",
-                LumpType.LUMP_CUBEMAPS => " - LUMP_CUBEMAPS",
-                LumpType.LUMP_TEXDATA_STRING_DATA => " - LUMP_TEXDATA_STRING_DATA",
-                LumpType.LUMP_TEXDATA_STRING_TABLE => " - LUMP_TEXDATA_STRING_TABLE",
-                LumpType.LUMP_OVERLAYS => " - LUMP_OVERLAYS",
-                LumpType.LUMP_LEAFMINDISTTOWATER => " - LUMP_LEAFMINDISTTOWATER",
-                LumpType.LUMP_FACE_MACRO_TEXTURE_INFO => " - LUMP_FACE_MACRO_TEXTURE_INFO",
-                LumpType.LUMP_DISP_TRIS => " - LUMP_DISP_TRIS",
-                LumpType.LUMP_PHYSCOLLIDESURFACE => " - LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB",
-                LumpType.LUMP_WATEROVERLAYS => " - LUMP_WATEROVERLAYS",
-                LumpType.LUMP_LIGHTMAPPAGES => " - LUMP_LIGHTMAPPAGES / LUMP_LEAF_AMBIENT_INDEX_HDR",
-                LumpType.LUMP_LIGHTMAPPAGEINFOS => " - LUMP_LIGHTMAPPAGEINFOS / LUMP_LEAF_AMBIENT_INDEX",
-                LumpType.LUMP_LIGHTING_HDR => " - LUMP_LIGHTING_HDR",
-                LumpType.LUMP_WORLDLIGHTS_HDR => " - LUMP_WORLDLIGHTS_HDR",
-                LumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR => " - LUMP_LEAF_AMBIENT_LIGHTING_HDR",
-                LumpType.LUMP_LEAF_AMBIENT_LIGHTING => " - LUMP_LEAF_AMBIENT_LIGHTING",
-                LumpType.LUMP_XZIPPAKFILE => " - LUMP_XZIPPAKFILE",
-                LumpType.LUMP_FACES_HDR => " - LUMP_FACES_HDR",
-                LumpType.LUMP_MAP_FLAGS => " - LUMP_MAP_FLAGS",
-                LumpType.LUMP_OVERLAY_FADES => " - LUMP_OVERLAY_FADES",
-                LumpType.LUMP_OVERLAY_SYSTEM_LEVELS => " - LUMP_OVERLAY_SYSTEM_LEVELS",
-                LumpType.LUMP_PHYSLEVEL => " - LUMP_PHYSLEVEL",
-                LumpType.LUMP_DISP_MULTIBLEND => " - LUMP_DISP_MULTIBLEND",
+                VbspLumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
+                VbspLumpType.LUMP_PLANES => " - LUMP_PLANES",
+                VbspLumpType.LUMP_TEXTURES => " - LUMP_TEXDATA",
+                VbspLumpType.LUMP_VERTICES => " - LUMP_VERTEXES",
+                VbspLumpType.LUMP_VISIBILITY => " - LUMP_VISIBILITY",
+                VbspLumpType.LUMP_NODES => " - LUMP_NODES",
+                VbspLumpType.LUMP_TEXINFO => " - LUMP_TEXINFO",
+                VbspLumpType.LUMP_FACES => " - LUMP_FACES",
+                VbspLumpType.LUMP_LIGHTING => " - LUMP_LIGHTING",
+                VbspLumpType.LUMP_CLIPNODES => " - LUMP_OCCLUSION",
+                VbspLumpType.LUMP_LEAVES => " - LUMP_LEAVES",
+                VbspLumpType.LUMP_MARKSURFACES => " - LUMP_FACEIDS",
+                VbspLumpType.LUMP_EDGES => " - LUMP_EDGES",
+                VbspLumpType.LUMP_SURFEDGES => " - LUMP_SURFEDGES",
+                VbspLumpType.LUMP_MODELS => " - LUMP_MODELS",
+                VbspLumpType.LUMP_WORLDLIGHTS => " - LUMP_WORLDLIGHTS",
+                VbspLumpType.LUMP_LEAFFACES => " - LUMP_LEAFFACES",
+                VbspLumpType.LUMP_LEAFBRUSHES => " - LUMP_LEAFBRUSHES",
+                VbspLumpType.LUMP_BRUSHES => " - LUMP_BRUSHES",
+                VbspLumpType.LUMP_BRUSHSIDES => " - LUMP_BRUSHSIDES",
+                VbspLumpType.LUMP_AREAS => " - LUMP_AREAS",
+                VbspLumpType.LUMP_AREAPORTALS => " - LUMP_AREAPORTALS",
+                VbspLumpType.LUMP_PORTALS => " - LUMP_PORTALS / LUMP_UNUSED0 / LUMP_PROPCOLLISION",
+                VbspLumpType.LUMP_CLUSTERS => " - LUMP_CLUSTERS / LUMP_UNUSED1 / LUMP_PROPHULLS",
+                VbspLumpType.LUMP_PORTALVERTS => " - LUMP_PORTALVERTS / LUMP_UNUSED2 / LUMP_FAKEENTITIES / LUMP_PROPHULLVERTS",
+                VbspLumpType.LUMP_CLUSTERPORTALS => " - LUMP_CLUSTERPORTALS / LUMP_UNUSED3 / LUMP_PROPTRIS",
+                VbspLumpType.LUMP_DISPINFO => " - LUMP_DISPINFO",
+                VbspLumpType.LUMP_ORIGINALFACES => " - LUMP_ORIGINALFACES",
+                VbspLumpType.LUMP_PHYSDISP => " - LUMP_PHYSDISP",
+                VbspLumpType.LUMP_PHYSCOLLIDE => " - LUMP_PHYSCOLLIDE",
+                VbspLumpType.LUMP_VERTNORMALS => " - LUMP_VERTNORMALS",
+                VbspLumpType.LUMP_VERTNORMALINDICES => " - LUMP_VERTNORMALINDICES",
+                VbspLumpType.LUMP_DISP_LIGHTMAP_ALPHAS => " - LUMP_DISP_LIGHTMAP_ALPHAS",
+                VbspLumpType.LUMP_DISP_VERTS => " - LUMP_DISP_VERTS",
+                VbspLumpType.LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS => " - LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS",
+                VbspLumpType.LUMP_GAME_LUMP => " - LUMP_GAME_LUMP",
+                VbspLumpType.LUMP_LEAFWATERDATA => " - LUMP_LEAFWATERDATA",
+                VbspLumpType.LUMP_PRIMITIVES => " - LUMP_PRIMITIVES",
+                VbspLumpType.LUMP_PRIMVERTS => " - LUMP_PRIMVERTS",
+                VbspLumpType.LUMP_PRIMINDICES => " - LUMP_PRIMINDICES",
+                VbspLumpType.LUMP_PAKFILE => " - LUMP_PAKFILE",
+                VbspLumpType.LUMP_CLIPPORTALVERTS => " - LUMP_CLIPPORTALVERTS",
+                VbspLumpType.LUMP_CUBEMAPS => " - LUMP_CUBEMAPS",
+                VbspLumpType.LUMP_TEXDATA_STRING_DATA => " - LUMP_TEXDATA_STRING_DATA",
+                VbspLumpType.LUMP_TEXDATA_STRING_TABLE => " - LUMP_TEXDATA_STRING_TABLE",
+                VbspLumpType.LUMP_OVERLAYS => " - LUMP_OVERLAYS",
+                VbspLumpType.LUMP_LEAFMINDISTTOWATER => " - LUMP_LEAFMINDISTTOWATER",
+                VbspLumpType.LUMP_FACE_MACRO_TEXTURE_INFO => " - LUMP_FACE_MACRO_TEXTURE_INFO",
+                VbspLumpType.LUMP_DISP_TRIS => " - LUMP_DISP_TRIS",
+                VbspLumpType.LUMP_PHYSCOLLIDESURFACE => " - LUMP_PHYSCOLLIDESURFACE / LUMP_PROP_BLOB",
+                VbspLumpType.LUMP_WATEROVERLAYS => " - LUMP_WATEROVERLAYS",
+                VbspLumpType.LUMP_LIGHTMAPPAGES => " - LUMP_LIGHTMAPPAGES / LUMP_LEAF_AMBIENT_INDEX_HDR",
+                VbspLumpType.LUMP_LIGHTMAPPAGEINFOS => " - LUMP_LIGHTMAPPAGEINFOS / LUMP_LEAF_AMBIENT_INDEX",
+                VbspLumpType.LUMP_LIGHTING_HDR => " - LUMP_LIGHTING_HDR",
+                VbspLumpType.LUMP_WORLDLIGHTS_HDR => " - LUMP_WORLDLIGHTS_HDR",
+                VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING_HDR => " - LUMP_LEAF_AMBIENT_LIGHTING_HDR",
+                VbspLumpType.LUMP_LEAF_AMBIENT_LIGHTING => " - LUMP_LEAF_AMBIENT_LIGHTING",
+                VbspLumpType.LUMP_XZIPPAKFILE => " - LUMP_XZIPPAKFILE",
+                VbspLumpType.LUMP_FACES_HDR => " - LUMP_FACES_HDR",
+                VbspLumpType.LUMP_MAP_FLAGS => " - LUMP_MAP_FLAGS",
+                VbspLumpType.LUMP_OVERLAY_FADES => " - LUMP_OVERLAY_FADES",
+                VbspLumpType.LUMP_OVERLAY_SYSTEM_LEVELS => " - LUMP_OVERLAY_SYSTEM_LEVELS",
+                VbspLumpType.LUMP_PHYSLEVEL => " - LUMP_PHYSLEVEL",
+                VbspLumpType.LUMP_DISP_MULTIBLEND => " - LUMP_DISP_MULTIBLEND",
                 _ => string.Empty,
             };
         }

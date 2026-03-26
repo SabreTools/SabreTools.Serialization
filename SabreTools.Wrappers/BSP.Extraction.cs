@@ -49,12 +49,12 @@ namespace SabreTools.Wrappers
             // Create the filename
             string filename = $"lump_{index}.bin";
 #pragma warning disable IDE0010
-            switch ((LumpType)index)
+            switch ((BspLumpType)index)
             {
-                case LumpType.LUMP_ENTITIES:
+                case BspLumpType.LUMP_ENTITIES:
                     filename = "entities.ent";
                     break;
-                case LumpType.LUMP_TEXTURES:
+                case BspLumpType.LUMP_TEXTURES:
                     filename = "texture_data.bin";
                     break;
             }
