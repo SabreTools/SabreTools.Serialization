@@ -2,6 +2,94 @@
 
 This library comprises of models that represent either directly serializable or representative structures for all SabreTools projects. The majority of models will have deserializers and wrappers, with some also having both regular and cross-model serializers.
 
+## Namespaces
+
+Below is a list of all existing namespaces with the `SabreTools.Data.Models` prefix removed, along with a brief description of the contained models.
+
+| Namespace | Description |
+| --- | --- |
+| `AACS` | AACS media key block |
+| `AdvancedInstaller` | Caphyon Advanced Installer SFX |
+| `ArchiveDotOrg` | archive.org metadata files |
+| `ASN1` | ASN.1 type/length/value |
+| `Atari7800` | Atari 7800 carts |
+| `AtariLynx` | Atari Lynx carts |
+| `AttractMode` | AttractMode metadata files |
+| `BDPlus` | BD+ SVM |
+| `BFPK` | BFPK custom archive format |
+| `Bitmap` | Bitmap graphics |
+| `BSP` | Valve BSP and VBSP level file formats |
+| `BZip2` | BZip2 archive |
+| `CDROM` | ISO 10149 / ECMA-130 CD-ROM images |
+| `CFB` | Microsoft Compound File Binary (CFB) file format |
+| `Charts` | Rhythm game song and career formats |
+| `CHD` | MAME Compressed Hunks of Data (CHD) |
+| `ClrMamePro` | ClrMamePro (CMP) metadata files |
+| `COFF` | Common Object File Format (COFF) |
+| `CueSheets` | Cuesheet |
+| `Delphi` | Delphi-specific PE blocks |
+| `DosCenter` | DosCenter (DC) metadata files |
+| `DVD` | Various DVD file formats |
+| `EverdriveSMDB` | Everdrive SmokeMonster Database (SMDB) metadata files |
+| `GameHeader` | GameHeader cart information metadata files |
+| `GCF` | Half-Life Game Cache File (GCF) |
+| `GZIP` | gzip archive |
+| `Hashfile` | Individual hash metadata file formats |
+| `InstallShieldArchiveV3` | InstallShield archive V3 (.z) |
+| `InstallShieldCabinet` | InstallShield cabinet (IS-CAB) |
+| `InstallShieldExecutable` | InstallShield Executable SFX |
+| `IRD` | PS3 IRD encryption files |
+| `ISO9660` | ISO9660 / EMCA-119 file system |
+| `LDSCRYPT` | LDSCRYPT encrypted files |
+| `LinearExecutable` | Linear Executable (LE/LX) |
+| `Listrom` | MAME Listrom metadata files |
+| `Listxml` | MAME ListXML metadata files |
+| `Logiqx` | Logiqx XML-based metadata files |
+| `LZ` | LZ compressed file variants |
+| `Metadata` | Common unified metadata format |
+| `MicrosoftCabinet` | Microsoft cabinet (MS-CAB) |
+| `MoPaQ` | MoPaQ (MPQ) game installer archive |
+| `MSDOS` | MS-DOS executable and stub |
+| `N3DS` | Nintendo 3DS carts |
+| `NCF` | Half-Life No Cache File |
+| `NES` | Nintendo Entertainment System (NES) and Famicom (FC) carts |
+| `NewExecutable` | New Executable (NE) |
+| `Nitro` | Nintendo DS carts |
+| `OfflineList` | OfflineList XML-based metadata files |
+| `OLE` | Object Linking and Embedding (OLE) |
+| `OpenMSX` | OpenMSX XML-based metadata files |
+| `PAK` | Half-Life Package File |
+| `PFF` | PFF archive |
+| `PIC` | Disc Information and Emergency Brake data |
+| `PKZIP` | PKWARE ZIP archive and derivatives |
+| `PlayJ` | PlayJ propietary music format |
+| `PlayStation3` | Sony PlayStation 3 (PS3) on-disc formats |
+| `PlayStation4` | Sony PlayStation 4 (PS4) on-disc formats |
+| `PortableExecutable` | Portable Executable (PE) |
+| `Quantum` | Quantum archive |
+| `RAR` | RAR archive |
+| `RealArcade` | RealArcade installer formats |
+| `RomCenter` | RomCenter INI-based metadata files |
+| `SafeDisc` | SafeDisc encrypted file entry |
+| `SecuROM` | SecuROM protection block formats |
+| `SeparatedValue` | Separated-value (CSV, SSV, TSV) metadata files |
+| `SevenZip` | 7-zip archive |
+| `SGA` | SGA game archive |
+| `SNES` | Super Nintendo Entertainment System (SNES) and Super Famicom (SFC) carts |
+| `SoftwareList` | MAME software list metadata files |
+| `SpoonInstaller` | Spoon Installer SFX |
+| `StarForce` | StarForce File System (SFFS) |
+| `TAR` | Tape Archive (TAR) |
+| `VDF` | Steam SIS files |
+| `VPK` | Valve Package File |
+| `WAD3` | Half-Life Texture Package File |
+| `WiseInstaller` | Wise script- and section-based installers |
+| `Xbox` | Xbox and Xbox 360 file formats |
+| `XboxExecutable` | Xbox Executable (XBE) |
+| `XZ` | xz archive |
+| `XZP` | XBox Package File |
+| `ZSTD` | ZSTD archive |
+
 ## Notable Information Sources
 
 Not all of this information was able to be gathered directly from the files in question, so here is a non-exhaustive list of sites and projects that allow this project to exist. Most of the models also have direct links to specific pages or code snippets, where available.
