@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 
@@ -29,7 +29,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Rom rom:
@@ -38,8 +37,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.CRCKey)))
                         missingFields.Add(Data.Models.Metadata.Rom.CRCKey);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

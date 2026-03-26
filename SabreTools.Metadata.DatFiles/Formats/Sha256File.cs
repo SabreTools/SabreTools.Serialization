@@ -37,7 +37,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             if (string.IsNullOrEmpty(datItem.GetName()))
                 missingFields.Add(Data.Models.Metadata.Rom.NameKey);
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Media medium:
@@ -49,8 +48,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA256Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA256Key);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

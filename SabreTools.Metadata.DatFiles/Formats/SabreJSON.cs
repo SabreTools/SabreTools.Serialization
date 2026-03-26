@@ -248,7 +248,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 if (datItemObj is null)
                     return;
 
-#pragma warning disable IDE0010
                 switch (datItemObj.Value<string>("type").AsItemType())
                 {
                     case ItemType.Adjuster:
@@ -320,6 +319,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case ItemType.Feature:
                         datItem = datItemObj.ToObject<Feature>();
                         break;
+                    case ItemType.File:
+                        datItem = datItemObj.ToObject<DatItems.Formats.File>();
+                        break;
                     case ItemType.Info:
                         datItem = datItemObj.ToObject<Info>();
                         break;
@@ -331,6 +333,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         break;
                     case ItemType.Media:
                         datItem = datItemObj.ToObject<Media>();
+                        break;
+                    case ItemType.Original:
+                        // Cannot be converted to a DatItem
                         break;
                     case ItemType.Part:
                         datItem = datItemObj.ToObject<Part>();
@@ -377,8 +382,12 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     case ItemType.SourceDetails:
                         datItem = datItemObj.ToObject<SourceDetails>();
                         break;
+
+                    case ItemType.NULL:
+                    default:
+                        // This should never happen
+                        break;
                 }
-#pragma warning restore IDE0010
             }
 
             // If we got a valid datitem, copy machine info and add

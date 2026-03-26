@@ -71,7 +71,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Release release:
@@ -170,8 +169,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (driver.GetStringFieldValue(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() == SupportStatus.NULL)
                         missingFields.Add(Data.Models.Metadata.Driver.EmulationKey);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

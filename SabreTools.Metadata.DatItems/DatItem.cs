@@ -279,7 +279,6 @@ namespace SabreTools.Metadata.DatItems
             string sourceKeyPadded = source?.Index.ToString().PadLeft(10, '0') + '-';
             string machineName = machine?.GetName() ?? "Default";
 
-#pragma warning disable IDE0010
             // Now determine what the key should be based on the bucketedBy value
             switch (bucketedBy)
             {
@@ -338,8 +337,12 @@ namespace SabreTools.Metadata.DatItems
                 case ItemKey.SpamSum:
                     key = HashType.SpamSum.ZeroString;
                     break;
+
+                case ItemKey.NULL:
+                default:
+                    // This should never happen
+                    break;
             }
-#pragma warning restore IDE0010
 
             // Double and triple check the key for corner cases
             key ??= string.Empty;

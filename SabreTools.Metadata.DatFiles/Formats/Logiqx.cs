@@ -263,7 +263,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Release release:
@@ -362,8 +361,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (softwarelist.GetStringFieldValue(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == SoftwareListStatus.None)
                         missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

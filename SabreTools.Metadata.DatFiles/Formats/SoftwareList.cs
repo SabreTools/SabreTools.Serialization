@@ -104,7 +104,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
         {
             List<string> missingFields = [];
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case DipSwitch dipSwitch:
@@ -204,8 +203,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (string.IsNullOrEmpty(sharedFeat.GetName()))
                         missingFields.Add(Data.Models.Metadata.SharedFeat.NameKey);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

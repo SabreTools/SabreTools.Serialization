@@ -72,15 +72,17 @@ The softwaredb.xml file contains information about rom mapper types
             if (string.IsNullOrEmpty(datItem.GetName()))
                 missingFields.Add(Data.Models.Metadata.Rom.NameKey);
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Rom rom:
                     if (string.IsNullOrEmpty(rom.GetStringFieldValue(Data.Models.Metadata.Rom.SHA1Key)))
                         missingFields.Add(Data.Models.Metadata.Rom.SHA1Key);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

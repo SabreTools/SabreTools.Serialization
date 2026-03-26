@@ -33,7 +33,6 @@ namespace SabreTools.Metadata.DatFiles.Formats
             if (string.IsNullOrEmpty(datItem.GetName()))
                 missingFields.Add(Data.Models.Metadata.Rom.NameKey);
 
-#pragma warning disable IDE0010
             switch (datItem)
             {
                 case Rom rom:
@@ -42,8 +41,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     if (rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) is null || rom.GetInt64FieldValue(Data.Models.Metadata.Rom.SizeKey) < 0)
                         missingFields.Add(Data.Models.Metadata.Rom.SizeKey);
                     break;
+
+                default:
+                    // Item type is not supported
+                    break;
             }
-#pragma warning restore IDE0010
 
             return missingFields;
         }

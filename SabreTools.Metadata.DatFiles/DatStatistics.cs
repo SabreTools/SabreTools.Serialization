@@ -157,7 +157,6 @@ namespace SabreTools.Metadata.DatFiles
                 // Increment the item count for the type
                 AddItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
 
-#pragma warning disable IDE0010
                 // Some item types require special processing
                 switch (item)
                 {
@@ -170,8 +169,11 @@ namespace SabreTools.Metadata.DatFiles
                     case Data.Models.Metadata.Rom rom:
                         AddItemStatistics(rom);
                         break;
+
+                    default:
+                        // Item type requires no special processing
+                        break;
                 }
-#pragma warning restore IDE0010
             }
         }
 
@@ -278,7 +280,6 @@ namespace SabreTools.Metadata.DatFiles
                 // Decrement the item count for the type
                 RemoveItemCount(item.GetStringFieldValue(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
 
-#pragma warning disable IDE0010
                 // Some item types require special processing
                 switch (item)
                 {
@@ -294,8 +295,11 @@ namespace SabreTools.Metadata.DatFiles
                     case Rom rom:
                         RemoveItemStatistics(rom);
                         break;
+
+                    default:
+                        // Item type requires no special processing
+                        break;
                 }
-#pragma warning restore IDE0010
             }
         }
 
@@ -321,7 +325,6 @@ namespace SabreTools.Metadata.DatFiles
                 // Decrement the item count for the type
                 RemoveItemCount(item.ReadString(Data.Models.Metadata.DatItem.TypeKey).AsItemType());
 
-#pragma warning disable IDE0010
                 // Some item types require special processing
                 switch (item)
                 {
@@ -334,8 +337,11 @@ namespace SabreTools.Metadata.DatFiles
                     case Data.Models.Metadata.Rom rom:
                         RemoveItemStatistics(rom);
                         break;
+
+                    default:
+                        // Item type requires no special processing
+                        break;
                 }
-#pragma warning restore IDE0010
             }
         }
 
