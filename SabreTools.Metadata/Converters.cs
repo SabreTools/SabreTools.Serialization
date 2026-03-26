@@ -43,7 +43,7 @@ namespace SabreTools.Metadata
                         continue;
 
                     // Try to get the mapping attribute
-                    MappingAttribute? attr = AttributeHelper<T>.GetMappingAttribute(value);
+                    MappingAttribute? attr = GetMappingAttribute(value);
                     if (attr?.Mappings is null || attr.Mappings.Length == 0)
                         continue;
 
@@ -106,7 +106,7 @@ namespace SabreTools.Metadata
                         continue;
 
                     // Try to get the mapping attribute
-                    MappingAttribute? attr = AttributeHelper<T>.GetMappingAttribute(value);
+                    MappingAttribute? attr = GetMappingAttribute(value);
                     if (attr?.Mappings is null || attr.Mappings.Length == 0)
                         continue;
 
@@ -125,6 +125,50 @@ namespace SabreTools.Metadata
                 // This should not happen, only if the type was not an enum
                 return [];
             }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Get the MappingAttribute from a supported value
+        /// </summary>
+        /// <param name="value">Value to use</param>
+        /// <returns>MappingAttribute attached to the value</returns>
+        internal static MappingAttribute? GetMappingAttribute<T>(T? value)
+        {
+            // Null value in, null value out
+            if (value is null)
+                return null;
+
+            // Current enumeration type
+            var enumType = typeof(T);
+            if (Nullable.GetUnderlyingType(enumType) is not null)
+                enumType = Nullable.GetUnderlyingType(enumType);
+
+            // If the value returns a null on ToString, just return null
+            string? valueStr = value.ToString();
+            if (string.IsNullOrEmpty(valueStr))
+                return null;
+
+            // Get the member info array
+            var memberInfos = enumType?.GetMember(valueStr);
+            if (memberInfos is null)
+                return null;
+
+            // Get the enum value info from the array, if possible
+            var enumValueMemberInfo = Array.Find(memberInfos, m => m.DeclaringType == enumType);
+            if (enumValueMemberInfo is null)
+                return null;
+
+            // Try to get the relevant attribute
+            var attributes = enumValueMemberInfo.GetCustomAttributes(typeof(MappingAttribute), true);
+            if (attributes is null || attributes.Length == 0)
+                return null;
+
+            // Return the first attribute, if possible
+            return (MappingAttribute?)attributes[0];
         }
 
         #endregion
