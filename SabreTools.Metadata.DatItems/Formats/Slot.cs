@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Slot(Data.Models.Metadata.Slot item) : base(item)
         {
             // Handle subitems
-            var slotOptions = item.ReadItemArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
+            var slotOptions = item.ReadArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
             if (slotOptions is not null)
             {
                 SlotOption[] slotOptionItems = Array.ConvertAll(slotOptions, slotOption => new SlotOption(slotOption));

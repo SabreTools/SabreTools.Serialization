@@ -81,7 +81,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.MetadataFile? actual = datFile.ConvertToMetadata();
             Assert.NotNull(actual);
 
-            Data.Models.Metadata.Machine[]? machines = actual.ReadItemArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
+            Data.Models.Metadata.Machine[]? machines = actual.ReadArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
             Assert.NotNull(machines);
             Data.Models.Metadata.Machine actualMachine = Assert.Single(machines);
             ValidateMetadataMachine(actualMachine);
@@ -472,138 +472,138 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tags", machine.ReadString(Data.Models.Metadata.Machine.TagsKey));
             Assert.Equal("year", machine.ReadString(Data.Models.Metadata.Machine.YearKey));
 
-            Data.Models.Metadata.Adjuster[]? adjusters = machine.ReadItemArray<Data.Models.Metadata.Adjuster>(Data.Models.Metadata.Machine.AdjusterKey);
+            Data.Models.Metadata.Adjuster[]? adjusters = machine.ReadArray<Data.Models.Metadata.Adjuster>(Data.Models.Metadata.Machine.AdjusterKey);
             Assert.NotNull(adjusters);
             Data.Models.Metadata.Adjuster adjuster = Assert.Single(adjusters);
             ValidateMetadataAdjuster(adjuster);
 
-            Data.Models.Metadata.Archive[]? archives = machine.ReadItemArray<Data.Models.Metadata.Archive>(Data.Models.Metadata.Machine.ArchiveKey);
+            Data.Models.Metadata.Archive[]? archives = machine.ReadArray<Data.Models.Metadata.Archive>(Data.Models.Metadata.Machine.ArchiveKey);
             Assert.NotNull(archives);
             Data.Models.Metadata.Archive archive = Assert.Single(archives);
             ValidateMetadataArchive(archive);
 
-            Data.Models.Metadata.BiosSet[]? biosSets = machine.ReadItemArray<Data.Models.Metadata.BiosSet>(Data.Models.Metadata.Machine.BiosSetKey);
+            Data.Models.Metadata.BiosSet[]? biosSets = machine.ReadArray<Data.Models.Metadata.BiosSet>(Data.Models.Metadata.Machine.BiosSetKey);
             Assert.NotNull(biosSets);
             Data.Models.Metadata.BiosSet biosSet = Assert.Single(biosSets);
             ValidateMetadataBiosSet(biosSet);
 
-            Data.Models.Metadata.Chip[]? chips = machine.ReadItemArray<Data.Models.Metadata.Chip>(Data.Models.Metadata.Machine.ChipKey);
+            Data.Models.Metadata.Chip[]? chips = machine.ReadArray<Data.Models.Metadata.Chip>(Data.Models.Metadata.Machine.ChipKey);
             Assert.NotNull(chips);
             Data.Models.Metadata.Chip chip = Assert.Single(chips);
             ValidateMetadataChip(chip);
 
-            Data.Models.Metadata.Configuration[]? configurations = machine.ReadItemArray<Data.Models.Metadata.Configuration>(Data.Models.Metadata.Machine.ConfigurationKey);
+            Data.Models.Metadata.Configuration[]? configurations = machine.ReadArray<Data.Models.Metadata.Configuration>(Data.Models.Metadata.Machine.ConfigurationKey);
             Assert.NotNull(configurations);
             Data.Models.Metadata.Configuration configuration = Assert.Single(configurations);
             ValidateMetadataConfiguration(configuration);
 
-            Data.Models.Metadata.Device[]? devices = machine.ReadItemArray<Data.Models.Metadata.Device>(Data.Models.Metadata.Machine.DeviceKey);
+            Data.Models.Metadata.Device[]? devices = machine.ReadArray<Data.Models.Metadata.Device>(Data.Models.Metadata.Machine.DeviceKey);
             Assert.NotNull(devices);
             Data.Models.Metadata.Device device = Assert.Single(devices);
             ValidateMetadataDevice(device);
 
-            Data.Models.Metadata.DeviceRef[]? deviceRefs = machine.ReadItemArray<Data.Models.Metadata.DeviceRef>(Data.Models.Metadata.Machine.DeviceRefKey);
+            Data.Models.Metadata.DeviceRef[]? deviceRefs = machine.ReadArray<Data.Models.Metadata.DeviceRef>(Data.Models.Metadata.Machine.DeviceRefKey);
             Assert.NotNull(deviceRefs);
             Data.Models.Metadata.DeviceRef deviceRef = Assert.Single(deviceRefs);
             ValidateMetadataDeviceRef(deviceRef);
 
-            Data.Models.Metadata.DipSwitch[]? dipSwitches = machine.ReadItemArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Machine.DipSwitchKey);
+            Data.Models.Metadata.DipSwitch[]? dipSwitches = machine.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Machine.DipSwitchKey);
             Assert.NotNull(dipSwitches);
             Assert.Equal(2, dipSwitches.Length);
             Data.Models.Metadata.DipSwitch dipSwitch = dipSwitches[0];
             ValidateMetadataDipSwitch(dipSwitch);
 
-            Data.Models.Metadata.Disk[]? disks = machine.ReadItemArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.Machine.DiskKey);
+            Data.Models.Metadata.Disk[]? disks = machine.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.Machine.DiskKey);
             Assert.NotNull(disks);
             Assert.Equal(2, disks.Length);
             Data.Models.Metadata.Disk disk = disks[0];
             ValidateMetadataDisk(disk);
 
-            Data.Models.Metadata.Display[]? displays = machine.ReadItemArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey);
+            Data.Models.Metadata.Display[]? displays = machine.ReadArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey);
             Assert.NotNull(displays);
             Assert.Equal(2, displays.Length);
             Data.Models.Metadata.Display? display = Array.Find(displays, d => !d.ContainsKey(Data.Models.Metadata.Video.AspectXKey));
             ValidateMetadataDisplay(display);
 
-            Data.Models.Metadata.Driver[]? drivers = machine.ReadItemArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
+            Data.Models.Metadata.Driver[]? drivers = machine.ReadArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
             Assert.NotNull(drivers);
             Data.Models.Metadata.Driver driver = Assert.Single(drivers);
             ValidateMetadataDriver(driver);
 
             // TODO: Implement this validation
-            // Data.Models.Metadata.Dump[]? dumps = machine.ReadItemArray<Data.Models.Metadata.Dump>(Data.Models.Metadata.Machine.DumpKey);
+            // Data.Models.Metadata.Dump[]? dumps = machine.ReadArray<Data.Models.Metadata.Dump>(Data.Models.Metadata.Machine.DumpKey);
             // Assert.NotNull(dumps);
             // Data.Models.Metadata.Dump dump = Assert.Single(dumps);
             // ValidateMetadataDump(dump);
 
-            Data.Models.Metadata.Feature[]? features = machine.ReadItemArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Machine.FeatureKey);
+            Data.Models.Metadata.Feature[]? features = machine.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Machine.FeatureKey);
             Assert.NotNull(features);
             Assert.Equal(2, features.Length);
             Data.Models.Metadata.Feature feature = features[0];
             ValidateMetadataFeature(feature);
 
-            Data.Models.Metadata.Info[]? infos = machine.ReadItemArray<Data.Models.Metadata.Info>(Data.Models.Metadata.Machine.InfoKey);
+            Data.Models.Metadata.Info[]? infos = machine.ReadArray<Data.Models.Metadata.Info>(Data.Models.Metadata.Machine.InfoKey);
             Assert.NotNull(infos);
             Data.Models.Metadata.Info info = Assert.Single(infos);
             ValidateMetadataInfo(info);
 
-            Data.Models.Metadata.Input[]? inputs = machine.ReadItemArray<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
+            Data.Models.Metadata.Input[]? inputs = machine.ReadArray<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
             Assert.NotNull(inputs);
             Data.Models.Metadata.Input input = Assert.Single(inputs);
             ValidateMetadataInput(input);
 
-            Data.Models.Metadata.Media[]? media = machine.ReadItemArray<Data.Models.Metadata.Media>(Data.Models.Metadata.Machine.MediaKey);
+            Data.Models.Metadata.Media[]? media = machine.ReadArray<Data.Models.Metadata.Media>(Data.Models.Metadata.Machine.MediaKey);
             Assert.NotNull(media);
             Data.Models.Metadata.Media medium = Assert.Single(media);
             ValidateMetadataMedia(medium);
 
-            Data.Models.Metadata.Part[]? parts = machine.ReadItemArray<Data.Models.Metadata.Part>(Data.Models.Metadata.Machine.PartKey);
+            Data.Models.Metadata.Part[]? parts = machine.ReadArray<Data.Models.Metadata.Part>(Data.Models.Metadata.Machine.PartKey);
             Assert.NotNull(parts);
             Data.Models.Metadata.Part part = Assert.Single(parts);
             ValidateMetadataPart(part);
 
-            Data.Models.Metadata.Port[]? ports = machine.ReadItemArray<Data.Models.Metadata.Port>(Data.Models.Metadata.Machine.PortKey);
+            Data.Models.Metadata.Port[]? ports = machine.ReadArray<Data.Models.Metadata.Port>(Data.Models.Metadata.Machine.PortKey);
             Assert.NotNull(ports);
             Data.Models.Metadata.Port port = Assert.Single(ports);
             ValidateMetadataPort(port);
 
-            Data.Models.Metadata.RamOption[]? ramOptions = machine.ReadItemArray<Data.Models.Metadata.RamOption>(Data.Models.Metadata.Machine.RamOptionKey);
+            Data.Models.Metadata.RamOption[]? ramOptions = machine.ReadArray<Data.Models.Metadata.RamOption>(Data.Models.Metadata.Machine.RamOptionKey);
             Assert.NotNull(ramOptions);
             Data.Models.Metadata.RamOption ramOption = Assert.Single(ramOptions);
             ValidateMetadataRamOption(ramOption);
 
-            Data.Models.Metadata.Release[]? releases = machine.ReadItemArray<Data.Models.Metadata.Release>(Data.Models.Metadata.Machine.ReleaseKey);
+            Data.Models.Metadata.Release[]? releases = machine.ReadArray<Data.Models.Metadata.Release>(Data.Models.Metadata.Machine.ReleaseKey);
             Assert.NotNull(releases);
             Data.Models.Metadata.Release release = Assert.Single(releases);
             ValidateMetadataRelease(release);
 
-            Data.Models.Metadata.Rom[]? roms = machine.ReadItemArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.Machine.RomKey);
+            Data.Models.Metadata.Rom[]? roms = machine.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.Machine.RomKey);
             Assert.NotNull(roms);
             Assert.Equal(2, roms.Length);
             Data.Models.Metadata.Rom rom = roms[0];
             ValidateMetadataRom(rom);
 
-            Data.Models.Metadata.Sample[]? samples = machine.ReadItemArray<Data.Models.Metadata.Sample>(Data.Models.Metadata.Machine.SampleKey);
+            Data.Models.Metadata.Sample[]? samples = machine.ReadArray<Data.Models.Metadata.Sample>(Data.Models.Metadata.Machine.SampleKey);
             Assert.NotNull(samples);
             Data.Models.Metadata.Sample sample = Assert.Single(samples);
             ValidateMetadataSample(sample);
 
-            Data.Models.Metadata.SharedFeat[]? sharedFeats = machine.ReadItemArray<Data.Models.Metadata.SharedFeat>(Data.Models.Metadata.Machine.SharedFeatKey);
+            Data.Models.Metadata.SharedFeat[]? sharedFeats = machine.ReadArray<Data.Models.Metadata.SharedFeat>(Data.Models.Metadata.Machine.SharedFeatKey);
             Assert.NotNull(sharedFeats);
             Data.Models.Metadata.SharedFeat sharedFeat = Assert.Single(sharedFeats);
             ValidateMetadataSharedFeat(sharedFeat);
 
-            Data.Models.Metadata.Slot[]? slots = machine.ReadItemArray<Data.Models.Metadata.Slot>(Data.Models.Metadata.Machine.SlotKey);
+            Data.Models.Metadata.Slot[]? slots = machine.ReadArray<Data.Models.Metadata.Slot>(Data.Models.Metadata.Machine.SlotKey);
             Assert.NotNull(slots);
             Data.Models.Metadata.Slot slot = Assert.Single(slots);
             ValidateMetadataSlot(slot);
 
-            Data.Models.Metadata.SoftwareList[]? softwareLists = machine.ReadItemArray<Data.Models.Metadata.SoftwareList>(Data.Models.Metadata.Machine.SoftwareListKey);
+            Data.Models.Metadata.SoftwareList[]? softwareLists = machine.ReadArray<Data.Models.Metadata.SoftwareList>(Data.Models.Metadata.Machine.SoftwareListKey);
             Assert.NotNull(softwareLists);
             Data.Models.Metadata.SoftwareList softwareList = Assert.Single(softwareLists);
             ValidateMetadataSoftwareList(softwareList);
 
-            Data.Models.Metadata.Sound[]? sounds = machine.ReadItemArray<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
+            Data.Models.Metadata.Sound[]? sounds = machine.ReadArray<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
             Assert.NotNull(sounds);
             Data.Models.Metadata.Sound sound = Assert.Single(sounds);
             ValidateMetadataSound(sound);
@@ -611,7 +611,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Logiqx.Trurip? trurip = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
             ValidateMetadataTrurip(trurip);
 
-            Data.Models.Metadata.Video[]? videos = machine.ReadItemArray<Data.Models.Metadata.Video>(Data.Models.Metadata.Machine.VideoKey);
+            Data.Models.Metadata.Video[]? videos = machine.ReadArray<Data.Models.Metadata.Video>(Data.Models.Metadata.Machine.VideoKey);
             Assert.NotNull(videos);
             Data.Models.Metadata.Video video = Assert.Single(videos);
             ValidateMetadataVideo(video);
@@ -677,12 +677,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Condition? condition = configuration.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
             ValidateMetadataCondition(condition);
 
-            Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ReadItemArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            Data.Models.Metadata.ConfLocation[]? confLocations = configuration.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
             Assert.NotNull(confLocations);
             Data.Models.Metadata.ConfLocation? confLocation = Assert.Single(confLocations);
             ValidateMetadataConfLocation(confLocation);
 
-            Data.Models.Metadata.ConfSetting[]? confSettings = configuration.ReadItemArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            Data.Models.Metadata.ConfSetting[]? confSettings = configuration.ReadArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
             Assert.NotNull(confSettings);
             Data.Models.Metadata.ConfSetting? confSetting = Assert.Single(confSettings);
             ValidateMetadataConfSetting(confSetting);
@@ -732,7 +732,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal(12345, dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey));
             Assert.Equal(64, dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey));
 
-            Data.Models.Metadata.Rom[]? roms = dataArea.ReadItemArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
+            Data.Models.Metadata.Rom[]? roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
             Assert.NotNull(roms);
             Data.Models.Metadata.Rom? rom = Assert.Single(roms);
             ValidateMetadataRom(rom);
@@ -747,7 +747,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("tag", device.ReadString(Data.Models.Metadata.Device.TagKey));
             Assert.Equal("punchtape", device.ReadString(Data.Models.Metadata.Device.DeviceTypeKey));
 
-            Data.Models.Metadata.Extension[]? extensions = device.ReadItemArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
+            Data.Models.Metadata.Extension[]? extensions = device.ReadArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
             Assert.NotNull(extensions);
             Data.Models.Metadata.Extension? extension = Assert.Single(extensions);
             ValidateMetadataExtension(extension);
@@ -781,12 +781,12 @@ namespace SabreTools.Metadata.DatFiles.Test
             Data.Models.Metadata.Condition? condition = dipSwitch.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
             ValidateMetadataCondition(condition);
 
-            Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.ReadItemArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            Data.Models.Metadata.DipLocation[]? dipLocations = dipSwitch.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
             Assert.NotNull(dipLocations);
             Data.Models.Metadata.DipLocation? dipLocation = Assert.Single(dipLocations);
             ValidateMetadataDipLocation(dipLocation);
 
-            Data.Models.Metadata.DipValue[]? dipValues = dipSwitch.ReadItemArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            Data.Models.Metadata.DipValue[]? dipValues = dipSwitch.ReadArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
             Assert.NotNull(dipValues);
             Data.Models.Metadata.DipValue? dipValue = Assert.Single(dipValues);
             ValidateMetadataDipValue(dipValue);
@@ -827,7 +827,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(diskArea);
             Assert.Equal("name", diskArea.ReadString(Data.Models.Metadata.DiskArea.NameKey));
 
-            Data.Models.Metadata.Disk[]? disks = diskArea.ReadItemArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
+            Data.Models.Metadata.Disk[]? disks = diskArea.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
             Assert.NotNull(disks);
             Data.Models.Metadata.Disk? disk = Assert.Single(disks);
             ValidateMetadataDisk(disk);
@@ -901,7 +901,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.True(input.ReadBool(Data.Models.Metadata.Input.ServiceKey));
             Assert.True(input.ReadBool(Data.Models.Metadata.Input.TiltKey));
 
-            Data.Models.Metadata.Control[]? controls = input.ReadItemArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
+            Data.Models.Metadata.Control[]? controls = input.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
             Assert.NotNull(controls);
             Data.Models.Metadata.Control? control = Assert.Single(controls);
             ValidateMetadataControl(control);
@@ -930,22 +930,22 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.Equal("interface", part.ReadString(Data.Models.Metadata.Part.InterfaceKey));
             Assert.Equal("name", part.ReadString(Data.Models.Metadata.Part.NameKey));
 
-            Data.Models.Metadata.DataArea[]? dataAreas = part.ReadItemArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
+            Data.Models.Metadata.DataArea[]? dataAreas = part.ReadArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
             Assert.NotNull(dataAreas);
             Data.Models.Metadata.DataArea? dataArea = Assert.Single(dataAreas);
             ValidateMetadataDataArea(dataArea);
 
-            Data.Models.Metadata.DiskArea[]? diskAreas = part.ReadItemArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
+            Data.Models.Metadata.DiskArea[]? diskAreas = part.ReadArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
             Assert.NotNull(diskAreas);
             Data.Models.Metadata.DiskArea? diskArea = Assert.Single(diskAreas);
             ValidateMetadataDiskArea(diskArea);
 
-            Data.Models.Metadata.DipSwitch[]? dipSwitches = part.ReadItemArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
+            Data.Models.Metadata.DipSwitch[]? dipSwitches = part.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
             Assert.NotNull(dipSwitches);
             Data.Models.Metadata.DipSwitch? dipSwitch = Assert.Single(dipSwitches);
             ValidateMetadataDipSwitch(dipSwitch);
 
-            Data.Models.Metadata.Feature[]? features = part.ReadItemArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
+            Data.Models.Metadata.Feature[]? features = part.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
             Assert.NotNull(features);
             Data.Models.Metadata.Feature? feature = Assert.Single(features);
             ValidateMetadataFeature(feature);
@@ -956,7 +956,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(port);
             Assert.Equal("tag", port.ReadString(Data.Models.Metadata.Port.TagKey));
 
-            Data.Models.Metadata.Analog[]? dipValues = port.ReadItemArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
+            Data.Models.Metadata.Analog[]? dipValues = port.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
             Assert.NotNull(dipValues);
             Data.Models.Metadata.Analog? dipValue = Assert.Single(dipValues);
             ValidateMetadataAnalog(dipValue);
@@ -1099,7 +1099,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             Assert.NotNull(slot);
             Assert.Equal("name", slot.ReadString(Data.Models.Metadata.Slot.NameKey));
 
-            Data.Models.Metadata.SlotOption[]? slotOptions = slot.ReadItemArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
+            Data.Models.Metadata.SlotOption[]? slotOptions = slot.ReadArray<Data.Models.Metadata.SlotOption>(Data.Models.Metadata.Slot.SlotOptionKey);
             Assert.NotNull(slotOptions);
             Data.Models.Metadata.SlotOption? slotOption = Assert.Single(slotOptions);
             ValidateMetadataSlotOption(slotOption);

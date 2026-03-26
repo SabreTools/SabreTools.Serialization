@@ -35,7 +35,7 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Port(Data.Models.Metadata.Port item) : base(item)
         {
             // Handle subitems
-            var analogs = item.ReadItemArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
+            var analogs = item.ReadArray<Data.Models.Metadata.Analog>(Data.Models.Metadata.Port.AnalogKey);
             if (analogs is not null)
             {
                 Analog[] analogItems = Array.ConvertAll(analogs, analog => new Analog(analog));

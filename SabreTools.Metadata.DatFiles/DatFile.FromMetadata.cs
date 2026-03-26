@@ -46,7 +46,7 @@ namespace SabreTools.Metadata.DatFiles
                 ConvertHeader(header, keep);
 
             // Get the machines from the metadata
-            var machines = item.ReadItemArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
+            var machines = item.ReadArray<Data.Models.Metadata.Machine>(Data.Models.Metadata.MetadataFile.MachineKey);
             if (machines is not null)
                 ConvertMachines(machines, source, sourceIndex: 0, statsOnly, filterRunner);
         }
@@ -247,7 +247,7 @@ namespace SabreTools.Metadata.DatFiles
             // Convert items in the machine
             if (item.ContainsKey(Data.Models.Metadata.Machine.AdjusterKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Adjuster>(Data.Models.Metadata.Machine.AdjusterKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Adjuster>(Data.Models.Metadata.Machine.AdjusterKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -259,7 +259,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.ArchiveKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Archive>(Data.Models.Metadata.Machine.ArchiveKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Archive>(Data.Models.Metadata.Machine.ArchiveKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -271,7 +271,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.BiosSetKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.BiosSet>(Data.Models.Metadata.Machine.BiosSetKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.BiosSet>(Data.Models.Metadata.Machine.BiosSetKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -283,7 +283,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.ChipKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Chip>(Data.Models.Metadata.Machine.ChipKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Chip>(Data.Models.Metadata.Machine.ChipKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -295,7 +295,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.ConfigurationKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Configuration>(Data.Models.Metadata.Machine.ConfigurationKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Configuration>(Data.Models.Metadata.Machine.ConfigurationKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -307,7 +307,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DeviceKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Device>(Data.Models.Metadata.Machine.DeviceKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Device>(Data.Models.Metadata.Machine.DeviceKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -319,7 +319,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DeviceRefKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.DeviceRef>(Data.Models.Metadata.Machine.DeviceRefKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.DeviceRef>(Data.Models.Metadata.Machine.DeviceRefKey) ?? [];
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
@@ -331,7 +331,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DipSwitchKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Machine.DipSwitchKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Machine.DipSwitchKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -343,7 +343,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DiskKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.Machine.DiskKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.Machine.DiskKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -355,7 +355,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DisplayKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Display>(Data.Models.Metadata.Machine.DisplayKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -367,7 +367,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DriverKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -379,7 +379,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.DumpKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Dump>(Data.Models.Metadata.Machine.DumpKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Dump>(Data.Models.Metadata.Machine.DumpKey) ?? [];
                 for (int i = 0; i < items.Length; i++)
                 {
                     var datItem = new Rom(items[i], machine, source, i);
@@ -393,7 +393,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.FeatureKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Machine.FeatureKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Machine.FeatureKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -405,7 +405,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.InfoKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Info>(Data.Models.Metadata.Machine.InfoKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Info>(Data.Models.Metadata.Machine.InfoKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -417,7 +417,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.InputKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -429,7 +429,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.MediaKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Media>(Data.Models.Metadata.Machine.MediaKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Media>(Data.Models.Metadata.Machine.MediaKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -441,13 +441,13 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.PartKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Part>(Data.Models.Metadata.Machine.PartKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Part>(Data.Models.Metadata.Machine.PartKey) ?? [];
                 ProcessItems(items, machine, machineIndex: 0, source, sourceIndex, statsOnly, filterRunner);
             }
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.PortKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Port>(Data.Models.Metadata.Machine.PortKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Port>(Data.Models.Metadata.Machine.PortKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -459,7 +459,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.RamOptionKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.RamOption>(Data.Models.Metadata.Machine.RamOptionKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.RamOption>(Data.Models.Metadata.Machine.RamOptionKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -471,7 +471,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.ReleaseKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Release>(Data.Models.Metadata.Machine.ReleaseKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Release>(Data.Models.Metadata.Machine.ReleaseKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -483,7 +483,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.RomKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.Machine.RomKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.Machine.RomKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -498,7 +498,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.SampleKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Sample>(Data.Models.Metadata.Machine.SampleKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Sample>(Data.Models.Metadata.Machine.SampleKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -510,7 +510,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.SharedFeatKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.SharedFeat>(Data.Models.Metadata.Machine.SharedFeatKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.SharedFeat>(Data.Models.Metadata.Machine.SharedFeatKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -522,7 +522,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.SlotKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Slot>(Data.Models.Metadata.Machine.SlotKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Slot>(Data.Models.Metadata.Machine.SlotKey) ?? [];
                 // Do not filter these due to later use
                 Array.ForEach(items, item =>
                 {
@@ -534,7 +534,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.SoftwareListKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.SoftwareList>(Data.Models.Metadata.Machine.SoftwareListKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.SoftwareList>(Data.Models.Metadata.Machine.SoftwareListKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -546,7 +546,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.SoundKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -558,7 +558,7 @@ namespace SabreTools.Metadata.DatFiles
 
             if (item.ContainsKey(Data.Models.Metadata.Machine.VideoKey))
             {
-                var items = item.ReadItemArray<Data.Models.Metadata.Video>(Data.Models.Metadata.Machine.VideoKey) ?? [];
+                var items = item.ReadArray<Data.Models.Metadata.Video>(Data.Models.Metadata.Machine.VideoKey) ?? [];
                 var filtered = filterRunner is null ? items : Array.FindAll(items, i => filterRunner.Run(item));
                 Array.ForEach(filtered, item =>
                 {
@@ -597,13 +597,13 @@ namespace SabreTools.Metadata.DatFiles
                 var partItem = new Part(item, machine, source);
 
                 // Handle subitems
-                var dataAreas = item.ReadItemArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
+                var dataAreas = item.ReadArray<Data.Models.Metadata.DataArea>(Data.Models.Metadata.Part.DataAreaKey);
                 if (dataAreas is not null)
                 {
                     foreach (var dataArea in dataAreas)
                     {
                         var dataAreaItem = new DataArea(dataArea, machine, source);
-                        var roms = dataArea.ReadItemArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
+                        var roms = dataArea.ReadArray<Data.Models.Metadata.Rom>(Data.Models.Metadata.DataArea.RomKey);
                         if (roms is null)
                             continue;
 
@@ -646,13 +646,13 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var diskAreas = item.ReadItemArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
+                var diskAreas = item.ReadArray<Data.Models.Metadata.DiskArea>(Data.Models.Metadata.Part.DiskAreaKey);
                 if (diskAreas is not null)
                 {
                     foreach (var diskArea in diskAreas)
                     {
                         var diskAreaitem = new DiskArea(diskArea, machine, source);
-                        var disks = diskArea.ReadItemArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
+                        var disks = diskArea.ReadArray<Data.Models.Metadata.Disk>(Data.Models.Metadata.DiskArea.DiskKey);
                         if (disks is null)
                             continue;
 
@@ -672,7 +672,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var dipSwitches = item.ReadItemArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
+                var dipSwitches = item.ReadArray<Data.Models.Metadata.DipSwitch>(Data.Models.Metadata.Part.DipSwitchKey);
                 if (dipSwitches is not null)
                 {
                     foreach (var dipSwitch in dipSwitches)
@@ -689,7 +689,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
                 }
 
-                var partFeatures = item.ReadItemArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
+                var partFeatures = item.ReadArray<Data.Models.Metadata.Feature>(Data.Models.Metadata.Part.FeatureKey);
                 if (partFeatures is not null)
                 {
                     foreach (var partFeature in partFeatures)

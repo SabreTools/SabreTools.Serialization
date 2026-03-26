@@ -47,7 +47,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                 Write<string?>(Data.Models.Metadata.Input.TiltKey, ReadBool(Data.Models.Metadata.Input.TiltKey).FromYesNo());
 
             // Handle subitems
-            var controls = item.ReadItemArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
+            var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);
             if (controls is not null)
             {
                 Control[] controlItems = Array.ConvertAll(controls, control => new Control(control));

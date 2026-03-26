@@ -59,14 +59,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (condition is not null)
                 Write<Condition?>(Data.Models.Metadata.Configuration.ConditionKey, new Condition(condition));
 
-            var confLocations = item.ReadItemArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
+            var confLocations = item.ReadArray<Data.Models.Metadata.ConfLocation>(Data.Models.Metadata.Configuration.ConfLocationKey);
             if (confLocations is not null)
             {
                 ConfLocation[] confLocationItems = Array.ConvertAll(confLocations, confLocation => new ConfLocation(confLocation));
                 Write<ConfLocation[]?>(Data.Models.Metadata.Configuration.ConfLocationKey, confLocationItems);
             }
 
-            var confSettings = item.ReadItemArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
+            var confSettings = item.ReadArray<Data.Models.Metadata.ConfSetting>(Data.Models.Metadata.Configuration.ConfSettingKey);
             if (confSettings is not null)
             {
                 ConfSetting[] confSettingItems = Array.ConvertAll(confSettings, confSetting => new ConfSetting(confSetting));

@@ -84,14 +84,14 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (condition is not null)
                 Write<Condition?>(Data.Models.Metadata.DipSwitch.ConditionKey, new Condition(condition));
 
-            var dipLocations = item.ReadItemArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
+            var dipLocations = item.ReadArray<Data.Models.Metadata.DipLocation>(Data.Models.Metadata.DipSwitch.DipLocationKey);
             if (dipLocations is not null)
             {
                 DipLocation[] dipLocationItems = Array.ConvertAll(dipLocations, dipLocation => new DipLocation(dipLocation));
                 Write<DipLocation[]?>(Data.Models.Metadata.DipSwitch.DipLocationKey, dipLocationItems);
             }
 
-            var dipValues = item.ReadItemArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
+            var dipValues = item.ReadArray<Data.Models.Metadata.DipValue>(Data.Models.Metadata.DipSwitch.DipValueKey);
             if (dipValues is not null)
             {
                 DipValue[] dipValueItems = Array.ConvertAll(dipValues, dipValue => new DipValue(dipValue));

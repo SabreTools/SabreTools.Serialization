@@ -55,7 +55,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             if (instance is not null)
                 Write<Instance?>(Data.Models.Metadata.Device.InstanceKey, new Instance(instance));
 
-            var extensions = item.ReadItemArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
+            var extensions = item.ReadArray<Data.Models.Metadata.Extension>(Data.Models.Metadata.Device.ExtensionKey);
             if (extensions is not null)
             {
                 Extension[] extensionItems = Array.ConvertAll(extensions, extension => new Extension(extension));
