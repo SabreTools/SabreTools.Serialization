@@ -859,25 +859,5 @@ namespace SabreTools.Data.Extensions
         }
 
         #endregion
-
-        #region Reading
-
-        /// <summary>
-        /// Read an item array from a given key, if possible
-        /// </summary>
-        public static T[]? ReadItemArray<T>(this DictionaryBase self, string key) where T : DictionaryBase
-        {
-            var items = self.Read<T[]>(key);
-            if (items == default)
-            {
-                var single = self.Read<T>(key);
-                if (single != default)
-                    items = [single];
-            }
-
-            return items;
-        }
-
-        #endregion
     }
 }

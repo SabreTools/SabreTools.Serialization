@@ -133,6 +133,25 @@ namespace SabreTools.Data.Models.Metadata
         }
 
         /// <summary>
+        /// Read a key as a T[], returning null on error
+        /// </summary>
+        public T[]? ReadArray<T>(string key)
+        {
+            if (!ValidateReadKey(key))
+                return null;
+
+            var items = Read<T[]>(key);
+            if (items is not null)
+                return items;
+
+            var single = Read<T>(key);
+            if (single is not null)
+                return [single];
+
+            return null;
+        }
+
+        /// <summary>
         /// Read a key as a string[], returning null on error
         /// </summary>
         public string[]? ReadStringArray(string key)
