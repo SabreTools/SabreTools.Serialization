@@ -1,4 +1,5 @@
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.BSP;
 using SabreTools.Text.Extensions;
 
@@ -51,7 +52,7 @@ namespace SabreTools.Wrappers
             for (int i = 0; i < model.Header.Lumps.Length; i++)
             {
                 var lump = model.Header.Lumps[i];
-                string specialLumpName = GetLumpName(i);
+                string specialLumpName = ((BspLumpType)i).FromBspLumpType();
 
                 builder.AppendLine($"  Lump {i}{specialLumpName}");
                 builder.AppendLine(lump.Offset, "    Offset");
@@ -111,29 +112,6 @@ namespace SabreTools.Wrappers
             }
 
             builder.AppendLine();
-        }
-
-        private static string GetLumpName(int i)
-        {
-            return (BspLumpType)i switch
-            {
-                BspLumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
-                BspLumpType.LUMP_PLANES => " - LUMP_PLANES",
-                BspLumpType.LUMP_TEXTURES => " - LUMP_TEXTURES",
-                BspLumpType.LUMP_VERTICES => " - LUMP_VERTICES",
-                BspLumpType.LUMP_VISIBILITY => " - LUMP_VISIBILITY",
-                BspLumpType.LUMP_NODES => " - LUMP_NODES",
-                BspLumpType.LUMP_TEXINFO => " - LUMP_TEXINFO",
-                BspLumpType.LUMP_FACES => " - LUMP_FACES",
-                BspLumpType.LUMP_LIGHTING => " - LUMP_LIGHTING",
-                BspLumpType.LUMP_CLIPNODES => " - LUMP_CLIPNODES",
-                BspLumpType.LUMP_LEAVES => " - LUMP_LEAVES",
-                BspLumpType.LUMP_MARKSURFACES => " - LUMP_MARKSURFACES",
-                BspLumpType.LUMP_EDGES => " - LUMP_EDGES",
-                BspLumpType.LUMP_SURFEDGES => " - LUMP_SURFEDGES",
-                BspLumpType.LUMP_MODELS => " - LUMP_MODELS",
-                _ => string.Empty,
-            };
         }
 
         private static void Print(StringBuilder builder, EntitiesLump lump)
