@@ -719,14 +719,14 @@ namespace SabreTools.Metadata.DatFiles
                     // Now that every device reference is accounted for, add the new list of device references, if they don't already exist
                     foreach (var deviceReference in newDeviceReferences)
                     {
-                        if (!deviceReferences.Contains(deviceReference))
-                        {
-                            deviceReferences.Add(deviceReference);
-                            var deviceRef = new DeviceRef();
-                            deviceRef.SetName(deviceReference);
-                            deviceRef.CopyMachineInformation(copyFrom);
-                            Items.AddItem(deviceRef, statsOnly: false);
-                        }
+                        if (deviceReferences.Contains(deviceReference))
+                            continue;
+
+                        deviceReferences.Add(deviceReference);
+                        var deviceRef = new DeviceRef();
+                        deviceRef.SetName(deviceReference);
+                        deviceRef.CopyMachineInformation(copyFrom);
+                        Items.AddItem(deviceRef, statsOnly: false);
                     }
                 }
 
@@ -769,19 +769,19 @@ namespace SabreTools.Metadata.DatFiles
                     // Now that every device is accounted for, add the new list of slot options, if they don't already exist
                     foreach (var slotOption in newSlotOptions)
                     {
-                        if (!slotOptions.Contains(slotOption))
-                        {
-                            slotOptions.Add(slotOption);
-                            var slotOptionItem = new SlotOption();
-                            slotOptionItem.Write<string?>(Data.Models.Metadata.SlotOption.DevNameKey, slotOption);
-                            slotOptionItem.CopyMachineInformation(copyFrom);
+                        if (slotOptions.Contains(slotOption))
+                            continue;
 
-                            var slotItem = new Slot();
-                            slotItem.Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, [slotOptionItem]);
-                            slotItem.CopyMachineInformation(copyFrom);
+                        slotOptions.Add(slotOption);
+                        var slotOptionItem = new SlotOption();
+                        slotOptionItem.Write<string?>(Data.Models.Metadata.SlotOption.DevNameKey, slotOption);
+                        slotOptionItem.CopyMachineInformation(copyFrom);
 
-                            Items.AddItem(slotItem, statsOnly: false);
-                        }
+                        var slotItem = new Slot();
+                        slotItem.Write<SlotOption[]?>(Data.Models.Metadata.Slot.SlotOptionKey, [slotOptionItem]);
+                        slotItem.CopyMachineInformation(copyFrom);
+
+                        Items.AddItem(slotItem, statsOnly: false);
                     }
                 }
             }

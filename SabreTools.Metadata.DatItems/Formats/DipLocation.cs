@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipLocation(Data.Models.Metadata.DipLocation item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.DipLocation.InvertedKey) is not null)
-                Write<string?>(Data.Models.Metadata.DipLocation.InvertedKey, ReadBool(Data.Models.Metadata.DipLocation.InvertedKey).FromYesNo());
+            bool? inverted = ReadBool(Data.Models.Metadata.DipLocation.InvertedKey);
+            if (inverted is not null)
+                Write<string?>(Data.Models.Metadata.DipLocation.InvertedKey, inverted.FromYesNo());
         }
 
         public DipLocation(Data.Models.Metadata.DipLocation item, Machine machine, Source source) : this(item)

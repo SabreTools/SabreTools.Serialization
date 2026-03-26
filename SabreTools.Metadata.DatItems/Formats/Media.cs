@@ -30,12 +30,17 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<DupeType>(DupeTypeKey, 0x00);
 
             // Process hash values
-            if (ReadString(Data.Models.Metadata.Media.MD5Key) is not null)
-                Write<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(ReadString(Data.Models.Metadata.Media.MD5Key)));
-            if (ReadString(Data.Models.Metadata.Media.SHA1Key) is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(ReadString(Data.Models.Metadata.Media.SHA1Key)));
-            if (ReadString(Data.Models.Metadata.Media.SHA256Key) is not null)
-                Write<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(ReadString(Data.Models.Metadata.Media.SHA256Key)));
+            string? md5 = ReadString(Data.Models.Metadata.Media.MD5Key);
+            if (md5 is not null)
+                Write<string?>(Data.Models.Metadata.Media.MD5Key, TextHelper.NormalizeMD5(md5));
+
+            string? sha1 = ReadString(Data.Models.Metadata.Media.SHA1Key);
+            if (sha1 is not null)
+                Write<string?>(Data.Models.Metadata.Media.SHA1Key, TextHelper.NormalizeSHA1(sha1));
+
+            string? sha256 = ReadString(Data.Models.Metadata.Media.SHA256Key);
+            if (sha256 is not null)
+                Write<string?>(Data.Models.Metadata.Media.SHA256Key, TextHelper.NormalizeSHA256(sha256));
         }
 
         public Media(Data.Models.Metadata.Media item, Machine machine, Source source) : this(item)

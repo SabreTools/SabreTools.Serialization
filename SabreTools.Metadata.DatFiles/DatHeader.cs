@@ -91,8 +91,8 @@ namespace SabreTools.Metadata.DatFiles
                 // Populate the internal machine from non-filter fields
                 foreach (string fieldName in nonItemFields)
                 {
-                    if (header.ContainsKey(fieldName))
-                        _internal[fieldName] = header[fieldName];
+                    if (header.TryGetValue(fieldName, out var fieldValue))
+                        _internal[fieldName] = fieldValue;
                 }
             }
 
@@ -103,22 +103,22 @@ namespace SabreTools.Metadata.DatFiles
                 // Populate the internal machine from filter fields
                 foreach (string fieldName in nonStandardFields)
                 {
-                    if (header.ContainsKey(fieldName))
-                        _internal[fieldName] = header[fieldName];
+                    if (header.TryGetValue(fieldName, out var fieldValue))
+                        _internal[fieldName] = fieldValue;
                 }
             }
 
             // Get all no-filter fields
-            if (header.ContainsKey(Data.Models.Metadata.Header.CanOpenKey))
-                _internal[Data.Models.Metadata.Header.CanOpenKey] = header[Data.Models.Metadata.Header.CanOpenKey];
-            if (header.ContainsKey(Data.Models.Metadata.Header.ImagesKey))
-                _internal[Data.Models.Metadata.Header.ImagesKey] = header[Data.Models.Metadata.Header.ImagesKey];
-            if (header.ContainsKey(Data.Models.Metadata.Header.InfosKey))
-                _internal[Data.Models.Metadata.Header.InfosKey] = header[Data.Models.Metadata.Header.InfosKey];
-            if (header.ContainsKey(Data.Models.Metadata.Header.NewDatKey))
-                _internal[Data.Models.Metadata.Header.NewDatKey] = header[Data.Models.Metadata.Header.NewDatKey];
-            if (header.ContainsKey(Data.Models.Metadata.Header.SearchKey))
-                _internal[Data.Models.Metadata.Header.SearchKey] = header[Data.Models.Metadata.Header.SearchKey];
+            if (header.TryGetValue(Data.Models.Metadata.Header.CanOpenKey, out var canOpenValue))
+                _internal[Data.Models.Metadata.Header.CanOpenKey] = canOpenValue;
+            if (header.TryGetValue(Data.Models.Metadata.Header.ImagesKey, out var imageValue))
+                _internal[Data.Models.Metadata.Header.ImagesKey] = imageValue;
+            if (header.TryGetValue(Data.Models.Metadata.Header.InfosKey, out var infosValue))
+                _internal[Data.Models.Metadata.Header.InfosKey] = infosValue;
+            if (header.TryGetValue(Data.Models.Metadata.Header.NewDatKey, out var newDatValue))
+                _internal[Data.Models.Metadata.Header.NewDatKey] = newDatValue;
+            if (header.TryGetValue(Data.Models.Metadata.Header.SearchKey, out var searchValue))
+                _internal[Data.Models.Metadata.Header.SearchKey] = searchValue;
         }
 
         #endregion

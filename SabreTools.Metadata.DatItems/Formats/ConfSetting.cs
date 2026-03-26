@@ -33,8 +33,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, defaultValue.FromYesNo());
 
             // Handle subitems
             var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);

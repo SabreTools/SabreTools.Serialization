@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -76,8 +75,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipSwitch(Data.Models.Metadata.DipSwitch item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.DipSwitch.DefaultKey, ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.DipSwitch.DefaultKey, defaultValue.FromYesNo());
 
             // Handle subitems
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);

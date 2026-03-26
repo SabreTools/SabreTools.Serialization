@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Sound(Data.Models.Metadata.Sound item) : base(item)
         {
             // Process flag values
-            if (ReadLong(Data.Models.Metadata.Sound.ChannelsKey) is not null)
-                Write<string?>(Data.Models.Metadata.Sound.ChannelsKey, ReadLong(Data.Models.Metadata.Sound.ChannelsKey).ToString());
+            long? channels = ReadLong(Data.Models.Metadata.Sound.ChannelsKey);
+            if (channels is not null)
+                Write<string?>(Data.Models.Metadata.Sound.ChannelsKey, channels.ToString());
         }
 
         public Sound(Data.Models.Metadata.Sound item, Machine machine, Source source) : this(item)

@@ -33,8 +33,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Adjuster(Data.Models.Metadata.Adjuster item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.Adjuster.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.Adjuster.DefaultKey, ReadBool(Data.Models.Metadata.Adjuster.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.Adjuster.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.Adjuster.DefaultKey, defaultValue.FromYesNo());
 
             // Handle subitems
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);

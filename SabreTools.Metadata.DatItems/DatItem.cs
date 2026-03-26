@@ -104,7 +104,7 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         /// <returns>Machine if available, null otherwise</returns>
         /// <remarks>Relies on <see cref="MachineKey"/></remarks>
-        public Machine? GetMachine() => _internal.Read<Machine>(MachineKey);
+        public Machine? GetMachine() => Read<Machine>(MachineKey);
 
         /// <summary>
         /// Gets the name to use for a DatItem

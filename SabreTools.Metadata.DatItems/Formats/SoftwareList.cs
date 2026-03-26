@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public SoftwareList(Data.Models.Metadata.SoftwareList item) : base(item)
         {
             // Process flag values
-            if (ReadString(Data.Models.Metadata.SoftwareList.StatusKey) is not null)
-                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus().AsStringValue());
+            string? status = ReadString(Data.Models.Metadata.SoftwareList.StatusKey);
+            if (status is not null)
+                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, status.AsSoftwareListStatus().AsStringValue());
 
             // Handle subitems
             // TODO: Handle the Software subitem

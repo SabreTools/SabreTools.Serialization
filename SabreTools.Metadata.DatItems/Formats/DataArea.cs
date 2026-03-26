@@ -24,12 +24,17 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DataArea(Data.Models.Metadata.DataArea item) : base(item)
         {
             // Process flag values
-            if (ReadString(Data.Models.Metadata.DataArea.EndiannessKey) is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, ReadString(Data.Models.Metadata.DataArea.EndiannessKey).AsEndianness().AsStringValue());
-            if (ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.SizeKey, ReadLong(Data.Models.Metadata.DataArea.SizeKey).ToString());
-            if (ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.WidthKey, ReadLong(Data.Models.Metadata.DataArea.WidthKey).ToString());
+            string? endianness = ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
+            if (endianness is not null)
+                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, endianness.AsEndianness().AsStringValue());
+
+            long? size = ReadLong(Data.Models.Metadata.DataArea.SizeKey);
+            if (size is not null)
+                Write<string?>(Data.Models.Metadata.DataArea.SizeKey, size.ToString());
+
+            long? width = ReadLong(Data.Models.Metadata.DataArea.WidthKey);
+            if (width is not null)
+                Write<string?>(Data.Models.Metadata.DataArea.WidthKey, width.ToString());
         }
 
         public DataArea(Data.Models.Metadata.DataArea item, Machine machine, Source source) : this(item)

@@ -23,28 +23,49 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Driver(Data.Models.Metadata.Driver item) : base(item)
         {
             // Process flag values
-            if (ReadString(Data.Models.Metadata.Driver.CocktailKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.CocktailKey, ReadString(Data.Models.Metadata.Driver.CocktailKey).AsSupportStatus().AsStringValue());
-            if (ReadString(Data.Models.Metadata.Driver.ColorKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.ColorKey, ReadString(Data.Models.Metadata.Driver.ColorKey).AsSupportStatus().AsStringValue());
-            if (ReadString(Data.Models.Metadata.Driver.EmulationKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.EmulationKey, ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus().AsStringValue());
-            if (ReadBool(Data.Models.Metadata.Driver.IncompleteKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.IncompleteKey, ReadBool(Data.Models.Metadata.Driver.IncompleteKey).FromYesNo());
-            if (ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.NoSoundHardwareKey, ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey).FromYesNo());
-            if (ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey).ToString());
-            if (ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.RequiresArtworkKey, ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey).FromYesNo());
-            if (ReadString(Data.Models.Metadata.Driver.SaveStateKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SaveStateKey, ReadString(Data.Models.Metadata.Driver.SaveStateKey).AsSupported().AsStringValue(useSecond: true));
-            if (ReadString(Data.Models.Metadata.Driver.SoundKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.SoundKey, ReadString(Data.Models.Metadata.Driver.SoundKey).AsSupportStatus().AsStringValue());
-            if (ReadString(Data.Models.Metadata.Driver.StatusKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.StatusKey, ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus().AsStringValue());
-            if (ReadBool(Data.Models.Metadata.Driver.UnofficialKey) is not null)
-                Write<string?>(Data.Models.Metadata.Driver.UnofficialKey, ReadBool(Data.Models.Metadata.Driver.UnofficialKey).FromYesNo());
+            string? cocktail = ReadString(Data.Models.Metadata.Driver.CocktailKey);
+            if (cocktail is not null)
+                Write<string?>(Data.Models.Metadata.Driver.CocktailKey, cocktail.AsSupportStatus().AsStringValue());
+
+            string? color = ReadString(Data.Models.Metadata.Driver.ColorKey);
+            if (color is not null)
+                Write<string?>(Data.Models.Metadata.Driver.ColorKey, color.AsSupportStatus().AsStringValue());
+
+            string? emulation = ReadString(Data.Models.Metadata.Driver.EmulationKey);
+            if (emulation is not null)
+                Write<string?>(Data.Models.Metadata.Driver.EmulationKey, emulation.AsSupportStatus().AsStringValue());
+
+            bool? incomplete = ReadBool(Data.Models.Metadata.Driver.IncompleteKey);
+            if (incomplete is not null)
+                Write<string?>(Data.Models.Metadata.Driver.IncompleteKey, incomplete.FromYesNo());
+
+            bool? noSoundHardware = ReadBool(Data.Models.Metadata.Driver.NoSoundHardwareKey);
+            if (noSoundHardware is not null)
+                Write<string?>(Data.Models.Metadata.Driver.NoSoundHardwareKey, noSoundHardware.FromYesNo());
+
+            long? paletteSize = ReadLong(Data.Models.Metadata.Driver.PaletteSizeKey);
+            if (paletteSize is not null)
+                Write<string?>(Data.Models.Metadata.Driver.PaletteSizeKey, paletteSize.ToString());
+
+            bool? requiresArtwork = ReadBool(Data.Models.Metadata.Driver.RequiresArtworkKey);
+            if (requiresArtwork is not null)
+                Write<string?>(Data.Models.Metadata.Driver.RequiresArtworkKey, requiresArtwork.FromYesNo());
+
+            string? saveState = ReadString(Data.Models.Metadata.Driver.SaveStateKey);
+            if (saveState is not null)
+                Write<string?>(Data.Models.Metadata.Driver.SaveStateKey, saveState.AsSupported().AsStringValue(useSecond: true));
+
+            string? sound = ReadString(Data.Models.Metadata.Driver.SoundKey);
+            if (sound is not null)
+                Write<string?>(Data.Models.Metadata.Driver.SoundKey, sound.AsSupportStatus().AsStringValue());
+
+            string? status = ReadString(Data.Models.Metadata.Driver.StatusKey);
+            if (status is not null)
+                Write<string?>(Data.Models.Metadata.Driver.StatusKey, status.AsSupportStatus().AsStringValue());
+
+            bool? unofficial = ReadBool(Data.Models.Metadata.Driver.UnofficialKey);
+            if (unofficial is not null)
+                Write<string?>(Data.Models.Metadata.Driver.UnofficialKey, unofficial.FromYesNo());
         }
 
         public Driver(Data.Models.Metadata.Driver item, Machine machine, Source source) : this(item)

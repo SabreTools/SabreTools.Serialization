@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public ConfLocation(Data.Models.Metadata.ConfLocation item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey) is not null)
-                Write<string?>(Data.Models.Metadata.ConfLocation.InvertedKey, ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey).FromYesNo());
+            bool? inverted = ReadBool(Data.Models.Metadata.ConfLocation.InvertedKey);
+            if (inverted is not null)
+                Write<string?>(Data.Models.Metadata.ConfLocation.InvertedKey, inverted.FromYesNo());
         }
 
         public ConfLocation(Data.Models.Metadata.ConfLocation item, Machine machine, Source source) : this(item)

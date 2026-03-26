@@ -31,31 +31,39 @@ namespace SabreTools.Metadata.DatItems
             _internal = [];
             foreach (string fieldName in nonItemFields)
             {
-                if (machine.TryGetValue(fieldName, out var value))
-                    _internal[fieldName] = value;
+                if (machine.TryGetValue(fieldName, out var fieldValue))
+                    _internal[fieldName] = fieldValue;
             }
 
             // Process flag values
-            if (ReadString(Data.Models.Metadata.Machine.Im1CRCKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.Im1CRCKey, TextHelper.NormalizeCRC32(ReadString(Data.Models.Metadata.Machine.Im1CRCKey)));
-            if (ReadString(Data.Models.Metadata.Machine.Im2CRCKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.Im2CRCKey, TextHelper.NormalizeCRC32(ReadString(Data.Models.Metadata.Machine.Im2CRCKey)));
-            if (ReadBool(Data.Models.Metadata.Machine.IsBiosKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsBiosKey, ReadBool(Data.Models.Metadata.Machine.IsBiosKey).FromYesNo());
-            if (ReadBool(Data.Models.Metadata.Machine.IsDeviceKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsDeviceKey, ReadBool(Data.Models.Metadata.Machine.IsDeviceKey).FromYesNo());
-            if (ReadBool(Data.Models.Metadata.Machine.IsMechanicalKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.IsMechanicalKey, ReadBool(Data.Models.Metadata.Machine.IsMechanicalKey).FromYesNo());
-            if (ReadString(Data.Models.Metadata.Machine.SupportedKey) is not null)
-                Write<string?>(Data.Models.Metadata.Machine.SupportedKey, ReadString(Data.Models.Metadata.Machine.SupportedKey).AsSupported().AsStringValue());
+            string? im1Crc = ReadString(Data.Models.Metadata.Machine.Im1CRCKey);
+            if (im1Crc is not null)
+                Write<string?>(Data.Models.Metadata.Machine.Im1CRCKey, TextHelper.NormalizeCRC32(im1Crc));
+
+            string? im2Crc = ReadString(Data.Models.Metadata.Machine.Im2CRCKey);
+            if (im2Crc is not null)
+                Write<string?>(Data.Models.Metadata.Machine.Im2CRCKey, TextHelper.NormalizeCRC32(im2Crc));
+
+            bool? isBios = ReadBool(Data.Models.Metadata.Machine.IsBiosKey);
+            if (isBios is not null)
+                Write<string?>(Data.Models.Metadata.Machine.IsBiosKey, isBios.FromYesNo());
+
+            bool? isDevice = ReadBool(Data.Models.Metadata.Machine.IsDeviceKey);
+            if (isDevice is not null)
+                Write<string?>(Data.Models.Metadata.Machine.IsDeviceKey, isDevice.FromYesNo());
+
+            bool? isMechanical = ReadBool(Data.Models.Metadata.Machine.IsMechanicalKey);
+            if (isMechanical is not null)
+                Write<string?>(Data.Models.Metadata.Machine.IsMechanicalKey, isMechanical.FromYesNo());
+
+            string? supported = ReadString(Data.Models.Metadata.Machine.SupportedKey);
+            if (supported is not null)
+                Write<string?>(Data.Models.Metadata.Machine.SupportedKey, supported.AsSupported().AsStringValue());
 
             // Handle Trurip object, if it exists
-            if (machine.ContainsKey(Data.Models.Metadata.Machine.TruripKey))
-            {
-                var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
-                if (truripItem is not null)
-                    Write(Data.Models.Metadata.Machine.TruripKey, new Trurip(truripItem));
-            }
+            var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);
+            if (truripItem is not null)
+                Write(Data.Models.Metadata.Machine.TruripKey, new Trurip(truripItem));
         }
 
         #endregion

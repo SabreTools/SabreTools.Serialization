@@ -67,18 +67,26 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<DupeType>(DupeTypeKey, 0x00);
 
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.Disk.OptionalKey) is not null)
-                Write<string?>(Data.Models.Metadata.Disk.OptionalKey, ReadBool(Data.Models.Metadata.Disk.OptionalKey).FromYesNo());
-            if (ReadString(Data.Models.Metadata.Disk.StatusKey) is not null)
-                Write<string?>(Data.Models.Metadata.Disk.StatusKey, ReadString(Data.Models.Metadata.Disk.StatusKey).AsItemStatus().AsStringValue());
-            if (ReadBool(Data.Models.Metadata.Disk.WritableKey) is not null)
-                Write<string?>(Data.Models.Metadata.Disk.WritableKey, ReadBool(Data.Models.Metadata.Disk.WritableKey).FromYesNo());
+            bool? optional = ReadBool(Data.Models.Metadata.Disk.OptionalKey);
+            if (optional is not null)
+                Write<string?>(Data.Models.Metadata.Disk.OptionalKey, optional.FromYesNo());
+
+            string? status = ReadString(Data.Models.Metadata.Disk.StatusKey);
+            if (status is not null)
+                Write<string?>(Data.Models.Metadata.Disk.StatusKey, status.AsItemStatus().AsStringValue());
+
+            bool? writable = ReadBool(Data.Models.Metadata.Disk.WritableKey);
+            if (writable is not null)
+                Write<string?>(Data.Models.Metadata.Disk.WritableKey, writable.FromYesNo());
 
             // Process hash values
-            if (ReadString(Data.Models.Metadata.Disk.MD5Key) is not null)
-                Write<string?>(Data.Models.Metadata.Disk.MD5Key, TextHelper.NormalizeMD5(ReadString(Data.Models.Metadata.Disk.MD5Key)));
-            if (ReadString(Data.Models.Metadata.Disk.SHA1Key) is not null)
-                Write<string?>(Data.Models.Metadata.Disk.SHA1Key, TextHelper.NormalizeSHA1(ReadString(Data.Models.Metadata.Disk.SHA1Key)));
+            string? md5 = ReadString(Data.Models.Metadata.Disk.MD5Key);
+            if (md5 is not null)
+                Write<string?>(Data.Models.Metadata.Disk.MD5Key, TextHelper.NormalizeMD5(md5));
+
+            string? sha1 = ReadString(Data.Models.Metadata.Disk.SHA1Key);
+            if (sha1 is not null)
+                Write<string?>(Data.Models.Metadata.Disk.SHA1Key, TextHelper.NormalizeSHA1(sha1));
         }
 
         public Disk(Data.Models.Metadata.Disk item, Machine machine, Source source) : this(item)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -35,16 +34,25 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Input(Data.Models.Metadata.Input item) : base(item)
         {
             // Process flag values
-            if (ReadLong(Data.Models.Metadata.Input.ButtonsKey) is not null)
-                Write<string?>(Data.Models.Metadata.Input.ButtonsKey, ReadLong(Data.Models.Metadata.Input.ButtonsKey).ToString());
-            if (ReadLong(Data.Models.Metadata.Input.CoinsKey) is not null)
-                Write<string?>(Data.Models.Metadata.Input.CoinsKey, ReadLong(Data.Models.Metadata.Input.CoinsKey).ToString());
-            if (ReadLong(Data.Models.Metadata.Input.PlayersKey) is not null)
-                Write<string?>(Data.Models.Metadata.Input.PlayersKey, ReadLong(Data.Models.Metadata.Input.PlayersKey).ToString());
-            if (ReadBool(Data.Models.Metadata.Input.ServiceKey) is not null)
-                Write<string?>(Data.Models.Metadata.Input.ServiceKey, ReadBool(Data.Models.Metadata.Input.ServiceKey).FromYesNo());
-            if (ReadBool(Data.Models.Metadata.Input.TiltKey) is not null)
-                Write<string?>(Data.Models.Metadata.Input.TiltKey, ReadBool(Data.Models.Metadata.Input.TiltKey).FromYesNo());
+            long? buttons = ReadLong(Data.Models.Metadata.Input.ButtonsKey);
+            if (buttons is not null)
+                Write<string?>(Data.Models.Metadata.Input.ButtonsKey, buttons.ToString());
+
+            long? coins = ReadLong(Data.Models.Metadata.Input.CoinsKey);
+            if (coins is not null)
+                Write<string?>(Data.Models.Metadata.Input.CoinsKey, coins.ToString());
+
+            long? players = ReadLong(Data.Models.Metadata.Input.PlayersKey);
+            if (players is not null)
+                Write<string?>(Data.Models.Metadata.Input.PlayersKey, players.ToString());
+
+            bool? service = ReadBool(Data.Models.Metadata.Input.ServiceKey);
+            if (service is not null)
+                Write<string?>(Data.Models.Metadata.Input.ServiceKey, service.FromYesNo());
+
+            bool? tilt = ReadBool(Data.Models.Metadata.Input.TiltKey);
+            if (tilt is not null)
+                Write<string?>(Data.Models.Metadata.Input.TiltKey, tilt.FromYesNo());
 
             // Handle subitems
             var controls = item.ReadArray<Data.Models.Metadata.Control>(Data.Models.Metadata.Input.ControlKey);

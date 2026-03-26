@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public RamOption(Data.Models.Metadata.RamOption item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.RamOption.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.RamOption.DefaultKey, ReadBool(Data.Models.Metadata.RamOption.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.RamOption.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.RamOption.DefaultKey, defaultValue.FromYesNo());
         }
 
         public RamOption(Data.Models.Metadata.RamOption item, Machine machine, Source source) : this(item)

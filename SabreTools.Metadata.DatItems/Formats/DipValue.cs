@@ -33,8 +33,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public DipValue(Data.Models.Metadata.DipValue item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.DipValue.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.DipValue.DefaultKey, ReadBool(Data.Models.Metadata.DipValue.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.DipValue.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.DipValue.DefaultKey, defaultValue.FromYesNo());
 
             // Handle subitems
             var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);

@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Release(Data.Models.Metadata.Release item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.Release.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.Release.DefaultKey, ReadBool(Data.Models.Metadata.Release.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.Release.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.Release.DefaultKey, defaultValue.FromYesNo());
         }
 
         public Release(Data.Models.Metadata.Release item, Machine machine, Source source) : this(item)

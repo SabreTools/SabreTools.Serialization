@@ -3,7 +3,6 @@ using System.Collections.Generic;
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
 using System.Threading.Tasks;
 #endif
-using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
@@ -66,36 +65,25 @@ namespace SabreTools.Metadata.DatFiles
             var header = new DatHeader(item);
 
             // Convert subheader values
-            if (item.ContainsKey(Data.Models.Metadata.Header.CanOpenKey))
-            {
-                var canOpen = item.Read<Data.Models.OfflineList.CanOpen>(Data.Models.Metadata.Header.CanOpenKey);
-                if (canOpen?.Extension is not null)
-                    Header.Write<string[]?>(Data.Models.Metadata.Header.CanOpenKey, canOpen.Extension);
-            }
+            var canOpen = item.Read<Data.Models.OfflineList.CanOpen>(Data.Models.Metadata.Header.CanOpenKey);
+            if (canOpen?.Extension is not null)
+                Header.Write<string[]?>(Data.Models.Metadata.Header.CanOpenKey, canOpen.Extension);
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.ImagesKey))
-            {
-                var images = item.Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+            var images = item.Read<Data.Models.OfflineList.Images>(Data.Models.Metadata.Header.ImagesKey);
+            if (images is not null)
                 Header.Write<Data.Models.OfflineList.Images?>(Data.Models.Metadata.Header.ImagesKey, images);
-            }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.InfosKey))
-            {
-                var infos = item.Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+            var infos = item.Read<Data.Models.OfflineList.Infos>(Data.Models.Metadata.Header.InfosKey);
+            if (infos is not null)
                 Header.Write<Data.Models.OfflineList.Infos?>(Data.Models.Metadata.Header.InfosKey, infos);
-            }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.NewDatKey))
-            {
-                var newDat = item.Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+            var newDat = item.Read<Data.Models.OfflineList.NewDat>(Data.Models.Metadata.Header.NewDatKey);
+            if (newDat is not null)
                 Header.Write<Data.Models.OfflineList.NewDat?>(Data.Models.Metadata.Header.NewDatKey, newDat);
-            }
 
-            if (item.ContainsKey(Data.Models.Metadata.Header.SearchKey))
-            {
-                var search = item.Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+            var search = item.Read<Data.Models.OfflineList.Search>(Data.Models.Metadata.Header.SearchKey);
+            if (search is not null)
                 Header.Write<Data.Models.OfflineList.Search?>(Data.Models.Metadata.Header.SearchKey, search);
-            }
 
             // Selectively set all possible fields -- TODO: Figure out how to make this less manual
             if (Header.ReadString(Data.Models.Metadata.Header.AuthorKey) is null)

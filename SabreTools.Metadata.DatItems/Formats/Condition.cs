@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public Condition(Data.Models.Metadata.Condition item) : base(item)
         {
             // Process flag values
-            if (ReadString(Data.Models.Metadata.Condition.RelationKey) is not null)
-                Write<string?>(Data.Models.Metadata.Condition.RelationKey, ReadString(Data.Models.Metadata.Condition.RelationKey).AsRelation().AsStringValue());
+            string? condition = ReadString(Data.Models.Metadata.Condition.RelationKey);
+            if (condition is not null)
+                Write<string?>(Data.Models.Metadata.Condition.RelationKey, condition.AsRelation().AsStringValue());
         }
 
         public Condition(Data.Models.Metadata.Condition item, Machine machine, Source source) : this(item)

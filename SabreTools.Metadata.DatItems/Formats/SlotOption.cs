@@ -23,8 +23,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         public SlotOption(Data.Models.Metadata.SlotOption item) : base(item)
         {
             // Process flag values
-            if (ReadBool(Data.Models.Metadata.SlotOption.DefaultKey) is not null)
-                Write<string?>(Data.Models.Metadata.SlotOption.DefaultKey, ReadBool(Data.Models.Metadata.SlotOption.DefaultKey).FromYesNo());
+            bool? defaultValue = ReadBool(Data.Models.Metadata.SlotOption.DefaultKey);
+            if (defaultValue is not null)
+                Write<string?>(Data.Models.Metadata.SlotOption.DefaultKey, defaultValue.FromYesNo());
         }
 
         public SlotOption(Data.Models.Metadata.SlotOption item, Machine machine, Source source) : this(item)
