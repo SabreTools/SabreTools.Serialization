@@ -9,7 +9,7 @@ namespace SabreTools.Metadata.Tools
         /// </summary>
         /// <param name="value">Value to use</param>
         /// <returns>MappingAttribute attached to the value</returns>
-        public static MappingAttribute? GetAttribute(T? value)
+        public static MappingAttribute? GetMappingAttribute(T? value)
         {
             // Null value in, null value out
             if (value is null)

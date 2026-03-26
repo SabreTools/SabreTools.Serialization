@@ -43,7 +43,7 @@ namespace SabreTools.Metadata.Tools
                         continue;
 
                     // Try to get the mapping attribute
-                    MappingAttribute? attr = AttributeHelper<T>.GetAttribute(value);
+                    MappingAttribute? attr = AttributeHelper<T>.GetMappingAttribute(value);
                     if (attr?.Mappings is null || attr.Mappings.Length == 0)
                         continue;
 
@@ -106,7 +106,7 @@ namespace SabreTools.Metadata.Tools
                         continue;
 
                     // Try to get the mapping attribute
-                    MappingAttribute? attr = AttributeHelper<T>.GetAttribute(value);
+                    MappingAttribute? attr = AttributeHelper<T>.GetMappingAttribute(value);
                     if (attr?.Mappings is null || attr.Mappings.Length == 0)
                         continue;
 
