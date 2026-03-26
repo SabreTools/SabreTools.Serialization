@@ -29,12 +29,12 @@ namespace SabreTools.Metadata.Tools
         /// <returns>Subfolder path for the given hash</returns>
         public static string? GetDepotPath(string? hash, int depth)
         {
-            // If the hash is null or empty, then we return null
-            if (string.IsNullOrEmpty(hash))
+            // If the hash is null, then we return null
+            if (hash is null)
                 return null;
 
             // If the hash isn't the right size, then we return null
-            if (hash!.Length != HashType.SHA1.ZeroString.Length)
+            if (hash.Length != HashType.SHA1.ZeroString.Length)
                 return null;
 
             // Cap the depth between 0 and 20, for now
