@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
 using SabreTools.Data.Models;
+using SabreTools.Data.Models.Metadata;
 
 namespace SabreTools.Metadata
 {
@@ -62,7 +63,7 @@ namespace SabreTools.Metadata
                         continue;
 
                     // If the type isn't a class or doesn't implement the interface
-                    if (!type.IsClass || !typeof(DatItems.DatItem).IsAssignableFrom(type))
+                    if (!type.IsClass || !typeof(DatItem).IsAssignableFrom(type))
                         continue;
 
                     // Get the XML type name
@@ -105,7 +106,7 @@ namespace SabreTools.Metadata
                         continue;
 
                     // If the type isn't a class or doesn't implement the interface
-                    if (!type.IsClass || !typeof(DatItems.DatItem).IsAssignableFrom(type))
+                    if (!type.IsClass || !typeof(DatItem).IsAssignableFrom(type))
                         continue;
 
                     // Get the XML type name
