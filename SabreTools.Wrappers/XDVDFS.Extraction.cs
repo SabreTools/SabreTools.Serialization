@@ -17,7 +17,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private readonly Dictionary<uint, int> extractedFiles = [];
+        private readonly Dictionary<uint, uint> extractedFiles = [];
 
         #endregion
 
