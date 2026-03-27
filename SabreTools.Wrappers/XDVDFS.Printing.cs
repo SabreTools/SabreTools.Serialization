@@ -59,7 +59,7 @@ namespace SabreTools.Wrappers
                 builder.AppendLine("Zeroed", "    Reserved Bytes");
             else
                 builder.AppendLine("Not Zeroed", "    Reserved Bytes");
-            builder.AppendLine(Encoding.ASCII.GetString(vd.EndSignature), "    End Identifier");
+            builder.AppendLine(Encoding.ASCII.GetString(vd.EndSignature), "    End Signature");
 
             builder.AppendLine();
         }
