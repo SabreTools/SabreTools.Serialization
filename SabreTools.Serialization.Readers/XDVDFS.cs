@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new VolumeDescriptor();
 
             obj.StartSignature = data.ReadBytes(20);
-            if (!obj.EqualsExactly(Constants.VOLUME_DESCRIPTOR_SIG))
+            if (!obj.StartSignature.EqualsExactly(Constants.VOLUME_DESCRIPTOR_SIG))
                 return null;
 
             obj.RootOffset = data.ReadUInt32();
@@ -136,13 +136,17 @@ namespace SabreTools.Serialization.Readers
             if (dd is null)
                 return null;
 
-            obj.TryAdd(offset, dd);
+            obj.Add(offset, dd);
 
             // Parse all child descriptors
-            foreach (var dr in vd.DirectoryRecords)
+            foreach (var dr in dd.DirectoryRecords)
             {
-                if (dr.FileFlags & FileFlags.DIRECTORY == FileFlags.DIRECTORY)
+                if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
                 {
+                    // Ensure same descriptor is never parsed twice
+                    if (obj.ContainsKey(dr.ExtentOffset))
+                        continue;
+
                     // Get all descriptors from child
                     var descriptors = ParseDirectoryDescriptors(data, dr.ExtentOffset, dr.ExtentSize);
                     if (descriptors is null)
@@ -178,7 +182,7 @@ namespace SabreTools.Serialization.Readers
             {
                 var dr = ParseDirectoryRecord(data);
                 if (dr is not null)
-                    records.TryAdd(dr);
+                    records.Add(dr);
 
                 // Exit early if stream does not advance
                 if (curPosition == data.Position)
@@ -187,7 +191,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.DirectoryRecords = [.. records];
 
-            int remainder = size % 2048;
+            int remainder = (int)(size % 2048);
             if (remainder > 0)
                 obj.Padding = data.ReadBytes(remainder);
 
