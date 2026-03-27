@@ -86,25 +86,6 @@ namespace SabreTools.Metadata.DatFiles
         public DatHeader(Data.Models.Metadata.Header header)
         {
             _internal = header;
-
-            // Remove all inverted fields
-            Remove(Data.Models.Metadata.Header.CanOpenKey);
-            Remove(Data.Models.Metadata.Header.ImagesKey);
-            Remove(Data.Models.Metadata.Header.InfosKey);
-            Remove(Data.Models.Metadata.Header.NewDatKey);
-            Remove(Data.Models.Metadata.Header.SearchKey);
-
-            // Get all no-filter fields
-            if (header.TryGetValue(Data.Models.Metadata.Header.CanOpenKey, out var canOpenValue))
-                _internal[Data.Models.Metadata.Header.CanOpenKey] = canOpenValue;
-            if (header.TryGetValue(Data.Models.Metadata.Header.ImagesKey, out var imageValue))
-                _internal[Data.Models.Metadata.Header.ImagesKey] = imageValue;
-            if (header.TryGetValue(Data.Models.Metadata.Header.InfosKey, out var infosValue))
-                _internal[Data.Models.Metadata.Header.InfosKey] = infosValue;
-            if (header.TryGetValue(Data.Models.Metadata.Header.NewDatKey, out var newDatValue))
-                _internal[Data.Models.Metadata.Header.NewDatKey] = newDatValue;
-            if (header.TryGetValue(Data.Models.Metadata.Header.SearchKey, out var searchValue))
-                _internal[Data.Models.Metadata.Header.SearchKey] = searchValue;
         }
 
         #endregion

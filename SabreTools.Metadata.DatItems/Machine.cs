@@ -22,7 +22,7 @@ namespace SabreTools.Metadata.DatItems
 
         public Machine(Data.Models.Metadata.Machine machine)
         {
-            _internal = machine;
+            _internal = machine.Clone() as Data.Models.Metadata.Machine ?? [];
 
             // Remove all inverted fields
             Remove(Data.Models.Metadata.Machine.AdjusterKey);
