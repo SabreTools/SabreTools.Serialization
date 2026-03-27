@@ -17,7 +17,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private readonly Dictionary<int, uint> extractedFiles = [];
+        private readonly List<uint> extractedFiles = [];
 
         #endregion
 
@@ -25,15 +25,48 @@ namespace SabreTools.Wrappers
         public virtual bool Extract(string outputDirectory, bool includeDebug)
         {
             // Extract files from all directories from root directory
-            return ExtractFromDirectory(outputDirectory, includeDebug, Model.VolumeDescriptor.RootOffset);
+            return ExtractDescriptor(outputDirectory, includeDebug, VolumeDescriptor.RootOffset);
         }
 
         /// <summary>
-        /// 
+        /// Extracts all directory records recursively from directory descriptor
         /// </summary>
-        public bool ExtractFromDirectory(string outputDirectory, bool includeDebug, uint sectorNumber)
+        public bool ExtractDescriptor(string outputDirectory, bool includeDebug, uint sectorNumber)
         {
-            //
+            // If no descriptor exists at that sector, we cannot extract from it 
+            if (!DirectoryDescriptors.ContainsKey(sectorNumber))
+                return false;
+
+            // Extract directory records within directory descriptor
+            foreach (var dr in DirectoryDescriptors[sectorNumber])
+            {
+                // Skip invalid records
+                if (dr.FilenameLength == 0 || dr.Filename is null)
+                    continue;
+
+                string outputPath = Path.Combine(outputDirectory, Encoding.UTF8.GetString(dr.Filename));
+
+                // If record is a directory, create it and extract child records
+                if ((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY)
+                {
+                    if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath))
+                        Directory.CreateDirectory(outputPath);
+
+                    //ExtractRecord(outputDirectory, includeDebug, )
+                }
+                else
+                {
+                    // Skip invalid file size
+                    if (dr.ExtentSize == 0)
+                        continue;
+
+                    // Skip invalid file location
+                    if (dr.ExtentLocation + dr.ExtentSize > _dataSource.Length)
+                        continue;
+                }
+            }
+
+            return true;
         }
     }
 }

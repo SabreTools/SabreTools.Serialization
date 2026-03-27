@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new VolumeDescriptor();
 
             obj.StartSignature = data.ReadBytes(20);
-            if (!Encoding.ASCII.GetString(obj.StartSignature).Equals(Constants.VolumeDescriptorSignature))
+            if (!System.Text.Encoding.ASCII.GetString(obj.StartSignature).Equals(Constants.VolumeDescriptorSignature))
                 return null;
 
             obj.RootOffset = data.ReadUInt32();
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new LayoutDescriptor();
 
             obj.Signature = data.ReadBytes(24);
-            if (!Encoding.ASCII.GetString(obj.Signature).Equals(Constants.LayoutDescriptorSignature))
+            if (!System.Text.Encoding.ASCII.GetString(obj.Signature).Equals(Constants.LayoutDescriptorSignature))
                 return null;
             obj.Unusued8Bytes = data.ReadBytes(8);
 
@@ -130,6 +130,14 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled Dictionary of int to DirectoryDescriptors on success, null on error</returns>
         public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, uint offset, uint size)
         {
+            // Ensure descriptor size is valid
+            if (size < 14)
+                return null;
+
+            // Ensure offset is valid
+            if (offset * Constants.SectorSize + size > data.Length)
+                return null;
+
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
             var dd = ParseDirectoryDescriptor(data, offset, size);
@@ -173,6 +181,14 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled DirectoryDescriptor on success, null on error</returns>
         public static DirectoryDescriptor? ParseDirectoryDescriptor(Stream data, uint offset, uint size)
         {
+            // Ensure descriptor size is valid
+            if (size < 14)
+                return null;
+
+            // Ensure offset is valid
+            if (offset * Constants.SectorSize + size > data.Length)
+                return null;
+
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
