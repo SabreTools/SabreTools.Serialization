@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// Volume descriptor magic, start
         /// </summary>
         /// <remarks>20 bytes</remarks>
-        public byte[] StartSignature { get; set; } = new byte[20]; // VOLUME_DESCRIPTOR_SIG
+        public byte[] StartSignature { get; set; } = new byte[20]; // VolumeDescriptorSignature
 
         /// <summary>
         /// UInt32 sector location of the root directory descriptor
@@ -47,6 +47,6 @@ namespace SabreTools.Data.Models.XDVDFS
         /// Volume descriptor magic, start
         /// </summary>
         /// <remarks>20 bytes</remarks>
-        public byte[] EndSignature { get; set; } = new byte[20]; // VOLUME_DESCRIPTOR_SIG
+        public byte[] EndSignature { get; set; } = new byte[20]; // VolumeDescriptorSignature
     }
 }

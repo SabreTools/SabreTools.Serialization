@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new VolumeDescriptor();
 
             obj.StartSignature = data.ReadBytes(20);
-            if (!obj.StartSignature.EqualsExactly(Constants.VOLUME_DESCRIPTOR_SIG))
+            if (!obj.StartSignature.EqualsExactly(Constants.VolumeDescriptorSignature))
                 return null;
 
             obj.RootOffset = data.ReadUInt32();
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new LayoutDescriptor();
 
             obj.Signature = data.ReadBytes(24);
-            if (!obj.Signature.EqualsExactly(Constants.LAYOUT_DESCRIPTOR_MAGIC))
+            if (!obj.Signature.EqualsExactly(Constants.LayoutDescriptorSignature))
                 return null;
             obj.Unusued8Bytes = data.ReadBytes(8);
 

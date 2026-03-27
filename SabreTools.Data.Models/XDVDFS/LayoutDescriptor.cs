@@ -13,7 +13,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// For XGD2, this should be the only non-zero field
         /// </summary>
         /// <remarks>24 bytes</remarks>
-        public byte[] Signature { get; set; } = new byte[24]; // LAYOUT_DESCRIPTOR_MAGIC
+        public byte[] Signature { get; set; } = new byte[24]; // LayoutDescriptorSignature
 
         /// <summary>
         /// Seemingly unused 8 bytes after the signature, should be zeroed

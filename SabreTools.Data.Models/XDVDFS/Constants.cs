@@ -16,11 +16,11 @@ namespace SabreTools.Data.Models.XDVDFS
         /// <summary>
         /// Volume Descriptor signature at start of sector 32
         /// </summary>
-        public static readonly byte[] VOLUME_DESCRIPTOR_SIG = [.."MICROSOFT*XBOX*MEDIA"u8];
+        public static readonly byte[] VolumeDescriptorSignature = System.Text.Encoding.ASCII.GetString("MICROSOFT*XBOX*MEDIA");
 
         /// <summary>
         /// Xbox DVD Layout Descriptor signature at start of sector 33
         /// </summary>
-        public static readonly byte[] LAYOUT_DESCRIPTOR_SIG = [.."XBOX_DVD_LAYOUT_TOOL_SIG"u8];
+        public static readonly byte[] LayoutDescriptorSignature = System.Text.Encoding.ASCII.GetString("XBOX_DVD_LAYOUT_TOOL_SIG");
     }
 }

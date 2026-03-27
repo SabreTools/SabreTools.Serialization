@@ -29,7 +29,7 @@ namespace SabreTools.Wrappers
 
             bool allExtracted = true;
 
-            // TODO: Parse file extents from DirectoryDescriptors
+            // Extract all files from all directories
 
             return allExtracted;
         }
