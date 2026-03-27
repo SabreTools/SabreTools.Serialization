@@ -24,14 +24,16 @@ namespace SabreTools.Wrappers
         /// <inheritdoc/>
         public virtual bool Extract(string outputDirectory, bool includeDebug)
         {
-            // Clear the extraction state
-            extractedFiles.Clear();
+            // Extract files from all directories from root directory
+            return ExtractFromDirectory(outputDirectory, includeDebug, Model.VolumeDescriptor.RootOffset);
+        }
 
-            bool allExtracted = true;
-
-            // Extract all files from all directories
-
-            return allExtracted;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ExtractFromDirectory(string outputDirectory, bool includeDebug, uint sectorNumber)
+        {
+            //
         }
     }
 }
