@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Readers
             obj.StartSignature = data.ReadBytes(20);
             obj.RootOffset = data.ReadUInt32();
             obj.RootSize = data.ReadUInt32();
-            obj.MasteringTimestamp = data.ReadUInt64();
+            obj.MasteringTimestamp = data.ReadInt64();
             obj.UnknownByte = data.ReadByteValue();
             obj.Reserved = data.ReadBytes(1991);
             obj.EndSignature = data.ReadBytes(20);
