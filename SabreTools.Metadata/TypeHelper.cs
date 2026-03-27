@@ -6,11 +6,13 @@ using SabreTools.Data.Models;
 
 namespace SabreTools.Metadata
 {
+    // TODO: Investigate ways of either caching or speeding up these methods
     public static class TypeHelper
     {
         /// <summary>
         /// Get constant values for the given type, if possible
         /// </summary>
+        /// <remarks>Does not return any values marked with the <see cref="NoFilterAttribute"/></remarks>
         public static string[]? GetConstants(Type? type)
         {
             if (type is null)
@@ -24,8 +26,10 @@ namespace SabreTools.Metadata
                 f => f.IsLiteral
                 && !f.IsInitOnly
                 && Attribute.GetCustomAttributes(f, typeof(NoFilterAttribute)).Length == 0);
+
             string[] constantValues = Array.ConvertAll(noFilterFields,
                 f => (f.GetRawConstantValue() as string) ?? string.Empty);
+
             return Array.FindAll(constantValues, s => s.Length > 0);
         }
 
