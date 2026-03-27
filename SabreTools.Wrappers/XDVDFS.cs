@@ -22,7 +22,7 @@ namespace SabreTools.Wrappers
         public VolumeDescriptor VolumeDescriptor => Model.VolumeDescriptor;
 
         /// <inheritdoc cref="Volume.LayoutDescriptor"/>
-        public LayoutDescriptor LayoutDescriptor => Model.LayoutDescriptor;
+        public LayoutDescriptor? LayoutDescriptor => Model.LayoutDescriptor;
 
         /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
         public Dictionary<int, DirectoryDescriptor> DirectoryDescriptors => Model.DirectoryDescriptors;

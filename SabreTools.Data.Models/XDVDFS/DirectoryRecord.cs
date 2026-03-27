@@ -53,7 +53,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// <summary>
         /// Name of the record, encoded in single-byte per character
         /// </summary>
-        public byte[] Filename { get; set; }
+        public byte[] Filename { get; set; } = new byte[];
 
         /// <summary>
         /// Padding to fill up remainder of uint32

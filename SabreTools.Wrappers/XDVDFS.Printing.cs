@@ -21,7 +21,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            Print(builder, Model.SystemArea);
+            Print(builder, Model.ReservedArea);
             Print(builder, Model.VolumeDescriptor);
 
             if (Model.LayoutDescriptor is not null)
@@ -84,17 +84,17 @@ namespace SabreTools.Wrappers
             builder.AppendLine();
         }
 
-        private static void GetVersionString(FourPartVersionType ver)
+        private static string GetVersionString(FourPartVersionType ver)
         {
-            return string.Format($"{ver.Major}.{ver.Revision}.{ver.Build}.{ver.Revision}");
+            return $"{ver.Major}.{ver.Revision}.{ver.Build}.{ver.Revision}";
         }
 
-        private static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
+        private static void Print(StringBuilder builder, DirectoryDescriptor dd, int sectorNumber)
         {
             builder.AppendLine($"    Directory Descriptor (Sector {sectorNumber}):");
             builder.AppendLine("    -------------------------");
 
-            foreach (DirectoryRecord dr in DirectoryRecords)
+            foreach (DirectoryRecord dr in dd.DirectoryRecords)
                 Print(builder, dr);
 
             if (dd.Padding is null)

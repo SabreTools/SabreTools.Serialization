@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Read the set of Volume Descriptors
                 var vd = ParseVolumeDescriptor(data);
-                if (vdSet is null)
+                if (vd is null)
                     return null;
 
                 volume.VolumeDescriptor = vd;
@@ -90,12 +90,12 @@ namespace SabreTools.Serialization.Readers
 
             obj.Signature = data.ReadBytes(24);
             obj.Unusued8Bytes = data.ReadBytes(8);
-            obj.XBLayoutVersion = data.ParseFourPartVersionType(data);
-            obj.XBPremasterVersion = data.ParseFourPartVersionType(data);
-            obj.XBGameDiscVersion = data.ParseFourPartVersionType(data);
-            obj.XBOther1Version = data.ParseFourPartVersionType(data);
-            obj.XBOther2Version = data.ParseFourPartVersionType(data);
-            obj.XBOther3Version = data.ParseFourPartVersionType(data);
+            obj.XBLayoutVersion = ParseFourPartVersionType(data);
+            obj.XBPremasterVersion = ParseFourPartVersionType(data);
+            obj.XBGameDiscVersion = ParseFourPartVersionType(data);
+            obj.XBOther1Version = ParseFourPartVersionType(data);
+            obj.XBOther2Version = ParseFourPartVersionType(data);
+            obj.XBOther3Version = ParseFourPartVersionType(data);
             obj.Reserved = data.ReadBytes(1968);
 
             return obj;
@@ -136,11 +136,6 @@ namespace SabreTools.Serialization.Readers
 
             // TODO: Parse child directory descriptors
 
-            // TODO: Parse padding bytes
-            uint remainder = 0 % 2048;
-            if (remainder > 0)
-                obj.Padding = data.ReadBytes(remainder);
-
             return obj;
         }
 
@@ -153,7 +148,32 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new DirectoryDescriptor();
 
+            obj.DirectoryRecords = new List<DirectoryRecord>();
+
             // TODO: Seek to start of directory descriptor
+            var dr = ParseDirectoryRecord(data);
+            if (dr is not null)
+                obj.Add(volumeDescriptor);
+
+            // TODO: Parse remaining records, check if next bytes are 0xFF ?
+
+            // TODO: Parse padding bytes
+            int remainder = 0 % 2048;
+            if (remainder > 0)
+                obj.Padding = data.ReadBytes(remainder);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Parse a Stream into a DirectoryRecord
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <returns>Filled DirectoryRecord on success, null on error</returns>
+        public static DirectoryRecord? ParseDirectoryRecord(Stream data)
+        {
+            var obj = new DirectoryRecord();
+
             obj.LeftChildOffset = data.ReadUInt16();
             obj.RightChildOffset = data.ReadUInt16();
             obj.ExtentOffset = data.ReadUInt32();
@@ -161,7 +181,7 @@ namespace SabreTools.Serialization.Readers
             obj.FileFlags = (FileFlags)data.ReadByteValue();
             obj.FilenameLength = data.ReadByteValue();
             obj.Filename = data.ReadBytes(obj.FilenameLength);
-            uint remainder = (2 + obj.FilenameLength) % 4;
+            int remainder = (2 + obj.FilenameLength) % 4;
             if (remainder > 0)
                 obj.Padding = data.ReadBytes(remainder);
 

@@ -12,7 +12,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// <summary>
         /// List of directory records
         /// </summary>
-        public DirectoryRecord[] DirectoryRecords { get; set; }
+        public DirectoryRecord[] DirectoryRecords { get; set; } = [];
 
         /// <summary>
         /// Padding to fill up remainder of sector
