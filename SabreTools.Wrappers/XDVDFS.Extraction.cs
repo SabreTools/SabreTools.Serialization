@@ -17,7 +17,7 @@ namespace SabreTools.Wrappers
         /// <summary>
         /// List of extracted files by their sector offset
         /// </summary>
-        private readonly List<uint> extractedFiles = [];
+        private readonly Dictionary<uint, int> extractedFiles = [];
 
         #endregion
 
@@ -69,10 +69,47 @@ namespace SabreTools.Wrappers
                     }
 
                     // Skip invalid file location
-                    if (dr.ExtentOffset * Constants.SectorSize + dr.ExtentSize > _dataSource.Length)
+                    if (((long)dr.ExtentOffset) * Constants.SectorSize + dr.ExtentSize > _dataSource.Length)
                     {
                         if (includeDebug) Console.WriteLine($"Invalid file location for file {dr.Filename} at sector {dr.ExtentOffset}");
                         continue;
+                    }
+
+                    // Check that the file hasn't been extracted already
+                    if (extractedFiles.ContainsKey(dr.ExtentLocation))
+                    {
+                        if (includeDebug) Console.WriteLine($"File {dr.Filename} at sector {dr.ExtentOffset} already extracted");
+                        continue;
+                    }
+
+                    // Read and extract the file extent
+                    const uint chunkSize = 2048 * 1024;
+                    lock (_dataSourceLock)
+                    {
+                        long fileOffset = ((long)dr.ExtentOffset) * Constants.SectorSize;
+                        _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
+
+                        // Get the length, and make sure it won't EOF
+                        uint length = dr.ExtentLength;
+                        if (length > _dataSource.Length - _dataSource.Position)
+                            return false;
+
+                        // Write the output file
+                        if (includeDebug) Console.WriteLine($"Extracting: {outputPath}");
+                        using var fs = File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        while (length > 0)
+                        {
+                            int bytesToRead = (int)Math.Min(length, chunkSize);
+
+                            byte[] buffer = _dataSource.ReadBytes(bytesToRead);
+                            fs.Write(buffer, 0, bytesToRead);
+                            fs.Flush();
+
+                            length -= (uint)bytesToRead;
+                        }
+
+                        // Mark the file as extracted
+                        extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
                     }
                 }
             }
