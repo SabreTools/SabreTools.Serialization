@@ -29,7 +29,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// UInt64 Win32 FILETIME filesystem mastering timestamp
         /// </summary>
         /// <remarks>Little-endian</remarks>
-        public ulong MasteringTimestamp { get; set; }
+        public long MasteringTimestamp { get; set; }
 
         /// <summary>
         /// Unknown byte, seemingly 0x00 for XGD1, and 0x01 for XGD2 and XGD3
