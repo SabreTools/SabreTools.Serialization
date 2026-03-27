@@ -1,5 +1,3 @@
-using System;
-
 namespace SabreTools.Data.Models.ISO9660
 {
     /// <summary>

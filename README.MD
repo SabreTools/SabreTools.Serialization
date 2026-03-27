@@ -72,7 +72,7 @@ Options:
 | Tape archive (TAR) | |
 | Valve Package File (VPK) | |
 | XBox Package File (XZP) | |
-| Xbox DVD Filesystem | |
+| Xbox DVD Filesystem (XISO) | |
 | xz archive (XZ) | .NET Framework 4.6.2 and greater |
 
 ## Namespaces
