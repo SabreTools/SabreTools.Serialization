@@ -192,9 +192,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
-            data.SeekIfPossible(Constants.SectorSize * offset, SeekOrigin.Begin);
+            data.SeekIfPossible(offset * Constants.SectorSize, SeekOrigin.Begin);
             long curPosition = data.Position;
-            while (size > Constants.SectorSize * offset - data.Position)
+            while (size > offset * Constants.SectorSize - data.Position)
             {
                 var dr = ParseDirectoryRecord(data);
                 if (dr is not null)

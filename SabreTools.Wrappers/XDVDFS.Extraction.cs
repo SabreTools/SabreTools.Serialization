@@ -64,14 +64,14 @@ namespace SabreTools.Wrappers
                     // Skip invalid file size
                     if (dr.ExtentSize == 0)
                     {
-                        if (includeDebug) Console.WriteLine($"Zero file size for file {dr.Filename} at sector {dr.ExtentLocation}");
+                        if (includeDebug) Console.WriteLine($"Zero file size for file {dr.Filename} at sector {dr.ExtentOffset}");
                         continue;
                     }
 
                     // Skip invalid file location
-                    if (dr.ExtentLocation + dr.ExtentSize > _dataSource.Length)
+                    if (dr.ExtentOffset * Constants.SectorSize + dr.ExtentSize > _dataSource.Length)
                     {
-                        if (includeDebug) Console.WriteLine($"Invalid file location for file {dr.Filename} at sector {dr.ExtentLocation}");
+                        if (includeDebug) Console.WriteLine($"Invalid file location for file {dr.Filename} at sector {dr.ExtentOffset}");
                         continue;
                     }
                 }
