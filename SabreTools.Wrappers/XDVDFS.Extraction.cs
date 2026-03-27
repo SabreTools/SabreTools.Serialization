@@ -76,7 +76,7 @@ namespace SabreTools.Wrappers
                     }
 
                     // Check that the file hasn't been extracted already
-                    if (extractedFiles.ContainsKey(dr.ExtentLocation))
+                    if (extractedFiles.ContainsKey(dr.ExtentOffset))
                     {
                         if (includeDebug) Console.WriteLine($"File {dr.Filename} at sector {dr.ExtentOffset} already extracted");
                         continue;
@@ -90,7 +90,7 @@ namespace SabreTools.Wrappers
                         _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
 
                         // Get the length, and make sure it won't EOF
-                        uint length = dr.ExtentLength;
+                        uint length = dr.ExtentSize;
                         if (length > _dataSource.Length - _dataSource.Position)
                             return false;
 
