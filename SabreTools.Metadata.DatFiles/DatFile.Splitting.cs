@@ -494,7 +494,7 @@ namespace SabreTools.Metadata.DatFiles
                         }
 
                         // If the parent doesn't already contain this item, add to subfolder of parent
-                        else if (!GetItemsForBucketDB(cloneOf).Values.Contains(item.Value) || skipDedup)
+                        else if (!GetItemsForBucketDB(cloneOf).ContainsValue(item.Value) || skipDedup)
                         {
                             if (subfolder)
                                 rom.SetName($"{machineName}\\{rom.GetName()}");
@@ -505,7 +505,7 @@ namespace SabreTools.Metadata.DatFiles
                     }
 
                     // All other that would be missing to subfolder of parent
-                    else if (!GetItemsForBucketDB(cloneOf).Values.Contains(item.Value))
+                    else if (!GetItemsForBucketDB(cloneOf).ContainsValue(item.Value))
                     {
                         if (subfolder)
                             item.Value.SetName($"{machineName}\\{item.Value.GetName()}");

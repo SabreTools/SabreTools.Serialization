@@ -30,7 +30,11 @@ namespace SabreTools.Metadata.DatFiles
         /// <summary>
         /// Lock for statistics calculation
         /// </summary>
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock statsLock = new();
+#else
         private readonly object statsLock = new();
+#endif
 
         #endregion
 

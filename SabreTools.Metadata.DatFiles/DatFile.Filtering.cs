@@ -738,20 +738,20 @@ namespace SabreTools.Metadata.DatFiles
                     string? sampleOf = machine.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
 
                     // Update machine name
-                    if (machineName is not null && mapping.ContainsKey(machineName))
-                        machine.SetName(mapping[machineName]);
+                    if (machineName is not null && mapping.TryGetValue(machineName, out string? mappedMachineName))
+                        machine.SetName(mappedMachineName);
 
                     // Update cloneof
-                    if (cloneOf is not null && mapping.ContainsKey(cloneOf))
-                        machine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, mapping[cloneOf]);
+                    if (cloneOf is not null && mapping.TryGetValue(cloneOf, out string? mappedCloneOf))
+                        machine.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, mappedCloneOf);
 
                     // Update romof
-                    if (romOf is not null && mapping.ContainsKey(romOf))
-                        machine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, mapping[romOf]);
+                    if (romOf is not null && mapping.TryGetValue(romOf, out string? mappedRomOf))
+                        machine.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, mappedRomOf);
 
                     // Update sampleof
-                    if (sampleOf is not null && mapping.ContainsKey(sampleOf))
-                        machine.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, mapping[sampleOf]);
+                    if (sampleOf is not null && mapping.TryGetValue(sampleOf, out string? mappedSampleOf))
+                        machine.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, mappedSampleOf);
                 }
 #if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
             });
@@ -779,20 +779,20 @@ namespace SabreTools.Metadata.DatFiles
                 string? sampleOf = machine.Value.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
 
                 // Update machine name
-                if (machineName is not null && mapping.ContainsKey(machineName))
-                    machine.Value.SetName(mapping[machineName]);
+                if (machineName is not null && mapping.TryGetValue(machineName, out string? mappedMachineName))
+                    machine.Value.SetName(mappedMachineName);
 
                 // Update cloneof
-                if (cloneOf is not null && mapping.ContainsKey(cloneOf))
-                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, mapping[cloneOf]);
+                if (cloneOf is not null && mapping.TryGetValue(cloneOf, out string? mappedCloneOf))
+                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.CloneOfKey, mappedCloneOf);
 
                 // Update romof
-                if (romOf is not null && mapping.ContainsKey(romOf))
-                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, mapping[romOf]);
+                if (romOf is not null && mapping.TryGetValue(romOf, out string? mappedRomOf))
+                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.RomOfKey, mappedRomOf);
 
                 // Update sampleof
-                if (sampleOf is not null && mapping.ContainsKey(sampleOf))
-                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, mapping[sampleOf]);
+                if (sampleOf is not null && mapping.TryGetValue(sampleOf, out string? mappedSampleOf))
+                    machine.Value.Write<string?>(Data.Models.Metadata.Machine.SampleOfKey, mappedSampleOf);
             }
         }
 

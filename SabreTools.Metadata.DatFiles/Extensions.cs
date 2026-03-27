@@ -63,8 +63,8 @@ namespace SabreTools.Metadata.DatFiles
                 return default;
 
             // Try to get the value from the mappings
-            if (_toMergingFlagMap.ContainsKey(value))
-                return _toMergingFlagMap[value];
+            if (_toMergingFlagMap.TryGetValue(value, out MergingFlag mergingFlag))
+                return mergingFlag;
 
             // Otherwise, return the default value for the enum
             return default;
@@ -83,8 +83,8 @@ namespace SabreTools.Metadata.DatFiles
                 return default;
 
             // Try to get the value from the mappings
-            if (_toNodumpFlagMap.ContainsKey(value))
-                return _toNodumpFlagMap[value];
+            if (_toNodumpFlagMap.TryGetValue(value, out NodumpFlag nodumpFlag))
+                return nodumpFlag;
 
             // Otherwise, return the default value for the enum
             return default;
@@ -103,8 +103,8 @@ namespace SabreTools.Metadata.DatFiles
                 return default;
 
             // Try to get the value from the mappings
-            if (_toPackingFlagMap.ContainsKey(value))
-                return _toPackingFlagMap[value];
+            if (_toPackingFlagMap.TryGetValue(value, out PackingFlag packingFlag))
+                return packingFlag;
 
             // Otherwise, return the default value for the enum
             return default;
@@ -123,10 +123,10 @@ namespace SabreTools.Metadata.DatFiles
         public static string? AsStringValue(this MergingFlag value, bool useSecond = false)
         {
             // Try to get the value from the mappings
-            if (!useSecond && _fromMergingFlagMap.ContainsKey(value))
-                return _fromMergingFlagMap[value];
-            else if (useSecond && _fromMergingFlagSecondaryMap.ContainsKey(value))
-                return _fromMergingFlagSecondaryMap[value];
+            if (!useSecond && _fromMergingFlagMap.TryGetValue(value, out string? mergingFlag))
+                return mergingFlag;
+            else if (useSecond && _fromMergingFlagSecondaryMap.TryGetValue(value, out string? mergingFlagSecondary))
+                return mergingFlagSecondary;
 
             // Otherwise, return null
             return null;
@@ -141,8 +141,8 @@ namespace SabreTools.Metadata.DatFiles
         public static string? AsStringValue(this NodumpFlag value)
         {
             // Try to get the value from the mappings
-            if (_fromNodumpFlagMap.ContainsKey(value))
-                return _fromNodumpFlagMap[value];
+            if (_fromNodumpFlagMap.TryGetValue(value, out string? nodumpFlag))
+                return nodumpFlag;
 
             // Otherwise, return null
             return null;
@@ -157,10 +157,10 @@ namespace SabreTools.Metadata.DatFiles
         public static string? AsStringValue(this PackingFlag value, bool useSecond = false)
         {
             // Try to get the value from the mappings
-            if (!useSecond && _fromPackingFlagMap.ContainsKey(value))
-                return _fromPackingFlagMap[value];
-            else if (useSecond && _fromPackingFlagSecondaryMap.ContainsKey(value))
-                return _fromPackingFlagSecondaryMap[value];
+            if (!useSecond && _fromPackingFlagMap.TryGetValue(value, out string? packingFlag))
+                return packingFlag;
+            else if (useSecond && _fromPackingFlagSecondaryMap.TryGetValue(value, out string? packingFlagSecondary))
+                return packingFlagSecondary;
 
             // Otherwise, return null
             return null;

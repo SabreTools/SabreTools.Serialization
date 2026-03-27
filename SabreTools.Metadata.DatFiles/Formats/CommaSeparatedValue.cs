@@ -1,4 +1,3 @@
-#pragma warning disable IDE0290 // Use primary constructor
 namespace SabreTools.Metadata.DatFiles.Formats
 {
     /// <summary>

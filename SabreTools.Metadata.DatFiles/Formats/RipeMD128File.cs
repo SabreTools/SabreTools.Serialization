@@ -3,7 +3,6 @@ using SabreTools.Hashing;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 
-#pragma warning disable IDE0290 // Use primary constructor
 namespace SabreTools.Metadata.DatFiles.Formats
 {
     /// <summary>

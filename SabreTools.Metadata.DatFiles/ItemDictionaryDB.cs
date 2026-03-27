@@ -451,10 +451,10 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Source? GetSource(long index)
         {
-            if (!_sources.ContainsKey(index))
-                return null;
+            if (!_sources.TryGetValue(index, out var source))
+                return source;
 
-            return _sources[index];
+            return null;
         }
 
         /// <summary>
@@ -1250,7 +1250,11 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.ResetStatistics();
 
             // If there are no items
+#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
+            if (_items is null || _items.IsEmpty)
+#else
             if (_items is null || _items.Count == 0)
+#endif
                 return;
 
             // Loop through and add

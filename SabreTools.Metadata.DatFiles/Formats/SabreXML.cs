@@ -19,7 +19,11 @@ namespace SabreTools.Metadata.DatFiles.Formats
     {
         /// <inheritdoc/>
         public override ItemType[] SupportedTypes
+#if NET5_0_OR_GREATER
+            => Enum.GetValues<ItemType>();
+#else
             => Enum.GetValues(typeof(ItemType)) as ItemType[] ?? [];
+#endif
 
         /// <summary>
         /// Constructor designed for casting a base DatFile
