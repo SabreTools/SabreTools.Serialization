@@ -22,7 +22,7 @@ namespace SabreTools.Data.Models.XDVDFS
         public byte[] Unusued8Bytes { get; set; } = new byte[8];
 
         /// <summary>
-        /// Version number of xblayout tool used to master the filesystem
+        /// Version number of xblayout(?) tool used to master the filesystem
         /// Known versions are 1.0.x.1, x = 3926 to 5120
         /// If zeroed, xblayout was not used
         /// </summary>
@@ -30,16 +30,15 @@ namespace SabreTools.Data.Models.XDVDFS
         public FourPartVersionType XBLayoutVersion { get; set; } = new();
 
         /// <summary>
-        /// Version number of xbpremaster tool used to master the filesystem
-        /// Often matches xblayout version
+        /// Version number of xbpremaster(?) tool used to master the filesystem
         /// If zeroed, xbpremaster was not used
         /// </summary>
         /// <remarks>8 bytes</remarks>
         public FourPartVersionType XBPremasterVersion { get; set; } = new();
 
         /// <summary>
-        /// Version number of xbgamedisc tool used to master the filesystem
-        /// The major version is set to 0x01 0x02 which may not be a ushort ?
+        /// Version number of xbgamedisc(?) tool used to master the filesystem
+        /// The major version is set to [0x01, 0x02] which may not be a ushort ?
         /// Known versions are 513.0.x.1 (aka 2.1.0.x.1), x = 5233 to 5849
         /// If zeroed, xbgamedisc was not used
         /// </summary>
@@ -48,7 +47,6 @@ namespace SabreTools.Data.Models.XDVDFS
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
-        /// Always(?) matches xbgamedisc version
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>
@@ -56,7 +54,6 @@ namespace SabreTools.Data.Models.XDVDFS
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
-        /// Always(?) matches xbgamedisc version
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>
@@ -64,7 +61,6 @@ namespace SabreTools.Data.Models.XDVDFS
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
-        /// Always(?) matches xbgamedisc version
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>

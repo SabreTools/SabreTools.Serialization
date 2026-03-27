@@ -49,16 +49,17 @@ namespace SabreTools.Wrappers
             builder.AppendLine("    Volume Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            builder.AppendLine(vd.StartSignature, "    Start Signature");
+            builder.AppendLine(Encoding.ASCII.GetString(vd.StartSignature), "    Start Signature");
             builder.AppendLine(vd.RootOffset, "    Root Offset");
             builder.AppendLine(vd.RootSize, "    Root Size");
-            builder.AppendLine(vd.MasteringTimestamp, "    Mastering Timestamp");
+            DateTime datetime = DateTime.FromFileTime(vd.MasteringTimestamp);
+            builder.AppendLine(datetime.ToString("yyyy-MM-dd HH:mm:ss"), "    Mastering Timestamp");
             builder.AppendLine(vd.UnknownByte, "    Unknown Byte");
             if (Array.TrueForAll(vd.Reserved, b => b == 0))
                 builder.AppendLine("Zeroed", "    Reserved Bytes");
             else
                 builder.AppendLine("Not Zeroed", "    Reserved Bytes");
-            builder.AppendLine(vd.EndSignature, "    End Identifier");
+            builder.AppendLine(Encoding.ASCII.GetString(vd.EndSignature), "    End Identifier");
 
             builder.AppendLine();
         }
@@ -68,7 +69,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine("    Xbox DVD Layout Descriptor:");
             builder.AppendLine("    -------------------------");
 
-            builder.AppendLine(ld.Signature, "    Signature");
+            builder.AppendLine(Encoding.ASCII.GetString(ld.Signature), "    Signature");    
             builder.AppendLine(ld.Unusued8Bytes, "    Unusued 8 Bytes");
             builder.AppendLine(GetVersionString(ld.XBLayoutVersion), "    xblayout Version");
             builder.AppendLine(GetVersionString(ld.XBPremasterVersion), "    xbpremaster Version");
@@ -86,7 +87,7 @@ namespace SabreTools.Wrappers
 
         private static string GetVersionString(FourPartVersionType ver)
         {
-            return $"{ver.Major}.{ver.Revision}.{ver.Build}.{ver.Revision}";
+            return $"{ver.Major}.{ver.Minor}.{ver.Build}.{ver.Revision}";
         }
 
         private static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
@@ -98,7 +99,7 @@ namespace SabreTools.Wrappers
                 Print(builder, dr);
 
             if (dd.Padding is null)
-                builder.AppendLine("None", "      Padding");
+                builder.AppendLine("None", "    Padding");
             else if (Array.TrueForAll(dd.Padding, b => b == 0xFF))
                 builder.AppendLine("All 0xFF", "    Padding");
             else
@@ -117,15 +118,15 @@ namespace SabreTools.Wrappers
             builder.AppendLine(dr.ExtentOffset, "      Extent Offset");
             builder.AppendLine(dr.ExtentSize, "      Extent Size");
 
-            builder.AppendLine("      File Flags");
-            builder.AppendLine((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY, "      Read-only");
-            builder.AppendLine((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN, "      Hidden");
-            builder.AppendLine((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM, "      System");
-            builder.AppendLine((dr.FileFlags & FileFlags.VOLUME_ID) == FileFlags.VOLUME_ID, "      Volume ID");
-            builder.AppendLine((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY, "      Directory");
-            builder.AppendLine((dr.FileFlags & FileFlags.ARCHIVE) == FileFlags.ARCHIVE, "      Archive");
-            builder.AppendLine((dr.FileFlags & FileFlags.DEVICE) == FileFlags.DEVICE, "      Device");
-            builder.AppendLine((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL, "      Normal");
+            builder.AppendLine("      File Flags:");
+            builder.AppendLine((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY, "        Read-only");
+            builder.AppendLine((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN, "        Hidden");
+            builder.AppendLine((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM, "        System");
+            builder.AppendLine((dr.FileFlags & FileFlags.VOLUME_ID) == FileFlags.VOLUME_ID, "        Volume ID");
+            builder.AppendLine((dr.FileFlags & FileFlags.DIRECTORY) == FileFlags.DIRECTORY, "        Directory");
+            builder.AppendLine((dr.FileFlags & FileFlags.ARCHIVE) == FileFlags.ARCHIVE, "        Archive");
+            builder.AppendLine((dr.FileFlags & FileFlags.DEVICE) == FileFlags.DEVICE, "        Device");
+            builder.AppendLine((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL, "        Normal");
 
             builder.AppendLine(dr.FilenameLength, "      Filename Length");
             builder.AppendLine(dr.Filename, "      Filename");
