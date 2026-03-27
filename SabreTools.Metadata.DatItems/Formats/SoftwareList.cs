@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -25,7 +26,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process flag values
             string? status = ReadString(Data.Models.Metadata.SoftwareList.StatusKey);
             if (status is not null)
-                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, status.AsSoftwareListStatus().AsStringValue());
+                Write<string?>(Data.Models.Metadata.SoftwareList.StatusKey, status.AsSoftwareListStatus()?.AsStringValue());
 
             // Handle subitems
             // TODO: Handle the Software subitem

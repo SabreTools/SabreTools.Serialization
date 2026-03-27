@@ -859,5 +859,722 @@ namespace SabreTools.Data.Extensions
         }
 
         #endregion
+
+        #region String to Enum
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static ChipType? AsChipType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "cpu" => ChipType.CPU,
+                "audio" => ChipType.Audio,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static ControlType? AsControlType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "joy" => ControlType.Joy,
+                "stick" => ControlType.Stick,
+                "paddle" => ControlType.Paddle,
+                "pedal" => ControlType.Pedal,
+                "lightgun" => ControlType.Lightgun,
+                "positional" => ControlType.Positional,
+                "dial" => ControlType.Dial,
+                "trackball" => ControlType.Trackball,
+                "mouse" => ControlType.Mouse,
+                "only_buttons" => ControlType.OnlyButtons,
+                "keypad" => ControlType.Keypad,
+                "keyboard" => ControlType.Keyboard,
+                "mahjong" => ControlType.Mahjong,
+                "hanafuda" => ControlType.Hanafuda,
+                "gambling" => ControlType.Gambling,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static DeviceType? AsDeviceType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "unknown" => DeviceType.Unknown,
+                "cartridge" => DeviceType.Cartridge,
+                "floppydisk" => DeviceType.FloppyDisk,
+                "harddisk" => DeviceType.HardDisk,
+                "cylinder" => DeviceType.Cylinder,
+                "cassette" => DeviceType.Cassette,
+                "punchcard" => DeviceType.PunchCard,
+                "punchtape" => DeviceType.PunchTape,
+                "printout" => DeviceType.Printout,
+                "serial" => DeviceType.Serial,
+                "parallel" => DeviceType.Parallel,
+                "snapshot" => DeviceType.Snapshot,
+                "quickload" => DeviceType.QuickLoad,
+                "memcard" => DeviceType.MemCard,
+                "cdrom" => DeviceType.CDROM,
+                "magtape" => DeviceType.MagTape,
+                "romimage" => DeviceType.ROMImage,
+                "midiin" => DeviceType.MIDIIn,
+                "midiout" => DeviceType.MIDIOut,
+                "picture" => DeviceType.Picture,
+                "vidfile" => DeviceType.VidFile,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static DisplayType? AsDisplayType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "raster" => DisplayType.Raster,
+                "vector" => DisplayType.Vector,
+                "lcd" => DisplayType.LCD,
+                "svg" => DisplayType.SVG,
+                "unknown" => DisplayType.Unknown,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static Endianness? AsEndianness(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "big" => Endianness.Big,
+                "little" => Endianness.Little,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static FeatureStatus? AsFeatureStatus(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "unemulated" => FeatureStatus.Unemulated,
+                "imperfect" => FeatureStatus.Imperfect,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static FeatureType? AsFeatureType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "protection" => FeatureType.Protection,
+                "palette" => FeatureType.Palette,
+                "graphics" => FeatureType.Graphics,
+                "sound" => FeatureType.Sound,
+                "controls" => FeatureType.Controls,
+                "keyboard" => FeatureType.Keyboard,
+                "mouse" => FeatureType.Mouse,
+                "microphone" => FeatureType.Microphone,
+                "camera" => FeatureType.Camera,
+                "disk" => FeatureType.Disk,
+                "printer" => FeatureType.Printer,
+                "lan" => FeatureType.Lan,
+                "wan" => FeatureType.Wan,
+                "timing" => FeatureType.Timing,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static ItemStatus? AsItemStatus(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "none" or "no" => ItemStatus.None,
+                "good" => ItemStatus.Good,
+                "baddump" => ItemStatus.BadDump,
+                "nodump" or "yes" => ItemStatus.Nodump,
+                "verified" => ItemStatus.Verified,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static LoadFlag? AsLoadFlag(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "load16_byte" => LoadFlag.Load16Byte,
+                "load16_word" => LoadFlag.Load16Word,
+                "load16_word_swap" => LoadFlag.Load16WordSwap,
+                "load32_byte" => LoadFlag.Load32Byte,
+                "load32_word" => LoadFlag.Load32Word,
+                "load32_word_swap" => LoadFlag.Load32WordSwap,
+                "load32_dword" => LoadFlag.Load32DWord,
+                "load64_word" => LoadFlag.Load64Word,
+                "load64_word_swap" => LoadFlag.Load64WordSwap,
+                "reload" => LoadFlag.Reload,
+                "fill" => LoadFlag.Fill,
+                "continue" => LoadFlag.Continue,
+                "reload_plain" => LoadFlag.ReloadPlain,
+                "ignore" => LoadFlag.Ignore,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, default on error</returns>
+        public static MergingFlag AsMergingFlag(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "none" => MergingFlag.None,
+                "split" => MergingFlag.Split,
+                "merged" => MergingFlag.Merged,
+                "nonmerged" or "unmerged" => MergingFlag.NonMerged,
+                "fullmerged" => MergingFlag.FullMerged,
+                "device" or "deviceunmerged" or "devicenonmerged" => MergingFlag.DeviceNonMerged,
+                "full" or "fullunmerged" or "fullnonmerged" => MergingFlag.FullNonMerged,
+                _ => MergingFlag.None,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, default on error</returns>
+        public static NodumpFlag AsNodumpFlag(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "none" => NodumpFlag.None,
+                "obsolete" => NodumpFlag.Obsolete,
+                "required" => NodumpFlag.Required,
+                "ignore" => NodumpFlag.Ignore,
+                _ => NodumpFlag.None,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static OpenMSXSubType? AsOpenMSXSubType(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "rom" => OpenMSXSubType.Rom,
+                "megarom" => OpenMSXSubType.MegaRom,
+                "sccpluscart" => OpenMSXSubType.SCCPlusCart,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, default on error</returns>
+        public static PackingFlag AsPackingFlag(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "none" => PackingFlag.None,
+                "zip" or "yes" => PackingFlag.Zip,
+                "unzip" or "no" => PackingFlag.Unzip,
+                "partial" => PackingFlag.Partial,
+                "flat" => PackingFlag.Flat,
+                "fileonly" => PackingFlag.FileOnly,
+                _ => PackingFlag.None,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static Relation? AsRelation(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "eq" => Relation.Equal,
+                "ne" => Relation.NotEqual,
+                "gt" => Relation.GreaterThan,
+                "le" => Relation.LessThanOrEqual,
+                "lt" => Relation.LessThan,
+                "ge" => Relation.GreaterThanOrEqual,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static Runnable? AsRunnable(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "no" => Runnable.No,
+                "partial" => Runnable.Partial,
+                "yes" => Runnable.Yes,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static SoftwareListStatus? AsSoftwareListStatus(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "none" => SoftwareListStatus.None,
+                "original" => SoftwareListStatus.Original,
+                "compatible" => SoftwareListStatus.Compatible,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static Supported? AsSupported(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "no" or "unsupported" => Supported.No,
+                "partial" => Supported.Partial,
+                "yes" or "supported" => Supported.Yes,
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the enum value for an input string, if possible
+        /// </summary>
+        /// <param name="value">String value to parse/param>
+        /// <returns>Enum value representing the input, null on error</returns>
+        public static SupportStatus? AsSupportStatus(this string? value)
+        {
+            return value?.ToLowerInvariant() switch
+            {
+                "good" => SupportStatus.Good,
+                "imperfect" => SupportStatus.Imperfect,
+                "preliminary" => SupportStatus.Preliminary,
+                _ => null,
+            };
+        }
+
+        #endregion
+
+        #region Enum to String
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this ChipType value)
+        {
+            return value switch
+            {
+                ChipType.CPU => "cpu",
+                ChipType.Audio => "audio",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this ControlType value)
+        {
+            return value switch
+            {
+                ControlType.Joy => "joy",
+                ControlType.Stick => "stick",
+                ControlType.Paddle => "paddle",
+                ControlType.Pedal => "pedal",
+                ControlType.Lightgun => "lightgun",
+                ControlType.Positional => "positional",
+                ControlType.Dial => "dial",
+                ControlType.Trackball => "trackball",
+                ControlType.Mouse => "mouse",
+                ControlType.OnlyButtons => "only_buttons",
+                ControlType.Keypad => "keypad",
+                ControlType.Keyboard => "keyboard",
+                ControlType.Mahjong => "mahjong",
+                ControlType.Hanafuda => "hanafuda",
+                ControlType.Gambling => "gambling",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this DeviceType value)
+        {
+            return value switch
+            {
+                DeviceType.Unknown => "unknown",
+                DeviceType.Cartridge => "cartridge",
+                DeviceType.FloppyDisk => "floppydisk",
+                DeviceType.HardDisk => "harddisk",
+                DeviceType.Cylinder => "cylinder",
+                DeviceType.Cassette => "cassette",
+                DeviceType.PunchCard => "punchcard",
+                DeviceType.PunchTape => "punchtape",
+                DeviceType.Printout => "printout",
+                DeviceType.Serial => "serial",
+                DeviceType.Parallel => "parallel",
+                DeviceType.Snapshot => "snapshot",
+                DeviceType.QuickLoad => "quickload",
+                DeviceType.MemCard => "memcard",
+                DeviceType.CDROM => "cdrom",
+                DeviceType.MagTape => "magtape",
+                DeviceType.ROMImage => "romimage",
+                DeviceType.MIDIIn => "midiin",
+                DeviceType.MIDIOut => "midiout",
+                DeviceType.Picture => "picture",
+                DeviceType.VidFile => "vidfile",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this DisplayType value)
+        {
+            return value switch
+            {
+                DisplayType.Raster => "raster",
+                DisplayType.Vector => "vector",
+                DisplayType.LCD => "lcd",
+                DisplayType.SVG => "svg",
+                DisplayType.Unknown => "unknown",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Endianness value)
+        {
+            return value switch
+            {
+                Endianness.Big => "big",
+                Endianness.Little => "little",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this FeatureStatus value)
+        {
+            return value switch
+            {
+                FeatureStatus.Unemulated => "unemulated",
+                FeatureStatus.Imperfect => "imperfect",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this FeatureType value)
+        {
+            return value switch
+            {
+                FeatureType.Protection => "protection",
+                FeatureType.Palette => "palette",
+                FeatureType.Graphics => "graphics",
+                FeatureType.Sound => "sound",
+                FeatureType.Controls => "controls",
+                FeatureType.Keyboard => "keyboard",
+                FeatureType.Mouse => "mouse",
+                FeatureType.Microphone => "microphone",
+                FeatureType.Camera => "camera",
+                FeatureType.Disk => "disk",
+                FeatureType.Printer => "printer",
+                FeatureType.Lan => "lan",
+                FeatureType.Wan => "wan",
+                FeatureType.Timing => "timing",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <param name="useSecond">True to use the second mapping option, if it exists</param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this ItemStatus value, bool useSecond = false)
+        {
+            return value switch
+            {
+                ItemStatus.None => useSecond ? "no" : "none",
+                ItemStatus.Good => "good",
+                ItemStatus.BadDump => "baddump",
+                ItemStatus.Nodump => useSecond ? "yes" : "nodump",
+                ItemStatus.Verified => "verified",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this LoadFlag value)
+        {
+            return value switch
+            {
+                LoadFlag.Load16Byte => "load16_byte",
+                LoadFlag.Load16Word => "load16_word",
+                LoadFlag.Load16WordSwap => "load16_word_swap",
+                LoadFlag.Load32Byte => "load32_byte",
+                LoadFlag.Load32Word => "load32_word",
+                LoadFlag.Load32WordSwap => "load32_word_swap",
+                LoadFlag.Load32DWord => "load32_dword",
+                LoadFlag.Load64Word => "load64_word",
+                LoadFlag.Load64WordSwap => "load64_word_swap",
+                LoadFlag.Reload => "reload",
+                LoadFlag.Fill => "fill",
+                LoadFlag.Continue => "continue",
+                LoadFlag.ReloadPlain => "reload_plain",
+                LoadFlag.Ignore => "ignore",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <param name="useSecond">True to use the second mapping option, if it exists</param>
+        /// <returns>String value representing the input, default on error</returns>
+        public static string? AsStringValue(this MergingFlag value, bool useSecond = false)
+        {
+            return value switch
+            {
+                MergingFlag.None => "none",
+                MergingFlag.Split => "split",
+                MergingFlag.Merged => "merged",
+                MergingFlag.NonMerged => useSecond ? "unmerged" : "nonmerged",
+                MergingFlag.FullMerged => "fullmerged",
+                MergingFlag.DeviceNonMerged => useSecond ? "devicenonmerged" : "device",
+                MergingFlag.FullNonMerged => useSecond ? "fullnonmerged" : "full",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, default on error</returns>
+        public static string? AsStringValue(this NodumpFlag value)
+        {
+            return value switch
+            {
+                NodumpFlag.None => "none",
+                NodumpFlag.Obsolete => "obsolete",
+                NodumpFlag.Required => "required",
+                NodumpFlag.Ignore => "ignore",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this OpenMSXSubType value)
+        {
+            return value switch
+            {
+                OpenMSXSubType.Rom => "rom",
+                OpenMSXSubType.MegaRom => "megarom",
+                OpenMSXSubType.SCCPlusCart => "sccpluscart",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <param name="useSecond">True to use the second mapping option, if it exists</param>
+        /// <returns>String value representing the input, default on error</returns>
+        public static string? AsStringValue(this PackingFlag value, bool useSecond = false)
+        {
+            return value switch
+            {
+                PackingFlag.None => "none",
+                PackingFlag.Zip => useSecond ? "yes" : "zip",
+                PackingFlag.Unzip => useSecond ? "no" : "unzip",
+                PackingFlag.Partial => "partial",
+                PackingFlag.Flat => "flat",
+                PackingFlag.FileOnly => "fileonly",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Relation value)
+        {
+            return value switch
+            {
+                Relation.Equal => "eq",
+                Relation.NotEqual => "ne",
+                Relation.GreaterThan => "gt",
+                Relation.LessThanOrEqual => "le",
+                Relation.LessThan => "lt",
+                Relation.GreaterThanOrEqual => "ge",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Runnable value)
+        {
+            return value switch
+            {
+                Runnable.No => "no",
+                Runnable.Partial => "partial",
+                Runnable.Yes => "yes",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this SoftwareListStatus value)
+        {
+            return value switch
+            {
+                SoftwareListStatus.None => "none",
+                SoftwareListStatus.Original => "original",
+                SoftwareListStatus.Compatible => "compatible",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <param name="useSecond">True to use the second mapping option, if it exists</param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this Supported value, bool useSecond = false)
+        {
+            return value switch
+            {
+                Supported.No => useSecond ? "unsupported" : "no",
+                Supported.Partial => "partial",
+                Supported.Yes => useSecond ? "supported" : "yes",
+                _ => null,
+            };
+        }
+
+        /// <summary>
+        /// Get the string value for an input enum, if possible
+        /// </summary>
+        /// <param name="value">Enum value to parse/param>
+        /// <returns>String value representing the input, null on error</returns>
+        public static string? AsStringValue(this SupportStatus value)
+        {
+            return value switch
+            {
+                SupportStatus.Good => "good",
+                SupportStatus.Imperfect => "imperfect",
+                SupportStatus.Preliminary => "preliminary",
+                _ => null,
+            };
+        }
+
+        #endregion
+
     }
 }

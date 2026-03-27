@@ -16,6 +16,8 @@ using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
+using SabreTools.Data.Extensions;
+using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
 
 /*
  * Planning Notes:
@@ -451,7 +453,7 @@ namespace SabreTools.Metadata.DatFiles
         /// </summary>
         public Source? GetSource(long index)
         {
-            if (!_sources.TryGetValue(index, out var source))
+            if (_sources.TryGetValue(index, out var source))
                 return source;
 
             return null;

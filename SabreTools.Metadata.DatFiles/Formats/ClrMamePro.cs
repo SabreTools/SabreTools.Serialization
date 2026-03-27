@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using SabreTools.Metadata.Filter;
@@ -133,14 +134,14 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Chip chip:
-                    if (chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType() == ChipType.NULL)
+                    if (chip.ReadString(Data.Models.Metadata.Chip.ChipTypeKey).AsChipType() is null)
                         missingFields.Add(Data.Models.Metadata.Chip.ChipTypeKey);
                     if (string.IsNullOrEmpty(chip.GetName()))
                         missingFields.Add(Data.Models.Metadata.Chip.NameKey);
                     break;
 
                 case Display display:
-                    if (display.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType() == DisplayType.NULL)
+                    if (display.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType() is null)
                         missingFields.Add(Data.Models.Metadata.Display.DisplayTypeKey);
                     if (display.ReadLong(Data.Models.Metadata.Display.RotateKey) is null)
                         missingFields.Add(Data.Models.Metadata.Display.RotateKey);
@@ -164,9 +165,9 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Driver driver:
-                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.StatusKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.EmulationKey);
                     break;
 

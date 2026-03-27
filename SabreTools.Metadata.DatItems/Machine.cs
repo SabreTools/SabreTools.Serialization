@@ -58,7 +58,7 @@ namespace SabreTools.Metadata.DatItems
 
             string? supported = ReadString(Data.Models.Metadata.Machine.SupportedKey);
             if (supported is not null)
-                Write<string?>(Data.Models.Metadata.Machine.SupportedKey, supported.AsSupported().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Machine.SupportedKey, supported.AsSupported()?.AsStringValue());
 
             // Handle Trurip object, if it exists
             var truripItem = machine.Read<Data.Models.Logiqx.Trurip>(Data.Models.Metadata.Machine.TruripKey);

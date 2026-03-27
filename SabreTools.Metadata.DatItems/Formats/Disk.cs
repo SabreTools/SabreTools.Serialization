@@ -1,6 +1,7 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
+using SabreTools.Data.Models.Metadata;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -73,7 +74,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? status = ReadString(Data.Models.Metadata.Disk.StatusKey);
             if (status is not null)
-                Write<string?>(Data.Models.Metadata.Disk.StatusKey, status.AsItemStatus().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Disk.StatusKey, status.AsItemStatus()?.AsStringValue());
 
             bool? writable = ReadBool(Data.Models.Metadata.Disk.WritableKey);
             if (writable is not null)

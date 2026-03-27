@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 
@@ -343,13 +344,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
                     break;
 
                 case Driver driver:
-                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.StatusKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.StatusKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.EmulationKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.EmulationKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.CocktailKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.CocktailKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.CocktailKey);
-                    if (driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey).AsSupportStatus() == SupportStatus.NULL)
+                    if (driver.ReadString(Data.Models.Metadata.Driver.SaveStateKey).AsSupportStatus() is null)
                         missingFields.Add(Data.Models.Metadata.Driver.SaveStateKey);
                     break;
 
@@ -358,7 +359,7 @@ namespace SabreTools.Metadata.DatFiles.Formats
                         missingFields.Add(Data.Models.Metadata.SoftwareList.TagKey);
                     if (string.IsNullOrEmpty(softwarelist.GetName()))
                         missingFields.Add(Data.Models.Metadata.SoftwareList.NameKey);
-                    if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == SoftwareListStatus.None)
+                    if (softwarelist.ReadString(Data.Models.Metadata.SoftwareList.StatusKey).AsSoftwareListStatus() == null)
                         missingFields.Add(Data.Models.Metadata.SoftwareList.StatusKey);
                     break;
 

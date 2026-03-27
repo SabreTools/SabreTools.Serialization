@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -58,7 +59,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? displayType = ReadString(Data.Models.Metadata.Display.DisplayTypeKey);
             if (displayType is not null)
-                Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, displayType.AsDisplayType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, displayType.AsDisplayType()?.AsStringValue());
 
             long? vbEnd = ReadLong(Data.Models.Metadata.Display.VBEndKey);
             if (vbEnd is not null)
@@ -88,7 +89,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // TODO: Convert this block to more traditional set of if/then
             Write(Data.Models.Metadata.Video.AspectXKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectXKey)));
             Write(Data.Models.Metadata.Video.AspectYKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.AspectYKey)));
-            Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, item.ReadString(Data.Models.Metadata.Video.ScreenKey).AsDisplayType().AsStringValue());
+            Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, item.ReadString(Data.Models.Metadata.Video.ScreenKey).AsDisplayType()?.AsStringValue());
             Write(Data.Models.Metadata.Display.HeightKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.HeightKey)));
             Write(Data.Models.Metadata.Display.RefreshKey, NumberHelper.ConvertToDouble(item.ReadString(Data.Models.Metadata.Video.RefreshKey)));
             Write(Data.Models.Metadata.Display.WidthKey, NumberHelper.ConvertToInt64(item.ReadString(Data.Models.Metadata.Video.WidthKey)));
@@ -125,7 +126,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? screen = ReadString(Data.Models.Metadata.Video.ScreenKey);
             if (screen is not null)
-                Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, screen.AsDisplayType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Display.DisplayTypeKey, screen.AsDisplayType()?.AsStringValue());
 
             long? width = ReadLong(Data.Models.Metadata.Video.WidthKey);
             if (width is not null)

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using SabreTools.Metadata.Filter;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
+using SabreTools.Data.Extensions;
+using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
+using NodumpFlag = SabreTools.Data.Models.Metadata.NodumpFlag;
+using PackingFlag = SabreTools.Data.Models.Metadata.PackingFlag;
 
 #pragma warning disable IDE0056 // Use index operator
 #pragma warning disable IDE0060 // Remove unused parameter

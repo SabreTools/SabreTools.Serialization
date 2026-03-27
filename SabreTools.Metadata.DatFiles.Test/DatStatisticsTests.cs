@@ -1,7 +1,9 @@
+using SabreTools.Data.Extensions;
 using SabreTools.Hashing;
 using SabreTools.Metadata.DatItems;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
+using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
 
 namespace SabreTools.Metadata.DatFiles.Test
 {

@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -25,15 +26,15 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process flag values
             string? overall = ReadString(Data.Models.Metadata.Feature.OverallKey);
             if (overall is not null)
-                Write<string?>(Data.Models.Metadata.Feature.OverallKey, overall.AsFeatureStatus().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Feature.OverallKey, overall.AsFeatureStatus()?.AsStringValue());
 
             string? status = ReadString(Data.Models.Metadata.Feature.StatusKey);
             if (status is not null)
-                Write<string?>(Data.Models.Metadata.Feature.StatusKey, status.AsFeatureStatus().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Feature.StatusKey, status.AsFeatureStatus()?.AsStringValue());
 
             string? featureType = ReadString(Data.Models.Metadata.Feature.FeatureTypeKey);
             if (featureType is not null)
-                Write<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, featureType.AsFeatureType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Feature.FeatureTypeKey, featureType.AsFeatureType()?.AsStringValue());
         }
 
         public Feature(Data.Models.Metadata.Feature item, Machine machine, Source source) : this(item)

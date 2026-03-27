@@ -1,5 +1,6 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -29,7 +30,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? chipType = ReadString(Data.Models.Metadata.Chip.ChipTypeKey);
             if (chipType is not null)
-                Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, chipType.AsChipType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Chip.ChipTypeKey, chipType.AsChipType()?.AsStringValue());
         }
 
         public Chip(Data.Models.Metadata.Chip item, Machine machine, Source source) : this(item)

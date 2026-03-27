@@ -1575,5 +1575,568 @@ namespace SabreTools.Data.Extensions.Test
         }
 
         #endregion
+
+        #region String to Enum
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("cpu", ChipType.CPU)]
+        [InlineData("audio", ChipType.Audio)]
+        public void AsChipTypeTest(string? field, ChipType? expected)
+        {
+            ChipType? actual = field.AsChipType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("joy", ControlType.Joy)]
+        [InlineData("stick", ControlType.Stick)]
+        [InlineData("paddle", ControlType.Paddle)]
+        [InlineData("pedal", ControlType.Pedal)]
+        [InlineData("lightgun", ControlType.Lightgun)]
+        [InlineData("positional", ControlType.Positional)]
+        [InlineData("dial", ControlType.Dial)]
+        [InlineData("trackball", ControlType.Trackball)]
+        [InlineData("mouse", ControlType.Mouse)]
+        [InlineData("only_buttons", ControlType.OnlyButtons)]
+        [InlineData("keypad", ControlType.Keypad)]
+        [InlineData("keyboard", ControlType.Keyboard)]
+        [InlineData("mahjong", ControlType.Mahjong)]
+        [InlineData("hanafuda", ControlType.Hanafuda)]
+        [InlineData("gambling", ControlType.Gambling)]
+        public void AsControlTypeTest(string? field, ControlType? expected)
+        {
+            ControlType? actual = field.AsControlType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("unknown", DeviceType.Unknown)]
+        [InlineData("cartridge", DeviceType.Cartridge)]
+        [InlineData("floppydisk", DeviceType.FloppyDisk)]
+        [InlineData("harddisk", DeviceType.HardDisk)]
+        [InlineData("cylinder", DeviceType.Cylinder)]
+        [InlineData("cassette", DeviceType.Cassette)]
+        [InlineData("punchcard", DeviceType.PunchCard)]
+        [InlineData("punchtape", DeviceType.PunchTape)]
+        [InlineData("printout", DeviceType.Printout)]
+        [InlineData("serial", DeviceType.Serial)]
+        [InlineData("parallel", DeviceType.Parallel)]
+        [InlineData("snapshot", DeviceType.Snapshot)]
+        [InlineData("quickload", DeviceType.QuickLoad)]
+        [InlineData("memcard", DeviceType.MemCard)]
+        [InlineData("cdrom", DeviceType.CDROM)]
+        [InlineData("magtape", DeviceType.MagTape)]
+        [InlineData("romimage", DeviceType.ROMImage)]
+        [InlineData("midiin", DeviceType.MIDIIn)]
+        [InlineData("midiout", DeviceType.MIDIOut)]
+        [InlineData("picture", DeviceType.Picture)]
+        [InlineData("vidfile", DeviceType.VidFile)]
+        public void AsDeviceTypeTest(string? field, DeviceType? expected)
+        {
+            DeviceType? actual = field.AsDeviceType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("raster", DisplayType.Raster)]
+        [InlineData("vector", DisplayType.Vector)]
+        [InlineData("lcd", DisplayType.LCD)]
+        [InlineData("svg", DisplayType.SVG)]
+        [InlineData("unknown", DisplayType.Unknown)]
+        public void AsDisplayTypeTest(string? field, DisplayType? expected)
+        {
+            DisplayType? actual = field.AsDisplayType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("big", Endianness.Big)]
+        [InlineData("little", Endianness.Little)]
+        public void AsEndiannessTest(string? field, Endianness? expected)
+        {
+            Endianness? actual = field.AsEndianness();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("unemulated", FeatureStatus.Unemulated)]
+        [InlineData("imperfect", FeatureStatus.Imperfect)]
+        public void AsFeatureStatusTest(string? field, FeatureStatus? expected)
+        {
+            FeatureStatus? actual = field.AsFeatureStatus();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("protection", FeatureType.Protection)]
+        [InlineData("palette", FeatureType.Palette)]
+        [InlineData("graphics", FeatureType.Graphics)]
+        [InlineData("sound", FeatureType.Sound)]
+        [InlineData("controls", FeatureType.Controls)]
+        [InlineData("keyboard", FeatureType.Keyboard)]
+        [InlineData("mouse", FeatureType.Mouse)]
+        [InlineData("microphone", FeatureType.Microphone)]
+        [InlineData("camera", FeatureType.Camera)]
+        [InlineData("disk", FeatureType.Disk)]
+        [InlineData("printer", FeatureType.Printer)]
+        [InlineData("lan", FeatureType.Lan)]
+        [InlineData("wan", FeatureType.Wan)]
+        [InlineData("timing", FeatureType.Timing)]
+        public void AsFeatureTypeTest(string? field, FeatureType? expected)
+        {
+            FeatureType? actual = field.AsFeatureType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("none", ItemStatus.None)]
+        [InlineData("no", ItemStatus.None)]
+        [InlineData("good", ItemStatus.Good)]
+        [InlineData("baddump", ItemStatus.BadDump)]
+        [InlineData("nodump", ItemStatus.Nodump)]
+        [InlineData("yes", ItemStatus.Nodump)]
+        [InlineData("verified", ItemStatus.Verified)]
+        public void AsItemStatusTest(string? field, ItemStatus? expected)
+        {
+            ItemStatus? actual = field.AsItemStatus();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("load16_byte", LoadFlag.Load16Byte)]
+        [InlineData("load16_word", LoadFlag.Load16Word)]
+        [InlineData("load16_word_swap", LoadFlag.Load16WordSwap)]
+        [InlineData("load32_byte", LoadFlag.Load32Byte)]
+        [InlineData("load32_word", LoadFlag.Load32Word)]
+        [InlineData("load32_word_swap", LoadFlag.Load32WordSwap)]
+        [InlineData("load32_dword", LoadFlag.Load32DWord)]
+        [InlineData("load64_word", LoadFlag.Load64Word)]
+        [InlineData("load64_word_swap", LoadFlag.Load64WordSwap)]
+        [InlineData("reload", LoadFlag.Reload)]
+        [InlineData("fill", LoadFlag.Fill)]
+        [InlineData("continue", LoadFlag.Continue)]
+        [InlineData("reload_plain", LoadFlag.ReloadPlain)]
+        [InlineData("ignore", LoadFlag.Ignore)]
+        public void AsLoadFlagTest(string? field, LoadFlag? expected)
+        {
+            LoadFlag? actual = field.AsLoadFlag();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, MergingFlag.None)]
+        [InlineData("none", MergingFlag.None)]
+        [InlineData("split", MergingFlag.Split)]
+        [InlineData("merged", MergingFlag.Merged)]
+        [InlineData("nonmerged", MergingFlag.NonMerged)]
+        [InlineData("unmerged", MergingFlag.NonMerged)]
+        [InlineData("fullmerged", MergingFlag.FullMerged)]
+        [InlineData("device", MergingFlag.DeviceNonMerged)]
+        [InlineData("devicenonmerged", MergingFlag.DeviceNonMerged)]
+        [InlineData("deviceunmerged", MergingFlag.DeviceNonMerged)]
+        [InlineData("full", MergingFlag.FullNonMerged)]
+        [InlineData("fullnonmerged", MergingFlag.FullNonMerged)]
+        [InlineData("fullunmerged", MergingFlag.FullNonMerged)]
+        public void AsMergingFlagTest(string? field, MergingFlag expected)
+        {
+            MergingFlag actual = field.AsMergingFlag();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, NodumpFlag.None)]
+        [InlineData("none", NodumpFlag.None)]
+        [InlineData("obsolete", NodumpFlag.Obsolete)]
+        [InlineData("required", NodumpFlag.Required)]
+        [InlineData("ignore", NodumpFlag.Ignore)]
+        public void AsNodumpFlagTest(string? field, NodumpFlag expected)
+        {
+            NodumpFlag actual = field.AsNodumpFlag();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("rom", OpenMSXSubType.Rom)]
+        [InlineData("megarom", OpenMSXSubType.MegaRom)]
+        [InlineData("sccpluscart", OpenMSXSubType.SCCPlusCart)]
+        public void AsOpenMSXSubTypeTest(string? field, OpenMSXSubType? expected)
+        {
+            OpenMSXSubType? actual = field.AsOpenMSXSubType();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, PackingFlag.None)]
+        [InlineData("none", PackingFlag.None)]
+        [InlineData("yes", PackingFlag.Zip)]
+        [InlineData("zip", PackingFlag.Zip)]
+        [InlineData("no", PackingFlag.Unzip)]
+        [InlineData("unzip", PackingFlag.Unzip)]
+        [InlineData("partial", PackingFlag.Partial)]
+        [InlineData("flat", PackingFlag.Flat)]
+        [InlineData("fileonly", PackingFlag.FileOnly)]
+        public void AsPackingFlagTest(string? field, PackingFlag expected)
+        {
+            PackingFlag actual = field.AsPackingFlag();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("eq", Relation.Equal)]
+        [InlineData("ne", Relation.NotEqual)]
+        [InlineData("gt", Relation.GreaterThan)]
+        [InlineData("le", Relation.LessThanOrEqual)]
+        [InlineData("lt", Relation.LessThan)]
+        [InlineData("ge", Relation.GreaterThanOrEqual)]
+        public void AsRelationTest(string? field, Relation? expected)
+        {
+            Relation? actual = field.AsRelation();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("no", Runnable.No)]
+        [InlineData("partial", Runnable.Partial)]
+        [InlineData("yes", Runnable.Yes)]
+        public void AsRunnableTest(string? field, Runnable? expected)
+        {
+            Runnable? actual = field.AsRunnable();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("none", SoftwareListStatus.None)]
+        [InlineData("original", SoftwareListStatus.Original)]
+        [InlineData("compatible", SoftwareListStatus.Compatible)]
+        public void AsSoftwareListStatusTest(string? field, SoftwareListStatus? expected)
+        {
+            SoftwareListStatus? actual = field.AsSoftwareListStatus();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("no", Supported.No)]
+        [InlineData("unsupported", Supported.No)]
+        [InlineData("partial", Supported.Partial)]
+        [InlineData("yes", Supported.Yes)]
+        [InlineData("supported", Supported.Yes)]
+        public void AsSupportedTest(string? field, Supported? expected)
+        {
+            Supported? actual = field.AsSupported();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("good", SupportStatus.Good)]
+        [InlineData("imperfect", SupportStatus.Imperfect)]
+        [InlineData("preliminary", SupportStatus.Preliminary)]
+        public void AsSupportStatusTest(string? field, SupportStatus? expected)
+        {
+            SupportStatus? actual = field.AsSupportStatus();
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
+
+        #region Enum to String
+
+        [Theory]
+        [InlineData((ChipType)int.MaxValue, null)]
+        [InlineData(ChipType.CPU, "cpu")]
+        [InlineData(ChipType.Audio, "audio")]
+        public void FromChipTypeTest(ChipType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((ControlType)int.MaxValue, null)]
+        [InlineData(ControlType.Joy, "joy")]
+        [InlineData(ControlType.Stick, "stick")]
+        [InlineData(ControlType.Paddle, "paddle")]
+        [InlineData(ControlType.Pedal, "pedal")]
+        [InlineData(ControlType.Lightgun, "lightgun")]
+        [InlineData(ControlType.Positional, "positional")]
+        [InlineData(ControlType.Dial, "dial")]
+        [InlineData(ControlType.Trackball, "trackball")]
+        [InlineData(ControlType.Mouse, "mouse")]
+        [InlineData(ControlType.OnlyButtons, "only_buttons")]
+        [InlineData(ControlType.Keypad, "keypad")]
+        [InlineData(ControlType.Keyboard, "keyboard")]
+        [InlineData(ControlType.Mahjong, "mahjong")]
+        [InlineData(ControlType.Hanafuda, "hanafuda")]
+        [InlineData(ControlType.Gambling, "gambling")]
+        public void FromControlTypeTest(ControlType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((DeviceType)int.MaxValue, null)]
+        [InlineData(DeviceType.Unknown, "unknown")]
+        [InlineData(DeviceType.Cartridge, "cartridge")]
+        [InlineData(DeviceType.FloppyDisk, "floppydisk")]
+        [InlineData(DeviceType.HardDisk, "harddisk")]
+        [InlineData(DeviceType.Cylinder, "cylinder")]
+        [InlineData(DeviceType.Cassette, "cassette")]
+        [InlineData(DeviceType.PunchCard, "punchcard")]
+        [InlineData(DeviceType.PunchTape, "punchtape")]
+        [InlineData(DeviceType.Printout, "printout")]
+        [InlineData(DeviceType.Serial, "serial")]
+        [InlineData(DeviceType.Parallel, "parallel")]
+        [InlineData(DeviceType.Snapshot, "snapshot")]
+        [InlineData(DeviceType.QuickLoad, "quickload")]
+        [InlineData(DeviceType.MemCard, "memcard")]
+        [InlineData(DeviceType.CDROM, "cdrom")]
+        [InlineData(DeviceType.MagTape, "magtape")]
+        [InlineData(DeviceType.ROMImage, "romimage")]
+        [InlineData(DeviceType.MIDIIn, "midiin")]
+        [InlineData(DeviceType.MIDIOut, "midiout")]
+        [InlineData(DeviceType.Picture, "picture")]
+        [InlineData(DeviceType.VidFile, "vidfile")]
+        public void FromDeviceTypeTest(DeviceType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((DisplayType)int.MaxValue, null)]
+        [InlineData(DisplayType.Raster, "raster")]
+        [InlineData(DisplayType.Vector, "vector")]
+        [InlineData(DisplayType.LCD, "lcd")]
+        [InlineData(DisplayType.SVG, "svg")]
+        [InlineData(DisplayType.Unknown, "unknown")]
+        public void FromDisplayTypeTest(DisplayType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Endianness)int.MaxValue, null)]
+        [InlineData(Endianness.Big, "big")]
+        [InlineData(Endianness.Little, "little")]
+        public void FromEndiannessTest(Endianness field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((FeatureStatus)int.MaxValue, null)]
+        [InlineData(FeatureStatus.Unemulated, "unemulated")]
+        [InlineData(FeatureStatus.Imperfect, "imperfect")]
+        public void FromFeatureStatusTest(FeatureStatus field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((FeatureType)int.MaxValue, null)]
+        [InlineData(FeatureType.Protection, "protection")]
+        [InlineData(FeatureType.Palette, "palette")]
+        [InlineData(FeatureType.Graphics, "graphics")]
+        [InlineData(FeatureType.Sound, "sound")]
+        [InlineData(FeatureType.Controls, "controls")]
+        [InlineData(FeatureType.Keyboard, "keyboard")]
+        [InlineData(FeatureType.Mouse, "mouse")]
+        [InlineData(FeatureType.Microphone, "microphone")]
+        [InlineData(FeatureType.Camera, "camera")]
+        [InlineData(FeatureType.Disk, "disk")]
+        [InlineData(FeatureType.Printer, "printer")]
+        [InlineData(FeatureType.Lan, "lan")]
+        [InlineData(FeatureType.Wan, "wan")]
+        [InlineData(FeatureType.Timing, "timing")]
+        public void FromFeatureTypeTest(FeatureType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((ItemStatus)int.MaxValue, true, null)]
+        [InlineData((ItemStatus)int.MaxValue, false, null)]
+        [InlineData(ItemStatus.None, true, "no")]
+        [InlineData(ItemStatus.None, false, "none")]
+        [InlineData(ItemStatus.Good, true, "good")]
+        [InlineData(ItemStatus.Good, false, "good")]
+        [InlineData(ItemStatus.BadDump, true, "baddump")]
+        [InlineData(ItemStatus.BadDump, false, "baddump")]
+        [InlineData(ItemStatus.Nodump, true, "yes")]
+        [InlineData(ItemStatus.Nodump, false, "nodump")]
+        [InlineData(ItemStatus.Verified, true, "verified")]
+        [InlineData(ItemStatus.Verified, false, "verified")]
+        public void FromItemStatusTest(ItemStatus field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((LoadFlag)int.MaxValue, null)]
+        [InlineData(LoadFlag.Load16Byte, "load16_byte")]
+        [InlineData(LoadFlag.Load16Word, "load16_word")]
+        [InlineData(LoadFlag.Load16WordSwap, "load16_word_swap")]
+        [InlineData(LoadFlag.Load32Byte, "load32_byte")]
+        [InlineData(LoadFlag.Load32Word, "load32_word")]
+        [InlineData(LoadFlag.Load32WordSwap, "load32_word_swap")]
+        [InlineData(LoadFlag.Load32DWord, "load32_dword")]
+        [InlineData(LoadFlag.Load64Word, "load64_word")]
+        [InlineData(LoadFlag.Load64WordSwap, "load64_word_swap")]
+        [InlineData(LoadFlag.Reload, "reload")]
+        [InlineData(LoadFlag.Fill, "fill")]
+        [InlineData(LoadFlag.Continue, "continue")]
+        [InlineData(LoadFlag.ReloadPlain, "reload_plain")]
+        [InlineData(LoadFlag.Ignore, "ignore")]
+        public void FromLoadFlagTest(LoadFlag field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(MergingFlag.None, true, "none")]
+        [InlineData(MergingFlag.None, false, "none")]
+        [InlineData(MergingFlag.Split, true, "split")]
+        [InlineData(MergingFlag.Split, false, "split")]
+        [InlineData(MergingFlag.Merged, true, "merged")]
+        [InlineData(MergingFlag.Merged, false, "merged")]
+        [InlineData(MergingFlag.NonMerged, true, "unmerged")]
+        [InlineData(MergingFlag.NonMerged, false, "nonmerged")]
+        [InlineData(MergingFlag.FullMerged, true, "fullmerged")]
+        [InlineData(MergingFlag.FullMerged, false, "fullmerged")]
+        [InlineData(MergingFlag.DeviceNonMerged, true, "devicenonmerged")]
+        [InlineData(MergingFlag.DeviceNonMerged, false, "device")]
+        [InlineData(MergingFlag.FullNonMerged, true, "fullnonmerged")]
+        [InlineData(MergingFlag.FullNonMerged, false, "full")]
+        public void FromMergingFlagTest(MergingFlag field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(NodumpFlag.None, "none")]
+        [InlineData(NodumpFlag.Obsolete, "obsolete")]
+        [InlineData(NodumpFlag.Required, "required")]
+        [InlineData(NodumpFlag.Ignore, "ignore")]
+        public void FromNodumpFlagTest(NodumpFlag field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((OpenMSXSubType)int.MaxValue, null)]
+        [InlineData(OpenMSXSubType.Rom, "rom")]
+        [InlineData(OpenMSXSubType.MegaRom, "megarom")]
+        [InlineData(OpenMSXSubType.SCCPlusCart, "sccpluscart")]
+        public void FromOpenMSXSubTypeTest(OpenMSXSubType field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(PackingFlag.None, true, "none")]
+        [InlineData(PackingFlag.None, false, "none")]
+        [InlineData(PackingFlag.Zip, true, "yes")]
+        [InlineData(PackingFlag.Zip, false, "zip")]
+        [InlineData(PackingFlag.Unzip, true, "no")]
+        [InlineData(PackingFlag.Unzip, false, "unzip")]
+        [InlineData(PackingFlag.Partial, true, "partial")]
+        [InlineData(PackingFlag.Partial, false, "partial")]
+        [InlineData(PackingFlag.Flat, true, "flat")]
+        [InlineData(PackingFlag.Flat, false, "flat")]
+        [InlineData(PackingFlag.FileOnly, true, "fileonly")]
+        [InlineData(PackingFlag.FileOnly, false, "fileonly")]
+        public void FromPackingFlagTest(PackingFlag field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Relation)int.MaxValue, null)]
+        [InlineData(Relation.Equal, "eq")]
+        [InlineData(Relation.NotEqual, "ne")]
+        [InlineData(Relation.GreaterThan, "gt")]
+        [InlineData(Relation.LessThanOrEqual, "le")]
+        [InlineData(Relation.LessThan, "lt")]
+        [InlineData(Relation.GreaterThanOrEqual, "ge")]
+        public void FromRelationTest(Relation field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Runnable)int.MaxValue, null)]
+        [InlineData(Runnable.No, "no")]
+        [InlineData(Runnable.Partial, "partial")]
+        [InlineData(Runnable.Yes, "yes")]
+        public void FromRunnableTest(Runnable field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((SoftwareListStatus)int.MaxValue, null)]
+        [InlineData(SoftwareListStatus.None, "none")]
+        [InlineData(SoftwareListStatus.Original, "original")]
+        [InlineData(SoftwareListStatus.Compatible, "compatible")]
+        public void FromSoftwareListStatusTest(SoftwareListStatus field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((Supported)int.MaxValue, true, null)]
+        [InlineData((Supported)int.MaxValue, false, null)]
+        [InlineData(Supported.No, true, "unsupported")]
+        [InlineData(Supported.No, false, "no")]
+        [InlineData(Supported.Partial, true, "partial")]
+        [InlineData(Supported.Partial, false, "partial")]
+        [InlineData(Supported.Yes, true, "supported")]
+        [InlineData(Supported.Yes, false, "yes")]
+        public void FromSupportedTest(Supported field, bool useSecond, string? expected)
+        {
+            string? actual = field.AsStringValue(useSecond);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData((SupportStatus)int.MaxValue, null)]
+        [InlineData(SupportStatus.Good, "good")]
+        [InlineData(SupportStatus.Imperfect, "imperfect")]
+        [InlineData(SupportStatus.Preliminary, "preliminary")]
+        public void FromSupportStatusTest(SupportStatus field, string? expected)
+        {
+            string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using SabreTools.Data.Extensions;
+using SabreTools.Data.Models.Metadata;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
@@ -36,7 +37,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             get
             {
                 var status = ReadString(Data.Models.Metadata.Rom.StatusKey).AsItemStatus();
-                return status != ItemStatus.NULL && status != ItemStatus.None;
+                return status is not null && status != ItemStatus.None;
             }
         }
 
@@ -60,7 +61,7 @@ namespace SabreTools.Metadata.DatItems.Formats
                     && (!string.IsNullOrEmpty(dataArea.GetName())
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.SizeKey) is not null
                         || dataArea.ReadLong(Data.Models.Metadata.DataArea.WidthKey) is not null
-                        || dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey).AsEndianness() != Endianness.NULL);
+                        || dataArea.ReadString(Data.Models.Metadata.DataArea.EndiannessKey).AsEndianness() is not null);
             }
         }
 
@@ -86,25 +87,25 @@ namespace SabreTools.Metadata.DatItems.Formats
             Write<string?>(Data.Models.Metadata.Rom.StatusKey, ItemStatus.None.AsStringValue());
         }
 
-        public Rom(Data.Models.Metadata.Dump item, Machine machine, Source source, int index)
+        public Rom(Dump item, Machine machine, Source source, int index)
         {
             // If we don't have rom data, we can't do anything
             Data.Models.Metadata.Rom? rom = null;
-            OpenMSXSubType subType = OpenMSXSubType.NULL;
+            OpenMSXSubType? subType = null;
 
-            if (item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.RomKey) is not null)
+            if (item.Read<Data.Models.Metadata.Rom>(Dump.RomKey) is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.RomKey);
+                rom = item.Read<Data.Models.Metadata.Rom>(Dump.RomKey);
                 subType = OpenMSXSubType.Rom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.MegaRomKey) is not null)
+            else if (item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey) is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.MegaRomKey);
+                rom = item.Read<Data.Models.Metadata.Rom>(Dump.MegaRomKey);
                 subType = OpenMSXSubType.MegaRom;
             }
-            else if (item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.SCCPlusCartKey) is not null)
+            else if (item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey) is not null)
             {
-                rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.SCCPlusCartKey);
+                rom = item.Read<Data.Models.Metadata.Rom>(Dump.SCCPlusCartKey);
                 subType = OpenMSXSubType.SCCPlusCart;
             }
 
@@ -116,14 +117,14 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             SetName(name);
             Write<string?>(Data.Models.Metadata.Rom.OffsetKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
-            Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, subType.AsStringValue());
+            Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, subType?.AsStringValue());
             Write<string?>(Data.Models.Metadata.Rom.OpenMSXType, rom.ReadString(Data.Models.Metadata.Rom.OpenMSXType) ?? rom.ReadString(Data.Models.Metadata.DatItem.TypeKey));
             Write<string?>(Data.Models.Metadata.Rom.RemarkKey, rom.ReadString(Data.Models.Metadata.Rom.RemarkKey));
             Write<string?>(Data.Models.Metadata.Rom.SHA1Key, rom.ReadString(Data.Models.Metadata.Rom.SHA1Key));
             Write<string?>(Data.Models.Metadata.Rom.StartKey, rom.ReadString(Data.Models.Metadata.Rom.StartKey));
             Write<Source?>(SourceKey, source);
 
-            var original = item.Read<Data.Models.Metadata.Original>(Data.Models.Metadata.Dump.OriginalKey);
+            var original = item.Read<Data.Models.Metadata.Original>(Dump.OriginalKey);
             if (original is not null)
             {
                 Write<Original?>("ORIGINAL", new Original
@@ -206,11 +207,11 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? loadFlag = ReadString(Data.Models.Metadata.Rom.LoadFlagKey);
             if (loadFlag is not null)
-                Write<string?>(Data.Models.Metadata.Rom.LoadFlagKey, loadFlag.AsLoadFlag().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Rom.LoadFlagKey, loadFlag.AsLoadFlag()?.AsStringValue());
 
             string? openMSXMediaType = ReadString(Data.Models.Metadata.Rom.OpenMSXMediaType);
             if (openMSXMediaType is not null)
-                Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, openMSXMediaType.AsOpenMSXSubType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Rom.OpenMSXMediaType, openMSXMediaType.AsOpenMSXSubType()?.AsStringValue());
 
             bool? mia = ReadBool(Data.Models.Metadata.Rom.MIAKey);
             if (mia is not null)
@@ -226,7 +227,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? status = ReadString(Data.Models.Metadata.Rom.StatusKey);
             if (status is not null)
-                Write<string?>(Data.Models.Metadata.Rom.StatusKey, status.AsItemStatus().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Rom.StatusKey, status.AsItemStatus()?.AsStringValue());
 
             // Process hash values
             long? size = ReadLong(Data.Models.Metadata.Rom.SizeKey);

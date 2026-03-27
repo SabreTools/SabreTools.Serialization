@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -50,7 +51,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? deviceType = ReadString(Data.Models.Metadata.Device.DeviceTypeKey);
             if (deviceType is not null)
-                Write<string?>(Data.Models.Metadata.Device.DeviceTypeKey, deviceType.AsDeviceType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Device.DeviceTypeKey, deviceType.AsDeviceType()?.AsStringValue());
 
             // Handle subitems
             var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);

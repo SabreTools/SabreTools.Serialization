@@ -14,6 +14,8 @@ using SabreTools.Hashing;
 using SabreTools.Logging;
 using SabreTools.Text.Compare;
 using SabreTools.Text.Extensions;
+using SabreTools.Data.Extensions;
+using ItemStatus = SabreTools.Data.Models.Metadata.ItemStatus;
 
 namespace SabreTools.Metadata.DatFiles
 {

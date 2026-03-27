@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 using SabreTools.Metadata.Filter;
+using MergingFlag = SabreTools.Data.Models.Metadata.MergingFlag;
+using NodumpFlag = SabreTools.Data.Models.Metadata.NodumpFlag;
+using PackingFlag = SabreTools.Data.Models.Metadata.PackingFlag;
 
 namespace SabreTools.Metadata.DatFiles
 {

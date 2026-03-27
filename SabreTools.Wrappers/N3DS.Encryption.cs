@@ -212,7 +212,7 @@ namespace SabreTools.Wrappers
         {
             // Determine the keys needed for this partition
             N3DSPartitionKeys? keys = GetDecryptionKeys(index, settings);
-            if (keys == null)
+            if (keys is null)
             {
                 Console.WriteLine($"Partition {index} could not generate keys. Skipping...");
                 return;
@@ -637,7 +637,7 @@ namespace SabreTools.Wrappers
         {
             // Determine the keys needed for this partition
             N3DSPartitionKeys? keys = GetEncryptionKeys(index, settings);
-            if (keys == null)
+            if (keys is null)
             {
                 Console.WriteLine($"Partition {index} could not generate keys. Skipping...");
                 return;

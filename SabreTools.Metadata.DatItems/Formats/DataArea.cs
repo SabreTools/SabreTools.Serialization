@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -26,7 +27,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process flag values
             string? endianness = ReadString(Data.Models.Metadata.DataArea.EndiannessKey);
             if (endianness is not null)
-                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, endianness.AsEndianness().AsStringValue());
+                Write<string?>(Data.Models.Metadata.DataArea.EndiannessKey, endianness.AsEndianness()?.AsStringValue());
 
             long? size = ReadLong(Data.Models.Metadata.DataArea.SizeKey);
             if (size is not null)

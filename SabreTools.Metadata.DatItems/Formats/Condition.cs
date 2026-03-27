@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -25,7 +26,7 @@ namespace SabreTools.Metadata.DatItems.Formats
             // Process flag values
             string? condition = ReadString(Data.Models.Metadata.Condition.RelationKey);
             if (condition is not null)
-                Write<string?>(Data.Models.Metadata.Condition.RelationKey, condition.AsRelation().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Condition.RelationKey, condition.AsRelation()?.AsStringValue());
         }
 
         public Condition(Data.Models.Metadata.Condition item, Machine machine, Source source) : this(item)

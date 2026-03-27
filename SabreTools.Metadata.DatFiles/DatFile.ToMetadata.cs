@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
+using OpenMSXSubType = SabreTools.Data.Models.Metadata.OpenMSXSubType;
 
 namespace SabreTools.Metadata.DatFiles
 {
@@ -935,7 +937,7 @@ namespace SabreTools.Metadata.DatFiles
                     [Data.Models.Metadata.Video.AspectYKey] = displayItem.ReadLong(Data.Models.Metadata.Video.AspectYKey).ToString(),
                     [Data.Models.Metadata.Video.HeightKey] = displayItem.ReadLong(Data.Models.Metadata.Display.HeightKey).ToString(),
                     [Data.Models.Metadata.Video.RefreshKey] = displayItem.ReadDouble(Data.Models.Metadata.Display.RefreshKey).ToString(),
-                    [Data.Models.Metadata.Video.ScreenKey] = displayItem.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType().AsStringValue(),
+                    [Data.Models.Metadata.Video.ScreenKey] = displayItem.ReadString(Data.Models.Metadata.Display.DisplayTypeKey).AsDisplayType()?.AsStringValue(),
                     [Data.Models.Metadata.Video.WidthKey] = displayItem.ReadLong(Data.Models.Metadata.Display.WidthKey).ToString()
                 };
 
@@ -1059,8 +1061,6 @@ namespace SabreTools.Metadata.DatFiles
 
                     EnsureMachineKey<Data.Models.Metadata.Dump?>(machine, Data.Models.Metadata.Machine.DumpKey);
                     AppendToMachineKey(machine, Data.Models.Metadata.Machine.DumpKey, dumpSccPlusCart);
-                    break;
-                case OpenMSXSubType.NULL:
                     break;
                 default:
                     // This should never happen

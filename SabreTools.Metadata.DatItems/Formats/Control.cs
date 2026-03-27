@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems.Formats
 {
@@ -57,7 +58,7 @@ namespace SabreTools.Metadata.DatItems.Formats
 
             string? controlType = ReadString(Data.Models.Metadata.Control.ControlTypeKey);
             if (controlType is not null)
-                Write<string?>(Data.Models.Metadata.Control.ControlTypeKey, controlType.AsControlType().AsStringValue());
+                Write<string?>(Data.Models.Metadata.Control.ControlTypeKey, controlType.AsControlType()?.AsStringValue());
         }
 
         public Control(Data.Models.Metadata.Control item, Machine machine, Source source) : this(item)
