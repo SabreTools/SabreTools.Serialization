@@ -90,12 +90,14 @@ namespace SabreTools.Serialization.Readers
 
             obj.Signature = data.ReadBytes(24);
             obj.Unusued8Bytes = data.ReadBytes(8);
-            obj.XBLayoutVersion = ParseFourPartVersionType(data) ?? 0;
-            obj.XBPremasterVersion = ParseFourPartVersionType(data) ?? 0;
-            obj.XBGameDiscVersion = ParseFourPartVersionType(data) ?? 0;
-            obj.XBOther1Version = ParseFourPartVersionType(data) ?? 0;
-            obj.XBOther2Version = ParseFourPartVersionType(data) ?? 0;
-            obj.XBOther3Version = ParseFourPartVersionType(data) ?? 0;
+
+            obj.XBLayoutVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBPremasterVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBGameDiscVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBOther1Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBOther2Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBOther3Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+
             obj.Reserved = data.ReadBytes(1968);
 
             return obj;
@@ -153,7 +155,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: Seek to start of directory descriptor
             var dr = ParseDirectoryRecord(data);
             if (dr is not null)
-                obj.Add(dr);
+                records.Add(dr);
 
             // TODO: Parse remaining records, check if next bytes are 0xFF ?
 
