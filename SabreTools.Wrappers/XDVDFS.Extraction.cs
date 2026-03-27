@@ -36,13 +36,18 @@ namespace SabreTools.Wrappers
             // If no descriptor exists at that sector, we cannot extract from it 
             if (!DirectoryDescriptors.ContainsKey(sectorNumber))
                 return false;
+            
+            bool allExtracted = true;
 
             // Extract directory records within directory descriptor
-            foreach (var dr in DirectoryDescriptors[sectorNumber])
+            foreach (var dr in DirectoryDescriptors[sectorNumber].DirectoryRecords)
             {
                 // Skip invalid records
                 if (dr.FilenameLength == 0 || dr.Filename is null)
+                {
+                    if (includeDebug) Console.WriteLine($"Empty filename in directory record at sector {sectorNumber}");
                     continue;
+                }
 
                 string outputPath = Path.Combine(outputDirectory, Encoding.UTF8.GetString(dr.Filename));
 
@@ -52,21 +57,27 @@ namespace SabreTools.Wrappers
                     if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath))
                         Directory.CreateDirectory(outputPath);
 
-                    //ExtractRecord(outputDirectory, includeDebug, )
+                    allExtracted |= ExtractDescriptor(outputDirectory, includeDebug, dr.ExtentOffset);
                 }
                 else
                 {
                     // Skip invalid file size
                     if (dr.ExtentSize == 0)
+                    {
+                        if (includeDebug) Console.WriteLine($"Zero file size for file {dr.Filename} at sector {dr.ExtentLocation}");
                         continue;
+                    }
 
                     // Skip invalid file location
                     if (dr.ExtentLocation + dr.ExtentSize > _dataSource.Length)
+                    {
+                        if (includeDebug) Console.WriteLine($"Invalid file location for file {dr.Filename} at sector {dr.ExtentLocation}");
                         continue;
+                    }
                 }
             }
 
-            return true;
+            return allExtracted;
         }
     }
 }
