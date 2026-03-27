@@ -14,7 +14,7 @@ INCLUDE_DEBUG=false
 INCLUDE_UNPUBLISHED=false
 NO_BUILD=false
 NO_ARCHIVE=false
-while getopts "udba" OPTION; do
+while getopts "udpba" OPTION; do
     case $OPTION in
     u)
         USE_ALL=true
