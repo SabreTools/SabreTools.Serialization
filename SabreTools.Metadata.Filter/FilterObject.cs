@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Metadata;
 using SabreTools.Text.Extensions;
 

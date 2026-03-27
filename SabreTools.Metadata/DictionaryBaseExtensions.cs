@@ -8,45 +8,6 @@ namespace SabreTools.Metadata
 {
     public static class DictionaryBaseExtensions
     {
-        #region Cloning
-
-        /// <summary>
-        /// Deep clone a DictionaryBase object
-        /// </summary>
-        public static DictionaryBase? Clone(this DictionaryBase self)
-        {
-            // If construction failed, we can't do anything
-            if (Activator.CreateInstance(self.GetType()) is not DictionaryBase clone)
-                return null;
-
-            // Loop through and clone per type
-            foreach (string key in self.Keys)
-            {
-                object? value = self[key];
-                clone[key] = value switch
-                {
-                    // Primative types
-                    bool or long or double or string => value,
-
-                    // DictionaryBase types
-                    DictionaryBase db => db.Clone(),
-
-                    // Enumerable types
-                    byte[] bytArr => bytArr.Clone(),
-                    string[] strArr => strArr.Clone(),
-                    DictionaryBase[] dbArr => Array.ConvertAll(dbArr, Clone),
-                    ICloneable[] clArr => Array.ConvertAll(clArr, cl => cl.Clone()),
-
-                    // Everything else just copies
-                    _ => value,
-                };
-            }
-
-            return clone;
-        }
-
-        #endregion
-
         #region Equality Checking
 
         /// <summary>

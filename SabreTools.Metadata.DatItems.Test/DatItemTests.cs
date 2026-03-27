@@ -1,3 +1,4 @@
+using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems.Formats;
 using Xunit;
 

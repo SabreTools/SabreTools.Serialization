@@ -1,4 +1,5 @@
 using System;
+using SabreTools.Data.Extensions;
 
 namespace SabreTools.Metadata.DatItems
 {

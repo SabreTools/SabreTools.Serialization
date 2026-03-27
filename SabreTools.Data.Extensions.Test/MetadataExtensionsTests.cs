@@ -1851,6 +1851,19 @@ namespace SabreTools.Data.Extensions.Test
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("INVALID", null)]
+        [InlineData("yes", true)]
+        [InlineData("True", true)]
+        [InlineData("no", false)]
+        [InlineData("False", false)]
+        public void AsYesNoTest(string? field, bool? expected)
+        {
+            bool? actual = field.AsYesNo();
+            Assert.Equal(expected, actual);
+        }
+
         #endregion
 
         #region Enum to String
@@ -2134,6 +2147,16 @@ namespace SabreTools.Data.Extensions.Test
         public void FromSupportStatusTest(SupportStatus field, string? expected)
         {
             string? actual = field.AsStringValue();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData(true, "yes")]
+        [InlineData(false, "no")]
+        public void FromYesNo(bool? field, string? expected)
+        {
+            string? actual = field.FromYesNo();
             Assert.Equal(expected, actual);
         }
 
