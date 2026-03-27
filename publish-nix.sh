@@ -11,15 +11,19 @@
 # Optional parameters
 USE_ALL=false
 INCLUDE_DEBUG=false
+INCLUDE_UNPUBLISHED=false
 NO_BUILD=false
 NO_ARCHIVE=false
-while getopts "udba" OPTION; do
+while getopts "udpba" OPTION; do
     case $OPTION in
     u)
         USE_ALL=true
         ;;
     d)
         INCLUDE_DEBUG=true
+        ;;
+    p)
+        INCLUDE_UNPUBLISHED=true
         ;;
     b)
         NO_BUILD=true
@@ -44,6 +48,7 @@ COMMIT=$(git log --pretty=%H -1)
 echo "Selected Options:"
 echo "  Use all frameworks (-u)               $USE_ALL"
 echo "  Include debug builds (-d)             $INCLUDE_DEBUG"
+echo "  Include unpublished packages (-p)     $INCLUDE_UNPUBLISHED"
 echo "  No build (-b)                         $NO_BUILD"
 echo "  No archive (-a)                       $NO_ARCHIVE"
 echo " "
