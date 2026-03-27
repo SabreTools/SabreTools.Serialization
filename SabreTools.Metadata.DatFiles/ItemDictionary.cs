@@ -368,7 +368,11 @@ namespace SabreTools.Metadata.DatFiles
         public void BucketBy(ItemKey bucketBy, bool lower = true, bool norename = true)
         {
             // If we have a situation where there's no dictionary or no keys at all, we skip
+#if NET20 || NET35
             if (_items is null || _items.Count == 0)
+#else
+            if (_items is null || _items.IsEmpty)
+#endif
                 return;
 
             // If the sorted type isn't the same, we want to sort the dictionary accordingly
@@ -914,7 +918,11 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.ResetStatistics();
 
             // If we have a blank Dat in any way, return
+#if NET20 || NET35
             if (_items is null || _items.Count == 0)
+#else
+            if (_items is null || _items.IsEmpty)
+#endif
                 return;
 
             // Loop through and add

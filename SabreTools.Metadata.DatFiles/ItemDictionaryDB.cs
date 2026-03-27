@@ -1252,10 +1252,10 @@ namespace SabreTools.Metadata.DatFiles
             DatStatistics.ResetStatistics();
 
             // If there are no items
-#if NET40_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
-            if (_items is null || _items.IsEmpty)
-#else
+#if NET20 || NET35
             if (_items is null || _items.Count == 0)
+#else
+            if (_items is null || _items.IsEmpty)
 #endif
                 return;
 

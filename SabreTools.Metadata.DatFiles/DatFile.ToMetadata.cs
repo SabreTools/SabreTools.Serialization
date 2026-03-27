@@ -332,10 +332,10 @@ namespace SabreTools.Metadata.DatFiles
                         ClearEmptyKeys(partItems[partName]);
 
                         // If the item has a DataArea mapping
-                        if (dataAreaMappings.ContainsKey(partItem))
+                        if (dataAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DataArea, Data.Models.Metadata.Rom) dataAreaMap))
                         {
                             // Get the mapped items
-                            var (dataArea, romItem) = dataAreaMappings[partItem];
+                            var (dataArea, romItem) = dataAreaMap;
 
                             // Clear any empty fields
                             ClearEmptyKeys(romItem);
@@ -389,10 +389,10 @@ namespace SabreTools.Metadata.DatFiles
                         }
 
                         // If the item has a DiskArea mapping
-                        if (diskAreaMappings.ContainsKey(partItem))
+                        if (diskAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DiskArea, Data.Models.Metadata.Disk) diskAreaMap))
                         {
                             // Get the mapped items
-                            var (diskArea, diskItem) = diskAreaMappings[partItem];
+                            var (diskArea, diskItem) = diskAreaMap;
 
                             // Clear any empty fields
                             ClearEmptyKeys(diskItem);
@@ -758,10 +758,10 @@ namespace SabreTools.Metadata.DatFiles
                         ClearEmptyKeys(partItems[partName]);
 
                         // If the item has a DataArea mapping
-                        if (dataAreaMappings.ContainsKey(partItem))
+                        if (dataAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DataArea, Data.Models.Metadata.Rom) dataAreaMap))
                         {
                             // Get the mapped items
-                            var (dataArea, romItem) = dataAreaMappings[partItem];
+                            var (dataArea, romItem) = dataAreaMap;
 
                             // Clear any empty fields
                             ClearEmptyKeys(romItem);
@@ -815,10 +815,10 @@ namespace SabreTools.Metadata.DatFiles
                         }
 
                         // If the item has a DiskArea mapping
-                        if (diskAreaMappings.ContainsKey(partItem))
+                        if (diskAreaMappings.TryGetValue(partItem, out (Data.Models.Metadata.DiskArea, Data.Models.Metadata.Disk) diskAreaMap))
                         {
                             // Get the mapped items
-                            var (diskArea, diskItem) = diskAreaMappings[partItem];
+                            var (diskArea, diskItem) = diskAreaMap;
 
                             // Clear any empty fields
                             ClearEmptyKeys(diskItem);
