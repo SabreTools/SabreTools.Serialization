@@ -1,3 +1,5 @@
+using System;
+
 namespace SabreTools.Data.Models.XDVDFS
 {
     /// <summary>

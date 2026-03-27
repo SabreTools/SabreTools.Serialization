@@ -99,7 +99,7 @@ namespace SabreTools.Wrappers
 
             if (dd.Padding is null)
                 builder.AppendLine("None", "      Padding");
-            elseif (Array.TrueForAll(dd.Padding, b => b == 0xFF))
+            else if (Array.TrueForAll(dd.Padding, b => b == 0xFF))
                 builder.AppendLine("All 0xFF", "    Padding");
             else
                 builder.AppendLine("Not all 0xFF", "    Padding");

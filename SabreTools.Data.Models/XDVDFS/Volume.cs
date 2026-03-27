@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SabreTools.Data.Models.XDVDFS
 {
     /// <summary>
