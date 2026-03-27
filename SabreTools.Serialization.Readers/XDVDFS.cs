@@ -29,22 +29,18 @@ namespace SabreTools.Serialization.Readers
                 // Read the Reserved Area
                 volume.ReservedArea = data.ReadBytes(Constants.ReservedSectors * Constants.SectorSize);
 
-                // Read the set of Volume Descriptors
+                // Read and validate the volume descriptor
                 var vd = ParseVolumeDescriptor(data);
                 if (vd is null)
                     return null;
 
                 volume.VolumeDescriptor = vd;
 
-                // Parse the path table group(s) for each base volume descriptor
-                var ld = ParseLayoutDescriptor(data);
-                if (ld is null)
-                    return null;
+                // Parse the optional layout descriptor
+                volume.LayoutDescriptor = ParseLayoutDescriptor(data);
 
-                volume.LayoutDescriptor = ld;
-
-                // Parse the root directory descriptor
-                var dd = ParseDirectoryDescriptors(data, volume.VolumeDescriptor);
+                // Parse the descriptors from the root directory descriptor
+                var dd = ParseDirectoryDescriptors(data, vd.RootOffset, vd.RootSize);
                 if (dd is null)
                     return null;
 
@@ -69,6 +65,9 @@ namespace SabreTools.Serialization.Readers
             var obj = new VolumeDescriptor();
 
             obj.StartSignature = data.ReadBytes(20);
+            if (!obj.EqualsExactly(Constants.VOLUME_DESCRIPTOR_SIG))
+                return null;
+
             obj.RootOffset = data.ReadUInt32();
             obj.RootSize = data.ReadUInt32();
             obj.MasteringTimestamp = data.ReadInt64();
@@ -89,6 +88,8 @@ namespace SabreTools.Serialization.Readers
             var obj = new LayoutDescriptor();
 
             obj.Signature = data.ReadBytes(24);
+            if (!obj.Signature.EqualsExactly(Constants.LAYOUT_DESCRIPTOR_MAGIC))
+                return null;
             obj.Unusued8Bytes = data.ReadBytes(8);
 
             obj.XBLayoutVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
@@ -124,19 +125,37 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a Dictionary of int to DirectoryDescriptors
         /// </summary>
         /// <param name="data">Stream to parse</param>
-        /// <param name="vd">VolumeDescriptor pointing to root directory</param>
+        /// <param name="offset">Sector number descriptor is located at</param>
+        /// <param name="size">Number of bytes descriptor contains</param>
         /// <returns>Filled Dictionary of int to DirectoryDescriptors on success, null on error</returns>
-        public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, VolumeDescriptor vd)
+        public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, uint offset, uint size)
         {
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
-            var dd = ParseDirectoryDescriptor(data, vd.RootOffset);
+            var dd = ParseDirectoryDescriptor(data, offset, size);
             if (dd is null)
                 return null;
 
-            obj.Add(vd.RootOffset, dd);
+            obj.TryAdd(offset, dd);
 
-            // TODO: Parse child directory descriptors
+            // Parse all child descriptors
+            foreach (var dr in vd.DirectoryRecords)
+            {
+                if (dr.FileFlags & FileFlags.DIRECTORY == FileFlags.DIRECTORY)
+                {
+                    // Get all descriptors from child
+                    var descriptors = ParseDirectoryDescriptors(data, dr.ExtentOffset, dr.ExtentSize);
+                    if (descriptors is null)
+                        continue;
+
+                    // Merge dictionaries
+                    foreach (var kvp in descriptors)
+                    {
+                        if (!obj.ContainsKey(kvp.Key))
+                            obj.Add(kvp.Key, kvp.Value);
+                    }
+                }
+            }
 
             return obj;
         }
@@ -145,24 +164,30 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a DirectoryDescriptor
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="offset">Sector number descriptor is located at</param>
+        /// <param name="size">Number of bytes descriptor contains</param>
         /// <returns>Filled DirectoryDescriptor on success, null on error</returns>
-        public static DirectoryDescriptor? ParseDirectoryDescriptor(Stream data, uint size)
+        public static DirectoryDescriptor? ParseDirectoryDescriptor(Stream data, uint offset, uint size)
         {
             var obj = new DirectoryDescriptor();
-
             var records = new List<DirectoryRecord>();
 
-            // TODO: Seek to start of directory descriptor
-            var dr = ParseDirectoryRecord(data);
-            if (dr is not null)
-                records.Add(dr);
+            data.SeekIfPossible(Constants.SectorSize * offset, SeekOrigin.Begin);
+            long curPosition = data.Position;
+            while (size > Constants.SectorSize * offset - data.Position)
+            {
+                var dr = ParseDirectoryRecord(data);
+                if (dr is not null)
+                    records.TryAdd(dr);
 
-            // TODO: Parse remaining records, check if next bytes are 0xFF ?
+                // Exit early if stream does not advance
+                if (curPosition == data.Position)
+                    break;
+            }
 
             obj.DirectoryRecords = [.. records];
 
-            // TODO: Parse padding bytes
-            int remainder = 0 % 2048;
+            int remainder = size % 2048;
             if (remainder > 0)
                 obj.Padding = data.ReadBytes(remainder);
 

@@ -46,8 +46,8 @@ namespace SabreTools.Wrappers
 
         private static void Print(StringBuilder builder, VolumeDescriptor vd)
         {
-            builder.AppendLine("    Volume Descriptor:");
-            builder.AppendLine("    -------------------------");
+            builder.AppendLine("  Volume Descriptor:");
+            builder.AppendLine("  -------------------------");
 
             builder.AppendLine(Encoding.ASCII.GetString(vd.StartSignature), "    Start Signature");
             builder.AppendLine(vd.RootOffset, "    Root Offset");
@@ -66,8 +66,8 @@ namespace SabreTools.Wrappers
 
         private static void Print(StringBuilder builder, LayoutDescriptor ld)
         {
-            builder.AppendLine("    Xbox DVD Layout Descriptor:");
-            builder.AppendLine("    -------------------------");
+            builder.AppendLine("  Xbox DVD Layout Descriptor:");
+            builder.AppendLine("  -------------------------");
 
             builder.AppendLine(Encoding.ASCII.GetString(ld.Signature), "    Signature");    
             builder.AppendLine(ld.Unusued8Bytes, "    Unusued 8 Bytes");
@@ -92,8 +92,8 @@ namespace SabreTools.Wrappers
 
         private static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
         {
-            builder.AppendLine($"    Directory Descriptor (Sector {sectorNumber}):");
-            builder.AppendLine("    -------------------------");
+            builder.AppendLine($"  Directory Descriptor (Sector {sectorNumber}):");
+            builder.AppendLine("  -------------------------");
 
             foreach (DirectoryRecord dr in dd.DirectoryRecords)
                 Print(builder, dr);
