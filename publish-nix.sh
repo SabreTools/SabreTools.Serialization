@@ -50,7 +50,7 @@ echo " "
 
 # Create the build matrix arrays
 FRAMEWORKS=("net10.0")
-RUNTIMES=("win-x86" "win-x64" "win-arm64" "linux-x64" "linux-arm64" "osx-x64" "osx-arm64")
+RUNTIMES=("win-x64")
 
 # Use expanded lists, if requested
 if [ $USE_ALL = true ]; then
@@ -68,22 +68,6 @@ if [ $NO_BUILD = false ]; then
     # Restore Nuget packages for all builds
     echo "Restoring Nuget packages"
     dotnet restore
-
-    # Create published Nuget Package
-    dotnet pack SabreTools.Serialization/SabreTools.Serialization.csproj --output $BUILD_FOLDER
-
-    # Create unpublished Nuget Packages
-    dotnet pack SabreTools.Data.Extensions/SabreTools.Data.Extensions.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Data.Models/SabreTools.Data.Models.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Metadata/SabreTools.Metadata.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Metadata.DatFiles/SabreTools.Metadata.DatFiles.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Metadata.DatItems/SabreTools.Metadata.DatItems.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Metadata.Filter/SabreTools.Metadata.Filter.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.ObjectIdentifier/SabreTools.ObjectIdentifier.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Serialization.CrossModel/SabreTools.Serialization.CrossModel.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Serialization.Readers/SabreTools.Serialization.Readers.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Serialization.Writers/SabreTools.Serialization.Writers.csproj --output $BUILD_FOLDER
-    dotnet pack SabreTools.Wrappers/SabreTools.Wrappers.csproj --output $BUILD_FOLDER
 
     # Build ExtractionTool
     for FRAMEWORK in "${FRAMEWORKS[@]}"; do
