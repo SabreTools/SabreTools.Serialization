@@ -26,7 +26,7 @@ namespace SabreTools.Data.Models.XDVDFS
         public uint RootSize { get; set; }
 
         /// <summary>
-        /// UInt64 Win32 FILETIME filesystem mastering timestamp
+        /// Win32 FILETIME filesystem mastering timestamp
         /// </summary>
         /// <remarks>Little-endian</remarks>
         public long MasteringTimestamp { get; set; }
