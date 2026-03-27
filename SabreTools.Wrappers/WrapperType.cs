@@ -289,6 +289,11 @@ namespace SabreTools.Wrappers
         XboxExecutable,
 
         /// <summary>
+        /// Xbox DVD Filesystem
+        /// </summary>
+        XDVDFS,
+
+        /// <summary>
         /// xz archive
         /// </summary>
         XZ,

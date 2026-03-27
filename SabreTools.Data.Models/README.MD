@@ -86,6 +86,7 @@ Below is a list of all existing namespaces with the `SabreTools.Data.Models` pre
 | `WiseInstaller` | Wise script- and section-based installers |
 | `Xbox` | Xbox and Xbox 360 file formats |
 | `XboxExecutable` | Xbox Executable (XBE) |
+| `XDVDFS` | Xbox DVD Filesystem (XISO) |
 | `XZ` | xz archive |
 | `XZP` | XBox Package File |
 | `ZSTD` | ZSTD archive |

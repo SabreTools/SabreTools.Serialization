@@ -57,6 +57,7 @@ Options:
 | Half-Life 2 Level (VBSP) | |
 | InstallShield Archive V3 (Z) | |
 | InstallShield CAB | |
+| ISO9660 | ISO and BIN files |
 | Microsoft cabinet file | Does not support LZX or Quantum compression |
 | Microsoft LZ-compressed files | KWAJ, QBasic, and SZDD variants |
 | MoPaQ game data archive (MPQ) | Windows only |
@@ -71,6 +72,7 @@ Options:
 | Tape archive (TAR) | |
 | Valve Package File (VPK) | |
 | XBox Package File (XZP) | |
+| Xbox DVD Filesystem | |
 | xz archive (XZ) | .NET Framework 4.6.2 and greater |
 
 ## Namespaces

@@ -68,6 +68,7 @@ namespace SabreTools.Wrappers
                 WrapperType.VPK => VPK.Create(data),
                 WrapperType.WAD => WAD3.Create(data),
                 WrapperType.XboxExecutable => XboxExecutable.Create(data),
+                WrapperType.XDVDFS => XDVDFS.Create(data),
                 WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
                 WrapperType.ZSTD => ZSTD.Create(data),
@@ -922,6 +923,16 @@ namespace SabreTools.Wrappers
 
             if (extension.Equals("xbe", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.XboxExecutable;
+
+            #endregion
+
+            #region XDVDFS
+
+            if (extension.Equals("xiso", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.XDVDFS;
+
+            if (extension.Equals("xdvdfs", StringComparison.OrdinalIgnoreCase))
+                return WrapperType.XDVDFS;
 
             #endregion
 
