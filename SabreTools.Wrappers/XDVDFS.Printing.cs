@@ -89,7 +89,7 @@ namespace SabreTools.Wrappers
             return $"{ver.Major}.{ver.Revision}.{ver.Build}.{ver.Revision}";
         }
 
-        private static void Print(StringBuilder builder, DirectoryDescriptor dd, int sectorNumber)
+        private static void Print(StringBuilder builder, DirectoryDescriptor dd, uint sectorNumber)
         {
             builder.AppendLine($"    Directory Descriptor (Sector {sectorNumber}):");
             builder.AppendLine("    -------------------------");

@@ -27,7 +27,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// If zeroed, xblayout was not used
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBLayoutVersion { get; set; } = [];
+        public FourPartVersionType XBLayoutVersion { get; set; } = new();
 
         /// <summary>
         /// Version number of xbpremaster tool used to master the filesystem
@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// If zeroed, xbpremaster was not used
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBPremasterVersion { get; set; } = [];
+        public FourPartVersionType XBPremasterVersion { get; set; } = new();
 
         /// <summary>
         /// Version number of xbgamedisc tool used to master the filesystem
@@ -44,7 +44,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// If zeroed, xbgamedisc was not used
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBGameDiscVersion { get; set; } = [];
+        public FourPartVersionType XBGameDiscVersion { get; set; } = new();
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
@@ -52,7 +52,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBOther1Version { get; set; } = [];
+        public FourPartVersionType XBOther1Version { get; set; } = new();
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
@@ -60,7 +60,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBOther2Version { get; set; } = [];
+        public FourPartVersionType XBOther2Version { get; set; } = new();
 
         /// <summary>
         /// Version number of other microsoft tool used to master the filesystem
@@ -68,7 +68,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// May be zeroed, not always present
         /// </summary>
         /// <remarks>8 bytes</remarks>
-        public FourPartVersionType XBOther3Version { get; set; } = [];
+        public FourPartVersionType XBOther3Version { get; set; } = new();
 
         /// <summary>
         /// Padding the remainder of sector, should be zeroed

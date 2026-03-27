@@ -90,12 +90,12 @@ namespace SabreTools.Serialization.Readers
 
             obj.Signature = data.ReadBytes(24);
             obj.Unusued8Bytes = data.ReadBytes(8);
-            obj.XBLayoutVersion = ParseFourPartVersionType(data);
-            obj.XBPremasterVersion = ParseFourPartVersionType(data);
-            obj.XBGameDiscVersion = ParseFourPartVersionType(data);
-            obj.XBOther1Version = ParseFourPartVersionType(data);
-            obj.XBOther2Version = ParseFourPartVersionType(data);
-            obj.XBOther3Version = ParseFourPartVersionType(data);
+            obj.XBLayoutVersion = ParseFourPartVersionType(data) ?? 0;
+            obj.XBPremasterVersion = ParseFourPartVersionType(data) ?? 0;
+            obj.XBGameDiscVersion = ParseFourPartVersionType(data) ?? 0;
+            obj.XBOther1Version = ParseFourPartVersionType(data) ?? 0;
+            obj.XBOther2Version = ParseFourPartVersionType(data) ?? 0;
+            obj.XBOther3Version = ParseFourPartVersionType(data) ?? 0;
             obj.Reserved = data.ReadBytes(1968);
 
             return obj;
@@ -124,9 +124,9 @@ namespace SabreTools.Serialization.Readers
         /// <param name="data">Stream to parse</param>
         /// <param name="vd">VolumeDescriptor pointing to root directory</param>
         /// <returns>Filled Dictionary of int to DirectoryDescriptors on success, null on error</returns>
-        public static Dictionary<int, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, VolumeDescriptor vd)
+        public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, VolumeDescriptor vd)
         {
-            var obj = new Dictionary<int, DirectoryDescriptor>();
+            var obj = new Dictionary<uint, DirectoryDescriptor>();
 
             var dd = ParseDirectoryDescriptor(data, vd.RootOffset);
             if (dd is null)
@@ -148,14 +148,16 @@ namespace SabreTools.Serialization.Readers
         {
             var obj = new DirectoryDescriptor();
 
-            obj.DirectoryRecords = new List<DirectoryRecord>();
+            var records = new List<DirectoryRecord>();
 
             // TODO: Seek to start of directory descriptor
             var dr = ParseDirectoryRecord(data);
             if (dr is not null)
-                obj.Add(volumeDescriptor);
+                obj.Add(dr);
 
             // TODO: Parse remaining records, check if next bytes are 0xFF ?
+
+            obj.DirectoryRecords = [.. records];
 
             // TODO: Parse padding bytes
             int remainder = 0 % 2048;

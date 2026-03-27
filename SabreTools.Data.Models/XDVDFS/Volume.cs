@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.XDVDFS
         /// XDVDFS Volume Descriptor
         /// </summary>
         /// <remarks>2048 bytes</remarks>
-        public VolumeDescriptor VolumeDescriptor { get; set; } = [];
+        public VolumeDescriptor VolumeDescriptor { get; set; } = new();
 
         /// <summary>
         /// Xbox DVD Layout Descriptor, immediately follows Volume Descriptor
@@ -34,12 +34,12 @@ namespace SabreTools.Data.Models.XDVDFS
         /// XGD3: Sector not present
         /// </summary>
         /// <remarks>2048 bytes</remarks>
-        public LayoutDescriptor? LayoutDescriptor { get; set; } = [];
+        public LayoutDescriptor? LayoutDescriptor { get; set; }
 
         /// <summary>
         /// Map of sector numbers and the directory descriptor at that sector number
         /// The root directory descriptor is not guaranteed to be the earliest
         /// </summary>
-        public Dictionary<int, DirectoryDescriptor> DirectoryDescriptors { get; set; } = [];
+        public Dictionary<uint, DirectoryDescriptor> DirectoryDescriptors { get; set; } = [];
     }
 }

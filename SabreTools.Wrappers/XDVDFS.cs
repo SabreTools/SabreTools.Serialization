@@ -25,7 +25,7 @@ namespace SabreTools.Wrappers
         public LayoutDescriptor? LayoutDescriptor => Model.LayoutDescriptor;
 
         /// <inheritdoc cref="Volume.DirectoryDescriptors"/>
-        public Dictionary<int, DirectoryDescriptor> DirectoryDescriptors => Model.DirectoryDescriptors;
+        public Dictionary<uint, DirectoryDescriptor> DirectoryDescriptors => Model.DirectoryDescriptors;
 
         #endregion
 
