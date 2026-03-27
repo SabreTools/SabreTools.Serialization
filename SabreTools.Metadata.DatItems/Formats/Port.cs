@@ -53,6 +53,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
+        public override object Clone() => new Port(_internal.Clone() as Data.Models.Metadata.Port ?? []);
+
+        /// <inheritdoc/>
         public override Data.Models.Metadata.Port GetInternalClone()
         {
             var portItem = base.GetInternalClone();

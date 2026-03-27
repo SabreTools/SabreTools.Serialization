@@ -1,12 +1,11 @@
 using System;
-using System.Reflection;
 
 namespace SabreTools.Metadata.DatItems
 {
     /// <summary>
     /// Base class for all items included in a set that are backed by an internal model
     /// </summary>
-    public abstract class DatItem<T> : DatItem, IEquatable<DatItem<T>>, IComparable<DatItem<T>>, ICloneable where T : Data.Models.Metadata.DatItem
+    public abstract class DatItem<T> : DatItem, IEquatable<DatItem<T>>, IComparable<DatItem<T>>, ICloneable where T : Data.Models.Metadata.DatItem, new()
     {
         #region Constructors
 
@@ -15,7 +14,7 @@ namespace SabreTools.Metadata.DatItems
         /// </summary>
         public DatItem()
         {
-            _internal = Activator.CreateInstance<T>();
+            _internal = new T();
 
             SetName(string.Empty);
             Write(Data.Models.Metadata.DatItem.TypeKey, ItemType);
@@ -36,24 +35,6 @@ namespace SabreTools.Metadata.DatItems
         #endregion
 
         #region Cloning Methods
-
-        /// <summary>
-        /// Clone the DatItem
-        /// </summary>
-        /// <returns>Clone of the DatItem</returns>
-        /// <remarks>
-        /// Throws an exception if there is a DatItem implementation
-        /// that is not a part of this library.
-        /// </remarks>
-        public override object Clone()
-        {
-            var concrete = Array.Find(Assembly.GetExecutingAssembly().GetTypes(),
-                t => !t.IsAbstract && t.IsClass && t.BaseType == typeof(DatItem<T>));
-
-            var clone = Activator.CreateInstance(concrete!);
-            (clone as DatItem<T>)!._internal = _internal?.Clone() as T ?? Activator.CreateInstance<T>();
-            return clone;
-        }
 
         /// <summary>
         /// Get a clone of the current internal model

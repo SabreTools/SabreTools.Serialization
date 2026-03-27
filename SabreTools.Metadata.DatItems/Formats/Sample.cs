@@ -29,5 +29,12 @@ namespace SabreTools.Metadata.DatItems.Formats
         }
 
         #endregion
+
+        #region Cloning Methods
+
+        /// <inheritdoc/>
+        public override object Clone() => new Sample(_internal.Clone() as Data.Models.Metadata.Sample ?? []);
+
+        #endregion
     }
 }

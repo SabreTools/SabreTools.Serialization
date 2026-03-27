@@ -29,6 +29,12 @@ namespace SabreTools.Metadata.DatItems.Test
             public TestDatItem(string? nameKey) => _nameKey = nameKey;
 
             /// <inheritdoc/>
+            public override object Clone() => new TestDatItem()
+            {
+                _internal = _internal.Clone() as TestDatItemModel ?? []
+            };
+
+            /// <inheritdoc/>
             public override string? GetName() => _nameKey is not null ? _internal.ReadString(_nameKey) : null;
 
             /// <inheritdoc/>

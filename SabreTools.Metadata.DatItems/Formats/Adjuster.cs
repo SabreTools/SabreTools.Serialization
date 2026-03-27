@@ -54,6 +54,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
+        public override object Clone() => new Adjuster(_internal.Clone() as Data.Models.Metadata.Adjuster ?? []);
+
+        /// <inheritdoc/>
         public override Data.Models.Metadata.Adjuster GetInternalClone()
         {
             var adjusterItem = base.GetInternalClone();

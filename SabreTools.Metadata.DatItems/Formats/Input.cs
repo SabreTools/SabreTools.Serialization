@@ -74,6 +74,9 @@ namespace SabreTools.Metadata.DatItems.Formats
         #region Cloning Methods
 
         /// <inheritdoc/>
+        public override object Clone() => new Input(_internal.Clone() as Data.Models.Metadata.Input ?? []);
+
+        /// <inheritdoc/>
         public override Data.Models.Metadata.Input GetInternalClone()
         {
             var inputItem = base.GetInternalClone();
