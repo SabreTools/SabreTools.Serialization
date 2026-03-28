@@ -110,10 +110,26 @@ namespace SabreTools.Wrappers
 
                             length -= (uint)bytesToRead;
                         }
-
-                        // Mark the file as extracted
-                        extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
                     }
+
+                    // Mark the file as extracted
+                    extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
+
+                    // Don't set any file attributes if file is normal
+                    if ((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL)
+                        continue;
+                    
+                    // Copy over hidden flag
+                    if ((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN)
+                        File.SetAttributes(path, FileAttributes.Hidden);
+                    
+                    // Copy over read-only flag
+                    if ((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY)
+                        File.SetAttributes(path, FileAttributes.ReadOnly);
+                    
+                    // Copy over system flag
+                    if ((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM)
+                        File.SetAttributes(path, FileAttributes.System);
                 }
             }
 

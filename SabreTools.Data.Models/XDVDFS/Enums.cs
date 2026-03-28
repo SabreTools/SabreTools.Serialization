@@ -4,10 +4,10 @@ namespace SabreTools.Data.Models.XDVDFS
 {
     /// <summary>
     /// Enum for DirectoryRecord.FileFlags
-    /// Values are assumed to match DOS/FAT/NTFS file attributes
+    /// Values are assumed to match lowest byte value of DOS/FAT/NTFS file attributes
     /// </summary>
     /// <see href="https://multimedia.cx/xdvdfs.html"/>
-    /// <see href="https://github.dev/Deterous/XboxKit/"/>
+    /// <see href="https://learn.microsoft.com/dotnet/api/system.io.fileattributes"/>
     [Flags]
     public enum FileFlags : byte
     {
@@ -47,7 +47,7 @@ namespace SabreTools.Data.Models.XDVDFS
         DEVICE = 0x40,
 
         /// <summary>
-        /// Record has no abnormal attributes
+        /// Record has no other attributes
         /// </summary>
         NORMAL = 0x80,
     }
