@@ -347,19 +347,25 @@ namespace SabreTools.Metadata.Filter
             return operation?.ToLowerInvariant() switch
             {
                 "=" => Operation.Equals,
+                "=:" => Operation.Equals,
                 "==" => Operation.Equals,
                 ":" => Operation.Equals,
                 "::" => Operation.Equals,
+                ":=" => Operation.Equals,
 
                 "!" => Operation.NotEquals,
                 "!=" => Operation.NotEquals,
                 "!:" => Operation.NotEquals,
 
                 ">" => Operation.GreaterThan,
+                ">:" => Operation.GreaterThanOrEqual,
                 ">=" => Operation.GreaterThanOrEqual,
+                "!<" => Operation.GreaterThanOrEqual,
 
                 "<" => Operation.LessThan,
+                "<:" => Operation.LessThanOrEqual,
                 "<=" => Operation.LessThanOrEqual,
+                "!>" => Operation.LessThanOrEqual,
 
                 _ => Operation.NONE,
             };
