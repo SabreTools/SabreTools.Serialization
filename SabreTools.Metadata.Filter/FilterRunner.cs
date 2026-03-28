@@ -80,9 +80,22 @@ namespace SabreTools.Metadata.Filter
             else if (filter.Key.ItemName == MetadataFile.MachineKey && filter.Key.FieldName == Machine.IsMechanicalKey)
                 key = $"{MetadataFile.MachineKey}.COMBINEDTYPE";
 
+            // Set the expected group type
+            GroupType groupType = GroupType.OR;
+
+            // Special case for size
+            if (filter.Key.ItemName == "item" && filter.Key.FieldName == DataArea.SizeKey)
+                groupType = GroupType.AND;
+            else if (filter.Key.ItemName == "item" && filter.Key.FieldName == Rom.SizeKey)
+                groupType = GroupType.AND;
+            if (filter.Key.ItemName == "dataarea" && filter.Key.FieldName == DataArea.SizeKey)
+                groupType = GroupType.AND;
+            else if (filter.Key.ItemName == "rom" && filter.Key.FieldName == Rom.SizeKey)
+                groupType = GroupType.AND;
+
             // Ensure the key exists
             if (!Filters.ContainsKey(key))
-                Filters[key] = new FilterGroup(GroupType.OR);
+                Filters[key] = new FilterGroup(groupType);
 
             // Add the filter to the set
             Filters[key].AddFilter(filter);
