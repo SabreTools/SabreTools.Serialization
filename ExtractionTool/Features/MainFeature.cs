@@ -304,6 +304,11 @@ namespace ExtractionTool.Features
                     wad.Extract(OutputPath, Debug);
                     break;
 
+                // XDVDFS volume
+                case XDVDFS xdvdfs:
+                    xdvdfs.Extract(OutputPath, Debug);
+                    break;
+
                 // xz
                 case XZ xz:
                     xz.Extract(OutputPath, Debug);
