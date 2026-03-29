@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using SabreTools.Data.Models.XDVDFS;
-using SabreTools.Numerics.Extensions;
 using SabreTools.Text.Extensions;
 
 namespace SabreTools.Wrappers
@@ -69,7 +67,7 @@ namespace SabreTools.Wrappers
             builder.AppendLine("  Xbox DVD Layout Descriptor:");
             builder.AppendLine("  -------------------------");
 
-            builder.AppendLine(Encoding.ASCII.GetString(ld.Signature), "    Signature");    
+            builder.AppendLine(Encoding.ASCII.GetString(ld.Signature), "    Signature");
             builder.AppendLine(ld.Unusued8Bytes, "    Unusued 8 Bytes");
             builder.AppendLine(GetVersionString(ld.XBLayoutVersion), "    xblayout Version");
             builder.AppendLine(GetVersionString(ld.XBPremasterVersion), "    xbpremaster Version");

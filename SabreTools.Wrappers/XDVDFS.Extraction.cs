@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XDVDFS;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 
 namespace SabreTools.Wrappers
@@ -36,10 +34,10 @@ namespace SabreTools.Wrappers
         /// </summary>
         public bool ExtractDescriptor(string outputDirectory, bool includeDebug, uint sectorNumber)
         {
-            // If no descriptor exists at that sector, we cannot extract from it 
+            // If no descriptor exists at that sector, we cannot extract from it
             if (!DirectoryDescriptors.ContainsKey(sectorNumber))
                 return false;
-            
+
             bool allExtracted = true;
 
             // Extract directory records within directory descriptor
@@ -72,7 +70,7 @@ namespace SabreTools.Wrappers
                     }
 
                     // Skip invalid file location
-                    if (((long)dr.ExtentOffset) * Constants.SectorSize + dr.ExtentSize > _dataSource.Length)
+                    if ((((long)dr.ExtentOffset) * Constants.SectorSize) + dr.ExtentSize > _dataSource.Length)
                     {
                         if (includeDebug) Console.WriteLine($"Invalid file location for file {dr.Filename} at sector {dr.ExtentOffset}");
                         continue;
@@ -118,19 +116,19 @@ namespace SabreTools.Wrappers
                     // Don't set any file attributes if file is normal
                     if ((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL)
                         continue;
-                    
+
                     // Copy over hidden flag
                     if ((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN)
                         File.SetAttributes(outputPath, FileAttributes.Hidden);
-                    
+
                     // Copy over read-only flag
                     if ((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY)
                         File.SetAttributes(outputPath, FileAttributes.ReadOnly);
-                    
+
                     // Copy over system flag
                     if ((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM)
                         File.SetAttributes(outputPath, FileAttributes.System);
-                    
+
                     // Copy over archive flag
                     if ((dr.FileFlags & FileFlags.ARCHIVE) == FileFlags.ARCHIVE)
                         File.SetAttributes(outputPath, FileAttributes.Archive);

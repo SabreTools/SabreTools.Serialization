@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.XDVDFS;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Numerics.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class XDVDFS : BaseBinaryReader<Volume>
@@ -137,7 +136,7 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Ensure offset is valid
-            if (offset * Constants.SectorSize + size > data.Length)
+            if ((offset * Constants.SectorSize) + size > data.Length)
                 return null;
 
             var obj = new Dictionary<uint, DirectoryDescriptor>();
@@ -188,15 +187,15 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             // Ensure offset is valid
-            if (((long)offset) * Constants.SectorSize + size > data.Length)
+            if ((((long)offset) * Constants.SectorSize) + size > data.Length)
                 return null;
 
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
             data.SeekIfPossible(((long)offset) * Constants.SectorSize, SeekOrigin.Begin);
-            long curPosition = data.Position;
-            while ((long)size > data.Position - ((long)offset) * Constants.SectorSize)
+            long curPosition;
+            while (size > data.Position - (((long)offset) * Constants.SectorSize))
             {
                 curPosition = data.Position;
                 var dr = ParseDirectoryRecord(data);
