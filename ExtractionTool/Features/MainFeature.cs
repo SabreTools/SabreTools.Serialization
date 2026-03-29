@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.CommandLine;
 using SabreTools.CommandLine.Inputs;
 using SabreTools.IO.Extensions;
+using SabreTools.Numerics.Extensions;
 using SabreTools.Wrappers;
 
 namespace ExtractionTool.Features
@@ -112,223 +113,52 @@ namespace ExtractionTool.Features
         /// <param name="path">File path</param>
         private void ExtractFile(string file)
         {
-            Console.WriteLine($"Attempting to extract all files from {file}");
-            using Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-            // Get the extension for certain checks
-            string extension = Path.GetExtension(file).ToLower().TrimStart('.');
-
-            // Get the first 16 bytes for matching
-            byte[] magic = new byte[16];
             try
             {
-                int read = stream.Read(magic, 0, 16);
-                stream.SeekIfPossible(0, SeekOrigin.Begin);
+                Console.WriteLine($"Attempting to extract all files from {file}");
+                using Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                // Read the first 16 bytes
+                byte[] magic = stream.PeekBytes(16);
+
+                // Get the file type
+                string extension = Path.GetExtension(file).TrimStart('.');
+                WrapperType ft = WrapperFactory.GetFileType(magic ?? [], extension);
+
+                // Print out the file format
+                Console.WriteLine($"File format found: {ft}");
+
+                // Setup the wrapper to extract
+                var wrapper = WrapperFactory.CreateWrapper(ft, stream);
+
+                // If we don't have a wrapper
+                if (wrapper is null)
+                {
+                    Console.WriteLine($"Either {ft} is not supported or something went wrong during parsing!");
+                    Console.WriteLine();
+                    return;
+                }
+
+                // If the wrapper is not extractable
+                if (wrapper is not IExtractable extractable)
+                {
+                    Console.WriteLine($"{ft} is not supported for extraction!");
+                    Console.WriteLine();
+                    return;
+                }
+
+                // Print the preamble
+                Console.WriteLine($"Attempting to extract from '{wrapper.Description()}'");
+                Console.WriteLine();
+
+                // Attempt the extraction
+                Directory.CreateDirectory(OutputPath);
+                extractable.Extract(OutputPath, Debug);
             }
             catch (Exception ex)
             {
-                if (Debug) Console.Error.WriteLine(ex);
-                return;
-            }
-
-            // Get the file type
-            WrapperType ft = WrapperFactory.GetFileType(magic, extension);
-            var wrapper = WrapperFactory.CreateWrapper(ft, stream);
-
-            // Create the output directory
-            Directory.CreateDirectory(OutputPath);
-
-            // Print the preamble
-            Console.WriteLine($"Attempting to extract from '{wrapper?.Description() ?? "UNKNOWN"}'");
-            Console.WriteLine();
-
-            switch (wrapper)
-            {
-                // 7-zip
-                case SevenZip sz:
-                    sz.Extract(OutputPath, Debug);
-                    break;
-
-                // Atari 7800 Cart
-                case Atari7800Cart a7800:
-                    a7800.Extract(OutputPath, Debug);
-                    break;
-
-                // Atari Lynx Cart
-                case AtariLynxCart lynx:
-                    lynx.Extract(OutputPath, Debug);
-                    break;
-
-                // BFPK archive
-                case BFPK bfpk:
-                    bfpk.Extract(OutputPath, Debug);
-                    break;
-
-                // BSP
-                case BSP bsp:
-                    bsp.Extract(OutputPath, Debug);
-                    break;
-
-                // bzip2
-                case BZip2 bzip2:
-                    bzip2.Extract(OutputPath, Debug);
-                    break;
-
-                // CD-ROM bin file
-                case CDROM cdrom:
-                    cdrom.Extract(OutputPath, Debug);
-                    break;
-
-                // CFB
-                case CFB cfb:
-                    cfb.Extract(OutputPath, Debug);
-                    break;
-
-                // fwNES FDS file
-                case FDS fds:
-                    fds.Extract(OutputPath, Debug);
-                    break;
-
-                // GCF
-                case GCF gcf:
-                    gcf.Extract(OutputPath, Debug);
-                    break;
-
-                // gzip
-                case GZip gzip:
-                    gzip.Extract(OutputPath, Debug);
-                    break;
-
-                // InstallShield Archive V3 (Z)
-                case InstallShieldArchiveV3 isv3:
-                    isv3.Extract(OutputPath, Debug);
-                    break;
-
-                // IS-CAB archive
-                case InstallShieldCabinet iscab:
-                    iscab.Extract(OutputPath, Debug);
-                    break;
-
-                // ISO 9660 volume
-                case ISO9660 iso9660:
-                    iso9660.Extract(OutputPath, Debug);
-                    break;
-
-                // LZ-compressed file, KWAJ variant
-                case LZKWAJ kwaj:
-                    kwaj.Extract(OutputPath, Debug);
-                    break;
-
-                // LZ-compressed file, QBasic variant
-                case LZQBasic qbasic:
-                    qbasic.Extract(OutputPath, Debug);
-                    break;
-
-                // LZ-compressed file, SZDD variant
-                case LZSZDD szdd:
-                    szdd.Extract(OutputPath, Debug);
-                    break;
-
-                // Microsoft Cabinet archive
-                case MicrosoftCabinet mscab:
-                    mscab.Extract(OutputPath, Debug);
-                    break;
-
-                // MoPaQ (MPQ) archive
-                case MoPaQ mpq:
-                    mpq.Extract(OutputPath, Debug);
-                    break;
-
-                // New Executable
-                case NewExecutable nex:
-                    nex.Extract(OutputPath, Debug);
-                    break;
-
-                // NES Cart
-                case NESCart nes:
-                    nes.Extract(OutputPath, Debug);
-                    break;
-
-                // PAK
-                case PAK pak:
-                    pak.Extract(OutputPath, Debug);
-                    break;
-
-                // PFF
-                case PFF pff:
-                    pff.Extract(OutputPath, Debug);
-                    break;
-
-                // PKZIP
-                case PKZIP pkzip:
-                    pkzip.Extract(OutputPath, Debug);
-                    break;
-
-                // Portable Executable
-                case PortableExecutable pex:
-                    pex.Extract(OutputPath, Debug);
-                    break;
-
-                // Quantum
-                case Quantum quantum:
-                    quantum.Extract(OutputPath, Debug);
-                    break;
-
-                // RAR
-                case RAR rar:
-                    rar.Extract(OutputPath, Debug);
-                    break;
-
-                // SGA
-                case SGA sga:
-                    sga.Extract(OutputPath, Debug);
-                    break;
-
-                // Tape Archive
-                case TapeArchive tar:
-                    tar.Extract(OutputPath, Debug);
-                    break;
-
-                // VBSP
-                case VBSP vbsp:
-                    vbsp.Extract(OutputPath, Debug);
-                    break;
-
-                // VPK
-                case VPK vpk:
-                    vpk.Extract(OutputPath, Debug);
-                    break;
-
-                // WAD3
-                case WAD3 wad:
-                    wad.Extract(OutputPath, Debug);
-                    break;
-
-                // XDVDFS volume
-                case XDVDFS xdvdfs:
-                    xdvdfs.Extract(OutputPath, Debug);
-                    break;
-
-                // xz
-                case XZ xz:
-                    xz.Extract(OutputPath, Debug);
-                    break;
-
-                // XZP
-                case XZP xzp:
-                    xzp.Extract(OutputPath, Debug);
-                    break;
-
-                // ZSTD
-                case ZSTD zstd:
-                    zstd.Extract(OutputPath, Debug);
-                    break;
-
-                // Everything else
-                default:
-                    Console.WriteLine("Not a supported extractable file format, skipping...");
-                    Console.WriteLine();
-                    break;
+                Console.WriteLine(Debug ? ex : "[Exception opening file, please try again]");
+                Console.WriteLine();
             }
         }
 
