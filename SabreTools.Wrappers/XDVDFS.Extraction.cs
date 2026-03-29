@@ -130,6 +130,10 @@ namespace SabreTools.Wrappers
                     // Copy over system flag
                     if ((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM)
                         File.SetAttributes(outputPath, FileAttributes.System);
+                    
+                    // Copy over archive flag
+                    if ((dr.FileFlags & FileFlags.ARCHIVE) == FileFlags.ARCHIVE)
+                        File.SetAttributes(outputPath, FileAttributes.Archive);
                 }
             }
 
