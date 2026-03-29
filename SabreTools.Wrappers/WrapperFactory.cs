@@ -30,7 +30,6 @@ namespace SabreTools.Wrappers
                 WrapperType.FDS => FDS.Create(data),
                 WrapperType.GCF => GCF.Create(data),
                 WrapperType.GZip => GZip.Create(data),
-                WrapperType.IniFile => null,// TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
                 WrapperType.IRD => IRD.Create(data),
@@ -63,10 +62,11 @@ namespace SabreTools.Wrappers
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
-                WrapperType.Textfile => null,// TODO: Implement wrapper
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
                 WrapperType.WAD => WAD3.Create(data),
+                WrapperType.WiseOverlayHeader => WiseOverlayHeader.Create(data),
+                WrapperType.WiseScript => WiseScript.Create(data),
                 WrapperType.XboxExecutable => XboxExecutable.Create(data),
                 WrapperType.XDVDFS => XDVDFS.Create(data),
                 WrapperType.XZ => XZ.Create(data),
@@ -75,8 +75,8 @@ namespace SabreTools.Wrappers
 
                 // Unimplemented
                 WrapperType.UNKNOWN => null,
-                WrapperType.WiseOverlayHeader => null,
-                WrapperType.WiseScript => null,
+                WrapperType.IniFile => null,// TODO: Implement wrapper
+                WrapperType.Textfile => null,// TODO: Implement wrapper
                 _ => null,
             };
         }
