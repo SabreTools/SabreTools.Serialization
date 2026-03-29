@@ -179,12 +179,20 @@ namespace InfoPrint.Features
                     return;
                 }
 
+                // If the wrapper is not printable
+                if (wrapper is not IPrintable printable)
+                {
+                    Console.WriteLine($"{ft} is not supported for printing!");
+                    Console.WriteLine();
+                    return;
+                }
+
 #if NETCOREAPP
                 // If we have the JSON flag
                 if (Json)
                 {
                     // Create the output data
-                    string serializedData = wrapper.ExportJSON();
+                    string serializedData = printable.ExportJSON();
 
                     // Write the output data
                     using var jsw = new StreamWriter(File.OpenWrite($"{filenameBase}.json"));
@@ -194,12 +202,8 @@ namespace InfoPrint.Features
 #endif
 
                 // Create the output data
-                var builder = wrapper.ExportStringBuilder();
-                if (builder is null)
-                {
-                    Console.WriteLine("No item information could be generated");
-                    return;
-                }
+                var builder = new StringBuilder();
+                printable.PrintInformation(builder);
 
                 // Only print to console if enabled
                 if (!FileOnly)
