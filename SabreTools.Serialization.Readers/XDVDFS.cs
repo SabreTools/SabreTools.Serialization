@@ -94,12 +94,12 @@ namespace SabreTools.Serialization.Readers
                 return null;
             obj.Unusued8Bytes = data.ReadBytes(8);
 
-            obj.XBLayoutVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
-            obj.XBPremasterVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
-            obj.XBGameDiscVersion = ParseFourPartVersionType(data) ?? new FourPartVersionType();
-            obj.XBOther1Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
-            obj.XBOther2Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
-            obj.XBOther3Version = ParseFourPartVersionType(data) ?? new FourPartVersionType();
+            obj.XBLayoutVersion = ParseFourPartVersionType(data);
+            obj.XBPremasterVersion = ParseFourPartVersionType(data);
+            obj.XBGameDiscVersion = ParseFourPartVersionType(data);
+            obj.XBOther1Version = ParseFourPartVersionType(data);
+            obj.XBOther2Version = ParseFourPartVersionType(data);
+            obj.XBOther3Version = ParseFourPartVersionType(data);
 
             obj.Reserved = data.ReadBytes(1968);
 
@@ -111,7 +111,7 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled FourPartVersionType on success, null on error</returns>
-        public static FourPartVersionType? ParseFourPartVersionType(Stream data)
+        public static FourPartVersionType ParseFourPartVersionType(Stream data)
         {
             var obj = new FourPartVersionType();
 

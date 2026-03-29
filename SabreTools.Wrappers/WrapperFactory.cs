@@ -928,6 +928,8 @@ namespace SabreTools.Wrappers
 
             #region XDVDFS
 
+            // TODO: Overload .iso wrapper to call both ISO and XDVDFS wrappers if present
+
             if (extension.Equals("xiso", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.XDVDFS;
 

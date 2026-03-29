@@ -116,20 +116,20 @@ namespace SabreTools.Wrappers
                     extractedFiles.Add(dr.ExtentOffset, dr.ExtentSize);
 
                     // Don't set any file attributes if file is normal
-                    if ((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL))
+                    if ((dr.FileFlags & FileFlags.NORMAL) == FileFlags.NORMAL)
                         continue;
                     
                     // Copy over hidden flag
-                    if ((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN))
-                        File.SetAttributes(path, FileAttributes.Hidden);
+                    if ((dr.FileFlags & FileFlags.HIDDEN) == FileFlags.HIDDEN)
+                        File.SetAttributes(outputPath, FileAttributes.Hidden);
                     
                     // Copy over read-only flag
-                    if ((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY))
-                        File.SetAttributes(path, FileAttributes.ReadOnly);
+                    if ((dr.FileFlags & FileFlags.READ_ONLY) == FileFlags.READ_ONLY)
+                        File.SetAttributes(outputPath, FileAttributes.ReadOnly);
                     
                     // Copy over system flag
-                    if ((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM))
-                        File.SetAttributes(path, FileAttributes.System);
+                    if ((dr.FileFlags & FileFlags.SYSTEM) == FileFlags.SYSTEM)
+                        File.SetAttributes(outputPath, FileAttributes.System);
                 }
             }
 
