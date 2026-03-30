@@ -25,14 +25,17 @@ namespace SabreTools.Wrappers
             // Clear the extraction state
             extractedFiles.Clear();
 
+            // Cache the current offset
+            long initialOffset = _dataSource.Position;
+
             // Extract files from all directories from root directory
-            return ExtractDescriptor(outputDirectory, includeDebug, VolumeDescriptor.RootOffset);
+            return ExtractDescriptor(outputDirectory, includeDebug, initialOffset, VolumeDescriptor.RootOffset);
         }
 
         /// <summary>
         /// Extracts all directory records recursively from directory descriptor
         /// </summary>
-        public bool ExtractDescriptor(string outputDirectory, bool includeDebug, uint sectorNumber)
+        public bool ExtractDescriptor(string outputDirectory, bool includeDebug, long initialOffset, uint sectorNumber)
         {
             // If no descriptor exists at that sector, we cannot extract from it
             if (!DirectoryDescriptors.ContainsKey(sectorNumber))
@@ -58,7 +61,7 @@ namespace SabreTools.Wrappers
                     if (!string.IsNullOrEmpty(outputPath) && !Directory.Exists(outputPath))
                         Directory.CreateDirectory(outputPath);
 
-                    allExtracted |= ExtractDescriptor(outputPath, includeDebug, dr.ExtentOffset);
+                    allExtracted |= ExtractDescriptor(outputPath, includeDebug, initialOffset, dr.ExtentOffset);
                 }
                 else
                 {
@@ -88,7 +91,7 @@ namespace SabreTools.Wrappers
                     lock (_dataSourceLock)
                     {
                         long fileOffset = ((long)dr.ExtentOffset) * Constants.SectorSize;
-                        _dataSource.SeekIfPossible(fileOffset, SeekOrigin.Begin);
+                        _dataSource.SeekIfPossible(initialOffset + fileOffset, SeekOrigin.Begin);
 
                         // Get the length, and make sure it won't EOF
                         uint length = dr.ExtentSize;

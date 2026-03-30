@@ -22,6 +22,9 @@ namespace SabreTools.Serialization.Readers
 
             try
             {
+                // Cache the current offset
+                long initialOffset = data.Position;
+
                 // Create a new Volume to fill
                 var volume = new Volume();
 
@@ -39,7 +42,7 @@ namespace SabreTools.Serialization.Readers
                 volume.LayoutDescriptor = ParseLayoutDescriptor(data);
 
                 // Parse the descriptors from the root directory descriptor
-                var dd = ParseDirectoryDescriptors(data, vd.RootOffset, vd.RootSize);
+                var dd = ParseDirectoryDescriptors(data, initialOffset, vd.RootOffset, vd.RootSize);
                 if (dd is null)
                     return null;
 
@@ -129,7 +132,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="offset">Sector number descriptor is located at</param>
         /// <param name="size">Number of bytes descriptor contains</param>
         /// <returns>Filled Dictionary of int to DirectoryDescriptors on success, null on error</returns>
-        public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, uint offset, uint size)
+        public static Dictionary<uint, DirectoryDescriptor>? ParseDirectoryDescriptors(Stream data, long initialOffset, uint offset, uint size)
         {
             // Ensure descriptor size is valid
             if (size < 14)
@@ -141,7 +144,7 @@ namespace SabreTools.Serialization.Readers
 
             var obj = new Dictionary<uint, DirectoryDescriptor>();
 
-            var dd = ParseDirectoryDescriptor(data, offset, size);
+            var dd = ParseDirectoryDescriptor(data, initialOffset, offset, size);
             if (dd is null)
                 return null;
 
@@ -157,7 +160,7 @@ namespace SabreTools.Serialization.Readers
                         continue;
 
                     // Get all descriptors from child
-                    var descriptors = ParseDirectoryDescriptors(data, dr.ExtentOffset, dr.ExtentSize);
+                    var descriptors = ParseDirectoryDescriptors(data, initialOffset, dr.ExtentOffset, dr.ExtentSize);
                     if (descriptors is null)
                         continue;
 
@@ -180,7 +183,7 @@ namespace SabreTools.Serialization.Readers
         /// <param name="offset">Sector number descriptor is located at</param>
         /// <param name="size">Number of bytes descriptor contains</param>
         /// <returns>Filled DirectoryDescriptor on success, null on error</returns>
-        public static DirectoryDescriptor? ParseDirectoryDescriptor(Stream data, uint offset, uint size)
+        public static DirectoryDescriptor? ParseDirectoryDescriptor(Stream data, long initialOffset, uint offset, uint size)
         {
             // Ensure descriptor size is valid
             if (size < Constants.MinimumRecordLength)
@@ -193,7 +196,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
-            data.SeekIfPossible(((long)offset) * Constants.SectorSize, SeekOrigin.Begin);
+            data.SeekIfPossible(initialOffset + ((long)offset) * Constants.SectorSize, SeekOrigin.Begin);
             long curPosition;
             while (size > data.Position - (((long)offset) * Constants.SectorSize))
             {
