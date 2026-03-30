@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new DirectoryDescriptor();
             var records = new List<DirectoryRecord>();
 
-            data.SeekIfPossible(initialOffset + ((long)offset) * Constants.SectorSize, SeekOrigin.Begin);
+            data.SeekIfPossible(initialOffset + (((long)offset) * Constants.SectorSize), SeekOrigin.Begin);
             long curPosition;
             while (size > data.Position - (((long)offset) * Constants.SectorSize))
             {
