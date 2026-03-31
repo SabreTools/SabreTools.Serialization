@@ -78,7 +78,7 @@ namespace SabreTools.Data.Models.Logiqx
         [XmlElement("trurip")]
         public Trurip? Trurip { get; set; }
 
-        [XmlElement(elementName: "release")]
+        [XmlElement("release")]
         public Release[]? Release { get; set; }
 
         [XmlElement("biosset")]
