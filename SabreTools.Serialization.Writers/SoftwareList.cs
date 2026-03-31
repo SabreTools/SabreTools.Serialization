@@ -42,8 +42,14 @@ namespace SabreTools.Serialization.Writers
 
             // Setup the writer and output
             var stream = new MemoryStream();
-            var writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
+            var writer = new XmlTextWriter(stream, Encoding.UTF8)
+            {
+                Formatting = Formatting.Indented,
+                IndentChar = '\t',
+                Indentation = 1
+            };
+            writer.Settings?.CheckCharacters = false;
+            writer.Settings?.NewLineChars = "\n";
 
             // Write document start
             writer.WriteStartDocument();
