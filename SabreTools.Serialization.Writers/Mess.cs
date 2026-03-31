@@ -21,6 +21,9 @@ namespace SabreTools.Serialization.Writers
             var writer = new XmlTextWriter(stream, Encoding.UTF8);
             writer.Formatting = Formatting.Indented;
 
+            // Write document start
+            writer.WriteStartDocument();
+
             // Write the Mess, if it exists
             WriteMess(obj, writer);
             writer.Flush();

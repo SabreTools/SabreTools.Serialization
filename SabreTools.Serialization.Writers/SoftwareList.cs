@@ -45,6 +45,9 @@ namespace SabreTools.Serialization.Writers
             var writer = new XmlTextWriter(stream, Encoding.UTF8);
             writer.Formatting = Formatting.Indented;
 
+            // Write document start
+            writer.WriteStartDocument();
+
             // Write document type
             writer.WriteDocType(DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSubset);
 
