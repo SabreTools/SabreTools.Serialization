@@ -31,6 +31,16 @@ namespace SabreTools.Serialization.Writers
         /// </summary>
         public const string? DocTypeSubset = null;
 
+        /// <summary>
+        /// xmlns:xsi field for datafile
+        /// </summary>
+        public const string? DatafileXmlnsXsi = "http://www.w3.org/2001/XMLSchema-instance";
+
+        /// <summary>
+        /// xsi:schemaLocation field for datafile
+        /// </summary>
+        public const string? DatafileXsiSchemaLocation = "https://datomatic.no-intro.org/stuff https://datomatic.no-intro.org/stuff/schema_nointro_datfile_v3.xsd";
+
         #endregion
 
         /// <inheritdoc/>
