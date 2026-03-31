@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Listxml.Mame mame = Build(game: true);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mame);
+            Stream? actual = serializer.SerializeStream(mame);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Listxml.Mame mame = Build(game: false);
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(mame);
+            Stream? actual = serializer.SerializeStream(mame);
             Assert.NotNull(actual);
 
             // Serialize back to original model
@@ -240,7 +240,7 @@ namespace SabreTools.Serialization.Readers.Test
                 Service = "XXXXXX",
                 Tilt = "XXXXXX",
                 Players = "XXXXXX",
-                //ControlAttr = "XXXXXX", // Mututally exclusive with input.Control
+                ControlAttr = "XXXXXX",
                 Buttons = "XXXXXX",
                 Coins = "XXXXXX",
                 Control = [control],
@@ -668,7 +668,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", input.Service);
             Assert.Equal("XXXXXX", input.Tilt);
             Assert.Equal("XXXXXX", input.Players);
-            //Assert.Equal("XXXXXX", input.ControlAttr); // Mututally exclusive with input.Control
+            Assert.Equal("XXXXXX", input.ControlAttr); // Mututally exclusive with input.Control
             Assert.Equal("XXXXXX", input.Buttons);
             Assert.Equal("XXXXXX", input.Coins);
 

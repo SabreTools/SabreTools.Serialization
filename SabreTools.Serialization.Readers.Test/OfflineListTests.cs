@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.OfflineList.Dat dat = Build();
 
             // Serialize to stream
-            Stream? metadata = serializer.Serialize(dat);
+            Stream? metadata = serializer.SerializeStream(dat);
             Assert.NotNull(metadata);
 
             // Serialize back to original model

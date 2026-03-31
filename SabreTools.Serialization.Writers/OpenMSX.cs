@@ -1,9 +1,13 @@
 using System.IO;
+using System.Text;
+using System.Xml;
 using SabreTools.Data.Models.OpenMSX;
+using SabreTools.IO.Extensions;
+using SabreTools.Text.Extensions;
 
 namespace SabreTools.Serialization.Writers
 {
-    public class OpenMSX : XmlFile<SoftwareDb>
+    public class OpenMSX : BaseBinaryWriter<SoftwareDb>
     {
         #region Constants
 
@@ -29,28 +33,136 @@ namespace SabreTools.Serialization.Writers
 
         #endregion
 
-        #region IByteWriter
-
-        /// <inheritdoc cref="XmlFile.SerializeArray(T?, string?, string?, string?, string?)" />
-        public override byte[]? SerializeArray(SoftwareDb? obj)
-            => SerializeArray(obj, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
-
-        #endregion
-
-        #region IFileWriter
-
-        /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?, string?)" />
-        public override bool SerializeFile(SoftwareDb? obj, string? path)
-            => Serialize(obj, path, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
-
-        #endregion
-
-        #region IStreamWriter
-
-        /// <inheritdoc cref="XmlFile.Serialize(T?, string?, string?, string?, string?)" />
+        /// <inheritdoc/>
         public override Stream? SerializeStream(SoftwareDb? obj)
-            => Serialize(obj, DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSysId);
+        {
+            // If the metadata file is null
+            if (obj is null)
+                return null;
 
-        #endregion
+            // Setup the writer and output
+            var stream = new MemoryStream();
+            var writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = Formatting.Indented;
+
+            // Write document type
+            writer.WriteDocType(DocTypeName, DocTypePubId, DocTypeSysId, DocTypeSubset);
+
+            // Write the SoftwareDb, if it exists
+            WriteSoftwareDb(obj, writer);
+            writer.Flush();
+
+            // Return the stream
+            stream.SeekIfPossible(0, SeekOrigin.Begin);
+            return stream;
+        }
+
+        /// <summary>
+        /// Write a SoftwareDb to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">SoftwareDb to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteSoftwareDb(SoftwareDb obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("softwaredb");
+
+            writer.WriteOptionalAttributeString("timestamp", obj.Timestamp);
+
+            if (obj.Software is not null && obj.Software.Length > 0)
+            {
+                foreach (var software in obj.Software)
+                {
+                    WriteSoftware(software, writer);
+                }
+            }
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a Dump to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">Dump to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteDump(Dump obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("dump");
+
+            if (obj.Original is not null)
+                WriteOriginal(obj.Original, writer);
+
+            if (obj.Rom is not null)
+                WriteRomBase(obj.Rom, writer);
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a Original to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">Original to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteOriginal(Original obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("original");
+
+            writer.WriteOptionalAttributeString("value", obj.Value);
+
+            if (obj.Content is not null)
+                writer.WriteRaw(obj.Content);
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a RomBase to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">RomBase to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteRomBase(RomBase obj, XmlTextWriter writer)
+        {
+            if (obj is MegaRom)
+                writer.WriteStartElement("megarom");
+            else if (obj is Rom)
+                writer.WriteStartElement("rom");
+            else if (obj is SCCPlusCart)
+                writer.WriteStartElement("sccpluscart");
+            else
+                return;
+
+            writer.WriteOptionalElementString("start", obj.Start);
+            writer.WriteOptionalElementString("type", obj.Type);
+            writer.WriteOptionalElementString("hash", obj.Hash);
+            writer.WriteOptionalElementString("remark", obj.Remark);
+
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Write a Software to an XmlTextWriter
+        /// </summary>
+        /// <param name="obj">Software to write</param>
+        /// <param name="writer">XmlTextReader to write to</param>
+        private static void WriteSoftware(Software obj, XmlTextWriter writer)
+        {
+            writer.WriteStartElement("software");
+
+            writer.WriteRequiredElementString("title", obj.Title);
+            writer.WriteOptionalElementString("genmsxid", obj.GenMSXID);
+            writer.WriteRequiredElementString("system", obj.System);
+            writer.WriteRequiredElementString("company", obj.Company);
+            writer.WriteRequiredElementString("year", obj.Year);
+            writer.WriteRequiredElementString("country", obj.Country);
+
+            if (obj.Dump is not null && obj.Dump.Length > 0)
+            {
+                foreach (var dump in obj.Dump)
+                {
+                    WriteDump(dump, writer);
+                }
+            }
+
+            writer.WriteEndElement();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SabreTools.Data.Extensions;
 using SabreTools.Metadata.DatItems;
@@ -382,13 +382,13 @@ namespace SabreTools.Metadata.DatFiles.Formats
                 var metadata = ConvertToMetadata(ignoreblanks);
                 var datafile = new Serialization.CrossModel.Logiqx().Deserialize(metadata, _useGame);
 
-                // TODO: Reenable doctype writing
+                // TODO: Enable No-Intro doctype writing instead of Logiqx
                 // Only write the doctype if we don't have No-Intro data
                 bool success;
                 if (string.IsNullOrEmpty(Header.ReadString(Data.Models.Metadata.Header.IdKey)))
-                    success = new Serialization.Writers.Logiqx().Serialize(datafile, outfile, null, null, null, null);
+                    success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);
                 else
-                    success = new Serialization.Writers.Logiqx().Serialize(datafile, outfile, null, null, null, null);
+                    success = new Serialization.Writers.Logiqx().SerializeFile(datafile, outfile);
 
                 if (!success)
                 {

@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Listxml.M1 m1 = Build(game: true);
 
             // Serialize to generic model
-            Stream? metadata = serializer.Serialize(m1);
+            Stream? metadata = serializer.SerializeStream(m1);
             Assert.NotNull(metadata);
 
             // Serialize to stream
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Listxml.M1 m1 = Build(game: false);
 
             // Serialize to generic model
-            Stream? metadata = serializer.Serialize(m1);
+            Stream? metadata = serializer.SerializeStream(m1);
             Assert.NotNull(metadata);
 
             // Serialize to stream

@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Writers.Test
         public void SerializeStream_Null_Null()
         {
             var serializer = new OpenMSX();
-            Stream? actual = serializer.Serialize(null);
+            Stream? actual = serializer.SerializeStream(null);
             Assert.Null(actual);
         }
     }

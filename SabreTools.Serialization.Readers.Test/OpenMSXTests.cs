@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.OpenMSX.SoftwareDb sdb = Build();
 
             // Serialize to stream
-            Stream? metadata = serializer.Serialize(sdb);
+            Stream? metadata = serializer.SerializeStream(sdb);
             Assert.NotNull(metadata);
 
             // Serialize back to original model

@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.ArchiveDotOrg.Files files = Build();
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(files);
+            Stream? actual = serializer.SerializeStream(files);
             Assert.NotNull(actual);
 
             // Serialize back to original model

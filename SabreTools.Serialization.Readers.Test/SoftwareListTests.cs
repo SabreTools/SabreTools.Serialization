@@ -80,8 +80,15 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.SoftwareList.SoftwareList sl = Build();
 
             // Serialize to stream
-            Stream? actual = serializer.Serialize(sl);
+            Stream? actual = serializer.SerializeStream(sl);
             Assert.NotNull(actual);
+
+            if (actual is MemoryStream ms)
+            {
+                byte[] bytes = ms.ToArray();
+                string str = System.Text.Encoding.UTF8.GetString(bytes);
+                System.Console.WriteLine(str);
+            }
 
             // Serialize back to original model
             Data.Models.SoftwareList.SoftwareList? newSl = deserializer.Deserialize(actual);

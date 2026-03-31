@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Logiqx.Datafile df = Build(game: true);
 
             // Serialize to stream
-            Stream? metadata = serializer.Serialize(df);
+            Stream? metadata = serializer.SerializeStream(df);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Readers.Test
             Data.Models.Logiqx.Datafile df = Build(game: false);
 
             // Serialize to stream
-            Stream? metadata = serializer.Serialize(df);
+            Stream? metadata = serializer.SerializeStream(df);
             Assert.NotNull(metadata);
 
             // Serialize back to original model
