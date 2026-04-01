@@ -124,6 +124,22 @@ namespace SabreTools.Metadata
         }
 
         /// <summary>
+        /// Get property names for the given type, if possible
+        /// </summary>
+        public static string[]? GetProperties(Type? type)
+        {
+            if (type is null)
+                return null;
+
+            var properties = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+            if (properties is null)
+                return null;
+
+            string[] propertyNames = Array.ConvertAll(properties, f => f.Name);
+            return Array.FindAll(propertyNames, s => s.Length > 0);
+        }
+
+        /// <summary>
         /// Attempt to get the XmlRootAttribute.ElementName value from a type
         /// </summary>
         public static string? GetXmlRootAttributeElementName(Type? type)

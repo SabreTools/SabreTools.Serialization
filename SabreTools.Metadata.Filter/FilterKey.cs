@@ -103,27 +103,37 @@ namespace SabreTools.Metadata.Filter
         {
             // Get the set of constants
             var constants = TypeHelper.GetConstants(typeof(Header));
-            if (constants is null)
-                return false;
-
-            // Special cases
-            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+            if (constants is not null)
             {
-                itemName = MetadataFile.HeaderKey;
-                fieldName = "name";
-                return true;
+                // Get if there's a match to a constant
+                string localFieldName = fieldName;
+                string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+                if (constantMatch is not null)
+                {
+                    // Return the sanitized ID
+                    itemName = MetadataFile.HeaderKey;
+                    fieldName = constantMatch;
+                    return true;
+                }
             }
 
-            // Get if there's a match to the constant
-            string localFieldName = fieldName;
-            string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-            if (constantMatch is null)
-                return false;
+            // Get the set of properties
+            var properties = TypeHelper.GetProperties(typeof(Header));
+            if (properties is not null)
+            {
+                // Get if there's a match to a property
+                string localFieldName = fieldName;
+                string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+                if (propertyMatch is not null)
+                {
+                    // Return the sanitized ID
+                    itemName = MetadataFile.HeaderKey;
+                    fieldName = propertyMatch.ToLowerInvariant();
+                    return true;
+                }
+            }
 
-            // Return the sanitized ID
-            itemName = MetadataFile.HeaderKey;
-            fieldName = constantMatch;
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -133,27 +143,37 @@ namespace SabreTools.Metadata.Filter
         {
             // Get the set of constants
             var constants = TypeHelper.GetConstants(typeof(Machine));
-            if (constants is null)
-                return false;
-
-            // Special cases
-            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
+            if (constants is not null)
             {
-                itemName = MetadataFile.MachineKey;
-                fieldName = "name";
-                return true;
+                // Get if there's a match to a constant
+                string localFieldName = fieldName;
+                string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+                if (constantMatch is not null)
+                {
+                    // Return the sanitized ID
+                    itemName = MetadataFile.MachineKey;
+                    fieldName = constantMatch;
+                    return true;
+                }
             }
 
-            // Get if there's a match to the constant
-            string localFieldName = fieldName;
-            string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-            if (constantMatch is null)
-                return false;
+            // Get the set of properties
+            var properties = TypeHelper.GetProperties(typeof(Machine));
+            if (properties is not null)
+            {
+                // Get if there's a match to a property
+                string localFieldName = fieldName;
+                string? propertyMatch = Array.Find(properties, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
+                if (propertyMatch is not null)
+                {
+                    // Return the sanitized ID
+                    itemName = MetadataFile.MachineKey;
+                    fieldName = propertyMatch.ToLowerInvariant();
+                    return true;
+                }
+            }
 
-            // Return the sanitized ID
-            itemName = MetadataFile.MachineKey;
-            fieldName = constantMatch;
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -165,14 +185,6 @@ namespace SabreTools.Metadata.Filter
             if (string.Equals(itemName, "datitem", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(itemName, "item", StringComparison.OrdinalIgnoreCase))
             {
-                // Special cases
-                if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
-                {
-                    itemName = "item";
-                    fieldName = "name";
-                    return true;
-                }
-
                 // Get all item types
                 var itemTypes = TypeHelper.GetDatItemTypeNames();
 
@@ -225,17 +237,25 @@ namespace SabreTools.Metadata.Filter
 
             // Get the set of constants
             var constants = TypeHelper.GetConstants(itemType);
-            if (constants is null)
-                return null;
+            if (constants is not null)
+            {
+                // Get if there's a match to a constant
+                string? constantMatch = Array.Find(constants, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
+                if (constantMatch is not null)
+                    return constantMatch;
+            }
 
-            // Special cases
-            if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
-                return "name";
+            // Get the set of properties
+            var properties = TypeHelper.GetProperties(itemType);
+            if (properties is not null)
+            {
+                // Get if there's a match to a property
+                string? propertyMatch = Array.Find(properties, c => string.Equals(c, fieldName, StringComparison.OrdinalIgnoreCase));
+                if (propertyMatch is not null)
+                    return propertyMatch.ToLowerInvariant();
+            }
 
-            // Get if there's a match to the constant
-            string localFieldName = fieldName;
-            string? constantMatch = Array.Find(constants, c => string.Equals(c, localFieldName, StringComparison.OrdinalIgnoreCase));
-            return constantMatch;
+            return null;
         }
     }
 }
