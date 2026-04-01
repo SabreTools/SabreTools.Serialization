@@ -84,50 +84,57 @@ namespace SabreTools.Wrappers
         {
             // Decompress each chunk to output
             var node = FileTree[index];
-            var rawOffset = Footer.SectionCompressedData.Offset;
-            var rawLength = Footer.SectionCompressedData.Size;
+            var dataOffset = Footer.SectionCompressedData.Offset;
+            var dataLength = Footer.SectionCompressedData.Size;
             if (node is FileEntry file)
             {
-                var fileOffset = ((ulong)file.FileOffsetHigh << 32) | (ulong)file.FileOffsetLow;
-                var fileSize = ((ulong)file.FileSizeHigh << 32) | (ulong)file.FileSizeLow;
+                ulong fileOffset = ((ulong)file.FileOffsetHigh << 32) | (ulong)file.FileOffsetLow;
+                ulong fileSize = ((ulong)file.FileSizeHigh << 32) | (ulong)file.FileSizeLow;
 
                 // Write the output file
                 if (includeDebug) Console.WriteLine($"Extracting: {outputPath}");
                 using var fs = File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                ulong readOffset = 0;
+                ulong fileProgress = 0;
 
                 lock (_dataSourceLock)
                 {
-                    while (readOffset < fileSize)
+                    while (fileProgress < fileSize)
                     {
-                        // Determine which block to read
-                        ulong absoluteOffset = fileOffset + readOffset;
-                        int blockIndex = (int)(absoluteOffset / (ulong)Constants.BlockSize);
-                        int intraBlockOffset = (int)(absoluteOffset % (ulong)Constants.BlockSize);
-                        int recordIndex = blockIndex / Constants.BlocksPerOffsetRecord;
+                        // Determine offset and size of next read
+                        ulong absoluteOffset = fileOffset + fileProgress;
+                        ulong blockIndex = absoluteOffset / (ulong)Constants.BlockSize;
+                        int recordIndex = (int)(blockIndex / (ulong)Constants.BlocksPerOffsetRecord);
                         if (recordIndex >= OffsetRecords.Length)
                         {
-                            if (includeDebug) Console.WriteLine($"File offset : {outputPath}");
+                            if (includeDebug) Console.WriteLine($"File offset out of range: {outputPath}");
                             return false;
                         }
+
                         var offsetRecord = OffsetRecords[recordIndex];
-
-                        int withinRecordIndex = blockIndex % Constants.BlocksPerOffsetRecord;
-                        int bytesToRead = (int)(offsetRecord.Size[withinRecordIndex]) + 1;
-                        int expectedSize = Math.Min((int)(fileSize - readOffset), Constants.BlockSize - intraBlockOffset);
-
-                        ulong blockOffset = rawOffset + offsetRecord.Offset;
-                        for (int i = 0; i < withinRecordIndex; i++)
+                        int withinRecordIndex = (int)(blockIndex % (ulong)Constants.BlocksPerOffsetRecord);
+                        if (withinRecordIndex >= offsetRecord.Size.Length)
                         {
-                            blockOffset += (ulong)offsetRecord.Size[i] + 1;
+                            if (includeDebug) Console.WriteLine($"Blocks per record mismatch: {outputPath}");
+                            return false;
                         }
 
-                        _dataSource.SeekIfPossible((long)blockOffset, SeekOrigin.Begin);
+                        int intraBlockOffset = (int)(absoluteOffset % (ulong)Constants.BlockSize);
+                        int bytesToRead = (int)(offsetRecord.Size[withinRecordIndex]) + 1;
+                        int bytesToWrite = (int)Math.Min(fileSize - fileProgress, (ulong)Constants.BlockSize - (ulong)intraBlockOffset);
 
-                        // Ensure it won't exceed compressed section
-                        if (blockOffset + (ulong)bytesToRead > rawOffset + rawLength)
+                        ulong readOffset = dataOffset + offsetRecord.Offset;
+                        for (int i = 0; i < withinRecordIndex; i++)
                         {
-                            if (includeDebug) Console.WriteLine("Block exceeds compressed section");
+                            readOffset += (ulong)offsetRecord.Size[i] + 1;
+                        }
+
+                        // Seek to location of block
+                        _dataSource.SeekIfPossible((long)readOffset, SeekOrigin.Begin);
+
+                        // Ensure block doesn't exceed compressed section
+                        if (offsetRecord.Offset + (ulong)bytesToRead > dataLength)
+                        {
+                            if (includeDebug) Console.WriteLine("Block exceeds compressed data section");
                             return false;
                         }
 
@@ -138,17 +145,19 @@ namespace SabreTools.Wrappers
                             return false;
                         }
 
+                        // Read block
                         var buffer = _dataSource.ReadBytes(bytesToRead);
 
+                        // Write entire block if it is uncompressed
                         if (bytesToRead == Constants.BlockSize)
                         {
                             // Block is stored uncompressed
-                            fs.Write(buffer, intraBlockOffset, expectedSize);
-                            readOffset += (ulong)expectedSize;
+                            fs.Write(buffer, intraBlockOffset, bytesToWrite);
+                            fileProgress += (ulong)bytesToWrite;
                             continue;
                         }
 
-                        // Decompress buffer
+                        // Decompress block
                         byte[] decompressedBuffer;
                         using var inputStream = new MemoryStream(buffer);
                         using var zstdStream = new ZStandardStream(inputStream);
@@ -161,9 +170,9 @@ namespace SabreTools.Wrappers
                             return false;
                         }
 
-                        // Write decompressed buffer to output file
-                        fs.Write(decompressedBuffer, intraBlockOffset, expectedSize);
-                        readOffset += (ulong)expectedSize;
+                        // Write decompressed block to output file
+                        fs.Write(decompressedBuffer, intraBlockOffset, bytesToWrite);
+                        fileProgress += (ulong)bytesToWrite;
                     }
                 }
 

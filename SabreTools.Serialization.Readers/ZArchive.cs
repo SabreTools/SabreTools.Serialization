@@ -256,8 +256,8 @@ namespace SabreTools.Serialization.Readers
                     fileEntry.NameOffsetAndTypeFlag = nameOffsetAndFlag;
                     fileEntry.FileOffsetLow = data.ReadUInt32BigEndian();
                     fileEntry.FileSizeLow = data.ReadUInt32BigEndian();
-                    fileEntry.FileOffsetHigh = data.ReadUInt16BigEndian();
                     fileEntry.FileSizeHigh = data.ReadUInt16BigEndian();
+                    fileEntry.FileOffsetHigh = data.ReadUInt16BigEndian();
                     obj[i] = fileEntry;
                 }
                 else

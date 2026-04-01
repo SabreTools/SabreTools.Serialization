@@ -19,15 +19,15 @@ namespace SabreTools.Data.Models.ZArchive
         public uint FileSizeLow { get; set; }
 
         /// <summary>
-        /// Highest 4 bits of the file's offset
-        /// </summary>
-        /// <remarks>Big-endian</remarks>
-        public ushort FileOffsetHigh { get; set; }
-
-        /// <summary>
         /// Highest 4 bits of the file's size
         /// </summary>
         /// <remarks>Big-endian</remarks>
         public ushort FileSizeHigh { get; set; }
+
+        /// <summary>
+        /// Highest 4 bits of the file's offset
+        /// </summary>
+        /// <remarks>Big-endian</remarks>
+        public ushort FileOffsetHigh { get; set; }
     }
 }
