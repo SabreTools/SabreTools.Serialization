@@ -10,17 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("release"), XmlRoot("release")]
     public sealed class Release : DatItem<Data.Models.Metadata.Release>
     {
+        #region Properties
+
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.Release)?.Default;
+            set => (_internal as Data.Models.Metadata.Release)?.Default = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public Release() : base() { }
 
-        public Release(Data.Models.Metadata.Release item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.Release.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.Release.DefaultKey, defaultValue.FromYesNo());
-        }
+        public Release(Data.Models.Metadata.Release item) : base(item) { }
 
         public Release(Data.Models.Metadata.Release item, Machine machine, Source source) : this(item)
         {

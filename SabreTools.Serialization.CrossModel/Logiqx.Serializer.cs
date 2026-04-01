@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.BiosSet.DescriptionKey] = item.Description,
-                [Data.Models.Metadata.BiosSet.DefaultKey] = item.Default,
+                Default = item.Default,
             };
             return biosset;
         }
@@ -282,7 +282,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Release.RegionKey] = item.Region,
                 [Data.Models.Metadata.Release.LanguageKey] = item.Language,
                 [Data.Models.Metadata.Release.DateKey] = item.Date,
-                [Data.Models.Metadata.Release.DefaultKey] = item.Default,
+                Default = item.Default,
             };
             return release;
         }

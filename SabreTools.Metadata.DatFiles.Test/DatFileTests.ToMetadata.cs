@@ -619,7 +619,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataAdjuster(Data.Models.Metadata.Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
-            Assert.True(adjuster.ReadBool(Data.Models.Metadata.Adjuster.DefaultKey));
+            Assert.True(adjuster.Default);
             Assert.Equal("name", adjuster.Name);
 
             Data.Models.Metadata.Condition? condition = adjuster.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
@@ -673,7 +673,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataBiosSet(Data.Models.Metadata.BiosSet? biosSet)
         {
             Assert.NotNull(biosSet);
-            Assert.True(biosSet.ReadBool(Data.Models.Metadata.BiosSet.DefaultKey));
+            Assert.True(biosSet.Default);
             Assert.Equal("description", biosSet.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey));
             Assert.Equal("name", biosSet.Name);
         }
@@ -730,7 +730,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataConfSetting(Data.Models.Metadata.ConfSetting? confSetting)
         {
             Assert.NotNull(confSetting);
-            Assert.True(confSetting.ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey));
+            Assert.True(confSetting.Default);
             Assert.Equal("name", confSetting.Name);
             Assert.Equal("value", confSetting.ReadString(Data.Models.Metadata.ConfSetting.ValueKey));
 
@@ -804,7 +804,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDipSwitch(Data.Models.Metadata.DipSwitch? dipSwitch)
         {
             Assert.NotNull(dipSwitch);
-            Assert.True(dipSwitch.ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey));
+            Assert.True(dipSwitch.Default);
             Assert.Equal("mask", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey));
             Assert.Equal("name", dipSwitch.Name);
             Assert.Equal("tag", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey));
@@ -831,7 +831,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataDipValue(Data.Models.Metadata.DipValue? dipValue)
         {
             Assert.NotNull(dipValue);
-            Assert.True(dipValue.ReadBool(Data.Models.Metadata.DipValue.DefaultKey));
+            Assert.True(dipValue.Default);
             Assert.Equal("name", dipValue.Name);
             Assert.Equal("value", dipValue.ReadString(Data.Models.Metadata.DipValue.ValueKey));
 
@@ -997,7 +997,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(ramOption);
             Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
-            Assert.True(ramOption.ReadBool(Data.Models.Metadata.RamOption.DefaultKey));
+            Assert.True(ramOption.Default);
             Assert.Equal("name", ramOption.Name);
         }
 
@@ -1005,7 +1005,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(release);
             Assert.Equal("date", release.ReadString(Data.Models.Metadata.Release.DateKey));
-            Assert.True(release.ReadBool(Data.Models.Metadata.Release.DefaultKey));
+            Assert.True(release.Default);
             Assert.Equal("language", release.ReadString(Data.Models.Metadata.Release.LanguageKey));
             Assert.Equal("name", release.Name);
             Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
@@ -1179,7 +1179,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateMetadataSlotOption(Data.Models.Metadata.SlotOption? slotOption)
         {
             Assert.NotNull(slotOption);
-            Assert.True(slotOption.ReadBool(Data.Models.Metadata.SlotOption.DefaultKey));
+            Assert.True(slotOption.Default);
             Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
             Assert.Equal("name", slotOption.Name);
         }

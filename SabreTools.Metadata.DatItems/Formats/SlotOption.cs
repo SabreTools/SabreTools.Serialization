@@ -10,17 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("slotoption"), XmlRoot("slotoption")]
     public sealed class SlotOption : DatItem<Data.Models.Metadata.SlotOption>
     {
+        #region Properties
+
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.SlotOption)?.Default;
+            set => (_internal as Data.Models.Metadata.SlotOption)?.Default = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public SlotOption() : base() { }
 
-        public SlotOption(Data.Models.Metadata.SlotOption item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.SlotOption.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.SlotOption.DefaultKey, defaultValue.FromYesNo());
-        }
+        public SlotOption(Data.Models.Metadata.SlotOption item) : base(item) { }
 
         public SlotOption(Data.Models.Metadata.SlotOption item, Machine machine, Source source) : this(item)
         {

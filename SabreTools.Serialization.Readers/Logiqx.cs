@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Logiqx;
 
 namespace SabreTools.Serialization.Readers
@@ -316,7 +317,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Description = reader.GetAttribute("description");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -673,7 +674,7 @@ namespace SabreTools.Serialization.Readers
             obj.Region = reader.GetAttribute("region");
             obj.Language = reader.GetAttribute("language");
             obj.Date = reader.GetAttribute("date");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }

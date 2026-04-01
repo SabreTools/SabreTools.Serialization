@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.CrossModel
             var adjuster = new Adjuster
             {
                 Name = item.Name,
-                Default = item.ReadString(Data.Models.Metadata.Adjuster.DefaultKey),
+                Default = item.Default,
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
@@ -180,7 +180,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
-                Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
+                Default = item.Default,
             };
             return biosset;
         }
@@ -266,7 +266,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Value = item.ReadString(Data.Models.Metadata.ConfSetting.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.ConfSetting.DefaultKey),
+                Default = item.Default,
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
@@ -386,7 +386,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.DipValue.DefaultKey),
+                Default = item.Default,
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
@@ -552,7 +552,7 @@ namespace SabreTools.Serialization.CrossModel
             var ramOption = new RamOption
             {
                 Name = item.Name,
-                Default = item.ReadString(Data.Models.Metadata.RamOption.DefaultKey),
+                Default = item.Default,
                 Content = item.ReadString(Data.Models.Metadata.RamOption.ContentKey),
             };
             return ramOption;
@@ -619,7 +619,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 DevName = item.ReadString(Data.Models.Metadata.SlotOption.DevNameKey),
-                Default = item.ReadString(Data.Models.Metadata.SlotOption.DefaultKey),
+                Default = item.Default,
             };
             return slotOption;
         }

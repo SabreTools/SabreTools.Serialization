@@ -135,14 +135,14 @@ namespace SabreTools.Serialization.CrossModel.Test
                 Region = "XXXXXX",
                 Language = "XXXXXX",
                 Date = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var biosset = new Data.Models.Logiqx.BiosSet
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var rom = new Data.Models.Logiqx.Rom
@@ -443,7 +443,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.Equal("XXXXXX", release.Region);
             Assert.Equal("XXXXXX", release.Language);
             Assert.Equal("XXXXXX", release.Date);
-            Assert.Equal("XXXXXX", release.Default);
+            Assert.Equal(true, release.Default);
         }
 
         /// <summary>
@@ -454,7 +454,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
             Assert.Equal("XXXXXX", biosset.Description);
-            Assert.Equal("XXXXXX", biosset.Default);
+            Assert.Equal(true, biosset.Default);
         }
 
         /// <summary>

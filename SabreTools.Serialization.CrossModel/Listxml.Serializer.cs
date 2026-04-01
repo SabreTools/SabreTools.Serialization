@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.CrossModel
             var adjuster = new Data.Models.Metadata.Adjuster
             {
                 Name = item.Name,
-                [Data.Models.Metadata.Adjuster.DefaultKey] = item.Default,
+                Default = item.Default,
             };
 
             if (item.Condition is not null)
@@ -213,7 +213,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.BiosSet.DescriptionKey] = item.Description,
-                [Data.Models.Metadata.BiosSet.DefaultKey] = item.Default,
+                Default = item.Default,
             };
             return biosset;
         }
@@ -302,7 +302,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.ConfSetting.ValueKey] = item.Value,
-                [Data.Models.Metadata.ConfSetting.DefaultKey] = item.Default,
+                Default = item.Default,
             };
 
             if (item.Condition is not null)
@@ -425,7 +425,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.DipValue.ValueKey] = item.Value,
-                [Data.Models.Metadata.DipValue.DefaultKey] = item.Default,
+                Default = item.Default,
             };
 
             if (item.Condition is not null)
@@ -591,7 +591,7 @@ namespace SabreTools.Serialization.CrossModel
             var ramOption = new Data.Models.Metadata.RamOption
             {
                 Name = item.Name,
-                [Data.Models.Metadata.RamOption.DefaultKey] = item.Default,
+                Default = item.Default,
                 [Data.Models.Metadata.RamOption.ContentKey] = item.Content,
             };
             return ramOption;
@@ -660,7 +660,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.SlotOption.DevNameKey] = item.DevName,
-                [Data.Models.Metadata.SlotOption.DefaultKey] = item.Default,
+                Default = item.Default,
             };
             return slotOption;
         }

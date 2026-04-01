@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Listxml;
 
 namespace SabreTools.Serialization.Readers
@@ -115,7 +116,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new Adjuster();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -170,7 +171,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Description = reader.GetAttribute("description");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }
@@ -298,7 +299,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -509,7 +510,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.Value = reader.GetAttribute("value");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             while (reader.Read())
             {
@@ -1026,7 +1027,7 @@ namespace SabreTools.Serialization.Readers
             var obj = new RamOption();
 
             obj.Name = reader.GetAttribute("name");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
             obj.Content = reader.ReadElementContentAsString();
 
             return obj;
@@ -1126,7 +1127,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Name = reader.GetAttribute("name");
             obj.DevName = reader.GetAttribute("devname");
-            obj.Default = reader.GetAttribute("default");
+            obj.Default = reader.GetAttribute("default").AsYesNo();
 
             return obj;
         }

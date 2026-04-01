@@ -22,6 +22,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.Adjuster)?.Default;
+            set => (_internal as Data.Models.Metadata.Adjuster)?.Default = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -30,11 +37,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public Adjuster(Data.Models.Metadata.Adjuster item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.Adjuster.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.Adjuster.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
             if (condition is not null)

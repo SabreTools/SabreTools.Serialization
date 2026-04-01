@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 [Data.Models.Metadata.DipValue.ValueKey] = item.Value,
-                [Data.Models.Metadata.DipValue.DefaultKey] = item.Default,
+                Default = item.Default,
             };
             return dipValue;
         }

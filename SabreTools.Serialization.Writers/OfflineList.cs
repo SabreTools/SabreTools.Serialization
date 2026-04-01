@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteOptionalAttributeString("visible", obj.Visible);
             writer.WriteOptionalAttributeString("inNamingOption", obj.InNamingOption);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.ToString()?.ToLowerInvariant());
 
             writer.WriteEndElement();
         }
@@ -441,7 +441,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("to");
 
             writer.WriteOptionalAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.ToString()?.ToLowerInvariant());
             writer.WriteOptionalAttributeString("auto", obj.Auto);
 
             if (obj.Find is not null && obj.Find.Length > 0)

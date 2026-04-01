@@ -22,6 +22,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.ConfSetting)?.Default;
+            set => (_internal as Data.Models.Metadata.ConfSetting)?.Default = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -30,11 +37,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public ConfSetting(Data.Models.Metadata.ConfSetting item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.ConfSetting.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
             var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
             if (condition is not null)

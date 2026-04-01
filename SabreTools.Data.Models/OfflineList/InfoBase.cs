@@ -15,7 +15,7 @@ namespace SabreTools.Data.Models.OfflineList
 
         /// <remarks>Boolean</remarks>
         [XmlAttribute("default")]
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
     }
 
     [XmlRoot("title")]

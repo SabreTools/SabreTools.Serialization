@@ -22,6 +22,13 @@ namespace SabreTools.Metadata.DatItems.Formats
             }
         }
 
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.DipValue)?.Default;
+            set => (_internal as Data.Models.Metadata.DipValue)?.Default = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -30,11 +37,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipValue(Data.Models.Metadata.DipValue item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.DipValue.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.DipValue.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
             var condition = Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
             if (condition is not null)

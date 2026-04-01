@@ -95,7 +95,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var dipswitch = new Data.Models.SoftwareList.DipSwitch
@@ -304,7 +304,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);
             Assert.Equal("XXXXXX", dipvalue.Value);
-            Assert.Equal("XXXXXX", dipvalue.Default);
+            Assert.Equal(true, dipvalue.Default);
         }
     }
 }

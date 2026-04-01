@@ -19,6 +19,6 @@ namespace SabreTools.Data.Models.ClrMamePro
         public string? Date { get; set; }
 
         /// <remarks>default</remarks>
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
     }
 }

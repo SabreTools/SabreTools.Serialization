@@ -77,22 +77,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesEqual(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
             if (checkValue is null)
@@ -132,22 +119,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesNotEqual(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // If a null value is expected
             if (checkValue is null)
@@ -187,22 +161,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesGreaterThan(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // Null is always failure
             if (checkValue is null)
@@ -232,22 +193,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesGreaterThanOrEqual(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // Null is always failure
             if (checkValue is null)
@@ -277,22 +225,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesLessThan(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // Null is always failure
             if (checkValue is null)
@@ -322,22 +257,9 @@ namespace SabreTools.Metadata.Filter
         /// </summary>
         private bool MatchesLessThanOrEqual(DictionaryBase dictionaryBase)
         {
-            // Some fields need unique handling
-            string? checkValue;
-            if (Key.FieldName == "name")
-            {
-                // TODO: Make this less awkward and hacky
-                checkValue = dictionaryBase.GetName();
-            }
-            else
-            {
-                // If the key doesn't exist, we count it as null
-                if (!dictionaryBase.ContainsKey(Key.FieldName))
-                    return string.IsNullOrEmpty(Value);
-
-                // If the value in the dictionary is null
-                checkValue = dictionaryBase.ReadString(Key.FieldName);
-            }
+            // Process the check value
+            if (!GetCheckValue(dictionaryBase, out string? checkValue))
+                return string.IsNullOrEmpty(Value);
 
             // Null is always failure
             if (checkValue is null)
@@ -409,6 +331,69 @@ namespace SabreTools.Metadata.Filter
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Get the check value for a field from a DictionaryBase
+        /// </summary>
+        private bool GetCheckValue(DictionaryBase dictionaryBase, out string? checkValue)
+        {
+            // Handle the common name field
+            if (Key.FieldName == "name")
+            {
+                checkValue = dictionaryBase.GetName();
+                return true;
+            }
+
+            // Handle type-specific properties
+            switch (dictionaryBase)
+            {
+                case Adjuster item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case BiosSet item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case ConfSetting item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case DipSwitch item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case DipValue item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case RamOption item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case Release item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                case SlotOption item when Key.FieldName == "default":
+                    checkValue = item.Default.FromYesNo();
+                    return true;
+
+                // Fallthrough to Dictionary-based checking
+                default: break;
+            }
+
+            // If the key doesn't exist, we count it as null
+            if (!dictionaryBase.ContainsKey(Key.FieldName))
+            {
+                checkValue = null;
+                return false;
+            }
+
+            // If the value in the dictionary is null
+            checkValue = dictionaryBase.ReadString(Key.FieldName);
+            return true;
         }
 
         /// <summary>

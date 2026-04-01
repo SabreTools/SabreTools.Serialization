@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.Text.ClrMamePro;
 
@@ -463,7 +464,7 @@ namespace SabreTools.Serialization.Readers
                         release.Date = kvp.Value;
                         break;
                     case "default":
-                        release.Default = kvp.Value;
+                        release.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         itemAdditional.Add($"{kvp.Key}: {kvp.Value}");
@@ -496,7 +497,7 @@ namespace SabreTools.Serialization.Readers
                         biosset.Description = kvp.Value;
                         break;
                     case "default":
-                        biosset.Default = kvp.Value;
+                        biosset.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values
@@ -920,7 +921,7 @@ namespace SabreTools.Serialization.Readers
                         entries.Add(kvp.Value);
                         break;
                     case "default":
-                        dipswitch.Default = kvp.Value;
+                        dipswitch.Default = kvp.Value.AsYesNo();
                         break;
                     default:
                         // TODO: Log invalid values

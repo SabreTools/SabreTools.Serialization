@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.ClrMamePro;
@@ -217,7 +218,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteRequiredAttributeString("region", release.Region, throwOnError: true);
                 writer.WriteOptionalAttributeString("language", release.Language);
                 writer.WriteOptionalAttributeString("date", release.Date);
-                writer.WriteOptionalAttributeString("default", release.Default);
+                writer.WriteOptionalAttributeString("default", release.Default.FromYesNo());
                 writer.WriteEndElement(); // release
             }
         }
@@ -238,7 +239,7 @@ namespace SabreTools.Serialization.Writers
                 writer.WriteStartElement("biosset");
                 writer.WriteRequiredAttributeString("name", biosset.Name, throwOnError: true);
                 writer.WriteRequiredAttributeString("description", biosset.Description, throwOnError: true);
-                writer.WriteOptionalAttributeString("default", biosset.Default);
+                writer.WriteOptionalAttributeString("default", biosset.Default.FromYesNo());
                 writer.WriteEndElement(); // release
             }
         }
@@ -477,7 +478,7 @@ namespace SabreTools.Serialization.Writers
                     writer.WriteRequiredAttributeString("entry", entry);
                 }
 
-                writer.WriteOptionalAttributeString("default", dipswitch.Default);
+                writer.WriteOptionalAttributeString("default", dipswitch.Default.FromYesNo());
                 writer.WriteEndElement(); // dipswitch
             }
         }

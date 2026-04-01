@@ -201,14 +201,14 @@ namespace SabreTools.Serialization.Readers.Test
                 Region = "XXXXXX",
                 Language = "XXXXXX",
                 Date = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var biosset = new Data.Models.ClrMamePro.BiosSet
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var rom = new Data.Models.ClrMamePro.Rom
@@ -309,7 +309,7 @@ namespace SabreTools.Serialization.Readers.Test
             {
                 Name = "XXXXXX",
                 Entry = ["XXXXXX"],
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var driver = new Data.Models.ClrMamePro.Driver
@@ -456,7 +456,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.Equal("XXXXXX", release.Region);
             Assert.Equal("XXXXXX", release.Language);
             Assert.Equal("XXXXXX", release.Date);
-            Assert.Equal("XXXXXX", release.Default);
+            Assert.Equal(true, release.Default);
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
             Assert.Equal("XXXXXX", biosset.Description);
-            Assert.Equal("XXXXXX", biosset.Default);
+            Assert.Equal(true, biosset.Default);
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace SabreTools.Serialization.Readers.Test
             string entry = Assert.Single(dipswitch.Entry);
             Assert.Equal("XXXXXX", entry);
 
-            Assert.Equal("XXXXXX", dipswitch.Default);
+            Assert.Equal(true, dipswitch.Default);
         }
 
         /// <summary>

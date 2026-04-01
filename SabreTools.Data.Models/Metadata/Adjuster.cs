@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public bool? Default { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
@@ -17,9 +19,6 @@ namespace SabreTools.Data.Models.Metadata
         // <remarks>Condition</remarks>
         [NoFilter]
         public const string ConditionKey = "condition";
-
-        /// <remarks>bool</remarks>
-        public const string DefaultKey = "default";
 
         #endregion
 

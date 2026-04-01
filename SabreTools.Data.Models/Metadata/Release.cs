@@ -8,6 +8,8 @@ namespace SabreTools.Data.Models.Metadata
     {
         #region Properties
 
+        public bool? Default { get; set; }
+
         public string? Name { get; set; }
 
         #endregion
@@ -16,9 +18,6 @@ namespace SabreTools.Data.Models.Metadata
 
         /// <remarks>string</remarks>
         public const string DateKey = "date";
-
-        /// <remarks>(yes|no) "no"</remarks>
-        public const string DefaultKey = "default";
 
         /// <remarks>string</remarks>
         public const string LanguageKey = "language";

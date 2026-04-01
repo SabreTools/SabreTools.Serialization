@@ -10,17 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("ramoption"), XmlRoot("ramoption")]
     public sealed class RamOption : DatItem<Data.Models.Metadata.RamOption>
     {
+        #region Properties
+
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.RamOption)?.Default;
+            set => (_internal as Data.Models.Metadata.RamOption)?.Default = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public RamOption() : base() { }
 
-        public RamOption(Data.Models.Metadata.RamOption item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.RamOption.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.RamOption.DefaultKey, defaultValue.FromYesNo());
-        }
+        public RamOption(Data.Models.Metadata.RamOption item) : base(item) { }
 
         public RamOption(Data.Models.Metadata.RamOption item, Machine machine, Source source) : this(item)
         {

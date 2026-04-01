@@ -337,7 +337,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Adjuster
             {
                 [Data.Models.Metadata.Adjuster.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.Adjuster.DefaultKey] = true,
+                Default = true,
                 Name = "name",
             };
         }
@@ -394,7 +394,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.BiosSet
             {
-                [Data.Models.Metadata.BiosSet.DefaultKey] = true,
+                Default = true,
                 [Data.Models.Metadata.BiosSet.DescriptionKey] = "description",
                 Name = "name",
             };
@@ -452,7 +452,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.ConfSetting
             {
                 [Data.Models.Metadata.ConfSetting.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.ConfSetting.DefaultKey] = "yes",
+                Default = true,
                 Name = "name",
                 [Data.Models.Metadata.ConfSetting.ValueKey] = "value",
             };
@@ -514,7 +514,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.DipSwitch
             {
                 [Data.Models.Metadata.DipSwitch.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.DipSwitch.DefaultKey] = "yes",
+                Default = true,
                 [Data.Models.Metadata.DipSwitch.DipLocationKey] = new Data.Models.Metadata.DipLocation[] { CreateMetadataDipLocation() },
                 [Data.Models.Metadata.DipSwitch.DipValueKey] = new Data.Models.Metadata.DipValue[] { CreateMetadataDipValue() },
                 [Data.Models.Metadata.DipSwitch.EntryKey] = new string[] { "entry" },
@@ -529,7 +529,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.DipValue
             {
                 [Data.Models.Metadata.DipValue.ConditionKey] = CreateMetadataCondition(),
-                [Data.Models.Metadata.DipValue.DefaultKey] = "yes",
+                Default = true,
                 Name = "name",
                 [Data.Models.Metadata.DipValue.ValueKey] = "value",
             };
@@ -726,7 +726,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.RamOption
             {
                 [Data.Models.Metadata.RamOption.ContentKey] = "content",
-                [Data.Models.Metadata.RamOption.DefaultKey] = "yes",
+                Default = true,
                 Name = "name",
             };
         }
@@ -736,7 +736,7 @@ namespace SabreTools.Metadata.DatFiles.Test
             return new Data.Models.Metadata.Release
             {
                 [Data.Models.Metadata.Release.DateKey] = "date",
-                [Data.Models.Metadata.Release.DefaultKey] = "yes",
+                Default = true,
                 [Data.Models.Metadata.Release.LanguageKey] = "language",
                 Name = "name",
                 [Data.Models.Metadata.Release.RegionKey] = "region",
@@ -920,7 +920,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             return new Data.Models.Metadata.SlotOption
             {
-                [Data.Models.Metadata.SlotOption.DefaultKey] = "yes",
+                Default = true,
                 [Data.Models.Metadata.SlotOption.DevNameKey] = "devname",
                 Name = "name",
             };
@@ -1144,7 +1144,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateAdjuster(Adjuster? adjuster)
         {
             Assert.NotNull(adjuster);
-            Assert.True(adjuster.ReadBool(Data.Models.Metadata.Adjuster.DefaultKey));
+            Assert.True(adjuster.Default);
             Assert.Equal("name", adjuster.GetName());
 
             Condition? condition = adjuster.Read<Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
@@ -1166,7 +1166,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateBiosSet(BiosSet? biosSet)
         {
             Assert.NotNull(biosSet);
-            Assert.True(biosSet.ReadBool(Data.Models.Metadata.BiosSet.DefaultKey));
+            Assert.True(biosSet.Default);
             Assert.Equal("description", biosSet.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey));
             Assert.Equal("name", biosSet.GetName());
         }
@@ -1223,7 +1223,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateConfSetting(ConfSetting? confSetting)
         {
             Assert.NotNull(confSetting);
-            Assert.True(confSetting.ReadBool(Data.Models.Metadata.ConfSetting.DefaultKey));
+            Assert.True(confSetting.Default);
             Assert.Equal("name", confSetting.GetName());
             Assert.Equal("value", confSetting.ReadString(Data.Models.Metadata.ConfSetting.ValueKey));
 
@@ -1292,7 +1292,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDipSwitch(DipSwitch? dipSwitch)
         {
             Assert.NotNull(dipSwitch);
-            Assert.True(dipSwitch.ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey));
+            Assert.True(dipSwitch.Default);
             Assert.Equal("mask", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.MaskKey));
             Assert.Equal("name", dipSwitch.GetName());
             Assert.Equal("tag", dipSwitch.ReadString(Data.Models.Metadata.DipSwitch.TagKey));
@@ -1319,7 +1319,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateDipValue(DipValue? dipValue)
         {
             Assert.NotNull(dipValue);
-            Assert.True(dipValue.ReadBool(Data.Models.Metadata.DipValue.DefaultKey));
+            Assert.True(dipValue.Default);
             Assert.Equal("name", dipValue.GetName());
             Assert.Equal("value", dipValue.ReadString(Data.Models.Metadata.DipValue.ValueKey));
 
@@ -1473,7 +1473,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(ramOption);
             Assert.Equal("content", ramOption.ReadString(Data.Models.Metadata.RamOption.ContentKey));
-            Assert.True(ramOption.ReadBool(Data.Models.Metadata.RamOption.DefaultKey));
+            Assert.True(ramOption.Default);
             Assert.Equal("name", ramOption.GetName());
         }
 
@@ -1481,7 +1481,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         {
             Assert.NotNull(release);
             Assert.Equal("date", release.ReadString(Data.Models.Metadata.Release.DateKey));
-            Assert.True(release.ReadBool(Data.Models.Metadata.Release.DefaultKey));
+            Assert.True(release.Default);
             Assert.Equal("language", release.ReadString(Data.Models.Metadata.Release.LanguageKey));
             Assert.Equal("name", release.GetName());
             Assert.Equal("region", release.ReadString(Data.Models.Metadata.Release.RegionKey));
@@ -1615,7 +1615,7 @@ namespace SabreTools.Metadata.DatFiles.Test
         private static void ValidateSlotOption(SlotOption? slotOption)
         {
             Assert.NotNull(slotOption);
-            Assert.True(slotOption.ReadBool(Data.Models.Metadata.SlotOption.DefaultKey));
+            Assert.True(slotOption.Default);
             Assert.Equal("devname", slotOption.ReadString(Data.Models.Metadata.SlotOption.DevNameKey));
             Assert.Equal("name", slotOption.GetName());
         }

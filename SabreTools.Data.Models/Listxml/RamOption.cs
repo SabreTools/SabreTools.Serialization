@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.Listxml
         public string? Name { get; set; }
 
         [XmlAttribute("default")]
-        public string? Default { get; set; }
+        public bool? Default { get; set; }
 
         [XmlText]
         public string? Content { get; set; }

@@ -10,17 +10,22 @@ namespace SabreTools.Metadata.DatItems.Formats
     [JsonObject("biosset"), XmlRoot("biosset")]
     public sealed class BiosSet : DatItem<Data.Models.Metadata.BiosSet>
     {
+        #region Properties
+
+        [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.BiosSet)?.Default;
+            set => (_internal as Data.Models.Metadata.BiosSet)?.Default = value;
+        }
+
+        #endregion
+
         #region Constructors
 
         public BiosSet() : base() { }
 
-        public BiosSet(Data.Models.Metadata.BiosSet item) : base(item)
-        {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.BiosSet.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.BiosSet.DefaultKey, defaultValue.FromYesNo());
-        }
+        public BiosSet(Data.Models.Metadata.BiosSet item) : base(item) { }
 
         public BiosSet(Data.Models.Metadata.BiosSet item, Machine machine, Source source) : this(item)
         {

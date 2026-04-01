@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Value = item.ReadString(Data.Models.Metadata.DipValue.ValueKey),
-                Default = item.ReadString(Data.Models.Metadata.DipValue.DefaultKey),
+                Default = item.Default,
             };
             return dipValue;
         }

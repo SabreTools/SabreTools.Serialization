@@ -208,7 +208,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 Name = item.Name,
                 Description = item.ReadString(Data.Models.Metadata.BiosSet.DescriptionKey),
-                Default = item.ReadString(Data.Models.Metadata.BiosSet.DefaultKey),
+                Default = item.Default,
             };
             return biosset;
         }
@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.CrossModel
                 Region = item.ReadString(Data.Models.Metadata.Release.RegionKey),
                 Language = item.ReadString(Data.Models.Metadata.Release.LanguageKey),
                 Date = item.ReadString(Data.Models.Metadata.Release.DateKey),
-                Default = item.ReadString(Data.Models.Metadata.Release.DefaultKey),
+                Default = item.Default,
             };
             return release;
         }

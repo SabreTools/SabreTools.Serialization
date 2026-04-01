@@ -33,6 +33,13 @@ namespace SabreTools.Metadata.DatItems.Formats
         }
 
         [JsonIgnore]
+        public bool? Default
+        {
+            get => (_internal as Data.Models.Metadata.DipSwitch)?.Default;
+            set => (_internal as Data.Models.Metadata.DipSwitch)?.Default = value;
+        }
+
+        [JsonIgnore]
         public bool LocationsSpecified
         {
             get
@@ -72,11 +79,6 @@ namespace SabreTools.Metadata.DatItems.Formats
 
         public DipSwitch(Data.Models.Metadata.DipSwitch item) : base(item)
         {
-            // Process flag values
-            bool? defaultValue = ReadBool(Data.Models.Metadata.DipSwitch.DefaultKey);
-            if (defaultValue is not null)
-                Write<string?>(Data.Models.Metadata.DipSwitch.DefaultKey, defaultValue.FromYesNo());
-
             // Handle subitems
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
             if (condition is not null)

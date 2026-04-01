@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.SoftwareList;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.Extensions;
@@ -153,7 +154,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }

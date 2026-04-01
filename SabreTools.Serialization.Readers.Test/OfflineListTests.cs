@@ -105,85 +105,85 @@ namespace SabreTools.Serialization.Readers.Test
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Location = new Data.Models.OfflineList.Location
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Publisher = new Data.Models.OfflineList.Publisher
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 SourceRom = new Data.Models.OfflineList.SourceRom
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 SaveType = new Data.Models.OfflineList.SaveType
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 RomSize = new Data.Models.OfflineList.RomSize
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 ReleaseNumber = new Data.Models.OfflineList.ReleaseNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 ImageNumber = new Data.Models.OfflineList.ImageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 LanguageNumber = new Data.Models.OfflineList.LanguageNumber
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Comment = new Data.Models.OfflineList.Comment
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 RomCRC = new Data.Models.OfflineList.RomCRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Im1CRC = new Data.Models.OfflineList.Im1CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Im2CRC = new Data.Models.OfflineList.Im2CRC
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
                 Languages = new Data.Models.OfflineList.Languages
                 {
                     Visible = "XXXXXX",
                     InNamingOption = "XXXXXX",
-                    Default = "XXXXXX",
+                    Default = true,
                 },
             };
 
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Readers.Test
             var to = new Data.Models.OfflineList.To
             {
                 Value = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
                 Auto = "XXXXXX",
                 Find = [find],
             };
@@ -352,7 +352,7 @@ namespace SabreTools.Serialization.Readers.Test
             Assert.NotNull(info);
             Assert.Equal("XXXXXX", info.Visible);
             Assert.Equal("XXXXXX", info.InNamingOption);
-            Assert.Equal("XXXXXX", info.Default);
+            Assert.Equal(true, info.Default);
         }
 
         /// <summary>
@@ -405,7 +405,7 @@ namespace SabreTools.Serialization.Readers.Test
         {
             Assert.NotNull(to);
             Assert.Equal("XXXXXX", to.Value);
-            Assert.Equal("XXXXXX", to.Default);
+            Assert.Equal(true, to.Default);
             Assert.Equal("XXXXXX", to.Auto);
 
             Assert.NotNull(to.Find);

@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 Description = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var rom = new Data.Models.Listxml.Rom
@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
                 Condition = condition,
             };
 
@@ -219,7 +219,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 Value = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
                 Condition = condition,
             };
 
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var adjuster = new Data.Models.Listxml.Adjuster
             {
                 Name = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
                 Condition = condition,
             };
 
@@ -299,7 +299,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             {
                 Name = "XXXXXX",
                 DevName = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
             };
 
             var slot = new Data.Models.Listxml.Slot
@@ -319,7 +319,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             var ramoption = new Data.Models.Listxml.RamOption
             {
                 Name = "XXXXXX",
-                Default = "XXXXXX",
+                Default = true,
                 Content = "XXXXXX",
             };
 
@@ -469,7 +469,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(biosset);
             Assert.Equal("XXXXXX", biosset.Name);
             Assert.Equal("XXXXXX", biosset.Description);
-            Assert.Equal("XXXXXX", biosset.Default);
+            Assert.Equal(true, biosset.Default);
         }
 
         /// <summary>
@@ -675,7 +675,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(dipvalue);
             Assert.Equal("XXXXXX", dipvalue.Name);
             Assert.Equal("XXXXXX", dipvalue.Value);
-            Assert.Equal("XXXXXX", dipvalue.Default);
+            Assert.Equal(true, dipvalue.Default);
             Validate(dipvalue.Condition);
         }
 
@@ -718,7 +718,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(confsetting);
             Assert.Equal("XXXXXX", confsetting.Name);
             Assert.Equal("XXXXXX", confsetting.Value);
-            Assert.Equal("XXXXXX", confsetting.Default);
+            Assert.Equal(true, confsetting.Default);
             Validate(confsetting.Condition);
         }
 
@@ -751,7 +751,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(adjuster);
             Assert.Equal("XXXXXX", adjuster.Name);
-            Assert.Equal("XXXXXX", adjuster.Default);
+            Assert.Equal(true, adjuster.Default);
             Validate(adjuster.Condition);
         }
 
@@ -843,7 +843,7 @@ namespace SabreTools.Serialization.CrossModel.Test
             Assert.NotNull(slotoption);
             Assert.Equal("XXXXXX", slotoption.Name);
             Assert.Equal("XXXXXX", slotoption.DevName);
-            Assert.Equal("XXXXXX", slotoption.Default);
+            Assert.Equal(true, slotoption.Default);
         }
 
         /// <summary>
@@ -865,7 +865,7 @@ namespace SabreTools.Serialization.CrossModel.Test
         {
             Assert.NotNull(ramoption);
             Assert.Equal("XXXXXX", ramoption.Name);
-            Assert.Equal("XXXXXX", ramoption.Default);
+            Assert.Equal(true, ramoption.Default);
             Assert.Equal("XXXXXX", ramoption.Content);
         }
     }

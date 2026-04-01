@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.Listxml;
 using SabreTools.IO.Extensions;
 using SabreTools.Text.Extensions;
@@ -73,7 +74,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("adjuster");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             if (obj.Condition is not null)
                 WriteCondition(obj.Condition, writer);
@@ -106,7 +107,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("description", obj.Description);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }
@@ -208,7 +209,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             if (obj.Condition is not null)
                 WriteCondition(obj.Condition, writer);
@@ -346,7 +347,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("value", obj.Value);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             if (obj.Condition is not null)
                 WriteCondition(obj.Condition, writer);
@@ -708,7 +709,7 @@ namespace SabreTools.Serialization.Writers
             writer.WriteStartElement("ramoption");
 
             writer.WriteRequiredAttributeString("name", obj.Name);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             if (obj.Content is not null)
                 writer.WriteValue(obj.Content);
@@ -788,7 +789,7 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteRequiredAttributeString("name", obj.Name);
             writer.WriteRequiredAttributeString("devname", obj.DevName);
-            writer.WriteOptionalAttributeString("default", obj.Default);
+            writer.WriteOptionalAttributeString("default", obj.Default.FromYesNo());
 
             writer.WriteEndElement();
         }
